@@ -1,0 +1,64 @@
+@import "tailwindcss";
+
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800;900&display=swap');
+
+@theme {
+  /* Colors */
+  --color-primary:      #f75a41;
+  --color-primary-dark: #d94e37;
+  --color-black:        #111111;
+  --color-charcoal:     #2a2a2a;
+  --color-off-white:    #f9f9f9;
+  --color-body:         #6b7280;
+  --color-border:       #e5e5e5;
+
+  /* Typography */
+  --font-display: 'Syne', system-ui, sans-serif;
+  --font-body:    system-ui, -apple-system, sans-serif;
+}
+
+/* Keyframes */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scalePop {
+  0%   { opacity: 0; transform: scale(0.88); }
+  70%  { transform: scale(1.03); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes pulseRing {
+  0%   { box-shadow: 0 0 0 0 rgba(247,90,65,0.5); }
+  60%  { box-shadow: 0 0 0 8px rgba(247,90,65,0); }
+  100% { box-shadow: 0 0 0 0 rgba(247,90,65,0); }
+}
+
+/* Animation utility classes (applied by IntersectionObserver) */
+.anim-fade-up {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.anim-scale-pop {
+  opacity: 0;
+  transform: scale(0.88);
+  transition: opacity 0.5s cubic-bezier(.22,1,.36,1), transform 0.5s cubic-bezier(.22,1,.36,1);
+}
+.anim-fade-up.in-view,
+.anim-scale-pop.in-view {
+  opacity: 1;
+  transform: none;
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .anim-fade-up, .anim-scale-pop { opacity: 1; transform: none; transition: none; }
+}
+
+/* Global base */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-body); color: #111111; background: #ffffff; }
+h1, h2, h3, h4, h5 { font-family: var(--font-display); }
