@@ -1,0 +1,22 @@
+---
+// src/components/ui/WhyCard.astro
+export interface Props {
+  icon: string;
+  title: string;
+  body: string;
+  delay?: number;
+}
+const { icon, title, body, delay = 0 } = Astro.props;
+---
+<div
+  class="bg-white flex items-start gap-4 p-5 rounded-xl border border-[#e5e5e5] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(0,0,0,0.08)] transition-all duration-200 anim-scale-pop"
+  style={`transition-delay: ${delay}ms;`}
+>
+  <div class="w-10 h-10 bg-[#fff5f3] rounded-[10px] flex items-center justify-center text-[18px] shrink-0">
+    {icon}
+  </div>
+  <div>
+    <h4 class="font-display font-extrabold text-[14px] text-black mb-1">{title}</h4>
+    <p class="text-[12px] text-[#6b7280] leading-relaxed">{body}</p>
+  </div>
+</div>

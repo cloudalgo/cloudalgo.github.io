@@ -1,0 +1,44 @@
+---
+// src/components/sections/Hero.astro
+import Button from '../ui/Button.astro';
+---
+<section class="relative bg-[#111] min-h-[90vh] flex items-center px-6 py-20 overflow-hidden">
+
+  <!-- Radial glow -->
+  <div class="absolute top-0 right-0 w-[500px] h-[500px] -translate-y-1/3 translate-x-1/4 rounded-full pointer-events-none"
+       style="background: radial-gradient(circle, rgba(247,90,65,0.12) 0%, transparent 70%);"></div>
+
+  <div class="relative max-w-6xl mx-auto w-full">
+
+    <!-- Badge -->
+    <div class="flex items-center gap-3 mb-5 anim-fade-up" style="animation-delay: 0.1s;">
+      <span class="w-5 h-0.5 bg-primary"></span>
+      <span class="text-[10px] font-extrabold tracking-[3px] uppercase text-primary">
+        Salesforce Consulting Partner
+      </span>
+    </div>
+
+    <!-- H1 -->
+    <h1
+      class="font-display font-black text-white leading-none mb-5 anim-fade-up"
+      style="font-size: clamp(38px, 6vw, 72px); letter-spacing: -2px; animation-delay: 0.2s;"
+    >
+      We make your<br/>
+      <span class="text-primary underline decoration-primary/40 underline-offset-[6px]">Salesforce org</span><br/>
+      work harder.
+    </h1>
+
+    <!-- Subline -->
+    <p class="text-[16px] text-[#94a3b8] font-semibold leading-relaxed max-w-[540px] mb-9 anim-fade-up"
+       style="animation-delay: 0.35s;">
+      Certified consultants. 12 years of experience.<br/>70+ projects delivered on time and on budget.
+    </p>
+
+    <!-- CTA row -->
+    <div class="flex items-center gap-5 anim-fade-up" style="animation-delay: 0.5s;">
+      <Button href="/contact">Book Free Consultation →</Button>
+      <Button href="/services" variant="ghost">See our services ↓</Button>
+    </div>
+
+  </div>
+</section>

@@ -1,0 +1,42 @@
+---
+// src/components/sections/Services.astro
+import SectionBadge from '../ui/SectionBadge.astro';
+import ServiceCard from '../ui/ServiceCard.astro';
+
+const services = [
+  {
+    icon: '☁️',
+    title: 'Salesforce Consulting',
+    body: 'CRM customization, Salesforce Communities, Force.com App Development, MuleSoft integrations, and Heroku solutions.',
+    href: '/services/salesforce-consulting',
+  },
+  {
+    icon: '📦',
+    title: 'Product Development',
+    body: 'AppExchange product development with 1GP and 2GP managed packages, security review readiness, and ISV strategy.',
+    href: '/services/product-development',
+  },
+  {
+    icon: '🔧',
+    title: 'Support & Managed Services',
+    body: 'Ongoing support, maintenance, enhancements, org health reviews, and security recommendations for your Salesforce environment.',
+    href: '/services/support-and-managed-services',
+  },
+];
+---
+<section class="bg-[#111] px-6 py-20">
+  <div class="max-w-6xl mx-auto">
+    <SectionBadge>What We Do</SectionBadge>
+    <h2
+      class="font-display font-black text-white leading-tight mb-12 anim-fade-up"
+      style="font-size: clamp(28px, 4vw, 44px); letter-spacing: -1px;"
+    >
+      Expert services,<br/>end to end.
+    </h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      {services.map((s, i) => (
+        <ServiceCard {...s} delay={i * 130} />
+      ))}
+    </div>
+  </div>
+</section>

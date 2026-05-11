@@ -1,0 +1,28 @@
+---
+// src/components/sections/WhyUs.astro
+import SectionBadge from '../ui/SectionBadge.astro';
+import WhyCard from '../ui/WhyCard.astro';
+
+const items = [
+  { icon: '⚡', title: 'On Time Delivery',   body: 'We ship on schedule. Every time. No surprises, no excuses.' },
+  { icon: '🏆', title: 'Certified Experts',  body: 'Certified architects and developers with deep Salesforce knowledge.' },
+  { icon: '💡', title: 'Simplicity First',   body: 'Clean, maintainable solutions over over-engineered complexity.' },
+  { icon: '💰', title: 'Cost Effective',     body: 'Maximum ROI for your Salesforce budget — no hidden fees.' },
+];
+---
+<section class="bg-[#f9f9f9] px-6 py-20">
+  <div class="max-w-6xl mx-auto">
+    <SectionBadge>Why Choose Us</SectionBadge>
+    <h2
+      class="font-display font-black text-black leading-tight mb-10 anim-fade-up"
+      style="font-size: clamp(28px, 4vw, 44px); letter-spacing: -1px;"
+    >
+      Built different.<br/>Proven results.
+    </h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 max-w-[700px]">
+      {items.map((item, i) => (
+        <WhyCard {...item} delay={i * 100} />
+      ))}
+    </div>
+  </div>
+</section>
