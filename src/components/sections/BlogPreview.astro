@@ -1,0 +1,37 @@
+---
+// src/components/sections/BlogPreview.astro
+import { getCollection } from 'astro:content';
+import BlogCard from '../ui/BlogCard.astro';
+
+const allPosts = await getCollection('blog', ({ data }) => data.published);
+const posts = allPosts
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, 3);
+---
+<section class="bg-[#f9f9f9] px-6 py-20">
+  <div class="max-w-6xl mx-auto">
+    <div class="flex items-end justify-between mb-8">
+      <h2 class="font-display font-black text-black anim-fade-up"
+          style="font-size: clamp(24px, 3.5vw, 36px); letter-spacing: -1px;">
+        Latest Articles
+      </h2>
+      <a href="/blog"
+         class="text-[13px] font-extrabold text-primary hover:underline underline-offset-4">
+        View All &rarr;
+      </a>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      {posts.map((post, i) => (
+        <BlogCard
+          title={post.data.title}
+          excerpt={post.data.excerpt}
+          category={post.data.category}
+          date={post.data.date}
+          readTime={post.data.readTime}
+          slug={post.slug}
+          delay={i * 130}
+        />
+      ))}
+    </div>
+  </div>
+</section>

@@ -1,8 +1,21 @@
 ---
+// src/pages/index.astro
 import Page from '../layouts/Page.astro';
+import Hero from '../components/sections/Hero.astro';
+import StatsBar from '../components/sections/StatsBar.astro';
+import Services from '../components/sections/Services.astro';
+import WhyUs from '../components/sections/WhyUs.astro';
+import Testimonials from '../components/sections/Testimonials.astro';
+import BlogPreview from '../components/sections/BlogPreview.astro';
 ---
-<Page title="CloudAlgo — Salesforce Consulting Services">
-  <div class="bg-[#111] min-h-screen flex items-center justify-center">
-    <h1 class="text-white font-display font-black text-4xl">Coming soon</h1>
-  </div>
+<Page
+  title="CloudAlgo — Salesforce Consulting Services"
+  description="CloudAlgo is your trusted Salesforce & Heroku consulting partner. Certified experts, 70+ projects, 12+ years experience."
+>
+  <Hero />
+  <StatsBar />
+  <Services />
+  <WhyUs />
+  <Testimonials />
+  <BlogPreview />
 </Page>

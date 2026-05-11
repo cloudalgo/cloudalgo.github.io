@@ -2,7 +2,7 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Autoplay, A11y } from 'swiper/modules';
 import 'swiper/css';
-import 'swiper/modules/navigation.css';
+import 'swiper/css/navigation';
 
 interface Testimonial {
   quote: string;
