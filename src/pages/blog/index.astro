@@ -21,18 +21,24 @@ const posts = (await getCollection('blog', ({ data }) => data.published))
   </section>
 
   <section class="bg-[#f9f9f9] px-6 py-16">
-    <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-4">
-      {posts.map((post, i) => (
-        <BlogCard
-          title={post.data.title}
-          excerpt={post.data.excerpt}
-          category={post.data.category}
-          date={post.data.date}
-          readTime={post.data.readTime}
-          slug={post.id}
-          delay={i * 80}
-        />
-      ))}
+    <div class="max-w-6xl mx-auto">
+      {posts.length === 0 ? (
+        <p class="text-[#6b7280] text-center py-16 font-semibold">No articles yet. Check back soon.</p>
+      ) : (
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {posts.map((post, i) => (
+            <BlogCard
+              title={post.data.title}
+              excerpt={post.data.excerpt}
+              category={post.data.category}
+              date={post.data.date}
+              readTime={post.data.readTime}
+              slug={post.id}
+              delay={i * 80}
+            />
+          ))}
+        </div>
+      )}
     </div>
   </section>
 </Page>
