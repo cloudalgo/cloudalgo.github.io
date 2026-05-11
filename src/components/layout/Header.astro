@@ -55,6 +55,7 @@ const currentPath = Astro.url.pathname;
       id="menu-toggle"
       aria-label="Toggle menu"
       aria-expanded="false"
+      aria-controls="mobile-menu"
       class="lg:hidden flex flex-col gap-1.5 p-2"
     >
       <span class="block w-6 h-0.5 bg-white transition-all duration-200" id="bar1"></span>
@@ -69,7 +70,13 @@ const currentPath = Astro.url.pathname;
     <ul class="flex flex-col gap-4 pt-4" role="list">
       {navLinks.map(link => (
         <li>
-          <a href={link.href} class="block text-[14px] font-bold text-[#ccc] hover:text-white transition-colors">
+          <a
+            href={link.href}
+            class:list={[
+              'block text-[14px] font-bold transition-colors',
+              currentPath === link.href ? 'text-white' : 'text-[#ccc] hover:text-white'
+            ]}
+          >
             {link.label}
           </a>
         </li>
