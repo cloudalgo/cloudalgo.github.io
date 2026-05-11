@@ -35,7 +35,10 @@
   100% { box-shadow: 0 0 0 0 rgba(247,90,65,0); }
 }
 
-/* Animation utility classes (applied by IntersectionObserver) */
+/* Animation utility classes (applied by IntersectionObserver / inline style) */
+.anim-pulse-ring {
+  animation: pulseRing 2.5s infinite;
+}
 .anim-fade-up {
   opacity: 0;
   transform: translateY(28px);
