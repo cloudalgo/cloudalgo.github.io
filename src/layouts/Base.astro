@@ -10,7 +10,7 @@ export interface Props {
 const {
   title,
   description = 'CloudAlgo — Salesforce & Heroku consulting. Certified experts, 70+ projects, 12 years experience.',
-  image = '/og-default.png',
+  image = '/og-default.jpg',
   canonicalURL = new URL(Astro.url.pathname, Astro.site).href,
 } = Astro.props;
 ---
@@ -34,6 +34,14 @@ const {
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={image} />
+    <!-- Google Analytics — replace GA_MEASUREMENT_ID with your G-XXXXXXXXXX -->
+    <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'GA_MEASUREMENT_ID');
+    </script> -->
   </head>
   <body>
     <slot />
