@@ -1,0 +1,22 @@
+---
+// src/layouts/Page.astro
+import Base from './Base.astro';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import '../styles/global.css';
+
+export interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+}
+
+const props = Astro.props;
+---
+<Base {...props}>
+  <Header />
+  <main>
+    <slot />
+  </main>
+  <Footer />
+</Base>

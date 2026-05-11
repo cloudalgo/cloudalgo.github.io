@@ -1,0 +1,106 @@
+---
+// src/components/layout/Header.astro
+import { Image } from 'astro:assets';
+import logoDark from '../../assets/brand/logo-inline-dark.svg';
+
+const navLinks = [
+  { href: '/',        label: 'Home' },
+  { href: '/services', label: 'Services' },
+  { href: '/about',   label: 'About Us' },
+  { href: '/blog',    label: 'Blog' },
+  { href: '/contact', label: 'Contact Us' },
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<header class="sticky top-0 z-50 bg-[#111]/95 backdrop-blur-sm border-b border-white/5">
+  <nav class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+
+    <!-- Logo -->
+    <a href="/" aria-label="CloudAlgo home">
+      <Image src={logoDark} alt="CloudAlgo" width={160} height={36} />
+    </a>
+
+    <!-- Desktop nav -->
+    <ul class="hidden lg:flex items-center gap-7" role="list">
+      {navLinks.map(link => (
+        <li>
+          <a
+            href={link.href}
+            class:list={[
+              'relative text-[13px] font-bold pb-1 transition-colors duration-200',
+              'after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-primary after:transition-[width] after:duration-250',
+              currentPath === link.href
+                ? 'text-white after:w-full'
+                : 'text-[#ccc] hover:text-white after:w-0 hover:after:w-full'
+            ]}
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <!-- CTA -->
+    <a
+      href="/contact"
+      class="hidden lg:inline-flex items-center gap-2 bg-primary hover:bg-primary-dark text-white text-[12px] font-extrabold px-5 py-[9px] rounded-md transition-all duration-200 hover:-translate-y-px hover:shadow-[0_4px_16px_rgba(247,90,65,0.4)] anim-pulse-ring"
+    >
+      Book Free Consultation
+    </a>
+
+    <!-- Mobile hamburger -->
+    <button
+      id="menu-toggle"
+      aria-label="Toggle menu"
+      aria-expanded="false"
+      class="lg:hidden flex flex-col gap-1.5 p-2"
+    >
+      <span class="block w-6 h-0.5 bg-white transition-all duration-200" id="bar1"></span>
+      <span class="block w-6 h-0.5 bg-white transition-all duration-200" id="bar2"></span>
+      <span class="block w-6 h-0.5 bg-white transition-all duration-200" id="bar3"></span>
+    </button>
+
+  </nav>
+
+  <!-- Mobile menu -->
+  <div id="mobile-menu" class="hidden lg:hidden bg-[#111] border-t border-white/5 px-6 pb-6">
+    <ul class="flex flex-col gap-4 pt-4" role="list">
+      {navLinks.map(link => (
+        <li>
+          <a href={link.href} class="block text-[14px] font-bold text-[#ccc] hover:text-white transition-colors">
+            {link.label}
+          </a>
+        </li>
+      ))}
+      <li>
+        <a href="/contact" class="inline-block bg-primary text-white text-[12px] font-extrabold px-5 py-2.5 rounded-md mt-2">
+          Book Free Consultation
+        </a>
+      </li>
+    </ul>
+  </div>
+</header>
+
+<script>
+  const toggle = document.getElementById('menu-toggle');
+  const menu = document.getElementById('mobile-menu');
+  const bar1 = document.getElementById('bar1');
+  const bar2 = document.getElementById('bar2');
+  const bar3 = document.getElementById('bar3');
+
+  toggle?.addEventListener('click', () => {
+    const open = menu?.classList.toggle('hidden') === false;
+    toggle.setAttribute('aria-expanded', String(open));
+    if (open) {
+      bar1?.classList.add('rotate-45', 'translate-y-2');
+      bar2?.classList.add('opacity-0');
+      bar3?.classList.add('-rotate-45', '-translate-y-2');
+    } else {
+      bar1?.classList.remove('rotate-45', 'translate-y-2');
+      bar2?.classList.remove('opacity-0');
+      bar3?.classList.remove('-rotate-45', '-translate-y-2');
+    }
+  });
+</script>
