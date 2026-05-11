@@ -20,6 +20,7 @@
     "react-countup": "^6.5.3",
     "react-dom": "^19.2.6",
     "react-hook-form": "^7.75.0",
+    "react-intersection-observer": "^10.0.3",
     "swiper": "^12.1.4",
     "tailwindcss": "^4.3.0"
   },
