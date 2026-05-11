@@ -1,0 +1,24 @@
+---
+// src/pages/404.astro
+import Page from '../layouts/Page.astro';
+---
+<Page title="Page Not Found — CloudAlgo">
+  <section class="bg-[#111] min-h-screen flex items-center justify-center px-6 text-center">
+    <div>
+      <div class="font-display font-black text-primary mb-4 anim-fade-up"
+           style="font-size: clamp(80px, 15vw, 160px); line-height: 1; letter-spacing: -4px;">
+        404
+      </div>
+      <h1 class="font-display font-black text-white text-[28px] mb-4 anim-fade-up">
+        Page not found
+      </h1>
+      <p class="text-[#64748b] font-semibold mb-8 anim-fade-up">
+        That page doesn't exist. Let's get you back on track.
+      </p>
+      <a href="/"
+         class="inline-flex items-center gap-2 bg-primary hover:bg-[#d94e37] text-white font-extrabold text-[13px] px-6 py-3 rounded-md transition-colors duration-200 hover:-translate-y-0.5">
+        Back to Home →
+      </a>
+    </div>
+  </section>
+</Page>

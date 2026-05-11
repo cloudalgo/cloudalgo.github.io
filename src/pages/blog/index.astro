@@ -1,0 +1,38 @@
+---
+// src/pages/blog/index.astro
+import { getCollection } from 'astro:content';
+import Page from '../../layouts/Page.astro';
+import BlogCard from '../../components/ui/BlogCard.astro';
+
+const posts = (await getCollection('blog', ({ data }) => data.published))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+---
+<Page
+  title="Blog — CloudAlgo"
+  description="Salesforce, Heroku, MuleSoft, and AWS insights from the CloudAlgo consulting team."
+>
+  <section class="bg-[#111] px-6 py-24">
+    <div class="max-w-6xl mx-auto">
+      <h1 class="font-display font-black text-white leading-tight anim-fade-up"
+          style="font-size: clamp(36px, 5vw, 60px); letter-spacing: -2px;">
+        All Articles
+      </h1>
+    </div>
+  </section>
+
+  <section class="bg-[#f9f9f9] px-6 py-16">
+    <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-4">
+      {posts.map((post, i) => (
+        <BlogCard
+          title={post.data.title}
+          excerpt={post.data.excerpt}
+          category={post.data.category}
+          date={post.data.date}
+          readTime={post.data.readTime}
+          slug={post.id}
+          delay={i * 80}
+        />
+      ))}
+    </div>
+  </section>
+</Page>

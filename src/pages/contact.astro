@@ -1,0 +1,62 @@
+---
+// src/pages/contact.astro
+import Page from '../layouts/Page.astro';
+import ContactForm from '../components/ui/ContactForm.tsx';
+---
+<Page
+  title="Contact Us — CloudAlgo"
+  description="Book a free consultation or send us a message. We respond within one business day."
+>
+  <section class="bg-[#111] px-6 py-24 min-h-screen">
+    <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16">
+
+      <!-- Left: Info -->
+      <div>
+        <span class="block text-[10px] font-extrabold tracking-[3px] uppercase text-primary mb-4">
+          Get In Touch
+        </span>
+        <h1 class="font-display font-black text-white leading-tight mb-5 anim-fade-up"
+            style="font-size: clamp(32px, 4vw, 52px); letter-spacing: -1.5px;">
+          Let's talk about<br/>
+          <span class="text-primary">everything!</span>
+        </h1>
+        <p class="text-[15px] text-[#94a3b8] font-semibold leading-relaxed mb-10">
+          Need help or have questions? Schedule a time with us or send a message below.
+        </p>
+        <div class="space-y-4">
+          <div class="flex items-start gap-3">
+            <span class="text-primary mt-0.5">📍</span>
+            <div>
+              <div class="text-[11px] font-extrabold text-[#555] uppercase tracking-widest mb-0.5">Office</div>
+              <div class="text-[14px] text-[#ccc] font-semibold">115, Irish, Manglam Aananda, Jaipur, India</div>
+            </div>
+          </div>
+          <div class="flex items-start gap-3">
+            <span class="text-primary mt-0.5">✉️</span>
+            <div>
+              <div class="text-[11px] font-extrabold text-[#555] uppercase tracking-widest mb-0.5">Email</div>
+              <a href="mailto:contact@cloudalgo.com" class="text-[14px] text-[#ccc] font-semibold hover:text-primary transition-colors">
+                contact@cloudalgo.com
+              </a>
+            </div>
+          </div>
+          <div class="flex items-start gap-3">
+            <span class="text-primary mt-0.5">📞</span>
+            <div>
+              <div class="text-[11px] font-extrabold text-[#555] uppercase tracking-widest mb-0.5">Phone</div>
+              <a href="tel:+916377360659" class="text-[14px] text-[#ccc] font-semibold hover:text-primary transition-colors">
+                +91 6377-360659
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Form -->
+      <div class="anim-scale-pop">
+        <ContactForm client:visible />
+      </div>
+
+    </div>
+  </section>
+</Page>

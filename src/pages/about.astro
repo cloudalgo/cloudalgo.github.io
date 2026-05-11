@@ -1,0 +1,72 @@
+---
+// src/pages/about.astro
+import Page from '../layouts/Page.astro';
+import WhyUs from '../components/sections/WhyUs.astro';
+import StatsBar from '../components/sections/StatsBar.astro';
+import SectionBadge from '../components/ui/SectionBadge.astro';
+
+const industries = [
+  'Retail', 'Healthcare & Hospitals', 'Energy & Utilities', 'Insurance',
+  'Services', 'Pharma', 'Communications', 'Manufacturing', 'Consumer Goods', 'Non Profit',
+];
+---
+<Page
+  title="About Us — CloudAlgo"
+  description="CloudAlgo is a cloud-based Business Process Automation Consulting Company specialising in Salesforce and Heroku, established in 2019."
+>
+  <!-- Hero -->
+  <section class="bg-[#111] px-6 py-24">
+    <div class="max-w-6xl mx-auto">
+      <SectionBadge>About Us</SectionBadge>
+      <h1 class="font-display font-black text-white leading-tight mb-5 anim-fade-up"
+          style="font-size: clamp(36px, 5vw, 60px); letter-spacing: -2px;">
+        We are a cloud-based<br/>
+        <span class="text-primary">Salesforce-first</span> team.
+      </h1>
+      <p class="text-[16px] text-[#94a3b8] font-semibold max-w-[560px] leading-relaxed">
+        A Business Process Automation Consulting Company specialising in the Salesforce and Heroku ecosystem since 2019.
+      </p>
+    </div>
+  </section>
+
+  <!-- Story -->
+  <section class="bg-white px-6 py-20">
+    <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
+      <div class="anim-fade-up">
+        <h2 class="font-display font-black text-black mb-6"
+            style="font-size: clamp(24px, 3.5vw, 36px); letter-spacing: -1px;">
+          Our story
+        </h2>
+        <div class="space-y-4 text-[15px] text-[#6b7280] leading-relaxed">
+          <p>
+            We are a team of experienced consultants who specialise in Salesforce and Heroku ecosystems.
+            Our company is cloud-based, which allows us to work with clients from all around the world.
+          </p>
+          <p>
+            Our approach is collaborative — we work closely with our clients to understand their business
+            processes and goals, then craft customised solutions tailored to their unique requirements.
+          </p>
+          <p>
+            At CloudAlgo, we are passionate about technology and its potential to transform businesses.
+            Let us help you take your business to the next level with Salesforce and Heroku.
+          </p>
+        </div>
+      </div>
+      <div class="anim-scale-pop">
+        <h3 class="font-display font-extrabold text-black text-[15px] uppercase tracking-widest mb-5">
+          Industries We Serve
+        </h3>
+        <div class="flex flex-wrap gap-2">
+          {industries.map(ind => (
+            <span class="bg-[#f9f9f9] border border-[#e5e5e5] text-[12px] font-semibold text-[#6b7280] px-3 py-1.5 rounded-full">
+              {ind}
+            </span>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <StatsBar />
+  <WhyUs />
+</Page>

@@ -1,0 +1,63 @@
+---
+// src/pages/services/index.astro
+import { getCollection } from 'astro:content';
+import Page from '../../layouts/Page.astro';
+import ServiceCard from '../../components/ui/ServiceCard.astro';
+
+const services = (await getCollection('services'))
+  .sort((a, b) => a.data.order - b.data.order);
+---
+<Page
+  title="Services — CloudAlgo"
+  description="Salesforce consulting, AppExchange product development, and managed services from CloudAlgo."
+>
+  <!-- Hero -->
+  <section class="bg-[#111] px-6 py-24">
+    <div class="max-w-6xl mx-auto">
+      <span class="block text-[10px] font-extrabold tracking-[3px] uppercase text-primary mb-4">What We Do</span>
+      <h1 class="font-display font-black text-white leading-tight mb-5 anim-fade-up"
+          style="font-size: clamp(36px, 5vw, 60px); letter-spacing: -2px;">
+        Salesforce solutions,<br/>end to end.
+      </h1>
+      <p class="text-[16px] text-[#94a3b8] font-semibold max-w-[560px] leading-relaxed">
+        We specialize in delivering tailored cloud solutions. From initial consulting to managed operations — we've got you covered.
+      </p>
+    </div>
+  </section>
+
+  <!-- Service cards -->
+  <section class="bg-[#111] px-6 pb-24">
+    <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-4">
+      {services.map((s, i) => (
+        <ServiceCard
+          icon={s.data.icon}
+          title={s.data.title}
+          body={s.data.excerpt}
+          href={`/services/${s.id}`}
+          delay={i * 130}
+        />
+      ))}
+    </div>
+  </section>
+
+  <!-- Process steps -->
+  <section class="bg-[#f9f9f9] px-6 py-20">
+    <div class="max-w-6xl mx-auto">
+      <h2 class="font-display font-black text-black mb-12 anim-fade-up"
+          style="font-size: clamp(24px, 3.5vw, 36px); letter-spacing: -1px;">
+        Our Development Process
+      </h2>
+      <div class="flex flex-wrap gap-4">
+        {['Discovery', 'Define', 'Design & Architect', 'Develop & Test', 'Deploy', 'Support & Enhancement'].map((step, i) => (
+          <div class="flex items-center gap-3">
+            <div class="w-7 h-7 rounded-full bg-primary text-white text-[11px] font-extrabold flex items-center justify-center shrink-0">
+              {i + 1}
+            </div>
+            <span class="font-display font-bold text-[13px] text-black">{step}</span>
+            {i < 5 && <span class="text-[#e5e5e5] text-[18px] hidden sm:block">→</span>}
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+</Page>

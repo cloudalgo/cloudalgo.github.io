@@ -1,0 +1,45 @@
+---
+// src/pages/blog/[slug].astro
+import { getCollection, render } from 'astro:content';
+import Page from '../../layouts/Page.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => data.published);
+  return posts.map(p => ({ params: { slug: p.id }, props: { post: p } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const formattedDate = post.data.date.toLocaleDateString('en-US', {
+  year: 'numeric', month: 'long', day: 'numeric'
+});
+---
+<Page
+  title={`${post.data.title} — CloudAlgo Blog`}
+  description={post.data.excerpt}
+>
+  <section class="bg-[#111] px-6 py-20">
+    <div class="max-w-3xl mx-auto">
+      <a href="/blog" class="text-[12px] font-bold text-[#64748b] hover:text-primary transition-colors mb-6 inline-block">
+        ← All Articles
+      </a>
+      <div class="text-[10px] font-extrabold tracking-[2px] uppercase text-primary mb-4">
+        {post.data.category}
+      </div>
+      <h1 class="font-display font-black text-white leading-tight mb-4 anim-fade-up"
+          style="font-size: clamp(28px, 4vw, 48px); letter-spacing: -1.5px;">
+        {post.data.title}
+      </h1>
+      <div class="text-[13px] text-[#64748b] font-semibold">
+        {formattedDate} · {post.data.readTime} min read
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-white px-6 py-16">
+    <div class="max-w-3xl mx-auto prose prose-lg prose-headings:font-display prose-headings:font-extrabold prose-a:text-primary">
+      <Content />
+    </div>
+  </section>
+</Page>
