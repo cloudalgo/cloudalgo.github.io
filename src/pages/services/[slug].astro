@@ -1,5 +1,4 @@
 ---
-// src/pages/services/[slug].astro
 import { getCollection, render } from 'astro:content';
 import Page from '../../layouts/Page.astro';
 
@@ -15,29 +14,32 @@ const { Content } = await render(service);
   title={`${service.data.title} — CloudAlgo`}
   description={service.data.excerpt}
 >
-  <section class="bg-[#111] px-6 pt-12 pb-20">
-    <div class="max-w-3xl mx-auto">
-      <a href="/services"
-         class="inline-flex items-center gap-1.5 text-[12px] font-bold text-[#64748b] hover:text-primary transition-colors mb-10 group">
-        <span class="group-hover:-translate-x-0.5 transition-transform">←</span>
-        Back to Services
-      </a>
-      <div class="w-14 h-14 bg-[#1a1a1a] rounded-2xl flex items-center justify-center text-3xl mb-6 border border-white/5">
-        {service.data.icon}
+
+  <!-- Page header -->
+  <div class="page-header">
+    <div class="container">
+      <nav class="breadcrumb">
+        <a href="/services">&larr; Services</a>
+      </nav>
+      <h1>{service.data.title}</h1>
+      <p>{service.data.excerpt}</p>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <section style="background:#fff;padding:5rem 0;">
+    <div class="container" style="max-width:780px;">
+      <div class="blog-post-details" style="padding:0;background:transparent;">
+        <Content />
       </div>
-      <h1 class="font-display font-black text-white leading-tight mb-4 anim-fade-up"
-          style="font-size: clamp(32px, 5vw, 52px); letter-spacing: -1.5px;">
-        {service.data.title}
-      </h1>
-      <p class="text-[17px] text-[#94a3b8] font-semibold leading-relaxed max-w-140">
-        {service.data.excerpt}
-      </p>
+      <div style="margin-top:3.5rem;padding-top:2rem;border-top:1px solid #E0E0DC;text-align:center;">
+        <h3 style="font-size:1.5rem;font-weight:800;margin-bottom:0.75rem;letter-spacing:-0.02em;">
+          Ready to work together?
+        </h3>
+        <p style="color:#5A5A5A;margin-bottom:1.5rem;">Let's discuss how we can help your team.</p>
+        <a href="/contact" class="btn btn-primary">Book a consultation &rarr;</a>
+      </div>
     </div>
   </section>
 
-  <section class="bg-white px-6 py-16">
-    <div class="max-w-3xl mx-auto prose prose-lg prose-headings:font-display prose-headings:font-extrabold prose-a:text-primary">
-      <Content />
-    </div>
-  </section>
 </Page>

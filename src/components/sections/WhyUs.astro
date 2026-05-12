@@ -1,28 +1,55 @@
 ---
-// src/components/sections/WhyUs.astro
-import SectionBadge from '../ui/SectionBadge.astro';
-import WhyCard from '../ui/WhyCard.astro';
-
 const items = [
-  { icon: '⚡', title: 'On Time Delivery',   body: 'We ship on schedule. Every time. No surprises, no excuses.' },
-  { icon: '🏆', title: 'Certified Experts',  body: 'Certified architects and developers with deep Salesforce knowledge.' },
-  { icon: '💡', title: 'Simplicity First',   body: 'Clean, maintainable solutions over over-engineered complexity.' },
-  { icon: '💰', title: 'Cost Effective',     body: 'Maximum ROI for your Salesforce budget — no hidden fees.' },
+  {
+    number: '01',
+    title: 'Certified Expertise',
+    body: 'Our architects hold active Salesforce certifications across Admin, Developer, and Architect tracks.',
+  },
+  {
+    number: '02',
+    title: 'On-Time Delivery',
+    body: 'We scope tightly and ship on schedule. No surprise delays, no scope creep.',
+  },
+  {
+    number: '03',
+    title: 'Clean Architecture',
+    body: 'No over-engineered orgs. We build for maintainability and your team\'s long-term ownership.',
+  },
+  {
+    number: '04',
+    title: 'Cost-Effective',
+    body: 'Transparent pricing, no surprise invoices. Flexible retainer or project-based engagements.',
+  },
 ];
 ---
-<section class="bg-[#f9f9f9] px-6 py-20">
-  <div class="max-w-6xl mx-auto">
-    <SectionBadge>Why Choose Us</SectionBadge>
-    <h2
-      class="font-display font-black text-black leading-tight mb-10 anim-fade-up"
-      style="font-size: clamp(28px, 4vw, 44px); letter-spacing: -1px;"
-    >
-      Built different.<br/>Proven results.
-    </h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 max-w-[700px]">
-      {items.map((item, i) => (
-        <WhyCard {...item} delay={i * 100} />
-      ))}
+<section style="background:#fff;padding:6rem 0;border-top:1px solid #E0E0DC;border-bottom:1px solid #E0E0DC;">
+  <div style="max-width:1278px;margin:0 auto;padding:0 1.5rem;">
+    <div class="row align-items-center" style="gap:3rem 0;">
+      <!-- Left: heading -->
+      <div class="col-lg-4">
+        <p class="section-label anim-fade-up">Why choose us</p>
+        <h2 class="anim-fade-up" style="font-size:clamp(2rem,3.5vw,3rem);font-weight:800;letter-spacing:-0.02em;margin-bottom:1.25rem;transition-delay:0.05s;">
+          Why teams choose CloudAlgo
+        </h2>
+        <p style="color:#5A5A5A;font-size:1rem;line-height:1.7;max-width:340px;">
+          We've helped 15+ companies get more from their Salesforce investment — without the bloat.
+        </p>
+        <a href="/about" class="btn btn-outline" style="margin-top:2rem;font-size:0.9375rem;padding:0.625rem 1.5rem;">
+          About us &rarr;
+        </a>
+      </div>
+      <!-- Right: cards grid -->
+      <div class="col-lg-8">
+        <div class="why-us-grid">
+          {items.map((item, i) => (
+            <div class="why-card anim-fade-up" style={`transition-delay:${0.1 + i * 0.08}s`}>
+              <div class="why-card-number">{item.number}</div>
+              <h3>{item.title}</h3>
+              <p>{item.body}</p>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   </div>
 </section>

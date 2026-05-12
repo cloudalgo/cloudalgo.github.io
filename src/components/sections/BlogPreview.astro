@@ -1,5 +1,4 @@
 ---
-// src/components/sections/BlogPreview.astro
 import { getCollection } from 'astro:content';
 import BlogCard from '../ui/BlogCard.astro';
 
@@ -8,29 +7,31 @@ const posts = allPosts
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
   .slice(0, 3);
 ---
-<section class="bg-[#f9f9f9] px-6 py-20">
-  <div class="max-w-6xl mx-auto">
-    <div class="flex items-end justify-between mb-8">
-      <h2 class="font-display font-black text-black anim-fade-up"
-          style="font-size: clamp(24px, 3.5vw, 36px); letter-spacing: -1px;">
-        Latest Articles
-      </h2>
-      <a href="/blog"
-         class="text-[13px] font-extrabold text-primary hover:underline underline-offset-4">
-        View All &rarr;
+<section style="background:#fff;padding:6rem 0;border-top:1px solid #E0E0DC;">
+  <div style="max-width:1278px;margin:0 auto;padding:0 1.5rem;">
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:3rem;gap:1rem;flex-wrap:wrap;">
+      <div>
+        <p class="section-label anim-fade-up">Writing</p>
+        <h2 class="anim-fade-up" style="font-size:clamp(2rem,3.5vw,3rem);font-weight:800;letter-spacing:-0.02em;margin:0;transition-delay:0.05s;">
+          From the team
+        </h2>
+      </div>
+      <a href="/blog" class="btn btn-outline" style="font-size:0.9375rem;padding:0.625rem 1.5rem;">
+        View all posts &rarr;
       </a>
     </div>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-      {posts.map((post, i) => (
-        <BlogCard
-          title={post.data.title}
-          excerpt={post.data.excerpt}
-          category={post.data.category}
-          date={post.data.date}
-          readTime={post.data.readTime}
-          slug={post.id}
-          delay={i * 130}
-        />
+    <div class="row">
+      {posts.map((post) => (
+        <div class="col-lg-4 col-md-4" style="margin-bottom:1.5rem;display:flex;">
+          <BlogCard
+            title={post.data.title}
+            excerpt={post.data.excerpt}
+            category={post.data.category}
+            date={post.data.date}
+            readTime={post.data.readTime}
+            slug={post.id}
+          />
+        </div>
       ))}
     </div>
   </div>

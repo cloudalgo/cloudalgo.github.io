@@ -1,58 +1,154 @@
 ---
+const year = new Date().getFullYear()
 ---
-<footer class="main-footer">
-  <section class="footer">
-    <div class="container">
 
-      <div class="lets-talk">
-        Let's talk
-        <div>
-          <span class="icon-arrow_forward"></span>
-          <a href="mailto:sales@cloudalgo.com">sales@cloudalgo.com</a>
+<!-- ── "Let's build" CTA strip ───────────────────────────── -->
+<section class="footer-cta">
+  <div class="container">
+    <h2>Let's build something<br/>together.</h2>
+    <a href="/contact" class="btn btn-light" style="font-size:1rem;">
+      Start a project &rarr;
+    </a>
+  </div>
+</section>
+
+<!-- ── Main footer ───────────────────────────────────────── -->
+<footer class="ca-footer">
+
+  <!-- Content -->
+  <div class="ca-footer-inner">
+    <div class="ca-footer-grid">
+
+      <!-- Brand column -->
+      <div class="ca-fbrand">
+        <h2 class="ca-fbrand-talk">Let's talk</h2>
+        <a href="mailto:sales@cloudalgo.com" class="ca-fbrand-email-cta">&rarr; sales@cloudalgo.com</a>
+        <p class="ca-fbrand-desc">
+          CloudAlgo, established in the year 2019, is a consulting firm that
+          prioritizes its customers and a Salesforce Consulting Partner.
+        </p>
+        <div class="ca-fbrand-badges">
+          <a href="https://appexchange.salesforce.com/appxConsultingListingDetail?listingId=a0N4V00000JdabDUAR&legacy=true"
+             target="_blank" rel="noreferrer">
+            <img src="/salesforce/Salesforce_Partner_Badge_RGB.png"
+                 alt="Certified Salesforce Partner"
+                 style="height:72px;width:auto;" />
+          </a>
+          <a href="https://appexchange.salesforce.com/appxConsultingListingDetail?listingId=a0N4V00000JdabDUAR&legacy=true"
+             target="_blank" rel="noreferrer">
+            <img src="/salesforce/Available_On_Appexchange_Badge_RGB_Transparent.png"
+                 alt="Available on AppExchange"
+                 style="height:72px;width:auto;" />
+          </a>
         </div>
+        <p class="ca-footer-copy">{year} &copy; cloudalgo.com, All rights reserved.</p>
       </div>
 
-      <div class="row">
-        <div class="col-md-7 align-self-center">
-          <address>
-            CloudAlgo, established in the year 2019, is a consulting firm that
-            prioritizes its customers and a Salesforce Consulting Partner.
-          </address>
-          <div class="d-flex flex-wrap" style="gap:0.5rem;margin-bottom:1rem;">
-            <div class="p-2">
-              <a href="https://appexchange.salesforce.com/appxConsultingListingDetail?listingId=a0N4V00000JdabDUAR&legacy=true"
-                 target="_blank" rel="noreferrer">
-                <img src="/salesforce/Salesforce_Partner_Badge_RGB.png"
-                     alt="Certified Salesforce Partner" style="height:100px;width:auto;" />
-              </a>
-            </div>
-            <div class="p-2">
-              <a href="https://appexchange.salesforce.com/appxConsultingListingDetail?listingId=a0N4V00000JdabDUAR&legacy=true"
-                 target="_blank" rel="noreferrer">
-                <img src="/salesforce/Available_On_Appexchange_Badge_RGB.png"
-                     alt="Available on Salesforce AppExchange" style="height:100px;width:auto;" />
-              </a>
-            </div>
-          </div>
-          <div class="copy-right">
-            {new Date().getFullYear()} © cloudalgo.com, All rights reserved.
-          </div>
-        </div>
+      <!-- Company links -->
+      <div>
+        <ul class="ca-flinks">
+          <li><a href="/about">About</a></li>
+          <li><a href="/services">Services</a></li>
+          <li><a href="/blog">Blogs</a></li>
+          <li><a href="/page/disclaimer">Disclaimer</a></li>
+        </ul>
+      </div>
 
-        <div class="col-md-5 page-links">
-          <ul class="list-unstyled">
-            <li><a href="/about">About</a></li>
-            <li><a href="/services">Services</a></li>
-            <li><a href="/blog">Blogs</a></li>
-          </ul>
-          <ul class="list-unstyled">
-            <li><a href="https://www.linkedin.com/company/cloudalgo" target="_blank" rel="noopener noreferrer">Linkedin</a></li>
-            <li><a href="https://github.com/cloudalgo" target="_blank" rel="noopener noreferrer">Github</a></li>
-            <li><a href="mailto:contact@cloudalgo.com">Contact</a></li>
-          </ul>
-        </div>
+      <!-- Connect links -->
+      <div>
+        <ul class="ca-flinks">
+          <li><a href="https://www.linkedin.com/company/cloudalgo" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+          <li><a href="https://github.com/cloudalgo" target="_blank" rel="noopener noreferrer">Github</a></li>
+          <li><a href="https://twitter.com/cloudalgo" target="_blank" rel="noopener noreferrer">Twitter</a></li>
+          <li><a href="/page/privacy-policy">Privacy Policy</a></li>
+        </ul>
       </div>
 
     </div>
-  </section>
+  </div>
 </footer>
+
+<style>
+/* ── CTA strip (reuses global .footer-cta styles) ────────── */
+
+/* ── Footer wrapper ──────────────────────────────────────── */
+.ca-footer {
+  background: #0A0A0A;
+  color: rgba(255,255,255,0.55);
+}
+
+/* ── Content wrapper ─────────────────────────────────────── */
+.ca-footer-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 1278px;
+  margin: 0 auto;
+  padding: 0 1.5rem 2.5rem;
+}
+
+/* ── Three-col grid ──────────────────────────────────────── */
+.ca-footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 3rem;
+  padding: 4.5rem 0 3rem;
+  align-items: start;
+}
+@media (max-width: 767px) {
+  .ca-footer-grid { grid-template-columns: 1fr; gap: 2rem; padding: 3rem 0 2rem; }
+}
+
+/* Brand */
+.ca-fbrand-talk {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+  margin-bottom: 0.5rem;
+}
+.ca-fbrand-email-cta {
+  display: inline-block;
+  color: rgba(255,255,255,0.6);
+  font-size: 0.9375rem;
+  text-decoration: none;
+  margin-bottom: 1.75rem;
+  transition: color 0.2s;
+}
+.ca-fbrand-email-cta:hover { color: #fff; }
+.ca-fbrand-desc {
+  font-size: 0.875rem;
+  line-height: 1.8;
+  color: rgba(255,255,255,0.38);
+  margin-bottom: 1.25rem;
+  max-width: 320px;
+}
+.ca-fbrand-badges {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+.ca-footer-copy {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.28);
+}
+
+/* Link columns */
+.ca-flinks {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding-top: 0.5rem;
+}
+.ca-flinks a {
+  color: rgba(255,255,255,0.55);
+  text-decoration: none;
+  font-size: 0.9375rem;
+  transition: color 0.2s;
+}
+.ca-flinks a:hover { color: #fff; }
+</style>

@@ -1,24 +1,19 @@
 ---
-// src/pages/404.astro
 import Page from '../layouts/Page.astro';
 ---
 <Page title="Page Not Found — CloudAlgo">
-  <section class="bg-[#111] min-h-screen flex items-center justify-center px-6 text-center">
+  <section style="background:#F5F5F2;min-height:80vh;display:flex;align-items:center;justify-content:center;padding:6rem 1.5rem;text-align:center;">
     <div>
-      <div class="font-display font-black text-primary mb-4 anim-fade-up"
-           style="font-size: clamp(80px, 15vw, 160px); line-height: 1; letter-spacing: -4px;">
+      <div style="font-size:clamp(6rem,15vw,12rem);font-weight:900;color:#E0E0DC;line-height:1;letter-spacing:-0.05em;font-family:'Outfit',sans-serif;user-select:none;" aria-hidden="true">
         404
       </div>
-      <h1 class="font-display font-black text-white text-[28px] mb-4 anim-fade-up">
+      <h1 style="font-size:clamp(1.75rem,3vw,2.5rem);font-weight:800;color:#0A0A0A;margin:1rem 0 0.75rem;letter-spacing:-0.03em;">
         Page not found
       </h1>
-      <p class="text-[#64748b] font-semibold mb-8 anim-fade-up">
-        That page doesn't exist. Let's get you back on track.
+      <p style="color:#5A5A5A;font-size:1rem;margin-bottom:2.5rem;max-width:380px;margin-left:auto;margin-right:auto;">
+        That page doesn't exist or has moved. Let's get you back on track.
       </p>
-      <a href="/"
-         class="inline-flex items-center gap-2 bg-primary hover:bg-[#d94e37] text-white font-extrabold text-[13px] px-6 py-3 rounded-md transition-colors duration-200 hover:-translate-y-0.5">
-        Back to Home →
-      </a>
+      <a href="/" class="btn btn-primary">Back to home &rarr;</a>
     </div>
   </section>
 </Page>

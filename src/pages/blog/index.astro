@@ -2,81 +2,113 @@
 import { getCollection } from 'astro:content';
 import Page from '../../layouts/Page.astro';
 import BlogCard from '../../components/ui/BlogCard.astro';
+import { getBlogIllustration } from '../../data/blog-illustrations';
 
 const allPublished = (await getCollection('blog', ({ data }) => data.published))
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 
-const editorsPick = allPublished.find(p => p.data.featured === 'editors-pick');
-const bottomPick  = allPublished.find(p => p.data.featured === 'bottom-pick');
-const regularPosts = allPublished.filter(p => !p.data.featured);
+const featuredPost = allPublished.find(p => p.data.featured === 'editors-pick') ?? allPublished[0];
+const otherPosts   = allPublished.filter(p => p !== featuredPost);
+
+const featuredIllustration = featuredPost ? getBlogIllustration(featuredPost.id) : '';
+
+const categories = ['All', ...Array.from(new Set(allPublished.map(p => p.data.category)))];
 
 const formatDate = (d: Date) =>
   d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 ---
-<Page title="Blog — CloudAlgo"
-      description="Salesforce, Heroku, MuleSoft, and AWS insights from the CloudAlgo consulting team.">
+<Page
+  title="Blog — CloudAlgo"
+  description="Technical insights on Salesforce, Heroku, MuleSoft, Airflow, and AWS from the CloudAlgo team."
+>
 
-  <!-- Hero -->
-  <div class="heroBanner-innerPage blog-banner">
-    <section class="banner-caption d-flex">
-      <div class="container d-flex align-content-center flex-wrap">
-        <div class="banner-caption_inner">
-          <h1>Blog</h1>
-          <p class="paragraph-large breadcrumb">
-            <a href="/">Home</a>
-            <span class="icon-arrow_forward"></span>
-            Blog
-          </p>
-        </div>
+  <!-- Page header — matches rest of site -->
+  <div class="page-header">
+    <div class="container">
+      <nav class="breadcrumb">
+        <a href="/">Home</a><span>&rarr;</span><span>Blog</span>
+      </nav>
+      <h1>From the team</h1>
+      <p>Technical deep-dives on Salesforce, Heroku, MuleSoft, Airflow, and AWS from engineers who build with them every day.</p>
+
+      <!-- Category filter — lives inside the header, below the title -->
+      <div class="blog-filter-row" role="tablist" aria-label="Filter by category">
+        {categories.map((cat, i) => (
+          <button
+            class:list={['blog-filter-btn', { 'blog-filter-btn--active': i === 0 }]}
+            data-cat={cat === 'All' ? 'all' : cat}
+            role="tab"
+            aria-selected={i === 0 ? 'true' : 'false'}
+            type="button"
+          >
+            {cat}
+          </button>
+        ))}
+        <span class="blog-filter-count" id="visible-count">{allPublished.length} articles</span>
       </div>
-    </section>
+    </div>
   </div>
 
-  <!-- Editor's Pick -->
-  {editorsPick && (
-    <section class="latest-post-section blog-post-section section-padding--vertical">
+  <!-- Featured post — full-width editorial card -->
+  {featuredPost && (
+    <section class="blog-featured-wrap">
       <div class="container">
-        <div class="heading-n-description">
-          <h2>Editor's Pick</h2>
-        </div>
-        <div class="card mb-3">
-          <div class="row g-0">
-            <div class="col-lg-6 col-md-7 order-md-2 text-md-end editors-pick-img-wrap">
-              {editorsPick.data.image
-                ? <img src={editorsPick.data.image} alt={editorsPick.data.title} class="img-fluid ps-lg-5" loading="eager" style="height:100%;width:100%;object-fit:cover;" />
-                : <div class="editor-pick-placeholder ps-lg-5"></div>
-              }
+
+        <a href={`/blog/${featuredPost.id}`} class="blog-featured-card" aria-label={`Read: ${featuredPost.data.title}`}>
+
+          <!-- Left: text panel -->
+          <div class="blog-featured-body">
+
+            <div class="blog-featured-top">
+              <span class="blog-featured-badge">Featured</span>
+              <span class="blog-featured-cat">{featuredPost.data.category}</span>
             </div>
-            <div class="col-lg-6 col-md-5 order-md-1 d-flex align-items-center">
-              <div class="card-body">
-                <h3 class="card-title">
-                  <a href={`/blog/${editorsPick.id}`}>{editorsPick.data.title}</a>
-                </h3>
-                <p class="card-text">{editorsPick.data.excerpt}</p>
-                <p class="card-text d-flex justify-content-between">
-                  <small class="text-muted">{formatDate(editorsPick.data.date)}</small>
-                </p>
+
+            <h2 class="blog-featured-title">{featuredPost.data.title}</h2>
+            <p class="blog-featured-excerpt">{featuredPost.data.excerpt}</p>
+
+            <div class="blog-featured-footer">
+              <div class="blog-featured-meta">
+                {featuredPost.data.authorPhoto && (
+                  <img src={featuredPost.data.authorPhoto} alt={featuredPost.data.author ?? ''}
+                       class="blog-featured-avatar" loading="eager" />
+                )}
+                <span class="blog-featured-byline">
+                  {featuredPost.data.author ?? 'CloudAlgo Team'}
+                  <span style="opacity:0.5"> · </span>
+                  {formatDate(featuredPost.data.date)}
+                  <span style="opacity:0.5"> · </span>
+                  {featuredPost.data.readTime} min read
+                </span>
               </div>
+              <span class="blog-featured-cta">Read article →</span>
             </div>
+
           </div>
-        </div>
+
+          <!-- Right: illustration panel -->
+          <div class="blog-featured-illus-panel" aria-hidden="true">
+            {featuredIllustration
+              ? <div class="blog-featured-illus-svg" set:html={featuredIllustration} />
+              : <div class="blog-featured-illus-empty" />
+            }
+          </div>
+
+        </a>
+
       </div>
     </section>
   )}
 
-  <!-- Latest Posts -->
-  <section class="blog-grid-section section-padding--vertical grey-bg2">
+  <!-- All articles grid -->
+  <section class="blog-grid-wrap">
     <div class="container">
-      <div class="heading-n-description mb-5">
-        <h2>Latest Posts</h2>
-      </div>
-      {regularPosts.length === 0 ? (
-        <p style="text-align:center;padding:4rem 0;color:var(--ca-secondary-black);font-weight:600;">No articles yet. Check back soon.</p>
-      ) : (
+      {otherPosts.length > 0 && (
         <>
-          <div class="row" id="blog-posts-grid">
-            {regularPosts.map((post, i) => (
-              <div class={`col-md-3 mb-5 blog-post-item${i >= 8 ? ' hidden-post' : ''}`}>
+          <div class="blog-grid" id="blog-grid">
+            {otherPosts.map((post, i) => (
+              <div class={`blog-grid-item${i >= 9 ? ' hidden-post' : ''}`}
+                   data-category={post.data.category}>
                 <BlogCard
                   title={post.data.title}
                   excerpt={post.data.excerpt}
@@ -85,13 +117,18 @@ const formatDate = (d: Date) =>
                   readTime={post.data.readTime}
                   slug={post.id}
                   image={post.data.image}
+                  author={post.data.author}
+                  authorPhoto={post.data.authorPhoto}
+                  delay={Math.min(i % 3, 2) * 80}
                 />
               </div>
             ))}
           </div>
-          {regularPosts.length > 8 && (
-            <div class="load-more-wrap">
-              <button id="load-more-btn" class="btn-load-more" type="button">Load More</button>
+          {otherPosts.length > 9 && (
+            <div style="text-align:center;margin-top:3rem;">
+              <button id="load-more-btn" class="btn btn-outline" type="button">
+                Load more articles
+              </button>
             </div>
           )}
         </>
@@ -99,50 +136,293 @@ const formatDate = (d: Date) =>
     </div>
   </section>
 
-  <!-- Bottom Pick -->
-  {bottomPick && (
-    <section class="last-post-section blog-post-section section-padding--vertical">
-      <div class="container">
-        <div class="card mt-3 mb-3">
-          <div class="row g-0">
-            <div class="col-lg-7 col-md-7 order-md-2 text-md-end bottom-pick-img-wrap">
-              {bottomPick.data.image
-                ? <img src={bottomPick.data.image} alt={bottomPick.data.title} class="img-fluid ps-lg-5" loading="lazy" style="height:100%;width:100%;object-fit:cover;" />
-                : <div class="editor-pick-placeholder ps-lg-5"></div>
-              }
-            </div>
-            <div class="col-lg-5 col-md-5 order-md-1 d-flex align-items-center">
-              <div class="card-body">
-                <h3 class="card-title">
-                  <a href={`/blog/${bottomPick.id}`}>{bottomPick.data.title}</a>
-                </h3>
-                <p class="card-text">{bottomPick.data.excerpt}</p>
-                <p class="card-text d-flex justify-content-between">
-                  <small class="text-muted">{formatDate(bottomPick.data.date)}</small>
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  )}
-
 </Page>
 
 <style>
-  .hidden-post { display: none; }
+/* ── Filter row (sits inside .page-header) ──── */
+.blog-filter-row {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #E0E0DC;
+}
+.blog-filter-btn {
+  background: none;
+  border: 1.5px solid #E0E0DC;
+  border-radius: 100px;
+  padding: 0.375rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #5A5A5A;
+  cursor: pointer;
+  font-family: 'Outfit', sans-serif;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.blog-filter-btn:hover {
+  color: #0A0A0A;
+  border-color: #0A0A0A;
+  background: #fff;
+}
+.blog-filter-btn--active {
+  background: #0A0A0A;
+  color: #fff;
+  border-color: #0A0A0A;
+}
+.blog-filter-count {
+  margin-left: auto;
+  font-size: 0.8125rem;
+  color: #aaa;
+  font-weight: 500;
+}
+
+/* ── Featured card — split layout ───────────── */
+.blog-featured-wrap {
+  background: #0A0A0A;
+  padding: 2.5rem 0;
+  border-bottom: 1px solid #222;
+}
+.blog-featured-card {
+  display: grid;
+  grid-template-columns: 55% 45%;
+  text-decoration: none;
+  border-radius: 14px;
+  overflow: hidden;
+  min-height: 380px;
+  background: #111;
+  border: 1px solid rgba(255,255,255,0.08);
+  transition: border-color 0.3s;
+}
+.blog-featured-card:hover {
+  border-color: rgba(255,255,255,0.2);
+}
+
+/* Left: text panel */
+.blog-featured-body {
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
+  background: #0A0A0A;
+}
+
+/* Right: illustration panel */
+.blog-featured-illus-panel {
+  background: #161616;
+  border-left: 1px solid rgba(255,255,255,0.07);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  overflow: hidden;
+  position: relative;
+  transition: background 0.3s;
+}
+.blog-featured-card:hover .blog-featured-illus-panel {
+  background: #1a1a1a;
+}
+.blog-featured-illus-svg {
+  width: 100%;
+}
+/* Invert SVG strokes (black → white) for the dark panel */
+.blog-featured-illus-svg svg {
+  width: 100%;
+  height: auto;
+  filter: invert(1) opacity(0.75);
+  transition: filter 0.4s ease, transform 0.5s ease;
+}
+.blog-featured-card:hover .blog-featured-illus-svg svg {
+  filter: invert(1) opacity(0.9);
+  transform: scale(1.03);
+}
+.blog-featured-illus-empty {
+  width: 100%;
+  height: 100%;
+  background: #1a1a1a;
+}
+.blog-featured-top {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  margin-bottom: 0.25rem;
+}
+.blog-featured-badge {
+  background: #fff;
+  color: #0A0A0A;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.625rem;
+  border-radius: 100px;
+}
+.blog-featured-cat {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.65);
+  border: 1px solid rgba(255,255,255,0.25);
+  padding: 0.2rem 0.625rem;
+  border-radius: 100px;
+}
+.blog-featured-title {
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  color: #fff;
+  line-height: 1.15;
+  margin: 0;
+  max-width: 680px;
+  transition: opacity 0.2s;
+}
+.blog-featured-card:hover .blog-featured-title { opacity: 0.85; }
+.blog-featured-excerpt {
+  font-size: 0.9375rem;
+  color: rgba(255,255,255,0.7);
+  line-height: 1.65;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  max-width: 620px;
+  margin: 0;
+}
+.blog-featured-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 0.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255,255,255,0.15);
+}
+.blog-featured-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+.blog-featured-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1.5px solid rgba(255,255,255,0.3);
+  flex-shrink: 0;
+}
+.blog-featured-byline {
+  font-size: 0.8125rem;
+  color: rgba(255,255,255,0.65);
+}
+.blog-featured-cta {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: #fff;
+  padding: 0.5rem 1.25rem;
+  border: 1.5px solid rgba(255,255,255,0.4);
+  border-radius: 100px;
+  transition: background 0.2s, border-color 0.2s;
+}
+.blog-featured-card:hover .blog-featured-cta {
+  background: rgba(255,255,255,0.12);
+  border-color: rgba(255,255,255,0.7);
+}
+
+/* ── All articles grid ───────────────────────── */
+.blog-grid-wrap {
+  background: #F5F5F2;
+  padding: 3.5rem 0 5rem;
+}
+.blog-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+.blog-grid-item { display: flex; }
+.blog-grid-item.hidden-post { display: none; }
+
+@media (min-width: 992px) {
+  .blog-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 767px) {
+  .blog-featured-card { grid-template-columns: 1fr; }
+  .blog-featured-illus-panel { min-height: 200px; border-left: none; border-top: 1px solid rgba(255,255,255,0.07); }
+  .blog-featured-body { padding: 1.75rem; }
+  .blog-featured-title { font-size: 1.375rem; }
+  .blog-grid { grid-template-columns: 1fr; }
+  .blog-filter-count { display: none; }
+}
 </style>
 
 <script>
-  const btn = document.getElementById('load-more-btn');
-  if (btn) {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.hidden-post').forEach(el => {
-        (el as HTMLElement).style.display = '';
-        el.classList.remove('hidden-post');
-      });
-      btn.style.display = 'none';
+// ── Category filter ──────────────────────────────────
+const filterBtns = document.querySelectorAll<HTMLButtonElement>('.blog-filter-btn');
+const allItems   = document.querySelectorAll<HTMLElement>('.blog-grid-item');
+const countEl    = document.getElementById('visible-count');
+
+filterBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const cat = btn.dataset.cat ?? 'all';
+    filterBtns.forEach(b => {
+      b.classList.remove('blog-filter-btn--active');
+      b.setAttribute('aria-selected', 'false');
     });
+    btn.classList.add('blog-filter-btn--active');
+    btn.setAttribute('aria-selected', 'true');
+
+    let visible = 0;
+    allItems.forEach(item => {
+      const match = cat === 'all' || item.dataset.category === cat;
+      item.style.display = match ? 'flex' : 'none';
+      if (match) visible++;
+    });
+    if (countEl) countEl.textContent = `${visible} article${visible !== 1 ? 's' : ''}`;
+  });
+});
+
+// ── Load more ────────────────────────────────────────
+document.getElementById('load-more-btn')?.addEventListener('click', function () {
+  document.querySelectorAll<HTMLElement>('.hidden-post').forEach(el => {
+    el.style.display = 'flex';
+    el.classList.remove('hidden-post');
+  });
+  this.style.display = 'none';
+  const total = document.querySelectorAll('.blog-grid-item').length;
+  if (countEl) countEl.textContent = `${total} articles`;
+});
+
+// ── Magnetic hover on cards ──────────────────────────
+document.querySelectorAll<HTMLElement>('.blog-card-thumb').forEach(thumb => {
+  const raw = thumb.querySelector<HTMLElement>('.blog-card-illus, .blog-thumb-img');
+  if (!raw) return;
+  const el: HTMLElement = raw;
+
+  let rafId = 0;
+  let lx = 0, ly = 0;
+  function lerp(a: number, b: number, t: number) { return a + (b - a) * t; }
+  function spring(toX: number, toY: number) {
+    function step() {
+      lx = lerp(lx, toX, 0.14);
+      ly = lerp(ly, toY, 0.14);
+      el.style.transform = `translate(${lx}px, ${ly}px)`;
+      if (Math.abs(lx - toX) > 0.05 || Math.abs(ly - toY) > 0.05)
+        rafId = requestAnimationFrame(step);
+      else
+        el.style.transform = `translate(${toX}px, ${toY}px)`;
+    }
+    cancelAnimationFrame(rafId);
+    rafId = requestAnimationFrame(step);
   }
+  thumb.addEventListener('mousemove', (e: MouseEvent) => {
+    const r = thumb.getBoundingClientRect();
+    spring(((e.clientX - r.left) / r.width - 0.5) * 14,
+           ((e.clientY - r.top)  / r.height - 0.5) * 10);
+  });
+  thumb.addEventListener('mouseleave', () => spring(0, 0));
+});
 </script>

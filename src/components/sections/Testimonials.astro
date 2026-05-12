@@ -1,10 +1,15 @@
 ---
 import TestimonialsSlider from '../ui/TestimonialsSlider.tsx';
 ---
-<section id="testimonial-slider" class="section-padding--vertical">
-  <div class="container">
-    <div class="heading-n-description text-center">
-      <h2>What Our Clients Say About Us!</h2>
+<section id="testimonial-slider" style="background:#F5F5F2;padding:6rem 0;border-top:1px solid #E0E0DC;">
+  <div style="max-width:1278px;margin:0 auto;padding:0 1.5rem;">
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:3rem;gap:1rem;flex-wrap:wrap;">
+      <div>
+        <p class="section-label anim-fade-up">Client stories</p>
+        <h2 class="anim-fade-up" style="font-size:clamp(2rem,3.5vw,3rem);font-weight:800;letter-spacing:-0.02em;margin:0;transition-delay:0.05s;">
+          What our clients say
+        </h2>
+      </div>
     </div>
     <TestimonialsSlider client:visible />
   </div>
