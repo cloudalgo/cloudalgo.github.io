@@ -1,4 +1,18 @@
 import { useState, useEffect, useCallback, useRef, useMemo, type FormEvent } from 'react';
+
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(
+    () => typeof window !== 'undefined' && window.innerWidth <= 640
+  );
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 640px)');
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mq.addEventListener('change', handler);
+    setIsMobile(mq.matches);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
+  return isMobile;
+}
 import { AiFillSchedule } from 'react-icons/ai';
 import { IoCloseOutline } from 'react-icons/io5';
 import { FiClock, FiVideo, FiCalendar, FiGlobe, FiArrowLeft, FiCheck } from 'react-icons/fi';
@@ -191,10 +205,13 @@ function StepDatePicker({
     isPastDate(year, month, day) || isWeekend(year, month, day);
 
   const tzLabel = getTimezoneLabel(userTimezone);
+  const isMobile = useIsMobile();
+  const showCalendar = !isMobile || mobileShowCalendar;
+  const showSlots = !isMobile || !mobileShowCalendar;
 
   return (
-    <div className={`sw-step sw-step--date${mobileShowCalendar ? ' sw-step--show-calendar' : ''}`}>
-      <div className="sw-step-left">
+    <div className="sw-step sw-step--date">
+      {showCalendar && <div className={`sw-step-left${isMobile ? ' sw-step-left--mobile-cal' : ''}`}>
         <div className="sw-calendar">
           <div className="sw-cal-header">
             <button
@@ -245,17 +262,17 @@ function StepDatePicker({
             <span>{tzLabel}</span>
           </div>
         </div>
-      </div>
+      </div>}
 
-      <div className="sw-step-right">
-        <button
+      {showSlots && <div className="sw-step-right">
+        {isMobile && <button
           className="sw-mobile-change-date"
           onClick={onMobileBackToCalendar}
           aria-label="Change date"
         >
           <FiArrowLeft size={12} />
           Change date
-        </button>
+        </button>}
         {!selectedDate && (
           <p className="sw-slots-prompt">Select a date to see available times.</p>
         )}
@@ -293,7 +310,7 @@ function StepDatePicker({
             ))}
           </>
         )}
-      </div>
+      </div>}
 
       <button className="sw-modal-close" onClick={onClose} aria-label="Close">
         <IoCloseOutline />

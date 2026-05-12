@@ -1038,10 +1038,10 @@ textarea.form-control { resize: vertical; min-height: 150px; }
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 22px;
+  font-size: 28px;
   color: var(--ca-secondary-black);
   line-height: 1;
-  padding: 4px 8px;
+  padding: 4px 10px;
   border-radius: 4px;
   transition: background 150ms;
 }
@@ -1316,9 +1316,6 @@ textarea.form-control { resize: vertical; min-height: 150px; }
   margin-bottom: 28px;
 }
 
-/* Hide mobile-only elements on desktop */
-.sw-mobile-change-date { display: none; }
-
 /* Mobile */
 @media (max-width: 640px) {
   .sw-launcher .sw-tooltip { display: none; }
@@ -1350,12 +1347,9 @@ textarea.form-control { resize: vertical; min-height: 150px; }
     padding: 20px 16px;
   }
 
-  /* Mobile step flow: slots-first, calendar on demand */
-  .sw-step--date .sw-step-left { display: none; }
-  .sw-step--date .sw-step-right { display: block; }
-  .sw-step--date.sw-step--show-calendar .sw-step-left { display: flex; justify-content: center; min-height: 100vh; }
-  .sw-step--date.sw-step--show-calendar .sw-step-left .sw-calendar { flex: none; }
-  .sw-step--date.sw-step--show-calendar .sw-step-right { display: none; }
+  /* Mobile calendar panel: centered vertically, no grow */
+  .sw-step-left--mobile-cal { justify-content: center; min-height: 100vh; }
+  .sw-step-left--mobile-cal .sw-calendar { flex: none; }
 
   /* "Change date" button — mobile slots view only */
   .sw-mobile-change-date {
