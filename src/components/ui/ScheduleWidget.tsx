@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, type FormEvent } from 'react';
 import { AiFillSchedule } from 'react-icons/ai';
 import { IoCloseOutline } from 'react-icons/io5';
 import { FiClock, FiVideo, FiCalendar, FiGlobe, FiArrowLeft, FiCheck } from 'react-icons/fi';
@@ -281,7 +281,7 @@ function StepDetails({
   const summary = formatBookingSummary(selectedDate, selectedTime, userTimezone);
   const tzLabel = getTimezoneLabel(userTimezone);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSubmitting(true);
     setErrorMsg('');

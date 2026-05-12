@@ -1270,7 +1270,7 @@ textarea.form-control { resize: vertical; min-height: 150px; }
 }
 
 .sw-submit-btn:hover:not(:disabled) { background: #d94e37; }
-.sw-submit-btn:disabled { opacity: 0.6; cursor: default; }
+.sw-submit-btn:disabled { opacity: 0.6; cursor: default; pointer-events: none; }
 
 /* Confirmation */
 .sw-confirmed-icon {
