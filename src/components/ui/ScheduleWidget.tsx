@@ -592,6 +592,11 @@ export default function ScheduleWidget() {
     return () => document.removeEventListener('keydown', onKey);
   }, [isOpen]);
 
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [isOpen]);
+
   const abortRef = useRef<AbortController | null>(null);
 
   const fetchSlots = useCallback(async (date: Date) => {
