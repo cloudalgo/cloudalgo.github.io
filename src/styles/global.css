@@ -1353,7 +1353,8 @@ textarea.form-control { resize: vertical; min-height: 150px; }
   /* Mobile step flow: slots-first, calendar on demand */
   .sw-step--date .sw-step-left { display: none; }
   .sw-step--date .sw-step-right { display: block; }
-  .sw-step--date.sw-step--show-calendar .sw-step-left { display: flex; justify-content: center; }
+  .sw-step--date.sw-step--show-calendar .sw-step-left { display: flex; justify-content: center; min-height: 100vh; }
+  .sw-step--date.sw-step--show-calendar .sw-step-left .sw-calendar { flex: none; }
   .sw-step--date.sw-step--show-calendar .sw-step-right { display: none; }
 
   /* "Change date" button — mobile slots view only */
