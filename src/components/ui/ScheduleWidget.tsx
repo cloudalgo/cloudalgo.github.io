@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef, type FormEvent } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo, type FormEvent } from 'react';
 import { AiFillSchedule } from 'react-icons/ai';
 import { IoCloseOutline } from 'react-icons/io5';
 import { FiClock, FiVideo, FiCalendar, FiGlobe, FiArrowLeft, FiCheck } from 'react-icons/fi';
@@ -87,6 +87,28 @@ function isPastDate(year: number, month: number, day: number): boolean {
 function isToday(year: number, month: number, day: number): boolean {
   const t = new Date();
   return t.getFullYear() === year && t.getMonth() === month && t.getDate() === day;
+}
+
+function addBusinessDays(from: Date, days: number): Date {
+  const result = new Date(from);
+  result.setHours(0, 0, 0, 0);
+  let added = 0;
+  while (added < days) {
+    result.setDate(result.getDate() + 1);
+    const dow = result.getDay();
+    if (dow !== 0 && dow !== 6) added++;
+  }
+  return result;
+}
+
+function isScheduleHash(): boolean {
+  return typeof window !== 'undefined' && window.location.hash === '#schedule';
+}
+
+function setScheduleHash(open: boolean) {
+  if (typeof window === 'undefined') return;
+  const base = window.location.pathname + window.location.search;
+  history.replaceState(null, '', open ? base + '#schedule' : base);
 }
 
 // ── ScheduleLauncher ───────────────────────────────────────────────────────
@@ -427,30 +449,46 @@ function StepConfirmation({
 // ── ScheduleWidget (root) ──────────────────────────────────────────────────
 
 export default function ScheduleWidget() {
-  const [isOpen, setIsOpen] = useState(false);
+  const openFromUrl = useMemo(() => isScheduleHash(), []);
+  const defaultDate = useMemo(() => addBusinessDays(new Date(), 2), []);
+
+  const [isOpen, setIsOpen] = useState(openFromUrl);
   const [step, setStep] = useState<Step>('date');
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(defaultDate);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [confirmedEmail, setConfirmedEmail] = useState('');
   const [availableSlots, setAvailableSlots] = useState<string[]>([]);
   const [slotsLoading, setSlotsLoading] = useState(false);
   const [slotsError, setSlotsError] = useState<string | null>(null);
   const [tooltipVisible, setTooltipVisible] = useState(false);
-  const [visible, setVisible] = useState(false);
-  const [currentMonth, setCurrentMonth] = useState(() => {
-    const d = new Date();
-    return new Date(d.getFullYear(), d.getMonth(), 1);
-  });
+  const [visible, setVisible] = useState(openFromUrl);
+  const [currentMonth, setCurrentMonth] = useState(() =>
+    new Date(defaultDate.getFullYear(), defaultDate.getMonth(), 1)
+  );
   const [userTimezone] = useState(() =>
     Intl.DateTimeFormat().resolvedOptions().timeZone
   );
 
   useEffect(() => {
+    if (openFromUrl) return; // already open, no fade-in delay needed
     const t = setTimeout(() => {
       setVisible(true);
       setTooltipVisible(true);
     }, 2000);
     return () => clearTimeout(t);
+  }, [openFromUrl]);
+
+  useEffect(() => {
+    const onHashChange = () => {
+      if (window.location.hash === '#schedule') {
+        setIsOpen(true);
+        setVisible(true);
+      } else {
+        setIsOpen(false);
+      }
+    };
+    window.addEventListener('hashchange', onHashChange);
+    return () => window.removeEventListener('hashchange', onHashChange);
   }, []);
 
   useEffect(() => {
@@ -485,6 +523,12 @@ export default function ScheduleWidget() {
     }
   }, []);
 
+  useEffect(() => {
+    if (openFromUrl && defaultDate) {
+      fetchSlots(defaultDate);
+    }
+  }, [fetchSlots, defaultDate, openFromUrl]);
+
   const handleSelectDate = (date: Date) => {
     setSelectedDate(date);
     fetchSlots(date);
@@ -509,15 +553,17 @@ export default function ScheduleWidget() {
     abortRef.current?.abort();
     setIsOpen(false);
     setStep('date');
-    setSelectedDate(null);
+    setSelectedDate(defaultDate);
     setSelectedTime(null);
     setAvailableSlots([]);
     setConfirmedEmail('');
+    setScheduleHash(false);
   };
 
   const handleOpen = () => {
     setIsOpen(true);
     setTooltipVisible(false);
+    setScheduleHash(true);
   };
 
   const handlePrevMonth = () => {
