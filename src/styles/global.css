@@ -137,15 +137,13 @@ h6 { font-size: 1rem; font-weight: 700; }
 }
 
 .navbar-brand {
-  font-size: 1.25rem;
-  font-weight: 800;
-  color: var(--ca-black);
-  letter-spacing: -0.02em;
-  display: flex;
+  display: inline-flex;
   align-items: center;
+  text-decoration: none;
+  transition: opacity 0.2s;
 }
-.navbar-brand img { height: 36px; width: auto; }
-.navbar-brand:hover { color: var(--ca-black); }
+.navbar-brand img { height: 38px; width: auto; }
+.navbar-brand:hover { opacity: 0.75; }
 
 .nav-links {
   display: flex;
