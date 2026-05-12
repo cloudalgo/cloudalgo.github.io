@@ -8,25 +8,31 @@ var SLOT_DURATION = 30;   // minutes
 var HOST_EMAIL    = 'sandeep@cloudalgo.com';
 
 function doGet(e) {
-  var action = e.parameter.action || 'slots';
-  var result;
-  if (action === 'slots') {
-    result = { slots: getAvailableSlots(e.parameter.date) };
-  } else if (action === 'book') {
-    result = createBooking(
-      e.parameter.name,
-      e.parameter.email,
-      e.parameter.date,
-      e.parameter.time,
-      e.parameter.notes || '',
-      e.parameter.timezone
-    );
-  } else {
-    result = { error: 'Unknown action' };
+  try {
+    var action = e.parameter.action || 'slots';
+    var result;
+    if (action === 'slots') {
+      result = { slots: getAvailableSlots(e.parameter.date) };
+    } else if (action === 'book') {
+      result = createBooking(
+        e.parameter.name,
+        e.parameter.email,
+        e.parameter.date,
+        e.parameter.time,
+        e.parameter.notes || '',
+        e.parameter.timezone
+      );
+    } else {
+      result = { error: 'Unknown action' };
+    }
+    return ContentService
+      .createTextOutput(JSON.stringify(result))
+      .setMimeType(ContentService.MimeType.JSON);
+  } catch (err) {
+    return ContentService
+      .createTextOutput(JSON.stringify({ error: err.toString() }))
+      .setMimeType(ContentService.MimeType.JSON);
   }
-  return ContentService
-    .createTextOutput(JSON.stringify(result))
-    .setMimeType(ContentService.MimeType.JSON);
 }
 
 function getAvailableSlots(dateStr) {
@@ -62,6 +68,17 @@ function getAvailableSlots(dateStr) {
 }
 
 function createBooking(name, email, date, time, notes, timezone) {
+  // Input validation
+  if (
+    !name || typeof name !== 'string' || name.trim() === '' ||
+    !email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ||
+    !date || !/^\d{4}-\d{2}-\d{2}$/.test(date) ||
+    !time || !/^\d{2}:\d{2}$/.test(time) ||
+    !timezone || typeof timezone !== 'string' || timezone.trim() === ''
+  ) {
+    return { success: false, error: 'Invalid booking parameters.' };
+  }
+
   try {
     var parts = time.split(':');
     var h = parseInt(parts[0], 10);
@@ -69,12 +86,20 @@ function createBooking(name, email, date, time, notes, timezone) {
     var startDate = new Date(date + 'T' + pad(h) + ':' + pad(m) + ':00+05:30');
     var endDate   = new Date(startDate.getTime() + SLOT_DURATION * 60000);
 
-    CalendarApp.getCalendarById(CALENDAR_ID).createEvent(
-      'Meeting with ' + name,
-      startDate,
-      endDate,
-      { description: notes, guests: email }
-    );
+    var lock = LockService.getScriptLock();
+    if (!lock.tryLock(5000)) {
+      return { success: false, error: 'Slot no longer available. Please try another time.' };
+    }
+    try {
+      CalendarApp.getCalendarById(CALENDAR_ID).createEvent(
+        'Meeting with ' + name,
+        startDate,
+        endDate,
+        { description: notes, guests: email }
+      );
+    } finally {
+      lock.releaseLock();
+    }
 
     var displayTime = startDate.toLocaleString('en-US', {
       timeZone: timezone,
