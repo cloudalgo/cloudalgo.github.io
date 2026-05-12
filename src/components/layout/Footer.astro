@@ -1,96 +1,58 @@
 ---
-// src/components/layout/Footer.astro
-import { Image } from 'astro:assets';
-import logoStacked from '../../assets/brand/logo-stacked-dark.svg';
-
-const services = [
-  { label: 'Salesforce Consulting', href: '/services/salesforce-consulting' },
-  { label: 'Product Development',   href: '/services/product-development' },
-  { label: 'Managed Services',      href: '/services/support-and-managed-services' },
-];
-
-const company = [
-  { label: 'About Us', href: '/about' },
-  { label: 'Blog',     href: '/blog' },
-  { label: 'Contact',  href: '/contact' },
-];
-
-const connect = [
-  { label: 'LinkedIn', href: 'https://linkedin.com/company/cloudalgo' },
-  { label: 'GitHub',   href: 'https://github.com/cloudalgo' },
-  { label: 'AppExchange', href: 'https://appexchange.salesforce.com' },
-];
 ---
+<footer class="main-footer">
+  <section class="footer">
+    <div class="container">
 
-<footer class="bg-[#111]">
-
-  <!-- Footer CTA band -->
-  <div class="max-w-6xl mx-auto px-6 py-20 text-center">
-    <h2 class="font-display font-black text-white leading-tight tracking-tight mb-4"
-        style="font-size: clamp(32px, 5vw, 56px); letter-spacing: -1.5px;">
-      Ready to transform your<br/>
-      <span class="text-primary">Salesforce</span>?
-    </h2>
-    <p class="text-[#64748b] text-[15px] font-semibold mb-8">
-      Let's talk about your goals — the first consultation is free.
-    </p>
-    <a
-      href="/contact"
-      class="inline-flex items-center gap-2 bg-primary hover:bg-primary-dark text-white font-extrabold text-[14px] px-8 py-4 rounded-md transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(247,90,65,0.3)]"
-    >
-      Book Free Consultation →
-    </a>
-  </div>
-
-  <!-- Footer links -->
-  <div class="max-w-6xl mx-auto px-6 pt-10 pb-6 border-t border-white/5">
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
-
-      <!-- Brand -->
-      <div class="md:col-span-1">
-        <Image src={logoStacked} alt="CloudAlgo" width={120} height={80} class="mb-4" />
-        <p class="text-[12px] text-[#555] font-semibold leading-relaxed max-w-[220px]">
-          Your trusted Salesforce and cloud consulting partner since 2019.
-        </p>
+      <div class="lets-talk">
+        Let's talk
+        <div>
+          <span class="icon-arrow_forward"></span>
+          <a href="mailto:sales@cloudalgo.com">sales@cloudalgo.com</a>
+        </div>
       </div>
 
-      <!-- Services -->
-      <div>
-        <h5 class="text-[11px] font-extrabold text-white uppercase tracking-widest mb-4">Services</h5>
-        <ul class="space-y-2.5">
-          {services.map(l => (
-            <li><a href={l.href} class="text-[13px] text-[#555] font-semibold hover:text-primary transition-colors">{l.label}</a></li>
-          ))}
-        </ul>
-      </div>
+      <div class="row">
+        <div class="col-md-7 align-self-center">
+          <address>
+            CloudAlgo, established in the year 2019, is a consulting firm that
+            prioritizes its customers and a Salesforce Consulting Partner.
+          </address>
+          <div class="d-flex flex-wrap" style="gap:0.5rem;margin-bottom:1rem;">
+            <div class="p-2">
+              <a href="https://appexchange.salesforce.com/appxConsultingListingDetail?listingId=a0N4V00000JdabDUAR&legacy=true"
+                 target="_blank" rel="noreferrer">
+                <img src="/salesforce/Salesforce_Partner_Badge_RGB.png"
+                     alt="Certified Salesforce Partner" style="height:100px;width:auto;" />
+              </a>
+            </div>
+            <div class="p-2">
+              <a href="https://appexchange.salesforce.com/appxConsultingListingDetail?listingId=a0N4V00000JdabDUAR&legacy=true"
+                 target="_blank" rel="noreferrer">
+                <img src="/salesforce/Available_On_Appexchange_Badge_RGB.png"
+                     alt="Available on Salesforce AppExchange" style="height:100px;width:auto;" />
+              </a>
+            </div>
+          </div>
+          <div class="copy-right">
+            {new Date().getFullYear()} © cloudalgo.com, All rights reserved.
+          </div>
+        </div>
 
-      <!-- Company -->
-      <div>
-        <h5 class="text-[11px] font-extrabold text-white uppercase tracking-widest mb-4">Company</h5>
-        <ul class="space-y-2.5">
-          {company.map(l => (
-            <li><a href={l.href} class="text-[13px] text-[#555] font-semibold hover:text-primary transition-colors">{l.label}</a></li>
-          ))}
-        </ul>
-      </div>
-
-      <!-- Connect -->
-      <div>
-        <h5 class="text-[11px] font-extrabold text-white uppercase tracking-widest mb-4">Connect</h5>
-        <ul class="space-y-2.5">
-          {connect.map(l => (
-            <li><a href={l.href} target="_blank" rel="noopener noreferrer" class="text-[13px] text-[#555] font-semibold hover:text-primary transition-colors">{l.label}</a></li>
-          ))}
-        </ul>
+        <div class="col-md-5 page-links">
+          <ul class="list-unstyled">
+            <li><a href="/about">About</a></li>
+            <li><a href="/services">Services</a></li>
+            <li><a href="/blog">Blogs</a></li>
+          </ul>
+          <ul class="list-unstyled">
+            <li><a href="https://www.linkedin.com/company/cloudalgo" target="_blank" rel="noopener noreferrer">Linkedin</a></li>
+            <li><a href="https://github.com/cloudalgo" target="_blank" rel="noopener noreferrer">Github</a></li>
+            <li><a href="mailto:contact@cloudalgo.com">Contact</a></li>
+          </ul>
+        </div>
       </div>
 
     </div>
-
-    <!-- Bottom bar -->
-    <div class="mt-10 pt-6 border-t border-white/5 flex flex-col sm:flex-row justify-between items-center gap-3">
-      <span class="text-[11px] text-[#444] font-semibold">© {new Date().getFullYear()} CloudAlgo. All rights reserved.</span>
-      <span class="text-[11px] text-[#444] font-semibold">Salesforce Partner · Heroku Partner</span>
-    </div>
-  </div>
-
+  </section>
 </footer>

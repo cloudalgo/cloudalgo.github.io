@@ -1,5 +1,4 @@
 ---
-// src/pages/blog/[slug].astro
 import { getCollection, render } from 'astro:content';
 import Page from '../../layouts/Page.astro';
 
@@ -11,35 +10,197 @@ export async function getStaticPaths() {
 const { post } = Astro.props;
 const { Content } = await render(post);
 
-const formattedDate = post.data.date.toLocaleDateString('en-US', {
-  year: 'numeric', month: 'long', day: 'numeric'
-});
+function ordinal(n: number): string {
+  const s = ['th','st','nd','rd'];
+  const v = n % 100;
+  return n + (s[(v-20)%10] || s[v] || s[0]);
+}
+const d = post.data.date;
+const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const formattedDate = `${months[d.getMonth()]} ${ordinal(d.getDate())}, ${d.getFullYear()}`;
+
+const GRADIENTS: Record<string, string> = {
+  Salesforce: 'linear-gradient(135deg, #f75a41, #ff8c42)',
+  Heroku:     'linear-gradient(135deg, #79589F, #4e3a6e)',
+  MuleSoft:   'linear-gradient(135deg, #00a1e0, #0070a8)',
+  AWS:        'linear-gradient(135deg, #ff9900, #232f3e)',
+  Product:    'linear-gradient(135deg, #6366f1, #4338ca)',
+};
+
+const heroImage   = post.data.image;
+const gradient    = GRADIENTS[post.data.category] ?? GRADIENTS.Salesforce;
+const author      = post.data.author ?? 'CloudAlgo Team';
+const authorPhoto = post.data.authorPhoto ?? '';
+const authorDesig = post.data.authorDesignation ?? 'Technical Architect';
+const postUrl     = `https://cloudalgo.com/blog/${post.id}`;
 ---
 <Page
   title={`${post.data.title} — CloudAlgo Blog`}
   description={post.data.excerpt}
 >
-  <section class="bg-[#111] px-6 py-20">
-    <div class="max-w-3xl mx-auto">
-      <a href="/blog" class="text-[12px] font-bold text-[#64748b] hover:text-primary transition-colors mb-6 inline-block">
-        ← All Articles
-      </a>
-      <div class="text-[10px] font-extrabold tracking-[2px] uppercase text-primary mb-4">
-        {post.data.category}
-      </div>
-      <h1 class="font-display font-black text-white leading-tight mb-4 anim-fade-up"
-          style="font-size: clamp(28px, 4vw, 48px); letter-spacing: -1.5px;">
-        {post.data.title}
-      </h1>
-      <div class="text-[13px] text-[#64748b] font-semibold">
-        {formattedDate} · {post.data.readTime} min read
+
+  <!-- Dark header: title + author/date only — white background follows -->
+  <section class="blog-detail-section">
+    <div class="container pt-4 pb-4">
+      <h1>{post.data.title}</h1>
+      <div class="d-flex justify-content-between written-date pt-1">
+        <span class="written">
+          Written by&nbsp;<a href="/about"><strong class="orange">{author}</strong></a>
+        </span>
+        <span class="blog-date">{formattedDate}</span>
       </div>
     </div>
   </section>
 
-  <section class="bg-white px-6 py-16">
-    <div class="max-w-3xl mx-auto prose prose-lg prose-headings:font-display prose-headings:font-extrabold prose-a:text-primary">
-      <Content />
+  <!-- Hero image — sibling of dark section, white background shows through pt-5 -->
+  <section class="blog-banner-section pt-5">
+    <div class="container">
+      {heroImage
+        ? <img src={heroImage} alt={post.data.title} loading="eager" />
+        : <div style={`background:${gradient};height:400px;width:100%;`}></div>
+      }
     </div>
   </section>
+
+  <!-- Content: col-sm-8 order-1 (main) + col-sm-4 no-order (sidebar appears left) -->
+  <section class="blog-post-details pb-5">
+    <div class="container">
+      <div class="row">
+
+        <!-- Main content — order-1 makes it appear on right -->
+        <div class="col-sm-8 col-lg-9 order-1 main-column">
+          <div class="blog-content">
+            <Content />
+          </div>
+          <!-- Tags at bottom of article -->
+          <div class="tag-share-inner pb-3 mt-4" style="border-bottom:1px solid #e8e7e7;">
+            <div class="tags">
+              <a href="/blog" class="blog-badges">{post.data.category}</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sidebar — no order (default 0), appears LEFT -->
+        <div class="col-sm-4 col-lg-3">
+          <div style="padding-top:0.5rem;">
+            {authorPhoto && (
+              <div class="author-dp">
+                <img src={authorPhoto} alt={author} loading="lazy" />
+              </div>
+            )}
+            <div class="author-details mt-3">
+              <div class="name">
+                <a href="/about">{author}</a>
+              </div>
+              <div class="designation">{authorDesig}</div>
+            </div>
+
+            <!-- Share buttons — vertical stack -->
+            <div class="share-btn pb-4 mt-3">
+              <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(postUrl)}`}
+                 target="_blank" rel="noopener noreferrer" class="share-icon-btn" title="Share on Facebook">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 18 18">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                    d="M5.25 7.5v3H7.5v5.25h3V10.5h2.25l.75-3h-3V6a.75.75 0 0 1 .75-.75h2.25v-3h-2.25A3.75 3.75 0 0 0 7.5 6v1.5z"/>
+                </svg>
+              </a>
+              <a href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(postUrl)}&text=${encodeURIComponent(post.data.title)}`}
+                 target="_blank" rel="noopener noreferrer" class="share-icon-btn" title="Share on X / Twitter">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 18 18">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                    d="M16.5 3.008c-.75.367-1.485.516-2.25.742-.84-.949-2.087-1.001-3.285-.553C9.767 3.646 8.983 4.742 9 6v.75c-2.434.062-4.601-1.046-6-3 0 0-3.136 5.575 3 8.25-1.404.935-2.804 1.566-4.5 1.5 2.481 1.352 5.185 1.817 7.525 1.138 2.685-.78 4.892-2.793 5.739-5.807.252-.916.378-1.864.373-2.814-.002-.187 1.132-2.08 1.363-3.01z"/>
+                </svg>
+              </a>
+              <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(postUrl)}`}
+                 target="_blank" rel="noopener noreferrer" class="share-icon-btn" title="Share on LinkedIn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                    d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/>
+                  <circle cx="4" cy="4" r="2" stroke="currentColor" stroke-width="1.5"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
 </Page>
+
+<style>
+/* Match original blog-detail-section exactly */
+.blog-detail-section {
+  background: var(--ca-primary-black);
+  padding-top: 4.375rem;
+  color: #fff;
+}
+.blog-detail-section h1 {
+  font-size: 2.5rem;
+  color: #fff;
+  margin-top: 2.125rem;
+  line-height: 1.2;
+}
+.written-date { color: #ccc; }
+.written { font-size: 0.9375rem; }
+.written a { color: var(--ca-orange); text-decoration: none; }
+.written a strong { font-weight: 700; }
+.blog-date { font-size: 0.9375rem; }
+.orange { color: var(--ca-orange); }
+
+/* Image overlaps content by 100px — matches original */
+.blog-banner-section { padding-top: 3rem; }
+.blog-banner-section img {
+  margin-bottom: -100px;
+  max-height: 600px;
+  width: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+/* Content padding-top accounts for -100px image overlap */
+.blog-post-details {
+  background: #fff;
+  padding-top: 130px;
+  font-size: 1.25rem;
+}
+.blog-post-details p { font-size: 1.25rem; margin-top: 1.25rem; }
+.blog-post-details h2 { margin-top: 2rem; margin-bottom: 1rem; }
+.blog-post-details h3 { margin-top: 1.5rem; margin-bottom: 0.75rem; }
+.blog-post-details strong { font-size: 1.75rem; }
+.blog-post-details ul { list-style: none; padding-left: 0; margin-top: 2.5rem; }
+.blog-post-details ul > li { position: relative; padding-left: 3.125rem; margin-bottom: 0.938rem; }
+.blog-post-details ul > li::before { content: '→'; color: var(--ca-orange); font-size: 1.5rem; position: absolute; left: 0; top: 0; }
+.blog-post-details ol { list-style: none; counter-reset: blog-counter; margin: 2.5rem 0; padding-left: 0; }
+.blog-post-details ol > li { counter-increment: blog-counter; display: flex; align-items: flex-start; gap: 0.938rem; margin-bottom: 1.25rem; }
+.blog-post-details ol > li::before { content: counter(blog-counter); background: var(--ca-orange); min-width: 2rem; height: 2rem; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; flex-shrink: 0; }
+.blog-post-details blockquote { font-weight: 900; font-size: 1.75rem; line-height: 1.4; background-color: var(--ca-grey); padding: 1.5rem 1.875rem; border-left: 5px solid var(--ca-orange); margin: 2rem 0; }
+.blog-post-details code { font-style: italic; background: #f3f3f3; padding: 0.15em 0.4em; border-radius: 3px; font-size: 0.9em; }
+.blog-post-details pre { background: #1e1e1e; color: #d4d4d4; padding: 1.5rem; border-radius: 6px; overflow-x: auto; margin: 1.5rem 0; }
+.blog-post-details pre code { background: none; padding: 0; color: inherit; font-style: normal; }
+
+/* Author sidebar */
+.author-dp { width: 80px; height: 80px; border-radius: 50%; overflow: hidden; }
+.author-dp img { width: 100%; height: 100%; object-fit: cover; }
+.author-details .name { font-weight: 900; font-size: 1rem; color: var(--ca-black); }
+.author-details .name a { color: var(--ca-black); text-decoration: none; }
+.author-details .name a:hover { color: var(--ca-orange); }
+.author-details .designation { font-size: 0.875rem; color: var(--ca-secondary-black); }
+
+/* Share buttons — vertical stack */
+.share-btn { display: flex; flex-direction: column; gap: 0.375rem; }
+.share-icon-btn {
+  background: #f3f3f3;
+  color: #4d4d4d;
+  display: flex;
+  width: 30px;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s;
+}
+.share-icon-btn:hover { background: var(--ca-orange) !important; color: #fff !important; }
+</style>

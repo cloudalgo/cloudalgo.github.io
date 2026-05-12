@@ -1,63 +1,106 @@
 ---
-// src/pages/services/index.astro
-import { getCollection } from 'astro:content';
 import Page from '../../layouts/Page.astro';
-import ServiceCard from '../../components/ui/ServiceCard.astro';
-
-const services = (await getCollection('services'))
-  .sort((a, b) => a.data.order - b.data.order);
 ---
-<Page
-  title="Services — CloudAlgo"
-  description="Salesforce consulting, AppExchange product development, and managed services from CloudAlgo."
->
+<Page title="Services — CloudAlgo"
+      description="Salesforce consulting, AppExchange product development, and managed services from CloudAlgo.">
+
   <!-- Hero -->
-  <section class="bg-[#111] px-6 py-24">
-    <div class="max-w-6xl mx-auto">
-      <span class="block text-[10px] font-extrabold tracking-[3px] uppercase text-primary mb-4">What We Do</span>
-      <h1 class="font-display font-black text-white leading-tight mb-5 anim-fade-up"
-          style="font-size: clamp(36px, 5vw, 60px); letter-spacing: -2px;">
-        Salesforce solutions,<br/>end to end.
-      </h1>
-      <p class="text-[16px] text-[#94a3b8] font-semibold max-w-[560px] leading-relaxed">
-        We specialize in delivering tailored cloud solutions. From initial consulting to managed operations — we've got you covered.
-      </p>
+  <div class="heroBanner-innerPage service-banner">
+    <section class="banner-caption d-flex">
+      <div class="container d-flex align-content-center flex-wrap">
+        <div class="banner-caption_inner">
+          <h1>What We Do</h1>
+          <p class="paragraph-large breadcrumb">
+            <a href="/">Home</a>
+            <span class="icon-arrow_forward"></span>
+            Services
+          </p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Services Content -->
+  <section class="sercvice-base-section section-padding--vertical">
+    <div class="container">
+      <div class="heading-n-description">
+        <h2>Our Services</h2>
+        <p class="paragraph-large">At CloudAlgo, we specialize in delivering tailored cloud solutions that empower businesses to achieve operational excellence and innovation. With expertise spanning <b>Salesforce, Heroku, MuleSoft, AWS, Snowflake,</b> and <b>Apache Airflow</b>, we provide a full range of services to meet your unique needs.</p>
+      </div>
+
+      <div class="heading-n-description card-1">
+        <h3 class="font32 orange">Salesforce Consulting &amp; Implementation</h3>
+        <p class="paragraph-large">Revolutionize your business processes with our Salesforce expertise:
+          <ul class="arrow">
+            <li><b>CRM Customization:</b> Align Salesforce with your business workflows for maximum efficiency.</li>
+            <li><b>Integrations:</b> Seamlessly connect Salesforce with other platforms and tools.</li>
+            <li><b>AppExchange Development:</b> Develop and deploy custom applications tailored to your needs.</li>
+            <li><b>Optimization &amp; Support:</b> Ensure your Salesforce environment is always performing at its best.</li>
+          </ul>
+        </p>
+      </div>
+
+      <div class="heading-n-description card-1">
+        <h3 class="font32 orange">Heroku Application Development</h3>
+        <p class="paragraph-large">Harness the power of Heroku to create, deploy, and scale applications effortlessly:
+          <ul class="arrow">
+            <li><b>Custom Applications:</b> Build modern, scalable cloud apps tailored to your goals.</li>
+            <li><b>Salesforce Integration:</b> Connect Heroku apps to Salesforce for seamless workflows.</li>
+            <li><b>Continuous Deployment:</b> Implement DevOps strategies for efficient application management.</li>
+          </ul>
+        </p>
+      </div>
+
+      <div class="heading-n-description card-1">
+        <h3 class="font32 orange">MuleSoft Integration Services</h3>
+        <p class="paragraph-large">Connect your ecosystem with powerful MuleSoft integrations:
+          <ul class="arrow">
+            <li><b>API-Led Connectivity:</b> Create APIs that bridge your applications, data, and devices.</li>
+            <li><b>Enterprise Workflows:</b> Automate complex business processes to save time and reduce errors.</li>
+            <li><b>Real-Time Data Flow:</b> Enable seamless, real-time communication across systems.</li>
+          </ul>
+        </p>
+      </div>
+
+      <div class="heading-n-description card-1">
+        <h3 class="font32 orange">AWS Cloud Solutions</h3>
+        <p class="paragraph-large">Unlock the potential of AWS for your business:
+          <ul class="arrow">
+            <li><b>Cloud Architecture Design:</b> Build secure and scalable cloud infrastructures.</li>
+            <li><b>Data Migration:</b> Move existing systems to AWS with minimal downtime.</li>
+            <li><b>Analytics &amp; Insights:</b> Use AWS tools to gain deeper business intelligence from your data.</li>
+          </ul>
+        </p>
+      </div>
+
+      <div class="heading-n-description card-1">
+        <h3 class="font32 orange">Support &amp; Managed Services</h3>
+        <p class="paragraph-large">Keep your Salesforce org running at peak performance:
+          <ul class="arrow">
+            <li><b>Ongoing Support:</b> Dedicated team available for issues and enhancements.</li>
+            <li><b>Health Reviews:</b> Regular org health checks and security recommendations.</li>
+            <li><b>Proactive Monitoring:</b> Stay ahead of issues before they impact your business.</li>
+          </ul>
+        </p>
+      </div>
     </div>
   </section>
 
-  <!-- Service cards -->
-  <section class="bg-[#111] px-6 pb-24">
-    <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-4">
-      {services.map((s, i) => (
-        <ServiceCard
-          icon={s.data.icon}
-          title={s.data.title}
-          body={s.data.excerpt}
-          href={`/services/${s.id}`}
-          delay={i * 130}
-        />
-      ))}
-    </div>
-  </section>
-
-  <!-- Process steps -->
-  <section class="bg-[#f9f9f9] px-6 py-20">
-    <div class="max-w-6xl mx-auto">
-      <h2 class="font-display font-black text-black mb-12 anim-fade-up"
-          style="font-size: clamp(24px, 3.5vw, 36px); letter-spacing: -1px;">
-        Our Development Process
-      </h2>
-      <div class="flex flex-wrap gap-4">
+  <!-- Development Process -->
+  <section class="process-section grey-bg2 section-padding--vertical">
+    <div class="container">
+      <div class="heading-n-description text-center">
+        <h2>Our Development Process</h2>
+      </div>
+      <div class="row" style="justify-content:center;gap:1rem;flex-wrap:wrap;">
         {['Discovery', 'Define', 'Design & Architect', 'Develop & Test', 'Deploy', 'Support & Enhancement'].map((step, i) => (
-          <div class="flex items-center gap-3">
-            <div class="w-7 h-7 rounded-full bg-primary text-white text-[11px] font-extrabold flex items-center justify-center shrink-0">
-              {i + 1}
-            </div>
-            <span class="font-display font-bold text-[13px] text-black">{step}</span>
-            {i < 5 && <span class="text-[#e5e5e5] text-[18px] hidden sm:block">→</span>}
+          <div style="display:flex;align-items:center;gap:0.75rem;padding:0.5rem 1rem;background:#fff;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+            <div style="width:32px;height:32px;border-radius:50%;background:var(--ca-orange);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.875rem;flex-shrink:0;">{i+1}</div>
+            <span style="font-weight:600;font-family:'Poppins',sans-serif;">{step}</span>
           </div>
         ))}
       </div>
     </div>
   </section>
+
 </Page>

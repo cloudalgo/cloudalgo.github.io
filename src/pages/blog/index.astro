@@ -1,44 +1,148 @@
 ---
-// src/pages/blog/index.astro
 import { getCollection } from 'astro:content';
 import Page from '../../layouts/Page.astro';
 import BlogCard from '../../components/ui/BlogCard.astro';
 
-const posts = (await getCollection('blog', ({ data }) => data.published))
+const allPublished = (await getCollection('blog', ({ data }) => data.published))
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
----
-<Page
-  title="Blog — CloudAlgo"
-  description="Salesforce, Heroku, MuleSoft, and AWS insights from the CloudAlgo consulting team."
->
-  <section class="bg-[#111] px-6 py-24">
-    <div class="max-w-6xl mx-auto">
-      <h1 class="font-display font-black text-white leading-tight anim-fade-up"
-          style="font-size: clamp(36px, 5vw, 60px); letter-spacing: -2px;">
-        All Articles
-      </h1>
-    </div>
-  </section>
 
-  <section class="bg-[#f9f9f9] px-6 py-16">
-    <div class="max-w-6xl mx-auto">
-      {posts.length === 0 ? (
-        <p class="text-[#6b7280] text-center py-16 font-semibold">No articles yet. Check back soon.</p>
-      ) : (
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {posts.map((post, i) => (
-            <BlogCard
-              title={post.data.title}
-              excerpt={post.data.excerpt}
-              category={post.data.category}
-              date={post.data.date}
-              readTime={post.data.readTime}
-              slug={post.id}
-              delay={i * 80}
-            />
-          ))}
+const editorsPick = allPublished.find(p => p.data.featured === 'editors-pick');
+const bottomPick  = allPublished.find(p => p.data.featured === 'bottom-pick');
+const regularPosts = allPublished.filter(p => !p.data.featured);
+
+const formatDate = (d: Date) =>
+  d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+---
+<Page title="Blog — CloudAlgo"
+      description="Salesforce, Heroku, MuleSoft, and AWS insights from the CloudAlgo consulting team.">
+
+  <!-- Hero -->
+  <div class="heroBanner-innerPage blog-banner">
+    <section class="banner-caption d-flex">
+      <div class="container d-flex align-content-center flex-wrap">
+        <div class="banner-caption_inner">
+          <h1>Blog</h1>
+          <p class="paragraph-large breadcrumb">
+            <a href="/">Home</a>
+            <span class="icon-arrow_forward"></span>
+            Blog
+          </p>
         </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Editor's Pick -->
+  {editorsPick && (
+    <section class="latest-post-section blog-post-section section-padding--vertical">
+      <div class="container">
+        <div class="heading-n-description">
+          <h2>Editor's Pick</h2>
+        </div>
+        <div class="card mb-3">
+          <div class="row g-0">
+            <div class="col-lg-6 col-md-7 order-md-2 text-md-end editors-pick-img-wrap">
+              {editorsPick.data.image
+                ? <img src={editorsPick.data.image} alt={editorsPick.data.title} class="img-fluid ps-lg-5" loading="eager" style="height:100%;width:100%;object-fit:cover;" />
+                : <div class="editor-pick-placeholder ps-lg-5"></div>
+              }
+            </div>
+            <div class="col-lg-6 col-md-5 order-md-1 d-flex align-items-center">
+              <div class="card-body">
+                <h3 class="card-title">
+                  <a href={`/blog/${editorsPick.id}`}>{editorsPick.data.title}</a>
+                </h3>
+                <p class="card-text">{editorsPick.data.excerpt}</p>
+                <p class="card-text d-flex justify-content-between">
+                  <small class="text-muted">{formatDate(editorsPick.data.date)}</small>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Latest Posts -->
+  <section class="blog-grid-section section-padding--vertical grey-bg2">
+    <div class="container">
+      <div class="heading-n-description mb-5">
+        <h2>Latest Posts</h2>
+      </div>
+      {regularPosts.length === 0 ? (
+        <p style="text-align:center;padding:4rem 0;color:var(--ca-secondary-black);font-weight:600;">No articles yet. Check back soon.</p>
+      ) : (
+        <>
+          <div class="row" id="blog-posts-grid">
+            {regularPosts.map((post, i) => (
+              <div class={`col-md-3 mb-5 blog-post-item${i >= 8 ? ' hidden-post' : ''}`}>
+                <BlogCard
+                  title={post.data.title}
+                  excerpt={post.data.excerpt}
+                  category={post.data.category}
+                  date={post.data.date}
+                  readTime={post.data.readTime}
+                  slug={post.id}
+                  image={post.data.image}
+                />
+              </div>
+            ))}
+          </div>
+          {regularPosts.length > 8 && (
+            <div class="load-more-wrap">
+              <button id="load-more-btn" class="btn-load-more" type="button">Load More</button>
+            </div>
+          )}
+        </>
       )}
     </div>
   </section>
+
+  <!-- Bottom Pick -->
+  {bottomPick && (
+    <section class="last-post-section blog-post-section section-padding--vertical">
+      <div class="container">
+        <div class="card mt-3 mb-3">
+          <div class="row g-0">
+            <div class="col-lg-7 col-md-7 order-md-2 text-md-end bottom-pick-img-wrap">
+              {bottomPick.data.image
+                ? <img src={bottomPick.data.image} alt={bottomPick.data.title} class="img-fluid ps-lg-5" loading="lazy" style="height:100%;width:100%;object-fit:cover;" />
+                : <div class="editor-pick-placeholder ps-lg-5"></div>
+              }
+            </div>
+            <div class="col-lg-5 col-md-5 order-md-1 d-flex align-items-center">
+              <div class="card-body">
+                <h3 class="card-title">
+                  <a href={`/blog/${bottomPick.id}`}>{bottomPick.data.title}</a>
+                </h3>
+                <p class="card-text">{bottomPick.data.excerpt}</p>
+                <p class="card-text d-flex justify-content-between">
+                  <small class="text-muted">{formatDate(bottomPick.data.date)}</small>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )}
+
 </Page>
+
+<style>
+  .hidden-post { display: none; }
+</style>
+
+<script>
+  const btn = document.getElementById('load-more-btn');
+  if (btn) {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.hidden-post').forEach(el => {
+        (el as HTMLElement).style.display = '';
+        el.classList.remove('hidden-post');
+      });
+      btn.style.display = 'none';
+    });
+  }
+</script>

@@ -15,17 +15,21 @@ const { Content } = await render(service);
   title={`${service.data.title} — CloudAlgo`}
   description={service.data.excerpt}
 >
-  <section class="bg-[#111] px-6 py-24">
+  <section class="bg-[#111] px-6 pt-12 pb-20">
     <div class="max-w-3xl mx-auto">
-      <a href="/services" class="text-[12px] font-bold text-[#64748b] hover:text-primary transition-colors mb-8 inline-block">
-        ← Back to Services
+      <a href="/services"
+         class="inline-flex items-center gap-1.5 text-[12px] font-bold text-[#64748b] hover:text-primary transition-colors mb-10 group">
+        <span class="group-hover:-translate-x-0.5 transition-transform">←</span>
+        Back to Services
       </a>
-      <div class="text-4xl mb-4">{service.data.icon}</div>
+      <div class="w-14 h-14 bg-[#1a1a1a] rounded-2xl flex items-center justify-center text-3xl mb-6 border border-white/5">
+        {service.data.icon}
+      </div>
       <h1 class="font-display font-black text-white leading-tight mb-4 anim-fade-up"
           style="font-size: clamp(32px, 5vw, 52px); letter-spacing: -1.5px;">
         {service.data.title}
       </h1>
-      <p class="text-[16px] text-[#94a3b8] font-semibold leading-relaxed">
+      <p class="text-[17px] text-[#94a3b8] font-semibold leading-relaxed max-w-140">
         {service.data.excerpt}
       </p>
     </div>

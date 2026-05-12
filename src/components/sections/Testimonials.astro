@@ -1,13 +1,11 @@
 ---
-// src/components/sections/Testimonials.astro
 import TestimonialsSlider from '../ui/TestimonialsSlider.tsx';
 ---
-<section class="bg-white px-6 py-20">
-  <div class="max-w-6xl mx-auto">
-    <h2 class="font-display font-black text-center text-black mb-12 anim-fade-up"
-        style="font-size: clamp(24px, 3vw, 36px); letter-spacing: -0.5px;">
-      What Our Clients Say
-    </h2>
+<section id="testimonial-slider" class="section-padding--vertical">
+  <div class="container">
+    <div class="heading-n-description text-center">
+      <h2>What Our Clients Say About Us!</h2>
+    </div>
     <TestimonialsSlider client:visible />
   </div>
 </section>

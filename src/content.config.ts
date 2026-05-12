@@ -11,6 +11,11 @@ const blog = defineCollection({
     excerpt:   z.string(),
     readTime:  z.number(),
     published: z.boolean().default(true),
+    featured:           z.enum(['editors-pick', 'bottom-pick']).optional(),
+    image:              z.string().optional(),
+    author:             z.string().optional(),
+    authorDesignation:  z.string().optional(),
+    authorPhoto:        z.string().optional(),
   }),
 });
 

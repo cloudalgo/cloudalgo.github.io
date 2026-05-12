@@ -1,72 +1,154 @@
 ---
-// src/pages/about.astro
 import Page from '../layouts/Page.astro';
-import WhyUs from '../components/sections/WhyUs.astro';
 import StatsBar from '../components/sections/StatsBar.astro';
-import SectionBadge from '../components/ui/SectionBadge.astro';
-
-const industries = [
-  'Retail', 'Healthcare & Hospitals', 'Energy & Utilities', 'Insurance',
-  'Services', 'Pharma', 'Communications', 'Manufacturing', 'Consumer Goods', 'Non Profit',
-];
 ---
-<Page
-  title="About Us — CloudAlgo"
-  description="CloudAlgo is a cloud-based Business Process Automation Consulting Company specialising in Salesforce and Heroku, established in 2019."
->
-  <!-- Hero -->
-  <section class="bg-[#111] px-6 py-24">
-    <div class="max-w-6xl mx-auto">
-      <SectionBadge>About Us</SectionBadge>
-      <h1 class="font-display font-black text-white leading-tight mb-5 anim-fade-up"
-          style="font-size: clamp(36px, 5vw, 60px); letter-spacing: -2px;">
-        We are a cloud-based<br/>
-        <span class="text-primary">Salesforce-first</span> team.
-      </h1>
-      <p class="text-[16px] text-[#94a3b8] font-semibold max-w-[560px] leading-relaxed">
-        A Business Process Automation Consulting Company specialising in the Salesforce and Heroku ecosystem since 2019.
-      </p>
-    </div>
-  </section>
+<Page title="About Us — CloudAlgo"
+      description="CloudAlgo is a cloud-based Business Process Automation Consulting Company specialising in Salesforce and Heroku, established in 2019.">
 
-  <!-- Story -->
-  <section class="bg-white px-6 py-20">
-    <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
-      <div class="anim-fade-up">
-        <h2 class="font-display font-black text-black mb-6"
-            style="font-size: clamp(24px, 3.5vw, 36px); letter-spacing: -1px;">
-          Our story
-        </h2>
-        <div class="space-y-4 text-[15px] text-[#6b7280] leading-relaxed">
-          <p>
-            We are a team of experienced consultants who specialise in Salesforce and Heroku ecosystems.
-            Our company is cloud-based, which allows us to work with clients from all around the world.
-          </p>
-          <p>
-            Our approach is collaborative — we work closely with our clients to understand their business
-            processes and goals, then craft customised solutions tailored to their unique requirements.
-          </p>
-          <p>
-            At CloudAlgo, we are passionate about technology and its potential to transform businesses.
-            Let us help you take your business to the next level with Salesforce and Heroku.
+  <!-- Hero Banner -->
+  <div class="heroBanner-innerPage about-banner">
+    <section class="banner-caption d-flex">
+      <div class="container d-flex align-content-center flex-wrap">
+        <div class="banner-caption_inner">
+          <h1>About Us</h1>
+          <p class="paragraph-large breadcrumb">
+            <a href="/">Home</a>
+            <span class="icon-arrow_forward"></span>
+            About Us
           </p>
         </div>
       </div>
-      <div class="anim-scale-pop">
-        <h3 class="font-display font-extrabold text-black text-[15px] uppercase tracking-widest mb-5">
-          Industries We Serve
-        </h3>
-        <div class="flex flex-wrap gap-2">
-          {industries.map(ind => (
-            <span class="bg-[#f9f9f9] border border-[#e5e5e5] text-[12px] font-semibold text-[#6b7280] px-3 py-1.5 rounded-full">
-              {ind}
-            </span>
-          ))}
-        </div>
+    </section>
+  </div>
+
+  <!-- About Content -->
+  <section class="about-base-section section-padding--vertical">
+    <div class="container">
+      <div class="heading-n-description">
+        <h2>We are a cloud-based <span class="orange">Business Process Automation</span> Consulting Company specialized in Salesforce and Heroku ecosystem.</h2>
+        <p class="paragraph-large">We are a team of experienced consultants who specialize in Salesforce and Heroku ecosystems. Our company is based in the cloud, which allows us to work with clients from all around the world. We pride ourselves on staying up-to-date with the latest trends and technologies in these ecosystems, so that we can provide our clients with the most effective solutions.</p>
+        <p class="paragraph-large">Our approach is collaborative - we work closely with our clients to understand their business processes and goals. Once we have a thorough understanding of their needs, we suggest customized solutions that are tailored to their unique requirements. We understand that each business is different, which is why we take the time to listen and provide personalized recommendations.</p>
+        <p class="paragraph-large">Our services include business process automation, Salesforce implementation and customization, Heroku development, and integration with third-party systems. We can help you automate your workflows, streamline your business processes, and reduce manual effort.</p>
+        <p class="paragraph-large">At our company, we are passionate about technology and its potential to transform businesses. Let us help you take your business to the next level with Salesforce and Heroku.</p>
       </div>
     </div>
   </section>
 
+  <!-- Industries We Serve -->
+  <section class="excellence-section grey-bg section-padding--vertical">
+    <div class="container">
+      <div class="heading-n-description text-center">
+        <h2>Industries we Serve</h2>
+      </div>
+      <div class="featured-cards">
+        <div class="row">
+
+          <!-- Retail -->
+          <div class="indutries-card col-6 col-lg-3 col-md-6 align-items-stretch">
+            <div class="indutries-card-bg">
+              <div class="indutries-card-icon">
+                <svg width="91" height="90" viewBox="0 0 91 90" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 20.25C9.5 18.4598 10.2112 16.7429 11.477 15.477C12.7429 14.2112 14.4598 13.5 16.25 13.5H74.75C76.3441 13.4976 77.8875 14.0595 79.1071 15.0861C80.3266 16.1127 81.1434 17.5377 81.4129 19.1089C81.6824 20.68 81.3871 22.2958 80.5794 23.6701C79.7718 25.0444 78.5037 26.0885 77 26.6175V54H72.5V27H18.5V72H23V56.25C23 55.6533 23.2371 55.081 23.659 54.659C24.081 54.2371 24.6533 54 25.25 54H43.25C43.6831 53.9997 44.1071 54.1243 44.4711 54.359C44.835 54.5937 45.1236 54.9284 45.302 55.323C43.9874 56.127 42.9014 57.2552 42.1481 58.5995C41.3948 59.9438 40.9995 61.4591 41 63V58.5H27.5V72H41V76.5H16.25C15.6533 76.5 15.081 76.263 14.659 75.841C14.2371 75.419 14 74.8467 14 74.25V26.6175C12.6834 26.152 11.5436 25.2896 10.7376 24.1492C9.93168 23.0088 9.49927 21.6465 9.5 20.25ZM16.25 18C15.6533 18 15.081 18.2371 14.659 18.659C14.2371 19.081 14 19.6533 14 20.25C14 20.8467 14.2371 21.419 14.659 21.841C15.081 22.263 15.6533 22.5 16.25 22.5H74.75C75.3467 22.5 75.919 22.263 76.341 21.841C76.7629 21.419 77 20.8467 77 20.25C77 19.6533 76.7629 19.081 76.341 18.659C75.919 18.2371 75.3467 18 74.75 18H16.25ZM25.25 31.5C24.6533 31.5 24.081 31.7371 23.659 32.159C23.2371 32.581 23 33.1533 23 33.75V47.25C23 47.8467 23.2371 48.419 23.659 48.841C24.081 49.263 24.6533 49.5 25.25 49.5H65.75C66.3467 49.5 66.919 49.263 67.341 48.841C67.7629 48.419 68 47.8467 68 47.25V33.75C68 33.1533 67.7629 32.581 67.341 32.159C66.919 31.7371 66.3467 31.5 65.75 31.5H25.25ZM27.5 45V36H63.5V45H27.5ZM86 65.25V78.75C86 80.5402 85.2888 82.2571 84.023 83.523C82.7571 84.7888 81.0402 85.5 79.25 85.5H52.25C50.4598 85.5 48.7429 84.7888 47.477 83.523C46.2112 82.2571 45.5 80.5402 45.5 78.75V65.25C45.5 63.4598 46.2112 61.7429 47.477 60.477C48.7429 59.2112 50.4598 58.5 52.25 58.5H79.25C81.0402 58.5 82.7571 59.2112 84.023 60.477C85.2888 61.7429 86 63.4598 86 65.25ZM79.25 81C79.25 80.4033 79.4871 79.831 79.909 79.409C80.331 78.9871 80.9033 78.75 81.5 78.75V74.25C79.7098 74.25 77.9929 74.9612 76.727 76.227C75.4612 77.4929 74.75 79.2098 74.75 81H79.25ZM81.5 65.25C80.9033 65.25 80.331 65.013 79.909 64.591C79.4871 64.169 79.25 63.5967 79.25 63H74.75C74.75 64.7902 75.4612 66.5071 76.727 67.773C77.9929 69.0389 79.7098 69.75 81.5 69.75V65.25ZM52.25 63C52.25 63.5967 52.0129 64.169 51.591 64.591C51.169 65.013 50.5967 65.25 50 65.25V69.75C51.7902 69.75 53.5071 69.0389 54.773 67.773C56.0388 66.5071 56.75 64.7902 56.75 63H52.25ZM50 78.75C50.5967 78.75 51.169 78.9871 51.591 79.409C52.0129 79.831 52.25 80.4033 52.25 81H56.75C56.75 79.2098 56.0388 77.4929 54.773 76.227C53.5071 74.9612 51.7902 74.25 50 74.25V78.75ZM65.75 65.25C63.9598 65.25 62.2429 65.9612 60.977 67.227C59.7112 68.4929 59 70.2098 59 72C59 73.7902 59.7112 75.5071 60.977 76.773C62.2429 78.0388 63.9598 78.75 65.75 78.75C67.5402 78.75 69.2571 78.0388 70.523 76.773C71.7888 75.5071 72.5 73.7902 72.5 72C72.5 70.2098 71.7888 68.4929 70.523 67.227C69.2571 65.9612 67.5402 65.25 65.75 65.25Z" fill="currentColor"/></svg>
+              </div>
+              <p class="indutries-card-text">Retail</p>
+            </div>
+          </div>
+
+          <!-- Healthcare & Hospitals -->
+          <div class="indutries-card col-6 col-lg-3 col-md-6 align-items-stretch">
+            <div class="indutries-card-bg">
+              <div class="indutries-card-icon">
+                <svg width="91" height="91" viewBox="0 0 91 91" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M68.2498 75.8343L82.7491 61.335C83.1759 60.9087 83.4159 60.3305 83.4164 59.7273V39.8135C83.4164 38.3051 82.8172 36.8584 81.7506 35.7918C80.684 34.7252 79.2373 34.126 77.7289 34.126C76.2205 34.126 74.7739 34.7252 73.7073 35.7918C72.6406 36.8584 72.0414 38.3051 72.0414 39.8135V56.876" stroke="currentColor" stroke-width="5.6875" stroke-linecap="round" stroke-linejoin="round"/><path d="M22.7498 75.8343L8.25046 61.335C7.8237 60.9087 7.58366 60.3305 7.58313 59.7273V39.8135C7.58313 38.3051 8.18235 36.8584 9.24896 35.7918C10.3156 34.7252 11.7622 34.126 13.2706 34.126C14.779 34.126 16.2257 34.7252 17.2923 35.7918C18.3589 36.8584 18.9581 38.3051 18.9581 39.8135V56.876M68.2498 60.6676L71.503 57.4144C71.674 57.2437 71.8095 57.041 71.9019 56.8178C71.9943 56.5946 72.0417 56.3554 72.0415 56.1138C72.0409 55.7729 71.9456 55.4388 71.7662 55.1489C71.5867 54.8589 71.3302 54.6246 71.0253 54.4721L69.3456 53.6341C67.9225 52.9226 66.3117 52.6767 64.7412 52.9312C63.1707 53.1857 61.72 53.9277 60.5944 55.0522L57.2009 58.4457C55.7786 59.8675 54.9794 61.7961 54.979 63.8071V75.8343L68.2498 60.6676Z" stroke="currentColor" stroke-width="5.6875" stroke-linecap="round" stroke-linejoin="round"/><path d="M22.7498 60.6675L19.4965 57.4142C19.3258 57.2434 19.1904 57.0407 19.098 56.8175C19.0056 56.5944 18.9581 56.3552 18.9581 56.1137C18.9581 55.4198 19.3525 54.7866 19.9743 54.4719L21.654 53.6339C23.0771 52.9224 24.6879 52.6765 26.2584 52.931C27.8289 53.1855 29.2796 53.9275 30.4052 55.052L33.7987 58.4456C35.221 59.8674 36.0202 61.7959 36.0206 63.807V75.8341L22.7498 60.6675ZM51.8205 45.5008H39.1791V36.6549H30.3331V24.0134H39.1791V15.1675H51.8205V24.0134H60.6665V36.6549H51.8205V45.5008Z" stroke="currentColor" stroke-width="5.6875" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <p class="indutries-card-text">Healthcare &amp; Hospitals</p>
+            </div>
+          </div>
+
+          <!-- Energy & Utilities -->
+          <div class="indutries-card col-6 col-lg-3 col-md-6 align-items-stretch">
+            <div class="indutries-card-bg">
+              <div class="indutries-card-icon">
+                <svg width="91" height="90" viewBox="0 0 91 90" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M38 39.375V30M45.5 82.5C66.2112 82.5 83 65.7112 83 45C83 24.2888 66.2112 7.5 45.5 7.5C24.7888 7.5 8 24.2888 8 45C8 65.7112 24.7888 82.5 45.5 82.5ZM53 39.375V30V39.375Z" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M45.5 82.5V60M45.5 60C49.4782 60 53.2936 58.4196 56.1066 55.6066C58.9196 52.7936 60.5 48.9782 60.5 45V39.375H30.5V45C30.5 48.9782 32.0804 52.7936 34.8934 55.6066C37.7064 58.4196 41.5218 60 45.5 60Z" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <p class="indutries-card-text">Energy &amp; Utilities</p>
+            </div>
+          </div>
+
+          <!-- Insurance -->
+          <div class="indutries-card col-6 col-lg-3 col-md-6 align-items-stretch">
+            <div class="indutries-card-bg">
+              <div class="indutries-card-icon">
+                <svg width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M56.25 84.375H47.8125C46.3211 84.3735 44.8912 83.7804 43.8367 82.7258C42.7821 81.6713 42.189 80.2414 42.1875 78.75V64.6875H47.8125V78.75H56.25V64.6875H61.875V53.4375C61.8743 52.6918 61.5777 51.9769 61.0504 51.4496C60.5231 50.9223 59.8082 50.6257 59.0625 50.625H34.5375L28.9125 33.75H11.25C10.5043 33.7507 9.78937 34.0473 9.26208 34.5746C8.7348 35.1019 8.43824 35.8168 8.4375 36.5625V53.4375H14.0625V78.75H25.3125V59.0625H30.9375V78.75C30.936 80.2414 30.3429 81.6713 29.2883 82.7258C28.2338 83.7804 26.8039 84.3735 25.3125 84.375H14.0625C12.5711 84.3735 11.1412 83.7804 10.0867 82.7258C9.0321 81.6713 8.43899 80.2414 8.4375 78.75V59.0625C6.94611 59.061 5.51624 58.4679 4.46167 57.4133C3.4071 56.3588 2.81399 54.9289 2.8125 53.4375V36.5625C2.81473 34.3254 3.7044 32.1806 5.28625 30.5988C6.86811 29.0169 9.01292 28.1272 11.25 28.125H28.9125C30.0929 28.1243 31.2436 28.4953 32.2013 29.1854C33.159 29.8755 33.875 30.8497 34.2478 31.9697L38.5875 45H59.0625C61.2996 45.0022 63.4444 45.8919 65.0262 47.4738C66.6081 49.0556 67.4978 51.2004 67.5 53.4375V64.6875C67.4985 66.1789 66.9054 67.6088 65.8508 68.6633C64.7963 69.7179 63.3664 70.311 61.875 70.3125V78.75C61.8735 80.2414 61.2804 81.6713 60.2258 82.7258C59.1713 83.7804 57.7414 84.3735 56.25 84.375ZM78.75 84.375H73.125V53.4375H81.5625V36.5625C81.5618 35.8168 81.2652 35.1019 80.7379 34.5746C80.2106 34.0473 79.4957 33.7507 78.75 33.75H67.5V28.125H78.75C80.9871 28.1272 83.1319 29.0169 84.7137 30.5988C86.2956 32.1806 87.1853 34.3254 87.1875 36.5625V53.4375C87.186 54.9289 86.5929 56.3588 85.5383 57.4133C84.4838 58.4679 83.0539 59.061 81.5625 59.0625H78.75V84.375ZM19.6875 25.3125C17.4625 25.3125 15.2874 24.6527 13.4373 23.4165C11.5873 22.1804 10.1453 20.4234 9.29386 18.3677C8.44237 16.312 8.21958 14.05 8.65367 11.8677C9.08775 9.68545 10.1592 7.68089 11.7325 6.10755C13.3059 4.53421 15.3104 3.46275 17.4927 3.02867C19.675 2.59459 21.937 2.81737 23.9927 3.66886C26.0484 4.52035 27.8054 5.96229 29.0415 7.81234C30.2777 9.66239 30.9375 11.8375 30.9375 14.0625C30.9338 17.045 29.7473 19.9044 27.6383 22.0133C25.5294 24.1223 22.67 25.3088 19.6875 25.3125ZM19.6875 8.4375C18.575 8.4375 17.4874 8.76741 16.5624 9.38549C15.6374 10.0036 14.9164 10.8821 14.4907 11.9099C14.0649 12.9377 13.9535 14.0687 14.1706 15.1599C14.3876 16.251 14.9234 17.2533 15.71 18.04C16.4967 18.8267 17.499 19.3624 18.5901 19.5794C19.6813 19.7965 20.8123 19.6851 21.8401 19.2593C22.8679 18.8336 23.7464 18.1126 24.3645 17.1876C24.9826 16.2626 25.3125 15.175 25.3125 14.0625C25.311 12.5711 24.7179 11.1412 23.6633 10.0867C22.6088 9.0321 21.1789 8.43899 19.6875 8.4375ZM70.3125 25.3125C68.0875 25.3125 65.9124 24.6527 64.0623 23.4165C62.2123 22.1804 60.7703 20.4234 59.9189 18.3677C59.0674 16.312 58.8446 14.05 59.2787 11.8677C59.7127 9.68545 60.7842 7.68089 62.3576 6.10755C63.9309 4.53421 65.9354 3.46275 68.1177 3.02867C70.3 2.59459 72.562 2.81737 74.6177 3.66886C76.6734 4.52035 78.4304 5.96229 79.6665 7.81234C80.9027 9.66239 81.5625 11.8375 81.5625 14.0625C81.5588 17.045 80.3723 19.9044 78.2633 22.0133C76.1544 24.1223 73.295 25.3088 70.3125 25.3125ZM52.0313 42.1875C50.0843 42.1875 48.1812 41.6102 46.5624 40.5285C44.9436 39.4469 43.6819 37.9095 42.9368 36.1108C42.1918 34.3121 41.9968 32.3328 42.3766 30.4233C42.7565 28.5138 43.694 26.7598 45.0707 25.3832C46.4473 24.0065 48.2013 23.069 50.1108 22.6891C52.0203 22.3093 53.9996 22.5043 55.7983 23.2493C57.597 23.9944 59.1344 25.2561 60.216 26.8749C61.2977 28.4937 61.875 30.3968 61.875 32.3438C61.872 34.9536 60.834 37.4556 58.9886 39.301C57.1431 41.1465 54.6411 42.1845 52.0313 42.1875Z" fill="currentColor"/></svg>
+              </div>
+              <p class="indutries-card-text">Insurance</p>
+            </div>
+          </div>
+
+          <!-- Services -->
+          <div class="indutries-card col-6 col-lg-3 col-md-6 align-items-stretch">
+            <div class="indutries-card-bg">
+              <div class="indutries-card-icon">
+                <svg width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M78.75 47.8125V61.875H11.25V16.875H39.375V11.25H11.25C9.75816 11.25 8.32742 11.8426 7.27252 12.8975C6.21763 13.9524 5.625 15.3832 5.625 16.875V61.875C5.625 63.3668 6.21763 64.7976 7.27252 65.8525C8.32742 66.9074 9.75816 67.5 11.25 67.5H33.75V78.75H22.5V84.375H67.5V78.75H56.25V67.5H78.75C80.2418 67.5 81.6726 66.9074 82.7275 65.8525C83.7824 64.7976 84.375 63.3668 84.375 61.875V47.8125H78.75ZM50.625 78.75H39.375V67.5H50.625V78.75Z" fill="currentColor"/><path d="M84.375 28.125V22.5H78.4659C78.1032 20.7394 77.4042 19.0654 76.4072 17.5697L80.5978 13.3791L76.6209 9.40219L72.4303 13.5928C70.9346 12.5958 69.2606 11.8968 67.5 11.5341V5.625H61.875V11.5341C60.1144 11.8968 58.4404 12.5958 56.9447 13.5928L52.7541 9.40219L48.7772 13.3791L52.9678 17.5697C51.9708 19.0654 51.2718 20.7394 50.9091 22.5H45V28.125H50.9091C51.2718 29.8856 51.9708 31.5596 52.9678 33.0553L48.7772 37.2459L52.7541 41.2228L56.9447 37.0322C58.4404 38.0292 60.1144 38.7282 61.875 39.0909V45H67.5V39.0909C69.2606 38.7282 70.9346 38.0292 72.4303 37.0322L76.6209 41.2228L80.5978 37.2459L76.4072 33.0553C77.4042 31.5596 78.1032 29.8856 78.4659 28.125H84.375ZM64.6875 33.75C63.0187 33.75 61.3874 33.2551 59.9999 32.328C58.6123 31.4009 57.5309 30.0831 56.8923 28.5414C56.2537 26.9996 56.0866 25.3031 56.4121 23.6664C56.7377 22.0297 57.5413 20.5263 58.7213 19.3463C59.9013 18.1663 61.4047 17.3627 63.0414 17.0371C64.6781 16.7116 66.3746 16.8787 67.9164 17.5173C69.4581 18.1559 70.7759 19.2373 71.703 20.6249C72.6302 22.0124 73.125 23.6437 73.125 25.3125C73.1228 27.5496 72.2331 29.6944 70.6512 31.2762C69.0694 32.8581 66.9246 33.7478 64.6875 33.75Z" fill="currentColor"/></svg>
+              </div>
+              <p class="indutries-card-text">Services</p>
+            </div>
+          </div>
+
+          <!-- Pharma -->
+          <div class="indutries-card col-6 col-lg-3 col-md-6 align-items-stretch">
+            <div class="indutries-card-bg">
+              <div class="indutries-card-icon">
+                <svg width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M69.5325 29.5032C69.7738 29.562 70.0243 29.5723 70.2695 29.5335C70.5148 29.4947 70.7499 29.4076 70.9612 29.2772C71.1725 29.1468 71.3558 28.9757 71.5005 28.7739C71.6452 28.5721 71.7483 28.3435 71.8039 28.1015C71.8596 27.8595 71.8666 27.6089 71.8246 27.3642C71.7825 27.1195 71.6923 26.8855 71.5591 26.6759C71.426 26.4664 71.2525 26.2853 71.0488 26.1433C70.8451 26.0013 70.6152 25.9012 70.3725 25.8488L57.9675 22.9988C57.7244 22.9341 57.4707 22.919 57.2217 22.9545C56.9726 22.9899 56.7332 23.075 56.5177 23.2049C56.3023 23.3348 56.1151 23.5067 55.9675 23.7104C55.8198 23.9141 55.7147 24.1454 55.6583 24.3905C55.6019 24.6357 55.5954 24.8897 55.6393 25.1375C55.6831 25.3852 55.7763 25.6216 55.9134 25.8325C56.0505 26.0435 56.2287 26.2247 56.4372 26.3653C56.6458 26.506 56.8806 26.6032 57.1275 26.6513L69.5325 29.5032Z" fill="currentColor"/><path fill-rule="evenodd" clip-rule="evenodd" d="M63.75 41.25C67.7282 41.25 71.5435 39.6696 74.3566 36.8566C77.1696 34.0436 78.75 30.2282 78.75 26.25C78.75 22.2718 77.1696 18.4564 74.3566 15.6434C71.5435 12.8304 67.7282 11.25 63.75 11.25C59.7717 11.25 55.9564 12.8304 53.1434 15.6434C50.3303 18.4564 48.75 22.2718 48.75 26.25C48.75 30.2282 50.3303 34.0436 53.1434 36.8566C55.9564 39.6696 59.7717 41.25 63.75 41.25ZM63.75 37.5C65.2273 37.5 66.6903 37.209 68.0552 36.6436C69.4201 36.0783 70.6603 35.2496 71.7049 34.205C72.7496 33.1603 73.5783 31.9201 74.1436 30.5552C74.709 29.1903 75 27.7274 75 26.25C75 24.7726 74.709 23.3097 74.1436 21.9448C73.5783 20.5799 72.7496 19.3397 71.7049 18.295C70.6603 17.2504 69.4201 16.4217 68.0552 15.8564C66.6903 15.291 65.2273 15 63.75 15C60.7663 15 57.9048 16.1853 55.795 18.295C53.6852 20.4048 52.5 23.2663 52.5 26.25C52.5 29.2337 53.6852 32.0952 55.795 34.205C57.9048 36.3147 60.7663 37.5 63.75 37.5ZM31.4587 17.3344C30.2456 14.4619 26.1844 14.1731 24.555 16.8413L11.7975 37.7156C10.3256 40.1231 11.97 43.1981 14.8406 43.4025L37.0894 44.9887C39.9581 45.195 42.0469 42.3863 40.9519 39.795L31.4587 17.3344ZM66.3468 68.175C69.0513 66.9141 71.1441 64.6306 72.1649 61.8267C73.1857 59.0228 73.0508 55.9282 71.79 53.2237C71.1657 51.8846 70.2837 50.6816 69.1945 49.6833C68.1052 48.6851 66.83 47.9111 65.4417 47.4057C62.6378 46.3849 59.5432 46.5198 56.8387 47.7806L36.4462 57.2906C35.1072 57.9149 33.9043 58.7969 32.9062 59.8861C31.908 60.9753 31.1342 62.2504 30.6288 63.6387C30.1235 65.0269 29.8965 66.5011 29.9609 67.9771C30.0253 69.4531 30.3797 70.9019 31.004 72.2409C31.6284 73.5799 32.5103 74.7828 33.5995 75.781C34.6887 76.7791 35.9638 77.553 37.3521 78.0583C38.7403 78.5637 40.2146 78.7907 41.6905 78.7263C43.1665 78.6619 44.6154 78.3074 45.9544 77.6831L66.3468 68.1731V68.175Z" fill="currentColor"/></svg>
+              </div>
+              <p class="indutries-card-text">Pharma</p>
+            </div>
+          </div>
+
+          <!-- Communications -->
+          <div class="indutries-card col-6 col-lg-3 col-md-6 align-items-stretch">
+            <div class="indutries-card-bg">
+              <div class="indutries-card-icon">
+                <svg width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M71.124 38.604L68.646 36.912C71.5456 32.6413 73.234 27.6649 73.532 22.5116C73.8299 17.3582 72.7261 12.2203 70.338 7.644L69.834 6.726L72.45 5.25L72.99 6.252C75.6324 11.3093 76.8548 16.9882 76.5273 22.6848C76.1998 28.3815 74.3346 33.8828 71.13 38.604H71.124ZM78.042 81.39V84H12.042V81.39H26.97L36.264 38.4C36.4081 37.7289 36.778 37.1276 37.312 36.6963C37.8459 36.265 38.5116 36.0298 39.198 36.03H43.548V27.612C42.0515 27.2643 40.7156 26.423 39.7556 25.2235C38.7956 24.024 38.2674 22.5363 38.256 21C38.2287 20.0716 38.388 19.1471 38.7244 18.2814C39.0608 17.4157 39.5676 16.6262 40.2146 15.9599C40.8617 15.2935 41.6359 14.7638 42.4913 14.4021C43.3468 14.0403 44.2662 13.8539 45.195 13.8539C46.1238 13.8539 47.0432 14.0403 47.8986 14.4021C48.7541 14.7638 49.5283 15.2935 50.1754 15.9599C50.8224 16.6262 51.3291 17.4157 51.6656 18.2814C52.002 19.1471 52.1613 20.0716 52.134 21C52.1208 22.5857 51.557 24.1175 50.5392 25.3335C49.5213 26.5494 48.1126 27.3739 46.554 27.666V36.036H50.88C51.5666 36.0341 52.233 36.2678 52.7681 36.698C53.3031 37.1283 53.6744 37.729 53.82 38.4L63.102 81.39H78.042Z" fill="currentColor"/></svg>
+              </div>
+              <p class="indutries-card-text">Communications</p>
+            </div>
+          </div>
+
+          <!-- Manufacturing -->
+          <div class="indutries-card col-6 col-lg-3 col-md-6 align-items-stretch">
+            <div class="indutries-card-bg">
+              <div class="indutries-card-icon">
+                <svg width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M28.125 61.875H37.9688" stroke="currentColor" stroke-width="5.625" stroke-linecap="round" stroke-linejoin="round"/><path d="M52.0312 61.875H61.875" stroke="currentColor" stroke-width="5.625" stroke-linecap="round" stroke-linejoin="round"/><path d="M75.9375 75.9375V47.8125H59.0625L36.5625 30.9375V47.8125L14.0625 30.9375V75.9375" stroke="currentColor" stroke-width="5.625" stroke-linecap="round" stroke-linejoin="round"/><path d="M5.625 75.9375H84.375" stroke="currentColor" stroke-width="5.625" stroke-linecap="round" stroke-linejoin="round"/><path d="M75.9375 47.8125L70.6641 10.8633C70.5709 10.1922 70.2387 9.57737 69.7284 9.13171C69.2182 8.68604 68.5642 8.43953 67.8867 8.4375H61.4883C60.8108 8.43953 60.1568 8.68604 59.6466 9.13171C59.1363 9.57737 58.8041 10.1922 58.7109 10.8633L53.9648 44.0156" stroke="currentColor" stroke-width="5.625" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <p class="indutries-card-text">Manufacturing</p>
+            </div>
+          </div>
+
+          <!-- Consumer Goods -->
+          <div class="indutries-card col-6 col-lg-3 col-md-6 align-items-stretch">
+            <div class="indutries-card-bg">
+              <div class="indutries-card-icon">
+                <svg width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M33.047 21.5858C32.2063 19.9789 32.0191 18.1093 32.5244 16.3676C33.0297 14.6259 34.1884 13.1468 35.7585 12.2392C37.3286 11.3317 39.1886 11.0659 40.95 11.4973C42.7115 11.9288 44.2381 13.0241 45.211 14.5546L55.7579 32.8007" stroke="currentColor" stroke-width="5.125" stroke-linecap="round" stroke-linejoin="round"/><path d="M23.6954 33.4691L18.0704 23.7309C17.2298 22.1239 17.0426 20.2543 17.5478 18.5126C18.0531 16.7709 19.2118 15.2918 20.7819 14.3843C22.352 13.4767 24.212 13.2109 25.9735 13.6423C27.7349 14.0738 29.2615 15.1691 30.2345 16.6996L42.1876 37.4066" stroke="currentColor" stroke-width="5.125" stroke-linecap="round" stroke-linejoin="round"/><path d="M54.1406 58.1125C53.2142 56.5159 52.6121 54.7521 52.3687 52.9223C52.1254 51.0925 52.2456 49.2326 52.7224 47.4494C53.1992 45.6661 54.0234 43.9945 55.1475 42.5304C56.2717 41.0663 57.6738 39.8384 59.2734 38.9172L55.7578 32.8C54.8254 31.1823 54.5738 29.2604 55.0584 27.4572C55.543 25.654 56.724 24.1172 58.3417 23.1848C59.9595 22.2524 61.8813 22.0008 63.6845 22.4854C65.4877 22.97 67.0246 24.151 67.957 25.7688L74.9882 37.968C78.7178 44.4295 79.7278 52.108 77.7961 59.3142C75.8643 66.5205 71.149 72.6642 64.6874 76.3938C58.2259 80.1234 50.5474 81.1334 43.3412 79.2016C36.135 77.2698 29.9913 72.5545 26.2617 66.093L11.496 40.4992C11.0344 39.6982 10.735 38.8141 10.615 37.8974C10.495 36.9807 10.5567 36.0493 10.7967 35.1565C11.2812 33.3532 12.4623 31.8164 14.08 30.884C15.6977 29.9516 17.6196 29.7 19.4228 30.1846C21.226 30.6692 22.7629 31.8503 23.6953 33.468L31.4296 46.8625" stroke="currentColor" stroke-width="5.125" stroke-linecap="round" stroke-linejoin="round"/><path d="M28.5117 84.375C23.7347 81.0801 19.758 76.7551 16.875 71.7188" stroke="currentColor" stroke-width="5.125" stroke-linecap="round" stroke-linejoin="round"/><path d="M61.875 10.8985C65.0842 10.8898 68.2385 11.731 71.0172 13.3364C73.7959 14.9419 76.1 17.2545 77.6953 20.0391" stroke="currentColor" stroke-width="5.125" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <p class="indutries-card-text">Consumer Goods</p>
+            </div>
+          </div>
+
+          <!-- Non Profit -->
+          <div class="indutries-card col-6 col-lg-3 col-md-6 align-items-stretch">
+            <div class="indutries-card-bg">
+              <div class="indutries-card-icon">
+                <svg width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M47.7 40.5C45.9 40.05 44.1 39.15 42.75 37.8C41.4 37.35 40.95 36 40.95 35.1C40.95 34.2 41.4 32.85 42.3 32.4C43.65 31.5 45 30.6 46.35 31.05C49.05 31.05 51.3 32.4 52.65 34.2L56.7 28.8C55.35 27.45 54 26.55 52.65 25.65C51.3 24.75 49.5 24.3 47.7 24.3V18H42.3V24.3C40.05 24.75 37.8 26.1 36 27.9C34.2 30.15 32.85 32.85 33.3 35.55C33.3 38.25 34.2 40.95 36 42.75C38.25 45 41.4 46.35 44.1 47.7C45.45 48.15 47.25 49.05 48.6 49.95C49.5 50.85 49.95 52.2 49.95 53.55C49.95 54.9 49.5 56.25 48.6 57.6C47.25 58.95 45.45 59.4 44.1 59.4C42.3 59.4 40.05 58.95 38.7 57.6C37.35 56.7 36 55.35 35.1 54L30.6 58.95C31.95 60.75 33.3 62.1 35.1 63.45C37.35 64.8 40.05 66.15 42.75 66.15V72H47.7V65.25C50.4 64.8 52.65 63.45 54.45 61.65C56.7 59.4 58.05 55.8 58.05 52.65C58.05 49.95 57.15 46.8 54.9 45C52.65 42.75 50.4 41.4 47.7 40.5ZM45 9C25.2 9 9 25.2 9 45C9 64.8 25.2 81 45 81C64.8 81 81 64.8 81 45C81 25.2 64.8 9 45 9ZM45 76.05C27.9 76.05 13.95 62.1 13.95 45C13.95 27.9 27.9 13.95 45 13.95C62.1 13.95 76.05 27.9 76.05 45C76.05 62.1 62.1 76.05 45 76.05Z" fill="currentColor"/><rect x="12.8716" y="81.7701" width="96.1536" height="4" transform="rotate(-49.1839 12.8716 81.7701)" fill="currentColor"/></svg>
+              </div>
+              <p class="indutries-card-text">Non Profit</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats -->
   <StatsBar />
-  <WhyUs />
+
 </Page>

@@ -1,21 +1,222 @@
 ---
-// src/pages/index.astro
 import Page from '../layouts/Page.astro';
-import Hero from '../components/sections/Hero.astro';
+import { getCollection } from 'astro:content';
+import BlogCard from '../components/ui/BlogCard.astro';
 import StatsBar from '../components/sections/StatsBar.astro';
-import Services from '../components/sections/Services.astro';
-import WhyUs from '../components/sections/WhyUs.astro';
-import Testimonials from '../components/sections/Testimonials.astro';
-import BlogPreview from '../components/sections/BlogPreview.astro';
+import TestimonialsSection from '../components/sections/Testimonials.astro';
+
+const posts = (await getCollection('blog', ({ data }) => data.published))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, 4);
 ---
-<Page
-  title="CloudAlgo — Salesforce Consulting Services"
-  description="CloudAlgo is your trusted Salesforce & Heroku consulting partner. Certified experts, 70+ projects, 12+ years experience."
->
-  <Hero />
+<Page title="CloudAlgo - Salesforce Consulting Services"
+      description="CloudAlgo is your trusted Salesforce & Heroku consulting partner.">
+
+  <!-- Hero -->
+  <div class="hero-img-bg">
+    <section class="banner-caption d-flex">
+      <div class="container d-flex align-content-center flex-wrap">
+        <div class="banner-caption_inner">
+          <p class="paragraph-large">We are a Salesforce &amp; Heroku consulting agency</p>
+          <h1>We help you make the most out of your Salesforce orgs and suggest solutions to your specific needs.</h1>
+          <a href="/contact" class="btn btn-light mt-4">Get Started <span class="icon-arrow_forward"></span></a>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- About -->
+  <section class="about-section section-padding--vertical">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-7 col-md-6 align-self-center">
+          <img src="/cloud-img.png" alt="CloudAlgo cloud solutions" class="img-fluid" />
+        </div>
+        <div class="col-lg-5 col-md-6 align-self-center">
+          <div class="about-section_inner">
+            <h2>Welcome to CloudAlgo</h2>
+            <p class="paragraph-large">
+              CloudAlgo is your trusted, customer-focused consulting and implementation partner specializing in
+              <b>Salesforce and advanced cloud solutions</b>. As an authorized provider, we deliver tailored services
+              to businesses across diverse industries. Our team of seasoned experts crafts <b>customized, cloud-based
+              strategies</b> that <b>accelerate efficiency, drive automation, and optimize operations</b>.
+            </p>
+            <p class="paragraph-large">
+              Beyond Salesforce, we excel in <b>Heroku consulting</b> to empower you to
+              <b>build, run, and scale modern applications effortlessly</b>. Our expertise extends to
+              <b>MuleSoft, AWS</b>, and other Salesforce integrations, enabling seamless connectivity across your
+              technology stack.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why Choose Us -->
+  <section class="excellence-section grey-bg section-padding--vertical">
+    <div class="container">
+      <div class="heading-n-description text-center">
+        <h2>Why Choose Us</h2>
+        <p class="paragraph-large">
+          At CloudAlgo, we bring a unique combination of expertise across <b>Salesforce</b>, <b>Heroku</b>,
+          <b>MuleSoft</b>, <b>AWS</b>, and other advanced integration technologies. This enables us to provide
+          <b>comprehensive, end-to-end solutions</b> tailored to your business's specific needs. Our team of certified
+          consultants works closely with you to deeply understand your objectives, crafting <b>customized strategies</b> that
+          <b>accelerate efficiency, automate workflows, and optimize operations</b>.
+        </p>
+        <p class="paragraph-large">
+          With our broad experience in <b>cloud computing and enterprise integrations</b>, we empower your business
+          to <b>build, scale, and modernize applications</b> while leveraging the full potential of Salesforce and
+          cutting-edge platforms. Whether you're looking to streamline sales and marketing processes, integrate complex
+          systems, or harness the power of data through Snowflake and AWS, CloudAlgo is your
+          <b>trusted partner for innovation and growth</b>.
+        </p>
+        <p class="paragraph-large">
+          Choose CloudAlgo to unlock your business's potential and achieve <b>impactful, measurable results</b> in
+          today's dynamic digital landscape.
+        </p>
+      </div>
+      <div class="featured-cards">
+        <div class="row">
+          <!-- Card 1 -->
+          <div class="featured-card col-lg-3 col-md-6 align-items-stretch">
+            <div class="featured-card-bg">
+              <div class="featured-card-icon">
+                <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M11.25 17.5C10.9185 17.5 10.6006 17.6317 10.3662 17.8662C10.1317 18.1006 10 18.4185 10 18.75V55H6.25C5.91849 55 5.60057 55.1317 5.36615 55.3662C5.13174 55.6006 5.00003 55.9185 5 56.25C5 59.7715 8.14917 62.5 11.8506 62.5H70.6494C74.3508 62.5 77.5 59.7715 77.5 56.25C77.5 55.9185 77.3683 55.6006 77.1339 55.3662C76.8994 55.1317 76.5815 55 76.25 55H72.5V18.75C72.5 18.4185 72.3683 18.1006 72.1339 17.8662C71.8994 17.6317 71.5815 17.5 71.25 17.5H11.25ZM12.5 20H70V55H12.5V20ZM17.5 25V47.5V50H65V47.5H24.2676L30.8838 40.8838L35.8838 45.8838L45.8838 35.8838L48.3838 38.3838L57.5 29.2676V31.25H60V25H53.75V27.5H55.7324L48.3838 34.8486L45.8838 32.3486L35.8838 42.3486L30.8838 37.3486L20.7324 47.5H20V25H17.5ZM8.08594 57.5H11.25H71.25H74.4141C73.7965 58.8732 72.5585 60 70.6494 60H11.8506C9.94152 60 8.70345 58.8732 8.08594 57.5Z" fill="CurrentColor"/>
+                </svg>
+              </div>
+              <h4 class="featured-card-text">Simplicity, Performance and Perfection</h4>
+            </div>
+          </div>
+          <!-- Card 2 -->
+          <div class="featured-card col-lg-3 col-md-6 align-items-stretch">
+            <div class="featured-card-bg">
+              <div class="featured-card-icon">
+                <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M70.3041 23.872C66.1734 19.7516 60.6703 17.2964 54.8448 16.9747C49.0193 16.6531 43.2793 18.4875 38.7201 22.128H21.9201C21.6018 22.128 21.2966 22.2544 21.0716 22.4794C20.8465 22.7045 20.7201 23.0097 20.7201 23.328C20.7201 23.6462 20.8465 23.9514 21.0716 24.1765C21.2966 24.4015 21.6018 24.528 21.9201 24.528H36.1601C34.8307 25.957 33.6833 27.545 32.7441 29.256H13.8721C13.5538 29.256 13.2486 29.3824 13.0236 29.6074C12.7985 29.8325 12.6721 30.1377 12.6721 30.456C12.6721 30.7742 12.7985 31.0794 13.0236 31.3045C13.2486 31.5295 13.5538 31.656 13.8721 31.656H31.5921C30.1394 35.222 29.5712 39.0867 29.9361 42.92H21.9361C21.6178 42.92 21.3126 43.0464 21.0876 43.2714C20.8625 43.4965 20.7361 43.8017 20.7361 44.12C20.7361 44.4382 20.8625 44.7434 21.0876 44.9685C21.3126 45.1935 21.6178 45.32 21.9361 45.32H30.2961C30.6045 46.8693 31.0682 48.3836 31.6801 49.84H13.8721C13.5538 49.84 13.2486 49.9664 13.0236 50.1914C12.7985 50.4165 12.6721 50.7217 12.6721 51.04C12.6721 51.3582 12.7985 51.6634 13.0236 51.8885C13.2486 52.1135 13.5538 52.24 13.8721 52.24H32.8561C33.7657 53.8881 34.8725 55.4193 36.1521 56.8H10.9601C10.6418 56.8 10.3366 56.9264 10.1116 57.1514C9.88651 57.3765 9.76009 57.6817 9.76009 58C9.76009 58.3182 9.88651 58.6234 10.1116 58.8485C10.3366 59.0735 10.6418 59.2 10.9601 59.2H37.9281C38.1383 59.1974 38.3445 59.1424 38.5281 59.04C43.2365 62.9445 49.2712 64.8792 55.3721 64.4401C61.473 64.001 67.1685 61.2221 71.2692 56.6836C75.37 52.1451 77.559 46.1979 77.3791 40.0839C77.1993 33.9698 74.6645 28.1616 70.3041 23.872V23.872ZM68.6081 55.72C65.6269 58.6988 61.8294 60.7268 57.6957 61.5477C53.5621 62.3687 49.2779 61.9456 45.3846 60.332C41.4914 58.7185 38.1639 55.9868 35.8229 52.4825C33.4819 48.9781 32.2324 44.8583 32.2324 40.644C32.2324 36.4296 33.4819 32.3098 35.8229 28.8055C38.1639 25.3011 41.4914 22.5695 45.3846 20.9559C49.2779 19.3423 53.5621 18.9193 57.6957 19.7402C61.8294 20.5611 65.6269 22.5892 68.6081 25.568C72.5988 29.5704 74.8398 34.9919 74.8398 40.644C74.8398 46.296 72.5988 51.7175 68.6081 55.72Z" fill="currentColor"/>
+                  <path d="M53.5358 22.792C50.0058 22.792 46.5551 23.8388 43.62 25.7999C40.6849 27.7611 38.3973 30.5486 37.0464 33.8099C35.6955 37.0712 35.3421 40.6598 36.0307 44.122C36.7194 47.5841 38.4193 50.7643 40.9154 53.2604C43.4114 55.7565 46.5917 57.4564 50.0538 58.145C53.516 58.8337 57.1046 58.4803 60.3659 57.1294C63.6272 55.7785 66.4147 53.4909 68.3759 50.5558C70.337 47.6207 71.3838 44.17 71.3838 40.64C71.3775 35.9084 69.495 31.3723 66.1492 28.0266C62.8035 24.6808 58.2674 22.7983 53.5358 22.792V22.792ZM54.7358 56V54.6C54.7358 54.2817 54.6094 53.9765 54.3843 53.7515C54.1593 53.5264 53.8541 53.4 53.5358 53.4C53.2175 53.4 52.9123 53.5264 52.6873 53.7515C52.4622 53.9765 52.3358 54.2817 52.3358 54.6V56C48.6747 55.7097 45.2367 54.1253 42.6376 51.5306C40.0385 48.9359 38.4483 45.5006 38.1518 41.84H39.5758C39.8941 41.84 40.1993 41.7136 40.4243 41.4885C40.6494 41.2635 40.7758 40.9583 40.7758 40.64C40.7758 40.3217 40.6494 40.0165 40.4243 39.7915C40.1993 39.5664 39.8941 39.44 39.5758 39.44H38.1518C38.4412 35.7746 40.0286 32.3326 42.6285 29.7327C45.2284 27.1328 48.6704 25.5454 52.3358 25.256V26.68C52.3358 26.9983 52.4622 27.3035 52.6873 27.5285C52.9123 27.7536 53.2175 27.88 53.5358 27.88C53.8541 27.88 54.1593 27.7536 54.3843 27.5285C54.6094 27.3035 54.7358 26.9983 54.7358 26.68V25.256C58.4012 25.5454 61.8432 27.1328 64.4431 29.7327C67.043 32.3326 68.6304 35.7746 68.9198 39.44H67.4958C67.1776 39.44 66.8723 39.5664 66.6473 39.7915C66.4222 40.0165 66.2958 40.3217 66.2958 40.64C66.2958 40.9583 66.4222 41.2635 66.6473 41.4885C66.8723 41.7136 67.1776 41.84 67.4958 41.84H68.9198C68.6234 45.5006 67.0331 48.9359 64.434 51.5306C61.8349 54.1253 58.3969 55.7097 54.7358 56Z" fill="currentColor"/>
+                  <path d="M60.1279 43.4398L55.0959 40.2398L60.3199 29.8398C60.4156 29.5623 60.4064 29.2594 60.2938 28.9883C60.1813 28.7172 59.9733 28.4967 59.7092 28.3686C59.4452 28.2405 59.1433 28.2137 58.8607 28.2931C58.5782 28.3725 58.3345 28.5528 58.1759 28.7998L52.4639 40.1038C52.3298 40.369 52.2989 40.6746 52.3773 40.9613C52.4556 41.2481 52.6375 41.4955 52.8879 41.6558L58.8319 45.4638C59.0232 45.5851 59.2453 45.6489 59.4719 45.6478C59.7313 45.6488 59.9842 45.5658 60.1924 45.411C60.4007 45.2563 60.5532 45.0382 60.6271 44.7895C60.701 44.5408 60.6923 44.2748 60.6023 44.0315C60.5123 43.7882 60.3458 43.5805 60.1279 43.4398V43.4398ZM17.9839 44.1118C17.9839 43.7935 17.8575 43.4883 17.6324 43.2632C17.4074 43.0382 17.1021 42.9118 16.7839 42.9118H4.05588C3.73762 42.9118 3.4324 43.0382 3.20735 43.2632C2.98231 43.4883 2.85588 43.7935 2.85588 44.1118C2.85588 44.43 2.98231 44.7352 3.20735 44.9603C3.4324 45.1853 3.73762 45.3118 4.05588 45.3118H16.7999C17.1154 45.3075 17.4165 45.1793 17.6381 44.9547C17.8597 44.7301 17.9839 44.4273 17.9839 44.1118V44.1118ZM9.93588 24.5198H16.7999C17.1181 24.5198 17.4234 24.3933 17.6484 24.1683C17.8735 23.9432 17.9999 23.638 17.9999 23.3198C17.9999 23.0015 17.8735 22.6963 17.6484 22.4712C17.4234 22.2462 17.1181 22.1198 16.7999 22.1198H9.93588C9.61762 22.1198 9.3124 22.2462 9.08735 22.4712C8.86231 22.6963 8.73588 23.0015 8.73588 23.3198C8.73588 23.638 8.86231 23.9432 9.08735 24.1683C9.3124 24.3933 9.61762 24.5198 9.93588 24.5198V24.5198ZM8.63188 38.3998H24.4479C24.7661 38.3998 25.0714 38.2733 25.2964 38.0483C25.5215 37.8232 25.6479 37.518 25.6479 37.1998C25.6479 36.8815 25.5215 36.5763 25.2964 36.3512C25.0714 36.1262 24.7661 35.9998 24.4479 35.9998H8.63188C8.31362 35.9998 8.0084 36.1262 7.78335 36.3512C7.55831 36.5763 7.43188 36.8815 7.43188 37.1998C7.43188 37.518 7.55831 37.8232 7.78335 38.0483C8.0084 38.2733 8.31362 38.3998 8.63188 38.3998Z" fill="currentColor"/>
+                </svg>
+              </div>
+              <h4 class="featured-card-text">Best Quality with On Time Delivery</h4>
+            </div>
+          </div>
+          <!-- Card 3 -->
+          <div class="featured-card col-lg-3 col-md-6 align-items-stretch">
+            <div class="featured-card-bg">
+              <div class="featured-card-icon">
+                <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M40 12C38.4087 12 36.8826 12.6321 35.7574 13.7574C34.6321 14.8826 34 16.4087 34 18C34 19.5913 34.6321 21.1174 35.7574 22.2426C36.8826 23.3679 38.4087 24 40 24C41.5913 24 43.1174 23.3679 44.2426 22.2426C45.3679 21.1174 46 19.5913 46 18C46 16.4087 45.3679 14.8826 44.2426 13.7574C43.1174 12.6321 41.5913 12 40 12ZM30 18C30 15.3478 31.0536 12.8043 32.9289 10.9289C34.8043 9.05357 37.3478 8 40 8C42.6522 8 45.1957 9.05357 47.0711 10.9289C48.9464 12.8043 50 15.3478 50 18C50 20.6522 48.9464 23.1957 47.0711 25.0711C45.1957 26.9464 42.6522 28 40 28C37.3478 28 34.8043 26.9464 32.9289 25.0711C31.0536 23.1957 30 20.6522 30 18ZM62 16C60.9391 16 59.9217 16.4214 59.1716 17.1716C58.4214 17.9217 58 18.9391 58 20C58 21.0609 58.4214 22.0783 59.1716 22.8284C59.9217 23.5786 60.9391 24 62 24C63.0609 24 64.0783 23.5786 64.8284 22.8284C65.5786 22.0783 66 21.0609 66 20C66 18.9391 65.5786 17.9217 64.8284 17.1716C64.0783 16.4214 63.0609 16 62 16ZM54 20C54 17.8783 54.8429 15.8434 56.3431 14.3431C57.8434 12.8429 59.8783 12 62 12C64.1217 12 66.1566 12.8429 67.6569 14.3431C69.1571 15.8434 70 17.8783 70 20C70 22.1217 69.1571 24.1566 67.6569 25.6569C66.1566 27.1571 64.1217 28 62 28C59.8783 28 57.8434 27.1571 56.3431 25.6569C54.8429 24.1566 54 22.1217 54 20ZM14 20C14 18.9391 14.4214 17.9217 15.1716 17.1716C15.9217 16.4214 16.9391 16 18 16C19.0609 16 20.0783 16.4214 20.8284 17.1716C21.5786 17.9217 22 18.9391 22 20C22 21.0609 21.5786 22.0783 20.8284 22.8284C20.0783 23.5786 19.0609 24 18 24C16.9391 24 15.9217 23.5786 15.1716 22.8284C14.4214 22.0783 14 21.0609 14 20ZM18 12C15.8783 12 13.8434 12.8429 12.3431 14.3431C10.8429 15.8434 10 17.8783 10 20C10 22.1217 10.8429 24.1566 12.3431 25.6569C13.8434 27.1571 15.8783 28 18 28C20.1217 28 22.1566 27.1571 23.6569 25.6569C25.1571 24.1566 26 22.1217 26 20C26 17.8783 25.1571 15.8434 23.6569 14.3431C22.1566 12.8429 20.1217 12 18 12ZM20.4 59.992C19.3169 60.0462 18.2341 59.8797 17.2174 59.5025C16.2007 59.1253 15.2713 58.5454 14.4857 57.7979C13.7 57.0504 13.0745 56.151 12.6472 55.1543C12.2199 54.1576 11.9997 53.0844 12 52V37C12 36.7348 12.1054 36.4804 12.2929 36.2929C12.4804 36.1054 12.7348 36 13 36H20.056C20.216 34.532 20.736 33.168 21.516 32H13C10.24 32 8 34.24 8 37V52C7.99981 53.7125 8.36615 55.4052 9.07441 56.9643C9.78266 58.5235 10.8164 59.913 12.1062 61.0395C13.396 62.166 14.912 63.0033 16.5523 63.4954C18.1925 63.9874 19.9191 64.1226 21.616 63.892C21.0776 62.6373 20.6701 61.3304 20.4 59.992ZM58.384 63.892C60.0809 64.1226 61.8075 63.9874 63.4477 63.4954C65.088 63.0033 66.604 62.166 67.8938 61.0395C69.1836 59.913 70.2173 58.5235 70.9256 56.9643C71.6338 55.4052 72.0002 53.7125 72 52V37C72 34.24 69.76 32 67 32H58.484C59.268 33.168 59.784 34.532 59.944 36H67C67.2652 36 67.5196 36.1054 67.7071 36.2929C67.8946 36.4804 68 36.7348 68 37V52C68.0003 53.0844 67.7801 54.1576 67.3528 55.1543C66.9255 56.151 66.3 57.0504 65.5143 57.7979C64.7287 58.5454 63.7993 59.1253 62.7826 59.5025C61.7659 59.8797 60.6831 60.0462 59.6 59.992C59.3298 61.3303 58.9223 62.6372 58.384 63.892ZM29 32C26.24 32 24 34.24 24 37V56C24 60.2435 25.6857 64.3131 28.6863 67.3137C31.6869 70.3143 35.7565 72 40 72C44.2435 72 48.3131 70.3143 51.3137 67.3137C54.3143 64.3131 56 60.2435 56 56V37C56 34.24 53.76 32 51 32H29ZM28 37C28 36.7348 28.1054 36.4804 28.2929 36.2929C28.4804 36.1054 28.7348 36 29 36H51C51.2652 36 51.5196 36.1054 51.7071 36.2929C51.8946 36.4804 52 36.7348 52 37V56C52 59.1826 50.7357 62.2348 48.4853 64.4853C46.2348 66.7357 43.1826 68 40 68C36.8174 68 33.7652 66.7357 31.5147 64.4853C29.2643 62.2348 28 59.1826 28 56V37Z" fill="currentColor"/>
+                </svg>
+              </div>
+              <h4 class="featured-card-text">Certified Architects and Developers</h4>
+            </div>
+          </div>
+          <!-- Card 4 -->
+          <div class="featured-card col-lg-3 col-md-6 align-items-stretch">
+            <div class="featured-card-bg">
+              <div class="featured-card-icon">
+                <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M47.9533 41.1117C47.4936 39.8117 46.6422 38.6862 45.5163 37.8902C44.3905 37.0941 43.0455 36.6667 41.6667 36.6667V35H38.3333V36.6667C36.5652 36.6667 34.8695 37.369 33.6193 38.6193C32.369 39.8695 31.6667 41.5652 31.6667 43.3333C31.6667 45.1014 32.369 46.7971 33.6193 48.0474C34.8695 49.2976 36.5652 50 38.3333 50V56.6667C36.8833 56.6667 35.6483 55.7417 35.1883 54.445C35.1201 54.2329 35.01 54.0366 34.8645 53.8677C34.7191 53.6989 34.5413 53.5609 34.3416 53.462C34.1419 53.363 33.9244 53.3052 33.702 53.2918C33.4795 53.2784 33.2566 53.3097 33.0465 53.384C32.8364 53.4582 32.6433 53.5738 32.4786 53.724C32.314 53.8742 32.1811 54.0558 32.0879 54.2582C31.9947 54.4606 31.943 54.6797 31.9359 54.9024C31.9288 55.1252 31.9665 55.3471 32.0467 55.555C32.5064 56.855 33.3578 57.9804 34.4837 58.7765C35.6095 59.5725 36.9545 60 38.3333 60V61.6667H41.6667V60C43.4348 60 45.1305 59.2976 46.3807 58.0474C47.6309 56.7971 48.3333 55.1014 48.3333 53.3333C48.3333 51.5652 47.6309 49.8695 46.3807 48.6193C45.1305 47.369 43.4348 46.6667 41.6667 46.6667V40C42.356 39.9998 43.0285 40.2134 43.5914 40.6113C44.1544 41.0091 44.5801 41.5718 44.81 42.2217C44.9572 42.6385 45.2639 42.9798 45.6628 43.1704C45.8602 43.2649 46.0744 43.3194 46.293 43.3311C46.5115 43.3427 46.7303 43.3112 46.9367 43.2383C47.1431 43.1655 47.3331 43.0526 47.4959 42.9063C47.6587 42.76 47.791 42.583 47.8854 42.3856C47.9798 42.1881 48.0344 41.9739 48.0461 41.7554C48.0577 41.5368 48.0262 41.3181 47.9533 41.1117V41.1117ZM38.3333 40C37.4493 40 36.6014 40.3512 35.9763 40.9763C35.3512 41.6014 35 42.4493 35 43.3333C35 44.2174 35.3512 45.0652 35.9763 45.6904C36.6014 46.3155 37.4493 46.6667 38.3333 46.6667V40ZM41.6667 56.6667C42.5507 56.6667 43.3986 56.3155 44.0237 55.6904C44.6488 55.0652 45 54.2174 45 53.3333C45 52.4493 44.6488 51.6014 44.0237 50.9763C43.3986 50.3512 42.5507 50 41.6667 50V56.6667Z" fill="currentColor"/>
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M21.9217 14.3683C26.0117 12.3667 32.7217 10 40.065 10C47.255 10 53.7883 12.2683 57.8567 14.2433L58.0867 14.355C59.3133 14.9617 60.3033 15.535 61 16L54.8433 25C69.0367 39.51 80 69.995 40.065 69.995C0.129987 69.995 10.7983 40.0633 25.115 25L18.9983 16C19.47 15.6917 20.0683 15.3333 20.7817 14.9533C21.135 14.7633 21.515 14.5683 21.9217 14.37V14.3683ZM50.8867 24.88L55.815 17.675C51.2317 18.005 45.7783 19.0817 40.5283 20.6017C36.7783 21.685 32.6117 21.52 28.7533 20.8083C27.781 20.6281 26.8154 20.4135 25.8583 20.165L29.0583 24.8767C35.9167 27.3183 44.0267 27.3183 50.8867 24.88V24.88ZM27.1333 27.7167C35.1583 30.8167 44.8033 30.8167 52.8283 27.7133C56.1781 31.2445 58.9803 35.2573 61.1417 39.6183C63.395 44.215 64.6217 48.81 64.4217 52.77C64.2283 56.5917 62.725 59.8567 59.2917 62.2833C55.7133 64.8117 49.695 66.6617 40.0633 66.6617C30.4217 66.6617 24.375 64.8433 20.7633 62.3433C17.305 59.9467 15.7867 56.7267 15.5717 52.9567C15.3467 49.04 16.5467 44.4683 18.7917 39.84C20.9333 35.4267 23.9217 31.1783 27.1333 27.7167V27.7167ZM25.2167 16.5267C26.55 16.9233 27.9433 17.2683 29.3567 17.53C32.94 18.19 36.5333 18.2867 39.6 17.3983C43.1737 16.3572 46.8084 15.5385 50.4833 14.9467C47.4167 14.0233 43.83 13.3333 40.0633 13.3333C34.3217 13.3333 28.9667 14.935 25.2167 16.5267V16.5267Z" fill="currentColor"/>
+                </svg>
+              </div>
+              <h4 class="featured-card-text">Cost effective</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="text-center mt-5">
+        <a href="/about" class="btn">Learn More About Us <span class="icon-arrow_forward"></span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- What We Do -->
+  <section class="services-section dark-bg section-padding--vertical">
+    <div class="container">
+      <div class="heading-n-description text-center">
+        <h2 style="color:#fff;">What We Do</h2>
+      </div>
+      <div class="services-cards">
+        <div class="row">
+          <div class="services-card col-lg-4 col-md-4 align-items-stretch">
+            <div class="card-bg">
+              <div class="card-icon">
+                <svg width="81" height="80" viewBox="0 0 81 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <g clip-path="url(#clip0_759_231)"><path d="M25.5 40C25.5 35.0555 26.9662 30.222 29.7133 26.1108C32.4603 21.9995 36.3648 18.7952 40.9329 16.903C45.5011 15.0108 50.5277 14.5157 55.3773 15.4804C60.2268 16.445 64.6814 18.826 68.1777 22.3223C71.674 25.8187 74.055 30.2732 75.0196 35.1228C75.9843 39.9723 75.4892 44.9989 73.597 49.5671C71.7048 54.1352 68.5005 58.0397 64.3893 60.7867C60.278 63.5338 55.4445 65 50.5 65H23C18.3587 65 13.9075 63.1563 10.6256 59.8744C7.34374 56.5925 5.5 52.1413 5.5 47.5C5.5 42.8587 7.34374 38.4075 10.6256 35.1256C13.9075 31.8438 18.3587 30 23 30C24.4642 29.9995 25.9229 30.1779 27.3438 30.5313" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g>
+                  <defs><clipPath id="clip0_759_231"><rect width="80" height="80" fill="white" transform="translate(0.5)"/></clipPath></defs>
+                </svg>
+              </div>
+              <a href="/services/salesforce-consulting"><h4 class="card-text">Salesforce Consulting</h4></a>
+              <p>CloudAlgo specializes in Salesforce CRM customization, Salesforce Communities, Force.com App Development, Integration, Heroku and Salesforce Support.</p>
+              <a href="/services/salesforce-consulting" class="btn btn-secondary">Learn More <span class="icon-arrow_forward"></span></a>
+            </div>
+          </div>
+          <div class="services-card col-lg-4 col-md-4 align-items-stretch">
+            <div class="card-bg">
+              <div class="card-icon">
+                <svg width="81" height="80" viewBox="0 0 81 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <g clip-path="url(#clip0_759_247)"><path d="M70.5 55.406V24.5935C70.4976 24.1485 70.3779 23.7119 70.153 23.3278C69.928 22.9438 69.6058 22.6258 69.2187 22.406L41.7187 6.93728C41.3482 6.72335 40.9279 6.61072 40.5 6.61072C40.0721 6.61072 39.6518 6.72335 39.2812 6.93728L11.7812 22.406C11.3942 22.6258 11.072 22.9438 10.847 23.3278C10.6221 23.7119 10.5024 24.1485 10.5 24.5935V55.406C10.5024 55.8511 10.6221 56.2877 10.847 56.6717C11.072 57.0558 11.3942 57.3737 11.7812 57.5935L39.2812 73.0623C39.6518 73.2762 40.0721 73.3888 40.5 73.3888C40.9279 73.3888 41.3482 73.2762 41.7187 73.0623L69.2187 57.5935C69.6058 57.3737 69.928 57.0558 70.153 56.6717C70.3779 56.2877 70.4976 55.8511 70.5 55.406Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M55.8125 47.6562V31.4062L25.5 14.6875" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M70.1561 23.3124L40.7811 39.9999L10.8436 23.3124" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M40.7812 40V73.3875" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g>
+                  <defs><clipPath id="clip0_759_247"><rect width="80" height="80" fill="white" transform="translate(0.5)"/></clipPath></defs>
+                </svg>
+              </div>
+              <a href="/services/product-development"><h4 class="card-text">Product Development</h4></a>
+              <p>AppExchange product development with 1GP and 2GP managed packages, security review readiness, and ISV strategy.</p>
+              <a href="/services/product-development" class="btn btn-secondary">Learn More <span class="icon-arrow_forward"></span></a>
+            </div>
+          </div>
+          <div class="services-card col-lg-4 col-md-4 align-items-stretch">
+            <div class="card-bg">
+              <div class="card-icon">
+                <svg width="81" height="80" viewBox="0 0 81 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <g clip-path="url(#clip0_759_261)"><path d="M40.5 5L10.5 20V60L40.5 75L70.5 60V20L40.5 5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M40.5 75V45" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M70.5 20L40.5 45L10.5 20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.5 60L40.5 45" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M70.5 60L40.5 45" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M25.5 12.5L55.5 27.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g>
+                  <defs><clipPath id="clip0_759_261"><rect width="80" height="80" fill="white" transform="translate(0.5)"/></clipPath></defs>
+                </svg>
+              </div>
+              <a href="/services/support-and-managed-services"><h4 class="card-text">Support &amp; Managed Services</h4></a>
+              <p>Ongoing support, maintenance, enhancements, org health reviews, and security recommendations for your Salesforce environment.</p>
+              <a href="/services/support-and-managed-services" class="btn btn-secondary">Learn More <span class="icon-arrow_forward"></span></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats -->
   <StatsBar />
-  <Services />
-  <WhyUs />
-  <Testimonials />
-  <BlogPreview />
+
+  <!-- Testimonials -->
+  <TestimonialsSection />
+
+  <!-- Latest Blog Posts -->
+  {posts.length > 0 && (
+    <section id="latestBlog" class="grey-bg section-padding--vertical">
+      <div class="container">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem;">
+          <h2 style="margin:0;">Latest Blog &amp; Article</h2>
+          <a href="/blog" class="btn btn-secondary">View All <span class="icon-arrow_forward"></span></a>
+        </div>
+        <div class="row">
+          {posts.map((post) => (
+            <div class="col-md-6 col-lg-3" style="margin-bottom:1.5rem;">
+              <BlogCard
+                title={post.data.title}
+                excerpt={post.data.excerpt}
+                category={post.data.category}
+                date={post.data.date}
+                readTime={post.data.readTime}
+                slug={post.id}
+                image={post.data.image}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
 </Page>

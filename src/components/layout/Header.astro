@@ -1,113 +1,75 @@
 ---
-// src/components/layout/Header.astro
-import { Image } from 'astro:assets';
-import logoDark from '../../assets/brand/logo-inline-dark.svg';
-
 const navLinks = [
-  { href: '/',        label: 'Home' },
+  { href: '/',         label: 'Home' },
   { href: '/services', label: 'Services' },
-  { href: '/about',   label: 'About Us' },
-  { href: '/blog',    label: 'Blog' },
-  { href: '/contact', label: 'Contact Us' },
+  { href: '/about',    label: 'About Us' },
+  { href: '/blog',     label: 'Blogs' },
+  { href: '/contact',  label: 'Contact Us' },
 ];
-
 const currentPath = Astro.url.pathname;
 ---
 
-<header class="sticky top-0 z-50 bg-[#111]/95 backdrop-blur-sm border-b border-white/5">
-  <nav class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-
-    <!-- Logo -->
-    <a href="/" aria-label="CloudAlgo home">
-      <Image src={logoDark} alt="CloudAlgo" width={160} height={36} />
+<header class="header" id="site-header">
+  <div class="navbar">
+    <a href="/" class="navbar-brand">
+      <img src="/logo.svg" alt="CloudAlgo" width="224" height="42" />
     </a>
 
-    <!-- Desktop nav -->
-    <ul class="hidden lg:flex items-center gap-7" role="list">
-      {navLinks.map(link => (
+    <nav class="hidden lg:block">
+      <ul class="nav-links" style="display:flex;align-items:center;gap:0.25rem;list-style:none;margin:0;padding:0;">
+        {navLinks.map(link => (
+          <li>
+            <a
+              href={link.href}
+              class:list={['nav-link', { active: link.href === '/' ? currentPath === '/' : currentPath.startsWith(link.href) }]}
+            >
+              {link.label}
+            </a>
+          </li>
+        ))}
         <li>
-          <a
-            href={link.href}
-            class:list={[
-              'relative text-[13px] font-bold pb-1 transition-colors duration-200',
-              'after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-primary after:transition-[width] after:duration-250',
-              currentPath === link.href
-                ? 'text-white after:w-full'
-                : 'text-[#ccc] hover:text-white after:w-0 hover:after:w-full'
-            ]}
-          >
-            {link.label}
-          </a>
+          <a href="/contact" class="nav-link join-us">Book Free Consultation</a>
         </li>
-      ))}
-    </ul>
+      </ul>
+    </nav>
 
-    <!-- CTA -->
-    <a
-      href="/contact"
-      class="hidden lg:inline-flex items-center gap-2 bg-primary hover:bg-primary-dark text-white text-[12px] font-extrabold px-5 py-[9px] rounded-md transition-all duration-200 hover:-translate-y-px hover:shadow-[0_4px_16px_rgba(247,90,65,0.4)] anim-pulse-ring"
-    >
-      Book Free Consultation
-    </a>
-
-    <!-- Mobile hamburger -->
-    <button
-      id="menu-toggle"
-      aria-label="Toggle menu"
-      aria-expanded="false"
-      aria-controls="mobile-menu"
-      class="lg:hidden flex flex-col gap-1.5 p-2"
-    >
-      <span class="block w-6 h-0.5 bg-white transition-all duration-200" id="bar1"></span>
-      <span class="block w-6 h-0.5 bg-white transition-all duration-200" id="bar2"></span>
-      <span class="block w-6 h-0.5 bg-white transition-all duration-200" id="bar3"></span>
+    <!-- Mobile toggle -->
+    <button id="mobile-toggle" class="lg:hidden" aria-label="Toggle menu"
+      style="background:none;border:none;cursor:pointer;padding:0.5rem;">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+        <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+      </svg>
     </button>
-
-  </nav>
+  </div>
 
   <!-- Mobile menu -->
-  <div id="mobile-menu" class="hidden lg:hidden bg-[#111] border-t border-white/5 px-6 pb-6">
-    <ul class="flex flex-col gap-4 pt-4" role="list">
+  <div id="mobile-menu" style="display:none;background:var(--ca-primary-black2);padding:1rem 1.5rem;">
+    <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:0.75rem;">
       {navLinks.map(link => (
         <li>
-          <a
-            href={link.href}
-            class:list={[
-              'block text-[14px] font-bold transition-colors',
-              currentPath === link.href ? 'text-white' : 'text-[#ccc] hover:text-white'
-            ]}
-          >
-            {link.label}
-          </a>
+          <a href={link.href} style="color:#fff;font-weight:700;font-size:1rem;">{link.label}</a>
         </li>
       ))}
       <li>
-        <a href="/contact" class="inline-block bg-primary text-white text-[12px] font-extrabold px-5 py-2.5 rounded-md mt-2">
-          Book Free Consultation
-        </a>
+        <a href="/contact" class="btn btn-primary" style="margin-top:0.5rem;display:inline-block;">Book Free Consultation</a>
       </li>
     </ul>
   </div>
 </header>
 
 <script>
-  const toggle = document.getElementById('menu-toggle');
-  const menu = document.getElementById('mobile-menu');
-  const bar1 = document.getElementById('bar1');
-  const bar2 = document.getElementById('bar2');
-  const bar3 = document.getElementById('bar3');
+  const header = document.getElementById('site-header');
+  const toggle = document.getElementById('mobile-toggle');
+  const mobileMenu = document.getElementById('mobile-menu');
+
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 50) header?.classList.add('active');
+    else header?.classList.remove('active');
+  });
 
   toggle?.addEventListener('click', () => {
-    const open = menu?.classList.toggle('hidden') === false;
-    toggle.setAttribute('aria-expanded', String(open));
-    if (open) {
-      bar1?.classList.add('rotate-45', 'translate-y-2');
-      bar2?.classList.add('opacity-0');
-      bar3?.classList.add('-rotate-45', '-translate-y-2');
-    } else {
-      bar1?.classList.remove('rotate-45', 'translate-y-2');
-      bar2?.classList.remove('opacity-0');
-      bar3?.classList.remove('-rotate-45', '-translate-y-2');
+    if (mobileMenu) {
+      mobileMenu.style.display = mobileMenu.style.display === 'none' ? 'block' : 'none';
     }
   });
 </script>

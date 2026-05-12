@@ -2,8 +2,8 @@
 // src/components/sections/StatsBar.astro
 import StatsCounter from '../ui/StatsCounter.tsx';
 ---
-<div class="bg-[#f9f9f9] border-b border-[#e5e5e5]">
-  <div class="max-w-6xl mx-auto">
-    <StatsCounter client:visible />
+<div class="counts">
+  <div class="container">
+    <StatsCounter client:load />
   </div>
 </div>

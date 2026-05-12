@@ -1,11 +1,10 @@
-// src/components/ui/ContactForm.tsx
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
 
 interface FormData {
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
-  company: string;
   message: string;
 }
 
@@ -28,56 +27,69 @@ export default function ContactForm() {
     }
   };
 
-  const inputCls = 'w-full bg-[#1a1a1a] border border-[#333] text-white text-[14px] font-medium px-4 py-3 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder:text-[#555]';
-  const errorCls = 'text-primary text-[11px] font-semibold mt-1';
-
   if (status === 'sent') {
     return (
-      <div className="text-center py-16">
-        <div className="text-5xl mb-4">✅</div>
-        <h3 className="font-display font-extrabold text-white text-[22px] mb-2">Message sent!</h3>
-        <p className="text-[#64748b]">We'll get back to you within one business day.</p>
+      <div className="text-center" style={{ padding: '4rem 0' }}>
+        <h4>Thank you for reaching out to CloudAlgo!</h4>
+        <p>We've received your message and will get back to you shortly.</p>
       </div>
     );
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div>
-          <input {...register('name', { required: 'Name is required' })}
-            placeholder="Your name" className={inputCls} />
-          {errors.name && <p className={errorCls}>{errors.name.message}</p>}
-        </div>
-        <div>
-          <input {...register('email', {
-            required: 'Email is required',
-            pattern: { value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: 'Invalid email' }
-          })}
-            placeholder="your@email.com" type="email" className={inputCls} />
-          {errors.email && <p className={errorCls}>{errors.email.message}</p>}
+    <form className="mb-5" method="post" id="contactForm" name="contactForm"
+      noValidate onSubmit={handleSubmit(onSubmit)}>
+
+      <div className="row">
+        <div className="col-md-12 form-group">
+          <input type="text" className="form-control" placeholder="Your first name"
+            {...register('firstName', { required: 'First name is required' })} />
+          {errors.firstName && <span className="error-line">{errors.firstName.message}</span>}
         </div>
       </div>
-      <div>
-        <input {...register('company')}
-          placeholder="Company (optional)" className={inputCls} />
+
+      <div className="row mt-3">
+        <div className="col-md-12 form-group">
+          <input type="text" className="form-control" placeholder="Your last name"
+            {...register('lastName', { required: 'Last name is required' })} />
+          {errors.lastName && <span className="error-line">{errors.lastName.message}</span>}
+        </div>
       </div>
-      <div>
-        <textarea {...register('message', { required: 'Message is required', minLength: { value: 20, message: 'At least 20 characters' } })}
-          placeholder="Tell us about your Salesforce goals..."
-          rows={5} className={`${inputCls} resize-none`} />
-        {errors.message && <p className={errorCls}>{errors.message.message}</p>}
+
+      <div className="row mt-3">
+        <div className="col-md-12 form-group">
+          <input type="email" className="form-control" placeholder="Email"
+            {...register('email', {
+              required: 'Email is required',
+              pattern: { value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: 'Invalid email address' }
+            })} />
+          {errors.email && <span className="error-line">{errors.email.message}</span>}
+        </div>
       </div>
+
+      <div className="row mt-3">
+        <div className="col-md-12 form-group">
+          <textarea className="form-control" rows={7} placeholder="Write your message"
+            {...register('message', { required: 'Message is required' })} />
+          {errors.message && <span className="error-line">{errors.message.message}</span>}
+        </div>
+      </div>
+
       {status === 'error' && (
-        <p className="text-primary text-[13px] font-semibold">Something went wrong. Please email us at contact@cloudalgo.com</p>
+        <p className="error-line" style={{ marginTop: '0.5rem' }}>
+          Something went wrong. Please email us at contact@cloudalgo.com
+        </p>
       )}
-      <button
-        type="submit"
-        disabled={status === 'sending'}
-        className="w-full bg-primary hover:bg-[#d94e37] disabled:opacity-60 text-white font-extrabold text-[14px] py-3.5 rounded-lg transition-colors duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(247,90,65,0.3)]"
-      >
-        {status === 'sending' ? 'Sending…' : 'Send Message →'}
-      </button>
+
+      <div className="row mt-5">
+        <div className="col-12">
+          <button type="submit" className="btn btn-secondary py-2 px-4"
+            disabled={status === 'sending'}>
+            {status === 'sending' ? 'Sending…' : 'Send Message'}
+            <span className="icon-arrow_forward"></span>
+          </button>
+        </div>
+      </div>
     </form>
   );
 }
