@@ -178,6 +178,7 @@ function StepDatePicker({
   userTimezone, onPrevMonth, onNextMonth, onSelectDate, onSelectSlot, onClose,
   mobileShowCalendar, onMobileBackToCalendar,
 }: StepDatePickerProps) {
+  const [pendingSlot, setPendingSlot] = useState<string | null>(null);
   const year = currentMonth.getFullYear();
   const month = currentMonth.getMonth();
   const today = new Date();
@@ -264,57 +265,121 @@ function StepDatePicker({
         </div>
       </div>}
 
-      {showSlots && <div className="sw-step-right">
-        {isMobile && <button
-          className="sw-mobile-change-date"
-          onClick={onMobileBackToCalendar}
-          aria-label="Change date"
-        >
-          <FiArrowLeft size={12} />
-          Change date
-        </button>}
-        {!selectedDate && (
-          <p className="sw-slots-prompt">Select a date to see available times.</p>
-        )}
-        {selectedDate && (
-          <>
-            <h3 className="sw-slots-heading">
-              {selectedDate.toLocaleDateString('en-US', {
-                weekday: 'long',
-                month: 'long',
-                day: 'numeric',
-              })}
-            </h3>
+      {showSlots && !isMobile && (
+        <div className="sw-step-right">
+          {!selectedDate && (
+            <p className="sw-slots-prompt">Select a date to see available times.</p>
+          )}
+          {selectedDate && (
+            <>
+              <h3 className="sw-slots-heading">
+                {selectedDate.toLocaleDateString('en-US', {
+                  weekday: 'long',
+                  month: 'long',
+                  day: 'numeric',
+                })}
+              </h3>
+              {slotsLoading && (
+                <div role="status" aria-live="polite">
+                  <span style={{ position: 'absolute', width: 1, height: 1, overflow: 'hidden', clip: 'rect(0,0,0,0)' }}>
+                    Loading available slots...
+                  </span>
+                  <div className="sw-spinner" />
+                </div>
+              )}
+              {slotsError && !slotsLoading && (
+                <p className="sw-slots-empty">{slotsError}</p>
+              )}
+              {!slotsLoading && !slotsError && availableSlots.length === 0 && (
+                <p className="sw-slots-empty">No slots available for this date.</p>
+              )}
+              {!slotsLoading && !slotsError && availableSlots.map(slot => (
+                <button
+                  key={slot}
+                  className="sw-slot-btn"
+                  onClick={() => onSelectSlot(slot)}
+                >
+                  {istSlotToLocal(selectedDate, slot, userTimezone)}
+                </button>
+              ))}
+            </>
+          )}
+        </div>
+      )}
+
+      {showSlots && isMobile && (
+        <div className="sw-mobile-panel">
+          {/* Mobile header */}
+          <div className="sw-mobile-panel-header">
+            <button className="sw-mobile-back-circle" onClick={onMobileBackToCalendar} aria-label="Back to calendar">
+              <FiArrowLeft size={18} />
+            </button>
+            <div className="sw-mobile-panel-date">
+              <strong>{selectedDate
+                ? selectedDate.toLocaleDateString('en-US', { weekday: 'long' })
+                : 'Select a date'}</strong>
+              {selectedDate && (
+                <span>{selectedDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
+              )}
+            </div>
+            <button className="sw-modal-close sw-modal-close--inline" onClick={onClose} aria-label="Close">
+              <IoCloseOutline />
+            </button>
+          </div>
+
+          {/* Timezone */}
+          <div className="sw-mobile-panel-tz">
+            <span className="sw-mobile-panel-tz-label">Time zone</span>
+            <div className="sw-mobile-panel-tz-value">
+              <FiGlobe size={15} />
+              <span>{tzLabel}</span>
+            </div>
+          </div>
+
+          <hr className="sw-mobile-divider" />
+
+          {/* Slots body */}
+          <div className="sw-mobile-panel-body">
+            <h3 className="sw-mobile-slots-title">Select a Time</h3>
+            <p className="sw-mobile-slots-duration">Duration: 30 min</p>
+
             {slotsLoading && (
               <div role="status" aria-live="polite">
                 <span style={{ position: 'absolute', width: 1, height: 1, overflow: 'hidden', clip: 'rect(0,0,0,0)' }}>
                   Loading available slots...
                 </span>
-                <div className="sw-spinner" />
+                <div className="sw-spinner" style={{ margin: '32px auto' }} />
               </div>
             )}
             {slotsError && !slotsLoading && (
-              <p className="sw-slots-empty">{slotsError}</p>
+              <p className="sw-mobile-slots-empty">{slotsError}</p>
             )}
             {!slotsLoading && !slotsError && availableSlots.length === 0 && (
-              <p className="sw-slots-empty">No slots available for this date.</p>
+              <p className="sw-mobile-slots-empty">No slots available for this date.</p>
             )}
             {!slotsLoading && !slotsError && availableSlots.map(slot => (
-              <button
-                key={slot}
-                className="sw-slot-btn"
-                onClick={() => onSelectSlot(slot)}
-              >
-                {istSlotToLocal(selectedDate, slot, userTimezone)}
-              </button>
+              pendingSlot === slot ? (
+                <div key={slot} className="sw-mobile-slot-row">
+                  <button className="sw-mobile-slot-selected" onClick={() => setPendingSlot(null)}>
+                    {istSlotToLocal(selectedDate!, slot, userTimezone)}
+                  </button>
+                  <button className="sw-mobile-slot-next" onClick={() => { setPendingSlot(null); onSelectSlot(slot); }}>
+                    Next
+                  </button>
+                </div>
+              ) : (
+                <button key={slot} className="sw-slot-btn" onClick={() => setPendingSlot(slot)}>
+                  {istSlotToLocal(selectedDate!, slot, userTimezone)}
+                </button>
+              )
             ))}
-          </>
-        )}
-      </div>}
+          </div>
+        </div>
+      )}
 
-      <button className="sw-modal-close" onClick={onClose} aria-label="Close">
+      {!isMobile && <button className="sw-modal-close" onClick={onClose} aria-label="Close">
         <IoCloseOutline />
-      </button>
+      </button>}
     </div>
   );
 }
