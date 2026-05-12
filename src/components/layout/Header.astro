@@ -28,7 +28,7 @@ const currentPath = Astro.url.pathname;
           </li>
         ))}
         <li>
-          <a href="/contact" class="nav-link join-us">Book Free Consultation</a>
+          <a href="#schedule" class="nav-link join-us" id="book-btn-desktop">Book Free Consultation</a>
         </li>
       </ul>
     </nav>
@@ -51,7 +51,7 @@ const currentPath = Astro.url.pathname;
         </li>
       ))}
       <li>
-        <a href="/contact" class="btn btn-primary" style="margin-top:0.5rem;display:inline-block;">Book Free Consultation</a>
+        <a href="#schedule" class="btn btn-primary" id="book-btn-mobile" style="margin-top:0.5rem;display:inline-block;">Book Free Consultation</a>
       </li>
     </ul>
   </div>
@@ -71,5 +71,9 @@ const currentPath = Astro.url.pathname;
     if (mobileMenu) {
       mobileMenu.style.display = mobileMenu.style.display === 'none' ? 'block' : 'none';
     }
+  });
+
+  document.getElementById('book-btn-mobile')?.addEventListener('click', () => {
+    if (mobileMenu) mobileMenu.style.display = 'none';
   });
 </script>
