@@ -1,9 +1,13 @@
-import { useState, useEffect, useCallback, type FormEvent } from 'react';
+import { useState, useEffect, useCallback, useRef, type FormEvent } from 'react';
 import { AiFillSchedule } from 'react-icons/ai';
 import { IoCloseOutline } from 'react-icons/io5';
 import { FiClock, FiVideo, FiCalendar, FiGlobe, FiArrowLeft, FiCheck } from 'react-icons/fi';
 
 const API_URL = import.meta.env.PUBLIC_SCHEDULE_API_URL as string;
+// Guards against missing env var in local dev without a .env file
+if (typeof window !== 'undefined' && !API_URL) {
+  console.warn('[ScheduleWidget] PUBLIC_SCHEDULE_API_URL is not set. Slot loading will fail.');
+}
 const SLOT_DURATION_MIN = 30;
 
 type Step = 'date' | 'details' | 'confirmed';
@@ -231,7 +235,14 @@ function StepDatePicker({
                 day: 'numeric',
               })}
             </h3>
-            {slotsLoading && <div className="sw-spinner" aria-label="Loading slots" />}
+            {slotsLoading && (
+              <div role="status" aria-live="polite">
+                <span style={{ position: 'absolute', width: 1, height: 1, overflow: 'hidden', clip: 'rect(0,0,0,0)' }}>
+                  Loading available slots...
+                </span>
+                <div className="sw-spinner" />
+              </div>
+            )}
             {slotsError && !slotsLoading && (
               <p className="sw-slots-empty">{slotsError}</p>
             )}
@@ -295,7 +306,9 @@ function StepDetails({
         notes: notes.trim(),
         timezone: userTimezone,
       });
+      params.append('_t', String(Date.now())); // cache-buster: booking requests must not be served from cache
       const res = await fetch(`${API_URL}?${params.toString()}`);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data: { success: boolean; error?: string } = await res.json();
       if (data.success) {
         onConfirmed(email.trim());
@@ -315,7 +328,7 @@ function StepDetails({
         <button className="sw-back-btn" onClick={onBack} aria-label="Back">
           <FiArrowLeft />
         </button>
-        <p className="sw-org-label">Sales CloudAlgo</p>
+        <p className="sw-org-label">CloudAlgo Sales</p>
         <h2 className="sw-event-title">Meeting with CloudAlgo Sales</h2>
         <ul className="sw-event-meta">
           <li><FiClock size={15} /><span>30 min</span></li>
@@ -440,16 +453,33 @@ export default function ScheduleWidget() {
     return () => clearTimeout(t);
   }, []);
 
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') handleClose(); };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [isOpen]);
+
+  const abortRef = useRef<AbortController | null>(null);
+
   const fetchSlots = useCallback(async (date: Date) => {
+    abortRef.current?.abort();
+    const controller = new AbortController();
+    abortRef.current = controller;
+    const signal = controller.signal;
+
     setSlotsLoading(true);
     setSlotsError(null);
     setAvailableSlots([]);
     try {
-      const res = await fetch(`${API_URL}?action=slots&date=${toDateStr(date)}`);
+      const res = await fetch(`${API_URL}?action=slots&date=${toDateStr(date)}`, { signal });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data: { slots?: string[]; error?: string } = await res.json();
       setAvailableSlots(data.slots ?? []);
-    } catch {
-      setSlotsError('Could not load slots. Please try again.');
+    } catch (e) {
+      if ((e as Error).name !== 'AbortError') {
+        setSlotsError('Could not load slots. Please try again.');
+      }
     } finally {
       setSlotsLoading(false);
     }
@@ -476,14 +506,13 @@ export default function ScheduleWidget() {
   };
 
   const handleClose = () => {
+    abortRef.current?.abort();
     setIsOpen(false);
-    setTimeout(() => {
-      setStep('date');
-      setSelectedDate(null);
-      setSelectedTime(null);
-      setAvailableSlots([]);
-      setConfirmedEmail('');
-    }, 300);
+    setStep('date');
+    setSelectedDate(null);
+    setSelectedTime(null);
+    setAvailableSlots([]);
+    setConfirmedEmail('');
   };
 
   const handleOpen = () => {
