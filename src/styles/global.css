@@ -960,7 +960,7 @@ textarea.form-control { resize: vertical; min-height: 150px; }
   border-radius: 8px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
   width: 100%;
-  max-width: 860px;
+  max-width: 680px;
   max-height: 90vh;
   overflow-y: auto;
   position: relative;
@@ -1080,8 +1080,8 @@ textarea.form-control { resize: vertical; min-height: 150px; }
   justify-content: center;
   transition: background 120ms, color 120ms;
   padding: 0;
+  aspect-ratio: 1;
   width: 100%;
-  min-height: 36px;
 }
 
 .sw-cal-day:hover:not(:disabled):not(.sw-cal-day--empty):not(.sw-cal-day--selected) {
@@ -1344,17 +1344,50 @@ textarea.form-control { resize: vertical; min-height: 150px; }
 
   .sw-step-left {
     border-right: none;
-    border-bottom: 1px solid #eaf0f6;
     padding: 20px 16px;
+  }
+
+  /* Mobile step flow: slots-first, calendar on demand */
+  .sw-step--date .sw-step-left { display: none; }
+  .sw-step--date .sw-step-right { display: block; }
+  .sw-step--date.sw-step--show-calendar .sw-step-left { display: flex; }
+  .sw-step--date.sw-step--show-calendar .sw-step-right { display: none; }
+
+  /* "Change date" button on mobile slots view */
+  .sw-mobile-change-date {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: 1.5px solid #e0e0e0;
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 13px;
+    font-family: 'Outfit', system-ui, sans-serif;
+    color: var(--ca-secondary-black);
+    cursor: pointer;
+    margin-bottom: 16px;
+    transition: border-color 150ms, color 150ms;
+  }
+
+  .sw-mobile-change-date:hover {
+    border-color: var(--ca-orange);
+    color: var(--ca-orange);
   }
 
   .sw-step-right {
     padding: 20px 16px;
   }
 
+  .sw-cal-grid {
+    flex: none;
+    align-content: start;
+    gap: 4px;
+  }
+
   .sw-cal-day {
-    font-size: 12px;
-    min-height: 40px;
+    font-size: 13px;
+    aspect-ratio: 1;
   }
 }
 

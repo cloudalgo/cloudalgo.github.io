@@ -155,11 +155,14 @@ interface StepDatePickerProps {
   onSelectDate: (date: Date) => void;
   onSelectSlot: (slot: string) => void;
   onClose: () => void;
+  mobileShowCalendar: boolean;
+  onMobileBackToCalendar: () => void;
 }
 
 function StepDatePicker({
   selectedDate, currentMonth, availableSlots, slotsLoading, slotsError,
   userTimezone, onPrevMonth, onNextMonth, onSelectDate, onSelectSlot, onClose,
+  mobileShowCalendar, onMobileBackToCalendar,
 }: StepDatePickerProps) {
   const year = currentMonth.getFullYear();
   const month = currentMonth.getMonth();
@@ -190,7 +193,7 @@ function StepDatePicker({
   const tzLabel = getTimezoneLabel(userTimezone);
 
   return (
-    <div className="sw-step sw-step--date">
+    <div className={`sw-step sw-step--date${mobileShowCalendar ? ' sw-step--show-calendar' : ''}`}>
       <div className="sw-step-left">
         <div className="sw-calendar">
           <div className="sw-cal-header">
@@ -245,6 +248,16 @@ function StepDatePicker({
       </div>
 
       <div className="sw-step-right">
+        <button
+          className="sw-mobile-change-date"
+          onClick={onMobileBackToCalendar}
+          aria-label="Change date"
+        >
+          <FiArrowLeft size={12} />
+          {selectedDate
+            ? selectedDate.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })
+            : 'Change date'}
+        </button>
         {!selectedDate && (
           <p className="sw-slots-prompt">Select a date to see available times.</p>
         )}
@@ -461,6 +474,7 @@ export default function ScheduleWidget() {
   const [slotsLoading, setSlotsLoading] = useState(false);
   const [slotsError, setSlotsError] = useState<string | null>(null);
   const [tooltipVisible, setTooltipVisible] = useState(false);
+  const [mobileShowCalendar, setMobileShowCalendar] = useState(false);
   const [visible, setVisible] = useState(openFromUrl);
   const [currentMonth, setCurrentMonth] = useState(() =>
     new Date(defaultDate.getFullYear(), defaultDate.getMonth(), 1)
@@ -532,6 +546,7 @@ export default function ScheduleWidget() {
   const handleSelectDate = (date: Date) => {
     setSelectedDate(date);
     fetchSlots(date);
+    setMobileShowCalendar(false);
   };
 
   const handleSelectSlot = (slot: string) => {
@@ -557,6 +572,7 @@ export default function ScheduleWidget() {
     setSelectedTime(null);
     setAvailableSlots([]);
     setConfirmedEmail('');
+    setMobileShowCalendar(false);
     setScheduleHash(false);
   };
 
@@ -610,6 +626,8 @@ export default function ScheduleWidget() {
                 onSelectDate={handleSelectDate}
                 onSelectSlot={handleSelectSlot}
                 onClose={handleClose}
+                mobileShowCalendar={mobileShowCalendar}
+                onMobileBackToCalendar={() => setMobileShowCalendar(true)}
               />
             )}
             {step === 'details' && selectedDate && selectedTime && (
