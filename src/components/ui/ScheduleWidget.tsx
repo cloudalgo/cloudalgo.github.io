@@ -131,9 +131,10 @@ interface LauncherProps {
   tooltipVisible: boolean;
   onDismissTooltip: () => void;
   onOpen: () => void;
+  bouncing: boolean;
 }
 
-function ScheduleLauncher({ tooltipVisible, onDismissTooltip, onOpen }: LauncherProps) {
+function ScheduleLauncher({ tooltipVisible, onDismissTooltip, onOpen, bouncing }: LauncherProps) {
   return (
     <div className="sw-launcher">
       {tooltipVisible && (
@@ -147,7 +148,11 @@ function ScheduleLauncher({ tooltipVisible, onDismissTooltip, onOpen }: Launcher
         </div>
       )}
       <div className="sw-launcher-btn-wrap">
-        <button className="sw-launcher-btn" onClick={onOpen} aria-label="Schedule a meeting">
+        <button
+          className={`sw-launcher-btn${bouncing ? ' sw-launcher-btn--bounce' : ''}`}
+          onClick={onOpen}
+          aria-label="Schedule a meeting"
+        >
           <AiFillSchedule />
         </button>
       </div>
@@ -556,6 +561,7 @@ export default function ScheduleWidget() {
   const [tooltipVisible, setTooltipVisible] = useState(false);
   const [mobileShowCalendar, setMobileShowCalendar] = useState(false);
   const [visible, setVisible] = useState(openFromUrl);
+  const [bouncing, setBouncing] = useState(false);
   const [currentMonth, setCurrentMonth] = useState(() =>
     new Date(defaultDate.getFullYear(), defaultDate.getMonth(), 1)
   );
@@ -596,6 +602,20 @@ export default function ScheduleWidget() {
     document.body.style.overflow = isOpen ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
   }, [isOpen]);
+
+  // Random attention bounce — triggers every 6–14s while launcher is visible and modal is closed
+  useEffect(() => {
+    if (!visible || isOpen) return;
+    let timer: ReturnType<typeof setTimeout>;
+    const bounce = () => {
+      setBouncing(true);
+      setTimeout(() => setBouncing(false), 950);
+      timer = setTimeout(bounce, 6000 + Math.random() * 8000);
+    };
+    // First bounce 4–7s after widget appears
+    timer = setTimeout(bounce, 4000 + Math.random() * 3000);
+    return () => clearTimeout(timer);
+  }, [visible, isOpen]);
 
   const abortRef = useRef<AbortController | null>(null);
 
@@ -688,11 +708,12 @@ export default function ScheduleWidget() {
         tooltipVisible={tooltipVisible}
         onDismissTooltip={() => setTooltipVisible(false)}
         onOpen={handleOpen}
+        bouncing={bouncing}
       />
       {isOpen && (
-        <div className="sw-overlay" onClick={handleClose}>
+        <div className="sw-overlay sw-overlay--enter" onClick={handleClose}>
           <div
-            className="sw-modal"
+            className="sw-modal sw-modal--enter"
             onClick={e => e.stopPropagation()}
             role="dialog"
             aria-modal="true"
