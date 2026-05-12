@@ -254,9 +254,7 @@ function StepDatePicker({
           aria-label="Change date"
         >
           <FiArrowLeft size={12} />
-          {selectedDate
-            ? selectedDate.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })
-            : 'Change date'}
+          Change date
         </button>
         {!selectedDate && (
           <p className="sw-slots-prompt">Select a date to see available times.</p>

@@ -1316,6 +1316,9 @@ textarea.form-control { resize: vertical; min-height: 150px; }
   margin-bottom: 28px;
 }
 
+/* Hide mobile-only elements on desktop */
+.sw-mobile-change-date { display: none; }
+
 /* Mobile */
 @media (max-width: 640px) {
   .sw-launcher .sw-tooltip { display: none; }
@@ -1353,7 +1356,7 @@ textarea.form-control { resize: vertical; min-height: 150px; }
   .sw-step--date.sw-step--show-calendar .sw-step-left { display: flex; }
   .sw-step--date.sw-step--show-calendar .sw-step-right { display: none; }
 
-  /* "Change date" button on mobile slots view */
+  /* "Change date" button — mobile slots view only */
   .sw-mobile-change-date {
     display: inline-flex;
     align-items: center;
