@@ -33,19 +33,18 @@ const currentPath = Astro.url.pathname;
       </ul>
     </nav>
 
-    <!-- Mobile toggle -->
-    <button id="mobile-toggle" class="lg:hidden" aria-label="Toggle menu"
-      style="background:none;border:none;cursor:pointer;padding:0.5rem;">
-      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round">
-        <line x1="2" y1="5" x2="20" y2="5"/>
-        <line x1="2" y1="11" x2="20" y2="11"/>
-        <line x1="2" y1="17" x2="20" y2="17"/>
+    <!-- Animated hamburger toggle -->
+    <button id="mobile-toggle" class="hamburger lg:hidden" aria-label="Toggle menu" aria-expanded="false">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <line class="ham-top" x1="3" y1="6"  x2="21" y2="6"  stroke="#0A0A0A" stroke-width="2" stroke-linecap="round"/>
+        <line class="ham-mid" x1="3" y1="12" x2="21" y2="12" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round"/>
+        <line class="ham-bot" x1="3" y1="18" x2="21" y2="18" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round"/>
       </svg>
     </button>
   </div>
 
-  <!-- Mobile menu -->
-  <div id="mobile-menu" style="display:none;background:#fff;border-top:1px solid #E0E0DC;padding:1.25rem 1.5rem;">
+  <!-- Mobile menu (animated slide) -->
+  <div id="mobile-menu" class="mobile-menu">
     <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:0.5rem;">
       {navLinks.map(link => (
         <li>
@@ -65,9 +64,60 @@ const currentPath = Astro.url.pathname;
   </div>
 </header>
 
+<style>
+/* ── Hamburger button ──────────────────────────────────── */
+.hamburger {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ham-top,
+.ham-mid,
+.ham-bot {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity   0.25s ease;
+}
+
+/* Open: top rotates to \ , mid fades, bot rotates to / */
+.hamburger.is-open .ham-top {
+  transform: translateY(6px) rotate(45deg);
+}
+.hamburger.is-open .ham-mid {
+  opacity: 0;
+  transform: scaleX(0);
+}
+.hamburger.is-open .ham-bot {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+/* ── Mobile menu slide ─────────────────────────────────── */
+.mobile-menu {
+  max-height: 0;
+  overflow: hidden;
+  background: #fff;
+  border-top: 1px solid transparent;
+  padding: 0 1.5rem;
+  transition: max-height 0.38s cubic-bezier(0.4, 0, 0.2, 1),
+              padding    0.38s cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 0.2s ease;
+}
+.mobile-menu.is-open {
+  max-height: 480px;
+  padding: 1.25rem 1.5rem;
+  border-top-color: #E0E0DC;
+}
+</style>
+
 <script>
-  const header = document.getElementById('site-header');
-  const toggle = document.getElementById('mobile-toggle');
+  const header     = document.getElementById('site-header');
+  const toggle     = document.getElementById('mobile-toggle');
   const mobileMenu = document.getElementById('mobile-menu');
 
   window.addEventListener('scroll', () => {
@@ -76,13 +126,14 @@ const currentPath = Astro.url.pathname;
   });
 
   toggle?.addEventListener('click', () => {
-    if (mobileMenu) {
-      const isOpen = mobileMenu.style.display !== 'none';
-      mobileMenu.style.display = isOpen ? 'none' : 'block';
-    }
+    const isOpen = toggle.classList.toggle('is-open');
+    toggle.setAttribute('aria-expanded', String(isOpen));
+    mobileMenu?.classList.toggle('is-open', isOpen);
   });
 
   document.getElementById('book-btn-mobile')?.addEventListener('click', () => {
-    if (mobileMenu) mobileMenu.style.display = 'none';
+    toggle?.classList.remove('is-open');
+    toggle?.setAttribute('aria-expanded', 'false');
+    mobileMenu?.classList.remove('is-open');
   });
 </script>
