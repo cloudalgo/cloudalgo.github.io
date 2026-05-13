@@ -26,10 +26,30 @@ const authorDesig = post.data.authorDesignation ?? 'Technical Architect';
 const postUrl     = `https://cloudalgo.com/blog/${post.id}`;
 
 const illustration = getBlogIllustration(post.id);
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": post.data.title,
+  "description": post.data.excerpt,
+  "datePublished": post.data.date.toISOString(),
+  "author": { "@type": "Organization", "name": "CloudAlgo", "url": "https://cloudalgo.com" },
+  "publisher": {
+    "@type": "Organization",
+    "name": "CloudAlgo",
+    "logo": { "@type": "ImageObject", "url": "https://cloudalgo.com/logo.svg" }
+  },
+  "url": postUrl,
+  "image": "https://cloudalgo.com/og-default.jpg",
+  "mainEntityOfPage": { "@type": "WebPage", "@id": postUrl }
+};
 ---
 <Page
   title={`${post.data.title} — CloudAlgo Blog`}
   description={post.data.excerpt}
+  ogType="article"
+  publishedTime={post.data.date.toISOString()}
+  {schema}
 >
 
   <!-- ── Page header — white, matches site style ── -->

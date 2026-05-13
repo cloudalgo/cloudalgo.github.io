@@ -11,6 +11,9 @@ export interface Props {
   description?: string;
   image?: string;
   canonicalURL?: string;
+  ogType?: 'website' | 'article';
+  publishedTime?: string;
+  schema?: object;
 }
 
 const props = Astro.props;

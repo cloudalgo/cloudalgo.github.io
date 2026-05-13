@@ -1,39 +1,65 @@
 ---
-// src/layouts/Base.astro
 export interface Props {
   title: string;
   description?: string;
   image?: string;
   canonicalURL?: string;
+  /** Pass 'article' for blog posts */
+  ogType?: 'website' | 'article';
+  /** ISO date string — used for article published_time */
+  publishedTime?: string;
+  /** Structured-data JSON-LD blob — pass from individual pages */
+  schema?: object;
 }
 
 const {
   title,
-  description = 'CloudAlgo — Salesforce & Heroku consulting. Certified experts, 70+ projects, 12 years experience.',
+  description = 'CloudAlgo — Certified Salesforce & Heroku consulting. 70+ projects delivered, 12 years experience.',
   image = '/og-default.jpg',
   canonicalURL = new URL(Astro.url.pathname, Astro.site).href,
+  ogType = 'website',
+  publishedTime,
+  schema,
 } = Astro.props;
+
+const site = 'https://cloudalgo.com';
+const ogImage = image.startsWith('http') ? image : `${site}${image}`;
 ---
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="canonical" href={canonicalURL} />
+
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta name="robots" content="index, follow" />
+
     <!-- Open Graph -->
-    <meta property="og:title" content={title} />
+    <meta property="og:site_name" content="CloudAlgo" />
+    <meta property="og:locale"    content="en_US" />
+    <meta property="og:type"      content={ogType} />
+    <meta property="og:title"     content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={image} />
-    <meta property="og:url" content={canonicalURL} />
-    <meta property="og:type" content="website" />
-    <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={title} />
+    <meta property="og:url"       content={canonicalURL} />
+    <meta property="og:image"     content={ogImage} />
+    <meta property="og:image:width"  content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={title} />
+    {publishedTime && <meta property="article:published_time" content={publishedTime} />}
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card"        content="summary_large_image" />
+    <meta name="twitter:site"        content="@cloudalgo" />
+    <meta name="twitter:title"       content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={image} />
+    <meta name="twitter:image"       content={ogImage} />
+
+    <!-- JSON-LD structured data -->
+    {schema && <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />}
+
     <!-- Google Analytics — replace GA_MEASUREMENT_ID with your G-XXXXXXXXXX -->
     <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
     <script>
@@ -46,7 +72,6 @@ const {
   <body>
     <slot />
     <script>
-      // IntersectionObserver for scroll animations
       const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
