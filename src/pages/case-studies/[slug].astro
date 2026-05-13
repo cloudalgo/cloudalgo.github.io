@@ -18,18 +18,18 @@ const next = caseStudies[caseStudies.findIndex(c => c.id === cs.id) + 1];
 >
 
   <!-- ── Hero ── -->
-  <div class="csd-hero">
+  <div class="page-header csd-hero-wrap">
     <div class="container">
-      <nav class="breadcrumb" style="--bc-color:rgba(255,255,255,0.4);">
-        <a href="/" style="color:rgba(255,255,255,0.4);">Home</a>
-        <span style="color:rgba(255,255,255,0.25);">&rarr;</span>
-        <a href="/case-studies" style="color:rgba(255,255,255,0.4);">Case Studies</a>
-        <span style="color:rgba(255,255,255,0.25);">&rarr;</span>
-        <span style="color:rgba(255,255,255,0.65);">{cs.company}</span>
+      <nav class="breadcrumb">
+        <a href="/">Home</a>
+        <span>&rarr;</span>
+        <a href="/case-studies">Case Studies</a>
+        <span>&rarr;</span>
+        <span>{cs.company}</span>
       </nav>
-
       <div class="csd-hero-inner">
         <div class="csd-hero-text">
+
           <div class="csd-hero-meta">
             <span class="csd-index">{cs.index}</span>
             <span class="csd-pill">{cs.industry}</span>
@@ -50,84 +50,85 @@ const next = caseStudies[caseStudies.findIndex(c => c.id === cs.id) + 1];
           </div>
         </div>
 
-        <!-- Hero illustration: abstract geometric per case study -->
+        <!-- Per-case illustration (light-themed) -->
         <div class="csd-hero-illo" aria-hidden="true">
           {cs.id === 'retailscale' && (
-            <svg viewBox="0 0 400 300" fill="none" class="csd-hero-svg">
-              <rect x="20"  y="180" width="60" height="100" rx="4" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
-              <rect x="100" y="130" width="60" height="150" rx="4" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
-              <rect x="180" y="80"  width="60" height="200" rx="4" stroke="rgba(255,255,255,0.5)" stroke-width="2"/>
-              <rect x="260" y="40"  width="60" height="240" rx="4" stroke="rgba(255,255,255,0.65)" stroke-width="2"/>
-              <rect x="340" y="10"  width="46" height="270" rx="4" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.85)" stroke-width="2"/>
-              <path d="M50 180 L130 130 L210 80 L290 40 L363 13" stroke="rgba(255,255,255,0.45)" stroke-width="2" stroke-dasharray="7 4" stroke-linecap="round"/>
-              <circle cx="363" cy="13" r="6" fill="rgba(255,255,255,0.7)"/>
-              <line x1="10" y1="282" x2="390" y2="282" stroke="rgba(255,255,255,0.1)" stroke-width="1.5"/>
+            <svg viewBox="0 0 320 240" fill="none" class="csd-hero-svg">
+              <rect x="16"  y="140" width="44" height="86"  rx="4" stroke="#0A0A0A" stroke-width="2" opacity="0.18"/>
+              <rect x="76"  y="100" width="44" height="126" rx="4" stroke="#0A0A0A" stroke-width="2" opacity="0.32"/>
+              <rect x="136" y="60"  width="44" height="166" rx="4" stroke="#0A0A0A" stroke-width="2" opacity="0.48"/>
+              <rect x="196" y="28"  width="44" height="198" rx="4" stroke="#0A0A0A" stroke-width="2" opacity="0.65"/>
+              <rect x="256" y="6"   width="44" height="220" rx="4" fill="rgba(10,10,10,0.05)" stroke="#0A0A0A" stroke-width="2" opacity="0.85"/>
+              <path d="M38 140 L98 100 L158 60 L218 28 L278 8" stroke="#0A0A0A" stroke-width="2" stroke-dasharray="6 4" opacity="0.4" stroke-linecap="round"/>
+              <circle cx="278" cy="8" r="5" fill="#0A0A0A" opacity="0.65"/>
+              <line x1="8" y1="228" x2="312" y2="228" stroke="#0A0A0A" stroke-width="1.5" opacity="0.1"/>
             </svg>
           )}
           {cs.id === 'medbridge' && (
-            <svg viewBox="0 0 400 300" fill="none" class="csd-hero-svg">
-              <circle cx="200" cy="150" r="120" stroke="rgba(255,255,255,0.1)" stroke-width="2"/>
-              <circle cx="200" cy="150" r="84"  stroke="rgba(255,255,255,0.18)" stroke-width="2"/>
-              <circle cx="200" cy="150" r="48"  stroke="rgba(255,255,255,0.28)" stroke-width="2"/>
-              <path d="M200 30 L200 270 M80 150 L320 150" stroke="rgba(255,255,255,0.6)" stroke-width="3" stroke-linecap="round"/>
-              <rect x="286" y="20" width="100" height="42" rx="21" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
-              <text x="336" y="46" text-anchor="middle" font-family="Outfit,sans-serif" font-size="18" font-weight="900" fill="rgba(255,255,255,0.85)">18×</text>
-              <circle cx="50"  cy="260" r="5" fill="rgba(255,255,255,0.12)"/>
-              <circle cx="370" cy="260" r="5" fill="rgba(255,255,255,0.1)"/>
+            <svg viewBox="0 0 320 240" fill="none" class="csd-hero-svg">
+              <circle cx="160" cy="120" r="100" stroke="#0A0A0A" stroke-width="2" opacity="0.1"/>
+              <circle cx="160" cy="120" r="70"  stroke="#0A0A0A" stroke-width="2" opacity="0.18"/>
+              <circle cx="160" cy="120" r="40"  stroke="#0A0A0A" stroke-width="2" opacity="0.28"/>
+              <path d="M160 20 L160 220 M60 120 L260 120" stroke="#0A0A0A" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
+              <rect x="234" y="16" width="74" height="34" rx="17" fill="#0A0A0A" opacity="0.85"/>
+              <text x="271" y="38" text-anchor="middle" font-family="Outfit,sans-serif" font-size="14" font-weight="900" fill="#fff">18×</text>
+              <circle cx="36"  cy="26"  r="4" fill="#0A0A0A" opacity="0.12"/>
+              <circle cx="284" cy="214" r="4" fill="#0A0A0A" opacity="0.12"/>
             </svg>
           )}
           {cs.id === 'gridflow' && (
-            <svg viewBox="0 0 400 300" fill="none" class="csd-hero-svg">
-              <circle cx="80"  cy="150" r="52" stroke="rgba(255,255,255,0.22)" stroke-width="2"/>
-              <circle cx="200" cy="150" r="52" stroke="rgba(255,255,255,0.42)" stroke-width="2"/>
-              <circle cx="320" cy="150" r="52" stroke="rgba(255,255,255,0.62)" stroke-width="2"/>
-              <line x1="132" y1="150" x2="148" y2="150" stroke="rgba(255,255,255,0.4)" stroke-width="2.5" stroke-dasharray="4 3"/>
-              <path d="M144 142 L152 150 L144 158" stroke="rgba(255,255,255,0.5)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              <line x1="252" y1="150" x2="268" y2="150" stroke="rgba(255,255,255,0.4)" stroke-width="2.5" stroke-dasharray="4 3"/>
-              <path d="M264 142 L272 150 L264 158" stroke="rgba(255,255,255,0.5)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              <text x="80"  y="147" text-anchor="middle" font-family="Outfit,sans-serif" font-size="13" font-weight="800" fill="rgba(255,255,255,0.4)">SAP</text>
-              <text x="80"  y="163" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" fill="rgba(255,255,255,0.28)">ERP</text>
-              <text x="200" y="147" text-anchor="middle" font-family="Outfit,sans-serif" font-size="13" font-weight="800" fill="rgba(255,255,255,0.65)">Mule</text>
-              <text x="200" y="163" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" fill="rgba(255,255,255,0.45)">Soft</text>
-              <text x="320" y="147" text-anchor="middle" font-family="Outfit,sans-serif" font-size="13" font-weight="800" fill="rgba(255,255,255,0.85)">SF</text>
-              <text x="320" y="163" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" fill="rgba(255,255,255,0.6)">CRM</text>
+            <svg viewBox="0 0 320 240" fill="none" class="csd-hero-svg">
+              <circle cx="60"  cy="120" r="44" stroke="#0A0A0A" stroke-width="2" opacity="0.25"/>
+              <circle cx="160" cy="120" r="44" stroke="#0A0A0A" stroke-width="2" opacity="0.48"/>
+              <circle cx="260" cy="120" r="44" stroke="#0A0A0A" stroke-width="2" opacity="0.7"/>
+              <line x1="104" y1="120" x2="116" y2="120" stroke="#0A0A0A" stroke-width="2.5" stroke-dasharray="4 3" opacity="0.5"/>
+              <path d="M112 114 L118 120 L112 126" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.5"/>
+              <line x1="204" y1="120" x2="216" y2="120" stroke="#0A0A0A" stroke-width="2.5" stroke-dasharray="4 3" opacity="0.5"/>
+              <path d="M212 114 L218 120 L212 126" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.5"/>
+              <text x="60"  y="117" text-anchor="middle" font-family="Outfit,sans-serif" font-size="11" font-weight="800" fill="#0A0A0A" opacity="0.4">SAP</text>
+              <text x="60"  y="131" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9"  fill="#0A0A0A" opacity="0.3">ERP</text>
+              <text x="160" y="117" text-anchor="middle" font-family="Outfit,sans-serif" font-size="11" font-weight="800" fill="#0A0A0A" opacity="0.62">Mule</text>
+              <text x="160" y="131" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9"  fill="#0A0A0A" opacity="0.45">Soft</text>
+              <text x="260" y="117" text-anchor="middle" font-family="Outfit,sans-serif" font-size="11" font-weight="800" fill="#0A0A0A" opacity="0.82">SF</text>
+              <text x="260" y="131" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9"  fill="#0A0A0A" opacity="0.6">CRM</text>
             </svg>
           )}
           {cs.id === 'shieldinsure' && (
-            <svg viewBox="0 0 400 300" fill="none" class="csd-hero-svg">
-              <path d="M200 10 L348 64 L348 164 C348 234 278 270 200 280 C122 270 52 234 52 164 L52 64 Z" stroke="rgba(255,255,255,0.12)" stroke-width="2"/>
-              <path d="M200 34 L320 80 L320 158 C320 218 264 248 200 256 C136 248 80 218 80 158 L80 80 Z" stroke="rgba(255,255,255,0.22)" stroke-width="2"/>
-              <path d="M200 58 L292 96 L292 152 C292 202 250 224 200 230 C150 224 108 202 108 152 L108 96 Z" stroke="rgba(255,255,255,0.38)" stroke-width="2"/>
-              <path d="M152 148 L180 176 L256 112" stroke="rgba(255,255,255,0.72)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            <svg viewBox="0 0 320 240" fill="none" class="csd-hero-svg">
+              <path d="M160 8 L268 48 L268 124 C268 168 216 192 160 200 C104 192 52 168 52 124 L52 48 Z" stroke="#0A0A0A" stroke-width="2" opacity="0.12"/>
+              <path d="M160 26 L248 60 L248 120 C248 156 208 174 160 180 C112 174 72 156 72 120 L72 60 Z" stroke="#0A0A0A" stroke-width="2" opacity="0.24"/>
+              <path d="M160 46 L228 74 L228 116 C228 144 200 156 160 162 C120 156 92 144 92 116 L92 74 Z" stroke="#0A0A0A" stroke-width="2" opacity="0.4"/>
+              <path d="M120 110 L146 136 L202 88" stroke="#0A0A0A" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity="0.7"/>
             </svg>
           )}
           {cs.id === 'partsco' && (
-            <svg viewBox="0 0 400 300" fill="none" class="csd-hero-svg">
-              <rect x="20"  y="30"  width="150" height="200" rx="8" stroke="rgba(255,255,255,0.22)" stroke-width="2"/>
-              <rect x="36"  y="56"  width="118" height="16" rx="3" fill="rgba(255,255,255,0.1)"/>
-              <rect x="36"  y="84"  width="90"  height="10" rx="2" fill="rgba(255,255,255,0.07)"/>
-              <rect x="36"  y="102" width="104" height="10" rx="2" fill="rgba(255,255,255,0.07)"/>
-              <rect x="36"  y="120" width="80"  height="10" rx="2" fill="rgba(255,255,255,0.07)"/>
-              <path d="M178 130 L222 130" stroke="rgba(255,255,255,0.4)" stroke-width="2.5" stroke-dasharray="5 3" stroke-linecap="round"/>
-              <path d="M216 122 L224 130 L216 138" stroke="rgba(255,255,255,0.5)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-              <rect x="230" y="30" width="150" height="200" rx="8" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.55)" stroke-width="2"/>
-              <text x="305" y="118" text-anchor="middle" font-family="Outfit,sans-serif" font-size="14" font-weight="700" fill="rgba(255,255,255,0.55)">Approved</text>
-              <text x="305" y="158" text-anchor="middle" font-family="Outfit,sans-serif" font-size="42" font-weight="900" fill="rgba(255,255,255,0.85)">1d</text>
-              <path d="M278 195 L292 208 L334 180" stroke="rgba(255,255,255,0.5)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <svg viewBox="0 0 320 240" fill="none" class="csd-hero-svg">
+              <rect x="16" y="20" width="110" height="148" rx="6" stroke="#0A0A0A" stroke-width="2" opacity="0.25"/>
+              <rect x="28" y="38" width="86" height="14" rx="3" fill="#0A0A0A" opacity="0.1"/>
+              <rect x="28" y="60" width="70" height="8"  rx="2" fill="#0A0A0A" opacity="0.08"/>
+              <rect x="28" y="76" width="78" height="8"  rx="2" fill="#0A0A0A" opacity="0.08"/>
+              <rect x="28" y="92" width="60" height="8"  rx="2" fill="#0A0A0A" opacity="0.08"/>
+              <path d="M136 94 L184 94" stroke="#0A0A0A" stroke-width="2.5" stroke-dasharray="5 3" opacity="0.45" stroke-linecap="round"/>
+              <path d="M178 87 L186 94 L178 101" stroke="#0A0A0A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.55"/>
+              <rect x="194" y="20" width="110" height="148" rx="6" fill="#0A0A0A" opacity="0.82"/>
+              <text x="249" y="76"  text-anchor="middle" font-family="Outfit,sans-serif" font-size="11" font-weight="700" fill="rgba(255,255,255,0.65)">Approved</text>
+              <text x="249" y="108" text-anchor="middle" font-family="Outfit,sans-serif" font-size="30" font-weight="900" fill="#fff">1d</text>
+              <text x="249" y="130" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9"  font-weight="500" fill="rgba(255,255,255,0.5)">was 5 days</text>
+              <path d="M232 145 L242 155 L270 135" stroke="rgba(255,255,255,0.55)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           )}
           {cs.id === 'lifesciences' && (
-            <svg viewBox="0 0 400 300" fill="none" class="csd-hero-svg">
-              <rect x="50" y="20" width="300" height="220" rx="14" stroke="rgba(255,255,255,0.18)" stroke-width="2"/>
-              <rect x="72" y="48" width="60" height="60" rx="10" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
-              <path d="M88 78 L98 88 L118 70" stroke="rgba(255,255,255,0.55)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-              <rect x="148" y="56" width="168" height="16" rx="4" fill="rgba(255,255,255,0.12)"/>
-              <rect x="148" y="80" width="118" height="10" rx="3" fill="rgba(255,255,255,0.07)"/>
-              <line x1="72" y1="130" x2="328" y2="130" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
-              <text x="72" y="168" font-family="Outfit,sans-serif" font-size="28" fill="rgba(255,255,255,0.45)">★★★★★</text>
-              <text x="72" y="192" font-family="Outfit,sans-serif" font-size="13" font-weight="600" fill="rgba(255,255,255,0.3)">4.8 · 200+ enterprise customers</text>
-              <circle cx="330" cy="48" r="24" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
-              <path d="M320 48 L327 55 L342 40" stroke="rgba(255,255,255,0.65)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <svg viewBox="0 0 320 240" fill="none" class="csd-hero-svg">
+              <rect x="40" y="12" width="240" height="176" rx="10" stroke="#0A0A0A" stroke-width="2" opacity="0.22"/>
+              <rect x="56" y="28" width="44" height="44" rx="8" stroke="#0A0A0A" stroke-width="2" opacity="0.38"/>
+              <path d="M68 50 L74 56 L88 44" stroke="#0A0A0A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.55"/>
+              <rect x="112" y="34" width="128" height="12" rx="3" fill="#0A0A0A" opacity="0.12"/>
+              <rect x="112" y="52" width="90"  height="8"  rx="2" fill="#0A0A0A" opacity="0.08"/>
+              <line x1="56" y1="90" x2="264" y2="90" stroke="#0A0A0A" stroke-width="1" opacity="0.1"/>
+              <text x="56" y="130" font-family="Outfit,sans-serif" font-size="20" fill="#0A0A0A" opacity="0.4">★★★★★</text>
+              <text x="56" y="152" font-family="Outfit,sans-serif" font-size="10" font-weight="600" fill="#0A0A0A" opacity="0.3">4.8 · 200+ enterprise customers</text>
+              <circle cx="268" cy="28" r="18" fill="#0A0A0A" opacity="0.85"/>
+              <path d="M260 28 L265 33 L278 22" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           )}
         </div>
@@ -155,7 +156,7 @@ const next = caseStudies[caseStudies.findIndex(c => c.id === cs.id) + 1];
       <div class="csd-two-col">
         <div class="csd-col-label-block">
           <p class="section-label" style="color:rgba(255,255,255,0.4);">The solution</p>
-          <div class="csd-col-number" style="color:rgba(255,255,255,0.06);" aria-hidden="true">02</div>
+          <div class="csd-col-number" style="color:rgba(255,255,255,0.12);" aria-hidden="true">02</div>
         </div>
         <div class="csd-col-content">
           <h2 class="csd-section-title" style="color:#fff;">What we built.</h2>
@@ -265,38 +266,26 @@ const next = caseStudies[caseStudies.findIndex(c => c.id === cs.id) + 1];
 
 <style>
 /* ── Hero ── */
-.csd-hero {
-  background: #0A0A0A;
-  padding-top: 6.5rem;
-  padding-bottom: 4rem;
-  overflow: hidden;
-  position: relative;
-}
-.csd-hero::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 65% 50%, rgba(255,255,255,0.03) 0%, transparent 55%);
-  pointer-events: none;
-}
+.csd-hero-wrap { padding-bottom: 4rem; }
 .csd-hero-inner {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 3rem;
   align-items: center;
-  margin-top: 2rem;
+  margin-top: 0.5rem;
 }
 .csd-hero-meta {
   display: flex;
   align-items: center;
   gap: 0.625rem;
   margin-bottom: 1.25rem;
+  flex-wrap: wrap;
 }
 .csd-index {
   font-size: 0.7rem;
   font-weight: 900;
   letter-spacing: 0.1em;
-  color: rgba(255,255,255,0.25);
+  color: #5A5A5A;
   font-family: 'Outfit', sans-serif;
 }
 .csd-pill {
@@ -304,8 +293,8 @@ const next = caseStudies[caseStudies.findIndex(c => c.id === cs.id) + 1];
   font-weight: 700;
   letter-spacing: 0.07em;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.55);
-  border: 1px solid rgba(255,255,255,0.18);
+  color: #5A5A5A;
+  border: 1px solid #E0E0DC;
   border-radius: 100px;
   padding: 0.2rem 0.75rem;
 }
@@ -314,12 +303,12 @@ const next = caseStudies[caseStudies.findIndex(c => c.id === cs.id) + 1];
   font-weight: 900;
   letter-spacing: -0.03em;
   line-height: 1.1;
-  color: #fff;
+  color: #0A0A0A;
   margin-bottom: 1.25rem;
 }
 .csd-hero-sub {
   font-size: 1rem;
-  color: rgba(255,255,255,0.5);
+  color: #5A5A5A;
   line-height: 1.75;
   margin-bottom: 2rem;
   max-width: 480px;
@@ -334,19 +323,19 @@ const next = caseStudies[caseStudies.findIndex(c => c.id === cs.id) + 1];
   font-size: 2rem;
   font-weight: 900;
   letter-spacing: -0.04em;
-  color: #fff;
+  color: #0A0A0A;
   font-family: 'Outfit', sans-serif;
   line-height: 1;
 }
 .csd-hero-stat-label {
   font-size: 0.75rem;
-  color: rgba(255,255,255,0.4);
+  color: #5A5A5A;
   font-weight: 500;
 }
 .csd-hero-divider {
   width: 1px;
   height: 40px;
-  background: rgba(255,255,255,0.15);
+  background: #E0E0DC;
 }
 .csd-hero-illo { display: flex; justify-content: center; align-items: center; }
 .csd-hero-svg  { width: 100%; max-width: 400px; height: auto; }
@@ -368,8 +357,7 @@ const next = caseStudies[caseStudies.findIndex(c => c.id === cs.id) + 1];
   font-size: 7rem;
   font-weight: 900;
   letter-spacing: -0.05em;
-  color: #0A0A0A;
-  opacity: 0.04;
+  color: rgba(10,10,10,0.07);
   font-family: 'Outfit', sans-serif;
   line-height: 1;
   margin-top: 0.5rem;
@@ -613,6 +601,6 @@ const next = caseStudies[caseStudies.findIndex(c => c.id === cs.id) + 1];
   .csd-hero-illo   { display: none; }
   .csd-nav-grid    { grid-template-columns: 1fr; }
   .csd-nav-card--next { text-align: left; }
-  .csd-hero-stats  { gap: 1.25rem; }
+  .csd-hero-stats  { gap: 1.25rem; flex-wrap: wrap; }
 }
 </style>
