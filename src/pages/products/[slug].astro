@@ -1,0 +1,187 @@
+---
+import { getCollection } from 'astro:content';
+import Page from '../../layouts/Page.astro';
+
+export async function getStaticPaths() {
+  const products = await getCollection('products', ({ data }) => data.published);
+  return products.map(p => ({ params: { slug: p.id } }));
+}
+
+const { slug } = Astro.params;
+const products = await getCollection('products');
+const product = products.find(p => p.id === slug);
+if (!product) return Astro.redirect('/404');
+
+const { data } = product;
+
+const statusLabel = (s: string) =>
+  s === 'ga' ? 'Generally Available' : s === 'preview' ? 'Preview' : 'Beta';
+const statusColor = (s: string) => (s === 'ga' ? '#16a34a' : '#d97706');
+const typeLabel = (t: string) =>
+  t === 'salesforce-app' ? 'Salesforce App' : 'Integration Connector';
+
+const hasPricingOrReqs = (data.pricing && data.pricing.length > 0) ||
+  (data.requirements && data.requirements.length > 0);
+---
+
+<Page
+  title={`${data.title} — CloudAlgo Products`}
+  description={data.tagline}
+>
+
+  <!-- ① Hero — white bg, matches .page-header -->
+  <div class="page-header" style="padding-bottom:3rem;">
+    <div class="container">
+      <nav class="breadcrumb">
+        <a href="/">Home</a>
+        <span>&rarr;</span>
+        <a href="/products">Products</a>
+        <span>&rarr;</span>
+        <span>{data.title}</span>
+      </nav>
+      <p class="section-label">{typeLabel(data.type)}</p>
+      <div style="display:flex;align-items:flex-start;gap:1.5rem;margin-top:1rem;">
+        <div style="width:64px;height:64px;border-radius:14px;background:#F5F5F2;border:1px solid #E0E0DC;display:flex;align-items:center;justify-content:center;font-size:1.75rem;flex-shrink:0;" aria-hidden="true">
+          {data.icon}
+        </div>
+        <div style="flex:1;">
+          <div style="display:flex;align-items:center;gap:0.625rem;margin-bottom:0.5rem;flex-wrap:wrap;">
+            <span style={`background:${statusColor(data.status)};color:#fff;font-size:0.65rem;font-weight:700;padding:3px 10px;border-radius:100px;text-transform:uppercase;letter-spacing:0.06em;`}>
+              {statusLabel(data.status)}
+            </span>
+            {data.version && (
+              <span style="font-size:0.8rem;color:#5A5A5A;">v{data.version}</span>
+            )}
+            {data.lastUpdated && (
+              <span style="font-size:0.8rem;color:#5A5A5A;">· Updated {data.lastUpdated}</span>
+            )}
+          </div>
+          <h1 style="font-size:clamp(2rem,4vw,3rem);margin-bottom:0.75rem;">{data.title}</h1>
+          <p style="font-size:1.0625rem;color:#5A5A5A;line-height:1.7;max-width:560px;margin-bottom:1.5rem;">
+            {data.tagline}
+          </p>
+          <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
+            {data.appexchangeUrl ? (
+              <a href={data.appexchangeUrl} target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+                View on AppExchange ↗
+              </a>
+            ) : (
+              <a href="/contact" class="btn btn-primary">Join waitlist →</a>
+            )}
+            <a href="/contact" class="btn btn-outline">Book a demo</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ② Key features — grey bg -->
+  <section style="background:#F5F5F2;padding:4rem 0;border-bottom:1px solid #E0E0DC;">
+    <div class="container">
+      <p class="section-label anim-fade-up">What it does</p>
+      <h2 class="anim-fade-up" style="font-size:clamp(1.75rem,3vw,2.25rem);font-weight:800;letter-spacing:-0.02em;margin-bottom:2rem;transition-delay:0.05s;">
+        Key Features
+      </h2>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;">
+        {data.features.map((f, i) => (
+          <div
+            class="anim-scale-pop"
+            style={`background:#fff;border:1px solid #E0E0DC;border-radius:12px;padding:1.5rem;transition-delay:${i * 0.06}s;`}
+          >
+            <div style="font-size:1.5rem;margin-bottom:0.75rem;" aria-hidden="true">{f.icon}</div>
+            <h3 style="font-size:1rem;font-weight:700;color:#0A0A0A;margin-bottom:0.4rem;">{f.title}</h3>
+            <p style="font-size:0.875rem;color:#5A5A5A;line-height:1.6;margin:0;">{f.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ③ Screenshots — white bg (only if screenshots array is non-empty) -->
+  {data.screenshots && data.screenshots.length > 0 && (
+    <section style="background:#fff;padding:4rem 0;border-bottom:1px solid #E0E0DC;">
+      <div class="container">
+        <p class="section-label">See it in action</p>
+        <h2 style="font-size:clamp(1.75rem,3vw,2.25rem);font-weight:800;letter-spacing:-0.02em;margin-bottom:2rem;">
+          Screenshots
+        </h2>
+        <div style="display:flex;gap:1rem;overflow-x:auto;padding-bottom:0.5rem;">
+          {data.screenshots.map(src => (
+            <img
+              src={src}
+              alt={`${data.title} screenshot`}
+              style="height:240px;width:auto;border-radius:10px;border:1px solid #E0E0DC;flex-shrink:0;"
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- ④ Pricing + Requirements — grey bg (only if at least one is set) -->
+  {hasPricingOrReqs && (
+    <section style="background:#F5F5F2;padding:4rem 0;border-bottom:1px solid #E0E0DC;">
+      <div class="container">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:3rem;">
+          {data.pricing && data.pricing.length > 0 && (
+            <div>
+              <p class="section-label">Licensing</p>
+              <h3 style="font-size:1.125rem;font-weight:700;color:#0A0A0A;margin-bottom:1rem;">Pricing</h3>
+              <div style="border:1px solid #E0E0DC;border-radius:12px;overflow:hidden;background:#fff;">
+                {data.pricing.map((row, i) => (
+                  <div style={`padding:0.875rem 1.25rem;display:flex;justify-content:space-between;align-items:center;${i > 0 ? 'border-top:1px solid #E0E0DC;' : ''}`}>
+                    <span style="font-weight:700;color:#0A0A0A;font-size:0.9375rem;">{row.tier}</span>
+                    <span style="color:#5A5A5A;font-weight:600;font-size:0.9375rem;">{row.price}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          {data.requirements && data.requirements.length > 0 && (
+            <div>
+              <p class="section-label">Before you install</p>
+              <h3 style="font-size:1.125rem;font-weight:700;color:#0A0A0A;margin-bottom:1rem;">Requirements</h3>
+              <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:0.75rem;">
+                {data.requirements.map(req => (
+                  <li style="font-size:0.9375rem;color:#5A5A5A;padding-left:1.5rem;position:relative;line-height:1.55;">
+                    <span style="position:absolute;left:0;color:#0A0A0A;font-weight:700;">→</span>
+                    {req}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- ⑤ CTA strip — dark bg -->
+  <section style="background:#0A0A0A;padding:4rem 0;">
+    <div class="container">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap;">
+        <div>
+          <h2 style="font-size:clamp(1.5rem,3vw,2rem);font-weight:900;color:#fff;letter-spacing:-0.025em;margin-bottom:0.35rem;">
+            Ready to get started?
+          </h2>
+          <p style="font-size:0.9375rem;color:rgba(255,255,255,0.5);margin:0;">
+            {data.appexchangeUrl ? 'Available now on AppExchange' : 'Early access — join the waitlist'}
+          </p>
+        </div>
+        <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
+          {data.appexchangeUrl ? (
+            <a href={data.appexchangeUrl} target="_blank" rel="noopener noreferrer" class="btn btn-light">
+              Install on AppExchange ↗
+            </a>
+          ) : (
+            <a href="/contact" class="btn btn-light">Join waitlist →</a>
+          )}
+          <a href="/contact" class="btn" style="background:transparent;color:#fff;border-color:rgba(255,255,255,0.3);">
+            Contact us
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</Page>
