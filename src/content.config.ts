@@ -46,7 +46,7 @@ const products = defineCollection({
       icon:        z.string(),
       title:       z.string(),
       description: z.string(),
-    })),
+    })).min(1),
     screenshots:  z.array(z.string()).optional(),
     pricing: z.array(z.object({
       tier:  z.string(),
