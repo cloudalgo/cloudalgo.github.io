@@ -1,0 +1,117 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  product: CollectionEntry<'products'>;
+  featured?: boolean;
+  dark?: boolean;
+}
+
+const { product, featured = false, dark = false } = Astro.props;
+const { data } = product;
+const slug = product.id;
+
+const statusLabel = (s: string) =>
+  s === 'ga' ? 'Generally Available' : s === 'preview' ? 'Preview' : 'Beta';
+const statusColor = (s: string) => (s === 'ga' ? '#16a34a' : '#d97706');
+const isEarlyAccess = data.status === 'preview' || data.status === 'beta';
+---
+
+{dark ? (
+  <!-- Dark variant: used inside dark home section -->
+  <div style={`
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 12px;
+    padding: 1.75rem;
+    display: flex;
+    gap: 1.25rem;
+    align-items: flex-start;
+  `}>
+    <div style="font-size:2rem;flex-shrink:0;">{data.icon}</div>
+    <div style="flex:1;min-width:0;">
+      <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem;flex-wrap:wrap;">
+        <span style={`background:${statusColor(data.status)};color:#fff;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:100px;text-transform:uppercase;letter-spacing:0.06em;`}>
+          {statusLabel(data.status)}
+        </span>
+        {isEarlyAccess && (
+          <span style="font-size:0.65rem;color:rgba(255,255,255,0.45);">Early access</span>
+        )}
+      </div>
+      <div style="font-size:1rem;font-weight:700;color:#fff;margin-bottom:0.35rem;">{data.title}</div>
+      <div style="font-size:0.85rem;color:rgba(255,255,255,0.55);line-height:1.55;margin-bottom:1rem;">{data.excerpt}</div>
+      <a href={`/products/${slug}`} style="font-size:0.8rem;font-weight:700;color:#fff;text-decoration:underline;text-underline-offset:3px;">
+        Learn more →
+      </a>
+    </div>
+  </div>
+) : (
+  <!-- Light variant: used on /products listing page -->
+  <div style={`
+    border: ${featured ? '2px solid #0A0A0A' : '1px solid #E0E0DC'};
+    border-radius: 12px;
+    padding: 1.75rem;
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+    background: #fff;
+    transition: border-color 0.2s;
+  `} class="product-card-light">
+    <div style={`
+      width: ${featured ? '56px' : '48px'};
+      height: ${featured ? '56px' : '48px'};
+      border-radius: ${featured ? '12px' : '10px'};
+      background: #F5F5F2;
+      border: 1px solid #E0E0DC;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: ${featured ? '1.6rem' : '1.3rem'};
+    `}>
+      {data.icon}
+    </div>
+    <div style="flex:1;min-width:0;">
+      <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.4rem;flex-wrap:wrap;">
+        <span style={`background:${statusColor(data.status)};color:#fff;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:100px;text-transform:uppercase;letter-spacing:0.06em;`}>
+          {statusLabel(data.status)}
+        </span>
+        {isEarlyAccess && (
+          <span style="font-size:0.65rem;color:#5A5A5A;">Early access · Feedback welcome</span>
+        )}
+        {data.version && (
+          <span style="font-size:0.65rem;color:#5A5A5A;">{data.version}</span>
+        )}
+      </div>
+      <div style={`font-size:${featured ? '1.125rem' : '1rem'};font-weight:${featured ? '800' : '700'};color:#0A0A0A;margin-bottom:0.35rem;`}>
+        {data.title}
+      </div>
+      <div style="font-size:0.875rem;color:#5A5A5A;line-height:1.6;margin-bottom:0.875rem;">
+        {data.excerpt}
+      </div>
+      {featured && data.features.length > 0 && (
+        <div style="display:flex;gap:0.4rem;flex-wrap:wrap;margin-bottom:1rem;">
+          {data.features.slice(0, 3).map(f => (
+            <span style="font-size:0.7rem;background:#F5F5F2;border:1px solid #E0E0DC;padding:3px 10px;border-radius:100px;color:#0A0A0A;font-weight:600;">
+              ✓ {f.title}
+            </span>
+          ))}
+        </div>
+      )}
+      <div style="display:flex;gap:0.625rem;flex-wrap:wrap;">
+        <a href={`/products/${slug}`} class="btn btn-primary" style="font-size:0.8125rem;padding:0.5rem 1.1rem;">
+          Learn more →
+        </a>
+        {data.appexchangeUrl ? (
+          <a href={data.appexchangeUrl} target="_blank" rel="noopener noreferrer" class="btn btn-outline" style="font-size:0.8125rem;padding:0.5rem 1.1rem;">
+            AppExchange ↗
+          </a>
+        ) : (
+          <a href="/contact" class="btn btn-outline" style="font-size:0.8125rem;padding:0.5rem 1.1rem;">
+            Join waitlist
+          </a>
+        )}
+      </div>
+    </div>
+  </div>
+)}
