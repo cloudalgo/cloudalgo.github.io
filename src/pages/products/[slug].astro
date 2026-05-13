@@ -16,9 +16,116 @@ const { data } = product;
 
 const statusLabel = (s: string) =>
   s === 'ga' ? 'Generally Available' : s === 'preview' ? 'Preview' : 'Beta';
-const statusColor = (s: string) => (s === 'ga' ? '#16a34a' : '#d97706');
 const typeLabel = (t: string) =>
   t === 'salesforce-app' ? 'Salesforce App' : 'Integration Connector';
+
+const illustrations: Record<string, string> = {
+  'cloudalgo-flow-audit': `<svg viewBox="0 0 460 380" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:460px;height:auto;">
+    <!-- Flow audit: flowchart with dependency map -->
+    <!-- Start node -->
+    <rect x="160" y="24" width="140" height="40" rx="20" stroke="#0A0A0A" stroke-width="2"/>
+    <text x="230" y="49" text-anchor="middle" font-family="Outfit,sans-serif" font-size="12" font-weight="700" fill="#0A0A0A">Record Changed</text>
+    <!-- Arrow down -->
+    <path d="M230 64 L230 90" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M224 86 L230 90 L236 86" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Decision diamond -->
+    <path d="M230 90 L285 132 L230 174 L175 132 Z" stroke="#0A0A0A" stroke-width="2" stroke-linejoin="round"/>
+    <text x="230" y="129" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" font-weight="700" fill="#0A0A0A">Stage =</text>
+    <text x="230" y="144" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" fill="#5A5A5A">Closed Won?</text>
+    <!-- Yes branch right -->
+    <path d="M285 132 L350 132" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M346 126 L350 132 L346 138" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="316" y="124" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" fill="#0A0A0A">Yes</text>
+    <!-- Yes action box -->
+    <rect x="350" y="108" width="96" height="48" rx="6" stroke="#0A0A0A" stroke-width="2"/>
+    <text x="398" y="128" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" font-weight="700" fill="#0A0A0A">Create Task</text>
+    <text x="398" y="144" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" fill="#5A5A5A">Notify Team</text>
+    <!-- No branch down -->
+    <path d="M230 174 L230 210" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M224 206 L230 210 L236 206" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="218" y="195" text-anchor="end" font-family="Outfit,sans-serif" font-size="10" fill="#0A0A0A">No</text>
+    <!-- No action box -->
+    <rect x="155" y="210" width="150" height="48" rx="6" stroke="#0A0A0A" stroke-width="1.5"/>
+    <text x="230" y="230" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" font-weight="700" fill="#0A0A0A">Update Stage</text>
+    <text x="230" y="246" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" fill="#5A5A5A">Send Email Alert</text>
+    <!-- End node -->
+    <path d="M230 258 L230 285" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M224 281 L230 285 L236 281" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect x="180" y="285" width="100" height="36" rx="18" fill="#0A0A0A"/>
+    <text x="230" y="308" text-anchor="middle" font-family="Outfit,sans-serif" font-size="11" font-weight="700" fill="#fff">End</text>
+    <!-- Decorative stat badges left -->
+    <rect x="18" y="54" width="90" height="28" rx="14" stroke="#0A0A0A" stroke-width="1.5" opacity="0.5"/>
+    <text x="63" y="73" text-anchor="middle" font-family="Outfit,sans-serif" font-size="11" font-weight="700" fill="#0A0A0A" opacity="0.7">14 Active Flows</text>
+    <rect x="18" y="94" width="90" height="28" rx="14" stroke="#0A0A0A" stroke-width="1.5" opacity="0.4"/>
+    <text x="63" y="113" text-anchor="middle" font-family="Outfit,sans-serif" font-size="11" font-weight="700" fill="#0A0A0A" opacity="0.6">3 Warnings</text>
+    <rect x="18" y="134" width="90" height="28" rx="14" stroke="#0A0A0A" stroke-width="1.5" opacity="0.35"/>
+    <text x="63" y="153" text-anchor="middle" font-family="Outfit,sans-serif" font-size="11" fill="#0A0A0A" opacity="0.55">2 Inactive</text>
+    <!-- Health bar right -->
+    <rect x="360" y="200" width="84" height="10" rx="5" stroke="#0A0A0A" stroke-width="1.5" opacity="0.3"/>
+    <rect x="360" y="200" width="65" height="10" rx="5" fill="#0A0A0A" opacity="0.7"/>
+    <text x="402" y="226" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" fill="#0A0A0A" opacity="0.7">Org Health: 78%</text>
+    <!-- Dependency map bottom right -->
+    <rect x="350" y="244" width="94" height="32" rx="6" stroke="#0A0A0A" stroke-width="1.5" opacity="0.45"/>
+    <text x="397" y="260" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" font-weight="700" fill="#0A0A0A" opacity="0.7">Apex Class</text>
+    <text x="397" y="272" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" fill="#5A5A5A" opacity="0.8">GetOpportunities</text>
+    <path d="M398 157 L398 196" stroke="#0A0A0A" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.35"/>
+    <path d="M398 244 L398 232" stroke="#0A0A0A" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.3"/>
+  </svg>`,
+  'sf-sync-connector': `<svg viewBox="0 0 460 380" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:460px;height:auto;">
+    <!-- Sync connector: two systems with bidirectional data flow -->
+    <!-- Left system: Salesforce -->
+    <rect x="30" y="100" width="140" height="180" rx="10" stroke="#0A0A0A" stroke-width="2.5"/>
+    <rect x="30" y="100" width="140" height="44" rx="10" stroke="#0A0A0A" stroke-width="2.5" fill="none"/>
+    <path d="M30 144 L170 144" stroke="#0A0A0A" stroke-width="1.5"/>
+    <text x="100" y="128" text-anchor="middle" font-family="Outfit,sans-serif" font-size="12" font-weight="700" fill="#0A0A0A">Salesforce</text>
+    <!-- Left rows -->
+    <rect x="46" y="158" width="108" height="22" rx="4" stroke="#0A0A0A" stroke-width="1.5" opacity="0.4"/>
+    <text x="100" y="173" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" fill="#0A0A0A" opacity="0.7">Account</text>
+    <rect x="46" y="188" width="108" height="22" rx="4" stroke="#0A0A0A" stroke-width="1.5" opacity="0.4"/>
+    <text x="100" y="203" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" fill="#0A0A0A" opacity="0.7">Contact</text>
+    <rect x="46" y="218" width="108" height="22" rx="4" fill="#0A0A0A" fill-opacity="0.06" stroke="#0A0A0A" stroke-width="1.5" opacity="0.5"/>
+    <text x="100" y="233" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" fill="#0A0A0A" opacity="0.7">Opportunity</text>
+    <rect x="46" y="248" width="108" height="22" rx="4" stroke="#0A0A0A" stroke-width="1.5" opacity="0.3"/>
+    <text x="100" y="263" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" fill="#0A0A0A" opacity="0.6">Custom Object</text>
+    <!-- Right system: External DB -->
+    <rect x="290" y="100" width="140" height="180" rx="10" stroke="#0A0A0A" stroke-width="2.5"/>
+    <rect x="290" y="100" width="140" height="44" rx="10" stroke="#0A0A0A" stroke-width="2.5" fill="none"/>
+    <path d="M290 144 L430 144" stroke="#0A0A0A" stroke-width="1.5"/>
+    <text x="360" y="128" text-anchor="middle" font-family="Outfit,sans-serif" font-size="12" font-weight="700" fill="#0A0A0A">External DB</text>
+    <!-- Right rows -->
+    <rect x="306" y="158" width="108" height="22" rx="4" stroke="#0A0A0A" stroke-width="1.5" opacity="0.4"/>
+    <text x="360" y="173" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" fill="#0A0A0A" opacity="0.7">customers</text>
+    <rect x="306" y="188" width="108" height="22" rx="4" stroke="#0A0A0A" stroke-width="1.5" opacity="0.4"/>
+    <text x="360" y="203" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" fill="#0A0A0A" opacity="0.7">contacts</text>
+    <rect x="306" y="218" width="108" height="22" rx="4" fill="#0A0A0A" fill-opacity="0.06" stroke="#0A0A0A" stroke-width="1.5" opacity="0.5"/>
+    <text x="360" y="233" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" fill="#0A0A0A" opacity="0.7">deals</text>
+    <rect x="306" y="248" width="108" height="22" rx="4" stroke="#0A0A0A" stroke-width="1.5" opacity="0.3"/>
+    <text x="360" y="263" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" fill="#0A0A0A" opacity="0.6">custom_table</text>
+    <!-- Bidirectional arrows (right) -->
+    <path d="M170 175 L290 175" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M286 170 L290 175 L286 180" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Bidirectional arrows (left) -->
+    <path d="M290 205 L170 205" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M174 200 L170 205 L174 210" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Bidirectional arrows (right, 3rd row) -->
+    <path d="M170 235 L290 235" stroke="#0A0A0A" stroke-width="1.5" stroke-dasharray="5 3" stroke-linecap="round"/>
+    <path d="M286 230 L290 235 L286 240" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Conflict resolution badge top center -->
+    <rect x="182" y="60" width="96" height="28" rx="14" stroke="#0A0A0A" stroke-width="1.5" opacity="0.6"/>
+    <text x="230" y="79" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" font-weight="700" fill="#0A0A0A" opacity="0.8">Auto-resolve</text>
+    <!-- Status dot -->
+    <circle cx="230" cy="190" r="6" fill="#0A0A0A" fill-opacity="0.15"/>
+    <circle cx="230" cy="190" r="3" fill="#0A0A0A" fill-opacity="0.6"/>
+    <!-- Bottom stats -->
+    <rect x="60" y="308" width="100" height="28" rx="6" stroke="#0A0A0A" stroke-width="1.5" opacity="0.4"/>
+    <text x="110" y="323" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" font-weight="700" fill="#0A0A0A" opacity="0.7">12k records/hr</text>
+    <rect x="300" y="308" width="100" height="28" rx="6" stroke="#0A0A0A" stroke-width="1.5" opacity="0.4"/>
+    <text x="350" y="323" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" font-weight="700" fill="#0A0A0A" opacity="0.7">99.8% uptime</text>
+    <!-- Connector label -->
+    <text x="230" y="348" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" fill="#5A5A5A" opacity="0.7">SF Sync Connector</text>
+  </svg>`,
+};
+const illustration = illustrations[slug] ?? '';
 
 const hasPricingOrReqs = (data.pricing && data.pricing.length > 0) ||
   (data.requirements && data.requirements.length > 0);
@@ -39,38 +146,44 @@ const hasPricingOrReqs = (data.pricing && data.pricing.length > 0) ||
         <span>&rarr;</span>
         <span aria-current="page">{data.title}</span>
       </nav>
-      <p class="section-label">{typeLabel(data.type)}</p>
-      <div style="display:flex;align-items:flex-start;gap:1.5rem;margin-top:1rem;">
-        <div style="width:64px;height:64px;border-radius:14px;background:#F5F5F2;border:1px solid #E0E0DC;display:flex;align-items:center;justify-content:center;font-size:1.75rem;flex-shrink:0;" aria-hidden="true">
-          {data.icon}
-        </div>
-        <div style="flex:1;">
-          <div style="display:flex;align-items:center;gap:0.625rem;margin-bottom:0.5rem;flex-wrap:wrap;">
-            <span style={`background:${statusColor(data.status)};color:#fff;font-size:0.65rem;font-weight:700;padding:3px 10px;border-radius:100px;text-transform:uppercase;letter-spacing:0.06em;`}>
-              {statusLabel(data.status)}
-            </span>
+      <div style="display:grid;grid-template-columns:1fr auto;gap:3rem;align-items:center;margin-top:1.5rem;" class="prod-hero-grid">
+        <div>
+          <p class="section-label">{typeLabel(data.type)}</p>
+          <div style="display:flex;align-items:center;gap:0.625rem;margin-bottom:0.75rem;flex-wrap:wrap;">
+            {data.status === 'ga' ? (
+              <span style="background:#0A0A0A;color:#fff;font-size:0.65rem;font-weight:700;padding:3px 10px;border-radius:100px;text-transform:uppercase;letter-spacing:0.06em;">
+                {statusLabel(data.status)}
+              </span>
+            ) : (
+              <span style="border:1.5px solid #0A0A0A;color:#0A0A0A;font-size:0.65rem;font-weight:700;padding:3px 10px;border-radius:100px;text-transform:uppercase;letter-spacing:0.06em;">
+                {statusLabel(data.status)}
+              </span>
+            )}
             {data.version && (
               <span style="font-size:0.8rem;color:#5A5A5A;">v{data.version}</span>
             )}
             {data.lastUpdated && (
-              <span style="font-size:0.8rem;color:#5A5A5A;">· Updated {data.lastUpdated}</span>
+              <span style="font-size:0.8rem;color:#5A5A5A;">&middot; Updated {data.lastUpdated}</span>
             )}
           </div>
           <h1 style="font-size:clamp(2rem,4vw,3rem);margin-bottom:0.75rem;">{data.title}</h1>
-          <p style="font-size:1.0625rem;color:#5A5A5A;line-height:1.7;max-width:560px;margin-bottom:1.5rem;">
+          <p style="font-size:1.0625rem;color:#5A5A5A;line-height:1.7;max-width:520px;margin-bottom:1.5rem;">
             {data.tagline}
           </p>
           <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
             {data.appexchangeUrl ? (
               <a href={data.appexchangeUrl} target="_blank" rel="noopener noreferrer" class="btn btn-primary">
-                View on AppExchange ↗
+                View on AppExchange &nearr;
               </a>
             ) : (
-              <a href="/contact" class="btn btn-primary">Join waitlist →</a>
+              <a href="/contact" class="btn btn-primary">Join waitlist &rarr;</a>
             )}
             <a href="/contact" class="btn btn-outline">Book a demo</a>
           </div>
         </div>
+        {illustration && (
+          <div style="width:320px;flex-shrink:0;" aria-hidden="true" set:html={illustration} class="prod-hero-illo" />
+        )}
       </div>
     </div>
   </div>
@@ -88,7 +201,12 @@ const hasPricingOrReqs = (data.pricing && data.pricing.length > 0) ||
             class="anim-scale-pop"
             style={`background:#fff;border:1px solid #E0E0DC;border-radius:12px;padding:1.5rem;transition-delay:${i * 0.06}s;`}
           >
-            <div style="font-size:1.5rem;margin-bottom:0.75rem;" aria-hidden="true">{f.icon}</div>
+            <div style="margin-bottom:0.75rem;" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 18 18" fill="none">
+                <rect x="0.75" y="0.75" width="16.5" height="16.5" rx="4.25" stroke="#0A0A0A" stroke-width="1.5"/>
+                <path d="M5.5 9L7.8 11.5L12.5 6.5" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
             <h3 style="font-size:1rem;font-weight:700;color:#0A0A0A;margin-bottom:0.4rem;">{f.title}</h3>
             <p style="font-size:0.875rem;color:#5A5A5A;line-height:1.6;margin:0;">{f.description}</p>
           </div>
@@ -185,5 +303,12 @@ const hasPricingOrReqs = (data.pricing && data.pricing.length > 0) ||
       </div>
     </div>
   </section>
+
+<style>
+@media (max-width: 767px) {
+  .prod-hero-grid { grid-template-columns: 1fr !important; }
+  .prod-hero-illo { display: none !important; }
+}
+</style>
 
 </Page>

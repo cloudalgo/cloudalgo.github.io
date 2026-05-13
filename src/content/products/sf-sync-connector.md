@@ -4,16 +4,16 @@ status: beta
 type: integration
 tagline: "Bi-directional sync between Salesforce and external databases — zero custom code."
 excerpt: "SF Sync Connector bridges your Salesforce org and external SQL databases or REST APIs with configurable field mappings, conflict resolution rules, and real-time change detection. Currently in beta — early access available."
-icon: "🔗"
+icon: "sync-connector"
 order: 2
 features:
-  - icon: "↔️"
+  - icon: "arrows"
     title: "Bi-directional Sync"
     description: "Push and pull records between Salesforce and PostgreSQL, MySQL, or any REST API on a configurable schedule or in real time via webhooks."
-  - icon: "🛡️"
+  - icon: "shield"
     title: "Conflict Resolution"
     description: "Choose Salesforce-master, external-master, or last-writer-wins strategies per object type — no data loss on concurrent updates."
-  - icon: "👁️"
+  - icon: "eye"
     title: "Sync Dashboard"
     description: "Monitor sync health, error rates, and record throughput in a real-time dashboard without leaving Salesforce."
 screenshots: []

@@ -4,19 +4,19 @@ status: ga
 type: salesforce-app
 tagline: "Instantly visualize, document, and analyze every Flow in your Salesforce org."
 excerpt: "Flow Audit gives Salesforce admins and architects a complete picture of their org's automation — dependencies, performance bottlenecks, and inactive flows — all in one dashboard."
-icon: "⚡"
+icon: "flow-audit"
 appexchangeUrl: "https://appexchange.salesforce.com"
 version: "2.1.0"
 lastUpdated: "2026-04-10"
 order: 1
 features:
-  - icon: "🗺️"
+  - icon: "map"
     title: "Full Flow Inventory"
     description: "Automatically catalogs all active, inactive, and draft Flows with type, trigger, and last-modified metadata."
-  - icon: "🔗"
+  - icon: "link"
     title: "Dependency Mapping"
     description: "Visualizes which objects, fields, and Apex classes each Flow references — so you can safely refactor without surprises."
-  - icon: "📊"
+  - icon: "chart"
     title: "Performance Insights"
     description: "Surfaces Flows with high interview counts, long execution times, or excessive DML operations that risk hitting governor limits."
 screenshots: []

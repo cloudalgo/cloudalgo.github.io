@@ -13,111 +13,115 @@ const slug = product.id;
 
 const statusLabel = (s: string) =>
   s === 'ga' ? 'Generally Available' : s === 'preview' ? 'Preview' : 'Beta';
-const statusColor = (s: string) => (s === 'ga' ? '#16a34a' : '#d97706');
 const isEarlyAccess = data.status === 'preview' || data.status === 'beta';
+
+// Small SVG icons per product (monochromatic, stroke only)
+const productIcons: Record<string, string> = {
+  'cloudalgo-flow-audit': `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="12" cy="3.5" r="2" stroke="currentColor" stroke-width="1.5"/>
+    <line x1="12" y1="5.5" x2="12" y2="8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M12 8.5 L17 12.5 L12 16.5 L7 12.5 Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+    <line x1="12" y1="16.5" x2="12" y2="19.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    <circle cx="12" cy="21" r="2" fill="currentColor"/>
+  </svg>`,
+  'sf-sync-connector': `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="1" y="7" width="8" height="10" rx="2" stroke="currentColor" stroke-width="1.5"/>
+    <rect x="15" y="7" width="8" height="10" rx="2" stroke="currentColor" stroke-width="1.5"/>
+    <path d="M9.5 10 L14.5 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M13 8.5 L14.5 10 L13 11.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M14.5 14 L9.5 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M11 12.5 L9.5 14 L11 15.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>`,
+};
+const iconSvg = productIcons[slug] ?? productIcons['cloudalgo-flow-audit'];
 ---
 
 {dark ? (
-  <!-- Dark variant: used inside dark home section -->
-  <div style={`
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.12);
-    border-radius: 12px;
-    padding: 1.75rem;
-    display: flex;
-    gap: 1.25rem;
-    align-items: flex-start;
-  `}>
-    <div style="font-size:2rem;flex-shrink:0;">{data.icon}</div>
+  <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:12px;padding:1.75rem;display:flex;gap:1.25rem;align-items:flex-start;">
+    <div style="width:44px;height:44px;border-radius:10px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);flex-shrink:0;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.8);" set:html={iconSvg} />
     <div style="flex:1;min-width:0;">
       <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem;flex-wrap:wrap;">
-        <span style={`background:${statusColor(data.status)};color:#fff;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:100px;text-transform:uppercase;letter-spacing:0.06em;`}>
-          {statusLabel(data.status)}
-        </span>
+        {data.status === 'ga' ? (
+          <span style="background:rgba(255,255,255,0.9);color:#0A0A0A;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:100px;text-transform:uppercase;letter-spacing:0.06em;">
+            {statusLabel(data.status)}
+          </span>
+        ) : (
+          <span style="border:1px solid rgba(255,255,255,0.4);color:rgba(255,255,255,0.7);font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:100px;text-transform:uppercase;letter-spacing:0.06em;">
+            {statusLabel(data.status)}
+          </span>
+        )}
         {isEarlyAccess && (
-          <span style="font-size:0.65rem;color:rgba(255,255,255,0.45);">Early access</span>
+          <span style="font-size:0.65rem;color:rgba(255,255,255,0.4);">Early access</span>
         )}
       </div>
       <div style="font-size:1rem;font-weight:700;color:#fff;margin-bottom:0.35rem;">{data.title}</div>
-      <div style="font-size:0.85rem;color:rgba(255,255,255,0.55);line-height:1.55;margin-bottom:1rem;">{data.excerpt}</div>
-      <a href={`/products/${slug}`} style="font-size:0.8rem;font-weight:700;color:#fff;text-decoration:underline;text-underline-offset:3px;">
-        Learn more →
+      <div style="font-size:0.85rem;color:rgba(255,255,255,0.55);line-height:1.6;margin-bottom:1rem;">{data.excerpt}</div>
+      <a href={`/products/${slug}`} style="font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.8);text-decoration:underline;text-underline-offset:3px;transition:color 0.2s;" class="prod-card-link-dark">
+        Learn more &rarr;
       </a>
     </div>
   </div>
 ) : (
-  <!-- Light variant: used on /products listing page -->
-  <div style={`
-    border: ${featured ? '2px solid #0A0A0A' : '1px solid #E0E0DC'};
-    border-radius: 12px;
-    padding: 1.75rem;
-    display: flex;
-    gap: 1.5rem;
-    align-items: flex-start;
-    background: #fff;
-    transition: border-color 0.2s;
-  `} class="product-card-light">
-    <div style={`
-      width: ${featured ? '56px' : '48px'};
-      height: ${featured ? '56px' : '48px'};
-      border-radius: ${featured ? '12px' : '10px'};
-      background: #F5F5F2;
-      border: 1px solid #E0E0DC;
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: ${featured ? '1.6rem' : '1.3rem'};
-    `}>
-      {data.icon}
-    </div>
-    <div style="flex:1;min-width:0;">
-      <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.4rem;flex-wrap:wrap;">
-        <span style={`background:${statusColor(data.status)};color:#fff;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:100px;text-transform:uppercase;letter-spacing:0.06em;`}>
-          {statusLabel(data.status)}
-        </span>
-        {isEarlyAccess && (
-          <span style="font-size:0.65rem;color:#5A5A5A;">Early access · Feedback welcome</span>
-        )}
-        {data.version && (
-          <span style="font-size:0.65rem;color:#5A5A5A;">{data.version}</span>
-        )}
-      </div>
-      <div style={`font-size:${featured ? '1.125rem' : '1rem'};font-weight:${featured ? '800' : '700'};color:#0A0A0A;margin-bottom:0.35rem;`}>
-        {data.title}
-      </div>
-      <div style="font-size:0.875rem;color:#5A5A5A;line-height:1.6;margin-bottom:0.875rem;">
-        {data.excerpt}
-      </div>
-      {featured && data.features.length > 0 && (
-        <div style="display:flex;gap:0.4rem;flex-wrap:wrap;margin-bottom:1rem;">
-          {data.features.slice(0, 3).map(f => (
-            <span style="font-size:0.7rem;background:#F5F5F2;border:1px solid #E0E0DC;padding:3px 10px;border-radius:100px;color:#0A0A0A;font-weight:600;">
-              ✓ {f.title}
+  <div style={`border:${featured ? '2px solid #0A0A0A' : '1px solid #E0E0DC'};border-radius:12px;padding:1.75rem;background:#fff;transition:border-color 0.2s;`} class="product-card-light">
+    <div style="display:flex;gap:1.5rem;align-items:flex-start;">
+      <div style={`width:${featured ? '56px' : '48px'};height:${featured ? '56px' : '48px'};border-radius:${featured ? '12px' : '10px'};background:#F5F5F2;border:1px solid #E0E0DC;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:#0A0A0A;`} set:html={iconSvg} />
+      <div style="flex:1;min-width:0;">
+        <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.4rem;flex-wrap:wrap;">
+          {data.status === 'ga' ? (
+            <span style="background:#0A0A0A;color:#fff;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:100px;text-transform:uppercase;letter-spacing:0.06em;">
+              {statusLabel(data.status)}
             </span>
-          ))}
+          ) : (
+            <span style="border:1.5px solid #0A0A0A;color:#0A0A0A;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:100px;text-transform:uppercase;letter-spacing:0.06em;">
+              {statusLabel(data.status)}
+            </span>
+          )}
+          {isEarlyAccess && (
+            <span style="font-size:0.65rem;color:#5A5A5A;">Early access &middot; Feedback welcome</span>
+          )}
+          {data.version && (
+            <span style="font-size:0.65rem;color:#5A5A5A;">{data.version}</span>
+          )}
         </div>
-      )}
-      <div style="display:flex;gap:0.625rem;flex-wrap:wrap;">
-        <a href={`/products/${slug}`} class="btn btn-primary" style="font-size:0.8125rem;padding:0.5rem 1.1rem;">
-          Learn more →
-        </a>
-        {data.appexchangeUrl ? (
-          <a href={data.appexchangeUrl} target="_blank" rel="noopener noreferrer" class="btn btn-outline" style="font-size:0.8125rem;padding:0.5rem 1.1rem;">
-            AppExchange ↗
-          </a>
-        ) : (
-          <a href="/contact" class="btn btn-outline" style="font-size:0.8125rem;padding:0.5rem 1.1rem;">
-            Join waitlist
-          </a>
+        <div style={`font-size:${featured ? '1.125rem' : '1rem'};font-weight:${featured ? '800' : '700'};color:#0A0A0A;margin-bottom:0.35rem;`}>
+          {data.title}
+        </div>
+        <div style="font-size:0.875rem;color:#5A5A5A;line-height:1.6;margin-bottom:0.875rem;">
+          {data.excerpt}
+        </div>
+        {featured && data.features.length > 0 && (
+          <ul style="list-style:none;padding:0;margin:0 0 1rem;display:flex;flex-direction:column;gap:0.5rem;">
+            {data.features.slice(0, 3).map(f => (
+              <li style="display:flex;gap:0.625rem;align-items:flex-start;">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" style="flex-shrink:0;margin-top:0.125rem;">
+                  <rect x="0.75" y="0.75" width="16.5" height="16.5" rx="4.25" stroke="#0A0A0A" stroke-width="1.5"/>
+                  <path d="M5.5 9L7.8 11.5L12.5 6.5" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span style="font-size:0.875rem;color:#5A5A5A;line-height:1.5;">{f.title}</span>
+              </li>
+            ))}
+          </ul>
         )}
+        <div style="display:flex;gap:0.625rem;flex-wrap:wrap;">
+          <a href={`/products/${slug}`} class="btn btn-primary" style="font-size:0.8125rem;padding:0.5rem 1.1rem;">
+            Learn more &rarr;
+          </a>
+          {data.appexchangeUrl ? (
+            <a href={data.appexchangeUrl} target="_blank" rel="noopener noreferrer" class="btn btn-outline" style="font-size:0.8125rem;padding:0.5rem 1.1rem;">
+              AppExchange &nearr;
+            </a>
+          ) : (
+            <a href="/contact" class="btn btn-outline" style="font-size:0.8125rem;padding:0.5rem 1.1rem;">
+              Join waitlist
+            </a>
+          )}
+        </div>
       </div>
     </div>
   </div>
 )}
 
 <style>
-.product-card-light:hover {
-  border-color: #0A0A0A !important;
-}
+.product-card-light:hover { border-color: #0A0A0A !important; }
+.prod-card-link-dark:hover { color: #fff !important; }
 </style>
