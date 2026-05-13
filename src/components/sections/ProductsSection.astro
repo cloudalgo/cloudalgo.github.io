@@ -6,7 +6,7 @@ const allProducts = await getCollection('products', ({ data }) => data.published
 const products = allProducts.sort((a, b) => a.data.order - b.data.order);
 ---
 
-<section style="background:#0A0A0A;padding:6rem 0;">
+<section style="background:#0A0A0A;padding:6rem 0;border-top:1px solid #222;">
   <div class="container">
     <p style="font-size:0.75rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:0.75rem;" class="anim-fade-up">
       Our Products
@@ -30,5 +30,5 @@ const products = allProducts.sort((a, b) => a.data.order - b.data.order);
 </section>
 
 <style>
-.products-view-all:hover { color: #fff !important; }
+.products-view-all:hover { color: rgba(255,255,255,0.9); }
 </style>
