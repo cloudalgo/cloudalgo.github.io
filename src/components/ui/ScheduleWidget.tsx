@@ -128,25 +128,13 @@ function setScheduleHash(open: boolean) {
 // ── ScheduleLauncher ───────────────────────────────────────────────────────
 
 interface LauncherProps {
-  tooltipVisible: boolean;
-  onDismissTooltip: () => void;
   onOpen: () => void;
   bouncing: boolean;
 }
 
-function ScheduleLauncher({ tooltipVisible, onDismissTooltip, onOpen, bouncing }: LauncherProps) {
+function ScheduleLauncher({ onOpen, bouncing }: LauncherProps) {
   return (
     <div className="sw-launcher">
-      {tooltipVisible && (
-        <div className="sw-tooltip">
-          <p className="sw-tooltip-text">
-            Need help or have questions? Schedule a time with us.
-          </p>
-          <button className="sw-tooltip-close" onClick={onDismissTooltip} aria-label="Dismiss">
-            <IoCloseOutline />
-          </button>
-        </div>
-      )}
       <div className="sw-launcher-btn-wrap">
         <button
           className={`sw-launcher-btn${bouncing ? ' sw-launcher-btn--bounce' : ''}`}
@@ -706,8 +694,6 @@ export default function ScheduleWidget() {
   return (
     <>
       <ScheduleLauncher
-        tooltipVisible={tooltipVisible}
-        onDismissTooltip={() => setTooltipVisible(false)}
         onOpen={handleOpen}
         bouncing={bouncing}
       />
