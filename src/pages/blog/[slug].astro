@@ -92,6 +92,28 @@ const schema = {
     </div>
   </div>
 
+  <!-- ── Sticky share bar ── -->
+  <div class="sticky-share" id="sticky-share" aria-label="Share this article">
+    <span class="sticky-share-label">Share</span>
+    <a href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(postUrl)}&text=${encodeURIComponent(post.data.title)}`}
+       target="_blank" rel="noopener noreferrer" class="sticky-share-btn" title="Share on X">
+      <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="none" viewBox="0 0 18 18">
+        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+          d="M16.5 3.008c-.75.367-1.485.516-2.25.742-.84-.949-2.087-1.001-3.285-.553C9.767 3.646 8.983 4.742 9 6v.75c-2.434.062-4.601-1.046-6-3 0 0-3.136 5.575 3 8.25-1.404.935-2.804 1.566-4.5 1.5 2.481 1.352 5.185 1.817 7.525 1.138 2.685-.78 4.892-2.793 5.739-5.807.252-.916.378-1.864.373-2.814-.002-.187 1.132-2.08 1.363-3.01z"/>
+      </svg>
+      <span>X / Twitter</span>
+    </a>
+    <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(postUrl)}`}
+       target="_blank" rel="noopener noreferrer" class="sticky-share-btn" title="Share on LinkedIn">
+      <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="none" viewBox="0 0 24 24">
+        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+          d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/>
+        <circle cx="4" cy="4" r="2" stroke="currentColor" stroke-width="1.5"/>
+      </svg>
+      <span>LinkedIn</span>
+    </a>
+  </div>
+
   <!-- ── Article content ── -->
   <section class="blog-post-details">
     <div class="container" style="max-width:720px;">
@@ -99,27 +121,6 @@ const schema = {
         <Content />
       </div>
 
-      <!-- Footer: tag + share -->
-      <div class="post-footer-row">
-        <a href="/blog" class="blog-badges">{post.data.category}</a>
-        <div style="display:flex;gap:0.5rem;">
-          <a href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(postUrl)}&text=${encodeURIComponent(post.data.title)}`}
-             target="_blank" rel="noopener noreferrer" class="share-icon-btn" title="Share on X">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 18 18">
-              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                d="M16.5 3.008c-.75.367-1.485.516-2.25.742-.84-.949-2.087-1.001-3.285-.553C9.767 3.646 8.983 4.742 9 6v.75c-2.434.062-4.601-1.046-6-3 0 0-3.136 5.575 3 8.25-1.404.935-2.804 1.566-4.5 1.5 2.481 1.352 5.185 1.817 7.525 1.138 2.685-.78 4.892-2.793 5.739-5.807.252-.916.378-1.864.373-2.814-.002-.187 1.132-2.08 1.363-3.01z"/>
-            </svg>
-          </a>
-          <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(postUrl)}`}
-             target="_blank" rel="noopener noreferrer" class="share-icon-btn" title="Share on LinkedIn">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24">
-              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/>
-              <circle cx="4" cy="4" r="2" stroke="currentColor" stroke-width="1.5"/>
-            </svg>
-          </a>
-        </div>
-      </div>
     </div>
   </section>
 
@@ -169,31 +170,149 @@ const schema = {
   font-size: 1.0625rem;
 }
 
-/* ── Post footer ────────────────────────────────── */
-.post-footer-row {
+
+/* ── Sticky share bar ───────────────────────────── */
+.sticky-share {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(calc(100% + 2rem));
+  z-index: 90;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.4rem 0.75rem;
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 100px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  white-space: nowrap;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.sticky-share.is-visible {
+  transform: translateX(-50%) translateY(0);
+}
+.sticky-share-label {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: rgba(0,0,0,0.4);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding-right: 0.25rem;
+}
+.sticky-share-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  background: rgba(10, 10, 10, 0.75);
+  color: #fff;
+  border-radius: 50%;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+.sticky-share-btn:hover { background: #0A0A0A; }
+.sticky-share-btn span { display: none; }
+
+/* ── Inline blog CTA block — must be :global so JS-created element gets styles ── */
+:global(.blog-cta-block) {
+  margin: 3rem 0 2rem;
+  background: #0A0A0A;
+  border-radius: 16px;
+  padding: 2.5rem 2.75rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 3rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid #E0E0DC;
+  gap: 2rem;
   flex-wrap: wrap;
-  gap: 1rem;
 }
-
-/* ── Share buttons ──────────────────────────────── */
-.share-icon-btn {
-  background: #F5F5F2;
-  color: #5A5A5A;
+:global(.blog-cta-block h3) {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.02em;
+  margin: 0 0 0.625rem;
+}
+:global(.blog-cta-block p) {
+  font-size: 0.9375rem;
+  color: rgba(255,255,255,0.55);
+  line-height: 1.7;
+  margin: 0;
+  max-width: 480px;
+}
+:global(.blog-cta-block a) {
+  flex-shrink: 0;
   display: inline-flex;
-  width: 34px;
-  height: 34px;
   align-items: center;
-  justify-content: center;
+  background: #fff;
+  color: #0A0A0A;
+  font-weight: 700;
+  font-size: 0.9375rem;
+  padding: 0.75rem 1.75rem;
+  border-radius: 100px;
   text-decoration: none;
-  border-radius: 6px;
-  border: 1px solid #E0E0DC;
-  transition: background 0.2s, color 0.2s, border-color 0.2s;
+  transition: opacity 0.2s;
+  white-space: nowrap;
 }
-.share-icon-btn:hover { background: #0A0A0A; color: #fff; border-color: #0A0A0A; }
+:global(.blog-cta-block a:hover) { opacity: 0.85; }
+@media (max-width: 600px) {
+  :global(.blog-cta-block) { padding: 1.75rem; flex-direction: column; align-items: flex-start; }
+}
 </style>
+
+<script>
+  // Sticky share bar — show after 300px, hide near footer
+  const stickyShare = document.getElementById('sticky-share');
+  const footer = document.querySelector('footer');
+  function updateShareBar() {
+    if (!stickyShare) return;
+    const scrolled = window.scrollY > 300;
+    const nearFooter = footer
+      ? window.scrollY + window.innerHeight >= (footer as HTMLElement).offsetTop - 80
+      : false;
+    stickyShare.classList.toggle('is-visible', scrolled && !nearFooter);
+  }
+  window.addEventListener('scroll', updateShareBar, { passive: true });
+  updateShareBar();
+
+  document.querySelectorAll('.blog-content h3').forEach(h3 => {
+    const siblings: Element[] = [];
+    let node = h3.nextElementSibling;
+    let hasLink = false;
+    while (node && node.tagName !== 'H3') {
+      siblings.push(node);
+      if (node.querySelector('a[href*="contact"]')) hasLink = true;
+      node = node.nextElementSibling;
+    }
+    if (!hasLink) return;
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'blog-cta-block';
+
+    // Left: heading + body text
+    const textDiv = document.createElement('div');
+    textDiv.appendChild(h3.cloneNode(true));
+    siblings.forEach(s => {
+      if (s.tagName !== 'P' || s.querySelector('a[href*="contact"]')) return;
+      textDiv.appendChild(s.cloneNode(true));
+    });
+    wrapper.appendChild(textDiv);
+
+    // Right: primary CTA button with arrow
+    siblings.forEach(s => {
+      const a = s.querySelector('a[href*="contact"]') as HTMLAnchorElement | null;
+      if (a) {
+        const clone = a.cloneNode(true) as HTMLAnchorElement;
+        clone.textContent = (clone.textContent?.trim() || 'Get in touch') + ' →';
+        wrapper.appendChild(clone);
+      }
+    });
+
+    h3.parentNode?.insertBefore(wrapper, h3);
+    h3.remove();
+    siblings.forEach(s => s.remove());
+  });
+</script>

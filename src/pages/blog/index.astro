@@ -212,8 +212,8 @@ const formatDate = (d: Date) =>
 
 /* Right: illustration panel */
 .blog-featured-illus-panel {
-  background: #161616;
-  border-left: 1px solid rgba(255,255,255,0.07);
+  background: #F5F5F2;
+  border-left: 1px solid #E0E0DC;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -223,26 +223,25 @@ const formatDate = (d: Date) =>
   transition: background 0.3s;
 }
 .blog-featured-card:hover .blog-featured-illus-panel {
-  background: #1a1a1a;
+  background: #efefeb;
 }
 .blog-featured-illus-svg {
   width: 100%;
 }
-/* Invert SVG strokes (black → white) for the dark panel */
 .blog-featured-illus-svg svg {
   width: 100%;
   height: auto;
-  filter: invert(1) opacity(0.75);
-  transition: filter 0.4s ease, transform 0.5s ease;
+  opacity: 0.85;
+  transition: opacity 0.4s ease, transform 0.5s ease;
 }
 .blog-featured-card:hover .blog-featured-illus-svg svg {
-  filter: invert(1) opacity(0.9);
+  opacity: 1;
   transform: scale(1.03);
 }
 .blog-featured-illus-empty {
   width: 100%;
   height: 100%;
-  background: #1a1a1a;
+  background: #f5f5f2;
 }
 .blog-featured-top {
   display: flex;

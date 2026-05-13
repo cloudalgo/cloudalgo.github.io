@@ -93,5 +93,4 @@ So here clearly mentioned that Heroku connect uses SOAP / Bulk API s
 
 Unlock the full potential of Heroku Connect with our team of dedicated experts. Whether you're new to Heroku Connect or looking to optimize your existing setup, our specialists are here to assist you every step of the way.
 
-
-[Get in touch ](/contactUs)<div
+[Get in touch](/contact)

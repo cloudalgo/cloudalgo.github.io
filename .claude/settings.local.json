@@ -1,0 +1,47 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//Users/sandeepkumar/.claude/plugins/cache/claude-plugins-official/superpowers/5.1.0/skills/brainstorming/**)",
+      "mcp__plugin_chrome-devtools-mcp_chrome-devtools__navigate_page",
+      "mcp__plugin_chrome-devtools-mcp_chrome-devtools__take_screenshot",
+      "Read(//var/folders/wg/8tkyj7s54_73n8x3wl0wk1mm0000gn/T/chrome-devtools-mcp-WVwHB1/**)",
+      "Read(//private/var/folders/wg/8tkyj7s54_73n8x3wl0wk1mm0000gn/T/chrome-devtools-mcp-WVwHB1/**)",
+      "mcp__plugin_figma_figma__get_design_context",
+      "Skill(update-config)",
+      "Skill(update-config:*)",
+      "Read(//Users/sandeepkumar/.claude/**)",
+      "mcp__plugin_chrome-devtools-mcp_chrome-devtools__evaluate_script",
+      "mcp__plugin_chrome-devtools-mcp_chrome-devtools__new_page",
+      "Read(//Volumes/WorkHD/cloudalgo/cloudalgo.github.io/**)",
+      "mcp__plugin_chrome-devtools-mcp_chrome-devtools__resize_page",
+      "Read(//var/folders/wg/8tkyj7s54_73n8x3wl0wk1mm0000gn/T/**)",
+      "Read(//private/var/folders/wg/8tkyj7s54_73n8x3wl0wk1mm0000gn/T/**)",
+      "mcp__plugin_figma_figma__get_metadata",
+      "mcp__plugin_chrome-devtools-mcp_chrome-devtools__list_pages",
+      "mcp__plugin_playwright_playwright__browser_navigate",
+      "mcp__plugin_playwright_playwright__browser_take_screenshot",
+      "mcp__plugin_figma_figma__whoami",
+      "mcp__plugin_playwright_playwright__browser_snapshot",
+      "mcp__plugin_figma_figma__get_screenshot",
+      "Read(//Volumes/WorkHD/cloudalgo/website/web-v2/**)",
+      "mcp__plugin_chrome-devtools-mcp_chrome-devtools__select_page",
+      "mcp__plugin_chrome-devtools-mcp_chrome-devtools__take_snapshot",
+      "Read(//Users/sandeepkumar/Desktop/**)",
+      "mcp__plugin_playwright_playwright__browser_wait_for",
+      "mcp__plugin_playwright_playwright__browser_click",
+      "mcp__plugin_playwright_playwright__browser_press_key",
+      "mcp__plugin_playwright_playwright__browser_resize",
+      "mcp__plugin_playwright_playwright__browser_console_messages",
+      "WebFetch(domain:notionary.framer.website)",
+      "mcp__plugin_playwright_playwright__browser_tabs",
+      "WebFetch(domain:cloudalgo.com)",
+      "Read(//Users/sandeepkumar/Downloads/**)",
+      "mcp__plugin_chrome-devtools-mcp_chrome-devtools__click"
+    ],
+    "additionalDirectories": [
+      "/Users/sandeepkumar/.claude",
+      "/tmp",
+      "/private/tmp"
+    ]
+  }
+}

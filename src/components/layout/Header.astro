@@ -71,9 +71,12 @@ const currentPath = Astro.url.pathname;
   border: none;
   cursor: pointer;
   padding: 0.4rem;
-  display: flex;
   align-items: center;
   justify-content: center;
+}
+/* Only apply flex when visible (mobile) */
+@media (max-width: 1023px) {
+  .hamburger { display: flex; }
 }
 
 .ham-top,
