@@ -1,0 +1,51 @@
+---
+import { getCollection } from 'astro:content';
+import Page from '../../layouts/Page.astro';
+import ProductCard from '../../components/ui/ProductCard.astro';
+
+const allProducts = await getCollection('products', ({ data }) => data.published);
+const products = allProducts.sort((a, b) => a.data.order - b.data.order);
+const hero = products[0];
+const secondary = products.slice(1);
+---
+
+<Page
+  title="Products — CloudAlgo"
+  description="Purpose-built Salesforce apps and integration connectors from the CloudAlgo team — from production-ready to early access."
+>
+
+  <!-- Page header -->
+  <div class="page-header">
+    <div class="container">
+      <nav class="breadcrumb">
+        <a href="/">Home</a>
+        <span>&rarr;</span>
+        <span>Products</span>
+      </nav>
+      <p class="section-label">Our Products</p>
+      <h1>Built for Salesforce teams.</h1>
+      <p style="max-width:540px;margin-top:1rem;font-size:1.0625rem;color:#5A5A5A;line-height:1.7;">
+        Purpose-built apps and connectors that extend what Salesforce can do — from production-ready to early access.
+      </p>
+    </div>
+  </div>
+
+  <!-- Product cards -->
+  <section style="background:#fff;padding:4rem 0;border-bottom:1px solid #E0E0DC;">
+    <div class="container">
+      <div style="display:flex;flex-direction:column;gap:1.25rem;max-width:860px;">
+        {hero && (
+          <div class="anim-fade-up">
+            <ProductCard product={hero} featured={true} />
+          </div>
+        )}
+        {secondary.map((p, i) => (
+          <div class="anim-fade-up" style={`transition-delay:${(i + 1) * 0.08}s`}>
+            <ProductCard product={p} featured={false} />
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+</Page>
