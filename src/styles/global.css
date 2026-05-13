@@ -1008,10 +1008,12 @@ textarea.form-control { resize: vertical; min-height: 140px; }
 
 .sw-tooltip {
   position: relative;
-  background: #fff;
-  border: 1px solid var(--ca-border);
-  border-left: 3px solid var(--ca-black);
-  box-shadow: 0 6px 28px rgba(0,0,0,0.13), 0 1px 4px rgba(0,0,0,0.06);
+  background: rgba(255,255,255,0.14);
+  backdrop-filter: blur(14px) saturate(1.6);
+  -webkit-backdrop-filter: blur(14px) saturate(1.6);
+  border: 1px solid rgba(255,255,255,0.3);
+  border-left: 3px solid rgba(255,255,255,0.7);
+  box-shadow: 0 6px 28px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.25);
   border-radius: 8px;
   padding: 12px 36px 12px 14px;
   width: 220px;
@@ -1022,7 +1024,7 @@ textarea.form-control { resize: vertical; min-height: 140px; }
 .sw-tooltip-text {
   font-size: 13px;
   font-weight: 500;
-  color: var(--ca-black);
+  color: #ffffff;
   margin: 0;
   line-height: 1.5;
 }
@@ -1034,7 +1036,7 @@ textarea.form-control { resize: vertical; min-height: 140px; }
   background: none;
   border: none;
   cursor: pointer;
-  color: #aaa;
+  color: rgba(255,255,255,0.6);
   font-size: 18px;
   line-height: 1;
   padding: 2px;
@@ -1042,14 +1044,16 @@ textarea.form-control { resize: vertical; min-height: 140px; }
   align-items: center;
   transition: color 150ms;
 }
-.sw-tooltip-close:hover { color: var(--ca-black); }
+.sw-tooltip-close:hover { color: #ffffff; }
 
 .sw-launcher-btn-wrap { display: flex; justify-content: flex-end; }
 
 .sw-launcher-btn {
-  background: #ffffff;
-  color: var(--ca-black);
-  border: 1.5px solid rgba(10,10,10,0.12);
+  background: rgba(255,255,255,0.18);
+  backdrop-filter: blur(14px) saturate(1.6);
+  -webkit-backdrop-filter: blur(14px) saturate(1.6);
+  color: #ffffff;
+  border: 1px solid rgba(255,255,255,0.35);
   border-radius: 100px;
   height: 50px;
   padding: 0 20px 0 14px;
@@ -1062,12 +1066,13 @@ textarea.form-control { resize: vertical; min-height: 140px; }
   align-items: center;
   gap: 8px;
   white-space: nowrap;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.22), 0 1px 6px rgba(0,0,0,0.12);
-  transition: transform 160ms cubic-bezier(0.34,1.56,0.64,1), box-shadow 160ms ease;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.28), 0 1px 6px rgba(0,0,0,0.16), inset 0 1px 0 rgba(255,255,255,0.3);
+  transition: transform 160ms cubic-bezier(0.34,1.56,0.64,1), box-shadow 160ms ease, background 160ms ease;
 }
 .sw-launcher-btn:hover {
+  background: rgba(255,255,255,0.28);
   transform: scale(1.05) translateY(-2px);
-  box-shadow: 0 8px 32px rgba(0,0,0,0.28), 0 2px 8px rgba(0,0,0,0.14);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.32), 0 2px 8px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.4);
 }
 .sw-launcher-btn svg { font-size: 18px; flex-shrink: 0; }
 
