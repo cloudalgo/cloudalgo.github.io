@@ -1,86 +1,6 @@
 ---
 import Page from '../layouts/Page.astro';
-
-const caseStudies = [
-  {
-    id: 'retailscale',
-    index: '01',
-    company: 'RetailScale',
-    industry: 'Retail',
-    service: 'Salesforce',
-    metric: '40%',
-    metricLabel: 'increase in pipeline visibility',
-    summary: 'Replaced spreadsheet-based sales tracking with a unified Sales Cloud implementation, giving leadership real-time visibility across 12 regional teams.',
-    tags: ['Sales Cloud', 'LWC', 'SOQL', 'Reports & Dashboards'],
-    duration: '14 weeks',
-    result: 'Full Sales Cloud rollout with custom forecasting dashboards',
-  },
-  {
-    id: 'medbridge',
-    index: '02',
-    company: 'MedBridge',
-    industry: 'Healthcare',
-    service: 'Heroku',
-    metric: '18×',
-    metricLabel: 'faster patient onboarding',
-    summary: 'Built a HIPAA-compliant patient intake portal on Heroku, connected to Salesforce Health Cloud via REST APIs — reducing onboarding from 3 days to 4 hours.',
-    tags: ['Heroku', 'Health Cloud', 'REST API', 'PostgreSQL'],
-    duration: '18 weeks',
-    result: 'Patient portal serving 50,000+ active records',
-  },
-  {
-    id: 'gridflow',
-    index: '03',
-    company: 'GridFlow Energy',
-    industry: 'Energy',
-    service: 'MuleSoft',
-    metric: '60%',
-    metricLabel: 'reduction in manual data entry',
-    summary: 'Unified SAP ERP and Salesforce via MuleSoft Anypoint Platform, eliminating double-entry across billing, metering, and CRM systems.',
-    tags: ['MuleSoft', 'SAP Integration', 'Anypoint', 'Apex'],
-    duration: '22 weeks',
-    result: '14 system integrations running on a single API mesh',
-  },
-  {
-    id: 'shieldinsure',
-    index: '04',
-    company: 'ShieldInsure',
-    industry: 'Insurance',
-    service: 'Salesforce',
-    metric: '91',
-    metricLabel: 'CSAT score — up from 72',
-    summary: 'Overhauled Service Cloud with a custom LWC agent console, automated case routing, and SLA dashboards. Agent handle time dropped by 35%.',
-    tags: ['Service Cloud', 'LWC', 'Omni-Channel', 'Einstein'],
-    duration: '16 weeks',
-    result: 'Deployed to 200+ service agents across 3 regions',
-  },
-  {
-    id: 'partsco',
-    index: '05',
-    company: 'PartsCo',
-    industry: 'Manufacturing',
-    service: 'Salesforce',
-    metric: '1 day',
-    metricLabel: 'quote turnaround — down from 5',
-    summary: 'Implemented Salesforce CPQ with automated pricing rules, product bundles, and approval workflows. Sales reps now generate accurate quotes without engineering sign-off.',
-    tags: ['CPQ', 'Apex', 'Flow Automation', 'Price Books'],
-    duration: '20 weeks',
-    result: '3,000+ quotes processed in first quarter post-launch',
-  },
-  {
-    id: 'lifesciences',
-    index: '06',
-    company: 'LifeSciences+',
-    industry: 'Pharma',
-    service: 'AppExchange',
-    metric: '200+',
-    metricLabel: 'enterprise customers at launch',
-    summary: 'Designed, built, and published a native AppExchange product for clinical trial management — passing Salesforce Security Review on first submission.',
-    tags: ['AppExchange', 'LWC', 'Security Review', 'Managed Package'],
-    duration: '28 weeks',
-    result: 'Listed on AppExchange — 4.8 ★ average rating',
-  },
-];
+import { caseStudies } from '../data/case-studies';
 
 ---
 
@@ -159,6 +79,8 @@ const caseStudies = [
           <article
             class="cs-card anim-fade-up"
             data-service={cs.service}
+            onclick={`window.location='/case-studies/${cs.id}'`}
+            style="cursor:pointer;"
           >
             <!-- Giant background metric -->
             <div class="cs-card-metric-bg" aria-hidden="true">{cs.metric}</div>
@@ -290,6 +212,9 @@ const caseStudies = [
                   <span class="cs-tag">{tag}</span>
                 ))}
               </div>
+              <a href={`/case-studies/${cs.id}`} class="cs-card-link">
+                Read case study &rarr;
+              </a>
             </div>
           </article>
         ))}
@@ -563,6 +488,20 @@ const caseStudies = [
   border-radius: 100px;
   padding: 0.2rem 0.625rem;
 }
+
+.cs-card-link {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 1rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: #0A0A0A;
+  text-decoration: none;
+  border-bottom: 1.5px solid #E0E0DC;
+  padding-bottom: 1px;
+  transition: border-color 150ms, opacity 150ms;
+}
+.cs-card-link:hover { border-color: #0A0A0A; opacity: 0.7; color: #0A0A0A; }
 
 /* Hidden card (filtered out) */
 .cs-card.hidden {
