@@ -1,4 +1,6 @@
 ---
+import CookieConsent from '../components/ui/CookieConsent.astro';
+
 export interface Props {
   title: string;
   description?: string;
@@ -71,26 +73,6 @@ const ogImage = image.startsWith('http') ? image : `${imageHost}${image}`;
     <!-- JSON-LD structured data -->
     {schema && <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />}
 
-    <!-- Google Analytics GA4 -->
-    <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-5WYSWY2G6Z"></script>
-    <script is:inline>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-5WYSWY2G6Z');
-    </script>
-
-    <!-- HubSpot tracking -->
-    <script is:inline async defer src="//js.hs-scripts.com/21905808.js"></script>
-
-    <!-- Microsoft Clarity -->
-    <script is:inline>
-      (function(c,l,a,r,i,t,y){
-        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-      })(window, document, "clarity", "script", "wqcruv2yej");
-    </script>
   </head>
   <body>
     <slot />
@@ -151,5 +133,6 @@ const ogImage = image.startsWith('http') ? image : `${imageHost}${image}`;
         }
       });
     </script>
+    <CookieConsent />
   </body>
 </html>
