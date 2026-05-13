@@ -7,15 +7,18 @@ interface Props {
   dark?: boolean;
 }
 
-const { product, featured = false, dark = false } = Astro.props;
+const { product, featured: _featured = false, dark = false } = Astro.props;
 const { data } = product;
 const slug = product.id;
 
 const statusLabel = (s: string) =>
   s === 'ga' ? 'Generally Available' : s === 'preview' ? 'Preview' : 'Beta';
 const isEarlyAccess = data.status === 'preview' || data.status === 'beta';
+const typeLabel = (t: string) =>
+  t === 'salesforce-app' ? 'Salesforce App' : 'Integration';
+const orderNum = String(data.order).padStart(2, '0');
 
-// Small SVG icons per product (monochromatic, stroke only)
+// Small icon SVGs for dark variant cards
 const productIcons: Record<string, string> = {
   'cloudalgo-flow-audit': `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
     <circle cx="12" cy="3.5" r="2" stroke="currentColor" stroke-width="1.5"/>
@@ -34,6 +37,63 @@ const productIcons: Record<string, string> = {
   </svg>`,
 };
 const iconSvg = productIcons[slug] ?? productIcons['cloudalgo-flow-audit'];
+
+// Card-sized illustration SVGs (320×160 viewBox, matching case study style)
+const cardIllos: Record<string, string> = {
+  'cloudalgo-flow-audit': `<svg viewBox="0 0 320 160" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">
+    <rect x="110" y="14" width="100" height="30" rx="15" stroke="#0A0A0A" stroke-width="1.5" opacity="0.6"/>
+    <text x="160" y="33" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" font-weight="700" fill="#0A0A0A" opacity="0.7">Record Changed</text>
+    <line x1="160" y1="44" x2="160" y2="58" stroke="#0A0A0A" stroke-width="1.5" opacity="0.5" stroke-linecap="round"/>
+    <path d="M155 55 L160 59 L165 55" stroke="#0A0A0A" stroke-width="1.5" opacity="0.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M160 59 L196 86 L160 113 L124 86 Z" stroke="#0A0A0A" stroke-width="1.5" opacity="0.7" stroke-linejoin="round"/>
+    <text x="160" y="83" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8" font-weight="700" fill="#0A0A0A" opacity="0.7">Stage?</text>
+    <text x="160" y="95" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8" fill="#5A5A5A" opacity="0.8">Closed Won</text>
+    <line x1="196" y1="86" x2="240" y2="86" stroke="#0A0A0A" stroke-width="1.5" opacity="0.5" stroke-linecap="round"/>
+    <path d="M236 81 L240 86 L236 91" stroke="#0A0A0A" stroke-width="1.5" opacity="0.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect x="240" y="70" width="64" height="32" rx="5" stroke="#0A0A0A" stroke-width="1.5" opacity="0.55"/>
+    <text x="272" y="83" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8" font-weight="700" fill="#0A0A0A" opacity="0.7">Create Task</text>
+    <text x="272" y="95" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8" fill="#5A5A5A" opacity="0.7">Notify</text>
+    <line x1="160" y1="113" x2="160" y2="135" stroke="#0A0A0A" stroke-width="1.5" opacity="0.4" stroke-linecap="round"/>
+    <rect x="110" y="135" width="100" height="18" rx="9" fill="#0A0A0A" opacity="0.85"/>
+    <text x="160" y="148" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" font-weight="700" fill="#fff">End</text>
+    <rect x="8" y="36" width="70" height="20" rx="10" stroke="#0A0A0A" stroke-width="1.5" opacity="0.35"/>
+    <text x="43" y="51" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" font-weight="700" fill="#0A0A0A" opacity="0.55">14 Flows</text>
+    <rect x="8" y="64" width="70" height="20" rx="10" stroke="#0A0A0A" stroke-width="1.5" opacity="0.28"/>
+    <text x="43" y="79" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" fill="#0A0A0A" opacity="0.45">3 Warnings</text>
+  </svg>`,
+  'sf-sync-connector': `<svg viewBox="0 0 320 160" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">
+    <rect x="16" y="30" width="100" height="100" rx="8" stroke="#0A0A0A" stroke-width="2" opacity="0.7"/>
+    <rect x="16" y="30" width="100" height="30" rx="8" stroke="#0A0A0A" stroke-width="1.5" fill="none" opacity="0.5"/>
+    <line x1="16" y1="60" x2="116" y2="60" stroke="#0A0A0A" stroke-width="1" opacity="0.3"/>
+    <text x="66" y="49" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" font-weight="700" fill="#0A0A0A" opacity="0.75">Salesforce</text>
+    <rect x="28" y="68" width="76" height="14" rx="3" stroke="#0A0A0A" stroke-width="1" opacity="0.3"/>
+    <text x="66" y="79" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8" fill="#0A0A0A" opacity="0.55">Account</text>
+    <rect x="28" y="88" width="76" height="14" rx="3" stroke="#0A0A0A" stroke-width="1" opacity="0.3"/>
+    <text x="66" y="99" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8" fill="#0A0A0A" opacity="0.55">Contact</text>
+    <rect x="28" y="108" width="76" height="14" rx="3" fill="rgba(10,10,10,0.04)" stroke="#0A0A0A" stroke-width="1" opacity="0.4"/>
+    <text x="66" y="119" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8" fill="#0A0A0A" opacity="0.6">Opportunity</text>
+    <path d="M118 72 L202 72" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" opacity="0.55"/>
+    <path d="M198 67 L202 72 L198 77" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.55"/>
+    <path d="M202 95 L118 95" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" opacity="0.45"/>
+    <path d="M122 90 L118 95 L122 100" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.45"/>
+    <path d="M118 112 L202 112" stroke="#0A0A0A" stroke-width="1.5" stroke-dasharray="4 3" stroke-linecap="round" opacity="0.3"/>
+    <circle cx="160" cy="83" r="5" fill="#0A0A0A" opacity="0.12"/>
+    <circle cx="160" cy="83" r="2.5" fill="#0A0A0A" opacity="0.5"/>
+    <rect x="204" y="30" width="100" height="100" rx="8" stroke="#0A0A0A" stroke-width="2" opacity="0.7"/>
+    <rect x="204" y="30" width="100" height="30" rx="8" stroke="#0A0A0A" stroke-width="1.5" fill="none" opacity="0.5"/>
+    <line x1="204" y1="60" x2="304" y2="60" stroke="#0A0A0A" stroke-width="1" opacity="0.3"/>
+    <text x="254" y="49" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" font-weight="700" fill="#0A0A0A" opacity="0.75">External DB</text>
+    <rect x="216" y="68" width="76" height="14" rx="3" stroke="#0A0A0A" stroke-width="1" opacity="0.3"/>
+    <text x="254" y="79" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8" fill="#0A0A0A" opacity="0.55">customers</text>
+    <rect x="216" y="88" width="76" height="14" rx="3" stroke="#0A0A0A" stroke-width="1" opacity="0.3"/>
+    <text x="254" y="99" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8" fill="#0A0A0A" opacity="0.55">contacts</text>
+    <rect x="216" y="108" width="76" height="14" rx="3" fill="rgba(10,10,10,0.04)" stroke="#0A0A0A" stroke-width="1" opacity="0.4"/>
+    <text x="254" y="119" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8" fill="#0A0A0A" opacity="0.6">deals</text>
+    <rect x="110" y="8" width="100" height="18" rx="9" stroke="#0A0A0A" stroke-width="1.5" opacity="0.5"/>
+    <text x="160" y="21" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" font-weight="700" fill="#0A0A0A" opacity="0.7">Auto-resolve conflicts</text>
+  </svg>`,
+};
+const cardIllo = cardIllos[slug] ?? '';
 ---
 
 {dark ? (
@@ -62,66 +122,158 @@ const iconSvg = productIcons[slug] ?? productIcons['cloudalgo-flow-audit'];
     </div>
   </div>
 ) : (
-  <div style={`border:${featured ? '2px solid #0A0A0A' : '1px solid #E0E0DC'};border-radius:12px;padding:1.75rem;background:#fff;transition:border-color 0.2s;`} class="product-card-light">
-    <div style="display:flex;gap:1.5rem;align-items:flex-start;">
-      <div style={`width:${featured ? '56px' : '48px'};height:${featured ? '56px' : '48px'};border-radius:${featured ? '12px' : '10px'};background:#F5F5F2;border:1px solid #E0E0DC;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:#0A0A0A;`} set:html={iconSvg} />
-      <div style="flex:1;min-width:0;">
-        <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.4rem;flex-wrap:wrap;">
-          {data.status === 'ga' ? (
-            <span style="background:#0A0A0A;color:#fff;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:100px;text-transform:uppercase;letter-spacing:0.06em;">
-              {statusLabel(data.status)}
-            </span>
-          ) : (
-            <span style="border:1.5px solid #0A0A0A;color:#0A0A0A;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:100px;text-transform:uppercase;letter-spacing:0.06em;">
-              {statusLabel(data.status)}
-            </span>
-          )}
-          {isEarlyAccess && (
-            <span style="font-size:0.65rem;color:#5A5A5A;">Early access &middot; Feedback welcome</span>
-          )}
-          {data.version && (
-            <span style="font-size:0.65rem;color:#5A5A5A;">{data.version}</span>
-          )}
-        </div>
-        <div style={`font-size:${featured ? '1.125rem' : '1rem'};font-weight:${featured ? '800' : '700'};color:#0A0A0A;margin-bottom:0.35rem;`}>
-          {data.title}
-        </div>
-        <div style="font-size:0.875rem;color:#5A5A5A;line-height:1.6;margin-bottom:0.875rem;">
-          {data.excerpt}
-        </div>
-        {featured && data.features.length > 0 && (
-          <ul style="list-style:none;padding:0;margin:0 0 1rem;display:flex;flex-direction:column;gap:0.5rem;">
-            {data.features.slice(0, 3).map(f => (
-              <li style="display:flex;gap:0.625rem;align-items:flex-start;">
-                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" style="flex-shrink:0;margin-top:0.125rem;">
-                  <rect x="0.75" y="0.75" width="16.5" height="16.5" rx="4.25" stroke="#0A0A0A" stroke-width="1.5"/>
-                  <path d="M5.5 9L7.8 11.5L12.5 6.5" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                <span style="font-size:0.875rem;color:#5A5A5A;line-height:1.5;">{f.title}</span>
-              </li>
-            ))}
-          </ul>
+  <article class="prod-card">
+    <!-- Illustration area (matches .cs-card-illo) -->
+    <div class="prod-card-illo" aria-hidden="true" set:html={cardIllo} />
+
+    <!-- Card body -->
+    <div class="prod-card-body">
+      <div class="prod-card-header">
+        <span class="prod-card-index">{orderNum}</span>
+        <span class="prod-card-dot">&middot;</span>
+        <span class="prod-card-type">{typeLabel(data.type)}</span>
+      </div>
+      <h2 class="prod-card-title">{data.title}</h2>
+      <div style="margin-bottom:0.75rem;">
+        {data.status === 'ga' ? (
+          <span style="background:#0A0A0A;color:#fff;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:100px;text-transform:uppercase;letter-spacing:0.06em;">
+            {statusLabel(data.status)}
+          </span>
+        ) : (
+          <span style="border:1.5px solid #0A0A0A;color:#0A0A0A;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:100px;text-transform:uppercase;letter-spacing:0.06em;">
+            {statusLabel(data.status)}
+          </span>
         )}
-        <div style="display:flex;gap:0.625rem;flex-wrap:wrap;">
-          <a href={`/products/${slug}`} class="btn btn-primary" style="font-size:0.8125rem;padding:0.5rem 1.1rem;">
-            Learn more &rarr;
+        {isEarlyAccess && (
+          <span style="font-size:0.65rem;color:#5A5A5A;margin-left:0.4rem;">Early access</span>
+        )}
+      </div>
+      <p class="prod-card-excerpt">{data.excerpt}</p>
+      <ul class="prod-card-features">
+        {data.features.slice(0, 3).map(f => (
+          <li>
+            <svg width="16" height="16" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+              <rect x="0.75" y="0.75" width="16.5" height="16.5" rx="4.25" stroke="#0A0A0A" stroke-width="1.5"/>
+              <path d="M5.5 9L7.8 11.5L12.5 6.5" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>{f.title}</span>
+          </li>
+        ))}
+      </ul>
+      <div class="prod-card-ctas">
+        <a href={`/products/${slug}`} class="btn btn-primary" style="font-size:0.8125rem;padding:0.5rem 1.25rem;">
+          Learn more &rarr;
+        </a>
+        {data.appexchangeUrl ? (
+          <a href={data.appexchangeUrl} target="_blank" rel="noopener noreferrer" class="btn btn-outline" style="font-size:0.8125rem;padding:0.5rem 1.25rem;">
+            AppExchange &nearr;
           </a>
-          {data.appexchangeUrl ? (
-            <a href={data.appexchangeUrl} target="_blank" rel="noopener noreferrer" class="btn btn-outline" style="font-size:0.8125rem;padding:0.5rem 1.1rem;">
-              AppExchange &nearr;
-            </a>
-          ) : (
-            <a href="/contact" class="btn btn-outline" style="font-size:0.8125rem;padding:0.5rem 1.1rem;">
-              Join waitlist
-            </a>
-          )}
-        </div>
+        ) : (
+          <a href="/contact" class="btn btn-outline" style="font-size:0.8125rem;padding:0.5rem 1.25rem;">
+            Join waitlist
+          </a>
+        )}
       </div>
     </div>
-  </div>
+  </article>
 )}
 
 <style>
-.product-card-light:hover { border-color: #0A0A0A !important; }
+/* Light card — matches case study card pattern */
+.prod-card {
+  background: #fff;
+  border: 1px solid #E0E0DC;
+  border-radius: 16px;
+  overflow: hidden;
+  transition: transform 220ms cubic-bezier(0.34,1.56,0.64,1),
+              box-shadow 220ms ease,
+              border-color 220ms ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.prod-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(10,10,10,0.1), 0 2px 8px rgba(10,10,10,0.06);
+  border-color: #0A0A0A;
+}
+.prod-card-illo {
+  background: #F5F5F2;
+  border-bottom: 1px solid #E0E0DC;
+  padding: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+}
+.prod-card-body {
+  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.prod-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  margin-bottom: 0.625rem;
+}
+.prod-card-index {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #0A0A0A;
+  letter-spacing: 0.04em;
+}
+.prod-card-dot {
+  font-size: 0.7rem;
+  color: #AEAEA8;
+}
+.prod-card-type {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #5A5A5A;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.prod-card-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #0A0A0A;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin-bottom: 0.625rem;
+}
+.prod-card-excerpt {
+  font-size: 0.9rem;
+  color: #5A5A5A;
+  line-height: 1.65;
+  margin-bottom: 1rem;
+  flex: 1;
+}
+.prod-card-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.prod-card-features li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+.prod-card-features li svg { flex-shrink: 0; margin-top: 0.1rem; }
+.prod-card-features li span {
+  font-size: 0.875rem;
+  color: #5A5A5A;
+  line-height: 1.5;
+}
+.prod-card-ctas {
+  display: flex;
+  gap: 0.625rem;
+  flex-wrap: wrap;
+  margin-top: auto;
+}
 .prod-card-link-dark:hover { color: #fff !important; }
 </style>

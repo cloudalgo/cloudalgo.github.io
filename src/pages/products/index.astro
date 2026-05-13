@@ -31,9 +31,9 @@ const secondary = products.slice(1);
   </div>
 
   <!-- Product cards -->
-  <section style="background:#fff;padding:4rem 0;border-bottom:1px solid #E0E0DC;">
+  <section style="background:#F5F5F2;padding:4rem 0;border-bottom:1px solid #E0E0DC;">
     <div class="container">
-      <div style="display:flex;flex-direction:column;gap:1.25rem;max-width:860px;">
+      <div class="prod-grid">
         {hero && (
           <div class="anim-fade-up">
             <ProductCard product={hero} featured={true} />
@@ -49,3 +49,14 @@ const secondary = products.slice(1);
   </section>
 
 </Page>
+
+<style>
+.prod-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+}
+@media (max-width: 767px) {
+  .prod-grid { grid-template-columns: 1fr; }
+}
+</style>
