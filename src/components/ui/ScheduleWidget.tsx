@@ -154,6 +154,7 @@ function ScheduleLauncher({ tooltipVisible, onDismissTooltip, onOpen, bouncing }
           aria-label="Schedule a meeting"
         >
           <AiFillSchedule />
+          Schedule a Call
         </button>
       </div>
     </div>
