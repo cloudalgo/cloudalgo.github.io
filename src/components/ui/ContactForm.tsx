@@ -8,6 +8,10 @@ interface FormData {
   message: string;
 }
 
+const HUBSPOT_PORTAL_ID = '21905808';
+const HUBSPOT_FORM_ID = 'bdb87791-63e2-42ac-87b4-a6afa5675e4a';
+const HUBSPOT_URL = `https://api.hsforms.com/submissions/v3/integration/submit/${HUBSPOT_PORTAL_ID}/${HUBSPOT_FORM_ID}`;
+
 export default function ContactForm() {
   const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
   const { register, handleSubmit, formState: { errors }, reset } = useForm<FormData>();
@@ -15,13 +19,36 @@ export default function ContactForm() {
   const onSubmit = async (data: FormData) => {
     setStatus('sending');
     try {
-      const res = await fetch('https://formspree.io/f/YOUR_FORM_ID', {
+      const res = await fetch(HUBSPOT_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify(data),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          fields: [
+            { name: 'firstname', value: data.firstName },
+            { name: 'lastname', value: data.lastName },
+            { name: 'email', value: data.email },
+            { name: 'message', value: data.message },
+          ],
+          context: {
+            pageUri: 'cloudalgo.com/contact',
+            pageName: 'CloudAlgo Contact Form',
+          },
+        }),
       });
-      if (res.ok) { setStatus('sent'); reset(); }
-      else setStatus('error');
+
+      if (res.ok) {
+        setStatus('sent');
+        reset();
+        // GA4 event
+        if (typeof window !== 'undefined' && (window as any).gtag) {
+          (window as any).gtag('event', 'form_submit', {
+            event_category: 'Contact',
+            event_label: 'HubSpot Contact Form',
+          });
+        }
+      } else {
+        setStatus('error');
+      }
     } catch {
       setStatus('error');
     }
@@ -43,7 +70,7 @@ export default function ContactForm() {
       <div className="row">
         <div className="col-md-12 form-group">
           <input type="text" className="form-control" placeholder="Your first name"
-            {...register('firstName', { required: 'First name is required' })} />
+            {...register('firstName', { required: 'First name is required', maxLength: { value: 100, message: 'Max 100 characters' } })} />
           {errors.firstName && <span className="error-line">{errors.firstName.message}</span>}
         </div>
       </div>
@@ -51,7 +78,7 @@ export default function ContactForm() {
       <div className="row mt-3">
         <div className="col-md-12 form-group">
           <input type="text" className="form-control" placeholder="Your last name"
-            {...register('lastName', { required: 'Last name is required' })} />
+            {...register('lastName', { required: 'Last name is required', maxLength: { value: 100, message: 'Max 100 characters' } })} />
           {errors.lastName && <span className="error-line">{errors.lastName.message}</span>}
         </div>
       </div>
@@ -61,7 +88,8 @@ export default function ContactForm() {
           <input type="email" className="form-control" placeholder="Email"
             {...register('email', {
               required: 'Email is required',
-              pattern: { value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: 'Invalid email address' }
+              pattern: { value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: 'Invalid email address' },
+              maxLength: { value: 100, message: 'Max 100 characters' },
             })} />
           {errors.email && <span className="error-line">{errors.email.message}</span>}
         </div>
@@ -70,7 +98,7 @@ export default function ContactForm() {
       <div className="row mt-3">
         <div className="col-md-12 form-group">
           <textarea className="form-control" rows={7} placeholder="Write your message"
-            {...register('message', { required: 'Message is required' })} />
+            {...register('message', { required: 'Message is required', maxLength: { value: 500, message: 'Max 500 characters' } })} />
           {errors.message && <span className="error-line">{errors.message.message}</span>}
         </div>
       </div>

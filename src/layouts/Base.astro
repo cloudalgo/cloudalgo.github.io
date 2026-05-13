@@ -60,18 +60,31 @@ const ogImage = image.startsWith('http') ? image : `${site}${image}`;
     <!-- JSON-LD structured data -->
     {schema && <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />}
 
-    <!-- Google Analytics — replace GA_MEASUREMENT_ID with your G-XXXXXXXXXX -->
-    <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
-    <script>
+    <!-- Google Analytics GA4 -->
+    <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-5WYSWY2G6Z"></script>
+    <script is:inline>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', 'GA_MEASUREMENT_ID');
-    </script> -->
+      gtag('config', 'G-5WYSWY2G6Z');
+    </script>
+
+    <!-- HubSpot tracking -->
+    <script is:inline async defer src="//js.hs-scripts.com/21905808.js"></script>
+
+    <!-- Microsoft Clarity -->
+    <script is:inline>
+      (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+      })(window, document, "clarity", "script", "wqcruv2yej");
+    </script>
   </head>
   <body>
     <slot />
     <script>
+      // Scroll animations
       const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
@@ -83,6 +96,48 @@ const ogImage = image.startsWith('http') ? image : `${site}${image}`;
 
       document.querySelectorAll('.anim-fade-up, .anim-scale-pop').forEach(el => {
         observer.observe(el);
+      });
+
+      // GA4: scroll depth (25 / 50 / 75 / 100%)
+      const scrollMilestones = new Set<number>();
+      window.addEventListener('scroll', () => {
+        const pct = Math.round(
+          (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100
+        );
+        for (const milestone of [25, 50, 75, 100]) {
+          if (pct >= milestone && !scrollMilestones.has(milestone)) {
+            scrollMilestones.add(milestone);
+            (window as any).gtag?.('event', 'scroll_depth', {
+              event_category: 'Engagement',
+              event_label: `${milestone}%`,
+              value: milestone,
+            });
+          }
+        }
+      }, { passive: true });
+
+      // GA4: CTA button clicks
+      document.addEventListener('click', (e) => {
+        const el = (e.target as Element).closest('a, button');
+        if (!el) return;
+        const text = el.textContent?.trim().slice(0, 50);
+        const href = (el as HTMLAnchorElement).href || '';
+
+        // Outbound links
+        if (href && !href.includes('cloudalgo.com') && href.startsWith('http')) {
+          (window as any).gtag?.('event', 'outbound_click', {
+            event_category: 'Outbound',
+            event_label: href,
+          });
+        }
+
+        // CTA buttons (Get in Touch, Book, Contact, Schedule)
+        if (/get in touch|book|contact|schedule|send message/i.test(text || '')) {
+          (window as any).gtag?.('event', 'cta_click', {
+            event_category: 'CTA',
+            event_label: text,
+          });
+        }
       });
     </script>
   </body>
