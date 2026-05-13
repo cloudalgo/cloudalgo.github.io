@@ -37,7 +37,7 @@ const hasPricingOrReqs = (data.pricing && data.pricing.length > 0) ||
         <span>&rarr;</span>
         <a href="/products">Products</a>
         <span>&rarr;</span>
-        <span>{data.title}</span>
+        <span aria-current="page">{data.title}</span>
       </nav>
       <p class="section-label">{typeLabel(data.type)}</p>
       <div style="display:flex;align-items:flex-start;gap:1.5rem;margin-top:1rem;">
@@ -127,14 +127,16 @@ const hasPricingOrReqs = (data.pricing && data.pricing.length > 0) ||
             <div>
               <p class="section-label">Licensing</p>
               <h3 style="font-size:1.125rem;font-weight:700;color:#0A0A0A;margin-bottom:1rem;">Pricing</h3>
-              <div style="border:1px solid #E0E0DC;border-radius:12px;overflow:hidden;background:#fff;">
-                {data.pricing.map((row, i) => (
-                  <div style={`padding:0.875rem 1.25rem;display:flex;justify-content:space-between;align-items:center;${i > 0 ? 'border-top:1px solid #E0E0DC;' : ''}`}>
-                    <span style="font-weight:700;color:#0A0A0A;font-size:0.9375rem;">{row.tier}</span>
-                    <span style="color:#5A5A5A;font-weight:600;font-size:0.9375rem;">{row.price}</span>
-                  </div>
-                ))}
-              </div>
+              <table style="width:100%;border-collapse:collapse;border:1px solid #E0E0DC;border-radius:12px;overflow:hidden;background:#fff;">
+                <tbody>
+                  {data.pricing.map((row, i) => (
+                    <tr style={i > 0 ? 'border-top:1px solid #E0E0DC;' : ''}>
+                      <td style="padding:0.875rem 1.25rem;font-weight:700;color:#0A0A0A;font-size:0.9375rem;">{row.tier}</td>
+                      <td style="padding:0.875rem 1.25rem;color:#5A5A5A;font-weight:600;font-size:0.9375rem;text-align:right;">{row.price}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           )}
           {data.requirements && data.requirements.length > 0 && (
