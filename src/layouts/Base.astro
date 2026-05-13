@@ -28,8 +28,7 @@ const {
   schema,
 } = Astro.props;
 
-// Use github.io as image host until cloudalgo.com DNS points to GitHub Pages
-const imageHost = 'https://cloudalgo.github.io';
+const imageHost = 'https://cloudalgo.com';
 const ogImage = image.startsWith('http') ? image : `${imageHost}${image}`;
 ---
 <!doctype html>
@@ -46,7 +45,7 @@ const ogImage = image.startsWith('http') ? image : `${imageHost}${image}`;
 
     <!-- Open Graph -->
     <meta property="og:site_name" content="CloudAlgo" />
-    <meta property="og:logo"      content="https://cloudalgo.github.io/logo.svg" />
+    <meta property="og:logo"      content="https://cloudalgo.com/logo.svg" />
     <meta property="og:locale"    content="en_US" />
     <meta property="og:type"      content={ogType} />
     <meta property="og:title"     content={title} />
