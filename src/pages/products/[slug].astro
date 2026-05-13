@@ -20,56 +20,56 @@ const typeLabel = (t: string) =>
   t === 'salesforce-app' ? 'Salesforce App' : 'Integration Connector';
 
 const illustrations: Record<string, string> = {
-  'cloudalgo-flow-audit': `<svg viewBox="0 0 460 380" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:460px;height:auto;">
-    <!-- Flow audit: flowchart with dependency map -->
-    <!-- Start node -->
-    <rect x="160" y="24" width="140" height="40" rx="20" stroke="#0A0A0A" stroke-width="2"/>
-    <text x="230" y="49" text-anchor="middle" font-family="Outfit,sans-serif" font-size="12" font-weight="700" fill="#0A0A0A">Record Changed</text>
-    <!-- Arrow down -->
-    <path d="M230 64 L230 90" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round"/>
-    <path d="M224 86 L230 90 L236 86" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-    <!-- Decision diamond -->
-    <path d="M230 90 L285 132 L230 174 L175 132 Z" stroke="#0A0A0A" stroke-width="2" stroke-linejoin="round"/>
-    <text x="230" y="129" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" font-weight="700" fill="#0A0A0A">Stage =</text>
-    <text x="230" y="144" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" fill="#5A5A5A">Closed Won?</text>
-    <!-- Yes branch right -->
-    <path d="M285 132 L350 132" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round"/>
-    <path d="M346 126 L350 132 L346 138" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-    <text x="316" y="124" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" fill="#0A0A0A">Yes</text>
-    <!-- Yes action box -->
-    <rect x="350" y="108" width="96" height="48" rx="6" stroke="#0A0A0A" stroke-width="2"/>
-    <text x="398" y="128" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" font-weight="700" fill="#0A0A0A">Create Task</text>
-    <text x="398" y="144" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" fill="#5A5A5A">Notify Team</text>
-    <!-- No branch down -->
-    <path d="M230 174 L230 210" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round"/>
-    <path d="M224 206 L230 210 L236 206" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-    <text x="218" y="195" text-anchor="end" font-family="Outfit,sans-serif" font-size="10" fill="#0A0A0A">No</text>
-    <!-- No action box -->
-    <rect x="155" y="210" width="150" height="48" rx="6" stroke="#0A0A0A" stroke-width="1.5"/>
-    <text x="230" y="230" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" font-weight="700" fill="#0A0A0A">Update Stage</text>
-    <text x="230" y="246" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" fill="#5A5A5A">Send Email Alert</text>
-    <!-- End node -->
-    <path d="M230 258 L230 285" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round"/>
-    <path d="M224 281 L230 285 L236 281" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-    <rect x="180" y="285" width="100" height="36" rx="18" fill="#0A0A0A"/>
-    <text x="230" y="308" text-anchor="middle" font-family="Outfit,sans-serif" font-size="11" font-weight="700" fill="#fff">End</text>
-    <!-- Decorative stat badges left -->
-    <rect x="18" y="54" width="90" height="28" rx="14" stroke="#0A0A0A" stroke-width="1.5" opacity="0.5"/>
-    <text x="63" y="73" text-anchor="middle" font-family="Outfit,sans-serif" font-size="11" font-weight="700" fill="#0A0A0A" opacity="0.7">14 Active Flows</text>
-    <rect x="18" y="94" width="90" height="28" rx="14" stroke="#0A0A0A" stroke-width="1.5" opacity="0.4"/>
-    <text x="63" y="113" text-anchor="middle" font-family="Outfit,sans-serif" font-size="11" font-weight="700" fill="#0A0A0A" opacity="0.6">3 Warnings</text>
-    <rect x="18" y="134" width="90" height="28" rx="14" stroke="#0A0A0A" stroke-width="1.5" opacity="0.35"/>
-    <text x="63" y="153" text-anchor="middle" font-family="Outfit,sans-serif" font-size="11" fill="#0A0A0A" opacity="0.55">2 Inactive</text>
-    <!-- Health bar right -->
-    <rect x="360" y="200" width="84" height="10" rx="5" stroke="#0A0A0A" stroke-width="1.5" opacity="0.3"/>
-    <rect x="360" y="200" width="65" height="10" rx="5" fill="#0A0A0A" opacity="0.7"/>
-    <text x="402" y="226" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" fill="#0A0A0A" opacity="0.7">Org Health: 78%</text>
-    <!-- Dependency map bottom right -->
-    <rect x="350" y="244" width="94" height="32" rx="6" stroke="#0A0A0A" stroke-width="1.5" opacity="0.45"/>
-    <text x="397" y="260" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" font-weight="700" fill="#0A0A0A" opacity="0.7">Apex Class</text>
-    <text x="397" y="272" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" fill="#5A5A5A" opacity="0.8">GetOpportunities</text>
-    <path d="M398 157 L398 196" stroke="#0A0A0A" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.35"/>
-    <path d="M398 244 L398 232" stroke="#0A0A0A" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.3"/>
+  'algobridge': `<svg viewBox="0 0 460 380" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:460px;height:auto;">
+    <!-- Left: Salesforce -->
+    <rect x="20" y="90" width="140" height="200" rx="10" stroke="#0A0A0A" stroke-width="2.5"/>
+    <rect x="20" y="90" width="140" height="44" rx="10" stroke="#0A0A0A" stroke-width="2.5" fill="none"/>
+    <path d="M20 134 L160 134" stroke="#0A0A0A" stroke-width="1.5"/>
+    <text x="90" y="117" text-anchor="middle" font-family="Outfit,sans-serif" font-size="13" font-weight="700" fill="#0A0A0A">Salesforce</text>
+    <rect x="36" y="148" width="108" height="22" rx="4" stroke="#0A0A0A" stroke-width="1.5" opacity="0.4"/>
+    <text x="90" y="163" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" fill="#0A0A0A" opacity="0.7">Account</text>
+    <rect x="36" y="178" width="108" height="22" rx="4" stroke="#0A0A0A" stroke-width="1.5" opacity="0.4"/>
+    <text x="90" y="193" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" fill="#0A0A0A" opacity="0.7">Contact</text>
+    <rect x="36" y="208" width="108" height="22" rx="4" fill="#0A0A0A" fill-opacity="0.06" stroke="#0A0A0A" stroke-width="1.5" opacity="0.5"/>
+    <text x="90" y="223" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" fill="#0A0A0A" opacity="0.7">Opportunity</text>
+    <rect x="36" y="238" width="108" height="22" rx="4" stroke="#0A0A0A" stroke-width="1.5" opacity="0.3"/>
+    <text x="90" y="253" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" fill="#0A0A0A" opacity="0.55">Custom Object</text>
+    <!-- Center: AlgoBridge engine -->
+    <rect x="180" y="160" width="100" height="60" rx="8" fill="#0A0A0A"/>
+    <text x="230" y="185" text-anchor="middle" font-family="Outfit,sans-serif" font-size="11" font-weight="700" fill="#fff">AlgoBridge</text>
+    <text x="230" y="202" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" fill="rgba(255,255,255,0.6)">10s intervals</text>
+    <!-- Right arrows -->
+    <path d="M160 178 L180 178" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M176 173 L180 178 L176 183" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M280 192 L300 192" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M296 187 L300 192 L296 197" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M180 200 L160 200" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M164 195 L160 200 L164 205" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M300 210 L280 210" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M284 205 L280 210 L284 215" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Right: PostgreSQL -->
+    <rect x="300" y="90" width="140" height="200" rx="10" stroke="#0A0A0A" stroke-width="2.5"/>
+    <rect x="300" y="90" width="140" height="44" rx="10" stroke="#0A0A0A" stroke-width="2.5" fill="none"/>
+    <path d="M300 134 L440 134" stroke="#0A0A0A" stroke-width="1.5"/>
+    <text x="370" y="117" text-anchor="middle" font-family="Outfit,sans-serif" font-size="13" font-weight="700" fill="#0A0A0A">PostgreSQL</text>
+    <rect x="316" y="148" width="108" height="22" rx="4" stroke="#0A0A0A" stroke-width="1.5" opacity="0.4"/>
+    <text x="370" y="163" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" fill="#0A0A0A" opacity="0.7">accounts</text>
+    <rect x="316" y="178" width="108" height="22" rx="4" stroke="#0A0A0A" stroke-width="1.5" opacity="0.4"/>
+    <text x="370" y="193" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" fill="#0A0A0A" opacity="0.7">contacts</text>
+    <rect x="316" y="208" width="108" height="22" rx="4" fill="#0A0A0A" fill-opacity="0.06" stroke="#0A0A0A" stroke-width="1.5" opacity="0.5"/>
+    <text x="370" y="223" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" fill="#0A0A0A" opacity="0.7">opportunities</text>
+    <rect x="316" y="238" width="108" height="22" rx="4" stroke="#0A0A0A" stroke-width="1.5" opacity="0.3"/>
+    <text x="370" y="253" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" fill="#0A0A0A" opacity="0.55">custom_table</text>
+    <!-- Stat badges -->
+    <rect x="150" y="318" width="88" height="26" rx="6" stroke="#0A0A0A" stroke-width="1.5" opacity="0.4"/>
+    <text x="194" y="335" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" font-weight="700" fill="#0A0A0A" opacity="0.65">31-day audit log</text>
+    <rect x="250" y="318" width="60" height="26" rx="6" stroke="#0A0A0A" stroke-width="1.5" opacity="0.4"/>
+    <text x="280" y="335" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" font-weight="700" fill="#0A0A0A" opacity="0.65">MIT OSS</text>
+    <!-- 10s pulse clock -->
+    <circle cx="230" cy="54" r="30" stroke="#0A0A0A" stroke-width="1.5" opacity="0.35"/>
+    <path d="M230 32 L230 54 L246 54" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.7"/>
+    <circle cx="230" cy="54" r="3" fill="#0A0A0A" opacity="0.7"/>
+    <text x="230" y="98" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" fill="#5A5A5A" opacity="0.7">Every 10 seconds</text>
   </svg>`,
   'sf-sync-connector': `<svg viewBox="0 0 460 380" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:460px;height:auto;">
     <!-- Sync connector: two systems with bidirectional data flow -->
@@ -171,9 +171,9 @@ const hasPricingOrReqs = (data.pricing && data.pricing.length > 0) ||
             {data.tagline}
           </p>
           <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
-            {data.appexchangeUrl ? (
-              <a href={data.appexchangeUrl} target="_blank" rel="noopener noreferrer" class="btn btn-primary">
-                View on AppExchange &nearr;
+            {data.externalUrl ? (
+              <a href={data.externalUrl} target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+                Get started &nearr;
               </a>
             ) : (
               <a href="/contact" class="btn btn-primary">Join waitlist &rarr;</a>
@@ -285,13 +285,13 @@ const hasPricingOrReqs = (data.pricing && data.pricing.length > 0) ||
             Ready to get started?
           </h2>
           <p style="font-size:0.9375rem;color:rgba(255,255,255,0.5);margin:0;">
-            {data.appexchangeUrl ? 'Available now on AppExchange' : 'Early access — join the waitlist'}
+            {data.externalUrl ? 'Available now — free to get started' : 'Early access — join the waitlist'}
           </p>
         </div>
         <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
-          {data.appexchangeUrl ? (
-            <a href={data.appexchangeUrl} target="_blank" rel="noopener noreferrer" class="btn btn-light">
-              Install on AppExchange ↗
+          {data.externalUrl ? (
+            <a href={data.externalUrl} target="_blank" rel="noopener noreferrer" class="btn btn-light">
+              Get started ↗
             </a>
           ) : (
             <a href="/contact" class="btn btn-light">Join waitlist →</a>

@@ -20,12 +20,13 @@ const orderNum = String(data.order).padStart(2, '0');
 
 // Small icon SVGs for dark variant cards
 const productIcons: Record<string, string> = {
-  'cloudalgo-flow-audit': `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="12" cy="3.5" r="2" stroke="currentColor" stroke-width="1.5"/>
-    <line x1="12" y1="5.5" x2="12" y2="8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-    <path d="M12 8.5 L17 12.5 L12 16.5 L7 12.5 Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
-    <line x1="12" y1="16.5" x2="12" y2="19.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-    <circle cx="12" cy="21" r="2" fill="currentColor"/>
+  'algobridge': `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="1" y="4" width="8" height="16" rx="2" stroke="currentColor" stroke-width="1.5"/>
+    <rect x="15" y="4" width="8" height="16" rx="2" stroke="currentColor" stroke-width="1.5"/>
+    <path d="M9.5 9 L14.5 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M13 7.5 L14.5 9 L13 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M14.5 15 L9.5 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M11 13.5 L9.5 15 L11 16.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
   </svg>`,
   'sf-sync-connector': `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
     <rect x="1" y="7" width="8" height="10" rx="2" stroke="currentColor" stroke-width="1.5"/>
@@ -105,9 +106,9 @@ const iconSvg = productIcons[slug] ?? productIcons['cloudalgo-flow-audit'];
         <a href={`/products/${slug}`} class="btn btn-primary" style="font-size:0.8125rem;padding:0.5rem 1.25rem;">
           Learn more &rarr;
         </a>
-        {data.appexchangeUrl ? (
-          <a href={data.appexchangeUrl} target="_blank" rel="noopener noreferrer" class="btn btn-outline" style="font-size:0.8125rem;padding:0.5rem 1.25rem;">
-            AppExchange &nearr;
+        {data.externalUrl ? (
+          <a href={data.externalUrl} target="_blank" rel="noopener noreferrer" class="btn btn-outline" style="font-size:0.8125rem;padding:0.5rem 1.25rem;">
+            Get started ↗
           </a>
         ) : (
           <a href="/contact" class="btn btn-outline" style="font-size:0.8125rem;padding:0.5rem 1.25rem;">
