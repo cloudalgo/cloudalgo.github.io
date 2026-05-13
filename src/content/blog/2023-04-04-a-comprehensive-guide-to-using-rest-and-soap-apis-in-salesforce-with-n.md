@@ -51,25 +51,25 @@ Authenticating and authorizing REST API access: To authenticate and authorize RE
 Here's an example code snippet to obtain an access token using the Node.js axios library:
 
 
-```
-1const axios = require('axios');
-2
-3const clientId = '<your_client_id>';
-4const clientSecret = '<your_client_secret>';
-5const username = '<your_salesforce_username>';
-6const password = '<your_salesforce_password>';
-7
-8const loginUrl = 'https://login.salesforce.com/services/oauth2/token';
-9const data = `grant_type=password&client_id=${clientId}&client_secret=${clientSecret}&username=${username}&password=${password}`;
-10
-11axios.post(loginUrl, data, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } })
-12  .then((response) => {
-13    const accessToken = response.data.access_token;
-14    console.log(`Access token: ${accessToken}`);
-15  })
-16  .catch((error) => {
-17    console.error(error);
-18  });
+```javascript
+const axios = require('axios');
+
+const clientId = '<your_client_id>';
+const clientSecret = '<your_client_secret>';
+const username = '<your_salesforce_username>';
+const password = '<your_salesforce_password>';
+
+const loginUrl = 'https://login.salesforce.com/services/oauth2/token';
+const data = `grant_type=password&client_id=${clientId}&client_secret=${clientSecret}&username=${username}&password=${password}`;
+
+axios.post(loginUrl, data, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } })
+  .then((response) => {
+    const accessToken = response.data.access_token;
+    console.log(`Access token: ${accessToken}`);
+  })
+  .catch((error) => {
+    console.error(error);
+  });
 ```
 
 In this code, we use the `axios.post` method to send a POST request to the Salesforce OAuth token endpoint with the required parameters in the request body. We also set the `Content-Type` header to `application/x-www-form-urlencoded`, which is required by Salesforce.
@@ -81,24 +81,24 @@ Note that this code is only an example and should not be used in production with
 ### REST API query examples with Node.js
 
 
-```
-1const axios = require('axios');
-2
-3const accessToken = '<your_access_token>';
-4const instanceUrl = '<your_salesforce_instance_url>';
-5const objectName = '<your_salesforce_object_name>';
-6const query = '<your_salesforce_query>';
-7
-8const url = `${instanceUrl}/services/data/v52.0/sobjects/${objectName}/?q=${query}`;
-9const headers = { Authorization: `Bearer ${accessToken}` };
-10
-11axios.get(url, { headers })
-12  .then((response) => {
-13    console.log(response.data);
-14  })
-15  .catch((error) => {
-16    console.error(error);
-17  });
+```javascript
+const axios = require('axios');
+
+const accessToken = '<your_access_token>';
+const instanceUrl = '<your_salesforce_instance_url>';
+const objectName = '<your_salesforce_object_name>';
+const query = '<your_salesforce_query>';
+
+const url = `${instanceUrl}/services/data/v52.0/sobjects/${objectName}/?q=${query}`;
+const headers = { Authorization: `Bearer ${accessToken}` };
+
+axios.get(url, { headers })
+  .then((response) => {
+    console.log(response.data);
+  })
+  .catch((error) => {
+    console.error(error);
+  });
 ```
 
 In this example, we first define the `accessToken`, `instanceUrl`, `objectName`, and `query` variables to specify the Salesforce object and query to retrieve. We then construct the REST API query URL using these variables and the Salesforce API endpoint. We also include the access token in the `Authorization` header.
@@ -108,31 +108,31 @@ We use the `axios.get` method to send a GET request to the URL and log the respo
 ### REST API update and create examples with Node.js
 
 
-```
-1const axios = require('axios');
-2
-3const accessToken = '<your_access_token>';
-4const instanceUrl = '<your_salesforce_instance_url>';
-5const objectName = '<your_salesforce_object_name>';
-6const data = {
-7  field1: 'value1',
-8  field2: 'value2',
-9  // Add more fields as needed
-10};
-11
-12const url = `${instanceUrl}/services/data/v52.0/sobjects/${objectName}/`;
-13const headers = {
-14  Authorization: `Bearer ${accessToken}`,
-15  'Content-Type': 'application/json',
-16};
-17
-18axios.post(url, data, { headers })
-19  .then((response) => {
-20    console.log(response.data);
-21  })
-22  .catch((error) => {
-23    console.error(error);
-24  });
+```javascript
+const axios = require('axios');
+
+const accessToken = '<your_access_token>';
+const instanceUrl = '<your_salesforce_instance_url>';
+const objectName = '<your_salesforce_object_name>';
+const data = {
+  field1: 'value1',
+  field2: 'value2',
+  // Add more fields as needed
+};
+
+const url = `${instanceUrl}/services/data/v52.0/sobjects/${objectName}/`;
+const headers = {
+  Authorization: `Bearer ${accessToken}`,
+  'Content-Type': 'application/json',
+};
+
+axios.post(url, data, { headers })
+  .then((response) => {
+    console.log(response.data);
+  })
+  .catch((error) => {
+    console.error(error);
+  });
 ```
 
 In this example, we first define the `accessToken`, `instanceUrl`, `objectName`, and `data` variables to specify the Salesforce object and record data to create. We then construct the REST API URL for creating a record using these variables and the Salesforce API endpoint. We also include the access token in the `Authorization` header and set the `Content-Type` header to `application/json`.
@@ -141,52 +141,52 @@ In this example, we first define the `accessToken`, `instanceUrl`, `objectName`,
 ### REST API bulk examples with Node.js
 
 
-```
-1const axios = require('axios');
-2
-3const accessToken = '<your_access_token>';
-4const instanceUrl = '<your_salesforce_instance_url>';
-5const objectName = '<your_salesforce_object_name>';
-6const records = [
-7  {
-8    field1: 'value1',
-9    field2: 'value2',
-10    // Add more fields as needed
-11  },
-12  {
-13    field1: 'value3',
-14    field2: 'value4',
-15    // Add more fields as needed
-16  },
-17  // Add more records as needed
-18];
-19
-20const url = `${instanceUrl}/services/data/v52.0/composite/sobjects`;
-21const headers = {
-22  Authorization: `Bearer ${accessToken}`,
-23  'Content-Type': 'application/json',
-24};
-25
-26const payload = {
-27  allOrNone: true,
-28  records: records.map((record) => {
-29    return {
-30      attributes: {
-31        type: objectName,
-32      },
-33      ...record,
-34    };
-35  }),
-36};
-37
-38axios.post(url, payload, { headers })
-39  .then((response) => {
-40    console.log(response.data);
-41  })
-42  .catch((error) => {
-43    console.error(error);
-44  });
-45
+```javascript
+const axios = require('axios');
+
+const accessToken = '<your_access_token>';
+const instanceUrl = '<your_salesforce_instance_url>';
+const objectName = '<your_salesforce_object_name>';
+const records = [
+  {
+    field1: 'value1',
+    field2: 'value2',
+    // Add more fields as needed
+  },
+  {
+    field1: 'value3',
+    field2: 'value4',
+    // Add more fields as needed
+  },
+  // Add more records as needed
+];
+
+const url = `${instanceUrl}/services/data/v52.0/composite/sobjects`;
+const headers = {
+  Authorization: `Bearer ${accessToken}`,
+  'Content-Type': 'application/json',
+};
+
+const payload = {
+  allOrNone: true,
+  records: records.map((record) => {
+    return {
+      attributes: {
+        type: objectName,
+      },
+      ...record,
+    };
+  }),
+};
+
+axios.post(url, payload, { headers })
+  .then((response) => {
+    console.log(response.data);
+  })
+  .catch((error) => {
+    console.error(error);
+  });
+
 ```
 
 We then construct the REST API URL for creating multiple records using the `composite/sobjects` endpoint.
@@ -205,59 +205,59 @@ The SOAP API provides access to most standard and custom objects in Salesforce, 
 Here is an example of using the Salesforce SOAP API with Node.js to create a new Contact record:
 
 
-```
-1const soap = require('soap');
-2
-3const username = '<your_salesforce_username>';
-4const password = '<your_salesforce_password>';
-5const securityToken = '<your_salesforce_security_token>';
-6const wsdlUrl = '<your_salesforce_wsdl_url>';
-7
-8const contact = {
-9  FirstName: 'John',
-10  LastName: 'Doe',
-11  Email: 'johndoe@example.com',
-12};
-13
-14soap.createClient(wsdlUrl, (err, client) => {
-15  if (err) {
-16    console.error(err);
-17    return;
-18  }
-19
-20  client.login({ username, password + securityToken }, (err, result) => {
-21    if (err) {
-22      console.error(err);
-23      return;
-24    }
-25
-26    const sessionId = result.sessionId;
-27    const serverUrl = result.serverUrl;
-28
-29    client.create(
-30      {
-31        sObjects: [
-32          {
-33            type: 'Contact',
-34            fieldsToNull: [],
-35            Id: null,
-36            ...contact,
-37          },
-38        ],
-39      },
-40      { sessionHeader: { sessionId } },
-41      (err, result) => {
-42        if (err) {
-43          console.error(err);
-44          return;
-45        }
-46
-47        console.log(result);
-48      },
-49      serverUrl
-50    );
-51  });
-52});
+```javascript
+const soap = require('soap');
+
+const username = '<your_salesforce_username>';
+const password = '<your_salesforce_password>';
+const securityToken = '<your_salesforce_security_token>';
+const wsdlUrl = '<your_salesforce_wsdl_url>';
+
+const contact = {
+  FirstName: 'John',
+  LastName: 'Doe',
+  Email: 'johndoe@example.com',
+};
+
+soap.createClient(wsdlUrl, (err, client) => {
+  if (err) {
+    console.error(err);
+    return;
+  }
+
+  client.login({ username, password + securityToken }, (err, result) => {
+    if (err) {
+      console.error(err);
+      return;
+    }
+
+    const sessionId = result.sessionId;
+    const serverUrl = result.serverUrl;
+
+    client.create(
+      {
+        sObjects: [
+          {
+            type: 'Contact',
+            fieldsToNull: [],
+            Id: null,
+            ...contact,
+          },
+        ],
+      },
+      { sessionHeader: { sessionId } },
+      (err, result) => {
+        if (err) {
+          console.error(err);
+          return;
+        }
+
+        console.log(result);
+      },
+      serverUrl
+    );
+  });
+});
 ```
 
 In this example, we first define the `username`, `password`, `securityToken`, and `wsdlUrl` variables to specify the Salesforce login credentials and the SOAP WSDL URL.

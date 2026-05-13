@@ -37,70 +37,70 @@ Now, let's delve into the code:
 
 **stripeComponent.lwc**
 stripeComponent.html
-```
-1<template>
-2    <div>
-3        <!-- Your Stripe integration code here -->
-4        <div id="stripe-card-element"></div>
-5    </div>
-6</template>
+```javascript
+<template>
+    <div>
+        <!-- Your Stripe integration code here -->
+        <div id="stripe-card-element"></div>
+    </div>
+</template>
 ```
 
 Inside the `stripeComponent`, we create a placeholder `<div>` with the id `stripe-card-element`. This is where we'll mount the Stripe card element.
 
 
 stripeComponent.js
-```
-1import { LightningElement, track } from 'lwc';
-2
-3export default class StripeComponent extends LightningElement {
-4    @track stripeLoaded = false;
-5
-6    renderedCallback() {
-7        if (this.stripeLoaded) {
-8            return;
-9        }
-10
-11        // Load the Stripe library dynamically
-12        const script = document.createElement('script');
-13        script.src = 'https://js.stripe.com/v3/';
-14        script.onload = () => {
-15            this.stripeLoaded = true;
-16            // Initialize Stripe and use it as needed
-17            const stripe = Stripe('your_publishable_key');
-18            const elements = stripe.elements();
-19
-20            // Mount the card element
-21            const card = elements.create('card');
-22            card.mount('#stripe-card-element');
-23        };
-24
-25        // Add the script to the DOM
-26        document.body.appendChild(script);
-27    }
-28}
+```javascript
+import { LightningElement, track } from 'lwc';
+
+export default class StripeComponent extends LightningElement {
+    @track stripeLoaded = false;
+
+    renderedCallback() {
+        if (this.stripeLoaded) {
+            return;
+        }
+
+        // Load the Stripe library dynamically
+        const script = document.createElement('script');
+        script.src = 'https://js.stripe.com/v3/';
+        script.onload = () => {
+            this.stripeLoaded = true;
+            // Initialize Stripe and use it as needed
+            const stripe = Stripe('your_publishable_key');
+            const elements = stripe.elements();
+
+            // Mount the card element
+            const card = elements.create('card');
+            card.mount('#stripe-card-element');
+        };
+
+        // Add the script to the DOM
+        document.body.appendChild(script);
+    }
+}
 ```
 
 
 
 **stripeParent.lwc**
 stripeParent.html
-```
-1<template lwc:render-mode="light">
-2  <c-stripe-component></c-stripe-component>
-3</template>
-4
+```javascript
+<template lwc:render-mode="light">
+  <c-stripe-component></c-stripe-component>
+</template>
+
 ```
 
 In the template, `stripeParent` includes the `c-stripe-component`, which is the component where we'll work with Stripe.
 stripeParent.js
-```
-1import { LightningElement } from "lwc";
-2
-3export default class StripeParent extends LightningElement {
-4  static renderMode = "light";
-5}
-6
+```javascript
+import { LightningElement } from "lwc";
+
+export default class StripeParent extends LightningElement {
+  static renderMode = "light";
+}
+
 ```
 
 In the JavaScript file for `stripeComponent`, we use the `renderedCallback` lifecycle hook to load the Stripe library dynamically. We ensure that the Stripe library is loaded only once by tracking the `stripeLoaded` property.

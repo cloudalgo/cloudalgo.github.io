@@ -15,15 +15,15 @@ I was having issue with NavigationMixin(LightningElement) while working in Sales
 
 Initial Code looks like this :
 
-```
-1let authenticatedUser = await this.callAuthenticationOrAnyother();if (!authenticatedUser) {
-2this[NavigationMixin.Navigate]({
-3type: "comm__namedPage",
-4attributes: {
-5name: "Sample1__c"
-6}
-7});
-8}
+```javascript
+let authenticatedUser = await this.callAuthenticationOrAnyother();if (!authenticatedUser) {
+this[NavigationMixin.Navigate]({
+type: "comm__namedPage",
+attributes: {
+name: "Sample1__c"
+}
+});
+}
 ```
 
 What are the things I was missing and how I fixed -

@@ -77,7 +77,7 @@ When we setup heroku connect in heroku then heroku connect uses a salesforce use
 
 ### 7. Encrypted field and heroku connect :
 
-Any field which mark encrypted on salesforce side and we synced to heroku remain encrypted and shows as ***** in postgres. So we must have a plan for encrypted fields if we are syncing to postgres
+Any field which mark encrypted on salesforce side and we synced to heroku remain encrypted and shows as *****in postgres. So we must have a plan for encrypted fields if we are syncing to postgres
 
 ### 8. Heroku connect and salesforce governing limit
 

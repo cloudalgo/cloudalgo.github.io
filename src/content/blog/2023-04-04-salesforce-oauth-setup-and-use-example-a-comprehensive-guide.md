@@ -2,7 +2,7 @@
 title: "Salesforce OAuth Setup and Use Example: A Comprehensive Guide"
 date: 2023-04-04
 category: Salesforce
-excerpt: "Salesforce OAuth is a powerful tool for authenticating and authorizing access to Salesforce resources. In this blog post, we&#x27;ll walk through the process of setting up Salesforce OAuth and provide"
+excerpt: "Salesforce OAuth is a powerful tool for authenticating and authorizing access to Salesforce resources. In this blog post, we'll walk through the process of setting up Salesforce OAuth and provide"
 readTime: 4
 image: /blog-images/2cc845d7ae68538fd778e5758ed0861708e0a76c-1200x600.jpg
 published: true
@@ -40,53 +40,53 @@ Using Salesforce OAuth in a Real-World Scenario Now that you've set up Salesforc
 Now that you've set up Salesforce OAuth, let's look at an example of using it with Node.js.
 
 
-```
-1const express = require('express');
-2const request = require('request');
-3const querystring = require('querystring');
-4const app = express();
-5
-6const clientId = '<your_client_id>';
-7const clientSecret = '<your_client_secret>';
-8const redirectUri = 'http://localhost:3000/oauth/callback';
-9const oauthUrl = 'https://login.salesforce.com/services/oauth2/authorize';
-10const tokenUrl = 'https://login.salesforce.com/services/oauth2/token';
-11
-12app.get('/', (req, res) => {
-13  const authUrl = oauthUrl + '?' + querystring.stringify({
-14    response_type: 'code',
-15    client_id: clientId,
-16    redirect_uri: redirectUri
-17  });
-18  res.redirect(authUrl);
-19});
-20
-21app.get('/oauth/callback', (req, res) => {
-22  const authCode = req.query.code;
-23  const options = {
-24    url: tokenUrl,
-25    form: {
-26      code: authCode,
-27      grant_type: 'authorization_code',
-28      client_id: clientId,
-29      client_secret: clientSecret,
-30      redirect_uri: redirectUri
-31    }
-32  };
-33  request.post(options, (error, response, body) => {
-34    if (!error && response.statusCode === 200) {
-35      const accessToken = JSON.parse(body).access_token;
-36      res.send('Access token: ' + accessToken);
-37    } else {
-38      res.send('Error: ' + error);
-39    }
-40  });
-41});
-42
-43app.listen(3000, () => {
-44  console.log('Server started on port 3000');
-45});
-46
+```javascript
+const express = require('express');
+const request = require('request');
+const querystring = require('querystring');
+const app = express();
+
+const clientId = '<your_client_id>';
+const clientSecret = '<your_client_secret>';
+const redirectUri = 'http://localhost:3000/oauth/callback';
+const oauthUrl = 'https://login.salesforce.com/services/oauth2/authorize';
+const tokenUrl = 'https://login.salesforce.com/services/oauth2/token';
+
+app.get('/', (req, res) => {
+  const authUrl = oauthUrl + '?' + querystring.stringify({
+    response_type: 'code',
+    client_id: clientId,
+    redirect_uri: redirectUri
+  });
+  res.redirect(authUrl);
+});
+
+app.get('/oauth/callback', (req, res) => {
+  const authCode = req.query.code;
+  const options = {
+    url: tokenUrl,
+    form: {
+      code: authCode,
+      grant_type: 'authorization_code',
+      client_id: clientId,
+      client_secret: clientSecret,
+      redirect_uri: redirectUri
+    }
+  };
+  request.post(options, (error, response, body) => {
+    if (!error && response.statusCode === 200) {
+      const accessToken = JSON.parse(body).access_token;
+      res.send('Access token: ' + accessToken);
+    } else {
+      res.send('Error: ' + error);
+    }
+  });
+});
+
+app.listen(3000, () => {
+  console.log('Server started on port 3000');
+});
+
 ```
 
 This code sets up an Express.js server with two endpoints: `/` and `/oauth/callback`. The `/` endpoint redirects the user to the Salesforce OAuth authorization page, passing the required parameters. Once the user authorizes the app, they are redirected to the `/oauth/callback` endpoint with an authorization code. The code is then exchanged for an access token using the Salesforce OAuth token URL.
