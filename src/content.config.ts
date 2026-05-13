@@ -29,4 +29,32 @@ const services = defineCollection({
   }),
 });
 
-export const collections = { blog, services };
+const products = defineCollection({
+  loader: glob({ pattern: '*.md', base: './src/content/products' }),
+  schema: z.object({
+    title:          z.string(),
+    status:         z.enum(['ga', 'preview', 'beta']),
+    type:           z.enum(['salesforce-app', 'integration']),
+    tagline:        z.string(),
+    excerpt:        z.string(),
+    icon:           z.string(),
+    appexchangeUrl: z.string().url().optional(),
+    version:        z.string().optional(),
+    lastUpdated:    z.string().optional(),
+    order:          z.number(),
+    features: z.array(z.object({
+      icon:        z.string(),
+      title:       z.string(),
+      description: z.string(),
+    })),
+    screenshots:  z.array(z.string()).optional(),
+    pricing: z.array(z.object({
+      tier:  z.string(),
+      price: z.string(),
+    })).optional(),
+    requirements: z.array(z.string()).optional(),
+    published:    z.boolean(),
+  }),
+});
+
+export const collections = { blog, services, products };
