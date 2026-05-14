@@ -38,7 +38,13 @@
       "Read(//Users/sandeepkumar/Downloads/**)",
       "mcp__plugin_chrome-devtools-mcp_chrome-devtools__click",
       "mcp__plugin_chrome-devtools-mcp_chrome-devtools__close_page",
-      "WebFetch(domain:bridge.cloudalgo.com)"
+      "WebFetch(domain:bridge.cloudalgo.com)",
+      "Skill(commit-commands:commit-push-pr)",
+      "Skill(commit-commands:commit-push-pr:*)",
+      "mcp__plugin_playwright_playwright__browser_evaluate",
+      "Skill(svg)",
+      "Skill(svg:*)",
+      "WebSearch"
     ],
     "additionalDirectories": [
       "/Users/sandeepkumar/.claude",
