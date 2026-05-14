@@ -29,14 +29,13 @@ const next = caseStudies[caseStudies.findIndex(c => c.id === cs.id) + 1];
       </nav>
       <div class="csd-hero-inner">
         <div class="csd-hero-text">
-
           <div class="csd-hero-meta">
             <span class="csd-index">{cs.index}</span>
             <span class="csd-pill">{cs.industry}</span>
             <span class="csd-pill">{cs.service}</span>
           </div>
           <h1 class="csd-hero-title">{cs.headline}</h1>
-          <p class="csd-hero-sub">{cs.summary}</p>
+          <p class="csd-hero-sub">{cs.executiveSummary}</p>
           <div class="csd-hero-stats">
             <div class="csd-hero-stat">
               <span class="csd-hero-stat-num">{cs.metric}</span>
@@ -45,90 +44,46 @@ const next = caseStudies[caseStudies.findIndex(c => c.id === cs.id) + 1];
             <div class="csd-hero-divider"></div>
             <div class="csd-hero-stat">
               <span class="csd-hero-stat-num">{cs.duration}</span>
-              <span class="csd-hero-stat-label">engagement length</span>
+              <span class="csd-hero-stat-label">engagement</span>
             </div>
           </div>
         </div>
-
-        <!-- Per-case illustration (light-themed) -->
         <div class="csd-hero-illo" aria-hidden="true">
-          {cs.id === 'retailscale' && (
-            <svg viewBox="0 0 320 240" fill="none" class="csd-hero-svg">
-              <rect x="16"  y="140" width="44" height="86"  rx="4" stroke="#0A0A0A" stroke-width="2" opacity="0.18"/>
-              <rect x="76"  y="100" width="44" height="126" rx="4" stroke="#0A0A0A" stroke-width="2" opacity="0.32"/>
-              <rect x="136" y="60"  width="44" height="166" rx="4" stroke="#0A0A0A" stroke-width="2" opacity="0.48"/>
-              <rect x="196" y="28"  width="44" height="198" rx="4" stroke="#0A0A0A" stroke-width="2" opacity="0.65"/>
-              <rect x="256" y="6"   width="44" height="220" rx="4" fill="rgba(10,10,10,0.05)" stroke="#0A0A0A" stroke-width="2" opacity="0.85"/>
-              <path d="M38 140 L98 100 L158 60 L218 28 L278 8" stroke="#0A0A0A" stroke-width="2" stroke-dasharray="6 4" opacity="0.4" stroke-linecap="round"/>
-              <circle cx="278" cy="8" r="5" fill="#0A0A0A" opacity="0.65"/>
-              <line x1="8" y1="228" x2="312" y2="228" stroke="#0A0A0A" stroke-width="1.5" opacity="0.1"/>
-            </svg>
-          )}
-          {cs.id === 'medbridge' && (
-            <svg viewBox="0 0 320 240" fill="none" class="csd-hero-svg">
-              <circle cx="160" cy="120" r="100" stroke="#0A0A0A" stroke-width="2" opacity="0.1"/>
-              <circle cx="160" cy="120" r="70"  stroke="#0A0A0A" stroke-width="2" opacity="0.18"/>
-              <circle cx="160" cy="120" r="40"  stroke="#0A0A0A" stroke-width="2" opacity="0.28"/>
-              <path d="M160 20 L160 220 M60 120 L260 120" stroke="#0A0A0A" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
-              <rect x="234" y="16" width="74" height="34" rx="17" fill="#0A0A0A" opacity="0.85"/>
-              <text x="271" y="38" text-anchor="middle" font-family="Outfit,sans-serif" font-size="14" font-weight="900" fill="#fff">18×</text>
-              <circle cx="36"  cy="26"  r="4" fill="#0A0A0A" opacity="0.12"/>
-              <circle cx="284" cy="214" r="4" fill="#0A0A0A" opacity="0.12"/>
-            </svg>
-          )}
-          {cs.id === 'gridflow' && (
-            <svg viewBox="0 0 320 240" fill="none" class="csd-hero-svg">
-              <circle cx="60"  cy="120" r="44" stroke="#0A0A0A" stroke-width="2" opacity="0.25"/>
-              <circle cx="160" cy="120" r="44" stroke="#0A0A0A" stroke-width="2" opacity="0.48"/>
-              <circle cx="260" cy="120" r="44" stroke="#0A0A0A" stroke-width="2" opacity="0.7"/>
-              <line x1="104" y1="120" x2="116" y2="120" stroke="#0A0A0A" stroke-width="2.5" stroke-dasharray="4 3" opacity="0.5"/>
-              <path d="M112 114 L118 120 L112 126" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.5"/>
-              <line x1="204" y1="120" x2="216" y2="120" stroke="#0A0A0A" stroke-width="2.5" stroke-dasharray="4 3" opacity="0.5"/>
-              <path d="M212 114 L218 120 L212 126" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.5"/>
-              <text x="60"  y="117" text-anchor="middle" font-family="Outfit,sans-serif" font-size="11" font-weight="800" fill="#0A0A0A" opacity="0.4">SAP</text>
-              <text x="60"  y="131" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9"  fill="#0A0A0A" opacity="0.3">ERP</text>
-              <text x="160" y="117" text-anchor="middle" font-family="Outfit,sans-serif" font-size="11" font-weight="800" fill="#0A0A0A" opacity="0.62">Mule</text>
-              <text x="160" y="131" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9"  fill="#0A0A0A" opacity="0.45">Soft</text>
-              <text x="260" y="117" text-anchor="middle" font-family="Outfit,sans-serif" font-size="11" font-weight="800" fill="#0A0A0A" opacity="0.82">SF</text>
-              <text x="260" y="131" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9"  fill="#0A0A0A" opacity="0.6">CRM</text>
-            </svg>
-          )}
-          {cs.id === 'shieldinsure' && (
-            <svg viewBox="0 0 320 240" fill="none" class="csd-hero-svg">
-              <path d="M160 8 L268 48 L268 124 C268 168 216 192 160 200 C104 192 52 168 52 124 L52 48 Z" stroke="#0A0A0A" stroke-width="2" opacity="0.12"/>
-              <path d="M160 26 L248 60 L248 120 C248 156 208 174 160 180 C112 174 72 156 72 120 L72 60 Z" stroke="#0A0A0A" stroke-width="2" opacity="0.24"/>
-              <path d="M160 46 L228 74 L228 116 C228 144 200 156 160 162 C120 156 92 144 92 116 L92 74 Z" stroke="#0A0A0A" stroke-width="2" opacity="0.4"/>
-              <path d="M120 110 L146 136 L202 88" stroke="#0A0A0A" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity="0.7"/>
-            </svg>
-          )}
-          {cs.id === 'partsco' && (
-            <svg viewBox="0 0 320 240" fill="none" class="csd-hero-svg">
-              <rect x="16" y="20" width="110" height="148" rx="6" stroke="#0A0A0A" stroke-width="2" opacity="0.25"/>
-              <rect x="28" y="38" width="86" height="14" rx="3" fill="#0A0A0A" opacity="0.1"/>
-              <rect x="28" y="60" width="70" height="8"  rx="2" fill="#0A0A0A" opacity="0.08"/>
-              <rect x="28" y="76" width="78" height="8"  rx="2" fill="#0A0A0A" opacity="0.08"/>
-              <rect x="28" y="92" width="60" height="8"  rx="2" fill="#0A0A0A" opacity="0.08"/>
-              <path d="M136 94 L184 94" stroke="#0A0A0A" stroke-width="2.5" stroke-dasharray="5 3" opacity="0.45" stroke-linecap="round"/>
-              <path d="M178 87 L186 94 L178 101" stroke="#0A0A0A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.55"/>
-              <rect x="194" y="20" width="110" height="148" rx="6" fill="#0A0A0A" opacity="0.82"/>
-              <text x="249" y="76"  text-anchor="middle" font-family="Outfit,sans-serif" font-size="11" font-weight="700" fill="rgba(255,255,255,0.65)">Approved</text>
-              <text x="249" y="108" text-anchor="middle" font-family="Outfit,sans-serif" font-size="30" font-weight="900" fill="#fff">1d</text>
-              <text x="249" y="130" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9"  font-weight="500" fill="rgba(255,255,255,0.5)">was 5 days</text>
-              <path d="M232 145 L242 155 L270 135" stroke="rgba(255,255,255,0.55)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          )}
-          {cs.id === 'lifesciences' && (
-            <svg viewBox="0 0 320 240" fill="none" class="csd-hero-svg">
-              <rect x="40" y="12" width="240" height="176" rx="10" stroke="#0A0A0A" stroke-width="2" opacity="0.22"/>
-              <rect x="56" y="28" width="44" height="44" rx="8" stroke="#0A0A0A" stroke-width="2" opacity="0.38"/>
-              <path d="M68 50 L74 56 L88 44" stroke="#0A0A0A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.55"/>
-              <rect x="112" y="34" width="128" height="12" rx="3" fill="#0A0A0A" opacity="0.12"/>
-              <rect x="112" y="52" width="90"  height="8"  rx="2" fill="#0A0A0A" opacity="0.08"/>
-              <line x1="56" y1="90" x2="264" y2="90" stroke="#0A0A0A" stroke-width="1" opacity="0.1"/>
-              <text x="56" y="130" font-family="Outfit,sans-serif" font-size="20" fill="#0A0A0A" opacity="0.4">★★★★★</text>
-              <text x="56" y="152" font-family="Outfit,sans-serif" font-size="10" font-weight="600" fill="#0A0A0A" opacity="0.3">4.8 · 200+ enterprise customers</text>
-              <circle cx="268" cy="28" r="18" fill="#0A0A0A" opacity="0.85"/>
-              <path d="M260 28 L265 33 L278 22" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          {cs.id === 'enterprise-data-pipeline' && (
+            <svg viewBox="0 0 360 300" fill="none" class="csd-hero-svg">
+              <!-- Source systems -->
+              <rect x="20" y="20" width="100" height="48" rx="8" stroke="#0A0A0A" stroke-width="1.5" opacity="0.3" fill="rgba(10,10,10,0.03)"/>
+              <text x="70" y="46" text-anchor="middle" font-family="Outfit,sans-serif" font-size="11" font-weight="700" fill="#0A0A0A" opacity="0.5">CRM</text>
+              <rect x="240" y="20" width="100" height="48" rx="8" stroke="#0A0A0A" stroke-width="1.5" opacity="0.3" fill="rgba(10,10,10,0.03)"/>
+              <text x="290" y="46" text-anchor="middle" font-family="Outfit,sans-serif" font-size="11" font-weight="700" fill="#0A0A0A" opacity="0.5">ERP</text>
+              <!-- Arrows down to staging -->
+              <path d="M70 68 L70 94" stroke="#0A0A0A" stroke-width="1.5" opacity="0.25" stroke-dasharray="4 3"/>
+              <path d="M67 91 L70 96 L73 91" stroke="#0A0A0A" stroke-width="1.5" opacity="0.25" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M290 68 L290 94" stroke="#0A0A0A" stroke-width="1.5" opacity="0.25" stroke-dasharray="4 3"/>
+              <path d="M287 91 L290 96 L293 91" stroke="#0A0A0A" stroke-width="1.5" opacity="0.25" stroke-linecap="round" stroke-linejoin="round"/>
+              <!-- Medallion layers -->
+              <rect x="20" y="96" width="320" height="38" rx="6" stroke="#0A0A0A" stroke-width="1.5" opacity="0.18" fill="rgba(10,10,10,0.02)"/>
+              <text x="36" y="120" font-family="Outfit,sans-serif" font-size="9" font-weight="800" fill="#0A0A0A" opacity="0.35" letter-spacing="0.1em">STAGING</text>
+              <text x="300" y="120" text-anchor="end" font-family="Outfit,sans-serif" font-size="9" fill="#0A0A0A" opacity="0.25">Redis coordination</text>
+              <path d="M180 136 L180 148" stroke="#0A0A0A" stroke-width="1.5" opacity="0.25" stroke-linecap="round"/>
+              <path d="M177 145 L180 150 L183 145" stroke="#0A0A0A" stroke-width="1.5" opacity="0.25" stroke-linecap="round" stroke-linejoin="round"/>
+              <rect x="20" y="150" width="320" height="38" rx="6" stroke="#0A0A0A" stroke-width="1.5" opacity="0.3" fill="rgba(10,10,10,0.03)"/>
+              <text x="36" y="174" font-family="Outfit,sans-serif" font-size="9" font-weight="800" fill="#0A0A0A" opacity="0.5" letter-spacing="0.1em">BRONZE</text>
+              <text x="300" y="174" text-anchor="end" font-family="Outfit,sans-serif" font-size="9" fill="#0A0A0A" opacity="0.35">Formula engine · batch writes</text>
+              <path d="M180 190 L180 202" stroke="#0A0A0A" stroke-width="1.5" opacity="0.38" stroke-linecap="round"/>
+              <path d="M177 199 L180 204 L183 199" stroke="#0A0A0A" stroke-width="1.5" opacity="0.38" stroke-linecap="round" stroke-linejoin="round"/>
+              <rect x="20" y="204" width="320" height="38" rx="6" stroke="#0A0A0A" stroke-width="1.5" opacity="0.48" fill="rgba(10,10,10,0.04)"/>
+              <text x="36" y="228" font-family="Outfit,sans-serif" font-size="9" font-weight="800" fill="#0A0A0A" opacity="0.65" letter-spacing="0.1em">SILVER</text>
+              <text x="300" y="228" text-anchor="end" font-family="Outfit,sans-serif" font-size="9" fill="#0A0A0A" opacity="0.45">Validation · dedup · upsert</text>
+              <path d="M180 244 L180 256" stroke="#0A0A0A" stroke-width="1.5" opacity="0.55" stroke-linecap="round"/>
+              <path d="M177 253 L180 258 L183 253" stroke="#0A0A0A" stroke-width="1.5" opacity="0.55" stroke-linecap="round" stroke-linejoin="round"/>
+              <rect x="20" y="258" width="320" height="38" rx="6" stroke="#0A0A0A" stroke-width="1.5" opacity="0.72" fill="rgba(10,10,10,0.06)"/>
+              <text x="36" y="282" font-family="Outfit,sans-serif" font-size="9" font-weight="800" fill="#0A0A0A" opacity="0.85" letter-spacing="0.1em">GOLD</text>
+              <text x="300" y="282" text-anchor="end" font-family="Outfit,sans-serif" font-size="9" fill="#0A0A0A" opacity="0.6">KPIs · account resolution</text>
+              <!-- Badge -->
+              <rect x="248" y="258" width="84" height="38" rx="6" fill="#0A0A0A"/>
+              <text x="290" y="274" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" font-weight="700" fill="rgba(255,255,255,0.6)">&lt;15 min</text>
+              <text x="290" y="288" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8" fill="rgba(255,255,255,0.4)">refresh</text>
             </svg>
           )}
         </div>
@@ -146,9 +101,59 @@ const next = caseStudies[caseStudies.findIndex(c => c.id === cs.id) + 1];
       <div class="csd-col-content">
         <h2 class="csd-section-title">What needed solving.</h2>
         <p class="paragraph-large csd-body-text">{cs.challenge}</p>
+        {cs.challengePoints && cs.challengePoints.length > 0 && (
+          <ul class="csd-challenge-list">
+            {cs.challengePoints.map(point => (
+              <li class="csd-challenge-item">
+                <span class="csd-challenge-dot" aria-hidden="true"></span>
+                <span>{point}</span>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </div>
   </section>
+
+  <!-- ── Why off-the-shelf failed ── -->
+  {cs.toolComparison && cs.toolComparison.length > 0 && (
+    <section class="csd-section csd-section--offwhite">
+      <div class="container">
+        <div class="csd-two-col" style="margin-bottom:2.5rem;">
+          <div class="csd-col-label-block">
+            <p class="section-label">Why standard tools failed</p>
+            <div class="csd-col-number" aria-hidden="true">02</div>
+          </div>
+          <div class="csd-col-content">
+            <h2 class="csd-section-title">Why off-the-shelf wasn't enough.</h2>
+            <p class="paragraph-large csd-body-text">{cs.whyNotOffShelf}</p>
+          </div>
+        </div>
+        <div class="csd-tool-table-wrap">
+          <table class="csd-tool-table">
+            <thead>
+              <tr>
+                <th>Tool</th>
+                <th>Category</th>
+                <th>What it does well</th>
+                <th>Why it wasn't enough</th>
+              </tr>
+            </thead>
+            <tbody>
+              {cs.toolComparison.map(row => (
+                <tr>
+                  <td class="csd-tool-name">{row.tool}</td>
+                  <td class="csd-tool-cat">{row.category}</td>
+                  <td>{row.doesWell}</td>
+                  <td class="csd-tool-limit">{row.limitation}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  )}
 
   <!-- ── Solution ── -->
   <section class="csd-section csd-section--dark">
@@ -156,14 +161,13 @@ const next = caseStudies[caseStudies.findIndex(c => c.id === cs.id) + 1];
       <div class="csd-two-col">
         <div class="csd-col-label-block">
           <p class="section-label" style="color:rgba(255,255,255,0.4);">The solution</p>
-          <div class="csd-col-number" style="color:rgba(255,255,255,0.12);" aria-hidden="true">02</div>
+          <div class="csd-col-number" style="color:rgba(255,255,255,0.08);" aria-hidden="true">{cs.toolComparison ? '03' : '02'}</div>
         </div>
         <div class="csd-col-content">
           <h2 class="csd-section-title" style="color:#fff;">What we built.</h2>
           <p class="paragraph-large csd-body-text" style="color:rgba(255,255,255,0.6);">{cs.solution}</p>
         </div>
       </div>
-      <!-- Steps -->
       <div class="csd-steps">
         {cs.solutionSteps.map((step, i) => (
           <div class="csd-step anim-fade-up" style={`transition-delay:${i * 0.08}s`}>
@@ -178,13 +182,39 @@ const next = caseStudies[caseStudies.findIndex(c => c.id === cs.id) + 1];
     </div>
   </section>
 
+  <!-- ── Technical highlights ── -->
+  {cs.technicalHighlights && cs.technicalHighlights.length > 0 && (
+    <section class="csd-section csd-section--white">
+      <div class="container">
+        <div class="csd-two-col" style="margin-bottom:2.5rem;">
+          <div class="csd-col-label-block">
+            <p class="section-label">Engineering depth</p>
+            <div class="csd-col-number" aria-hidden="true">{cs.toolComparison ? '04' : '03'}</div>
+          </div>
+          <div class="csd-col-content">
+            <h2 class="csd-section-title">Technical highlights.</h2>
+          </div>
+        </div>
+        <div class="csd-highlights">
+          {cs.technicalHighlights.map((h, i) => (
+            <div class="csd-highlight anim-fade-up" style={`transition-delay:${i * 0.07}s`}>
+              <div class="csd-highlight-num">{String(i + 1).padStart(2, '0')}</div>
+              <h3 class="csd-highlight-title">{h.title}</h3>
+              <p class="csd-highlight-body">{h.body}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
   <!-- ── Outcomes ── -->
   <section class="csd-section csd-section--offwhite">
     <div class="container">
       <div class="csd-two-col" style="margin-bottom:3rem;">
         <div class="csd-col-label-block">
           <p class="section-label">The results</p>
-          <div class="csd-col-number" aria-hidden="true">03</div>
+          <div class="csd-col-number" aria-hidden="true">{cs.technicalHighlights ? (cs.toolComparison ? '05' : '04') : (cs.toolComparison ? '04' : '03')}</div>
         </div>
         <div class="csd-col-content">
           <h2 class="csd-section-title">Measurable outcomes.</h2>
@@ -198,8 +228,55 @@ const next = caseStudies[caseStudies.findIndex(c => c.id === cs.id) + 1];
           </div>
         ))}
       </div>
+      {cs.resultsTable && cs.resultsTable.length > 0 && (
+        <div class="csd-results-table-wrap">
+          <table class="csd-results-table">
+            <thead>
+              <tr>
+                <th>Metric</th>
+                <th>Before</th>
+                <th>After</th>
+              </tr>
+            </thead>
+            <tbody>
+              {cs.resultsTable.map(row => (
+                <tr>
+                  <td class="csd-result-metric">{row.metric}</td>
+                  <td class="csd-result-before">{row.before}</td>
+                  <td class="csd-result-after">{row.after}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   </section>
+
+  <!-- ── What this demonstrates ── -->
+  {cs.whatDemonstrates && cs.whatDemonstrates.length > 0 && (
+    <section class="csd-section csd-section--dark">
+      <div class="container">
+        <div class="csd-two-col" style="margin-bottom:2.5rem;">
+          <div class="csd-col-label-block">
+            <p class="section-label" style="color:rgba(255,255,255,0.4);">The CloudAlgo difference</p>
+          </div>
+          <div class="csd-col-content">
+            <h2 class="csd-section-title" style="color:#fff;">What this shows about how we work.</h2>
+          </div>
+        </div>
+        <div class="csd-demonstrates">
+          {cs.whatDemonstrates.map((d, i) => (
+            <div class="csd-demonstrate anim-fade-up" style={`transition-delay:${i * 0.07}s`}>
+              <div class="csd-demonstrate-num">{String(i + 1).padStart(2, '0')}</div>
+              <h3 class="csd-demonstrate-title">{d.title}</h3>
+              <p class="csd-demonstrate-body">{d.body}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
 
   <!-- ── Testimonial ── -->
   {cs.testimonial && (
@@ -218,43 +295,61 @@ const next = caseStudies[caseStudies.findIndex(c => c.id === cs.id) + 1];
   )}
 
   <!-- ── Tech stack ── -->
-  <section class="csd-section csd-section--offwhite" style="padding-top:3rem;padding-bottom:3rem;">
-    <div class="container">
-      <p class="section-label" style="margin-bottom:1rem;">Tech stack</p>
-      <div class="csd-tags">
-        {cs.tags.map(tag => <span class="csd-tag">{tag}</span>)}
+  {cs.techStack && cs.techStack.length > 0 ? (
+    <section class="csd-section csd-section--white" style="padding-top:3.5rem;padding-bottom:3.5rem;">
+      <div class="container">
+        <p class="section-label" style="margin-bottom:1.5rem;">Technology stack</p>
+        <div class="csd-stack-grid">
+          {cs.techStack.map(row => (
+            <div class="csd-stack-row">
+              <span class="csd-stack-layer">{row.layer}</span>
+              <span class="csd-stack-tech">{row.technology}</span>
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
+  ) : (
+    <section class="csd-section csd-section--offwhite" style="padding-top:3rem;padding-bottom:3rem;">
+      <div class="container">
+        <p class="section-label" style="margin-bottom:1rem;">Tech stack</p>
+        <div class="csd-tags">
+          {cs.tags.map(tag => <span class="csd-tag">{tag}</span>)}
+        </div>
+      </div>
+    </section>
+  )}
 
   <!-- ── Prev / Next ── -->
-  <section class="csd-nav-section">
-    <div class="container">
-      <div class="csd-nav-grid">
-        {prev ? (
-          <a href={`/case-studies/${prev.id}`} class="csd-nav-card csd-nav-card--prev">
-            <span class="csd-nav-direction">&larr; Previous</span>
-            <span class="csd-nav-company">{prev.company}</span>
-            <span class="csd-nav-headline">{prev.headline}</span>
-          </a>
-        ) : <div />}
-        {next ? (
-          <a href={`/case-studies/${next.id}`} class="csd-nav-card csd-nav-card--next">
-            <span class="csd-nav-direction">Next &rarr;</span>
-            <span class="csd-nav-company">{next.company}</span>
-            <span class="csd-nav-headline">{next.headline}</span>
-          </a>
-        ) : <div />}
+  {(prev || next) && (
+    <section class="csd-nav-section">
+      <div class="container">
+        <div class="csd-nav-grid">
+          {prev ? (
+            <a href={`/case-studies/${prev.id}`} class="csd-nav-card csd-nav-card--prev">
+              <span class="csd-nav-direction">&larr; Previous</span>
+              <span class="csd-nav-company">{prev.company}</span>
+              <span class="csd-nav-headline">{prev.headline}</span>
+            </a>
+          ) : <div />}
+          {next ? (
+            <a href={`/case-studies/${next.id}`} class="csd-nav-card csd-nav-card--next">
+              <span class="csd-nav-direction">Next &rarr;</span>
+              <span class="csd-nav-company">{next.company}</span>
+              <span class="csd-nav-headline">{next.headline}</span>
+            </a>
+          ) : <div />}
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
+  )}
 
   <!-- ── CTA ── -->
   <section class="csd-cta">
     <div class="container">
       <p class="csd-cta-label">Work with us</p>
-      <h2 class="csd-cta-title">Ready to get results like these?</h2>
-      <p class="csd-cta-sub">Tell us about your project — we'll scope it and respond within one business day.</p>
+      <h2 class="csd-cta-title">Facing a similar challenge?</h2>
+      <p class="csd-cta-sub">Tell us about your data problem — we'll scope it and respond within one business day.</p>
       <div class="csd-cta-actions">
         <a href="/contact" class="csd-cta-btn-primary">Start a conversation &rarr;</a>
         <a href="/case-studies" class="csd-cta-btn-secondary">See all case studies</a>
@@ -307,17 +402,13 @@ const next = caseStudies[caseStudies.findIndex(c => c.id === cs.id) + 1];
   margin-bottom: 1.25rem;
 }
 .csd-hero-sub {
-  font-size: 1rem;
+  font-size: 0.9375rem;
   color: #5A5A5A;
-  line-height: 1.75;
+  line-height: 1.8;
   margin-bottom: 2rem;
-  max-width: 480px;
+  max-width: 560px;
 }
-.csd-hero-stats {
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-}
+.csd-hero-stats { display: flex; align-items: center; gap: 2rem; }
 .csd-hero-stat { display: flex; flex-direction: column; gap: 0.25rem; }
 .csd-hero-stat-num {
   font-size: 2rem;
@@ -327,24 +418,16 @@ const next = caseStudies[caseStudies.findIndex(c => c.id === cs.id) + 1];
   font-family: 'Outfit', sans-serif;
   line-height: 1;
 }
-.csd-hero-stat-label {
-  font-size: 0.75rem;
-  color: #5A5A5A;
-  font-weight: 500;
-}
-.csd-hero-divider {
-  width: 1px;
-  height: 40px;
-  background: #E0E0DC;
-}
+.csd-hero-stat-label { font-size: 0.75rem; color: #5A5A5A; font-weight: 500; }
+.csd-hero-divider { width: 1px; height: 40px; background: #E0E0DC; }
 .csd-hero-illo { display: flex; justify-content: center; align-items: center; }
-.csd-hero-svg  { width: 100%; max-width: 400px; height: auto; }
+.csd-hero-svg  { width: 100%; max-width: 420px; height: auto; }
 
 /* ── Sections ── */
 .csd-section { padding: 5rem 0; }
-.csd-section--white   { background: #fff; border-bottom: 1px solid #E0E0DC; }
-.csd-section--offwhite{ background: #F5F5F2; border-bottom: 1px solid #E0E0DC; }
-.csd-section--dark    { background: #0A0A0A; }
+.csd-section--white    { background: #fff; border-bottom: 1px solid #E0E0DC; }
+.csd-section--offwhite { background: #F5F5F2; border-bottom: 1px solid #E0E0DC; }
+.csd-section--dark     { background: #0A0A0A; }
 
 .csd-two-col {
   display: grid;
@@ -373,6 +456,77 @@ const next = caseStudies[caseStudies.findIndex(c => c.id === cs.id) + 1];
 }
 .csd-body-text { color: #5A5A5A; max-width: 640px; }
 
+/* ── Challenge list ── */
+.csd-challenge-list {
+  list-style: none;
+  padding: 0;
+  margin: 1.75rem 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 640px;
+}
+.csd-challenge-item {
+  display: flex;
+  gap: 0.875rem;
+  align-items: flex-start;
+  font-size: 0.9375rem;
+  color: #3A3A3A;
+  line-height: 1.65;
+}
+.csd-challenge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #0A0A0A;
+  flex-shrink: 0;
+  margin-top: 0.6rem;
+  opacity: 0.5;
+}
+
+/* ── Tool comparison table ── */
+.csd-tool-table-wrap {
+  overflow-x: auto;
+  border-radius: 12px;
+  border: 1px solid #E0E0DC;
+  background: #fff;
+}
+.csd-tool-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+.csd-tool-table thead tr {
+  background: #0A0A0A;
+}
+.csd-tool-table thead th {
+  padding: 0.875rem 1.25rem;
+  text-align: left;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+}
+.csd-tool-table tbody tr {
+  border-bottom: 1px solid #E0E0DC;
+}
+.csd-tool-table tbody tr:last-child { border-bottom: none; }
+.csd-tool-table tbody tr:hover { background: #FAFAFA; }
+.csd-tool-table tbody td {
+  padding: 1rem 1.25rem;
+  color: #3A3A3A;
+  line-height: 1.55;
+  vertical-align: top;
+}
+.csd-tool-name { font-weight: 700; color: #0A0A0A; white-space: nowrap; }
+.csd-tool-cat {
+  color: #5A5A5A;
+  font-size: 0.8125rem;
+  white-space: nowrap;
+}
+.csd-tool-limit { color: #5A5A5A; }
+
 /* ── Solution steps ── */
 .csd-steps {
   display: grid;
@@ -398,13 +552,46 @@ const next = caseStudies[caseStudies.findIndex(c => c.id === cs.id) + 1];
   font-size: 0.95rem;
   font-weight: 800;
   color: #fff;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.625rem;
   line-height: 1.3;
 }
 .csd-step-text {
-  font-size: 0.85rem;
+  font-size: 0.875rem;
   color: rgba(255,255,255,0.5);
-  line-height: 1.7;
+  line-height: 1.75;
+}
+
+/* ── Technical highlights ── */
+.csd-highlights {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+.csd-highlight {
+  background: #F5F5F2;
+  border: 1px solid #E0E0DC;
+  border-radius: 12px;
+  padding: 1.75rem;
+}
+.csd-highlight-num {
+  font-size: 0.7rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  color: rgba(10,10,10,0.2);
+  font-family: 'Outfit', sans-serif;
+  margin-bottom: 0.75rem;
+}
+.csd-highlight-title {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #0A0A0A;
+  margin-bottom: 0.625rem;
+  line-height: 1.3;
+}
+.csd-highlight-body {
+  font-size: 0.875rem;
+  color: #5A5A5A;
+  line-height: 1.75;
 }
 
 /* ── Outcomes ── */
@@ -412,6 +599,7 @@ const next = caseStudies[caseStudies.findIndex(c => c.id === cs.id) + 1];
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1.5rem;
+  margin-bottom: 3rem;
 }
 .csd-outcome {
   background: #fff;
@@ -429,10 +617,77 @@ const next = caseStudies[caseStudies.findIndex(c => c.id === cs.id) + 1];
   margin-bottom: 0.625rem;
 }
 .csd-outcome-label {
-  font-size: 0.85rem;
+  font-size: 0.875rem;
   color: #5A5A5A;
   line-height: 1.5;
   font-weight: 500;
+}
+
+/* ── Results table ── */
+.csd-results-table-wrap {
+  overflow-x: auto;
+  border-radius: 12px;
+  border: 1px solid #E0E0DC;
+  background: #fff;
+}
+.csd-results-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+.csd-results-table thead tr { background: #0A0A0A; }
+.csd-results-table thead th {
+  padding: 0.875rem 1.25rem;
+  text-align: left;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+}
+.csd-results-table tbody tr { border-bottom: 1px solid #E0E0DC; }
+.csd-results-table tbody tr:last-child { border-bottom: none; }
+.csd-results-table tbody tr:hover { background: #FAFAFA; }
+.csd-results-table tbody td {
+  padding: 1rem 1.25rem;
+  vertical-align: top;
+  line-height: 1.55;
+}
+.csd-result-metric { font-weight: 700; color: #0A0A0A; white-space: nowrap; }
+.csd-result-before { color: #5A5A5A; }
+.csd-result-after  { color: #0A0A0A; font-weight: 600; }
+
+/* ── What this demonstrates ── */
+.csd-demonstrates {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+.csd-demonstrate {
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 1.75rem;
+  background: rgba(255,255,255,0.03);
+}
+.csd-demonstrate-num {
+  font-size: 0.7rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.15);
+  font-family: 'Outfit', sans-serif;
+  margin-bottom: 0.75rem;
+}
+.csd-demonstrate-title {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 0.625rem;
+  line-height: 1.35;
+}
+.csd-demonstrate-body {
+  font-size: 0.875rem;
+  color: rgba(255,255,255,0.5);
+  line-height: 1.75;
 }
 
 /* ── Testimonial ── */
@@ -440,7 +695,6 @@ const next = caseStudies[caseStudies.findIndex(c => c.id === cs.id) + 1];
   max-width: 780px;
   margin: 0 auto;
   text-align: center;
-  position: relative;
 }
 .csd-quote-mark {
   font-size: 6rem;
@@ -458,23 +712,53 @@ const next = caseStudies[caseStudies.findIndex(c => c.id === cs.id) + 1];
   letter-spacing: -0.01em;
   margin-bottom: 2rem;
 }
-.csd-quote-footer {
+.csd-quote-footer { display: flex; flex-direction: column; gap: 0.25rem; align-items: center; }
+.csd-quote-name { font-size: 0.9375rem; font-weight: 700; color: #0A0A0A; }
+.csd-quote-role  { font-size: 0.8125rem; color: #5A5A5A; }
+
+/* ── Tech stack grid ── */
+.csd-stack-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0;
+  border: 1px solid #E0E0DC;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+}
+.csd-stack-row {
   display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
+  gap: 0;
+  border-bottom: 1px solid #E0E0DC;
+  border-right: 1px solid #E0E0DC;
+}
+.csd-stack-row:nth-child(even) { border-right: none; }
+.csd-stack-row:last-child,
+.csd-stack-row:nth-last-child(2):nth-child(odd) { border-bottom: none; }
+.csd-stack-layer {
+  padding: 0.875rem 1.25rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #5A5A5A;
+  background: #F5F5F2;
+  width: 180px;
+  flex-shrink: 0;
+  border-right: 1px solid #E0E0DC;
+  display: flex;
   align-items: center;
 }
-.csd-quote-name {
-  font-size: 0.9375rem;
-  font-weight: 700;
+.csd-stack-tech {
+  padding: 0.875rem 1.25rem;
+  font-size: 0.875rem;
   color: #0A0A0A;
-}
-.csd-quote-role {
-  font-size: 0.8125rem;
-  color: #5A5A5A;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
 }
 
-/* ── Tags ── */
+/* ── Tags fallback ── */
 .csd-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 .csd-tag {
   font-size: 0.8rem;
@@ -493,11 +777,7 @@ const next = caseStudies[caseStudies.findIndex(c => c.id === cs.id) + 1];
   border-top: 1px solid #E0E0DC;
   border-bottom: 1px solid #E0E0DC;
 }
-.csd-nav-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
-}
+.csd-nav-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
 .csd-nav-card {
   display: flex;
   flex-direction: column;
@@ -511,96 +791,39 @@ const next = caseStudies[caseStudies.findIndex(c => c.id === cs.id) + 1];
 }
 .csd-nav-card:hover { border-color: #0A0A0A; transform: translateY(-2px); }
 .csd-nav-card--next { text-align: right; }
-.csd-nav-direction {
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: #5A5A5A;
-}
-.csd-nav-company {
-  font-size: 1.125rem;
-  font-weight: 900;
-  color: #0A0A0A;
-  letter-spacing: -0.02em;
-}
-.csd-nav-headline {
-  font-size: 0.8125rem;
-  color: #5A5A5A;
-  line-height: 1.5;
-}
+.csd-nav-direction { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #5A5A5A; }
+.csd-nav-company { font-size: 1.125rem; font-weight: 900; color: #0A0A0A; letter-spacing: -0.02em; }
+.csd-nav-headline { font-size: 0.8125rem; color: #5A5A5A; line-height: 1.5; }
 
 /* ── CTA ── */
-.csd-cta {
-  background: #0A0A0A;
-  padding: 5rem 0;
-  text-align: center;
-}
-.csd-cta-label {
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.35);
-  margin-bottom: 1rem;
-}
-.csd-cta-title {
-  font-size: clamp(2rem, 3.5vw, 3rem);
-  font-weight: 900;
-  letter-spacing: -0.03em;
-  color: #fff;
-  margin-bottom: 0.875rem;
-  line-height: 1.1;
-}
-.csd-cta-sub {
-  font-size: 1rem;
-  color: rgba(255,255,255,0.45);
-  line-height: 1.7;
-  max-width: 420px;
-  margin: 0 auto 2.5rem;
-}
-.csd-cta-actions {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-.csd-cta-btn-primary {
-  background: #fff;
-  color: #0A0A0A;
-  padding: 0.875rem 1.75rem;
-  border-radius: 100px;
-  font-weight: 700;
-  font-size: 0.9375rem;
-  text-decoration: none;
-  transition: opacity 150ms, transform 150ms;
-}
-.csd-cta-btn-primary:hover  { opacity: 0.88; transform: translateY(-1px); color: #0A0A0A; }
-.csd-cta-btn-secondary {
-  color: rgba(255,255,255,0.55);
-  padding: 0.875rem 1.75rem;
-  border-radius: 100px;
-  border: 1px solid rgba(255,255,255,0.2);
-  font-weight: 600;
-  font-size: 0.9375rem;
-  text-decoration: none;
-  transition: color 150ms, border-color 150ms;
-}
+.csd-cta { background: #0A0A0A; padding: 5rem 0; text-align: center; }
+.csd-cta-label { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-bottom: 1rem; }
+.csd-cta-title { font-size: clamp(2rem, 3.5vw, 3rem); font-weight: 900; letter-spacing: -0.03em; color: #fff; margin-bottom: 0.875rem; line-height: 1.1; }
+.csd-cta-sub { font-size: 1rem; color: rgba(255,255,255,0.45); line-height: 1.7; max-width: 420px; margin: 0 auto 2.5rem; }
+.csd-cta-actions { display: flex; align-items: center; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+.csd-cta-btn-primary { background: #fff; color: #0A0A0A; padding: 0.875rem 1.75rem; border-radius: 100px; font-weight: 700; font-size: 0.9375rem; text-decoration: none; transition: opacity 150ms, transform 150ms; }
+.csd-cta-btn-primary:hover { opacity: 0.88; transform: translateY(-1px); color: #0A0A0A; }
+.csd-cta-btn-secondary { color: rgba(255,255,255,0.55); padding: 0.875rem 1.75rem; border-radius: 100px; border: 1px solid rgba(255,255,255,0.2); font-weight: 600; font-size: 0.9375rem; text-decoration: none; transition: color 150ms, border-color 150ms; }
 .csd-cta-btn-secondary:hover { color: #fff; border-color: rgba(255,255,255,0.5); }
 
 /* ── Responsive ── */
 @media (max-width: 1024px) {
-  .csd-two-col   { grid-template-columns: 1fr; gap: 1.5rem; }
+  .csd-two-col { grid-template-columns: 1fr; gap: 1.5rem; }
   .csd-col-number { display: none; }
-  .csd-steps     { grid-template-columns: 1fr; }
-  .csd-outcomes  { grid-template-columns: 1fr; }
+  .csd-steps { grid-template-columns: 1fr; }
+  .csd-highlights { grid-template-columns: 1fr; }
+  .csd-outcomes { grid-template-columns: 1fr; }
+  .csd-demonstrates { grid-template-columns: 1fr; }
+  .csd-stack-grid { grid-template-columns: 1fr; }
+  .csd-stack-row { border-right: none !important; }
+  .csd-stack-row { border-bottom: 1px solid #E0E0DC !important; }
+  .csd-stack-row:last-child { border-bottom: none !important; }
 }
 @media (max-width: 767px) {
-  .csd-hero-inner  { grid-template-columns: 1fr; }
-  .csd-hero-illo   { display: none; }
-  .csd-nav-grid    { grid-template-columns: 1fr; }
+  .csd-hero-inner { grid-template-columns: 1fr; }
+  .csd-hero-illo  { display: none; }
+  .csd-nav-grid   { grid-template-columns: 1fr; }
   .csd-nav-card--next { text-align: left; }
-  .csd-hero-stats  { gap: 1.25rem; flex-wrap: wrap; }
+  .csd-hero-stats { gap: 1.25rem; flex-wrap: wrap; }
 }
 </style>

@@ -10,228 +10,208 @@ export interface CaseStudy {
   tags: string[];
   duration: string;
   result: string;
-  // Detail page fields
+  // Detail page — core
   headline: string;
+  executiveSummary: string;
   challenge: string;
+  challengePoints: string[];
   solution: string;
   solutionSteps: { title: string; body: string }[];
   outcomes: { metric: string; label: string }[];
   testimonial?: { quote: string; name: string; role: string };
+  // Detail page — rich sections
+  whyNotOffShelf?: string;
+  toolComparison?: { tool: string; category: string; doesWell: string; limitation: string }[];
+  technicalHighlights?: { title: string; body: string }[];
+  resultsTable?: { metric: string; before: string; after: string }[];
+  whatDemonstrates?: { title: string; body: string }[];
+  techStack?: { layer: string; technology: string }[];
 }
 
 export const caseStudies: CaseStudy[] = [
   {
-    id: 'retailscale',
+    id: 'enterprise-data-pipeline',
     index: '01',
-    company: 'RetailScale',
-    industry: 'Retail',
-    service: 'Salesforce',
-    metric: '40%',
-    metricLabel: 'increase in pipeline visibility',
-    summary: 'Replaced spreadsheet-based sales tracking with a unified Sales Cloud implementation, giving leadership real-time visibility across 12 regional teams.',
-    tags: ['Sales Cloud', 'LWC', 'SOQL', 'Reports & Dashboards'],
-    duration: '14 weeks',
-    result: 'Full Sales Cloud rollout with custom forecasting dashboards',
-    headline: 'From spreadsheets to a single source of sales truth.',
-    challenge: 'RetailScale operated 12 regional sales teams, each maintaining their own spreadsheets to track pipeline and forecast revenue. Leadership had zero real-time visibility. Monthly roll-up reports took 3 days to compile and were stale by the time they reached the board. The sales team spent 6+ hours per week on manual reporting instead of selling.',
-    solution: 'We implemented Salesforce Sales Cloud as the single CRM across all 12 regions, replacing every spreadsheet with structured opportunity management. Custom LWC dashboards gave sales managers live pipeline views, and automated roll-up forecasting meant leadership could see the full picture in seconds, not days.',
-    solutionSteps: [
-      { title: 'Discovery & data mapping', body: 'Audited all 12 regional spreadsheets, normalised fields, and defined a unified data model in Salesforce.' },
-      { title: 'Sales Cloud configuration', body: 'Built opportunity stages, custom fields, validation rules, and assignment rules aligned to the existing sales process.' },
-      { title: 'LWC dashboard suite', body: 'Developed three custom Lightning Web Components: a regional pipeline view, a deal velocity tracker, and a team leaderboard.' },
-      { title: 'Migration & training', body: 'Migrated 4,200+ historical opportunities, ran region-by-region onboarding sessions, and produced video training assets.' },
-    ],
-    outcomes: [
-      { metric: '40%', label: 'Increase in pipeline visibility score (exec survey)' },
-      { metric: '3 days → 0', label: 'Board reporting now instant via live dashboards' },
-      { metric: '6 hrs/wk', label: 'Saved per sales rep on manual reporting' },
-    ],
-    testimonial: {
-      quote: 'CloudAlgo took something we\'d been putting off for years and made it feel effortless. The rollout was flawless and the team was selling in the new system within a week.',
-      name: 'Sarah Mitchell',
-      role: 'VP of Sales, RetailScale',
-    },
-  },
-  {
-    id: 'medbridge',
-    index: '02',
-    company: 'MedBridge',
-    industry: 'Healthcare',
-    service: 'Heroku',
-    metric: '18×',
-    metricLabel: 'faster patient onboarding',
-    summary: 'Built a HIPAA-compliant patient intake portal on Heroku, connected to Salesforce Health Cloud via REST APIs — reducing onboarding from 3 days to 4 hours.',
-    tags: ['Heroku', 'Health Cloud', 'REST API', 'PostgreSQL'],
-    duration: '18 weeks',
-    result: 'Patient portal serving 50,000+ active records',
-    headline: 'Patient onboarding cut from 3 days to 4 hours.',
-    challenge: 'MedBridge\'s patient intake process was entirely paper-based. New patients filled out forms in-clinic, staff manually keyed data into multiple systems, and records took up to 3 days to be fully available to care teams. The friction drove patient drop-off and created compliance risk around incomplete records.',
-    solution: 'We built a HIPAA-compliant digital intake portal on Heroku — patients complete forms online before their visit. A REST API integration with Salesforce Health Cloud ensures data flows instantly into the care team\'s view. PostgreSQL on Heroku handles encrypted document storage, and all data transit is secured via TLS with field-level encryption at rest.',
-    solutionSteps: [
-      { title: 'HIPAA compliance architecture', body: 'Designed the system architecture with Heroku Private Spaces, encrypted PostgreSQL, and audit logging to satisfy HIPAA technical safeguards.' },
-      { title: 'Patient portal (Node.js)', body: 'Built a responsive intake portal with multi-step forms, e-signature, and document upload — optimised for mobile.' },
-      { title: 'Health Cloud integration', body: 'Built REST API endpoints to push patient records, consent forms, and insurance data directly into Salesforce Health Cloud in real time.' },
-      { title: 'Staff dashboard', body: 'Created an admin view for intake coordinators showing completion status, flagged records, and an audit trail for compliance review.' },
-    ],
-    outcomes: [
-      { metric: '18×', label: 'Faster patient onboarding (3 days → 4 hours)' },
-      { metric: '50k+', label: 'Active patient records in the portal' },
-      { metric: '0', label: 'HIPAA compliance findings since launch' },
-    ],
-    testimonial: {
-      quote: 'The integration between the patient portal and Health Cloud is seamless. Our care coordinators now walk into every appointment fully informed.',
-      name: 'Dr. James Okonkwo',
-      role: 'Chief Medical Officer, MedBridge',
-    },
-  },
-  {
-    id: 'gridflow',
-    index: '03',
-    company: 'GridFlow Energy',
-    industry: 'Energy',
-    service: 'MuleSoft',
-    metric: '60%',
-    metricLabel: 'reduction in manual data entry',
-    summary: 'Unified SAP ERP and Salesforce via MuleSoft Anypoint Platform, eliminating double-entry across billing, metering, and CRM systems.',
-    tags: ['MuleSoft', 'SAP Integration', 'Anypoint', 'Apex'],
-    duration: '22 weeks',
-    result: '14 system integrations running on a single API mesh',
-    headline: 'Fourteen systems unified. Manual entry down 60%.',
-    challenge: 'GridFlow\'s operations ran across 14 disconnected systems — SAP for billing, a legacy metering platform, Salesforce for customer management, and 11 supporting tools. Data moved between systems manually or via brittle point-to-point scripts. A customer address change required updates in 5 separate systems. Errors were frequent, costly, and invisible until they caused billing failures.',
-    solution: 'We implemented MuleSoft Anypoint Platform as a central API mesh connecting all 14 systems. Every system now publishes and consumes via standardised APIs — a change in one system propagates automatically. We also built an operations dashboard in Salesforce showing real-time API health and data-flow monitoring.',
-    solutionSteps: [
-      { title: 'Integration audit & design', body: 'Mapped all 14 system integrations, identified 47 data flows, and designed a canonical data model to standardise fields across SAP and Salesforce.' },
-      { title: 'Anypoint Platform setup', body: 'Configured MuleSoft Anypoint with environment segregation (dev/staging/prod), API governance policies, and SLA alerting.' },
-      { title: 'SAP ↔ Salesforce connector', body: 'Built the primary bidirectional integration between SAP ERP and Salesforce — handling accounts, billing records, and meter readings in real time.' },
-      { title: 'Remaining 12 integrations', body: 'Rolled out API connections for the remaining systems in three sprints, each with automated tests and error-replay capabilities.' },
-    ],
-    outcomes: [
-      { metric: '60%', label: 'Reduction in manual data entry hours' },
-      { metric: '14', label: 'Systems connected on a single API mesh' },
-      { metric: '47', label: 'Automated data flows replacing manual processes' },
-    ],
-  },
-  {
-    id: 'shieldinsure',
-    index: '04',
-    company: 'ShieldInsure',
-    industry: 'Insurance',
-    service: 'Salesforce',
-    metric: '91',
-    metricLabel: 'CSAT score — up from 72',
-    summary: 'Overhauled Service Cloud with a custom LWC agent console, automated case routing, and SLA dashboards. Agent handle time dropped by 35%.',
-    tags: ['Service Cloud', 'LWC', 'Omni-Channel', 'Einstein'],
-    duration: '16 weeks',
-    result: 'Deployed to 200+ service agents across 3 regions',
-    headline: 'Service Cloud overhaul takes CSAT from 72 to 91.',
-    challenge: 'ShieldInsure\'s 200-agent service team operated on a heavily customised legacy CRM that had grown unmaintainable. Agents switched between 4 screens to resolve a single claim query. Case routing was manual. SLA tracking was a weekly spreadsheet exercise. Customer satisfaction had been declining for two consecutive years, and agent attrition was rising.',
-    solution: 'We rebuilt the service operation on Salesforce Service Cloud with a custom LWC agent console that surfaces every relevant detail on a single screen. Omni-Channel routes cases to the right agent automatically based on skills, workload, and SLA priority. Einstein Case Classification tags and prioritises inbound cases before a human touches them.',
-    solutionSteps: [
-      { title: 'Current-state process mapping', body: 'Shadowed 20 agents across 3 regions to document exact workflows, pain points, and the data they needed at their fingertips.' },
-      { title: 'Service Cloud configuration', body: 'Set up case management, entitlements, SLA milestones, and Omni-Channel routing rules aligned to the four policy lines.' },
-      { title: 'Custom LWC agent console', body: 'Built a single-screen agent experience showing customer history, open cases, policy details, and recommended next actions — eliminating the 4-screen context-switch.' },
-      { title: 'Einstein & reporting', body: 'Configured Einstein Case Classification and built a real-time SLA dashboard for supervisors replacing the weekly spreadsheet.' },
-    ],
-    outcomes: [
-      { metric: '91', label: 'CSAT score (up from 72 in 12 months)' },
-      { metric: '35%', label: 'Drop in average handle time per case' },
-      { metric: '200+', label: 'Agents live across 3 regions' },
-    ],
-    testimonial: {
-      quote: 'Our agents actually like using Salesforce now. That sentence would have been unthinkable before CloudAlgo came in.',
-      name: 'Tom Eriksen',
-      role: 'Head of Customer Operations, ShieldInsure',
-    },
-  },
-  {
-    id: 'partsco',
-    index: '05',
-    company: 'PartsCo',
-    industry: 'Manufacturing',
-    service: 'Salesforce',
-    metric: '1 day',
-    metricLabel: 'quote turnaround — down from 5',
-    summary: 'Implemented Salesforce CPQ with automated pricing rules, product bundles, and approval workflows. Sales reps now generate accurate quotes without engineering sign-off.',
-    tags: ['CPQ', 'Apex', 'Flow Automation', 'Price Books'],
-    duration: '20 weeks',
-    result: '3,000+ quotes processed in first quarter post-launch',
-    headline: 'Quote turnaround from 5 days to same-day.',
-    challenge: 'PartsCo\'s sales team sold complex industrial parts configurations — a single quote could involve 300+ line items with custom pricing, compatibility rules, and margin thresholds. Every quote required engineering review, which created a 5-day bottleneck. Deals were lost to competitors who quoted faster. Sales reps had no confidence in the numbers they were giving customers.',
-    solution: 'We implemented Salesforce CPQ with a complete product catalogue, automated compatibility rules, and tiered pricing logic. The approval workflow now triggers only for quotes that breach margin thresholds — standard quotes generate and send automatically. Sales reps produce accurate, branded quotes in under 10 minutes.',
-    solutionSteps: [
-      { title: 'Product catalogue & pricing model', body: 'Loaded 12,000 SKUs into CPQ price books with compatibility matrices and bundle configurations based on engineering specs.' },
-      { title: 'Pricing rules & constraints', body: 'Built 40+ Apex-backed pricing rules enforcing margin floors, volume discounts, and regional price variations.' },
-      { title: 'Approval automation', body: 'Designed a tiered approval workflow — standard quotes auto-approve, custom pricing routes to sales ops, margin exceptions to management.' },
-      { title: 'Quote template & e-sign', body: 'Created a branded PDF quote template with DocuSign integration for same-day e-signature and order confirmation.' },
-    ],
-    outcomes: [
-      { metric: '1 day', label: 'Quote turnaround (was 5 days)' },
-      { metric: '3,000+', label: 'Quotes processed in first quarter' },
-      { metric: '22%', label: 'Increase in quote-to-close rate' },
-    ],
-    testimonial: {
-      quote: 'Our reps were quoting on gut feel before. Now they walk into every negotiation with exact numbers and the confidence to back them up.',
-      name: 'Marcus Webb',
-      role: 'Sales Director, PartsCo',
-    },
-  },
-  {
-    id: 'novamfg',
-    index: '06',
-    company: 'NovaMfg',
+    company: 'Enterprise Manufacturer',
     industry: 'Manufacturing',
     service: 'Data Engineering',
     metric: '<15 min',
-    metricLabel: 'data freshness — down from 24 hrs',
-    summary: 'Designed and delivered a cloud-native medallion data pipeline on Apache Airflow — ingesting from CRM and ERP, enforcing schema validation, and surfacing analytics-ready KPI data with sub-15-minute latency.',
-    tags: ['Apache Airflow', 'PostgreSQL', 'Redis', 'Python', 'ETL'],
-    duration: '24 weeks',
-    result: 'Sub-15 min refresh across all 8 source tables',
-    headline: 'From 24-hour-stale reports to a live, trusted data layer.',
-    challenge: 'NovaMfg\'s operational data was spread across a leading CRM platform and ERP system — but the two systems used different account identifiers, reports ran 12–24 hours stale, and any pipeline failure caused complete data loss for that sync window. Sales goals couldn\'t be reconciled with actual shipments. Account data drifted out of sync daily. Teams spent hours per week manually reconciling discrepancies in spreadsheets.',
-    solution: 'CloudAlgo designed and delivered a multi-stage medallion data pipeline on Apache Airflow with Celery-based distributed execution. Raw data from CRM and ERP is progressively refined through Bronze, Silver, and Gold layers — with schema validation, deduplication, formula-based field derivation, and cross-system account resolution — before reaching analytics consumers at sub-15-minute latency.',
-    solutionSteps: [
-      { title: 'Medallion architecture design', body: 'Designed a four-layer pipeline (Staging → Bronze → Silver → Gold) with clear data contracts at each stage. Every transformation is config-driven via JSON — no code changes required to add a table or modify a derivation rule.' },
-      { title: 'Bronze: config-driven formula engine', body: 'Built a custom formula evaluation engine handling concatenation, unit conversion (tons ↔ pounds), date extraction, and duration calculations — driven by JSON config so business analysts can update rules without touching Python.' },
-      { title: 'Silver: schema validation and trust layer', body: 'Implemented Cerberus-based schema validation, duplicate detection, column normalisation, and upsert writes — guaranteeing every downstream record is structurally valid, deduplicated, and correctly typed.' },
-      { title: 'Gold: account resolution and KPI calculation', body: 'Built specialised DAGs for cross-system account linking (CRM ↔ ERP using functional indexes) and automated KPI calculation joining shipped quantities against annual sales goals at product and division level.' },
+    metricLabel: 'end-to-end data latency — down from 24 hours',
+    summary:
+      'An enterprise manufacturer was sitting on a goldmine of operational data — spread across CRM and ERP systems — but couldn\'t act on any of it in real time. CloudAlgo delivered a fully automated, cloud-native medallion pipeline that replaced 24-hour-stale reports with sub-15-minute analytics, eliminated manual reconciliation, and gave leadership a single source of truth they could trust.',
+    tags: [
+      'Apache Airflow',
+      'PostgreSQL',
+      'Redis',
+      'Python',
+      'Celery',
+      'Cerberus',
+      'Docker',
+      'Heroku',
     ],
+    duration: 'Ongoing engagement',
+    result: 'Sub-15 min data freshness across CRM + ERP with zero manual intervention',
+
+    headline: 'From disconnected systems to a unified, analytics-ready data layer.',
+
+    executiveSummary:
+      'An enterprise manufacturing business was sitting on a goldmine of operational data — spread across a leading CRM platform, an ERP system, and multiple business divisions — but couldn\'t act on any of it in real time. Reports were hours stale. Sales goals couldn\'t be reconciled with actual shipments. Account data across systems drifted out of sync daily. CloudAlgo designed and delivered a fully automated, cloud-native data pipeline that ingests raw transactional data, transforms it through a rigorous validation and enrichment layer, and surfaces analytics-ready datasets — all with sub-15-minute latency, fault-tolerant processing, and zero manual intervention. The result: a single source of truth that leadership, operations, and sales teams could trust and act on.',
+
+    challenge:
+      'Modern enterprises don\'t have a shortage of data. They have a coordination problem. CRM platforms capture customer relationships. ERP systems manage inventory, orders, and shipments. Finance tracks invoices. Sales sets goals by product and division. But these systems rarely talk to each other — and when they do, it\'s through brittle, manual exports and spreadsheet-driven reconciliation that breaks the moment volume increases.',
+
+    challengePoints: [
+      'Analytics dashboards reflected data that was 12–24 hours behind operational reality, making it impossible to act on live business conditions.',
+      'Customer records in the CRM used different identifiers than those in the ERP, meaning shipment and order data couldn\'t be reliably attributed to the correct accounts. Teams spent hours per week manually reconciling discrepancies.',
+      'Raw records from source systems contained inconsistencies — missing fields, incorrect types, unformatted strings, duplicate rows — that propagated silently into downstream reports.',
+      'Sales goals set at the product and division level had no automated connection to shipped quantities. KPI tracking required manual extraction and formula work in spreadsheets.',
+      'The business operated across multiple divisions, each with distinct data semantics, product lines, and reporting requirements.',
+      'Any failure in existing data flows caused complete data loss for that sync window, with no recovery path short of a manual re-pull.',
+    ],
+
+    whyNotOffShelf:
+      'Before engaging CloudAlgo, the business evaluated several standard enterprise integration platforms. Each had fundamental limitations that ruled it out. Off-the-shelf tools either handle extraction OR transformation — rarely both with the nuance required for business-specific rules, multi-system account resolution, and division-level data semantics. Stitching together three or four tools creates its own integration burden, operational overhead, and failure surface. CloudAlgo built what the tools couldn\'t provide: a unified, end-to-end pipeline with business logic embedded at every layer.',
+
+    toolComparison: [
+      {
+        tool: 'Fivetran',
+        category: 'Managed ELT',
+        doesWell: 'Excellent pre-built connectors; zero-config replication',
+        limitation:
+          'Pure EL — no transformation logic. Business rules, formula evaluation, and multi-division enrichment are not supported. All logic still lives in spreadsheets.',
+      },
+      {
+        tool: 'Stitch Data',
+        category: 'Managed ELT',
+        doesWell: 'Fast setup; affordable entry point',
+        limitation:
+          'Same limitation as Fivetran. Replicates data as-is. Data quality enforcement and derived field calculation require a separate transformation layer the tool doesn\'t provide.',
+      },
+      {
+        tool: 'dbt',
+        category: 'Transformation Layer',
+        doesWell: 'SQL-native transformations; version control',
+        limitation:
+          'Only the "T" in ETL. Still requires a loading mechanism, orchestration, and a separate validation framework. Not a pipeline — a component.',
+      },
+      {
+        tool: 'MuleSoft',
+        category: 'iPaaS / Integration',
+        doesWell: 'Robust connector library; enterprise-grade support',
+        limitation:
+          'Extremely heavyweight. Licensing costs are prohibitive. Built for API-centric integrations, not high-volume batch data pipelines with complex state management.',
+      },
+      {
+        tool: 'Azure Data Factory',
+        category: 'Cloud ETL',
+        doesWell: 'Native Azure integration; visual pipeline builder',
+        limitation:
+          'Vendor lock-in to Microsoft cloud. Limited support for formula-based field derivation and schema-level validation. Customisation requires significant DevOps overhead.',
+      },
+      {
+        tool: 'Talend',
+        category: 'Enterprise ETL',
+        doesWell: 'Feature-rich; handles complex transformations',
+        limitation:
+          'On-premise orientation; steep learning curve; expensive licensing. Overengineered for this use case and slow to adapt to schema changes.',
+      },
+      {
+        tool: 'Salesforce Flow / Data Loader',
+        category: 'Native CRM Tooling',
+        doesWell: 'Tight CRM integration; no extra infrastructure',
+        limitation:
+          'No concept of a data warehouse layer. Cannot transform, validate, or route data to external systems at scale. API rate limits become a bottleneck immediately.',
+      },
+    ],
+
+    solution:
+      'CloudAlgo designed and implemented a multi-stage medallion architecture — a proven data engineering pattern where raw data is progressively refined through Bronze, Silver, and Gold layers before reaching analytics consumers. Each layer has a clear contract: what comes in, what transformations are applied, and what comes out. The entire system runs on Apache Airflow with Celery-based distributed execution, deployed to a managed cloud environment with PostgreSQL as the warehouse layer and Redis for real-time coordination between pipeline stages.',
+
+    solutionSteps: [
+      {
+        title: 'Intelligent Ingestion — Staging Layer',
+        body: 'A dedicated orchestration DAG receives table-level payloads via API and uses Redis-backed state coordination to track which tables have arrived for a given sync window. Only when all expected tables for a division are confirmed does the downstream pipeline trigger — eliminating the partial-data problem that caused reporting inconsistencies. Configurable timeout and retry handling ensure no sync window is silently skipped.',
+      },
+      {
+        title: 'Bronze — The Faithful Copy',
+        body: 'Raw data lands in the Bronze layer with minimal transformation — the goal is a clean, complete, denormalized record of what arrived. Records are processed in configurable batch sizes using executemany semantics so individual row failures don\'t abort the entire batch. A custom formula evaluation engine handles concatenation, unit conversion (tons ↔ pounds), date part extraction, and duration calculations — all driven by JSON configuration, not hardcoded logic. Business analysts can update derivation rules without touching Python.',
+      },
+      {
+        title: 'Silver — The Trust Layer',
+        body: 'The Silver pipeline is where raw data becomes trusted data. Every record passes through Cerberus schema validation (type checking, required field enforcement, value constraints), duplicate detection, column normalisation (uppercase, trimming, type coercion, null handling), and upsert writes. New records are inserted; existing records are updated on conflict, making the pipeline idempotent and safe to re-run. Anything downstream can trust that Silver data is structurally valid, deduplicated, and correctly typed.',
+      },
+      {
+        title: 'Gold — Analytics at Speed',
+        body: 'The Gold layer exposes analytics-optimised schemas at 15-minute cadence. A Table Sync DAG maps Silver columns to Gold schema names with idempotent upserts. An Account Relationship DAG solves the hardest cross-system problem — linking CRM account identifiers to ERP records across 4 destination tables using functional indexes on TRIM()+LOWER() columns, cutting query time by 75–90%. A KPI Calculation DAG joins shipped quantity data against annual and prior-year sales goals at product and division level, giving sales leadership a live view of performance vs. plan.',
+      },
+    ],
+
+    technicalHighlights: [
+      {
+        title: 'Config-Driven Architecture',
+        body: 'Every pipeline stage — table definitions, column mappings, validation schemas, formula rules, relationship joins — is driven by JSON configuration files. Adding a new table or modifying a transformation does not require code changes. This makes the system maintainable by data engineers who didn\'t write it and adaptable to schema evolution without pipeline downtime.',
+      },
+      {
+        title: 'Fault Tolerance by Design',
+        body: 'Batch processing uses executemany with per-row error isolation. A single bad record is logged and skipped — it doesn\'t abort the batch. Failed rows are counted, reported in email notifications, and surfaced in the Airflow task log for investigation. The pipeline always completes; it never silently swallows failures.',
+      },
+      {
+        title: '75–90% Performance Gain via Index Optimisation',
+        body: 'An early version of the Account Relationship DAG used ILIKE pattern matching for account lookup — readable, but unindexable. As data volumes grew, this stage became a multi-hour bottleneck. CloudAlgo created functional indexes on TRIM(source_account_id) and TRIM(LOWER(division)) columns, then rewrote queries using identical semantics that were now index-scannable. Execution time dropped from 1–2 hours to 10–30 minutes — a 75–90% reduction with no change to output correctness.',
+      },
+      {
+        title: 'Standardised Operational Observability',
+        body: 'Every pipeline stage emits structured email notifications in a consistent format: [ENVIRONMENT] [STATUS] PIPELINE — DIVISION — RECORDS_PROCESSED / RECORDS_FAILED. Operations teams see at a glance what ran, whether it succeeded, what division it processed, and how many records were affected — without opening Airflow. Partial failures surface immediately, not after someone notices a dashboard anomaly.',
+      },
+    ],
+
     outcomes: [
-      { metric: '<15 min', label: 'Data freshness end-to-end (was 12–24 hours)' },
+      { metric: '<15 min', label: 'End-to-end data freshness (was 12–24 hours)' },
       { metric: '90%', label: 'Faster account linkage query (1–2 hrs → 10–30 min)' },
       { metric: '0', label: 'Manual interventions required per sync cycle' },
     ],
-  },
-  {
-    id: 'lifesciences',
-    index: '07',
-    company: 'LifeSciences+',
-    industry: 'Pharma',
-    service: 'AppExchange',
-    metric: '200+',
-    metricLabel: 'enterprise customers at launch',
-    summary: 'Designed, built, and published a native AppExchange product for clinical trial management — passing Salesforce Security Review on first submission.',
-    tags: ['AppExchange', 'LWC', 'Security Review', 'Managed Package'],
-    duration: '28 weeks',
-    result: 'Listed on AppExchange — 4.8 ★ average rating',
-    headline: 'AppExchange launch. Security Review passed first time.',
-    challenge: 'LifeSciences+ had deep domain expertise in clinical trial management but no software product. Their consultants manually configured Salesforce for each new pharma client — a process that took 12 weeks per engagement. The founders wanted to productise their methodology as a native Salesforce app, but had no experience with AppExchange development, Managed Packages, or the Security Review process.',
-    solution: 'We designed and built a fully native Salesforce Managed Package for clinical trial management — covering site activation, patient enrolment, adverse event tracking, and regulatory reporting. The app passed Salesforce Security Review on the first submission (an uncommon achievement) and launched with 200+ enterprise customers pre-committed from LifeSciences+\'s existing client base.',
-    solutionSteps: [
-      { title: 'Product architecture', body: 'Designed the managed package schema, namespace strategy, and feature toggle system to support configurable deployment across client orgs.' },
-      { title: 'Core feature build', body: 'Built 6 LWC modules covering trial site management, patient enrolment tracking, protocol deviation logging, and regulatory submission templates.' },
-      { title: 'Security Review preparation', body: 'Conducted a full security audit against Salesforce\'s checkmarx rules, remediated all findings, and prepared the Security Review submission package.' },
-      { title: 'AppExchange listing & launch', body: 'Produced the listing content, demo org, and installation documentation. Coordinated the go-live with LifeSciences+\'s sales team for a simultaneous customer announcement.' },
+
+    resultsTable: [
+      { metric: 'Data freshness', before: '12–24 hours behind', after: 'Sub-15 minutes end-to-end' },
+      { metric: 'Account reconciliation', before: 'Manual, weekly, error-prone', after: 'Automated every 15 minutes' },
+      { metric: 'Account linkage query time', before: '1–2 hours', after: '10–30 minutes (75–90% faster)' },
+      { metric: 'Data quality enforcement', before: 'None — errors propagated silently', after: 'Schema-validated at Silver layer; failures isolated and reported' },
+      { metric: 'Goal vs. actuals tracking', before: 'Manual spreadsheet extraction', after: 'Automated KPI calculation on every sync' },
+      { metric: 'Pipeline failures', before: 'Total data loss for sync window', after: 'Row-level fault isolation; partial success reported' },
+      { metric: 'Schema change process', before: 'Code modification + redeploy', after: 'Config file update' },
+      { metric: 'Multi-division support', before: 'Separate, inconsistent scripts', after: 'Unified pipeline with division-aware routing' },
     ],
-    outcomes: [
-      { metric: '200+', label: 'Enterprise customers at launch day' },
-      { metric: '4.8 ★', label: 'Average AppExchange rating' },
-      { metric: '1st try', label: 'Salesforce Security Review — passed first submission' },
+
+    whatDemonstrates: [
+      {
+        title: 'We build to the real requirement, not the template.',
+        body: 'Off-the-shelf tools failed here not because they\'re bad tools, but because the problem demanded business logic embedded in the pipeline — formula evaluation, cross-system account resolution, division-aware routing, schema validation with specific rules per table. We designed a system where all of that logic is first-class, not bolted on.',
+      },
+      {
+        title: 'We engineer for the second year, not just the launch.',
+        body: 'Config-driven architecture, functional indexes, fault-tolerant batching, standardised observability — none of these are features you need on day one. They\'re the features that keep a pipeline running reliably at year two when data volumes have doubled and the original engineers have moved on.',
+      },
+      {
+        title: 'We treat performance as a correctness requirement.',
+        body: 'A pipeline that takes two hours to run every 15 minutes isn\'t a pipeline — it\'s a liability. Performance optimisation isn\'t a luxury phase; it\'s part of building something production-worthy.',
+      },
+      {
+        title: 'We leave teams capable of owning what we build.',
+        body: 'JSON-driven configuration, documented schemas, standardised notification formats, and clean DAG separation mean the team inheriting this system can understand, extend, and debug it without re-engaging us for every change.',
+      },
     ],
-    testimonial: {
-      quote: 'CloudAlgo didn\'t just build the app — they taught us how to think like a software product company. The Security Review pass on first submission saved us months.',
-      name: 'Priya Nair',
-      role: 'CEO, LifeSciences+',
-    },
+
+    techStack: [
+      { layer: 'Orchestration', technology: 'Apache Airflow 2.6.1 with CeleryExecutor' },
+      { layer: 'Distributed Processing', technology: 'Celery 5.3.1 + Redis' },
+      { layer: 'Data Warehouse', technology: 'PostgreSQL (Staging / Bronze / Silver / Gold schemas)' },
+      { layer: 'Schema Validation', technology: 'Cerberus' },
+      { layer: 'Formula Evaluation', technology: 'Custom Python engine (Sympy + pandas)' },
+      { layer: 'Account Matching', technology: 'Levenshtein distance + functional index optimisation' },
+      { layer: 'Deployment', technology: 'Docker + Heroku (managed cloud)' },
+      { layer: 'Notifications', technology: 'Mailgun (structured HTML email)' },
+      { layer: 'Monitoring', technology: 'Papertrail (log aggregation) + Librato (metrics)' },
+      { layer: 'Language', technology: 'Python 3.x' },
+    ],
   },
 ];
