@@ -1302,10 +1302,61 @@ textarea.form-control { resize: vertical; min-height: 140px; }
   outline: none;
   resize: vertical;
 }
-.sw-field input:focus,
+.sw-field input:not(.sw-email-pills input):focus,
 .sw-field textarea:focus { border-color: var(--ca-black); }
 
 .sw-error-msg { font-size: 13px; color: #e53e3e; margin-bottom: 12px; }
+
+.sw-email-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 6px 10px;
+  cursor: text;
+  min-height: 42px;
+  background: #fff;
+  transition: border-color 150ms;
+}
+.sw-email-pills:focus-within { border-color: var(--ca-black); }
+.sw-email-pills input {
+  border: none !important;
+  outline: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  flex: 1;
+  min-width: 120px;
+  font-size: 14px;
+  background: transparent;
+}
+.sw-email-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--ca-black);
+  color: #fff;
+  border-radius: 100px;
+  padding: 2px 10px 2px 10px;
+  font-size: 13px;
+  white-space: nowrap;
+}
+.sw-email-pill-remove {
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  font-size: 15px;
+  line-height: 1;
+  padding: 0;
+  opacity: 0.7;
+}
+.sw-email-pill-remove:hover { opacity: 1; }
+.sw-email-hint { font-size: 12px; color: #94a3b8; margin-top: 4px; }
+
+/* disabled slot */
+.sw-slot-btn:disabled { opacity: 0.35; cursor: default; pointer-events: none; text-decoration: line-through; }
 
 .sw-submit-btn {
   background: var(--ca-black);

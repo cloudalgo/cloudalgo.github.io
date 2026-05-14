@@ -155,6 +155,7 @@ interface StepDatePickerProps {
   selectedDate: Date | null;
   currentMonth: Date;
   availableSlots: string[];
+  allSlots: string[];
   slotsLoading: boolean;
   slotsError: string | null;
   userTimezone: string;
@@ -168,7 +169,7 @@ interface StepDatePickerProps {
 }
 
 function StepDatePicker({
-  selectedDate, currentMonth, availableSlots, slotsLoading, slotsError,
+  selectedDate, currentMonth, availableSlots, allSlots, slotsLoading, slotsError,
   userTimezone, onPrevMonth, onNextMonth, onSelectDate, onSelectSlot, onClose,
   mobileShowCalendar, onMobileBackToCalendar,
 }: StepDatePickerProps) {
@@ -196,8 +197,14 @@ function StepDatePicker({
     selectedDate?.getMonth() === month &&
     selectedDate?.getDate() === day;
 
-  const isDisabled = (day: number) =>
-    isPastDate(year, month, day) || isWeekend(year, month, day);
+  const minDate = addBusinessDays(new Date(), 2);
+  const maxDate = (() => { const d = new Date(); d.setMonth(d.getMonth() + 1); return d; })();
+  const isLastAllowedMonth = new Date(year, month + 1, 1) > maxDate;
+
+  const isDisabled = (day: number) => {
+    const d = new Date(year, month, day);
+    return d < minDate || d > maxDate || isWeekend(year, month, day);
+  };
 
   const tzLabel = getTimezoneLabel(userTimezone);
   const isMobile = useIsMobile();
@@ -218,7 +225,7 @@ function StepDatePicker({
               ‹
             </button>
             <span className="sw-cal-month">{monthLabel}</span>
-            <button className="sw-cal-nav" onClick={onNextMonth} aria-label="Next month">
+            <button className="sw-cal-nav" onClick={onNextMonth} disabled={isLastAllowedMonth} aria-label="Next month">
               ›
             </button>
           </div>
@@ -284,18 +291,31 @@ function StepDatePicker({
               {slotsError && !slotsLoading && (
                 <p className="sw-slots-empty">{slotsError}</p>
               )}
-              {!slotsLoading && !slotsError && availableSlots.length === 0 && (
+              {!slotsLoading && !slotsError && allSlots.length === 0 && (
                 <p className="sw-slots-empty">No slots available for this date.</p>
               )}
-              {!slotsLoading && !slotsError && availableSlots.map(slot => (
-                <button
-                  key={slot}
-                  className="sw-slot-btn"
-                  onClick={() => onSelectSlot(slot)}
-                >
-                  {istSlotToLocal(selectedDate, slot, userTimezone)}
-                </button>
-              ))}
+              {!slotsLoading && !slotsError && allSlots.map(slot => {
+                const isAvailable = availableSlots.includes(slot);
+                return pendingSlot === slot ? (
+                  <div key={slot} className="sw-mobile-slot-row">
+                    <button className="sw-mobile-slot-selected" onClick={() => setPendingSlot(null)}>
+                      {istSlotToLocal(selectedDate!, slot, userTimezone)}
+                    </button>
+                    <button className="sw-mobile-slot-next" onClick={() => { setPendingSlot(null); onSelectSlot(slot); }}>
+                      Next
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    key={slot}
+                    className="sw-slot-btn"
+                    disabled={!isAvailable}
+                    onClick={() => setPendingSlot(slot)}
+                  >
+                    {istSlotToLocal(selectedDate!, slot, userTimezone)}
+                  </button>
+                );
+              })}
             </>
           )}
         </div>
@@ -348,11 +368,12 @@ function StepDatePicker({
             {slotsError && !slotsLoading && (
               <p className="sw-mobile-slots-empty">{slotsError}</p>
             )}
-            {!slotsLoading && !slotsError && availableSlots.length === 0 && (
+            {!slotsLoading && !slotsError && allSlots.length === 0 && (
               <p className="sw-mobile-slots-empty">No slots available for this date.</p>
             )}
-            {!slotsLoading && !slotsError && availableSlots.map(slot => (
-              pendingSlot === slot ? (
+            {!slotsLoading && !slotsError && allSlots.map(slot => {
+              const isAvailable = availableSlots.includes(slot);
+              return pendingSlot === slot ? (
                 <div key={slot} className="sw-mobile-slot-row">
                   <button className="sw-mobile-slot-selected" onClick={() => setPendingSlot(null)}>
                     {istSlotToLocal(selectedDate!, slot, userTimezone)}
@@ -362,11 +383,11 @@ function StepDatePicker({
                   </button>
                 </div>
               ) : (
-                <button key={slot} className="sw-slot-btn" onClick={() => setPendingSlot(slot)}>
+                <button key={slot} className="sw-slot-btn" disabled={!isAvailable} onClick={() => setPendingSlot(slot)}>
                   {istSlotToLocal(selectedDate!, slot, userTimezone)}
                 </button>
-              )
-            ))}
+              );
+            })}
           </div>
         </div>
       )}
@@ -393,7 +414,8 @@ function StepDetails({
   selectedDate, selectedTime, userTimezone, onBack, onConfirmed, onClose,
 }: StepDetailsProps) {
   const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
+  const [emails, setEmails] = useState<string[]>([]);
+  const [emailInput, setEmailInput] = useState('');
   const [notes, setNotes] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
@@ -401,15 +423,36 @@ function StepDetails({
   const summary = formatBookingSummary(selectedDate, selectedTime, userTimezone);
   const tzLabel = getTimezoneLabel(userTimezone);
 
+  const isValidEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+
+  const addEmail = (raw: string) => {
+    const v = raw.trim().replace(/,+$/, '');
+    if (v && isValidEmail(v) && !emails.includes(v)) {
+      setEmails(prev => [...prev, v]);
+    }
+    setEmailInput('');
+  };
+
+  const handleEmailKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (['Enter', ',', 'Tab'].includes(e.key)) {
+      e.preventDefault();
+      addEmail(emailInput);
+    } else if (e.key === 'Backspace' && !emailInput && emails.length > 0) {
+      setEmails(prev => prev.slice(0, -1));
+    }
+  };
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const allEmails = emailInput.trim() ? [...emails, emailInput.trim()] : emails;
+    if (!allEmails.length) return;
     setSubmitting(true);
     setErrorMsg('');
     try {
       const params = new URLSearchParams({
         action: 'book',
         name: name.trim(),
-        email: email.trim(),
+        email: allEmails.join(','),
         date: toDateStr(selectedDate),
         time: selectedTime,
         notes: notes.trim(),
@@ -420,7 +463,7 @@ function StepDetails({
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data: { success: boolean; error?: string } = await res.json();
       if (data.success) {
-        onConfirmed(email.trim());
+        onConfirmed(allEmails[0]);
       } else {
         setErrorMsg(data.error ?? 'Something went wrong. Please try again.');
         setSubmitting(false);
@@ -463,14 +506,25 @@ function StepDetails({
           </div>
           <div className="sw-field">
             <label htmlFor="sw-email">Email <span aria-hidden="true">*</span></label>
-            <input
-              id="sw-email"
-              type="email"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              required
-              autoComplete="email"
-            />
+            <div className="sw-email-pills" onClick={() => document.getElementById('sw-email')?.focus()}>
+              {emails.map(em => (
+                <span key={em} className="sw-email-pill">
+                  {em}
+                  <button type="button" className="sw-email-pill-remove" onClick={() => setEmails(prev => prev.filter(x => x !== em))} aria-label={`Remove ${em}`}>×</button>
+                </span>
+              ))}
+              <input
+                id="sw-email"
+                type="email"
+                value={emailInput}
+                onChange={e => setEmailInput(e.target.value)}
+                onKeyDown={handleEmailKeyDown}
+                onBlur={() => addEmail(emailInput)}
+                placeholder={emails.length === 0 ? 'name@example.com' : ''}
+                autoComplete="email"
+              />
+            </div>
+            <p className="sw-email-hint">Press Enter or comma to add multiple emails</p>
           </div>
           <div className="sw-field">
             <label htmlFor="sw-notes">
@@ -487,9 +541,9 @@ function StepDetails({
           <button
             type="submit"
             className="sw-submit-btn"
-            disabled={submitting || !name.trim() || !email.trim()}
+            disabled={submitting || !name.trim() || (emails.length === 0 && !emailInput.trim())}
           >
-            {submitting ? 'Scheduling…' : 'Schedule Event'}
+            {submitting ? 'Scheduling…' : 'Schedule Call'}
           </button>
         </form>
       </div>
@@ -545,6 +599,7 @@ export default function ScheduleWidget() {
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [confirmedEmail, setConfirmedEmail] = useState('');
   const [availableSlots, setAvailableSlots] = useState<string[]>([]);
+  const [allSlots, setAllSlots] = useState<string[]>([]);
   const [slotsLoading, setSlotsLoading] = useState(false);
   const [slotsError, setSlotsError] = useState<string | null>(null);
   const [tooltipVisible, setTooltipVisible] = useState(false);
@@ -617,11 +672,13 @@ export default function ScheduleWidget() {
     setSlotsLoading(true);
     setSlotsError(null);
     setAvailableSlots([]);
+    setAllSlots([]);
     try {
       const res = await fetch(`${API_URL}?action=slots&date=${toDateStr(date)}`, { signal });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data: { slots?: string[]; error?: string } = await res.json();
+      const data: { slots?: string[]; allSlots?: string[]; error?: string } = await res.json();
       setAvailableSlots(data.slots ?? []);
+      setAllSlots(data.allSlots ?? data.slots ?? []);
     } catch (e) {
       if ((e as Error).name !== 'AbortError') {
         setSlotsError('Could not load slots. Please try again.');
@@ -665,6 +722,7 @@ export default function ScheduleWidget() {
     setSelectedDate(defaultDate);
     setSelectedTime(null);
     setAvailableSlots([]);
+    setAllSlots([]);
     setConfirmedEmail('');
     setMobileShowCalendar(false);
     setScheduleHash(false);
@@ -674,6 +732,7 @@ export default function ScheduleWidget() {
     setIsOpen(true);
     setTooltipVisible(false);
     setScheduleHash(true);
+    fetchSlots(defaultDate);
   };
 
   const handlePrevMonth = () => {
@@ -686,7 +745,12 @@ export default function ScheduleWidget() {
   };
 
   const handleNextMonth = () => {
-    setCurrentMonth(prev => new Date(prev.getFullYear(), prev.getMonth() + 1, 1));
+    setCurrentMonth(prev => {
+      const maxDate = new Date();
+      maxDate.setMonth(maxDate.getMonth() + 1);
+      const next = new Date(prev.getFullYear(), prev.getMonth() + 1, 1);
+      return next > maxDate ? prev : next;
+    });
   };
 
   if (!visible) return null;
@@ -711,6 +775,7 @@ export default function ScheduleWidget() {
                 selectedDate={selectedDate}
                 currentMonth={currentMonth}
                 availableSlots={availableSlots}
+                allSlots={allSlots}
                 slotsLoading={slotsLoading}
                 slotsError={slotsError}
                 userTimezone={userTimezone}
