@@ -6,7 +6,7 @@ This document covers setup, deployment, and the API contract.
 ## Environment variable
 
 ```
-PUBLIC_SCHEDULE_API_URL=https://script.google.com/macros/s/AKfycbzIH100rcbBH84ragJP89fuv85j1ui0WrIdGX0pKNsgMZo1xFSTBHMKYeFCGui7BWgO/exec
+PUBLIC_SCHEDULE_API_URL=https://script.google.com/macros/s/AKfycby-lauhAmsGPEqaS6bhD5IQOeFrSrHIpdQ8POkoIQpFTpiYsjDkDZy9xA3045cs0QqC/exec
 ```
 
 Set this in:
@@ -129,7 +129,8 @@ function bookSlot(p) {
 // ── Confirmation email ────────────────────────────────────────────────────────
 function sendConfirmationEmail({ name, email, date, time, timezone, notes }) {
   const subject = 'Your call with CloudAlgo is confirmed!';
-  const body = `Hi ${name},
+
+  const bookerBody = `Hi ${name},
 
 Your 30-minute call with the CloudAlgo team has been confirmed.
 
@@ -145,12 +146,29 @@ Sandeep Kumar
 CloudAlgo
 ${OWNER_EMAIL}`;
 
-  MailApp.sendEmail({ to: email, subject, body, name: 'CloudAlgo' });
+  MailApp.sendEmail({ to: email, subject, body: bookerBody, name: 'CloudAlgo' });
+
+  const ownerBody = `
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  NEW CALL BOOKED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Name:      ${name}
+  Email:     ${email}
+
+  Date:      ${date}
+  Time:      ${time} IST  (${timezone})
+  Duration:  30 minutes
+
+${notes ? '  Notes\n  ' + notes + '\n' : ''}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+A calendar invite has been sent to all participants.
+`;
 
   MailApp.sendEmail({
     to: OWNER_EMAIL,
-    subject: `New call booked: ${name} — ${date} at ${time} IST`,
-    body: `New booking:\n\nName:     ${name}\nEmail:    ${email}\nDate:     ${date}\nTime:     ${time} IST\nTimezone: ${timezone}\nNotes:    ${notes || 'None'}`,
+    subject: `New Call: ${name} — ${date} at ${time} IST`,
+    body: ownerBody,
   });
 }
 
@@ -170,7 +188,7 @@ function jsonResponse(data) {
    - **Execute as**: Me
    - **Who has access**: Anyone
 4. Click **Deploy** and authorise the required permissions (Calendar + Gmail)
-5. Copy the URL: `https://script.google.com/macros/s/AKfycbzIH100rcbBH84ragJP89fuv85j1ui0WrIdGX0pKNsgMZo1xFSTBHMKYeFCGui7BWgO/exec`
+5. Copy the URL: `https://script.google.com/macros/s/AKfycby-lauhAmsGPEqaS6bhD5IQOeFrSrHIpdQ8POkoIQpFTpiYsjDkDZy9xA3045cs0QqC/exec`
 
 > Every time you edit the script you must create a **new deployment** (or **manage deployments → edit**) — the URL stays the same but the version updates.
 
@@ -178,7 +196,7 @@ function jsonResponse(data) {
 
 ```bash
 # .env (git-ignored)
-PUBLIC_SCHEDULE_API_URL=https://script.google.com/macros/s/AKfycbzIH100rcbBH84ragJP89fuv85j1ui0WrIdGX0pKNsgMZo1xFSTBHMKYeFCGui7BWgO/exec
+PUBLIC_SCHEDULE_API_URL=https://script.google.com/macros/s/AKfycby-lauhAmsGPEqaS6bhD5IQOeFrSrHIpdQ8POkoIQpFTpiYsjDkDZy9xA3045cs0QqC/exec
 ```
 
 ### 5. Wire it up in GitHub Actions
@@ -187,7 +205,7 @@ Add a repository secret:
 
 | Name | Value |
 |------|-------|
-| `PUBLIC_SCHEDULE_API_URL` | `https://script.google.com/macros/s/AKfycbzIH100rcbBH84ragJP89fuv85j1ui0WrIdGX0pKNsgMZo1xFSTBHMKYeFCGui7BWgO/exec` |
+| `PUBLIC_SCHEDULE_API_URL` | `https://script.google.com/macros/s/AKfycby-lauhAmsGPEqaS6bhD5IQOeFrSrHIpdQ8POkoIQpFTpiYsjDkDZy9xA3045cs0QqC/exec` |
 
 The deploy workflow already passes `PUBLIC_*` env vars to the Astro build step (verify in `.github/workflows/deploy.yml` if needed).
 
