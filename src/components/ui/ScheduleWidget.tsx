@@ -606,6 +606,8 @@ export default function ScheduleWidget() {
   const [mobileShowCalendar, setMobileShowCalendar] = useState(false);
   const [visible, setVisible] = useState(openFromUrl);
   const [bouncing, setBouncing] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
+  const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [currentMonth, setCurrentMonth] = useState(() =>
     new Date(defaultDate.getFullYear(), defaultDate.getMonth(), 1)
   );
@@ -634,13 +636,6 @@ export default function ScheduleWidget() {
     window.addEventListener('hashchange', onHashChange);
     return () => window.removeEventListener('hashchange', onHashChange);
   }, []);
-
-  useEffect(() => {
-    if (!isOpen) return;
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') handleClose(); };
-    document.addEventListener('keydown', onKey);
-    return () => document.removeEventListener('keydown', onKey);
-  }, [isOpen]);
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? 'hidden' : '';
@@ -715,18 +710,32 @@ export default function ScheduleWidget() {
     setStep('confirmed');
   };
 
-  const handleClose = () => {
-    abortRef.current?.abort();
-    setIsOpen(false);
-    setStep('date');
-    setSelectedDate(defaultDate);
-    setSelectedTime(null);
-    setAvailableSlots([]);
-    setAllSlots([]);
-    setConfirmedEmail('');
-    setMobileShowCalendar(false);
-    setScheduleHash(false);
-  };
+  const handleClose = useCallback(() => {
+    if (isClosing) return;
+    setIsClosing(true);
+    closeTimerRef.current = setTimeout(() => {
+      setIsClosing(false);
+      abortRef.current?.abort();
+      setIsOpen(false);
+      setStep('date');
+      setSelectedDate(defaultDate);
+      setSelectedTime(null);
+      setAvailableSlots([]);
+      setAllSlots([]);
+      setConfirmedEmail('');
+      setMobileShowCalendar(false);
+      setScheduleHash(false);
+    }, 300);
+  }, [isClosing, defaultDate]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') handleClose(); };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [isOpen, handleClose]);
+
+  useEffect(() => () => { if (closeTimerRef.current) clearTimeout(closeTimerRef.current); }, []);
 
   const handleOpen = () => {
     setIsOpen(true);
@@ -761,10 +770,10 @@ export default function ScheduleWidget() {
         onOpen={handleOpen}
         bouncing={bouncing}
       />
-      {isOpen && (
-        <div className="sw-overlay sw-overlay--enter" onClick={handleClose}>
+      {(isOpen || isClosing) && (
+        <div className={`sw-overlay ${isClosing ? 'sw-overlay--exit' : 'sw-overlay--enter'}`} onClick={handleClose}>
           <div
-            className="sw-modal sw-modal--enter"
+            className={`sw-modal ${isClosing ? 'sw-modal--exit' : 'sw-modal--enter'}`}
             onClick={e => e.stopPropagation()}
             role="dialog"
             aria-modal="true"

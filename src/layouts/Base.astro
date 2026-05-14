@@ -91,6 +91,32 @@ const ogImage = image.startsWith('http') ? image : `${imageHost}${image}`;
         observer.observe(el);
       });
 
+      // Scroll parallax for [data-parallax] elements
+      const noMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (!noMotion) {
+        const parallaxEls = Array.from(document.querySelectorAll<HTMLElement>('[data-parallax]'));
+        if (parallaxEls.length) {
+          const items = parallaxEls.map(el => {
+            const rect = el.getBoundingClientRect();
+            const naturalCenter = rect.top + rect.height / 2 + window.scrollY;
+            el.style.willChange = 'transform';
+            return { el, naturalCenter, speed: parseFloat(el.dataset.parallax ?? '0.1') };
+          });
+          let pRafId: number | null = null;
+          const updateParallax = () => {
+            pRafId = null;
+            items.forEach(({ el, naturalCenter, speed }) => {
+              const fromCenter = naturalCenter - window.scrollY - window.innerHeight * 0.5;
+              el.style.transform = `translateY(${fromCenter * speed}px)`;
+            });
+          };
+          window.addEventListener('scroll', () => {
+            if (!pRafId) pRafId = requestAnimationFrame(updateParallax);
+          }, { passive: true });
+          requestAnimationFrame(updateParallax);
+        }
+      }
+
       // GA4: scroll depth (25 / 50 / 75 / 100%)
       const scrollMilestones = new Set<number>();
       window.addEventListener('scroll', () => {
