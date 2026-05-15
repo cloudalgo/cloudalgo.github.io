@@ -64,7 +64,7 @@ import { caseStudies } from '../data/case-studies';
             <text x="264" y="289" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8" font-weight="700" fill="rgba(10,10,10,0.5)">Airflow</text>
             <!-- floating badge -->
             <rect x="346" y="50" width="90" height="30" rx="15" fill="#0A0A0A"/>
-            <text x="391" y="69" text-anchor="middle" font-family="Outfit,sans-serif" font-size="11" font-weight="700" fill="#fff">1 study</text>
+            <text x="391" y="69" text-anchor="middle" font-family="Outfit,sans-serif" font-size="11" font-weight="700" fill="#fff">2 studies</text>
             <!-- decorative dots -->
             <circle cx="66"  cy="130" r="4"   fill="rgba(10,10,10,0.07)"/>
             <circle cx="56"  cy="188" r="2.5" fill="rgba(10,10,10,0.05)"/>
@@ -89,6 +89,34 @@ import { caseStudies } from '../data/case-studies';
             <div class="cs-card-metric-bg" aria-hidden="true">{cs.metric}</div>
 
             <div class="cs-card-illo" aria-hidden="true">
+              {cs.id === 'nonprofit-web-platform' && (
+                <svg viewBox="0 0 320 160" fill="none" class="cs-illo-svg">
+                  <!-- Layer 1: Frontend -->
+                  <rect x="16" y="12" width="288" height="30" rx="5" stroke="#0A0A0A" stroke-width="1.5" opacity="0.15" fill="rgba(10,10,10,0.02)"/>
+                  <text x="30" y="31" font-family="Outfit,sans-serif" font-size="9" font-weight="800" fill="#0A0A0A" opacity="0.30" letter-spacing="0.08em">NEXT.JS 14 · REACT 18</text>
+                  <!-- Arrow 1→2 -->
+                  <path d="M160 44 L160 50" stroke="#0A0A0A" stroke-width="1.5" opacity="0.25" stroke-linecap="round"/>
+                  <path d="M157 47 L160 52 L163 47" stroke="#0A0A0A" stroke-width="1.5" opacity="0.25" stroke-linecap="round" stroke-linejoin="round"/>
+                  <!-- Layer 2: Backend -->
+                  <rect x="16" y="52" width="288" height="30" rx="5" stroke="#0A0A0A" stroke-width="1.5" opacity="0.32" fill="rgba(10,10,10,0.04)"/>
+                  <text x="30" y="71" font-family="Outfit,sans-serif" font-size="9" font-weight="800" fill="#0A0A0A" opacity="0.52" letter-spacing="0.08em">NODE.JS API · HEROKU</text>
+                  <!-- Arrow 2→3 -->
+                  <path d="M160 84 L160 90" stroke="#0A0A0A" stroke-width="1.5" opacity="0.35" stroke-linecap="round"/>
+                  <path d="M157 87 L160 92 L163 87" stroke="#0A0A0A" stroke-width="1.5" opacity="0.35" stroke-linecap="round" stroke-linejoin="round"/>
+                  <!-- Integration nodes -->
+                  <rect x="16" y="92" width="72" height="28" rx="5" stroke="#0A0A0A" stroke-width="1.5" opacity="0.45" fill="rgba(10,10,10,0.05)"/>
+                  <text x="52" y="110" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8" font-weight="800" fill="#0A0A0A" opacity="0.65">Salesforce</text>
+                  <rect x="96" y="92" width="52" height="28" rx="5" stroke="#0A0A0A" stroke-width="1.5" opacity="0.45" fill="rgba(10,10,10,0.05)"/>
+                  <text x="122" y="110" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8" font-weight="800" fill="#0A0A0A" opacity="0.65">Stripe</text>
+                  <rect x="156" y="92" width="60" height="28" rx="5" stroke="#0A0A0A" stroke-width="1.5" opacity="0.45" fill="rgba(10,10,10,0.05)"/>
+                  <text x="186" y="110" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8" font-weight="800" fill="#0A0A0A" opacity="0.65">Cognito</text>
+                  <!-- Metric badge -->
+                  <rect x="224" y="92" width="80" height="28" rx="5" fill="#0A0A0A"/>
+                  <text x="264" y="110" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" font-weight="800" fill="#fff">2+ yrs</text>
+                  <!-- Sub-row: additional integrations label -->
+                  <text x="16" y="140" font-family="Outfit,sans-serif" font-size="8" font-weight="600" fill="#0A0A0A" opacity="0.22" letter-spacing="0.05em">Segment · Marketing Cloud · Framer Motion · React Query</text>
+                </svg>
+              )}
               {cs.id === 'enterprise-data-pipeline' && (
                 <svg viewBox="0 0 320 160" fill="none" class="cs-illo-svg">
                   <rect x="16" y="10"  width="288" height="28" rx="5" stroke="#0A0A0A" stroke-width="1.5" opacity="0.15" fill="rgba(10,10,10,0.02)"/>
@@ -193,9 +221,9 @@ import { caseStudies } from '../data/case-studies';
 .cs-grid-section { background: #fff; padding: 4rem 0 5rem; }
 .cs-grid {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: 1.5rem;
-  max-width: 900px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
@@ -365,7 +393,7 @@ import { caseStudies } from '../data/case-studies';
 .cs-cta-btn-secondary:hover { color: #fff; border-color: rgba(255,255,255,0.5); }
 
 /* ── Responsive ── */
-@media (max-width: 1024px) { .cs-grid { grid-template-columns: 1fr; } }
+@media (max-width: 768px) { .cs-grid { grid-template-columns: 1fr; } }
 @media (max-width: 767px) {
   .cs-hero       { padding-top: 5.5rem; padding-bottom: 2rem; }
   .cs-hero-split { grid-template-columns: 1fr; }

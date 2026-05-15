@@ -30,8 +30,137 @@ export interface CaseStudy {
 
 export const caseStudies: CaseStudy[] = [
   {
-    id: 'enterprise-data-pipeline',
+    id: 'nonprofit-web-platform',
     index: '01',
+    company: 'Global Non-Profit Organization',
+    industry: 'Non-Profit',
+    service: 'Full-Stack · Salesforce',
+    metric: '2+ yrs',
+    metricLabel: 'ongoing platform engagement — serving 180+ countries',
+    summary:
+      'A global spiritual non-profit with presence in 180+ countries had outgrown its legacy PHP monolith — no CRM integration, growing technical debt, and a scalability ceiling that threatened every major event launch. CloudAlgo rebuilt the platform from the ground up: a Next.js 14 application with Salesforce CRM, Stripe-powered enrollment and donations, AWS Cognito passwordless auth, and a full content library — a platform the client has continued expanding for two years and counting.',
+    tags: ['Next.js 14', 'Salesforce', 'Stripe', 'AWS Cognito', 'Heroku', 'Segment', 'React Query', 'Framer Motion'],
+    duration: 'Ongoing (2+ years)',
+    result: 'Full platform rebuild replacing a legacy PHP monolith — CRM-connected, continuously expanding',
+
+    headline: 'From a legacy PHP monolith to a CRM-connected platform built for global reach.',
+
+    executiveSummary:
+      'A global non-profit spiritual organization operating across 180+ countries had outgrown its custom PHP platform — a monolith with no CRM connectivity, mounting technical debt, and a scalability ceiling that made every course launch a risk. CloudAlgo led a deliberate full-platform rebuild: a Next.js 14 application with a Node.js backend, Salesforce as the CRM backbone, Stripe for payments and donations, and AWS Cognito for passwordless authentication. The result is a modern, maintainable platform the client has continued to expand for two-plus years — adding course types, membership tiers, content features, and integrations — the clearest signal that the architecture was right.',
+
+    challenge:
+      'The client had served its global community for years on a custom PHP platform. But the system had accumulated enough technical debt that every new feature became a negotiation with legacy constraints. More critically, there was no CRM integration: member data, course enrollments, and user activity lived in separate silos with no unified view, no automation, and no path to real-time reporting.',
+
+    challengePoints: [
+      'No CRM connectivity — member records, course enrollments, and user activity lived in separate systems with no single source of truth and no automation between them.',
+      'Feature delivery was slow. New requests required navigating a legacy PHP codebase with no modern tooling, no standardized patterns, and no onboarding documentation for new contributors.',
+      'Traffic spikes during major course launches and enrollment windows pushed the PHP system toward its scalability ceiling.',
+      'Without standardized development patterns, every new contributor increased the risk of regressions and maintenance became progressively harder with every release.',
+    ],
+
+    solution:
+      'CloudAlgo led a full-platform rebuild — not a gradual migration, but a deliberate re-architecture. The new platform is a Next.js 14 application (React 18, Pages Router) deployed on Heroku, with a Node.js backend that normalizes data contracts across six external systems, Salesforce as the unified CRM backbone, and Heroku Marketing Cloud for campaign and transactional email automation.',
+
+    solutionSteps: [
+      {
+        title: 'Course & Event Platform',
+        body: 'A complete enrollment system for in-person courses, online workshops, ticketed events, youth programs, and retreats. Users can discover offerings via geo-based center finder (Google Maps + Autocomplete), register, pay via Stripe with saved payment methods and coupon support, and receive Apple Wallet passes and QR codes for in-person check-in — all within a single cohesive experience.',
+      },
+      {
+        title: 'Authentication & Identity',
+        body: 'Authentication runs on AWS Cognito with Cognito Passwordless Auth — enabling one-tap magic link and OTP logins alongside traditional email/password flows. This reduced friction at account creation and login significantly, critical for an audience spanning a wide age range and range of technical comfort across 180+ countries.',
+      },
+      {
+        title: 'Membership & Content Platform',
+        body: 'A complete membership lifecycle covering tier selection, billing, renewal, and personalized content gating. The content layer includes Daily Sky (daily inspiration), a guided meditation audio/video library, Ask Gurudev Q&A, a wisdom article and video collection, and a global audio player that persists playback state across page navigation.',
+      },
+      {
+        title: 'Donation Platform',
+        body: 'A full donation lifecycle built on Salesforce, Stripe, and Salesforce Community Cloud — one-time and recurring giving options, automated Salesforce sync per transaction, a donor self-service portal (giving history, tax receipts, payment method management), campaign and fund attribution, and Marketing Cloud acknowledgement emails triggered on transaction confirmation. This replaced a manual, spreadsheet-driven process with the organization\'s first fully auditable, end-to-end donation tracking system.',
+      },
+      {
+        title: 'CRM-Connected Analytics',
+        body: 'Every significant user action — page views, course views, checkout initiation, purchases — is tracked through Segment into Salesforce, enabling the marketing team to build audience segments, trigger Marketing Cloud automations, and report on enrollment funnel performance with no manual data entry.',
+      },
+    ],
+
+    technicalHighlights: [
+      {
+        title: 'Six External Systems, One Clean Backend Layer',
+        body: 'The platform integrates Salesforce, Salesforce Community Cloud, Stripe, AWS Cognito, Segment, and Heroku Marketing Cloud — each with distinct data models and failure modes. CloudAlgo built a Node.js backend layer that normalizes data contracts, handles retries, and decouples the frontend from individual vendor APIs. A Salesforce schema change doesn\'t cascade into the UI. A Stripe webhook failure doesn\'t leave the client state inconsistent.',
+      },
+      {
+        title: 'Enforced Conventions at Scale',
+        body: 'With a large team and 4,500+ commits over two years, ad-hoc patterns accumulate fast. Enforced conventions kept the codebase navigable: a custom useRouter hook that automatically preserves UTM parameters across every navigation; a useEntityTracking hook that standardizes analytics event payloads so no developer can accidentally fire a malformed track event; Pino structured logging replacing console.log throughout; React Query for consistent server-state management; and global modal and alert context providers preventing z-index conflicts and duplicated state logic scattered across features.',
+      },
+      {
+        title: '82% SSR Payload Reduction',
+        body: 'One major performance initiative reduced a key centers page SSR payload from 228 kB to 42 kB — an 82% reduction — by selectively deferring non-critical data to client-side fetches. Combined with Next.js SWC compilation, WebP image conversion at build time, and ongoing bundle analysis via @next/bundle-analyzer, the platform handles course launch traffic spikes without degradation.',
+      },
+      {
+        title: 'Multi-Environment CI/CD with Sentry Monitoring',
+        body: 'Three environments — development, QA, and production — each with distinct API credentials, feature flags, and Salesforce org connections. Heroku pipelines coordinate promotion from QA to production. Sentry monitors error rates post-deploy, and structured Pino logs give the engineering team clean, searchable production visibility without opening a dashboard.',
+      },
+    ],
+
+    outcomes: [
+      { metric: '2+ yrs', label: 'Ongoing client engagement — platform continuously expanding' },
+      { metric: '82%', label: 'SSR payload reduction on centers page (228 kB → 42 kB)' },
+      { metric: '6', label: 'External systems integrated cohesively — Salesforce, Stripe, Cognito, Segment, and more' },
+    ],
+
+    resultsTable: [
+      { metric: 'Platform foundation', before: 'Legacy PHP monolith — no modern tooling', after: 'Next.js 14, React 18, modular architecture on Heroku' },
+      { metric: 'CRM integration', before: 'None — siloed member and enrollment data', after: 'Salesforce as unified source of truth for all member activity' },
+      { metric: 'Donation tracking', before: 'Manual, spreadsheet-driven process', after: 'Full Salesforce-backed lifecycle with automated receipts and donor portal' },
+      { metric: 'Authentication', before: 'Email/password only', after: 'AWS Cognito with passwordless magic link and OTP' },
+      { metric: 'Feature delivery', before: 'Weeks — navigating legacy constraints', after: 'Days — clean architecture and reusable components' },
+      { metric: 'SSR payload (centers page)', before: '228 kB', after: '42 kB (82% reduction)' },
+      { metric: 'Analytics pipeline', before: 'No structured pipeline', after: 'Segment → Salesforce with full enrollment funnel visibility' },
+      { metric: 'Deployment', before: 'Manual', after: 'Heroku multi-environment pipelines with Sentry error monitoring' },
+    ],
+
+    whatDemonstrates: [
+      {
+        title: 'We rebuild when rebuilding is right.',
+        body: 'A gradual migration would have preserved the constraints of the PHP platform while adding complexity. We made the case for a clean break, designed the new architecture to handle the client\'s actual integration requirements from day one, and delivered a platform the team could own and extend without re-engaging us for every change.',
+      },
+      {
+        title: 'Integration depth requires an abstraction layer.',
+        body: 'Six external systems with distinct data models is a coordination problem, not a configuration problem. Our Node.js backend treats integration complexity as a first-class architectural concern — not something left for the frontend to handle ad hoc.',
+      },
+      {
+        title: 'Enforced conventions pay for themselves.',
+        body: 'A custom useRouter hook, a standardized analytics event contract, global context providers for modals and alerts — these feel like overhead in week one. By year two, with 4,500+ commits from a large team, they\'re the reason the codebase is still navigable and safe to work in.',
+      },
+      {
+        title: 'Ongoing engagement is the real metric.',
+        body: 'The strongest signal that a platform was built right is that the client keeps building on it. Two years in, the client is adding course types, membership tiers, content features, and integrations — not rewriting.',
+      },
+    ],
+
+    techStack: [
+      { layer: 'Framework', technology: 'Next.js 14 (Pages Router), React 18' },
+      { layer: 'Styling', technology: 'SCSS, Tailwind CSS, React Bootstrap 5' },
+      { layer: 'Authentication', technology: 'AWS Cognito, Cognito Passwordless Auth (magic link + OTP)' },
+      { layer: 'Payments', technology: 'Stripe (one-time, subscriptions, saved payment methods)' },
+      { layer: 'CRM', technology: 'Salesforce, Salesforce Community Cloud' },
+      { layer: 'Email / SMS Automation', technology: 'Heroku Marketing Cloud' },
+      { layer: 'Analytics Pipeline', technology: 'Segment → Salesforce' },
+      { layer: 'Server State', technology: 'React Query (TanStack)' },
+      { layer: 'Forms', technology: 'Formik, React Hook Form, Yup, Zod' },
+      { layer: 'Hosting & Deployment', technology: 'Heroku (multi-environment pipelines)' },
+      { layer: 'Error Tracking', technology: 'Sentry' },
+      { layer: 'Logging', technology: 'Pino (structured, leveled JSON)' },
+      { layer: 'Maps', technology: 'Google Maps, Google Places Autocomplete' },
+      { layer: 'Media', technology: 'Vimeo, YouTube, React Player' },
+      { layer: 'Animations', technology: 'Framer Motion' },
+      { layer: 'Build', technology: 'SWC, Next.js Bundle Analyzer, WebP conversion scripts' },
+    ],
+  },
+  {
+    id: 'enterprise-data-pipeline',
+    index: '02',
     company: 'Enterprise Manufacturer',
     industry: 'Manufacturing',
     service: 'Data Engineering',
