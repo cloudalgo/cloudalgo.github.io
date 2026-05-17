@@ -44,7 +44,13 @@
       "mcp__plugin_playwright_playwright__browser_evaluate",
       "Skill(svg)",
       "Skill(svg:*)",
-      "WebSearch"
+      "WebSearch",
+      "Skill(superpowers:brainstorming)",
+      "Skill(superpowers:brainstorming:*)",
+      "Skill(superpowers:writing-plans)",
+      "Skill(superpowers:writing-plans:*)",
+      "Skill(superpowers:subagent-driven-development)",
+      "Skill(superpowers:subagent-driven-development:*)"
     ],
     "additionalDirectories": [
       "/Users/sandeepkumar/.claude",
