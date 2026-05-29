@@ -1,5 +1,5 @@
 ---
-title: "Salesforce Consulting"
+title: "Salesforce Consulting & Implementation"
 order: 1
 icon: "☁️"
 excerpt: "CRM customization, communities, Force.com development, MuleSoft integrations, and Heroku solutions."
