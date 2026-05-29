@@ -7,11 +7,25 @@ const allProducts = await getCollection('products', ({ data }) => data.published
 const products = allProducts.sort((a, b) => a.data.order - b.data.order);
 const hero = products[0];
 const secondary = products.slice(1);
+
+const catalogSchema = {
+  '@context': 'https://schema.org',
+  '@type':    'ItemList',
+  name:       'CloudAlgo Products',
+  url:        'https://cloudalgo.com/products',
+  itemListElement: products.map((p, i) => ({
+    '@type':  'ListItem',
+    position: i + 1,
+    name:     p.data.title,
+    url:      `https://cloudalgo.com/products/${p.id}`,
+  })),
+};
 ---
 
 <Page
-  title="Products — CloudAlgo"
+  title="Salesforce Apps & AppExchange Products — CloudAlgo"
   description="Purpose-built Salesforce apps and integration connectors from the CloudAlgo team — from production-ready to early access."
+  schema={catalogSchema}
 >
 
   <!-- Page header -->
