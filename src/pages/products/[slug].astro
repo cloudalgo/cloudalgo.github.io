@@ -16,6 +16,45 @@ const { data } = product;
 const { Content } = await render(product);
 const hasBody = (product.body?.trim().length ?? 0) > 30;
 
+const siteBase = 'https://cloudalgo.com';
+
+const osMap: Record<string, string> = {
+  'salesforce-app': 'Salesforce',
+  'mobile-app':     'iOS, Android',
+  'integration':    'Linux, Docker',
+};
+
+const softwareApp: Record<string, unknown> = {
+  '@type':             'SoftwareApplication',
+  name:                data.title,
+  description:         data.tagline,
+  applicationCategory: 'BusinessApplication',
+  operatingSystem:     osMap[data.type] ?? 'Web',
+  url:                 `${siteBase}/products/${slug}`,
+  provider: {
+    '@type': 'Organization',
+    name:    'CloudAlgo',
+    url:     siteBase,
+  },
+};
+
+if (data.externalUrl) softwareApp.downloadUrl = data.externalUrl;
+if (data.status === 'ga') {
+  softwareApp.offers = { '@type': 'Offer', price: '0', priceCurrency: 'USD' };
+}
+
+const productSchema: object[] = [
+  softwareApp,
+  {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home',     item: `${siteBase}/` },
+      { '@type': 'ListItem', position: 2, name: 'Products', item: `${siteBase}/products` },
+      { '@type': 'ListItem', position: 3, name: data.title, item: `${siteBase}/products/${slug}` },
+    ],
+  },
+];
+
 const statusLabel = (s: string) =>
   s === 'ga' ? 'Generally Available' : s === 'preview' ? 'Preview' : 'Beta';
 const typeLabel = (t: string) =>
@@ -212,8 +251,9 @@ const hasPricingOrReqs = (data.pricing && data.pricing.length > 0) ||
 ---
 
 <Page
-  title={`${data.title} — CloudAlgo Products`}
+  title={data.seoTitle ?? `${data.title} — CloudAlgo Products`}
   description={data.tagline}
+  schema={productSchema}
 >
 
   <!-- ① Hero — white bg, matches .page-header -->
