@@ -29,10 +29,10 @@ features:
     title: "One-Tap Renewal"
     description: "Renew a policy in one tap with optional auto-advance of the expiry date by one year, keeping your records accurate."
 screenshots:
-  - "/products/insurealgo/02_dashboard.png"
-  - "/products/insurealgo/03_policy_list.png"
-  - "/products/insurealgo/04_add_policy.png"
-  - "/products/insurealgo/05_settings.png"
+  - "/products/insurealgo/02_dashboard.webp"
+  - "/products/insurealgo/03_policy_list.webp"
+  - "/products/insurealgo/04_add_policy.webp"
+  - "/products/insurealgo/05_settings.webp"
 pricing:
   - tier: "iOS App"
     price: "Free"

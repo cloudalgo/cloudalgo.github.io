@@ -6,7 +6,7 @@ excerpt: "Recently with the release salesforce launched support of Light DOM (Be
 
 Here I am givin"
 readTime: 3
-image: /blog-images/5e16611d37dc352a2525cbd77af54dc81b9b95e7-850x382.png
+image: /blog-images/5e16611d37dc352a2525cbd77af54dc81b9b95e7-850x382.webp
 published: true
 author: "Vikash Agarwal"
 authorDesignation: "Technical Architect"

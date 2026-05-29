@@ -29,7 +29,7 @@ name: "Sample1__c"
 What are the things I was missing and how I fixed -
 
 - Make sure the api name of the site page is exactly same (it’s a case sensitive and make sure you are appending __c in the end of the name just like mentioned above)
-![image](/blog-images/dadc068a1104041e3373cf7aafc3e28e980f7cc7-395x551.png)
+![image](/blog-images/dadc068a1104041e3373cf7aafc3e28e980f7cc7-395x551.webp)
 image_site_navigation
 
 <div

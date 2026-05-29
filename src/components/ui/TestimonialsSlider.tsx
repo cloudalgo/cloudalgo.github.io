@@ -8,7 +8,7 @@ const TESTIMONIALS = [
     quote: "The team at CloudAlgo has been extremely helpful in elevating our Salesforce consulting services to new heights. Their expertise, dedication, collaboration, and innovative solutions have consistently exceeded our expectations. Their exceptional communication, flexibility and unwavering work ethic have been phenomenal.",
     author: "Jessica Lillquist",
     company: "Minlopro Partners",
-    photo: "/testimonials-user.png",
+    photo: "/testimonials-user.webp",
   },
 ];
 
