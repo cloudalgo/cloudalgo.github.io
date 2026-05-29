@@ -5,7 +5,7 @@ category: Salesforce
 excerpt: "Looking for a career in Salesforce technology? Look no further! With the platform's growing popularity and demand, new job opportunities are constantly emerging for professionals with various ski"
 readTime: 3
 image: /blog-images/d0dd09a0a08115417037c07110f843385172a618-1200x600.jpg
-published: true
+published: false
 author: "Sandeep Kumar"
 authorDesignation: "Technical Architect"
 authorPhoto: "/blog-images/a0bac224191c550df6e3a1f8ade4206b0927cbfb-515x515.jpg"
