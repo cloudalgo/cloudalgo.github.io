@@ -15,7 +15,7 @@ export interface Props {
   /** Category — used for article:section on blog posts */
   section?: string;
   /** Structured-data JSON-LD blob — pass from individual pages */
-  schema?: object;
+  schema?: object | object[];
 }
 
 const {
@@ -29,6 +29,12 @@ const {
   section,
   schema,
 } = Astro.props;
+
+const schemaJson: string | null = !schema
+  ? null
+  : Array.isArray(schema)
+    ? JSON.stringify({ '@context': 'https://schema.org', '@graph': schema })
+    : JSON.stringify(schema);
 
 const imageHost = 'https://cloudalgo.com';
 const ogImage = image.startsWith('http') ? image : `${imageHost}${image}`;
@@ -71,7 +77,7 @@ const ogImage = image.startsWith('http') ? image : `${imageHost}${image}`;
     <meta name="twitter:image:alt"   content={title} />
 
     <!-- JSON-LD structured data -->
-    {schema && <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />}
+    {schemaJson && <script is:inline type="application/ld+json" set:html={schemaJson} />}
 
   </head>
   <body>
