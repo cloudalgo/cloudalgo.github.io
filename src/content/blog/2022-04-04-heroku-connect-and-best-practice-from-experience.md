@@ -1,8 +1,8 @@
 ---
-title: "Heroku connect and best practice from experience"
+title: "Heroku Connect Best Practices: Lessons from Real-World Deployments"
 date: 2022-04-04
 category: Heroku
-excerpt: "While developing apps on Heroku sometime we did mistake while configuring and using Heroku connect ...."
+excerpt: "Common mistakes teams make with Heroku Connect — External IDs, formula fields, and governor limits — from real project experience."
 readTime: 7
 image: /blog-images/2f23904ac526708a919bb2c5e4b3574dbb601fee-800x239.webp
 published: true

@@ -2,7 +2,7 @@
 title: "A Comprehensive Guide to Using REST and SOAP APIs in Salesforce with Node.js"
 date: 2023-04-04
 category: Heroku
-excerpt: "Salesforce is a powerful CRM platform that offers a variety of APIs to integrate with external systems. The REST API and SOAP API are two of the most commonly used APIs in Salesforce for integrating w"
+excerpt: "A practical walkthrough of calling Salesforce REST and SOAP APIs from Node.js — authentication, request structure, and the key differences between the two."
 readTime: 11
 image: /blog-images/870f59fff70dbc1fc789c519719f547d9151d3e6-1200x600.jpg
 published: true

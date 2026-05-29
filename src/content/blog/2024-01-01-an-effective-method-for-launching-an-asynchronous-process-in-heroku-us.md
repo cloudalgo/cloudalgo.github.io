@@ -1,8 +1,8 @@
 ---
-title: "An effective method for launching an asynchronous process in Heroku using RabbitMQ from Salesforce (Apex)."
+title: "Triggering Async Heroku Processes from Salesforce Apex with RabbitMQ"
 date: 2024-01-01
 category: Salesforce
-excerpt: "In scenarios where tasks are required to be executed on AWS or Heroku, and secure data transmission from Salesforce Apex is essential, employing RabbitMQ proves to be a viable solution. This approach "
+excerpt: "How to trigger an asynchronous process on Heroku or AWS from Salesforce Apex using RabbitMQ — avoiding callout limits and keeping data transfer secure."
 readTime: 5
 image: /blog-images/e94d9966c30f4e9a42597b6210253e356bc16c0d-1992x1130.webp
 published: true

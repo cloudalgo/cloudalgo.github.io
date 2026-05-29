@@ -1,8 +1,8 @@
 ---
-title: "Leveraging Apache Airflow on Heroku to Create a Unified Data Ecosystem with Salesforce Integration"
+title: "Building a Unified Data Ecosystem with Apache Airflow on Heroku"
 date: 2023-10-10
 category: Heroku
-excerpt: "In today's dynamic business landscape, harnessing the power of technology is paramount. The synergy between Airflow, Heroku, and Salesforce presents an exciting opportunity to unlock exceptional value."
+excerpt: "How to run Apache Airflow on Heroku to move data from multiple sources into Salesforce using bronze, silver, and gold layers with Heroku Connect."
 readTime: 3
 image: /blog-images/921830719b89800a07f795a55ebea355aeb5b9b7-1200x600.jpg
 published: true
