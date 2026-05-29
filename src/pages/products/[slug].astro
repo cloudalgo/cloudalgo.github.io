@@ -17,7 +17,7 @@ const { data } = product;
 const statusLabel = (s: string) =>
   s === 'ga' ? 'Generally Available' : s === 'preview' ? 'Preview' : 'Beta';
 const typeLabel = (t: string) =>
-  t === 'salesforce-app' ? 'Salesforce App' : 'Integration Connector';
+  t === 'salesforce-app' ? 'Salesforce App' : t === 'mobile-app' ? 'iOS App' : 'Integration Connector';
 
 const illustrations: Record<string, string> = {
   'algobridge': `<svg viewBox="0 0 460 380" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:460px;height:auto;">
@@ -70,6 +70,72 @@ const illustrations: Record<string, string> = {
     <path d="M230 32 L230 54 L246 54" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.7"/>
     <circle cx="230" cy="54" r="3" fill="#0A0A0A" opacity="0.7"/>
     <text x="230" y="98" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" fill="#5A5A5A" opacity="0.7">Every 10 seconds</text>
+  </svg>`,
+  'insurealgo': `<svg viewBox="0 0 460 380" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:460px;height:auto;">
+    <!-- Phone frame -->
+    <rect x="140" y="20" width="180" height="340" rx="22" stroke="#0A0A0A" stroke-width="2.5"/>
+    <rect x="148" y="28" width="164" height="324" rx="16" fill="#0A0A0A" fill-opacity="0.03"/>
+    <!-- Notch -->
+    <rect x="190" y="20" width="80" height="18" rx="9" fill="#F5F5F2" stroke="#0A0A0A" stroke-width="2.5"/>
+    <!-- Status bar dots -->
+    <circle cx="215" cy="29" r="2.5" fill="#0A0A0A" fill-opacity="0.3"/>
+    <circle cx="230" cy="29" r="2.5" fill="#0A0A0A" fill-opacity="0.5"/>
+    <circle cx="245" cy="29" r="2.5" fill="#0A0A0A" fill-opacity="0.3"/>
+    <!-- App header -->
+    <text x="230" y="70" text-anchor="middle" font-family="Outfit,sans-serif" font-size="13" font-weight="800" fill="#0A0A0A">InsureAlgo</text>
+    <!-- Policy card 1 — expiring soon -->
+    <rect x="158" y="82" width="144" height="60" rx="10" fill="#0A0A0A"/>
+    <text x="172" y="102" font-family="Outfit,sans-serif" font-size="9" font-weight="700" fill="rgba(255,255,255,0.5)" letter-spacing="0.06em">VEHICLE · 4-WHEELER</text>
+    <text x="172" y="118" font-family="Outfit,sans-serif" font-size="11" font-weight="700" fill="#fff">Maruti Swift 2024</text>
+    <text x="172" y="132" font-family="Outfit,sans-serif" font-size="9" fill="rgba(255,255,255,0.55)">Expires in</text>
+    <text x="258" y="132" text-anchor="end" font-family="Outfit,sans-serif" font-size="11" font-weight="800" fill="rgba(255,255,255,0.9)">3 days</text>
+    <!-- Policy card 2 -->
+    <rect x="158" y="150" width="144" height="56" rx="10" stroke="#0A0A0A" stroke-width="1.5" fill="#fff"/>
+    <text x="172" y="168" font-family="Outfit,sans-serif" font-size="9" font-weight="700" fill="#5A5A5A" letter-spacing="0.05em">HEALTH INSURANCE</text>
+    <text x="172" y="183" font-family="Outfit,sans-serif" font-size="11" font-weight="700" fill="#0A0A0A">Star Health — Family</text>
+    <text x="172" y="197" font-family="Outfit,sans-serif" font-size="9" fill="#8a8a8a">Expires in</text>
+    <text x="293" y="197" text-anchor="end" font-family="Outfit,sans-serif" font-size="10" font-weight="700" fill="#0A0A0A">47 days</text>
+    <!-- Policy card 3 -->
+    <rect x="158" y="214" width="144" height="56" rx="10" stroke="#0A0A0A" stroke-width="1.5" fill="#fff" opacity="0.7"/>
+    <text x="172" y="232" font-family="Outfit,sans-serif" font-size="9" font-weight="700" fill="#5A5A5A" letter-spacing="0.05em">TERM LIFE</text>
+    <text x="172" y="247" font-family="Outfit,sans-serif" font-size="11" font-weight="700" fill="#0A0A0A" opacity="0.7">LIC Tech Term</text>
+    <text x="172" y="261" font-family="Outfit,sans-serif" font-size="9" fill="#8a8a8a" opacity="0.7">Expires in</text>
+    <text x="293" y="261" text-anchor="end" font-family="Outfit,sans-serif" font-size="10" font-weight="700" fill="#0A0A0A" opacity="0.7">218 days</text>
+    <!-- Bottom nav bar -->
+    <rect x="148" y="316" width="164" height="36" rx="0" fill="#fff" fill-opacity="0.8"/>
+    <path d="M148 316 L312 316" stroke="#0A0A0A" stroke-width="1" opacity="0.1"/>
+    <!-- Nav icons -->
+    <circle cx="187" cy="334" r="4" fill="#0A0A0A"/>
+    <rect x="214" y="328" width="14" height="12" rx="2" stroke="#0A0A0A" stroke-width="1.5" opacity="0.4"/>
+    <path d="M246 328 L246 340 M242 334 L250 334" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
+    <circle cx="279" cy="334" r="4" stroke="#0A0A0A" stroke-width="1.5" opacity="0.4"/>
+    <!-- Home indicator -->
+    <rect x="200" y="352" width="60" height="4" rx="2" fill="#0A0A0A" opacity="0.2"/>
+    <!-- Floating badges left -->
+    <rect x="20" y="100" width="110" height="32" rx="8" fill="#fff" stroke="#0A0A0A" stroke-width="1.5" opacity="0.7"/>
+    <text x="75" y="121" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" font-weight="700" fill="#0A0A0A" opacity="0.8">100% Offline</text>
+    <rect x="20" y="142" width="110" height="32" rx="8" fill="#fff" stroke="#0A0A0A" stroke-width="1.5" opacity="0.7"/>
+    <text x="75" y="163" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" font-weight="700" fill="#0A0A0A" opacity="0.8">Zero Tracking</text>
+    <rect x="20" y="184" width="110" height="32" rx="8" fill="#fff" stroke="#0A0A0A" stroke-width="1.5" opacity="0.7"/>
+    <text x="75" y="205" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" font-weight="700" fill="#0A0A0A" opacity="0.8">Free Forever</text>
+    <!-- Connector lines from badges to phone -->
+    <path d="M130 116 L140 116" stroke="#0A0A0A" stroke-width="1" opacity="0.2" stroke-dasharray="3 2"/>
+    <path d="M130 158 L140 158" stroke="#0A0A0A" stroke-width="1" opacity="0.2" stroke-dasharray="3 2"/>
+    <path d="M130 200 L140 200" stroke="#0A0A0A" stroke-width="1" opacity="0.2" stroke-dasharray="3 2"/>
+    <!-- Floating badges right -->
+    <rect x="330" y="100" width="110" height="32" rx="8" fill="#0A0A0A" opacity="0.85"/>
+    <text x="385" y="121" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" font-weight="700" fill="#fff">Smart Reminders</text>
+    <rect x="330" y="142" width="110" height="32" rx="8" fill="#fff" stroke="#0A0A0A" stroke-width="1.5" opacity="0.7"/>
+    <text x="385" y="163" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" font-weight="700" fill="#0A0A0A" opacity="0.8">Doc Vault</text>
+    <rect x="330" y="184" width="110" height="32" rx="8" fill="#fff" stroke="#0A0A0A" stroke-width="1.5" opacity="0.7"/>
+    <text x="385" y="205" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" font-weight="700" fill="#0A0A0A" opacity="0.8">iCloud Backup</text>
+    <!-- Connector lines from phone to right badges -->
+    <path d="M320 116 L330 116" stroke="#0A0A0A" stroke-width="1" opacity="0.2" stroke-dasharray="3 2"/>
+    <path d="M320 158 L330 158" stroke="#0A0A0A" stroke-width="1" opacity="0.2" stroke-dasharray="3 2"/>
+    <path d="M320 200 L330 200" stroke="#0A0A0A" stroke-width="1" opacity="0.2" stroke-dasharray="3 2"/>
+    <!-- App Store badge bottom -->
+    <rect x="155" y="278" width="150" height="30" rx="8" fill="#0A0A0A" fill-opacity="0.06" stroke="#0A0A0A" stroke-width="1.5" opacity="0.5"/>
+    <text x="230" y="298" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" font-weight="700" fill="#0A0A0A" opacity="0.7">Available on the App Store</text>
   </svg>`,
   'sf-sync-connector': `<svg viewBox="0 0 460 380" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:460px;height:auto;">
     <!-- Sync connector: two systems with bidirectional data flow -->
@@ -173,12 +239,17 @@ const hasPricingOrReqs = (data.pricing && data.pricing.length > 0) ||
           <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
             {data.externalUrl ? (
               <a href={data.externalUrl} target="_blank" rel="noopener noreferrer" class="btn btn-primary">
-                Get started &nearr;
+                {data.type === 'mobile-app' ? 'Download on App Store ↗' : 'Get started ↗'}
               </a>
             ) : (
               <a href="/contact" class="btn btn-primary">Join waitlist &rarr;</a>
             )}
-            <a href="/contact" class="btn btn-outline">Book a demo</a>
+            {data.type !== 'mobile-app' && (
+              <a href="/contact" class="btn btn-outline">Book a demo</a>
+            )}
+            {data.type === 'mobile-app' && (
+              <a href={`/apps/insurealgo/privacy`} class="btn btn-outline">Privacy Policy</a>
+            )}
           </div>
         </div>
         {illustration && (
@@ -291,14 +362,20 @@ const hasPricingOrReqs = (data.pricing && data.pricing.length > 0) ||
         <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
           {data.externalUrl ? (
             <a href={data.externalUrl} target="_blank" rel="noopener noreferrer" class="btn btn-light">
-              Get started ↗
+              {data.type === 'mobile-app' ? 'Download on App Store ↗' : 'Get started ↗'}
             </a>
           ) : (
             <a href="/contact" class="btn btn-light">Join waitlist →</a>
           )}
-          <a href="/contact" class="btn" style="background:transparent;color:#fff;border-color:rgba(255,255,255,0.3);">
-            Contact us
-          </a>
+          {data.type === 'mobile-app' ? (
+            <a href={`/apps/insurealgo/privacy`} class="btn" style="background:transparent;color:#fff;border-color:rgba(255,255,255,0.3);">
+              Privacy Policy
+            </a>
+          ) : (
+            <a href="/contact" class="btn" style="background:transparent;color:#fff;border-color:rgba(255,255,255,0.3);">
+              Contact us
+            </a>
+          )}
         </div>
       </div>
     </div>

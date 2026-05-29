@@ -34,7 +34,7 @@ const products = defineCollection({
   schema: z.object({
     title:          z.string(),
     status:         z.enum(['ga', 'preview', 'beta']),
-    type:           z.enum(['salesforce-app', 'integration']),
+    type:           z.enum(['salesforce-app', 'integration', 'mobile-app']),
     tagline:        z.string(),
     excerpt:        z.string(),
     icon:           z.string(),
