@@ -574,6 +574,172 @@ const illustrations: Record<string, string> = {
   <text x="240" y="183" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8" fill="#5A5A5A" opacity="0.6">async callback → update SF record</text>
 </svg>`,
 
+  // ── Heroku or AWS: Decision Framework ──────────────────────────────
+  'heroku-or-aws-how-to-choose': `
+<svg viewBox="0 0 480 200" fill="none" xmlns="http://www.w3.org/2000/svg" class="blog-svg-illus" aria-hidden="true">
+  <!-- Input factors (left column) -->
+  <rect x="18" y="10" width="96" height="26" rx="5" stroke="#0A0A0A" stroke-width="1.5" opacity="0.55"/>
+  <text x="66" y="28" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" font-weight="600" fill="#0A0A0A" opacity="0.65">SF coupling</text>
+
+  <rect x="18" y="50" width="96" height="26" rx="5" stroke="#0A0A0A" stroke-width="1.5" opacity="0.7"/>
+  <text x="66" y="68" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" font-weight="600" fill="#0A0A0A" opacity="0.75">Team size</text>
+
+  <rect x="18" y="90" width="96" height="26" rx="5" stroke="#0A0A0A" stroke-width="1.5" opacity="0.7"/>
+  <text x="66" y="108" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" font-weight="600" fill="#0A0A0A" opacity="0.75">Cost model</text>
+
+  <rect x="18" y="130" width="96" height="26" rx="5" stroke="#0A0A0A" stroke-width="1.5" opacity="0.7"/>
+  <text x="66" y="148" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" font-weight="600" fill="#0A0A0A" opacity="0.75">Compliance</text>
+
+  <!-- Arrows from inputs to ASSESS box -->
+  <path d="M114 23 L172 88" stroke="#0A0A0A" stroke-width="1" stroke-dasharray="4 3" opacity="0.25"/>
+  <path d="M114 63 L172 94" stroke="#0A0A0A" stroke-width="1" stroke-dasharray="4 3" opacity="0.3"/>
+  <path d="M114 103 L172 100" stroke="#0A0A0A" stroke-width="1" stroke-dasharray="4 3" opacity="0.3"/>
+  <path d="M114 143 L172 110" stroke="#0A0A0A" stroke-width="1" stroke-dasharray="4 3" opacity="0.25"/>
+
+  <!-- Central ASSESS box -->
+  <rect x="172" y="72" width="108" height="58" rx="8" stroke="#0A0A0A" stroke-width="1.5" opacity="0.85" fill="#0A0A0A" fill-opacity="0.04"/>
+  <text x="226" y="97" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" font-weight="700" fill="#0A0A0A" opacity="0.8">ASSESS</text>
+  <text x="226" y="113" text-anchor="middle" font-family="Outfit,sans-serif" font-size="7.5" fill="#5A5A5A" opacity="0.65">CloudAlgo review</text>
+
+  <!-- Fork: upper arrow to Heroku -->
+  <path d="M280 88 L326 62" stroke="#0A0A0A" stroke-width="1.5" opacity="0.5"/>
+  <path d="M322 59 L326 62 L323 66" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"/>
+
+  <!-- Heroku box (top right) -->
+  <rect x="326" y="34" width="130" height="54" rx="8" stroke="#0A0A0A" stroke-width="1.5" opacity="0.8"/>
+  <text x="391" y="56" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" font-weight="700" fill="#0A0A0A" opacity="0.8">Heroku</text>
+  <text x="391" y="70" text-anchor="middle" font-family="Outfit,sans-serif" font-size="7.5" fill="#5A5A5A" opacity="0.65">simple ops · SF-native</text>
+  <text x="391" y="81" text-anchor="middle" font-family="Outfit,sans-serif" font-size="7" fill="#5A5A5A" opacity="0.5">git push · Connect built-in</text>
+
+  <!-- Fork: lower arrow to AWS -->
+  <path d="M280 114 L326 140" stroke="#0A0A0A" stroke-width="1.5" opacity="0.5"/>
+  <path d="M322 137 L326 140 L323 144" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"/>
+
+  <!-- AWS box (bottom right) -->
+  <rect x="326" y="114" width="130" height="54" rx="8" stroke="#0A0A0A" stroke-width="1.5" opacity="0.8"/>
+  <text x="391" y="136" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" font-weight="700" fill="#0A0A0A" opacity="0.8">AWS</text>
+  <text x="391" y="150" text-anchor="middle" font-family="Outfit,sans-serif" font-size="7.5" fill="#5A5A5A" opacity="0.65">fine control · compliance</text>
+  <text x="391" y="161" text-anchor="middle" font-family="Outfit,sans-serif" font-size="7" fill="#5A5A5A" opacity="0.5">ECS / Lambda / RDS</text>
+</svg>`,
+
+  // ── Heroku Connect at Scale: Failure Modes ─────────────────────────
+  'heroku-connect-at-scale': `
+<svg viewBox="0 0 480 200" fill="none" xmlns="http://www.w3.org/2000/svg" class="blog-svg-illus" aria-hidden="true">
+  <!-- PostgreSQL cylinder (left) -->
+  <ellipse cx="88" cy="58" rx="48" ry="13" stroke="#0A0A0A" stroke-width="1.5" opacity="0.8"/>
+  <line x1="40" y1="58" x2="40" y2="132" stroke="#0A0A0A" stroke-width="1.5" opacity="0.8"/>
+  <line x1="136" y1="58" x2="136" y2="132" stroke="#0A0A0A" stroke-width="1.5" opacity="0.8"/>
+  <ellipse cx="88" cy="132" rx="48" ry="13" stroke="#0A0A0A" stroke-width="1.5" opacity="0.8"/>
+  <ellipse cx="88" cy="76" rx="48" ry="13" stroke="#0A0A0A" stroke-width="1" opacity="0.25"/>
+  <text x="88" y="118" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" font-weight="700" fill="#0A0A0A" opacity="0.7">PostgreSQL</text>
+  <text x="88" y="158" text-anchor="middle" font-family="Outfit,monospace" font-size="8" fill="#5A5A5A" opacity="0.55">50k rows/hr</text>
+
+  <!-- HC bridge (centre) -->
+  <rect x="184" y="74" width="88" height="46" rx="6" stroke="#0A0A0A" stroke-width="1.5" opacity="0.75"/>
+  <text x="228" y="94" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" font-weight="700" fill="#0A0A0A" opacity="0.75">HEROKU</text>
+  <text x="228" y="108" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" font-weight="700" fill="#0A0A0A" opacity="0.75">CONNECT</text>
+
+  <!-- Warning triangle above HC bridge -->
+  <path d="M228 44 L216 64 L240 64 Z" stroke="#0A0A0A" stroke-width="1.5" stroke-linejoin="round" opacity="0.75"/>
+  <text x="228" y="61" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" font-weight="700" fill="#0A0A0A" opacity="0.8">!</text>
+
+  <!-- Sync arrows Postgres → HC (left side) -->
+  <path d="M136 88 L184 90" stroke="#0A0A0A" stroke-width="1.5" opacity="0.5"/>
+  <path d="M180 86 L184 90 L180 94" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.55"/>
+  <path d="M136 108 L184 108" stroke="#0A0A0A" stroke-width="1.5" stroke-dasharray="5 4" opacity="0.3"/>
+
+  <!-- API limit bar below HC -->
+  <rect x="188" y="130" width="80" height="8" rx="3" stroke="#0A0A0A" stroke-width="1" opacity="0.3"/>
+  <rect x="188" y="130" width="67" height="8" rx="3" fill="#0A0A0A" fill-opacity="0.45"/>
+  <text x="228" y="151" text-anchor="middle" font-family="Outfit,monospace" font-size="7.5" fill="#5A5A5A" opacity="0.6">API limit 84%</text>
+
+  <!-- Sync arrows HC → Salesforce (right side, one broken) -->
+  <path d="M272 90 L316 90" stroke="#0A0A0A" stroke-width="1.5" opacity="0.5"/>
+  <path d="M312 86 L316 90 L312 94" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.55"/>
+  <!-- broken return line with X -->
+  <path d="M272 108 L295 108" stroke="#0A0A0A" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.3"/>
+  <path d="M300 104 L308 112" stroke="#0A0A0A" stroke-width="1.5" opacity="0.45"/>
+  <path d="M308 104 L300 112" stroke="#0A0A0A" stroke-width="1.5" opacity="0.45"/>
+
+  <!-- Salesforce cloud (right) -->
+  <path d="M352 90 C336 90 324 80 324 68 C324 59 330 52 339 50 C341 42 349 36 358 36 C365 36 371 40 374 46 C378 44 383 43 388 43 C402 43 413 53 413 66 C413 79 402 89 388 89 Z"
+        stroke="#0A0A0A" stroke-width="2" opacity="0.8"/>
+  <text x="368" y="115" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" font-weight="700" fill="#0A0A0A" opacity="0.7">Salesforce</text>
+  <text x="368" y="155" text-anchor="middle" font-family="Outfit,sans-serif" font-size="7.5" fill="#5A5A5A" opacity="0.5">duplicate records</text>
+  <text x="368" y="167" text-anchor="middle" font-family="Outfit,monospace" font-size="7" fill="#5A5A5A" opacity="0.4">no External ID</text>
+</svg>`,
+
+  // ── Salesforce + Heroku Architecture Patterns ──────────────────────
+  'salesforce-heroku-architecture-patterns': `
+<svg viewBox="0 0 480 200" fill="none" xmlns="http://www.w3.org/2000/svg" class="blog-svg-illus" aria-hidden="true">
+  <!-- Column headers -->
+  <text x="76" y="16" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8" font-weight="700" fill="#0A0A0A" opacity="0.55" letter-spacing="0.06em">REST API</text>
+  <text x="240" y="16" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8" font-weight="700" fill="#0A0A0A" opacity="0.55" letter-spacing="0.06em">PLATFORM EVENTS</text>
+  <text x="404" y="16" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8" font-weight="700" fill="#0A0A0A" opacity="0.55" letter-spacing="0.06em">RABBITMQ</text>
+
+  <!-- Column dividers -->
+  <line x1="158" y1="8" x2="158" y2="192" stroke="#0A0A0A" stroke-width="1" stroke-dasharray="3 4" opacity="0.12"/>
+  <line x1="322" y1="8" x2="322" y2="192" stroke="#0A0A0A" stroke-width="1" stroke-dasharray="3 4" opacity="0.12"/>
+
+  <!-- ── Column 1: REST API ── -->
+  <rect x="14" y="28" width="54" height="28" rx="5" stroke="#0A0A0A" stroke-width="1.5" opacity="0.75"/>
+  <text x="41" y="47" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8" font-weight="600" fill="#0A0A0A" opacity="0.75">SF Apex</text>
+  <!-- arrow -->
+  <path d="M68 42 L88 42" stroke="#0A0A0A" stroke-width="1.5" opacity="0.5"/>
+  <path d="M84 38 L88 42 L84 46" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"/>
+  <text x="78" y="36" text-anchor="middle" font-family="Outfit,monospace" font-size="6" fill="#5A5A5A" opacity="0.55">HTTP</text>
+  <rect x="88" y="28" width="54" height="28" rx="5" stroke="#0A0A0A" stroke-width="1.5" opacity="0.75"/>
+  <text x="115" y="47" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8" font-weight="600" fill="#0A0A0A" opacity="0.75">Heroku</text>
+  <!-- traits -->
+  <text x="76" y="76" text-anchor="middle" font-family="Outfit,sans-serif" font-size="7.5" fill="#0A0A0A" opacity="0.65">Synchronous</text>
+  <text x="76" y="96" text-anchor="middle" font-family="Outfit,sans-serif" font-size="7" fill="#5A5A5A" opacity="0.55">+ Easy to debug</text>
+  <text x="76" y="109" text-anchor="middle" font-family="Outfit,sans-serif" font-size="7" fill="#5A5A5A" opacity="0.55">+ Any dev can read</text>
+  <text x="76" y="130" text-anchor="middle" font-family="Outfit,sans-serif" font-size="7" fill="#5A5A5A" opacity="0.4">− 120s timeout</text>
+  <text x="76" y="143" text-anchor="middle" font-family="Outfit,sans-serif" font-size="7" fill="#5A5A5A" opacity="0.4">− 100 callout limit</text>
+  <text x="76" y="164" text-anchor="middle" font-family="Outfit,sans-serif" font-size="7" fill="#5A5A5A" opacity="0.35">Best for small teams</text>
+
+  <!-- ── Column 2: Platform Events ── -->
+  <rect x="178" y="28" width="50" height="28" rx="5" stroke="#0A0A0A" stroke-width="1.5" opacity="0.75"/>
+  <text x="203" y="47" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8" font-weight="600" fill="#0A0A0A" opacity="0.75">Salesforce</text>
+  <!-- event bus pill -->
+  <rect x="234" y="36" width="48" height="14" rx="5" stroke="#0A0A0A" stroke-width="1" opacity="0.5"/>
+  <text x="258" y="47" text-anchor="middle" font-family="Outfit,monospace" font-size="6.5" fill="#5A5A5A" opacity="0.65">event bus</text>
+  <path d="M228 43 L234 43" stroke="#0A0A0A" stroke-width="1.5" opacity="0.45"/>
+  <path d="M282 43 L288 43" stroke="#0A0A0A" stroke-width="1.5" opacity="0.45"/>
+  <path d="M284 39 L288 43 L284 47" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.55"/>
+  <rect x="288" y="28" width="50" height="28" rx="5" stroke="#0A0A0A" stroke-width="1.5" opacity="0.75"/>
+  <text x="313" y="47" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8" font-weight="600" fill="#0A0A0A" opacity="0.75">Heroku</text>
+  <!-- traits -->
+  <text x="240" y="76" text-anchor="middle" font-family="Outfit,sans-serif" font-size="7.5" fill="#0A0A0A" opacity="0.65">Asynchronous</text>
+  <text x="240" y="96" text-anchor="middle" font-family="Outfit,sans-serif" font-size="7" fill="#5A5A5A" opacity="0.55">+ Decoupled</text>
+  <text x="240" y="109" text-anchor="middle" font-family="Outfit,sans-serif" font-size="7" fill="#5A5A5A" opacity="0.55">+ Scales well</text>
+  <text x="240" y="130" text-anchor="middle" font-family="Outfit,sans-serif" font-size="7" fill="#5A5A5A" opacity="0.4">− 72hr replay window</text>
+  <text x="240" y="143" text-anchor="middle" font-family="Outfit,sans-serif" font-size="7" fill="#5A5A5A" opacity="0.4">− Reconnect handling</text>
+  <text x="240" y="164" text-anchor="middle" font-family="Outfit,sans-serif" font-size="7" fill="#5A5A5A" opacity="0.35">Best for integration teams</text>
+
+  <!-- ── Column 3: RabbitMQ ── -->
+  <rect x="342" y="28" width="50" height="28" rx="5" stroke="#0A0A0A" stroke-width="1.5" opacity="0.75"/>
+  <text x="367" y="47" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8" font-weight="600" fill="#0A0A0A" opacity="0.75">Salesforce</text>
+  <!-- queue box -->
+  <rect x="396" y="34" width="36" height="18" rx="4" stroke="#0A0A0A" stroke-width="1" opacity="0.5"/>
+  <text x="414" y="44" text-anchor="middle" font-family="Outfit,monospace" font-size="6" fill="#5A5A5A" opacity="0.65">queue</text>
+  <text x="414" y="52" text-anchor="middle" font-family="Outfit,monospace" font-size="5.5" fill="#5A5A5A" opacity="0.45">durable</text>
+  <path d="M392 43 L396 43" stroke="#0A0A0A" stroke-width="1.5" opacity="0.45"/>
+  <path d="M432 43 L450 43" stroke="#0A0A0A" stroke-width="1.5" opacity="0.45"/>
+  <path d="M446 39 L450 43 L446 47" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.55"/>
+  <!-- Heroku box (right edge) - shift left slightly -->
+  <rect x="344" y="28" width="0" height="0"/>
+  <rect x="434" y="28" width="32" height="28" rx="5" stroke="#0A0A0A" stroke-width="1.5" opacity="0.75"/>
+  <text x="450" y="47" text-anchor="middle" font-family="Outfit,sans-serif" font-size="7.5" font-weight="600" fill="#0A0A0A" opacity="0.75">Heroku</text>
+  <!-- traits -->
+  <text x="404" y="76" text-anchor="middle" font-family="Outfit,sans-serif" font-size="7.5" fill="#0A0A0A" opacity="0.65">Guaranteed</text>
+  <text x="404" y="96" text-anchor="middle" font-family="Outfit,sans-serif" font-size="7" fill="#5A5A5A" opacity="0.55">+ Survives restart</text>
+  <text x="404" y="109" text-anchor="middle" font-family="Outfit,sans-serif" font-size="7" fill="#5A5A5A" opacity="0.55">+ Back-pressure</text>
+  <text x="404" y="130" text-anchor="middle" font-family="Outfit,sans-serif" font-size="7" fill="#5A5A5A" opacity="0.4">− Broker to operate</text>
+  <text x="404" y="143" text-anchor="middle" font-family="Outfit,sans-serif" font-size="7" fill="#5A5A5A" opacity="0.4">− Complex setup</text>
+  <text x="404" y="164" text-anchor="middle" font-family="Outfit,sans-serif" font-size="7" fill="#5A5A5A" opacity="0.35">Best for regulated env</text>
+</svg>`,
+
 };
 
 /**
