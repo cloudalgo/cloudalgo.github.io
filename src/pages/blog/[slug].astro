@@ -313,7 +313,10 @@ const schema = {
   margin: 2.5rem 0 1rem;
   background: #0A0A0A;
   border-radius: 12px;
-  padding: 1.75rem 2rem;
+  padding: 2rem 2.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 :global(.blog-cta-inline p) {
   color: rgba(255,255,255,0.75);
@@ -321,14 +324,32 @@ const schema = {
   line-height: 1.75;
   margin: 0;
 }
-:global(.blog-cta-inline a) {
-  color: #fff;
-  font-weight: 700;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  text-decoration-thickness: 1px;
+:global(.blog-cta-inline__buttons) {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
 }
-:global(.blog-cta-inline a:hover) { opacity: 0.75; }
+:global(.blog-cta-inline__buttons a) {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.625rem 1.5rem;
+  border-radius: 100px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: opacity 0.2s;
+}
+:global(.blog-cta-inline__buttons a:first-child) {
+  background: #fff;
+  color: #0A0A0A;
+}
+:global(.blog-cta-inline__buttons a:not(:first-child)) {
+  background: transparent;
+  color: #fff;
+  border: 1.5px solid rgba(255,255,255,0.4);
+}
+:global(.blog-cta-inline__buttons a:hover) { opacity: 0.8; }
 </style>
 
 <script>
@@ -377,10 +398,41 @@ const schema = {
   document.querySelectorAll('.blog-content hr').forEach(hr => {
     const p = hr.nextElementSibling;
     if (!p || p.tagName !== 'P') return;
-    if (!p.querySelector('a')) return;
+    const links = Array.from(p.querySelectorAll('a')) as HTMLAnchorElement[];
+    if (!links.length) return;
+
+    // Collect text nodes that appear before the first link
+    let bodyText = '';
+    for (const node of Array.from(p.childNodes)) {
+      if (node.nodeType === Node.TEXT_NODE) {
+        bodyText += node.textContent ?? '';
+      } else if ((node as Element).tagName === 'A') {
+        break;
+      }
+    }
+    bodyText = bodyText.replace(/[,\s]+$/, '').trim();
+
     const wrapper = document.createElement('div');
     wrapper.className = 'blog-cta-inline';
-    wrapper.appendChild(p.cloneNode(true));
+
+    // Body paragraph (text before the links)
+    if (bodyText) {
+      const textP = document.createElement('p');
+      textP.textContent = bodyText;
+      wrapper.appendChild(textP);
+    }
+
+    // Buttons row
+    const btns = document.createElement('div');
+    btns.className = 'blog-cta-inline__buttons';
+    links.forEach(a => {
+      const btn = document.createElement('a');
+      btn.href = a.getAttribute('href') ?? '#';
+      btn.textContent = (a.textContent?.trim() ?? 'Learn more') + ' →';
+      btns.appendChild(btn);
+    });
+    wrapper.appendChild(btns);
+
     hr.parentNode?.insertBefore(wrapper, hr);
     hr.remove();
     p.remove();
