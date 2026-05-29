@@ -39,6 +39,7 @@ const products = defineCollection({
     excerpt:        z.string(),
     icon:           z.string(),
     externalUrl:    z.string().url().optional(),
+    seoTitle:       z.string().optional(),
     version:        z.string().optional(),
     lastUpdated:    z.string().optional(),
     order:          z.number(),
