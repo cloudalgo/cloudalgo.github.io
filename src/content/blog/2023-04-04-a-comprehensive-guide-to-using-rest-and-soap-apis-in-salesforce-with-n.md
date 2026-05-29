@@ -291,4 +291,9 @@ We format the `contact` object with the appropriate `type` attribute and field v
 ## Conclusion
 
 Integrating REST and SOAP APIs with external systems can help organizations streamline business processes and improve data accuracy and synchronization. Choosing the right integration pattern, using integration tools, mapping data fields, monitoring integration performance, implementing error handling mechanisms, testing and validating integrations, and ensuring security and compliance are all critical to the success of the integration. By following these best practices, organizations can build robust and efficient integrations with external systems in Salesforce.
+
+---
+
+If you are building or maintaining a Salesforce integration and want to talk through the architecture, [see how we work with Salesforce and Heroku](/services/salesforce-consulting) or [get in touch directly](/contact).
+
 <div

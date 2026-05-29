@@ -74,4 +74,9 @@ For a more advanced and customized integration between ViralSweep and Salesforce
 To learn more about implementing a custom Apex solution for integrating ViralSweep with Salesforce,**Please visit [https://github.com/cloudalgo](https://github.com/cloudalgo).**
 
 In conclusion, integrating ViralSweep entries into Salesforce can greatly enhance your lead generation and management processes. By centralizing your lead data, automating tasks, and leveraging Salesforce's powerful features, you can streamline your sales and marketing efforts, ultimately leading to higher conversion rates and business success. Whether you choose a simple integration method or opt for a custom Apex implementation, take the time to set up the integration properly, and you'll be well on your way to maximizing the potential of your ViralSweep campaigns.
+
+---
+
+Connecting marketing tools to Salesforce is one of the most common projects we take on. If your data is not flowing the way it should, [get in touch](/contact) and we can help you work through it.
+
 <div

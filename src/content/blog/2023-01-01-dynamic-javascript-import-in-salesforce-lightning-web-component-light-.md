@@ -108,5 +108,8 @@ In the JavaScript file for `stripeComponent`, we use the `renderedCallback` life
 
 With the introduction of Light DOM (Beta) in Lightning Web Components, Salesforce has addressed the challenge of securely integrating external JavaScript libraries. This capability allows developers to continue benefiting from the robust security provided by Locker Service while seamlessly incorporating live JavaScript libraries like Stripe into their LWC components. By following the example outlined in this blog post, you can leverage Light DOM to enhance your Salesforce development projects with external integrations, all within a secure environment.
 
+---
+
+If you are building custom Salesforce Lightning components and need help with complex integrations or third-party libraries, [see how we approach Salesforce development](/services/salesforce-consulting).
 
 <div

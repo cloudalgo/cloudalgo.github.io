@@ -67,4 +67,9 @@ Pacific/Honolulu - HST*
 41*/
 42
 ```
+
+---
+
+If you are working with time formatting in the same codebase, [How to Format an Apex Time Value as a Readable String](/blog/formatting-a-apex-time-into-string-in-apex-class) covers the display side of the same problem.
+
 <div

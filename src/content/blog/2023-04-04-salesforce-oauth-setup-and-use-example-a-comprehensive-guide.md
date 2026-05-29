@@ -93,11 +93,10 @@ This code sets up an Express.js server with two endpoints: `/` and `/oauth/callb
 
 Note that this code is just a sample and should not be used in production environments without proper security measures and error handling. It's important to follow best practices and guidelines when implementing Salesforce OAuth in your application.
 
-In Conclusion Salesforce OAuth is a powerful tool for authenticating and authorizing third-party applications to access Salesforce data. By following the steps outlined in this blog, you can set up Salesforce OAuth and use it in a real-world scenario. With the right configuration and use case, Salesforce OAuth can help streamline your organization's data access and improve security.
+In Conclusion Salesforce OAuth is a powerful tool for authenticating and authorizing third-party applications to access Salesforce data. By following the steps outlined in this blog, you can set up Salesforce OAuth and use it in a real-world scenario. With the right configuration and use case, Salesforce OAuth can help streamline your organization’s data access and improve security.
 
-### Ready to unlock the potential of your Salesforce and heroku instance?
+---
 
-Get in touch with our experienced design team, and we’ll help you get there.
+If you are building a connected app and need help with OAuth configuration, integration architecture, or security review, [see how we approach Salesforce integrations](/services/salesforce-consulting).
 
-
-[Get in Touch ](/contactUs)<div
+<div

@@ -92,4 +92,9 @@ The practical example showcased here illustrates the real-world applicability of
 By leveraging these features within Salesforce development, developers can streamline processes, improve code readability, and create more robust applications.
 
 Happy coding and efficient support ticket management in Salesforce!
+
+---
+
+If your team is working through complex Salesforce business logic and you want an experienced set of eyes on the design, [we are happy to talk](/contact).
+
 <div

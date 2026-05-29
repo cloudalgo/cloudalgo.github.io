@@ -39,4 +39,9 @@ Since as on today we don’t have any inbuilt method which can format this type 
 23    return sTime;
 24  }
 ```
+
+---
+
+If you need to handle timezone conversion alongside formatting, [Converting Date, Time, and Timezone to a GMT DateTime in Salesforce](/blog/converting-date-and-time-and-timezone-to-datetime-in-gmt-salesforce) covers the full UTC conversion pattern.
+
 <div

@@ -43,10 +43,8 @@ Benefits of Salesforce Integration:
 - **Effortless Data Access:** Salesforce users can access and work with the integrated data seamlessly, eliminating the need for manual data imports and exports.
 #### Conclusion:
 
-Incorporating Apache Airflow on Heroku to manage different data sources and creating bronze, silver, and gold data layers provides a structured and scalable approach to data management. When combined with Heroku Connect's integration with Salesforce, your organization gains access to a unified data ecosystem that empowers data-driven decision-making, enhances customer engagement, and drives business success. Harnessing the power of these technologies can truly yield exceptional outcomes for your business in today's data-centric world.
+Incorporating Apache Airflow on Heroku to manage different data sources and creating bronze, silver, and gold data layers provides a structured and scalable approach to data management. When combined with Heroku Connect’s integration with Salesforce, your organization gains access to a unified data ecosystem that empowers data-driven decision-making, enhances customer engagement, and drives business success. Harnessing the power of these technologies can truly yield exceptional outcomes for your business in today’s data-centric world.
 
-### Ready to unlock the potential of Salesforce and Heroku with Apache Airflow?
+---
 
-Get in touch with our team and we’ll help you get there.
-
-[Get in touch](/contact)
+We design and maintain Airflow pipelines for clients with complex data integration requirements. If you are working through a similar problem, [see how we approach data pipelines](/services/airflow-data-pipelines) or [get in touch](/contact).

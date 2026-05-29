@@ -32,4 +32,9 @@ What are the things I was missing and how I fixed -
 ![image](/blog-images/dadc068a1104041e3373cf7aafc3e28e980f7cc7-395x551.webp)
 image_site_navigation
 
+
+---
+
+If you are working on Salesforce Experience Cloud customisation and need to bring in external libraries, you might find [Using Dynamic JavaScript Imports in Salesforce LWC with Light DOM](/blog/dynamic-javascript-import-in-salesforce-lightning-web-component-light-) useful as well.
+
 <div

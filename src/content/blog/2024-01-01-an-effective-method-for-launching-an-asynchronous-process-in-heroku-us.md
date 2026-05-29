@@ -136,5 +136,8 @@ RestCallToGenericService
 79
 ```
 
+---
+
+If you are working on asynchronous integration between Salesforce and Heroku or AWS and want to talk through the right approach for your situation, [get in touch](/contact).
 
 <div

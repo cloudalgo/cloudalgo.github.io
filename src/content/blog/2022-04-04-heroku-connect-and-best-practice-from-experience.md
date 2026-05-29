@@ -94,3 +94,7 @@ So here clearly mentioned that Heroku connect uses SOAP / Bulk API s
 Unlock the full potential of Heroku Connect with our team of dedicated experts. Whether you're new to Heroku Connect or looking to optimize your existing setup, our specialists are here to assist you every step of the way.
 
 [Get in touch](/contact)
+
+---
+
+We help teams get Heroku Connect right from the start — and recover it when things have gone sideways. If you are dealing with sync issues or planning a new integration, [see how we work with Heroku and Salesforce](/services/salesforce-consulting) or [get in touch](/contact).

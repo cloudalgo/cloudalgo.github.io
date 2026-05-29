@@ -147,4 +147,7 @@ Most production Salesforce integrations combine two or three of these patterns. 
 
 Getting this architecture right from the start avoids the painful rewrites we see when teams bolt on integrations one by one without a coherent pattern.
 
-[Get in touch](/contact) if you're scoping a Salesforce integration and want a second opinion on the approach.
+
+---
+
+If you are in the middle of an integration project and want an experienced team to review your approach or take it on entirely, [get in touch](/contact) — this is the kind of work we do every day. if you're scoping a Salesforce integration and want a second opinion on the approach.

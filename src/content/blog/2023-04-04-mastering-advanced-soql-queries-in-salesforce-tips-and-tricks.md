@@ -48,4 +48,9 @@ In this case, the inner `SELECT` statement retrieves all `Account__c` values fro
 
 - Query Optimization Finally, it is important to optimize your SOQL queries to ensure they are executed efficiently. Salesforce provides a number of tools to help with this, including the Query Plan Tool, which can be used to analyze the performance of a given query. Additionally, it is important to limit the number of records returned, using filters and limits where appropriate.
 In conclusion, Salesforce SOQL is a powerful tool that can be used to retrieve and manipulate data efficiently. By leveraging relationship queries, aggregate functions, date queries, semi-join and anti-join queries, and query optimization techniques, users can make the most of this powerful tool.
+
+---
+
+If you are running into data retrieval performance issues or hitting governor limits in a larger org, [we are happy to take a look](/contact).
+
 <div
