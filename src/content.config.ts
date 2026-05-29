@@ -53,6 +53,15 @@ const products = defineCollection({
       price: z.string(),
     })).optional(),
     requirements: z.array(z.string()).optional(),
+    techStack: z.array(z.object({
+      label: z.string(),
+      value: z.string(),
+    })).optional(),
+    roadmap: z.array(z.object({
+      version:     z.string(),
+      theme:       z.string(),
+      description: z.string(),
+    })).optional(),
     published:    z.boolean(),
   }),
 });
