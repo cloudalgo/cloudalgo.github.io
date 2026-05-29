@@ -307,6 +307,28 @@ const schema = {
 @media (max-width: 600px) {
   :global(.blog-cta-block) { padding: 1.75rem; flex-direction: column; align-items: flex-start; }
 }
+
+/* ── End-of-post hr + p CTA callout ── */
+:global(.blog-cta-inline) {
+  margin: 2.5rem 0 1rem;
+  background: #0A0A0A;
+  border-radius: 12px;
+  padding: 1.75rem 2rem;
+}
+:global(.blog-cta-inline p) {
+  color: rgba(255,255,255,0.75);
+  font-size: 0.9375rem;
+  line-height: 1.75;
+  margin: 0;
+}
+:global(.blog-cta-inline a) {
+  color: #fff;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+:global(.blog-cta-inline a:hover) { opacity: 0.75; }
 </style>
 
 <script>
@@ -350,6 +372,19 @@ const schema = {
   }
   window.addEventListener('scroll', updateShareBar, { passive: true });
   updateShareBar();
+
+  // hr + p → inline CTA callout (end-of-post CTAs)
+  document.querySelectorAll('.blog-content hr').forEach(hr => {
+    const p = hr.nextElementSibling;
+    if (!p || p.tagName !== 'P') return;
+    if (!p.querySelector('a')) return;
+    const wrapper = document.createElement('div');
+    wrapper.className = 'blog-cta-inline';
+    wrapper.appendChild(p.cloneNode(true));
+    hr.parentNode?.insertBefore(wrapper, hr);
+    hr.remove();
+    p.remove();
+  });
 
   document.querySelectorAll('.blog-content h3').forEach(h3 => {
     const siblings: Element[] = [];
