@@ -17,7 +17,7 @@ const { data } = product;
 const statusLabel = (s: string) =>
   s === 'ga' ? 'Generally Available' : s === 'preview' ? 'Preview' : 'Beta';
 const typeLabel = (t: string) =>
-  t === 'salesforce-app' ? 'Salesforce App' : t === 'mobile-app' ? 'iOS App' : 'Integration Connector';
+  t === 'salesforce-app' ? 'Salesforce App' : t === 'mobile-app' ? 'Flutter App · iOS & Android' : 'Integration Connector';
 
 const illustrations: Record<string, string> = {
   'algobridge': `<svg viewBox="0 0 460 380" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:460px;height:auto;">
@@ -134,9 +134,9 @@ const illustrations: Record<string, string> = {
     <path d="M320 116 L330 116" stroke="#0A0A0A" stroke-width="1" opacity="0.2" stroke-dasharray="3 2"/>
     <path d="M320 158 L330 158" stroke="#0A0A0A" stroke-width="1" opacity="0.2" stroke-dasharray="3 2"/>
     <path d="M320 200 L330 200" stroke="#0A0A0A" stroke-width="1" opacity="0.2" stroke-dasharray="3 2"/>
-    <!-- App Store badge bottom -->
-    <rect x="155" y="278" width="150" height="30" rx="8" fill="#0A0A0A" fill-opacity="0.06" stroke="#0A0A0A" stroke-width="1.5" opacity="0.5"/>
-    <text x="230" y="298" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" font-weight="700" fill="#0A0A0A" opacity="0.7">Available on the App Store</text>
+    <!-- Platform badge bottom -->
+    <rect x="148" y="278" width="164" height="30" rx="8" fill="#0A0A0A" fill-opacity="0.06" stroke="#0A0A0A" stroke-width="1.5" opacity="0.5"/>
+    <text x="230" y="298" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" font-weight="700" fill="#0A0A0A" opacity="0.7">iOS &amp; Android · Built with Flutter</text>
   </svg>`,
   'sf-sync-connector': `<svg viewBox="0 0 460 380" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:460px;height:auto;">
     <!-- Sync connector: two systems with bidirectional data flow -->
@@ -240,7 +240,7 @@ const hasPricingOrReqs = (data.pricing && data.pricing.length > 0) ||
           <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
             {data.externalUrl ? (
               <a href={data.externalUrl} target="_blank" rel="noopener noreferrer" class="btn btn-primary">
-                {data.type === 'mobile-app' ? 'Download on App Store ↗' : 'Get started ↗'}
+                {data.type === 'mobile-app' ? 'Get the App ↗' : 'Get started ↗'}
               </a>
             ) : (
               <a href="/contact" class="btn btn-primary">Join waitlist &rarr;</a>
@@ -384,13 +384,13 @@ const hasPricingOrReqs = (data.pricing && data.pricing.length > 0) ||
             Ready to get started?
           </h2>
           <p style="font-size:0.9375rem;color:rgba(255,255,255,0.5);margin:0;">
-            {data.externalUrl ? 'Available now — free to get started' : 'Early access — join the waitlist'}
+            {data.type === 'mobile-app' ? 'Free on iOS & Android — built with Flutter' : data.externalUrl ? 'Available now — free to get started' : 'Early access — join the waitlist'}
           </p>
         </div>
         <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
           {data.externalUrl ? (
             <a href={data.externalUrl} target="_blank" rel="noopener noreferrer" class="btn btn-light">
-              {data.type === 'mobile-app' ? 'Download on App Store ↗' : 'Get started ↗'}
+              {data.type === 'mobile-app' ? 'Get the App ↗' : 'Get started ↗'}
             </a>
           ) : (
             <a href="/contact" class="btn btn-light">Join waitlist →</a>

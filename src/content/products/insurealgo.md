@@ -2,8 +2,8 @@
 title: "InsureAlgo"
 status: ga
 type: mobile-app
-tagline: "Track all your insurance policies and never miss a renewal — free, offline, and private."
-excerpt: "InsureAlgo is a free iOS app that keeps every insurance policy at your fingertips. Expiry countdowns, smart reminders, document vault, and iCloud backup — with zero data collection and no account required."
+tagline: "Track all your insurance policies and never miss a renewal — free, offline, and private. Available on iOS and Android."
+excerpt: "InsureAlgo is a free Flutter app for iOS and Android that keeps every insurance policy at your fingertips. Expiry countdowns, smart reminders, document vault, and iCloud backup — with zero data collection and no account required."
 icon: "insurealgo"
 externalUrl: "https://apps.apple.com/app/insurealgo/id6748688246"
 version: "1.0.0"
@@ -18,10 +18,10 @@ features:
     description: "Local notifications at 10, 5, and 3 days before expiry. Fully customisable timing — no account, no cloud, no data shared."
   - icon: "lock"
     title: "100% Private & Offline"
-    description: "No server, no tracking, no ads. Data lives on your device, protected by Face ID / Touch ID and encrypted Hive storage."
+    description: "No server, no tracking, no ads. Data lives on your device, protected by biometric lock and encrypted Hive storage."
   - icon: "cloud"
-    title: "iCloud Backup"
-    description: "Optional backup and restore via your personal iCloud account — CloudAlgo never sees your data."
+    title: "Cloud Backup"
+    description: "Optional backup and restore via iCloud (iOS) — CloudAlgo never sees your data."
   - icon: "camera"
     title: "Document Vault"
     description: "Attach photos and PDFs directly to each policy. Camera, photo library, and file picker all supported."
@@ -34,19 +34,20 @@ screenshots:
   - "/products/insurealgo/04_add_policy.webp"
   - "/products/insurealgo/05_settings.webp"
 pricing:
-  - tier: "iOS App"
+  - tier: "iOS & Android"
     price: "Free"
   - tier: "All features"
     price: "Included"
-  - tier: "iCloud Backup"
+  - tier: "Cloud Backup"
     price: "Uses your iCloud"
 requirements:
-  - "iPhone or iPad running iOS 15.0 or later"
-  - "iCloud Drive enabled (only for optional backup feature)"
-  - "Face ID or Touch ID supported device (for biometric lock)"
+  - "iOS 15.0+ or Android 8.0 (API level 26)+"
+  - "Built with Flutter — native performance on both platforms"
+  - "iCloud Drive enabled (iOS only, for optional backup feature)"
+  - "Biometric sensor supported device (for optional biometric lock)"
 published: true
 ---
 
-InsureAlgo puts all your insurance policies in one place — vehicle, health, life, home, and any custom type you create. Every policy shows an exact expiry countdown and triggers local notifications before renewal is due, so you never miss a deadline.
+InsureAlgo puts all your insurance policies in one place — vehicle, health, life, home, and any custom type you create. Built with Flutter, it runs natively on both iOS and Android with a single codebase.
 
-All data stays on your device. There's no account, no server, and no tracking of any kind. The optional iCloud backup goes directly to your private Apple account — CloudAlgo never touches it.
+Every policy shows an exact expiry countdown and triggers local notifications before renewal is due, so you never miss a deadline. All data stays on your device. There's no account, no server, and no tracking of any kind.

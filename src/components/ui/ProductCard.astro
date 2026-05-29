@@ -15,7 +15,7 @@ const statusLabel = (s: string) =>
   s === 'ga' ? 'Generally Available' : s === 'preview' ? 'Preview' : 'Beta';
 const isEarlyAccess = data.status === 'preview' || data.status === 'beta';
 const typeLabel = (t: string) =>
-  t === 'salesforce-app' ? 'Salesforce App' : t === 'mobile-app' ? 'iOS App' : 'Integration';
+  t === 'salesforce-app' ? 'Salesforce App' : t === 'mobile-app' ? 'Mobile App' : 'Integration';
 const orderNum = String(data.order).padStart(2, '0');
 
 // Small icon SVGs for dark variant cards
