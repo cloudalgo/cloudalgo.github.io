@@ -2,7 +2,7 @@
 title: "Utilizing Apex Enum with Switch Case: A Salesforce Developer&#x27;s Guide"
 date: 2022-10-10
 category: Salesforce
-excerpt: "Just an example of enum with switch case in Apex salesforce. This is single class which having references to other which may not included here. Purpose of posting this blog with single class to repres"
+excerpt: "Using Apex enums with switch-case statements to manage support ticket states cleanly — a practical example with a real object model."
 readTime: 3
 image: /blog-images/1f0b08180cd64c7cf5f4004d8bfd1168a682b61a-1200x600.jpg
 published: true

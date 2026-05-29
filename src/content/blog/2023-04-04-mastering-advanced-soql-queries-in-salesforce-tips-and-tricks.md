@@ -2,7 +2,7 @@
 title: "Mastering Advanced SOQL Queries in Salesforce: Tips and Tricks"
 date: 2023-04-04
 category: Salesforce
-excerpt: "Salesforce Object Query Language (SOQL) is a powerful tool that enables developers to retrieve data from Salesforce databases. While basic SOQL statements are relatively straightforward, there are sev"
+excerpt: "Advanced SOQL techniques for Salesforce developers: relationship queries, aggregate functions, semi-joins, and avoiding common governor limit traps."
 readTime: 3
 image: /blog-images/eebb5692a5e0de7447173c9c2afc6beb91127699-1200x600.jpg
 published: true

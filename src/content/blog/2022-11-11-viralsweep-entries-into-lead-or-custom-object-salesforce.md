@@ -2,7 +2,7 @@
 title: "Streamlining ViralSweep Entries into Salesforce Leads and Custom Objects"
 date: 2022-11-11
 category: Salesforce
-excerpt: "we'll explore how to connect ViralSweep entries to Salesforce Leads and Custom Objects to optimize your sales and marketing processes."
+excerpt: "How to push ViralSweep contest entries into Salesforce Leads or custom objects automatically using the Salesforce REST API and webhook support."
 readTime: 3
 image: /blog-images/a08376513035a117d1b150b7224680ffd386769a-1200x600.jpg
 published: true

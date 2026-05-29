@@ -1,8 +1,8 @@
 ---
-title: "Navigation in Salesforce Digital Experiences (sites / communities) LWC"
+title: "Fixing Navigation in Salesforce Experience Cloud Sites with LWC"
 date: 2022-05-05
 category: Salesforce
-excerpt: "I was having issue with NavigationMixin(LightningElement) while working in Salesforce Experience cloud (sites - Guest user), I was unable to navigate from one site page to another using code. Working "
+excerpt: "How to navigate between pages in Salesforce Experience Cloud using LWC, including the fix for NavigationMixin failing in guest user context."
 readTime: 3
 image: /blog-images/bdd4dba68c01c037c041e86132ee8a64215e2ba9-1200x600.jpg
 published: true

@@ -2,7 +2,7 @@
 title: "Salesforce OAuth Setup and Use Example: A Comprehensive Guide"
 date: 2023-04-04
 category: Salesforce
-excerpt: "Salesforce OAuth is a powerful tool for authenticating and authorizing access to Salesforce resources. In this blog post, we'll walk through the process of setting up Salesforce OAuth and provide"
+excerpt: "Step-by-step guide to setting up a Salesforce Connected App for OAuth, including the OAuth 2.0 flow and a working Node.js implementation example."
 readTime: 4
 image: /blog-images/2cc845d7ae68538fd778e5758ed0861708e0a76c-1200x600.jpg
 published: true

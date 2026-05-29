@@ -1,8 +1,8 @@
 ---
-title: "Formatting a Apex Time into String (in apex class)"
+title: “How to Format an Apex Time Value as a Readable String”
 date: 2022-06-06
 category: Salesforce
-excerpt: "Since as on today we don’t have any inbuilt method which can format this type of String “ 14:00:00.000Z” like “2:00 PM” So wrote a snippet for this and may be useful."
+excerpt: “Salesforce has no built-in method to format a Time value as a human-readable string. Here is a short Apex utility that does it.”
 readTime: 3
 image: /blog-images/f4996321c58486dc7be36f56159974a5ee7ed576-1200x600.jpg
 published: true

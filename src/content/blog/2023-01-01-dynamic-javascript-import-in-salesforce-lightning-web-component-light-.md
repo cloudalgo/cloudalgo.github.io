@@ -1,10 +1,8 @@
 ---
-title: "Dynamic Javascript import in Salesforce Lightning Web Component (Light Dom with LWC With Stripe live js)"
+title: "Using Dynamic JavaScript Imports in Salesforce LWC with Light DOM"
 date: 2023-01-01
 category: Salesforce
-excerpt: "Recently with the release salesforce launched support of Light DOM (Beta) using that we can inject the live js library inside our component without turning off LWS / Lightning locker.
-
-Here I am givin"
+excerpt: "How to load an external JavaScript library like Stripe.js inside a Lightning Web Component using Light DOM to work around Locker Service restrictions."
 readTime: 3
 image: /blog-images/5e16611d37dc352a2525cbd77af54dc81b9b95e7-850x382.webp
 published: true
