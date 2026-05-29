@@ -5,6 +5,7 @@ category: Heroku
 excerpt: "Heroku and AWS serve different needs. Here is how we help clients decide — based on team composition, Salesforce coupling, compliance, and real cost modelling."
 readTime: 7
 published: true
+featured: editors-pick
 author: "Sandeep Kumar"
 authorDesignation: "Technical Architect"
 authorPhoto: "/blog-images/a0bac224191c550df6e3a1f8ade4206b0927cbfb-515x515.jpg"

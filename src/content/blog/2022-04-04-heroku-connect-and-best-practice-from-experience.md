@@ -6,7 +6,6 @@ excerpt: "Common mistakes teams make with Heroku Connect — External IDs, formu
 readTime: 7
 image: /blog-images/2f23904ac526708a919bb2c5e4b3574dbb601fee-800x239.webp
 published: true
-featured: editors-pick
 author: "Vikash Agarwal"
 authorDesignation: "Technical Architect"
 authorPhoto: "/blog-images/32c050b8f0ed847ec0b34f5144d2fa6b03a40888-200x200.jpg"
