@@ -43,25 +43,22 @@ const productIcons: Record<string, string> = {
     <path d="M9 13 L12 15 L15 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
     <circle cx="12" cy="20" r="1" fill="currentColor"/>
   </svg>`,
+  'pledgivo': `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M12 21C12 21 3 14.5 3 8.5C3 6 5 4 7.5 4C9.24 4 10.75 4.96 11.56 6.35C11.75 6.67 12.25 6.67 12.44 6.35C13.25 4.96 14.76 4 16.5 4C19 4 21 6 21 8.5C21 14.5 12 21 12 21Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+    <path d="M8 11 L10.5 13.5 L16 8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>`,
 };
 const iconSvg = productIcons[slug] ?? productIcons['cloudalgo-flow-audit'];
 
-const productImages: Record<string, string> = {
-  'insurealgo': '/products/insurealgo/app-icon.webp',
-};
-const iconImage = productImages[slug] ?? null;
 
 ---
 
 {dark ? (
-  <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:12px;padding:1.75rem;display:flex;gap:1.25rem;align-items:flex-start;">
-    <div style="width:44px;height:44px;border-radius:10px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);flex-shrink:0;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.8);overflow:hidden;">
-      {iconImage
-        ? <img src={iconImage} alt={data.title} style="width:100%;height:100%;object-fit:cover;" />
-        : <Fragment set:html={iconSvg} />
-      }
+  <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:12px;padding:1.75rem;display:flex;gap:1.25rem;align-items:flex-start;height:100%;">
+    <div style="width:44px;height:44px;border-radius:10px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);flex-shrink:0;display:flex;align-items:center;justify-content:center;color:#fff;overflow:hidden;">
+      <Fragment set:html={iconSvg} />
     </div>
-    <div style="flex:1;min-width:0;">
+    <div style="flex:1;min-width:0;display:flex;flex-direction:column;height:100%;">
       <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem;flex-wrap:wrap;">
         {data.status === 'ga' ? (
           <span style="background:rgba(255,255,255,0.9);color:#0A0A0A;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:100px;text-transform:uppercase;letter-spacing:0.06em;">
@@ -78,7 +75,7 @@ const iconImage = productImages[slug] ?? null;
       </div>
       <div style="font-size:1rem;font-weight:700;color:#fff;margin-bottom:0.35rem;">{data.title}</div>
       <div style="font-size:0.85rem;color:rgba(255,255,255,0.55);line-height:1.6;margin-bottom:1rem;">{data.excerpt}</div>
-      <a href={`/products/${slug}`} style="font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.8);text-decoration:underline;text-underline-offset:3px;transition:color 0.2s;" class="prod-card-link-dark">
+      <a href={`/products/${slug}`} style="font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.8);text-decoration:underline;text-underline-offset:3px;transition:color 0.2s;margin-top:auto;" class="prod-card-link-dark">
         Learn more &rarr;
       </a>
     </div>

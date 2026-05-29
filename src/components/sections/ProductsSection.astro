@@ -26,7 +26,7 @@ const products = allProducts.sort((a, b) => a.data.order - b.data.order);
     </div>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1rem;">
       {products.map((p, i) => (
-        <div class="anim-scale-pop" style={`transition-delay:${i * 0.1}s;`}>
+        <div class="anim-scale-pop" style={`transition-delay:${i * 0.1}s;display:flex;`}>
           <ProductCard product={p} dark={true} />
         </div>
       ))}
