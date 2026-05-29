@@ -96,5 +96,3 @@ Happy coding and efficient support ticket management in Salesforce!
 ---
 
 If your team is working through complex Salesforce business logic and you want an experienced set of eyes on the design, [we are happy to talk](/contact).
-
-<div
