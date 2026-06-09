@@ -1,0 +1,821 @@
+# Cookie Consent Redesign Implementation Plan
+
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+
+**Goal:** Rewrite `src/components/ui/CookieConsent.astro` to be a non-blocking two-state popup that matches the CloudAlgo design system.
+
+**Architecture:** Single `.astro` file with scoped `<style>` and a `<script>` block. State 1 (initial notice) and State 2 (detail/customise) are two sibling `<div>`s inside one fixed panel; visibility is toggled via CSS class on the outer container. No React, no external dependencies.
+
+**Tech Stack:** Astro 6, vanilla TypeScript (Astro `<script>`), scoped CSS, `localStorage`.
+
+---
+
+## Files
+
+| Action | Path |
+|--------|------|
+| Modify (full rewrite) | `src/components/ui/CookieConsent.astro` |
+
+`Base.astro` already imports and renders `<CookieConsent />` — no changes needed there.
+
+---
+
+## Task 1: Replace HTML structure (both states + long-form text)
+
+**Files:**
+- Modify: `src/components/ui/CookieConsent.astro`
+
+- [ ] **Step 1.1 — Open the file and replace its entire contents with the new HTML skeleton**
+
+  Replace everything in `src/components/ui/CookieConsent.astro` with this (CSS and script sections are placeholders filled in Tasks 2–3):
+
+  ```astro
+  ---
+  // Cookie consent — two-state non-blocking popup.
+  ---
+
+  <div
+    id="ca-cookie-popup"
+    class="ca-hidden"
+    role="region"
+    aria-label="Cookie preferences"
+  >
+
+    <!-- ── State 1: Initial notice ── -->
+    <div id="ca-s1">
+      <div class="ca-s1-inner">
+        <div class="ca-cookie-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"/>
+            <circle cx="8.5" cy="8.5" r="1.5" fill="currentColor" stroke="none"/>
+            <circle cx="14" cy="7.5" r="1" fill="currentColor" stroke="none"/>
+            <circle cx="9" cy="14" r="1" fill="currentColor" stroke="none"/>
+            <circle cx="14.5" cy="13.5" r="1.5" fill="currentColor" stroke="none"/>
+            <circle cx="11" cy="11" r="0.75" fill="currentColor" stroke="none"/>
+          </svg>
+        </div>
+        <h3 class="ca-cookie-title">We use cookies</h3>
+        <p class="ca-cookie-body">
+          We use cookies, including third-party tools (Google Analytics, HubSpot, Microsoft Clarity),
+          to understand how visitors engage with our site and to improve our content and services.
+          No personal data is sold to third parties. Click <strong>"Accept all"</strong> to consent,
+          or <strong>"Customise&nbsp;/&nbsp;reject"</strong> to review your options.
+        </p>
+        <div class="ca-btns">
+          <button id="ca-btn-customise" class="ca-btn-outline">Customise&nbsp;/&nbsp;reject</button>
+          <button id="ca-btn-accept-s1" class="ca-btn-primary">Accept all</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── State 2: Modifications & Details ── -->
+    <div id="ca-s2">
+      <div class="ca-s2-header">
+        <h3 class="ca-s2-title">Cookies — Modifications &amp; Details</h3>
+        <p class="ca-s2-sub">Essential cookies are always active. Review and enable optional cookies below.</p>
+      </div>
+
+      <div class="ca-s2-body">
+
+        <!-- Analytics & Marketing card -->
+        <div id="ca-analytics-card" class="ca-cat-card">
+          <div class="ca-cat-top">
+            <span class="ca-cat-name">Analytics &amp; Marketing Cookies</span>
+            <div class="ca-cb-group">
+              <input type="checkbox" id="ca-analytics-cb" class="ca-cb-input" />
+              <label for="ca-analytics-cb" class="ca-cb-box" aria-hidden="true"></label>
+              <span id="ca-analytics-badge" class="ca-badge ca-badge-prohibited">Prohibited</span>
+            </div>
+          </div>
+          <p class="ca-cat-desc">
+            Used by Google Analytics, HubSpot, and Microsoft Clarity to measure site traffic,
+            understand user behaviour, and surface relevant content about CloudAlgo's Salesforce,
+            Heroku, and AWS services. Unchecked by default — enable only if you consent.
+          </p>
+          <a href="#ca-cookie-detail" class="ca-cat-link">Open cookies and options in detail ↓</a>
+        </div>
+
+        <!-- Essential cookies card -->
+        <div class="ca-cat-card">
+          <div class="ca-cat-top">
+            <span class="ca-cat-name">Essential Cookies</span>
+            <span class="ca-badge ca-badge-always">Always on</span>
+          </div>
+          <p class="ca-cat-desc">
+            Required for page navigation, session continuity, form submissions, and stable
+            delivery of the CloudAlgo website. These cannot be disabled.
+          </p>
+          <a href="#ca-cookie-detail" class="ca-cat-link">Open cookies and options in detail ↓</a>
+        </div>
+
+        <!-- Responsible line -->
+        <p class="ca-responsible">Responsible as defined by data protection law: CloudAlgo Inc.</p>
+
+        <!-- Long-form cookie detail -->
+        <div id="ca-cookie-detail" class="ca-detail-text">
+          <h4>Cookies and Modifications</h4>
+          <p>
+            In the following paragraphs, we'll explain our purposes for using cookies and similar
+            technologies on our websites. We also offer you the opportunity to modify your consent
+            to our use or to revoke your consent at any time.
+          </p>
+
+          <h4>What are Cookies?</h4>
+          <p>
+            Cookies and web storage technologies, such as Local Storage and Session Storage,
+            referred to as "cookies", facilitate your interaction with our websites. As soon as
+            you visit our websites, cookies are downloaded by the internet browser to your end
+            device, for example as a small text file. Third-party technologies — like scripts,
+            pixels, and tags — which we integrate into our websites for analytics purposes, also
+            place cookies on your end device.
+          </p>
+
+          <h4>Purposes of Cookies</h4>
+          <p>Cookies take care of many different tasks that contribute to a seamless online experience. Some specific cookies are essential for the running and maintenance of our websites, because they enable us to:</p>
+          <ul>
+            <li>Provide you with the services of your preference at all times</li>
+            <li>Present you with specific and relevant information</li>
+            <li>Offer you a seamless and comfortable online experience</li>
+          </ul>
+
+          <h4>Recognition and Response</h4>
+          <p>Cookies show us how you use and interact with our websites. This helps us to:</p>
+          <ul>
+            <li>Provide you with a more personal experience by bringing you to the most important pages more efficiently</li>
+            <li>Remind us of some of your personal preferences</li>
+            <li>Guide you to useful content or pages relevant to CloudAlgo's services</li>
+          </ul>
+
+          <h4>Continuous Improvements</h4>
+          <p>Cookies help us understand how visitors use our websites and enable us to make improvements. For example, cookies make it possible to analyse what type of content is popular and create similar topics. This helps us to:</p>
+          <ul>
+            <li>Improve the design of our websites and provide you with a better online experience</li>
+            <li>Try different approaches and present visitors with content most relevant to them</li>
+          </ul>
+
+          <h4>Advertising and Retargeting</h4>
+          <p>Our websites may use cookies for retargeting purposes. This means cookies store information from your browsing history to track your interests and activity. This helps us, or our advertising partners, to present you with:</p>
+          <ul>
+            <li>Relevant advertising for our products on other websites, based on your visits here</li>
+            <li>A combination of relevant and specific information so that displayed advertising matches your interests</li>
+          </ul>
+
+          <h4>Cookie Categories</h4>
+          <p>
+            Both data processing and associated cookies may be deployed on our websites. Depending
+            on function and purpose, we have divided data processing into different categories.
+            Please find further information on the various cookie categories at the start of this
+            page, under "Modifications and Details".
+          </p>
+
+          <h4>What do you need to know about cookies?</h4>
+          <p>
+            A cookie is a small text file that stores internet settings. Almost every website uses
+            cookies. When you visit a website for the first time, the cookies are downloaded by
+            your internet browser. The next time you visit this website using the same end device,
+            the website recognises you and displays content tailored to your personal needs and
+            interests. The cookies mentioned below are synonymous with HTML5 Session Web Storage
+            and HTML5 Local Web Storage.
+          </p>
+
+          <h4>First-Party Cookies</h4>
+          <p>
+            First-party cookies are cookies that we, or contracted service providers, place on the
+            website and with which you interact if you continue to use our website.
+          </p>
+
+          <h4>Third-Party Cookies</h4>
+          <p>
+            Our websites may also contain content from other providers (third-party providers),
+            who possibly use their own cookies. Third-party providers may place cookies during your
+            visit to our websites that request information like, for example, whether you loaded one
+            of our websites. Please go to the website of the third-party provider to learn more
+            about their use of cookies. You can reject cookies from third-party providers at any
+            time by using the corresponding function on our websites.
+          </p>
+
+          <h4>Rejecting Cookies</h4>
+          <p>
+            When you reject cookies that require your consent, we'll duly accept your decision and
+            refrain from placing the respective cookies. If you revoke your consent, we'll stop
+            placing cookies that require consent starting from your visit to the next page. We'll
+            delete any first-party cookies, insofar as this is technically possible. Please note
+            that we cannot delete third-party cookies — if you would like to delete all third-party
+            cookies, please go to your browser settings.
+          </p>
+
+          <h4>Cookie Management in your browser</h4>
+          <p>
+            You can manage cookie settings via the features on our website, and also through
+            changing your browser settings (enable, disable, and delete). Most browsers allow you
+            to manage cookies by either accepting or rejecting all cookies. Go to the help section
+            of your browser to learn more about how to manage and delete cookies. When you change
+            your cookie settings, certain cookies will be blocked. In this case, you may not fully
+            benefit from some features on our website.
+          </p>
+        </div>
+
+      </div><!-- /.ca-s2-body -->
+
+      <div class="ca-s2-footer">
+        <div class="ca-btns">
+          <button id="ca-btn-accept-selected" class="ca-btn-outline">Accept Selected</button>
+          <button id="ca-btn-accept-s2" class="ca-btn-primary">Accept All</button>
+        </div>
+      </div>
+    </div><!-- /#ca-s2 -->
+
+  </div><!-- /#ca-cookie-popup -->
+
+  <style>
+    /* CSS goes here — Task 2 */
+  </style>
+
+  <script>
+    /* JS goes here — Task 3 */
+  </script>
+  ```
+
+- [ ] **Step 1.2 — Run type-check to make sure Astro parses the file**
+
+  ```bash
+  npm run astro check
+  ```
+
+  Expected: 0 errors. (Warnings about empty script/style blocks are fine at this stage.)
+
+---
+
+## Task 2: Write all CSS
+
+**Files:**
+- Modify: `src/components/ui/CookieConsent.astro` — replace the `<style>` block
+
+- [ ] **Step 2.1 — Replace the `<style>` block with the full CSS**
+
+  ```css
+  /* ── Outer popup — non-blocking fixed panel ── */
+  #ca-cookie-popup {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    width: 90%;
+    background: #ffffff;
+    border: 1px solid #E0E0DC;
+    border-bottom: none;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.12);
+    z-index: 1000;
+    font-family: 'Outfit', system-ui, sans-serif;
+    opacity: 0;
+    animation: caPanelIn 0.35s cubic-bezier(0.34, 1.2, 0.64, 1) 1.5s forwards;
+  }
+
+  #ca-cookie-popup.ca-hidden {
+    display: none;
+    animation: none;
+  }
+
+  @keyframes caPanelIn {
+    to {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+  }
+
+  /* ── State visibility ── */
+
+  /* State 2 is hidden by default */
+  #ca-s2 {
+    display: none;
+  }
+
+  /* When popup has .ca-state2: hide s1, show s2 as flex column */
+  #ca-cookie-popup.ca-state2 #ca-s1 {
+    display: none;
+  }
+
+  #ca-cookie-popup.ca-state2 #ca-s2 {
+    display: flex;
+    flex-direction: column;
+    max-height: 70vh;
+    overflow: hidden;
+  }
+
+  /* ── State 1 ── */
+  .ca-s1-inner {
+    padding: 1.25rem 1.375rem 1.5rem;
+  }
+
+  .ca-cookie-icon {
+    width: 32px;
+    height: 32px;
+    background: #F5F5F2;
+    border: 1px solid #E0E0DC;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #0A0A0A;
+    margin-bottom: 0.75rem;
+  }
+
+  .ca-cookie-title {
+    font-size: 1rem;
+    font-weight: 800;
+    color: #0A0A0A;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    margin-bottom: 0.375rem;
+  }
+
+  .ca-cookie-body {
+    font-size: 0.875rem;
+    color: #5A5A5A;
+    line-height: 1.65;
+    margin-bottom: 1.25rem;
+  }
+
+  /* ── Shared button row ── */
+  .ca-btns {
+    display: flex;
+    gap: 0.625rem;
+  }
+
+  .ca-btn-primary {
+    flex: 1;
+    background: #0A0A0A;
+    color: #ffffff;
+    border: none;
+    border-radius: 100px;
+    padding: 0.625rem 1rem;
+    font-size: 0.9375rem;
+    font-weight: 700;
+    font-family: 'Outfit', system-ui, sans-serif;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    text-align: center;
+  }
+  .ca-btn-primary:hover { opacity: 0.8; }
+
+  .ca-btn-outline {
+    flex: 1;
+    background: transparent;
+    color: #0A0A0A;
+    border: 1.5px solid #E0E0DC;
+    border-radius: 100px;
+    padding: 0.625rem 1rem;
+    font-size: 0.9375rem;
+    font-weight: 700;
+    font-family: 'Outfit', system-ui, sans-serif;
+    cursor: pointer;
+    transition: background 0.2s;
+    text-align: center;
+  }
+  .ca-btn-outline:hover { background: #F5F5F2; }
+
+  /* ── State 2 layout ── */
+  .ca-s2-header {
+    padding: 1rem 1.375rem 0.875rem;
+    border-bottom: 1px solid #E0E0DC;
+    flex-shrink: 0;
+  }
+
+  .ca-s2-title {
+    font-size: 1rem;
+    font-weight: 800;
+    color: #0A0A0A;
+    letter-spacing: -0.01em;
+    margin-bottom: 0.25rem;
+  }
+
+  .ca-s2-sub {
+    font-size: 0.8125rem;
+    color: #5A5A5A;
+    line-height: 1.55;
+  }
+
+  .ca-s2-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem 1.375rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .ca-s2-footer {
+    padding: 0.75rem 1.375rem 1.25rem;
+    border-top: 1px solid #E0E0DC;
+    flex-shrink: 0;
+  }
+
+  /* ── Category cards ── */
+  .ca-cat-card {
+    background: #F5F5F2;
+    border: 1px solid #E0E0DC;
+    border-radius: 12px;
+    padding: 0.875rem 1rem;
+    transition: border-color 0.2s;
+  }
+
+  .ca-cat-card.ca-allowed {
+    border-color: #0A0A0A;
+  }
+
+  .ca-cat-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .ca-cat-name {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #0A0A0A;
+  }
+
+  .ca-cat-desc {
+    font-size: 0.8125rem;
+    color: #5A5A5A;
+    line-height: 1.55;
+  }
+
+  .ca-cat-link {
+    display: inline-block;
+    margin-top: 0.5rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: #0A0A0A;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    text-decoration-color: #E0E0DC;
+    cursor: pointer;
+  }
+
+  /* ── Checkbox ── */
+  .ca-cb-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+  }
+
+  .ca-cb-input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+  }
+
+  .ca-cb-box {
+    width: 16px;
+    height: 16px;
+    border: 1.5px solid #E0E0DC;
+    border-radius: 3px;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+  }
+
+  .ca-cb-input:checked + .ca-cb-box {
+    background: #0A0A0A;
+    border-color: #0A0A0A;
+  }
+
+  .ca-cb-input:checked + .ca-cb-box::after {
+    content: '';
+    display: block;
+    width: 4px;
+    height: 7px;
+    border: 2px solid #ffffff;
+    border-top: none;
+    border-left: none;
+    transform: rotate(45deg) translateY(-1px);
+  }
+
+  /* ── Badges ── */
+  .ca-badge {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    border-radius: 100px;
+    padding: 0.1875rem 0.5625rem;
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  .ca-badge-prohibited {
+    background: #ffffff;
+    color: #5A5A5A;
+    border: 1.5px solid #E0E0DC;
+  }
+
+  .ca-badge-allowed {
+    background: #0A0A0A;
+    color: #ffffff;
+    border: 1.5px solid #0A0A0A;
+  }
+
+  .ca-badge-always {
+    background: #0A0A0A;
+    color: #ffffff;
+    border: 1.5px solid #0A0A0A;
+  }
+
+  /* ── Responsible line ── */
+  .ca-responsible {
+    font-size: 0.8125rem;
+    color: #5A5A5A;
+    opacity: 0.65;
+  }
+
+  /* ── Long-form detail text ── */
+  .ca-detail-text {
+    font-size: 0.8125rem;
+    color: #5A5A5A;
+    line-height: 1.7;
+    padding-top: 0.25rem;
+  }
+
+  .ca-detail-text h4 {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #0A0A0A;
+    margin-top: 1.25rem;
+    margin-bottom: 0.375rem;
+    line-height: 1.3;
+  }
+
+  .ca-detail-text h4:first-child {
+    margin-top: 0;
+  }
+
+  .ca-detail-text p {
+    margin-bottom: 0.5rem;
+  }
+
+  .ca-detail-text ul {
+    padding-left: 1.25rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .ca-detail-text li {
+    margin-bottom: 0.25rem;
+  }
+
+  /* ── Mobile ── */
+  @media (max-width: 640px) {
+    #ca-cookie-popup {
+      width: 100%;
+      border-radius: 12px 12px 0 0;
+    }
+  }
+  ```
+
+- [ ] **Step 2.2 — Run type-check**
+
+  ```bash
+  npm run astro check
+  ```
+
+  Expected: 0 errors.
+
+---
+
+## Task 3: Write JS logic
+
+**Files:**
+- Modify: `src/components/ui/CookieConsent.astro` — replace the `<script>` block
+
+- [ ] **Step 3.1 — Replace the `<script>` block with the full logic**
+
+  ```typescript
+  function injectTrackers(): void {
+    // Google Analytics GA4
+    const ga = document.createElement('script');
+    ga.async = true;
+    ga.src = 'https://www.googletagmanager.com/gtag/js?id=G-5WYSWY2G6Z';
+    document.head.appendChild(ga);
+    (window as any).dataLayer = (window as any).dataLayer || [];
+    (window as any).gtag = function () { (window as any).dataLayer.push(arguments); };
+    (window as any).gtag('js', new Date());
+    (window as any).gtag('config', 'G-5WYSWY2G6Z');
+
+    // HubSpot
+    const hs = document.createElement('script');
+    hs.async = true;
+    hs.src = '//js.hs-scripts.com/21905808.js';
+    document.head.appendChild(hs);
+
+    // Microsoft Clarity
+    const w = window as any;
+    w['clarity'] = w['clarity'] || function () { (w['clarity'].q = w['clarity'].q || []).push(arguments); };
+    const ct = document.createElement('script');
+    ct.async = true;
+    ct.src = 'https://www.clarity.ms/tag/wqcruv2yej';
+    document.head.appendChild(ct);
+  }
+
+  function setConsent(value: 'accepted' | 'declined'): void {
+    localStorage.setItem('ca_cookie_consent', value);
+  }
+
+  function hidePopup(): void {
+    document.getElementById('ca-cookie-popup')?.classList.add('ca-hidden');
+  }
+
+  // ── On page load ──
+  const consent = localStorage.getItem('ca_cookie_consent');
+  if (consent === 'accepted') {
+    injectTrackers();
+  } else if (!consent) {
+    // First visit: remove ca-hidden to show the popup
+    document.getElementById('ca-cookie-popup')?.classList.remove('ca-hidden');
+  }
+  // If 'declined', popup stays hidden (ca-hidden remains), no trackers.
+
+  // ── State 1: "Customise / reject" → show State 2 ──
+  document.getElementById('ca-btn-customise')?.addEventListener('click', () => {
+    document.getElementById('ca-cookie-popup')?.classList.add('ca-state2');
+  });
+
+  // ── State 1: "Accept all" ──
+  document.getElementById('ca-btn-accept-s1')?.addEventListener('click', () => {
+    setConsent('accepted');
+    injectTrackers();
+    hidePopup();
+  });
+
+  // ── State 2: checkbox → update badge + card border ──
+  const cb = document.getElementById('ca-analytics-cb') as HTMLInputElement | null;
+  const badge = document.getElementById('ca-analytics-badge');
+  const card = document.getElementById('ca-analytics-card');
+
+  cb?.addEventListener('change', () => {
+    if (cb.checked) {
+      badge?.classList.replace('ca-badge-prohibited', 'ca-badge-allowed');
+      if (badge) badge.textContent = 'Allowed';
+      card?.classList.add('ca-allowed');
+    } else {
+      badge?.classList.replace('ca-badge-allowed', 'ca-badge-prohibited');
+      if (badge) badge.textContent = 'Prohibited';
+      card?.classList.remove('ca-allowed');
+    }
+  });
+
+  // ── State 2: "Accept Selected" ──
+  document.getElementById('ca-btn-accept-selected')?.addEventListener('click', () => {
+    if (cb?.checked) {
+      setConsent('accepted');
+      injectTrackers();
+    } else {
+      setConsent('declined');
+    }
+    hidePopup();
+  });
+
+  // ── State 2: "Accept All" ──
+  document.getElementById('ca-btn-accept-s2')?.addEventListener('click', () => {
+    setConsent('accepted');
+    injectTrackers();
+    hidePopup();
+  });
+  ```
+
+- [ ] **Step 3.2 — Run type-check**
+
+  ```bash
+  npm run astro check
+  ```
+
+  Expected: 0 errors.
+
+- [ ] **Step 3.3 — Commit**
+
+  ```bash
+  git add src/components/ui/CookieConsent.astro
+  git commit -m "feat(cookie): two-state non-blocking consent popup"
+  ```
+
+---
+
+## Task 4: Manual verification
+
+**Files:** none (browser testing only)
+
+- [ ] **Step 4.1 — Start dev server**
+
+  ```bash
+  npm run dev
+  ```
+
+  Open `http://localhost:4321` in a browser.
+
+- [ ] **Step 4.2 — First-visit: popup appears**
+
+  Open DevTools → Application → Local Storage → delete `ca_cookie_consent` key if present → reload.
+
+  Expected: after ~1.5s the popup slides up from the bottom, 90% wide, centered, no overlay/dimming.
+
+- [ ] **Step 4.3 — Page remains interactive**
+
+  While popup is visible, scroll the page and click nav links.
+
+  Expected: page scrolls and responds normally. Popup stays pinned at bottom.
+
+- [ ] **Step 4.4 — "Customise / reject" switches to State 2**
+
+  Click "Customise / reject".
+
+  Expected: State 1 disappears; State 2 appears with pinned header ("Cookies — Modifications & Details"), scrollable body, and pinned footer buttons.
+
+- [ ] **Step 4.5 — State 2 body is scrollable**
+
+  Scroll inside the cookie detail panel.
+
+  Expected: header and footer stay fixed; body scrolls through category cards and long-form text.
+
+- [ ] **Step 4.6 — Checkbox toggles badge and card border**
+
+  Click the Analytics & Marketing checkbox.
+
+  Expected:
+  - Checkbox fills black with a checkmark ✓
+  - Badge changes from "Prohibited" (outlined gray) to "Allowed" (black filled)
+  - Card border turns `#0A0A0A` (dark)
+
+  Click again to uncheck.
+
+  Expected: reverts to "Prohibited" badge, border back to `#E0E0DC`.
+
+- [ ] **Step 4.7 — "Accept Selected" with checkbox unchecked**
+
+  Ensure checkbox is unchecked → click "Accept Selected".
+
+  Expected:
+  - Popup closes
+  - DevTools → Application → Local Storage: `ca_cookie_consent = 'declined'`
+  - DevTools → Network: no requests to `googletagmanager.com`, `hs-scripts.com`, or `clarity.ms`
+
+- [ ] **Step 4.8 — Reload after declining**
+
+  Reload the page.
+
+  Expected: popup does not appear. No tracker network requests.
+
+- [ ] **Step 4.9 — "Accept Selected" with checkbox checked**
+
+  Delete `ca_cookie_consent` from Local Storage, reload → click "Customise / reject" → check the Analytics checkbox → click "Accept Selected".
+
+  Expected:
+  - Popup closes
+  - `ca_cookie_consent = 'accepted'`
+  - Network requests to GA4, HubSpot, Clarity visible in DevTools
+
+- [ ] **Step 4.10 — "Accept All" from State 1**
+
+  Delete `ca_cookie_consent`, reload → click "Accept all".
+
+  Expected: popup closes, `ca_cookie_consent = 'accepted'`, trackers fire.
+
+- [ ] **Step 4.11 — "Accept All" from State 2**
+
+  Delete `ca_cookie_consent`, reload → "Customise / reject" → "Accept All".
+
+  Expected: same as above.
+
+- [ ] **Step 4.12 — Reload after accepting**
+
+  Reload. Expected: popup hidden immediately, trackers fire on load (GA4 `gtag/js` visible in Network tab from page load).
+
+- [ ] **Step 4.13 — Mobile layout**
+
+  DevTools → toggle device toolbar → set width ≤ 640px.
+
+  Expected: popup goes full width, flush to the bottom, top corners rounded.
+
+- [ ] **Step 4.14 — "Open cookies and options in detail ↓" links**
+
+  In State 2, click either "Open cookies and options in detail ↓" link.
+
+  Expected: the scrollable body scrolls to the long-form `#ca-cookie-detail` section.
+
+- [ ] **Step 4.15 — Final commit if any tweaks were made during verification**
+
+  ```bash
+  git add src/components/ui/CookieConsent.astro
+  git commit -m "fix(cookie): adjust cookie popup after manual verification"
+  ```
+
+  Skip this step if no changes were needed.
