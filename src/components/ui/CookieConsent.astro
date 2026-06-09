@@ -199,17 +199,17 @@
 /* ── Outer popup — non-blocking fixed panel ── */
 #ca-cookie-popup {
   position: fixed;
-  bottom: 0;
+  bottom: 1.25rem;
   left: 50%;
   transform: translateX(-50%) translateY(20px);
   width: 90%;
   max-width: 760px;
-  background: #ffffff;
-  border: 1px solid #E0E0DC;
-  border-bottom: none;
-  border-top-left-radius: 12px;
-  border-top-right-radius: 12px;
-  box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.12);
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  border: 1px solid rgba(224, 224, 220, 0.7);
+  border-radius: 12px;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.14), 0 2px 8px rgba(0, 0, 0, 0.06);
   z-index: 1000;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
   opacity: 0;
@@ -357,8 +357,8 @@
 
 /* ── Category cards ── */
 .ca-cat-card {
-  background: #F5F5F2;
-  border: 1px solid #E0E0DC;
+  background: rgba(245, 245, 242, 0.7);
+  border: 1px solid rgba(224, 224, 220, 0.8);
   border-radius: 12px;
   padding: 0.875rem 1rem;
   transition: border-color 0.2s;
@@ -519,8 +519,8 @@
 /* ── Mobile ── */
 @media (max-width: 640px) {
   #ca-cookie-popup {
-    width: 100%;
-    border-radius: 12px 12px 0 0;
+    width: calc(100% - 1.5rem);
+    bottom: 0.75rem;
   }
 }
 
@@ -529,6 +529,7 @@
     animation: none;
     opacity: 1;
     transform: translateX(-50%) translateY(0);
+    bottom: 1.25rem;
   }
 }
 </style>
