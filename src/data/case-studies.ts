@@ -343,4 +343,142 @@ export const caseStudies: CaseStudy[] = [
       { layer: 'Language', technology: 'Python 3.x' },
     ],
   },
+  {
+    id: 'salesforce-emr-sync',
+    index: '03',
+    company: 'Pediatric Therapy Clinic',
+    industry: 'Healthcare',
+    service: 'Heroku · Salesforce · Integration',
+    metric: '0',
+    metricLabel: 'manual data entry required — every patient sync fully automated',
+    summary:
+      'A pediatric therapy clinic was manually re-entering every patient intake from Salesforce into their EMR — a web portal with no public API. CloudAlgo built a Heroku-hosted Node.js integration using Puppeteer-driven browser automation and a RabbitMQ message queue to fully automate the sync, running 24/7 without staff intervention.',
+    tags: ['Heroku', 'Salesforce', 'Puppeteer', 'Node.js', 'RabbitMQ', 'Redis', 'TypeScript'],
+    duration: '3-month engagement',
+    result: 'Fully automated Salesforce → EMR patient sync — zero re-entry, 24/7 coverage',
+
+    headline: 'No API? No problem. Automating patient data sync with a browser robot on Heroku.',
+
+    executiveSummary:
+      'A pediatric therapy clinic had two systems that couldn\'t talk to each other: Salesforce for patient intake and an EMR for clinical records. Every new patient meant staff manually re-entering the same information twice — names, dates of birth, insurance, parent contacts, case notes. The EMR vendor provided no public API. CloudAlgo built a Heroku-hosted integration that closes the gap: a queue-backed Node.js worker that uses Puppeteer to drive a headless Chrome session through the EMR portal, populating every field exactly as a human would — but continuously, automatically, and without errors.',
+
+    challenge:
+      'Healthcare operations teams rarely choose which software they use — the EMR is mandated, the CRM is the enterprise standard, and the integration gap between them becomes a staffing problem. For this clinic, every patient intake created a dual-entry burden: clinical and administrative data recorded in Salesforce had to be manually transcribed into the EMR portal, field by field, form by form.',
+
+    challengePoints: [
+      'Every patient intake required staff to open two systems and enter the same information twice — patient details, parent/guardian contacts, insurance coverage, and clinical case notes.',
+      'Transcription errors in patient records carry real risk in a clinical setting. A wrong date of birth, an incorrect insurance ID, or a missing parent phone number creates downstream problems in billing, scheduling, and care coordination.',
+      'Staff time spent on dual data entry could not be spent on patient care, scheduling, or clinical support — the work the clinic actually hired for.',
+      'The EMR vendor provided no public API, no webhook support, and no data export endpoint. The only integration surface was the web portal itself.',
+    ],
+
+    whyNotOffShelf:
+      'The absence of an API is not a configuration problem — it\'s an architectural one. No integration platform, no middleware connector, and no low-code tool can connect to a system that doesn\'t expose an integration interface. Zapier, MuleSoft, and Heroku Connect all require at minimum a REST API or a database connection. When the only interface is a JavaScript-heavy web portal, the only viable bridge is a programmatic browser that can interact with it as a human would.',
+
+    toolComparison: [
+      {
+        tool: 'Zapier',
+        category: 'No-code automation',
+        doesWell: 'Simple trigger-action workflows between systems with native connectors',
+        limitation: 'Requires an API or a native app connector. No EMR connector exists. Cannot drive a web portal.',
+      },
+      {
+        tool: 'MuleSoft',
+        category: 'iPaaS',
+        doesWell: 'Enterprise-grade API connectivity with deep integration logic',
+        limitation: 'Only as capable as the APIs available. No API means MuleSoft has nothing to connect to on the EMR side.',
+      },
+      {
+        tool: 'Heroku Connect',
+        category: 'Database sync',
+        doesWell: 'Bidirectional Salesforce ↔ Postgres sync with no custom code',
+        limitation: 'Syncs to a Postgres database, not to a web portal. The EMR has no database access layer.',
+      },
+      {
+        tool: 'Manual entry',
+        category: 'Status quo',
+        doesWell: 'Always works — no technical risk or upfront investment',
+        limitation: 'Staff time per patient, transcription errors, and no scaling path as patient volume grows.',
+      },
+    ],
+
+    solution:
+      'CloudAlgo built a two-process Heroku application: a web process that manages Salesforce OAuth credentials and a worker process that listens to a RabbitMQ queue. When a patient record is created or updated in Salesforce, an Apex trigger publishes a job to the queue. The worker picks it up, launches a Puppeteer-controlled headless Chrome session, operates the EMR portal to create or update the patient record, and returns the resulting EMR patient ID back to Salesforce via an Apex REST callback.',
+
+    solutionSteps: [
+      {
+        title: 'Salesforce Triggers the Queue',
+        body: 'When a patient record is created or updated in Salesforce, an Apex trigger publishes a job payload to a RabbitMQ queue hosted on CloudAMQP. The queue decouples Salesforce event timing from the sync operation — Salesforce doesn\'t wait for the browser to finish, job bursts don\'t stack up Puppeteer sessions, and failed jobs are nack\'d without data loss.',
+      },
+      {
+        title: 'OAuth Credentials Cached in Redis',
+        body: 'A web process handles the Salesforce OAuth 2.0 flow and stores access tokens, refresh tokens, and instance URLs in Heroku Redis. The jsforce library automatically refreshes expired tokens and updates the cache — so the integration stays connected indefinitely without manual re-authentication.',
+      },
+      {
+        title: 'Puppeteer Drives the EMR Portal',
+        body: 'For each job, the worker launches a headless Chrome browser via the Google Chrome buildpack on Heroku. Puppeteer navigates to the EMR portal, logs in, and programmatically interacts with the interface: clicking buttons, selecting dropdown options, filling form fields, and waiting for network idle before each step. The worker detects and resolves idle lock screen re-authentication automatically, and checks field values before writing — only updating fields that have actually changed.',
+      },
+      {
+        title: 'EMR Patient ID Written Back to Salesforce',
+        body: 'After creating or updating the patient record, the worker extracts the EMR patient ID from the portal and calls a Salesforce Apex REST endpoint to write it back. The Salesforce record is now linked to the EMR record by ID, enabling future updates to target the correct patient without re-searching. On any failure, the worker sends an error callback so the Salesforce record reflects the failure rather than remaining silently stale.',
+      },
+    ],
+
+    technicalHighlights: [
+      {
+        title: 'Browser Automation as Integration Layer',
+        body: 'Puppeteer driving a full Chromium instance is not the first-choice integration pattern — but when there is no API, it is the only viable one. The architecture treats the browser as a typed, programmatic interface: CSS selectors as contracts, network idle waits as synchronisation points, and field-level read-before-write logic to prevent unnecessary mutations.',
+      },
+      {
+        title: 'Queue-Backed, Decoupled Architecture',
+        body: 'A synchronous Salesforce → EMR call would mean Salesforce waits for Puppeteer to complete — a multi-second operation that can time out, stall on a lock screen, or encounter unexpected DOM state. RabbitMQ decouples the trigger from the execution: the queue absorbs bursts, failed jobs are nack\'d without data loss, and the worker processes at its own pace without blocking the Salesforce transaction.',
+      },
+      {
+        title: 'Lock Screen and Idempotent Field Writes',
+        body: 'The EMR portal shows a password re-entry dialog after idle periods. The worker detects this overlay at every interaction point and resolves it before continuing. Field writes are also idempotent: the current value is read before typing, and the field is only updated if the value differs — preventing spurious writes and reducing the risk of triggering portal-side validation errors on unchanged fields.',
+      },
+      {
+        title: 'Heroku Add-Ons Eliminate Infrastructure',
+        body: 'The Google Chrome buildpack makes Chrome available on the dyno without Docker. Heroku Redis provides token caching, CloudAMQP provides the managed RabbitMQ queue, and Papertrail aggregates logs. No container orchestration, no managed cloud infrastructure. The stack deploys with a git push.',
+      },
+    ],
+
+    outcomes: [
+      { metric: 'Zero', label: 'Manual data entry — every patient sync is fully automated' },
+      { metric: '24/7', label: 'Continuous coverage — the worker runs around the clock without supervision' },
+      { metric: '0', label: 'Transcription errors — Salesforce is the source of truth, written once' },
+    ],
+
+    whatDemonstrates: [
+      {
+        title: 'We find the integration path, even when there isn\'t one.',
+        body: 'No API doesn\'t mean no solution. It means the solution requires a different kind of engineering. Recognising that a headless browser is a legitimate, architecturally sound integration layer — not a workaround — is what made this problem solvable.',
+      },
+      {
+        title: 'Architecture decisions prevent operational debt.',
+        body: 'A synchronous direct-call integration would have worked initially and broken under any load or timeout. Queue decoupling, Redis token caching, and error callbacks to Salesforce are not over-engineering — they\'re the difference between something that works at 3am on a Monday and something that only works when someone is watching.',
+      },
+      {
+        title: 'Healthcare constraints require defensive engineering.',
+        body: 'Patient data accuracy is not a UX concern — it\'s a clinical one. Idempotent writes, lock screen detection, and failure callbacks were built because silent errors in a medical context are not acceptable. The integration behaves defensively by design.',
+      },
+      {
+        title: 'Platform choice is an operational cost decision.',
+        body: 'Heroku\'s add-on ecosystem eliminated a significant infrastructure footprint: no managed Redis to provision, no AMQP cluster to configure, no Chrome runtime to containerise. That operational simplicity is a cost advantage that compounds over the lifetime of the integration.',
+      },
+    ],
+
+    techStack: [
+      { layer: 'Runtime', technology: 'Node.js · TypeScript' },
+      { layer: 'Web Framework', technology: 'Express.js' },
+      { layer: 'Browser Automation', technology: 'Puppeteer (headless Chromium)' },
+      { layer: 'Salesforce API', technology: 'jsforce (OAuth 2.0, Apex REST callbacks)' },
+      { layer: 'Job Queue', technology: 'RabbitMQ via CloudAMQP' },
+      { layer: 'Token Cache', technology: 'Heroku Redis (mini)' },
+      { layer: 'Process Management', technology: 'Throng (clustered worker processes)' },
+      { layer: 'Hosting', technology: 'Heroku (web + worker dyno formation)' },
+      { layer: 'Chrome Runtime', technology: 'Google Chrome buildpack' },
+      { layer: 'Logging', technology: 'Papertrail' },
+    ],
+  },
 ];
