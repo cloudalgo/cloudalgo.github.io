@@ -130,6 +130,23 @@ const schema = {
     </div>
   </section>
 
+  <!-- ── Bottom CTA ── -->
+  <section class="blog-bottom-cta">
+    <div class="container">
+      <div class="blog-bottom-cta-inner">
+        <div class="blog-bottom-cta-text">
+          <p class="blog-bottom-cta-label">Work with us</p>
+          <h2 class="blog-bottom-cta-title">Have a similar challenge?</h2>
+          <p class="blog-bottom-cta-sub">Tell us about your integration or data problem — we'll scope it and respond within one business day.</p>
+        </div>
+        <div class="blog-bottom-cta-actions">
+          <a href="/contact" class="blog-bottom-cta-primary">Start a conversation &rarr;</a>
+          <a href="/case-studies" class="blog-bottom-cta-secondary">See case studies</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
 </Page>
 
 <style>
@@ -350,6 +367,81 @@ const schema = {
   border: 1.5px solid rgba(255,255,255,0.4);
 }
 :global(.blog-cta-inline__buttons a:hover) { opacity: 0.8; }
+
+/* ── Bottom CTA ── */
+.blog-bottom-cta {
+  background: #0A0A0A;
+  padding: 4rem 0;
+}
+.blog-bottom-cta-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2.5rem;
+  flex-wrap: wrap;
+}
+.blog-bottom-cta-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.35);
+  margin-bottom: 0.625rem;
+}
+.blog-bottom-cta-title {
+  font-size: clamp(1.625rem, 3vw, 2.25rem);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  color: #fff;
+  margin-bottom: 0.625rem;
+  line-height: 1.1;
+}
+.blog-bottom-cta-sub {
+  font-size: 0.9375rem;
+  color: rgba(255,255,255,0.45);
+  line-height: 1.7;
+  max-width: 400px;
+}
+.blog-bottom-cta-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+.blog-bottom-cta-primary {
+  display: inline-flex;
+  align-items: center;
+  background: #fff;
+  color: #0A0A0A;
+  padding: 0.8rem 1.625rem;
+  border-radius: 100px;
+  font-weight: 700;
+  font-size: 0.9375rem;
+  text-decoration: none;
+  transition: opacity 150ms, transform 150ms;
+  white-space: nowrap;
+}
+.blog-bottom-cta-primary:hover { opacity: 0.88; transform: translateY(-1px); color: #0A0A0A; }
+.blog-bottom-cta-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: rgba(255,255,255,0.55);
+  padding: 0.8rem 1.625rem;
+  border-radius: 100px;
+  border: 1px solid rgba(255,255,255,0.2);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  text-decoration: none;
+  transition: color 150ms, border-color 150ms;
+  white-space: nowrap;
+}
+.blog-bottom-cta-secondary:hover { color: #fff; border-color: rgba(255,255,255,0.5); }
+@media (max-width: 767px) {
+  .blog-bottom-cta-inner { flex-direction: column; align-items: flex-start; }
+  .blog-bottom-cta-actions { flex-direction: row; flex-wrap: wrap; }
+}
 </style>
 
 <script>
