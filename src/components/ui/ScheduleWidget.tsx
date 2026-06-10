@@ -771,7 +771,7 @@ export default function ScheduleWidget() {
         bouncing={bouncing}
       />
       {(isOpen || isClosing) && (
-        <div className={`sw-overlay ${isClosing ? 'sw-overlay--exit' : 'sw-overlay--enter'}`} onClick={handleClose}>
+        <div className={`sw-overlay ${isClosing ? 'sw-overlay--exit' : 'sw-overlay--enter'}`}>
           <div
             className={`sw-modal ${isClosing ? 'sw-modal--exit' : 'sw-modal--enter'}`}
             onClick={e => e.stopPropagation()}
