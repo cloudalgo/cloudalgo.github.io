@@ -444,7 +444,7 @@ export const caseStudies: CaseStudy[] = [
     ],
 
     outcomes: [
-      { metric: 'Zero', label: 'Manual data entry — every patient sync is fully automated' },
+      { metric: '0', label: 'Manual data entry — every patient sync is fully automated' },
       { metric: '24/7', label: 'Continuous coverage — the worker runs around the clock without supervision' },
       { metric: '0', label: 'Transcription errors — Salesforce is the source of truth, written once' },
     ],

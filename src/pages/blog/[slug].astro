@@ -141,7 +141,10 @@ const schema = {
         </div>
         <div class="blog-bottom-cta-actions">
           <a href="/contact" class="blog-bottom-cta-primary">Start a conversation &rarr;</a>
-          <a href="/case-studies" class="blog-bottom-cta-secondary">See case studies</a>
+          {post.data.relatedCaseStudy
+            ? <a href={`/case-studies/${post.data.relatedCaseStudy}`} class="blog-bottom-cta-secondary">See case study &rarr;</a>
+            : <a href="/case-studies" class="blog-bottom-cta-secondary">See case studies</a>
+          }
         </div>
       </div>
     </div>
