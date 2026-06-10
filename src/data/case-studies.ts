@@ -481,4 +481,151 @@ export const caseStudies: CaseStudy[] = [
       { layer: 'Logging', technology: 'Papertrail' },
     ],
   },
+  {
+    id: 'salesforce-netsuite-sync',
+    index: '04',
+    company: 'Specialty Wholesale Distributor',
+    industry: 'Distribution',
+    service: 'MuleSoft · Salesforce · NetSuite',
+    metric: '0',
+    metricLabel: 'manual order re-entry — every Salesforce order syncs to NetSuite automatically',
+    summary:
+      'MuleSoft API-led integration connecting Salesforce and NetSuite for a specialty wholesale distributor — orders, customers, invoices, and payments syncing bidirectionally via Platform Events and scheduled flows.',
+    tags: ['MuleSoft', 'Salesforce', 'NetSuite', 'CloudHub', 'DataWeave', 'Platform Events', 'Object Store'],
+    duration: '5-month engagement',
+    result: 'Bidirectional Salesforce ↔ NetSuite sync — orders, customers, invoices, and payments fully automated',
+
+    headline: 'One source of truth: bidirectional Salesforce ↔ NetSuite sync via MuleSoft API-led integration.',
+
+    executiveSummary:
+      'A specialty wholesale distributor ran Salesforce for CRM and NetSuite for ERP — with no connection between them. Sales orders placed in Salesforce were re-entered into NetSuite by the operations team. Invoices in NetSuite were invisible to the sales team without a separate login. Customer updates in Salesforce didn\'t reflect in NetSuite until someone noticed a discrepancy. CloudAlgo built a MuleSoft integration closing every gap: Platform Events trigger real-time customer and order sync to NetSuite, a 15-minute scheduler pushes NetSuite invoices and refunds to Salesforce, and a payment event keeps financial data flowing in near real-time — all without manual re-entry or a human in the loop.',
+
+    challenge:
+      'Wholesale distributors run two essential systems that rarely talk to each other: Salesforce for the sales process, NetSuite for everything after the deal closes. When those systems are disconnected, the gap becomes a daily operational tax — paid in manual re-entry, stale data, and coordination overhead that scales with every additional order, customer, and invoice.',
+
+    challengePoints: [
+      'Every Sales Order placed in Salesforce had to be manually re-entered into NetSuite by the operations team — creating a lag between deal close and fulfilment, and introducing a point of failure on every line item, discount, shipping address, and PO number.',
+      'Invoice and payment status in NetSuite was invisible to the sales team without a separate NetSuite login. Account managers chasing payment status had to escalate to finance — information that already existed in a system they couldn\'t access.',
+      'Customer account data — payment terms, credit limits, shipping preferences, tax IDs — was captured in Salesforce but not automatically reflected in NetSuite when accounts were created or updated.',
+      'Shipment confirmations and NetSuite order numbers had no automated path back to Salesforce, leaving order records incomplete and requiring operations to manually close the loop.',
+    ],
+
+    whyNotOffShelf:
+      'NetSuite and Salesforce both have marketplace connectors and native integration tools. The challenge wasn\'t finding something with a NetSuite connector — it was finding one that could handle the actual requirements: real-time Platform Event-driven flows for orders and customers, 15-minute incremental polling for invoices and refunds with watermark-based pagination, bidirectional ID writeback, SOAP/XML operations for complex Sales Order creation, and per-flow error email notifications with failed record details. No off-the-shelf connector handles all of these in a maintainable, multi-environment integration with the reliability a production-grade financial sync requires.',
+
+    toolComparison: [
+      {
+        tool: 'Zapier',
+        category: 'No-code automation',
+        doesWell: 'Simple trigger-action flows with native connectors; fast setup for basic scenarios',
+        limitation: 'No support for paginated batch polling, watermark-based incremental sync, or the complexity of SOAP/XML NetSuite Sales Order operations with conditional create-vs-update routing.',
+      },
+      {
+        tool: 'Boomi',
+        category: 'iPaaS',
+        doesWell: 'Has NetSuite and Salesforce connectors; visual flow design; reasonable for standard object syncs',
+        limitation: 'Less flexible for custom Platform Event flows and conditional ID writeback logic; per-connection pricing grows with flow count; limited DataWeave-equivalent transformation power.',
+      },
+      {
+        tool: 'NetSuite SuiteApp for Salesforce',
+        category: 'Native connector',
+        doesWell: 'Out-of-the-box mapping for standard Salesforce and NetSuite objects; no custom development for common fields',
+        limitation: 'Fixed object and field mappings only. No support for custom Platform Events, custom financial objects, conditional writeback, or paginated incremental sync patterns.',
+      },
+      {
+        tool: 'MuleSoft Anypoint Platform',
+        category: 'iPaaS / API-led',
+        doesWell: 'Full connector library for Salesforce and NetSuite; DataWeave for field-level transformation; Object Store for watermark sync; per-flow error handling; CloudHub deployment',
+        limitation: 'Higher upfront investment in design and configuration vs. point-to-point tools; requires MuleSoft expertise to architect correctly.',
+      },
+    ],
+
+    solution:
+      'CloudAlgo built a three-application MuleSoft integration following API-led connectivity principles. A Salesforce System API subscribes to Platform Events and orchestrates real-time flows from Salesforce to NetSuite, writing NetSuite record IDs back on success. A NetSuite System API wraps all create/update operations — SOAP/XML for complex Sales Order logic, REST for customers and payments. An orchestration application schedules incremental NetSuite → Salesforce syncs for invoices and refunds, and subscribes to payment Platform Events for near-real-time financial data.',
+
+    solutionSteps: [
+      {
+        title: 'Real-Time Customer Sync (SF → NetSuite)',
+        body: 'When a Salesforce Account is created or updated, an AccountsEvent__e Platform Event triggers the MuleSoft Salesforce SAPI. DataWeave transforms Salesforce Account fields — company name, payment terms, credit limit, tax ID/VAT, DUNS, shipping carrier, parent account — into a NetSuite Customer record. For new customers, the resulting NetSuite Customer ID is written back to the Salesforce Account. For existing customers, the record is updated by NetSuite ID.',
+      },
+      {
+        title: 'Real-Time Order Sync (SF → NetSuite)',
+        body: 'When a Salesforce Order is queued for fulfilment, a Create_NS_Order__e Platform Event fires. MuleSoft queries the Salesforce OrderItems — product SKUs, quantities, unit prices, discounts, expected ship dates, sequence names, quote line IDs — and transforms them into a NetSuite Sales Order via SOAP/XML. A DataWeave script handles country enum mapping, conditional null guards, and date format conversion. The resulting NetSuite Order ID and Number are written back to the Salesforce Order asynchronously.',
+      },
+      {
+        title: 'Scheduled Invoice & Refund Sync (NetSuite → SF)',
+        body: 'Two schedulers run every 15 minutes — staggered by 7 minutes to prevent resource contention. Each fetches records modified since the last run, using a timestamp watermark persisted in Anypoint Object Store (minus a two-minute buffer for clock skew). Fetching is paginated: 50 records per request, with recursive sub-flow calls while hasMore == true. Records are posted to the Salesforce SAPI for upsert. Any HTTP 400 responses are collected, and a structured HTML error email is sent to the operations team.',
+      },
+      {
+        title: 'Real-Time Payment Sync (SF → NetSuite)',
+        body: 'When a payment is recorded in Salesforce, an ABT_Payment_and_Refund_Event__e Platform Event carries the payment amount, NetSuite Account number, and NetSuite Invoice ID. MuleSoft transforms this into a NetSuite payment application — specifying the AR account, GL account, payment amount, and the exact invoice to apply it against. The payment is posted to NetSuite via REST, keeping accounts receivable in sync with Salesforce payment records without manual journal entries.',
+      },
+    ],
+
+    technicalHighlights: [
+      {
+        title: 'Platform Events as the Integration Bus',
+        body: 'All real-time flows are triggered by Salesforce Platform Events, not by direct cross-system API calls. This decouples Salesforce from NetSuite response times — a Salesforce Order save doesn\'t wait for a NetSuite SOAP call to complete. Platform Events provide built-in replay, retry, and delivery guarantees that a synchronous callout cannot.',
+      },
+      {
+        title: 'Watermark-Based Incremental Sync with Object Store',
+        body: 'The invoice and refund schedulers use Anypoint Object Store to persist the last-run timestamp, minus a two-minute buffer to handle clock skew. Each run fetches only records modified since that timestamp — avoiding full-table scans, preventing duplicates, and handling API rate limits. The watermark can be reset to a configured default date via a config flag without code changes.',
+      },
+      {
+        title: 'SOAP/XML for NetSuite Sales Order Complexity',
+        body: 'The Sales Order create and update operations use NetSuite\'s SOAP WebServices API, not REST. DataWeave generates the full XML structure — including conditional field inclusion via null guards, country enum mapping via string camelize functions, date format conversion, and item list construction. This path was chosen deliberately: NetSuite\'s SOAP API supports field-level conditional inclusion and complex transactional object types that its REST API does not yet fully expose.',
+      },
+      {
+        title: 'Bidirectional ID Writeback',
+        body: 'Every flow that creates a record in one system writes the resulting ID back to the other. NetSuite Customer IDs and Order Numbers are written to Salesforce fields via Salesforce Connector update. Salesforce Account and Order Line IDs are embedded in the NetSuite payload as custom fields. This mutual reference pattern makes the integration idempotent: an update flow checks whether a NetSuite ID already exists on the Salesforce record before deciding to create or update.',
+      },
+    ],
+
+    outcomes: [
+      { metric: '0', label: 'Manual order re-entry — every Salesforce order creates a NetSuite Sales Order automatically' },
+      { metric: '15 min', label: 'Invoice and refund sync cadence — NetSuite financial data reaches Salesforce in near real-time' },
+      { metric: '4', label: 'Bidirectional sync flows automated — customers, orders, invoices, and payments' },
+    ],
+
+    resultsTable: [
+      { metric: 'Order fulfilment handoff', before: 'Manual re-entry by ops from Salesforce email', after: 'Automatic on Salesforce Platform Event' },
+      { metric: 'Invoice visibility', before: 'NetSuite-only — required separate login', after: 'Synced to Salesforce every 15 minutes' },
+      { metric: 'Payment status', before: 'Invisible to sales team without NetSuite access', after: 'Near real-time via Platform Event' },
+      { metric: 'Customer account sync', before: 'Manual, inconsistent', after: 'Event-driven on Salesforce Account create/update' },
+      { metric: 'NetSuite order number in SF', before: 'Manual update after ops confirms', after: 'Async writeback on NetSuite order creation' },
+      { metric: 'Error handling', before: 'Silent failures, discovered after the fact', after: 'HTML error email per failed record per scheduler run' },
+    ],
+
+    whatDemonstrates: [
+      {
+        title: 'API-led architecture scales when requirements grow.',
+        body: 'A point-to-point Apex callout to NetSuite would have worked for the first flow. By the fourth, four separate maintenance surfaces, four separate error patterns, and no shared observability. The three-application API-led structure meant each new flow was a new sub-flow in the orchestration layer — not a new integration to build from scratch.',
+      },
+      {
+        title: 'Real-time and scheduled patterns solve different problems.',
+        body: 'Order and customer sync are event-driven because the business cannot wait for a scheduler. Invoice sync runs on a schedule because pulling NetSuite transactional data in batch is more reliable than expecting real-time triggers from the ERP side. Matching the integration pattern to the data type and latency requirement is an architectural decision, not a default.',
+      },
+      {
+        title: 'Incremental sync requires state management.',
+        body: 'A naive sync fetches all records on every run. An incremental sync persists a watermark and only fetches what changed. The difference is between a 15-minute scheduler that runs reliably and one that hits NetSuite API limits, overlaps with the previous run, and creates duplicate records. Anypoint Object Store makes that state persisted, configurable, and observable.',
+      },
+      {
+        title: 'Error visibility is part of the integration contract.',
+        body: 'Automated HTML error emails with failed record details aren\'t a feature — they\'re a reliability guarantee. Without them, a batch failure in an invoice sync is invisible until a sales rep notices a missing record two days later. With them, operations sees the failure within 15 minutes, with enough detail to diagnose the root cause without opening a dashboard.',
+      },
+    ],
+
+    techStack: [
+      { layer: 'Integration Platform', technology: 'MuleSoft Anypoint Platform 4.x' },
+      { layer: 'Salesforce Connectivity', technology: 'Salesforce Connector (Platform Events, SOQL, Update)' },
+      { layer: 'NetSuite Connectivity', technology: 'NetSuite Connector (SOAP/XML WebServices + REST)' },
+      { layer: 'Transformation', technology: 'DataWeave 2.0' },
+      { layer: 'State Management', technology: 'Anypoint Object Store v2 (sync watermarks)' },
+      { layer: 'Deployment', technology: 'CloudHub' },
+      { layer: 'Error Notifications', technology: 'SMTP (structured HTML email via DataWeave template)' },
+      { layer: 'Security', technology: 'Secure Properties + Blowfish encryption' },
+      { layer: 'Testing', technology: 'MUnit (MuleSoft unit testing framework)' },
+      { layer: 'Environments', technology: 'Multi-env config (dev / qa / prod) via mule.env' },
+    ],
+  },
 ];

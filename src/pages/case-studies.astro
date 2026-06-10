@@ -64,7 +64,7 @@ import { caseStudies } from '../data/case-studies';
             <text x="264" y="289" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8" font-weight="700" fill="rgba(10,10,10,0.5)">Airflow</text>
             <!-- floating badge -->
             <rect x="346" y="50" width="90" height="30" rx="15" fill="#0A0A0A"/>
-            <text x="391" y="69" text-anchor="middle" font-family="Outfit,sans-serif" font-size="11" font-weight="700" fill="#fff">3 studies</text>
+            <text x="391" y="69" text-anchor="middle" font-family="Outfit,sans-serif" font-size="11" font-weight="700" fill="#fff">4 studies</text>
             <!-- decorative dots -->
             <circle cx="66"  cy="130" r="4"   fill="rgba(10,10,10,0.07)"/>
             <circle cx="56"  cy="188" r="2.5" fill="rgba(10,10,10,0.05)"/>
@@ -135,6 +135,34 @@ import { caseStudies } from '../data/case-studies';
                   <path d="M157 119 L160 124 L163 119" stroke="#0A0A0A" stroke-width="1.5" opacity="0.6" stroke-linecap="round" stroke-linejoin="round"/>
                   <rect x="208" y="124" width="88" height="28" rx="5" fill="#0A0A0A"/>
                   <text x="252" y="143" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" font-weight="800" fill="#fff">&lt;15 min</text>
+                </svg>
+              )}
+              {cs.id === 'salesforce-netsuite-sync' && (
+                <svg viewBox="0 0 320 160" fill="none" class="cs-illo-svg">
+                  <rect x="16" y="10"  width="288" height="28" rx="5" stroke="#0A0A0A" stroke-width="1.5" opacity="0.15" fill="rgba(10,10,10,0.02)"/>
+                  <rect x="16" y="48"  width="288" height="28" rx="5" stroke="#0A0A0A" stroke-width="1.5" opacity="0.28" fill="rgba(10,10,10,0.03)"/>
+                  <rect x="16" y="86"  width="288" height="28" rx="5" stroke="#0A0A0A" stroke-width="1.5" opacity="0.48" fill="rgba(10,10,10,0.05)"/>
+                  <rect x="16" y="124" width="288" height="28" rx="5" stroke="#0A0A0A" stroke-width="1.5" opacity="0.72" fill="rgba(10,10,10,0.07)"/>
+                  <text x="30" y="29"  font-family="Outfit,sans-serif" font-size="9" font-weight="800" fill="#0A0A0A" opacity="0.30" letter-spacing="0.08em">SALESFORCE CRM</text>
+                  <text x="30" y="67"  font-family="Outfit,sans-serif" font-size="9" font-weight="800" fill="#0A0A0A" opacity="0.45" letter-spacing="0.08em">MULESOFT ANYPOINT</text>
+                  <text x="30" y="105" font-family="Outfit,sans-serif" font-size="9" font-weight="800" fill="#0A0A0A" opacity="0.65" letter-spacing="0.08em">NETSUITE ERP</text>
+                  <text x="30" y="143" font-family="Outfit,sans-serif" font-size="9" font-weight="800" fill="#0A0A0A" opacity="0.85" letter-spacing="0.08em">ORDERS · INVOICES · PAYMENTS</text>
+                  <!-- down arrow 1→2 -->
+                  <path d="M160 40 L160 46" stroke="#0A0A0A" stroke-width="1.5" opacity="0.28" stroke-linecap="round"/>
+                  <path d="M157 43 L160 48 L163 43" stroke="#0A0A0A" stroke-width="1.5" opacity="0.28" stroke-linecap="round" stroke-linejoin="round"/>
+                  <!-- dashed return 2→1 -->
+                  <path d="M150 46 L150 40" stroke="#0A0A0A" stroke-width="1.2" opacity="0.14" stroke-linecap="round" stroke-dasharray="3 2"/>
+                  <!-- down arrow 2→3 -->
+                  <path d="M160 78 L160 84" stroke="#0A0A0A" stroke-width="1.5" opacity="0.42" stroke-linecap="round"/>
+                  <path d="M157 81 L160 86 L163 81" stroke="#0A0A0A" stroke-width="1.5" opacity="0.42" stroke-linecap="round" stroke-linejoin="round"/>
+                  <!-- dashed return 3→2 -->
+                  <path d="M150 84 L150 78" stroke="#0A0A0A" stroke-width="1.2" opacity="0.18" stroke-linecap="round" stroke-dasharray="3 2"/>
+                  <!-- down arrow 3→4 -->
+                  <path d="M160 116 L160 122" stroke="#0A0A0A" stroke-width="1.5" opacity="0.60" stroke-linecap="round"/>
+                  <path d="M157 119 L160 124 L163 119" stroke="#0A0A0A" stroke-width="1.5" opacity="0.60" stroke-linecap="round" stroke-linejoin="round"/>
+                  <!-- metric badge -->
+                  <rect x="214" y="124" width="82" height="28" rx="5" fill="#0A0A0A"/>
+                  <text x="255" y="143" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" font-weight="800" fill="#fff">0 re-entry</text>
                 </svg>
               )}
               {cs.id === 'salesforce-emr-sync' && (
