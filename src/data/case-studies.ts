@@ -628,4 +628,119 @@ export const caseStudies: CaseStudy[] = [
       { layer: 'Environments', technology: 'Multi-env config (dev / qa / prod) via mule.env' },
     ],
   },
+  {
+    id: 'health-portal-mulesoft-integration',
+    index: '05',
+    company: 'Digital Health Platform',
+    industry: 'Digital Health',
+    service: 'MuleSoft · Salesforce · Logistics',
+    metric: '5 min',
+    metricLabel: 'kit tracking to portal — order status, shipment details, and delivery date synced from the logistics platform every 5 minutes',
+    summary: 'MuleSoft API-led integration connecting a health portal, Salesforce CRM, and a logistics platform — customer journeys into Salesforce, support cases back to the portal, and kit shipment tracking every five minutes.',
+    tags: ['MuleSoft', 'Salesforce', 'CloudHub', 'DataWeave', 'Object Store', 'Bulk API v2', 'Person Accounts', 'Logistics API'],
+    duration: '6-month engagement',
+    result: 'Three-system integration — health portal, Salesforce, and logistics — with bidirectional data flow, automated case management, and real-time kit tracking',
+    headline: 'Three systems, eight applications, one integration layer: how a digital health platform connected its portal, CRM, and logistics without a gap.',
+    executiveSummary: `A digital health company offering at-home diagnostic testing had three systems that didn't talk to each other. Their customer portal managed member journeys and orders. Salesforce managed accounts, cases, and support. A third-party logistics platform handled kit shipment. Staff bridged the gaps manually — creating Salesforce records after portal registrations, copying support actions between Salesforce and the portal, and checking the logistics dashboard to answer basic questions about kit status.
+
+CloudAlgo built the integration layer: eight MuleSoft applications covering customer onboarding, bidirectional case management, kit fulfilment, and automated shipment tracking. All three systems now stay in sync without manual intervention.`,
+    challenge: `The company's stack had grown around three independent systems. New customer registrations in the portal didn't automatically appear in Salesforce — support staff created them manually. When Salesforce agents flagged a case for a new kit, a blood draw reschedule, or a cancellation, someone had to translate that action back into the portal. Kit shipment status lived only in the logistics platform's dashboard; customers and support staff asking "where's my kit?" got no answer from either the portal or Salesforce.`,
+    challengePoints: [
+      'Customer registrations in the portal required manual Account and Case creation in Salesforce. Every new member was an entry that someone created twice.',
+      'Case management was one-directional. Salesforce agents could log requests — new kit, blood draw reschedule, cancellation, telehealth follow-up — but those requests did not reach the portal automatically. A human had to transfer each one.',
+      'Shipment tracking lived in the logistics platform. Neither the portal nor Salesforce could show customers their kit status, tracking number, or estimated delivery date without a separate dashboard login.',
+      'Journey data in the portal and member data in Salesforce drifted apart over time. No scheduled sync, no external ID linkage, no single source of truth for member state.',
+    ],
+    whyNotOffShelf: `The three systems involved — a proprietary health portal, Salesforce, and a third-party logistics API — have no native integration pathway. The portal's API uses API key authentication (X-Client-ID / X-Client-Secret) and exposes custom resources (journeys, orders, cases) that no off-the-shelf connector maps. The logistics platform uses Bearer token auth and returns structured shipment data with custom fields (kit_ids, tracking_status, carrier_code, service_code). Salesforce Person Accounts, custom fields (Portal_ID__c, Journey_ID__c, Integration_Timestamp__c), and the Member RecordType are all organisation-specific. No integration tool can connect these three systems without custom mapping — which is the integration, not a shortcut to it.`,
+    toolComparison: [
+      { tool: 'Zapier', category: 'Low-code automation', doesWell: 'Connecting popular SaaS apps with standard triggers and actions', limitation: 'No support for custom API auth patterns; no Object Store for watermarks; no batch operations' },
+      { tool: 'Workato', category: 'Enterprise automation', doesWell: 'Pre-built connectors for popular business apps', limitation: 'Same connector gap as Zapier for a custom portal API; no fine control over Salesforce Bulk API v2 behaviour' },
+      { tool: 'Point-to-point Apex', category: 'Native Salesforce', doesWell: 'Direct Salesforce → external API calls', limitation: 'Salesforce-only; cannot orchestrate Portal → Salesforce flows; tight coupling; no observability across systems' },
+      { tool: 'MuleSoft', category: 'Integration platform', doesWell: 'API-led architecture, DataWeave, Object Store, CloudHub', limitation: 'Higher initial investment; right choice for multi-system orchestration with durable state and bidirectional flows' },
+    ],
+    solution: `Eight MuleSoft applications — three System APIs, four Process APIs, and one batch job — created a complete integration layer across the health portal, Salesforce, and the logistics platform. The architecture follows API-led connectivity: each system API wraps one external system behind a stable interface, and each process API orchestrates business logic without touching external systems directly.`,
+    solutionSteps: [
+      {
+        title: 'Customer Onboarding (xh-customer-papi)',
+        body: 'When a new member registers on the health portal, MuleSoft receives the registration payload and creates a Salesforce Person Account under the "Member" RecordType — splitting the full name, mapping email, phone, gender, Portal_ID__c as external ID, subscription ID, and start date. If the registration includes a Journey ID, a linked Case is created simultaneously with Journey_ID__c as the external identifier. Both Salesforce record IDs are returned to the caller.',
+      },
+      {
+        title: 'Journey Sync (xh-journey-sync-papi, scheduled)',
+        body: 'A scheduler fetches pending journeys from the portal (using xellaUserId and xellaJourneyId as identifiers), queries Salesforce for existing Member Accounts by Portal_ID__c, and runs a RecordType filter to prevent accidental updates to non-Member records. Valid accounts are upserted with current journey data; Cases are upserted on Journey_ID__c. Portal IDs are zipped with Salesforce Account IDs after each batch to maintain the cross-system ID map.',
+      },
+      {
+        title: 'Case Sync (xh-case-sync-papi, Object Store watermark)',
+        body: 'Salesforce support agents flag cases using four boolean fields: New_Kit_Requested__c, New_Blood_Draw_Requested__c, Cancellation_Requested__c, New_Telehealth_Requested__c. The case sync scheduler polls for cases where Integration_Timestamp__c exceeds the last-run timestamp (stored in Anypoint Object Store), transforms each flagged case into a structured request type ("new_kit", "reschedule_blood_draw", "cancellation", "follow_up"), and sends a bulk PATCH to the portal\'s journeys endpoint — up to 100 requests per batch. The Object Store watermark is updated after each successful run.',
+      },
+      {
+        title: 'Kit Fulfilment (xh-order-to-shipment-papi)',
+        body: 'When a diagnostic kit order is created in the portal, MuleSoft POSTs it to the logistics platform via Bearer token authentication — creating the outbound shipment record in the logistics system.',
+      },
+      {
+        title: 'Order Status Sync (xh-order-status-sync-batch, every 5 minutes)',
+        body: 'A scheduled batch fetches pending orders from the portal, queries the logistics platform for each order\'s status and shipment details — tracking number, carrier code, service code, estimated delivery date, delivery timestamp, kit IDs — and PATCHes the order back to the portal. If an order has status updates but no shipments yet, the status is applied without shipment fields; once shipments exist, full tracking data is included.',
+      },
+    ],
+    outcomes: [
+      { metric: '0', label: 'manual Salesforce account creation — every portal registration creates the CRM record automatically' },
+      { metric: '4', label: 'case request types synced to portal — new kit, blood draw reschedule, cancellation, telehealth — directly from Salesforce agent flags' },
+      { metric: '5 min', label: 'maximum shipment tracking lag — kit status, tracking URL, and estimated delivery date visible in portal within one polling cycle' },
+    ],
+    resultsTable: [
+      { metric: 'Customer registration in Salesforce', before: 'Manual — support staff created Account after portal sign-up', after: 'Automatic on portal registration via xh-customer-papi' },
+      { metric: 'Case-driven portal requests', before: 'Manual — agent logged request in Salesforce, then repeated in portal', after: 'Automatic bulk PATCH from case sync, keyed on Journey_ID__c' },
+      { metric: 'Kit shipment visibility', before: 'Logistics dashboard only — no data in portal or Salesforce', after: 'Tracking number, carrier, status, delivery date synced to portal every 5 min' },
+      { metric: 'Journey data in Salesforce', before: 'Stale — no scheduled sync, portal and CRM diverged over time', after: 'Scheduled sync via Journey_ID__c → Salesforce Cases + Accounts' },
+      { metric: 'Account safety on upsert', before: 'No protection — upsert could create wrong-type Account records', after: 'RecordType filter blocks non-Member records before upsert' },
+      { metric: 'Case watermark accuracy', before: 'LastModifiedDate — re-processed records changed by any update', after: 'Integration_Timestamp__c — only updated when integration processes the case' },
+    ],
+    technicalHighlights: [
+      {
+        title: 'Object Store watermark on Integration_Timestamp__c',
+        body: 'The case sync uses a dedicated custom field rather than Salesforce\'s LastModifiedDate to track which records have been processed. This was a deliberate v1.1.0 change noted in the flow code: LastModifiedDate can be updated by any system change, causing reprocessing of already-synced records. Integration_Timestamp__c is only updated when the integration itself processes a case, making the watermark exact.',
+      },
+      {
+        title: 'RecordType-filtered upserts for Person Accounts',
+        body: 'Before upserting accounts, the journey sync queries the Salesforce RecordType ID for "Member" accounts and filters the incoming payload to only include records where Portal_ID__c matches an existing Member-type account. This prevents the upsert from accidentally creating wrong-type Account records when a Portal_ID__c appears in the system but belongs to a different record type.',
+      },
+      {
+        title: 'Multi-lookup resolution in the Salesforce SAPI',
+        body: 'The Salesforce System API includes a generic lookup resolution layer: before upserting records, it detects lookup fields in the payload (identified by the presence of lookupTable and lookupField properties), queries Salesforce for the corresponding parent record IDs, and substitutes them into the payload. This keeps business logic out of the process layer and makes the SAPI reusable across any object with relational dependencies.',
+      },
+      {
+        title: 'Shipment-level tracking propagation',
+        body: 'The order status batch fetches shipment-level detail for every shipment on the order: direction (inbound/outbound), estimated delivery date, tracking status, tracking number, tracking URL, carrier code, service code, delivery timestamp, and kit IDs. Each field is written back to the portal, making the full logistics picture visible without requiring direct access to the logistics platform.',
+      },
+    ],
+    whatDemonstrates: [
+      {
+        title: 'Different sync directions need different patterns',
+        body: 'Portal → Salesforce uses scheduled full-sync with RecordType filtering. Salesforce → Portal uses watermark-based incremental polling. Logistics → Portal uses a 5-minute batch. Each pattern matches its data type and latency requirement — applying the same pattern to all three would have made each one worse.',
+      },
+      {
+        title: 'External IDs are the architectural linchpin',
+        body: 'Portal_ID__c and Journey_ID__c make every upsert idempotent across all three sync patterns. Without them, every re-run creates duplicates; with them, every re-run is safe. External IDs are not a convenience — they are the safety property that makes scheduled sync reliable.',
+      },
+      {
+        title: 'Watermark field selection is a correctness question, not a convenience',
+        body: 'The v1.1.0 change from LastModifiedDate to Integration_Timestamp__c eliminated false re-triggers from unrelated field updates. A watermark on the wrong field produces duplicate work at best and inconsistent state at worst.',
+      },
+      {
+        title: 'Lookup resolution belongs in the system API',
+        body: "The Salesforce SAPI's generic lookup resolver means process APIs pass field values, not Salesforce IDs. This keeps process APIs free from Salesforce-specific query logic and makes the SAPI reusable across any object with relational dependencies.",
+      },
+    ],
+    techStack: [
+      { layer: 'Integration Platform', technology: 'MuleSoft Anypoint Platform 4.x (8 applications)' },
+      { layer: 'Deployment', technology: 'CloudHub' },
+      { layer: 'Salesforce Connectivity', technology: 'Salesforce Connector — Bulk API v2, SOQL queries, upsert/create/update' },
+      { layer: 'Salesforce Data Model', technology: 'Person Accounts (Member RecordType), Cases (Journey_ID__c), Portal_ID__c external IDs, Integration_Timestamp__c' },
+      { layer: 'Health Portal Connectivity', technology: 'HTTP (X-Client-ID / X-Client-Secret), Secure Properties' },
+      { layer: 'Logistics Connectivity', technology: 'HTTP (Bearer token), SLP shipments/orders API' },
+      { layer: 'Transformation', technology: 'DataWeave 2.0' },
+      { layer: 'State Management', technology: 'Anypoint Object Store v2 (case sync watermark on Integration_Timestamp__c)' },
+      { layer: 'Security', technology: 'Secure Properties + Blowfish encryption' },
+      { layer: 'Environments', technology: 'Multi-env config (dev / qa / prod) via mule.env' },
+    ],
+  },
 ];

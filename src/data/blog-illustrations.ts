@@ -787,6 +787,55 @@ const illustrations: Record<string, string> = {
   <text x="404" y="164" text-anchor="middle" font-family="Outfit,sans-serif" font-size="7" fill="#5A5A5A" opacity="0.35">Best for regulated env</text>
 </svg>`,
 
+  // ── Health Portal ↔ MuleSoft ↔ Salesforce + Logistics ────────────
+  'health-portal-mulesoft-integration': `
+<svg viewBox="0 0 480 200" fill="none" xmlns="http://www.w3.org/2000/svg" class="blog-svg-illus" aria-hidden="true">
+  <!-- Health Portal (left) -->
+  <rect x="14" y="46" width="106" height="100" rx="8" stroke="#0A0A0A" stroke-width="1.5" opacity="0.75"/>
+  <text x="67" y="70" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" font-weight="700" fill="#0A0A0A" opacity="0.75">Health Portal</text>
+  <text x="67" y="84" text-anchor="middle" font-family="Outfit,sans-serif" font-size="7.5" fill="#5A5A5A">Member journeys</text>
+  <text x="67" y="102" text-anchor="middle" font-family="Outfit,monospace" font-size="6.5" fill="#5A5A5A" opacity="0.6">X-Client-ID auth</text>
+  <text x="67" y="114" text-anchor="middle" font-family="Outfit,monospace" font-size="6.5" fill="#5A5A5A" opacity="0.55">orders · cases</text>
+  <text x="67" y="126" text-anchor="middle" font-family="Outfit,monospace" font-size="6.5" fill="#5A5A5A" opacity="0.5">registration</text>
+  <!-- Bidirectional arrows Portal ↔ MuleSoft -->
+  <path d="M120 82 L164 82" stroke="#0A0A0A" stroke-width="1.5" opacity="0.55"/>
+  <path d="M160 78 L164 82 L160 86" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"/>
+  <path d="M164 108 L120 108" stroke="#0A0A0A" stroke-width="1.5" stroke-dasharray="5 4" opacity="0.35"/>
+  <path d="M124 104 L120 108 L124 112" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.4"/>
+  <text x="142" y="76" text-anchor="middle" font-family="Outfit,monospace" font-size="6" fill="#5A5A5A" opacity="0.55">journeys</text>
+  <text x="142" y="120" text-anchor="middle" font-family="Outfit,monospace" font-size="6" fill="#5A5A5A" opacity="0.45">cases</text>
+  <!-- MuleSoft Anypoint (center) -->
+  <rect x="164" y="36" width="152" height="124" rx="8" stroke="#0A0A0A" stroke-width="2" opacity="0.85" fill="#0A0A0A" fill-opacity="0.04"/>
+  <text x="240" y="58" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" font-weight="700" fill="#0A0A0A" opacity="0.85">MULESOFT ANYPOINT</text>
+  <text x="240" y="71" text-anchor="middle" font-family="Outfit,sans-serif" font-size="7.5" fill="#5A5A5A">CloudHub · 8 applications</text>
+  <rect x="176" y="82" width="128" height="14" rx="3" stroke="#0A0A0A" stroke-width="1" opacity="0.25"/>
+  <text x="240" y="92" text-anchor="middle" font-family="Outfit,monospace" font-size="7" fill="#0A0A0A" opacity="0.65">DataWeave · Object Store v2</text>
+  <rect x="176" y="100" width="128" height="14" rx="3" stroke="#0A0A0A" stroke-width="1" opacity="0.25"/>
+  <text x="240" y="110" text-anchor="middle" font-family="Outfit,monospace" font-size="7" fill="#0A0A0A" opacity="0.65">Bulk API v2 · Portal_ID__c</text>
+  <rect x="176" y="118" width="128" height="14" rx="3" stroke="#0A0A0A" stroke-width="1" opacity="0.25"/>
+  <text x="240" y="128" text-anchor="middle" font-family="Outfit,monospace" font-size="7" fill="#0A0A0A" opacity="0.65">Integration_Timestamp__c</text>
+  <!-- Arrows MuleSoft ↔ Salesforce + Logistics -->
+  <path d="M316 72 L360 72" stroke="#0A0A0A" stroke-width="1.5" opacity="0.55"/>
+  <path d="M356 68 L360 72 L356 76" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"/>
+  <path d="M360 90 L316 90" stroke="#0A0A0A" stroke-width="1.5" stroke-dasharray="5 4" opacity="0.35"/>
+  <path d="M320 86 L316 90 L320 94" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.4"/>
+  <path d="M316 126 L360 126" stroke="#0A0A0A" stroke-width="1.5" opacity="0.45"/>
+  <path d="M356 122 L360 126 L356 130" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.5"/>
+  <!-- Salesforce CRM (top right) -->
+  <rect x="360" y="46" width="106" height="60" rx="8" stroke="#0A0A0A" stroke-width="1.5" opacity="0.75"/>
+  <text x="413" y="68" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" font-weight="700" fill="#0A0A0A" opacity="0.75">Salesforce</text>
+  <text x="413" y="81" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8" fill="#5A5A5A">CRM</text>
+  <text x="413" y="96" text-anchor="middle" font-family="Outfit,monospace" font-size="6.5" fill="#5A5A5A" opacity="0.55">Person Accounts</text>
+  <!-- Logistics Platform (bottom right, filled) -->
+  <rect x="360" y="116" width="106" height="60" rx="8" fill="#0A0A0A" opacity="0.85"/>
+  <text x="413" y="138" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" font-weight="700" fill="#fff" opacity="0.9">Logistics</text>
+  <text x="413" y="152" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8" fill="rgba(255,255,255,0.55)">SLP Platform</text>
+  <text x="413" y="167" text-anchor="middle" font-family="Outfit,monospace" font-size="6.5" fill="rgba(255,255,255,0.35)">kits · tracking</text>
+  <!-- Bottom metric badge -->
+  <rect x="164" y="172" width="152" height="20" rx="10" fill="#0A0A0A" opacity="0.85"/>
+  <text x="240" y="186" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" font-weight="700" fill="#fff">5 min kit tracking sync</text>
+</svg>`,
+
   // ── Salesforce ↔ NetSuite via MuleSoft ────────────────────────────
   'salesforce-netsuite-mulesoft-integration': `
 <svg viewBox="0 0 480 200" fill="none" xmlns="http://www.w3.org/2000/svg" class="blog-svg-illus" aria-hidden="true">
