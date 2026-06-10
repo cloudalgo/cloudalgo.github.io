@@ -352,7 +352,7 @@ export const caseStudies: CaseStudy[] = [
     metric: '0',
     metricLabel: 'manual data entry required — every patient sync fully automated',
     summary:
-      'A pediatric therapy clinic was manually re-entering every patient intake from Salesforce into their EMR — a web portal with no public API. CloudAlgo built a Heroku-hosted Node.js integration using Puppeteer-driven browser automation and a RabbitMQ message queue to fully automate the sync, running 24/7 without staff intervention.',
+      'How CloudAlgo automated Salesforce-to-EMR patient data sync for a therapy clinic with no API access — Heroku, Puppeteer, and RabbitMQ running 24/7, zero manual re-entry.',
     tags: ['Heroku', 'Salesforce', 'Puppeteer', 'Node.js', 'RabbitMQ', 'Redis', 'TypeScript'],
     duration: '3-month engagement',
     result: 'Fully automated Salesforce → EMR patient sync — zero re-entry, 24/7 coverage',

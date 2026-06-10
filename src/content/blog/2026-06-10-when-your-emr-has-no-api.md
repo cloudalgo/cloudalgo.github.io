@@ -2,7 +2,7 @@
 title: "When Your EMR Has No API: Automating Patient Data Sync with Heroku and Puppeteer"
 date: 2026-06-10
 category: Heroku
-excerpt: "How we eliminated double data entry for a therapy clinic by building a queue-backed browser robot on Heroku that syncs Salesforce patient records into a no-API EMR portal."
+excerpt: "How we automated Salesforce-to-EMR patient data sync for a therapy clinic with no API access — Heroku, Puppeteer, and RabbitMQ running 24/7, zero double entry."
 readTime: 5
 published: true
 author: "Sandeep Kumar"

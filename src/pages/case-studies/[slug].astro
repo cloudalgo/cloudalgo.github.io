@@ -9,12 +9,33 @@ export function getStaticPaths() {
 const { cs } = Astro.props;
 const prev = caseStudies[caseStudies.findIndex(c => c.id === cs.id) - 1];
 const next = caseStudies[caseStudies.findIndex(c => c.id === cs.id) + 1];
+
+const csUrl = `https://cloudalgo.com/case-studies/${cs.id}`;
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": cs.headline,
+  "description": cs.summary,
+  "author": {
+    "@type": "Organization",
+    "name": "CloudAlgo",
+    "url": "https://cloudalgo.com"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "CloudAlgo",
+    "logo": { "@type": "ImageObject", "url": "https://cloudalgo.com/logo.svg" }
+  },
+  "url": csUrl,
+  "mainEntityOfPage": { "@type": "WebPage", "@id": csUrl }
+};
 ---
 
 <Page
   title={`${cs.company} — ${cs.headline} | CloudAlgo Case Study`}
   description={cs.summary}
   ogType="article"
+  schema={schema}
 >
 
   <!-- ── Hero ── -->
