@@ -787,6 +787,55 @@ const illustrations: Record<string, string> = {
   <text x="404" y="164" text-anchor="middle" font-family="Outfit,sans-serif" font-size="7" fill="#5A5A5A" opacity="0.35">Best for regulated env</text>
 </svg>`,
 
+  // ── Salesforce ↔ NetSuite via MuleSoft ────────────────────────────
+  'salesforce-netsuite-mulesoft-integration': `
+<svg viewBox="0 0 480 200" fill="none" xmlns="http://www.w3.org/2000/svg" class="blog-svg-illus" aria-hidden="true">
+  <!-- Salesforce (left) -->
+  <rect x="14" y="46" width="106" height="100" rx="8" stroke="#0A0A0A" stroke-width="1.5" opacity="0.75"/>
+  <text x="67" y="70" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" font-weight="700" fill="#0A0A0A" opacity="0.75">Salesforce</text>
+  <text x="67" y="83" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8" fill="#5A5A5A">CRM</text>
+  <text x="67" y="102" text-anchor="middle" font-family="Outfit,monospace" font-size="6.5" fill="#5A5A5A" opacity="0.6">AccountsEvent__e</text>
+  <text x="67" y="114" text-anchor="middle" font-family="Outfit,monospace" font-size="6.5" fill="#5A5A5A" opacity="0.55">Create_NS_Order__e</text>
+  <text x="67" y="126" text-anchor="middle" font-family="Outfit,monospace" font-size="6.5" fill="#5A5A5A" opacity="0.5">Payment_Event__e</text>
+
+  <!-- Arrows SF ↔ MuleSoft -->
+  <path d="M120 82 L164 82" stroke="#0A0A0A" stroke-width="1.5" opacity="0.55"/>
+  <path d="M160 78 L164 82 L160 86" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"/>
+  <path d="M164 108 L120 108" stroke="#0A0A0A" stroke-width="1.5" stroke-dasharray="5 4" opacity="0.35"/>
+  <path d="M124 104 L120 108 L124 112" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.4"/>
+  <text x="142" y="76" text-anchor="middle" font-family="Outfit,monospace" font-size="6" fill="#5A5A5A" opacity="0.55">events</text>
+
+  <!-- MuleSoft Anypoint (center) -->
+  <rect x="164" y="36" width="152" height="124" rx="8" stroke="#0A0A0A" stroke-width="2" opacity="0.85" fill="#0A0A0A" fill-opacity="0.04"/>
+  <text x="240" y="58" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" font-weight="700" fill="#0A0A0A" opacity="0.85">MULESOFT ANYPOINT</text>
+  <text x="240" y="71" text-anchor="middle" font-family="Outfit,sans-serif" font-size="7.5" fill="#5A5A5A">CloudHub · 4 flows</text>
+  <rect x="176" y="82" width="128" height="14" rx="3" stroke="#0A0A0A" stroke-width="1" opacity="0.25"/>
+  <text x="240" y="92" text-anchor="middle" font-family="Outfit,monospace" font-size="7" fill="#0A0A0A" opacity="0.65">DataWeave · SOAP/XML · REST</text>
+  <rect x="176" y="100" width="128" height="14" rx="3" stroke="#0A0A0A" stroke-width="1" opacity="0.25"/>
+  <text x="240" y="110" text-anchor="middle" font-family="Outfit,monospace" font-size="7" fill="#0A0A0A" opacity="0.65">Object Store watermarks</text>
+  <rect x="176" y="118" width="128" height="14" rx="3" stroke="#0A0A0A" stroke-width="1" opacity="0.25"/>
+  <text x="240" y="128" text-anchor="middle" font-family="Outfit,monospace" font-size="7" fill="#0A0A0A" opacity="0.65">Bidirectional ID writeback</text>
+
+  <!-- Arrows MuleSoft ↔ NetSuite -->
+  <path d="M316 82 L360 82" stroke="#0A0A0A" stroke-width="1.5" opacity="0.55"/>
+  <path d="M356 78 L360 82 L356 86" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"/>
+  <path d="M360 108 L316 108" stroke="#0A0A0A" stroke-width="1.5" stroke-dasharray="5 4" opacity="0.35"/>
+  <path d="M320 104 L316 108 L320 112" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.4"/>
+  <text x="338" y="76" text-anchor="middle" font-family="Outfit,monospace" font-size="6" fill="#5A5A5A" opacity="0.55">orders</text>
+
+  <!-- NetSuite ERP (right, filled) -->
+  <rect x="360" y="46" width="106" height="100" rx="8" fill="#0A0A0A" opacity="0.85"/>
+  <text x="413" y="70" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" font-weight="700" fill="#fff" opacity="0.9">NetSuite</text>
+  <text x="413" y="83" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8" fill="rgba(255,255,255,0.55)">ERP</text>
+  <text x="413" y="102" text-anchor="middle" font-family="Outfit,monospace" font-size="7" fill="rgba(255,255,255,0.45)">Sales Orders</text>
+  <text x="413" y="114" text-anchor="middle" font-family="Outfit,monospace" font-size="7" fill="rgba(255,255,255,0.4)">Customers</text>
+  <text x="413" y="126" text-anchor="middle" font-family="Outfit,monospace" font-size="7" fill="rgba(255,255,255,0.35)">Invoices · Payments</text>
+
+  <!-- Bottom metric badge -->
+  <rect x="164" y="172" width="152" height="20" rx="10" fill="#0A0A0A" opacity="0.85"/>
+  <text x="240" y="186" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" font-weight="700" fill="#fff">0 manual re-entry</text>
+</svg>`,
+
 };
 
 /**
