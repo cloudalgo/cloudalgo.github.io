@@ -669,6 +669,53 @@ const illustrations: Record<string, string> = {
   <text x="368" y="167" text-anchor="middle" font-family="Outfit,monospace" font-size="7" fill="#5A5A5A" opacity="0.4">no External ID</text>
 </svg>`,
 
+  // ── When Your EMR Has No API (Puppeteer + RabbitMQ + Heroku) ────────
+  'when-your-emr-has-no-api': `
+<svg viewBox="0 0 480 200" fill="none" xmlns="http://www.w3.org/2000/svg" class="blog-svg-illus" aria-hidden="true">
+  <!-- Salesforce (left) -->
+  <rect x="20" y="64" width="80" height="72" rx="8" stroke="#0A0A0A" stroke-width="1.5" opacity="0.75"/>
+  <text x="60" y="90" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" font-weight="700" fill="#0A0A0A" opacity="0.75">Salesforce</text>
+  <text x="60" y="103" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8" fill="#5A5A5A">CRM</text>
+  <text x="60" y="120" text-anchor="middle" font-family="Outfit,monospace" font-size="7" fill="#5A5A5A" opacity="0.6">Apex trigger</text>
+  <text x="60" y="131" text-anchor="middle" font-family="Outfit,monospace" font-size="7" fill="#5A5A5A" opacity="0.6">+ REST callback</text>
+  <!-- Arrow: SF → Queue -->
+  <path d="M100 100 L126 100" stroke="#0A0A0A" stroke-width="1.5" opacity="0.5"/>
+  <path d="M122 96 L126 100 L122 104" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"/>
+  <text x="113" y="93" text-anchor="middle" font-family="Outfit,monospace" font-size="6.5" fill="#5A5A5A" opacity="0.55">publish</text>
+  <!-- RabbitMQ Queue -->
+  <rect x="126" y="64" width="98" height="72" rx="8" stroke="#0A0A0A" stroke-width="1.5" opacity="0.75" fill="#0A0A0A" fill-opacity="0.03"/>
+  <text x="175" y="87" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" font-weight="700" fill="#0A0A0A" opacity="0.75">RabbitMQ</text>
+  <rect x="141" y="95" width="24" height="16" rx="3" stroke="#0A0A0A" stroke-width="1.5" opacity="0.6"/>
+  <path d="M141 95 L153 103 L165 95" stroke="#0A0A0A" stroke-width="1" opacity="0.4"/>
+  <rect x="169" y="95" width="24" height="16" rx="3" stroke="#0A0A0A" stroke-width="1.5" opacity="0.45"/>
+  <path d="M169 95 L181 103 L193 95" stroke="#0A0A0A" stroke-width="1" opacity="0.3"/>
+  <text x="175" y="126" text-anchor="middle" font-family="Outfit,monospace" font-size="7" fill="#5A5A5A" opacity="0.55">CloudAMQP</text>
+  <!-- Arrow: Queue → Worker -->
+  <path d="M224 100 L250 100" stroke="#0A0A0A" stroke-width="1.5" opacity="0.5"/>
+  <path d="M246 96 L250 100 L246 104" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"/>
+  <text x="237" y="93" text-anchor="middle" font-family="Outfit,monospace" font-size="6.5" fill="#5A5A5A" opacity="0.55">consume</text>
+  <!-- Heroku Worker -->
+  <rect x="250" y="64" width="92" height="72" rx="8" stroke="#0A0A0A" stroke-width="1.5" opacity="0.75"/>
+  <text x="296" y="87" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" font-weight="700" fill="#0A0A0A" opacity="0.75">Heroku</text>
+  <text x="296" y="99" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8" fill="#5A5A5A">Worker</text>
+  <text x="296" y="116" text-anchor="middle" font-family="Outfit,monospace" font-size="7" fill="#5A5A5A" opacity="0.6">Puppeteer</text>
+  <text x="296" y="127" text-anchor="middle" font-family="Outfit,monospace" font-size="7" fill="#5A5A5A" opacity="0.6">headless Chrome</text>
+  <!-- Arrow: Worker → EMR -->
+  <path d="M342 100 L360 100" stroke="#0A0A0A" stroke-width="1.5" opacity="0.5"/>
+  <path d="M356 96 L360 100 L356 104" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"/>
+  <text x="351" y="93" text-anchor="middle" font-family="Outfit,monospace" font-size="6.5" fill="#5A5A5A" opacity="0.55">automate</text>
+  <!-- Fusion EMR Portal (solid black) -->
+  <rect x="360" y="64" width="102" height="72" rx="8" fill="#0A0A0A" opacity="0.85"/>
+  <text x="411" y="88" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" font-weight="700" fill="#fff" opacity="0.9">Fusion EMR</text>
+  <text x="411" y="101" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8" fill="rgba(255,255,255,0.55)">web portal</text>
+  <text x="411" y="117" text-anchor="middle" font-family="Outfit,monospace" font-size="7" fill="rgba(255,255,255,0.35)">no public API</text>
+  <text x="411" y="128" text-anchor="middle" font-family="Outfit,monospace" font-size="7" fill="rgba(255,255,255,0.35)">browser-only</text>
+  <!-- Callback arc (bottom) -->
+  <path d="M411 136 L411 162 L60 162 L60 136" stroke="#0A0A0A" stroke-width="1.5" stroke-dasharray="5 4" opacity="0.3"/>
+  <path d="M56 140 L60 136 L64 140" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.35"/>
+  <text x="240" y="177" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8" fill="#5A5A5A" opacity="0.5">Fusion patient ID → Salesforce Apex callback</text>
+</svg>`,
+
   // ── Salesforce + Heroku Architecture Patterns ──────────────────────
   'salesforce-heroku-architecture-patterns': `
 <svg viewBox="0 0 480 200" fill="none" xmlns="http://www.w3.org/2000/svg" class="blog-svg-illus" aria-hidden="true">
