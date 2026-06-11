@@ -44,7 +44,9 @@
       "mcp__plugin_playwright_playwright__browser_evaluate",
       "Skill(svg)",
       "Skill(svg:*)",
-      "WebSearch"
+      "WebSearch",
+      "Skill(commit-commands:commit)",
+      "Skill(commit-commands:commit:*)"
     ],
     "additionalDirectories": [
       "/Users/sandeepkumar/.claude",

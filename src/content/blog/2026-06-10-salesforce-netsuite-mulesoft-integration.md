@@ -25,7 +25,7 @@ NetSuite and Salesforce both have marketplace integrations and native connector 
 
 For this client, it wasn't.
 
-The requirements included custom Platform Events (`AccountsEvent__e`, `Create_NS_Order__e`, `ABT_Payment_and_Refund_Event__e`), custom financial objects, bidirectional ID writeback, watermark-based incremental polling for invoices and refunds, and per-flow error email notifications with failed record details. The native connector doesn't touch any of those. It maps standard objects and calls it done.
+The requirements included custom Platform Events (`AccountsEvent__e`, `Create_NS_Order__e`, `Payment_and_Refund_Event__e`), custom financial objects, bidirectional ID writeback, watermark-based incremental polling for invoices and refunds, and per-flow error email notifications with failed record details. The native connector doesn't touch any of those. It maps standard objects and calls it done.
 
 We needed a proper integration layer. We chose MuleSoft.
 
@@ -35,9 +35,9 @@ The integration follows MuleSoft's API-led connectivity pattern — not because 
 
 Three applications:
 
-- **Salesforce System API** (`ansa-sfdc-sapi`) — Subscribes to Salesforce Platform Events and handles real-time flows to NetSuite. Also receives callbacks from NetSuite (ship confirms, order updates) and writes NetSuite IDs back to Salesforce records.
-- **NetSuite System API** (`ansa-netsuite-sapi`) — Wraps all NetSuite create and update operations behind a clean API contract. SOAP/XML for Sales Orders, REST for customers.
-- **Orchestration application** (`ansa-sf-ns-sync`) — Schedules 15-minute incremental syncs for invoices and refunds from NetSuite to Salesforce. Subscribes to payment Platform Events for near-real-time financial data.
+- **Salesforce System API** (`sfdc-sapi`) — Subscribes to Salesforce Platform Events and handles real-time flows to NetSuite. Also receives callbacks from NetSuite (ship confirms, order updates) and writes NetSuite IDs back to Salesforce records.
+- **NetSuite System API** (`netsuite-sapi`) — Wraps all NetSuite create and update operations behind a clean API contract. SOAP/XML for Sales Orders, REST for customers.
+- **Orchestration application** (`sf-ns-sync`) — Schedules 15-minute incremental syncs for invoices and refunds from NetSuite to Salesforce. Subscribes to payment Platform Events for near-real-time financial data.
 
 The four flows those applications power:
 
@@ -51,7 +51,7 @@ When a Salesforce Order moves to fulfilment, a `Create_NS_Order__e` Platform Eve
 Two schedulers run every 15 minutes — staggered by 7 minutes to avoid resource contention. Each fetches records from NetSuite modified since the last run, using a timestamp watermark stored in Anypoint Object Store. Records arrive in paginated batches of 50 and are posted to the Salesforce SAPI for upsert. Failed records trigger a structured HTML error email.
 
 **4. Payment sync (Salesforce → NetSuite, event-driven)**  
-When a payment is recorded in Salesforce, an `ABT_Payment_and_Refund_Event__e` Platform Event carries the payment amount, NetSuite Account number, and NetSuite Invoice ID. MuleSoft posts the payment to NetSuite via REST, applying it against the specific invoice — keeping accounts receivable in sync without manual journal entries.
+When a payment is recorded in Salesforce, an `Payment_and_Refund_Event__e` Platform Event carries the payment amount, NetSuite Account number, and NetSuite Invoice ID. MuleSoft posts the payment to NetSuite via REST, applying it against the specific invoice — keeping accounts receivable in sync without manual journal entries.
 
 ## Why real-time for orders but scheduled for invoices?
 
