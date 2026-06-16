@@ -215,6 +215,41 @@ const schema = {
 }
 
 
+/* ── Blog content — tables ─────────────────────── */
+:global(.blog-content table) {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 2rem 0;
+  font-size: 0.9375rem;
+  overflow-x: auto;
+  display: block;
+}
+:global(.blog-content thead) {
+  border-bottom: 2px solid #0A0A0A;
+}
+:global(.blog-content th) {
+  text-align: left;
+  font-weight: 700;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #5A5A5A;
+  padding: 0.625rem 1rem;
+  white-space: nowrap;
+}
+:global(.blog-content td) {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #E0E0DC;
+  vertical-align: top;
+  line-height: 1.65;
+}
+:global(.blog-content tr:last-child td) {
+  border-bottom: none;
+}
+:global(.blog-content tbody tr:hover) {
+  background: #F5F5F2;
+}
+
 /* ── Sticky share bar ───────────────────────────── */
 .sticky-share {
   position: fixed;
