@@ -5,7 +5,7 @@ type: mobile-app
 tagline: "Track all your insurance policies and never miss a renewal — free, offline, and private. Available on iOS and Android."
 excerpt: "InsureAlgo is a free Flutter app for iOS and Android that keeps every insurance policy at your fingertips. Expiry countdowns, smart reminders, document vault, and iCloud backup — with zero data collection and no account required."
 icon: "insurealgo"
-externalUrl: "https://apps.apple.com/app/insurealgo/id6748688246"
+externalUrl: "https://apps.apple.com/in/app/insurealgo/id6778015224"
 seoTitle: "InsureAlgo — Insurance Policy Tracker for iOS & Android | CloudAlgo"
 version: "1.0.0"
 lastUpdated: "2025-05-29"
