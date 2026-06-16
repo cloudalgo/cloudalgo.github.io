@@ -5,6 +5,7 @@ category: Salesforce
 excerpt: "A client wanted to clean up 800+ legacy custom fields before a major data migration. The native dependency graph wasn't enough. Here's the script we built — and what it found."
 readTime: 7
 published: true
+image: /blog-images/salesforce-field-impact-hero.svg
 ---
 
 A client came to us ahead of a data migration. Their Salesforce org had grown over eight years — multiple product launches, several reorgs, a few abandoned features — and nobody was quite sure what was still live and what was dead weight. The schema had ballooned to over 800 custom fields on their core objects alone.
