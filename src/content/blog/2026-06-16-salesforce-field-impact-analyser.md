@@ -8,72 +8,70 @@ published: true
 image: /blog-images/salesforce-field-impact-hero.svg
 ---
 
-A client came to us ahead of a data migration. Their Salesforce org had grown over eight years — multiple product launches, several reorgs, a few abandoned features — and nobody was quite sure what was still live and what was dead weight. The schema had ballooned to over 800 custom fields on their core objects alone.
+A client asked us to help prep their Salesforce org for a data migration. Eight years of history — product pivots, reorgs, features that got halfway built and then quietly abandoned. The schema had somewhere north of 800 custom fields on Account alone. Nobody on their team could tell you with confidence which ones were actually being used.
 
-Before the migration team could do their work, the Salesforce team wanted to clean house. They had a list of fields they believed were no longer used — fields added for a workshop attendance tracking feature that had been replaced by a third-party platform two years earlier. The plan was to delete them before the migration window.
+Before the migration could happen, they wanted to clean it up. They'd already gone through the list and flagged a bunch of fields as dead — mostly tied to a workshop attendance tracking thing that got replaced by a third-party tool a couple years back. The plan was simple: clear the references, then delete.
 
-We ran the native check. Setup → Object Manager → find the field → View Field Dependencies. It showed a handful of references — a couple of layouts, one Validation Rule. The team cleared those. We ran it again. No more references. "Safe to delete," the team said.
+We ran the native check. Setup → Object Manager → View Field Dependencies. Found a few things — some layouts, a validation rule. Cleared them. Ran it again. Clean. "Good to delete," the team said.
 
-We paused. Something felt off.
+We said hold on.
 
-## The dependency graph lies by omission
+## The dep graph doesn't show you everything
 
-Salesforce's built-in dependency graph is good at what it covers. Layouts, Flows, Validation Rules, Reports, Dashboards, Formula Fields — if a component is a first-class metadata citizen with a tracked reference, the dep graph sees it. But there is a long list of hiding spots it silently ignores.
+Here's the thing about Salesforce's built-in dependency checker — it works fine for what it tracks, but there's a bunch of stuff it just doesn't know about.
 
-**String references in Apex.** If a developer wrote `soqlFields.add('My_Field__c')` — assembling a dynamic SOQL query as a string — that reference is invisible to the dep graph. The field name is just text. Salesforce doesn't track it.
+**Apex string references.** If someone wrote `soqlFields.add('My_Field__c')` to build a dynamic SOQL query at runtime, that's invisible. It's just a string. Salesforce has no idea it's a field reference.
 
-**FieldPermissions.** Profiles and Permission Sets that grant read or edit access to a field do not appear as dependencies. Delete the field and those permission entries break silently.
+**FieldPermissions.** Profiles and Permission Sets that grant access to a field don't show up in the dep graph at all. You delete the field, those entries break — silently.
 
-**Email Template bodies.** If a template uses a hardcoded field API name outside of standard merge field syntax — common in older orgs where templates were edited as raw HTML — the dep graph won't catch it.
+**Email Template bodies.** Old orgs especially — if someone edited a template as raw HTML and hardcoded a field API name directly in the body rather than using standard merge field syntax, the dep graph won't catch it.
 
-**Workflow Field Updates.** The dep graph tracks Workflow Rules in criteria, but if a Workflow Field Update is *setting* a field as its target value, that relationship is not always surfaced in the dependency view.
+**Workflow Field Updates.** The dep graph picks up Workflow Rules in criteria, but if a field update action is *setting* a field as the target, that link isn't always surfaced.
 
-**Static Resources.** Some orgs store configuration as JSON in a Static Resource — field mappings, column definitions for a data table, export configs. The dep graph sees the resource, not its contents.
+**Static Resources.** Some orgs keep configuration as JSON files — field mappings, column definitions, that kind of thing. The dep graph sees that a Static Resource exists, not what's inside it.
 
-**Custom Labels.** Uncommon, but some orgs use Custom Label values to store field API names for internationalised configuration. The dep graph has no visibility into label values.
+**Custom Labels.** Rare, but it happens. Some orgs store field API names in label values for config-driven features.
 
-On our client's org, the field that "had zero references" according to the dep graph was referenced as a string literal in 14 Apex classes. Dynamic SOQL was assembling the field name at runtime based on user-selected report parameters. Deleting that field would have broken a reporting feature silently — no compile error, just null results.
+On this client's org, the field the dep graph said had zero references was being referenced as a string literal in 14 Apex classes. Dynamic SOQL, assembled at runtime based on user-picked report options. If we'd deleted that field, the reporting feature would've just silently returned nothing. No error. No crash. Just wrong data.
 
-We pulled the trigger on nothing.
+We almost missed it.
 
-## So we built a script
+## So we wrote a script
 
-We needed a way to check all of these hiding spots systematically — without spending half a day per field doing it manually. We built `sf-field-impact.sh`: a Bash script that combines the metadata dependency graph with source-level string scans across every place in the org a field API name could be lurking.
-
-The script works against any authenticated Salesforce org via the Salesforce CLI. No deployment required. No packages to install in your org.
+Rather than doing this manually for every field — which was going to take days — we built a Bash script that runs through all the hiding spots systematically. It's called `sf-field-impact.sh` and it works against any org you're authenticated to via the Salesforce CLI. Nothing to deploy, nothing to install in the org.
 
 ```bash
 curl -o sf-field-impact.sh https://gist.githubusercontent.com/xenotime-india/6153edfad49a028076d521ca09104e35/raw/sf-field-impact.sh
 chmod +x sf-field-impact.sh
 ```
 
-It has two modes: **UNUSED** (full org scan — find all deletion candidates) and **IMPACT** (targeted — show everything touching a specific field before you touch it).
+It has two modes. **UNUSED** scans the whole org and classifies every custom field. **IMPACT** takes a specific field and tells you everything touching it before you make a move.
 
-## Seven passes, in order
+## Seven passes
 
-The script runs every candidate field through seven passes. Each pass targets a different class of reference:
+The script runs each field through seven passes, each targeting a different kind of reference:
 
 | Pass | What it checks | Why it matters |
 |------|---------------|----------------|
-| 1 | Metadata dependency graph | Layouts, Flows, Validation Rules, Reports, Dashboards, Formula Fields, Workflow Rule criteria |
-| 2 | Apex classes & triggers, LWC JS/HTML, Aura components, Visualforce pages — full source scan | Catches dynamic SOQL and any hardcoded string references |
-| 3 | FieldPermissions in Profiles & Permission Sets | Field access grants are invisible to the dep graph |
-| 4 | Custom Label values | Orgs that store field API names in labels for config-driven features |
-| 5 | Static Resource bodies (fetched via REST, not just the URL pointer) | Middleware config JSON, LWC data table definitions |
-| 6 | Email Template subject, body, and HTML | Hardcoded field names outside merge field syntax |
-| 7 | Workflow Field Update target fields and formula text | The field being *set* — not just evaluated — by a field update action |
+| 1 | Metadata dependency graph | Layouts, Flows, Validation Rules, Reports, Dashboards, Formula Fields |
+| 2 | Apex, LWC, Aura, Visualforce source — full text scan | Catches dynamic SOQL and hardcoded string references |
+| 3 | FieldPermissions in Profiles and Permission Sets | These don't appear in the dep graph at all |
+| 4 | Custom Label values | For orgs that store field names in labels |
+| 5 | Static Resource bodies fetched via REST | Actually reads the file, not just the URL |
+| 6 | Email Template subject, body, HTML | Hardcoded field names that bypass merge field syntax |
+| 7 | Workflow Field Update targets and formulas | The field being set, not just evaluated |
 
-A field that survives all seven passes without a hit lands in `no_reference`. That is the only status that warrants serious consideration for deletion — and even then we recommend a manual spot-check against Reports and Dashboards.
+If a field gets through all seven and nothing comes back, it lands in `no_reference`. That's your list to review. Not your list to bulk delete — still worth a quick manual check — but a solid starting point.
 
-## Two modes: UNUSED and IMPACT
+## Running it
 
-**UNUSED mode** is where you start. Run it against the org, write the output to a CSV, then work through the `no_reference` bucket with your team:
+**UNUSED mode** — run it against the org, dump to CSV, go through the `no_reference` bucket with your team:
 
 ```bash
 ./sf-field-impact.sh --org my-sandbox --output results.csv
 ```
 
-The console gives you a summary as it runs:
+You'll see the passes tick by in the console:
 
 ```
 Pass 1/7: querying metadata dependency graph…
@@ -89,13 +87,13 @@ Wrote results to results.csv
   no_reference:             46  <- safe deletion candidates
   found_in_code:           162  <- Apex/LWC/Aura/VF source
   found_in_permissions:    568  <- Profile or Permission Set field access
-  found_in_email_template:   0  <- Email Template subject/body
-  found_in_workflow:         0  <- Workflow Field Update target or formula
-  found_in_labels:           0  <- Custom Label value
-  found_in_static_resource:  0  <- text/JSON Static Resource
+  found_in_email_template:   0
+  found_in_workflow:         0
+  found_in_labels:           0
+  found_in_static_resource:  0
 ```
 
-**IMPACT mode** is for when you already know which field you want to remove and need a full picture before acting:
+**IMPACT mode** — when you've already identified a field and want the full picture before touching it:
 
 ```bash
 ./sf-field-impact.sh --org my-sandbox \
@@ -103,7 +101,7 @@ Wrote results to results.csv
   --object Account
 ```
 
-The output shows every referencing component — with `[ACTIVE]` / `[INACTIVE]` badges on Flows and Triggers — and tells you whether the field appears in source code as a string:
+Output shows every referencing component, with `[ACTIVE]` / `[INACTIVE]` on Flows and Triggers, plus whether the field shows up in source code:
 
 ```
 ┌─ Is_Mandatory_Workshop_Attended__c
@@ -125,51 +123,42 @@ The output shows every referencing component — with `[ACTIVE]` / `[INACTIVE]` 
 └──────────────────────────────────────────────────────────
 ```
 
-This is the output that stopped us from deleting a field that 14 Apex classes depended on.
+That last line — `String in source: YES` — is exactly what stopped us from deleting a field that 14 Apex classes were depending on.
 
-## What we found for the client
+## What we actually found
 
-When we ran the full unused-mode scan on the client's org, here is what came back:
+On the client's org, the scan came back with 46 fields that had genuinely zero references across all seven passes. We also found 14 Apex classes touching a field the dep graph said was clean, 5 layouts still rendering two fields the team was convinced had been removed, and a couple of inactive Flows still tagged against another field.
 
-- **46 fields** with zero references across all seven passes — genuine candidates for deletion
-- **14 Apex classes** holding string references to one field the dep graph showed as clean
-- **5 page layouts** still rendering two fields the team believed had been removed
-- **2 inactive Flows** tagged against a third field — safe to delete, but documented in the cleanup log
+The dep graph alone would have greenlit somewhere around 200 fields for deletion. The script cut that down to 46. Those 46 still got a manual review before anyone deleted anything. The migration went ahead without a production incident.
 
-The dep graph alone would have classified well over 200 fields as unreferenced. The script brought that number down to 46. The remaining 46 the team reviewed manually before deleting. Migration proceeded without a production incident.
+## What the script won't catch
 
-## What it still won't catch
+To be straight about it — there are things this doesn't cover.
 
-We try to be precise about what the script does and doesn't cover:
+If field names are assembled at runtime through string concatenation (`'My_' + 'Field__c'`), no static scan will catch that. You need someone to actually read the code. Same goes for external systems — if a middleware layer or ETL tool is referring to a Salesforce field by name, the script has no way to see that. Check your integration docs separately.
 
-- **Runtime-assembled field names** — `'My_' + 'Field__c'` in Apex dynamic SOQL is invisible to any static scan. If your org does this, you need a code review, not a script.
-- **External system references** — if an ETL tool, a middleware layer, or an external API refers to a Salesforce field by name, the script has no way to know. Check your integration inventory separately.
-- **Translated Email Template bodies** — only the default-language HTML and body are scanned.
-- **Binary or ZIP Static Resources** — only text/JSON content types are fetched and searched.
+Translated Email Template bodies only get the default-language version scanned. And binary Static Resources get skipped — only text and JSON get read.
 
-The `no_reference` bucket is high confidence, not guaranteed. Treat it as a starting list for human review, not a deletion queue.
+So `no_reference` means high confidence, not certainty. Treat it as a shortlist, not a delete queue.
 
-## How to run it
+## Setup
 
-Prerequisites: Salesforce CLI (`sf`) installed and authenticated to the target org. `curl` is optional — needed only for Static Resource body fetching (Pass 5); the rest of the passes work without it.
+Just needs the Salesforce CLI authenticated to the org. `curl` is optional — only needed for Pass 5 (Static Resource body fetching), the rest work without it.
 
 ```bash
 # Download
 curl -o sf-field-impact.sh https://gist.githubusercontent.com/xenotime-india/6153edfad49a028076d521ca09104e35/raw/sf-field-impact.sh
 chmod +x sf-field-impact.sh
 
-# Full org scan — write to CSV
+# Scan the whole org
 ./sf-field-impact.sh --org MY_ORG_ALIAS --output results.csv
 
-# Impact analysis on a specific field before deletion
+# Check a specific field before deleting
 ./sf-field-impact.sh --org MY_ORG_ALIAS --analyze "My_Old_Field__c" --object Account
-
-# Impact analysis on multiple fields
-./sf-field-impact.sh --org MY_ORG_ALIAS --analyze "Field1__c,Field2__c"
 ```
 
-The script is pure Bash and works with bash 3.2+, including the macOS default shell. No managed packages, no org configuration, no deployment.
+Works on bash 3.2+ so the macOS default shell is fine. No packages, no org config, no deployment.
 
 ---
 
-We built this script during that field-cleanup engagement and have run it on every similar project since. If you're managing schema debt, preparing for a migration, or just want confidence before any field deletion, [get in touch](/contact) or [see how we approach Salesforce architecture](/services/salesforce-consulting).
+We've run this on every schema cleanup engagement since we built it. If you're heading into a migration or just trying to get a handle on field debt, [get in touch](/contact) or [see how we approach Salesforce architecture](/services/salesforce-consulting).
