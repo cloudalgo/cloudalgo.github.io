@@ -430,6 +430,14 @@ const illustrationSvg = contentIllustration || illustrations[category] || illust
   to   { opacity: 1; }
 }
 
+/* ── Field Impact Analyser: passes fade in, badge pulses ── */
+.blog-card-new:hover .sfia-passes {
+  animation: blogFadeIn 0.5s ease forwards;
+}
+.blog-card-new:hover .sfia-badge {
+  animation: blogPulse 1.8s ease-in-out infinite;
+}
+
 /* ── Reduced motion ─────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   .blog-card-new:hover .sf-cloud,
@@ -448,6 +456,8 @@ const illustrationSvg = contentIllustration || illustrations[category] || illust
   .blog-card-new:hover .product-star4,
   .blog-card-new:hover .product-star5,
   .blog-card-new:hover .product-star6 { animation: none; }
+  .blog-card-new:hover .sfia-passes,
+  .blog-card-new:hover .sfia-badge { animation: none; }
   .blog-card-new:hover .blog-thumb-img { transform: none; }
 }
 </style>

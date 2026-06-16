@@ -885,6 +885,83 @@ const illustrations: Record<string, string> = {
   <text x="240" y="186" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" font-weight="700" fill="#fff">0 manual re-entry</text>
 </svg>`,
 
+  // ── Salesforce Field Impact Analyser ───────────────────────────────
+  'salesforce-field-impact-analyser': `
+<svg viewBox="0 0 480 200" fill="none" xmlns="http://www.w3.org/2000/svg" class="blog-svg-illus" aria-hidden="true">
+  <!-- Terminal window (left) -->
+  <rect x="12" y="12" width="214" height="176" rx="8" fill="white" fill-opacity="0.5" stroke="#0A0A0A" stroke-opacity="0.10" stroke-width="1.5"/>
+  <rect x="12" y="12" width="214" height="26" rx="8" fill="#0A0A0A" fill-opacity="0.06"/>
+  <rect x="12" y="30" width="214" height="8" fill="#0A0A0A" fill-opacity="0.06"/>
+  <line x1="12" y1="38" x2="226" y2="38" stroke="#0A0A0A" stroke-opacity="0.07" stroke-width="1"/>
+  <circle cx="28" cy="25" r="4" fill="#0A0A0A" fill-opacity="0.14"/>
+  <circle cx="42" cy="25" r="4" fill="#0A0A0A" fill-opacity="0.14"/>
+  <circle cx="56" cy="25" r="4" fill="#0A0A0A" fill-opacity="0.14"/>
+  <text x="119" y="29" font-family="Outfit,system-ui,sans-serif" font-size="9" fill="#0A0A0A" fill-opacity="0.26" text-anchor="middle" letter-spacing="0.05em">sf-field-impact.sh</text>
+  <text x="22" y="54" font-family="'Courier New',monospace" font-size="8.5" fill="#0A0A0A" fill-opacity="0.28">$</text>
+  <text x="30" y="54" font-family="'Courier New',monospace" font-size="8.5" fill="#0A0A0A" fill-opacity="0.48">./sf-field-impact.sh</text>
+  <!-- Pass rows -->
+  <g class="sfia-passes">
+    <circle cx="26" cy="70" r="6.5" fill="#0A0A0A" fill-opacity="0.76"/>
+    <path d="M22.5,70 L25,72.5 L29.5,67" stroke="#F5F5F2" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="38" y="74" font-family="Outfit,system-ui,sans-serif" font-size="9" font-weight="600" fill="#0A0A0A" fill-opacity="0.80">Pass 1/7 · dep graph</text>
+    <circle cx="26" cy="90" r="6.5" fill="#0A0A0A" fill-opacity="0.76"/>
+    <path d="M22.5,90 L25,92.5 L29.5,87" stroke="#F5F5F2" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="38" y="94" font-family="Outfit,system-ui,sans-serif" font-size="9" font-weight="600" fill="#0A0A0A" fill-opacity="0.80">Pass 2/7 · Apex/LWC/Aura</text>
+    <circle cx="26" cy="110" r="6.5" fill="#0A0A0A" fill-opacity="0.76"/>
+    <path d="M22.5,110 L25,112.5 L29.5,107" stroke="#F5F5F2" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="38" y="114" font-family="Outfit,system-ui,sans-serif" font-size="9" font-weight="600" fill="#0A0A0A" fill-opacity="0.80">Pass 3/7 · FieldPermissions</text>
+    <circle cx="26" cy="130" r="6.5" fill="#0A0A0A" fill-opacity="0.76"/>
+    <path d="M22.5,130 L25,132.5 L29.5,127" stroke="#F5F5F2" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="38" y="134" font-family="Outfit,system-ui,sans-serif" font-size="9" font-weight="600" fill="#0A0A0A" fill-opacity="0.80">Pass 4/7 · Custom Labels</text>
+    <circle cx="26" cy="148" r="6.5" fill="#0A0A0A" fill-opacity="0.76"/>
+    <path d="M22.5,148 L25,150.5 L29.5,145" stroke="#F5F5F2" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="38" y="152" font-family="Outfit,system-ui,sans-serif" font-size="9" font-weight="600" fill="#0A0A0A" fill-opacity="0.80">Pass 5/7 · Static Resources</text>
+    <circle cx="26" cy="165" r="6.5" fill="#0A0A0A" fill-opacity="0.76"/>
+    <path d="M22.5,165 L25,167.5 L29.5,162" stroke="#F5F5F2" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="38" y="169" font-family="Outfit,system-ui,sans-serif" font-size="9" font-weight="600" fill="#0A0A0A" fill-opacity="0.80">Pass 6/7 · Email Templates</text>
+    <circle cx="26" cy="182" r="6.5" fill="#0A0A0A" fill-opacity="0.76"/>
+    <path d="M22.5,182 L25,184.5 L29.5,179" stroke="#F5F5F2" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="38" y="186" font-family="Outfit,system-ui,sans-serif" font-size="9" font-weight="600" fill="#0A0A0A" fill-opacity="0.80">Pass 7/7 · Workflow Updates</text>
+  </g>
+  <!-- Field dependency map (right) -->
+  <!-- Account box -->
+  <rect x="248" y="14" width="148" height="36" rx="7" fill="#0A0A0A" fill-opacity="0.85"/>
+  <text x="322" y="37" font-family="Outfit,system-ui,sans-serif" font-size="13" font-weight="700" fill="#F5F5F2" text-anchor="middle" letter-spacing="0.05em">Account</text>
+  <!-- Tree -->
+  <line x1="322" y1="50" x2="322" y2="70" stroke="#0A0A0A" stroke-opacity="0.14" stroke-width="1.5"/>
+  <line x1="280" y1="70" x2="450" y2="70" stroke="#0A0A0A" stroke-opacity="0.10" stroke-width="1.5"/>
+  <line x1="280" y1="70" x2="280" y2="86" stroke="#0A0A0A" stroke-opacity="0.14" stroke-width="1.5"/>
+  <line x1="368" y1="70" x2="368" y2="86" stroke="#0A0A0A" stroke-opacity="0.09" stroke-width="1.5" stroke-dasharray="3,3"/>
+  <line x1="450" y1="70" x2="450" y2="86" stroke="#0A0A0A" stroke-opacity="0.14" stroke-width="1.5"/>
+  <!-- Field 1: found_in_code -->
+  <rect x="244" y="86" width="74" height="42" rx="5" fill="#0A0A0A" fill-opacity="0.06" stroke="#0A0A0A" stroke-opacity="0.28" stroke-width="1"/>
+  <text x="250" y="102" font-family="'Courier New',monospace" font-size="7.5" fill="#0A0A0A" fill-opacity="0.70">Is_Mandatory_</text>
+  <text x="250" y="113" font-family="'Courier New',monospace" font-size="7.5" fill="#0A0A0A" fill-opacity="0.70">Workshop__c</text>
+  <g class="sfia-badge">
+    <rect x="250" y="117" width="62" height="9" rx="4.5" fill="#0A0A0A" fill-opacity="0.72"/>
+    <text x="281" y="124.5" font-family="Outfit,system-ui,sans-serif" font-size="6.5" font-weight="700" fill="#F5F5F2" text-anchor="middle" letter-spacing="0.06em">FOUND IN CODE</text>
+  </g>
+  <!-- Field 2: no_reference (dashed) -->
+  <rect x="330" y="86" width="74" height="42" rx="5" fill="#0A0A0A" fill-opacity="0.02" stroke="#0A0A0A" stroke-opacity="0.12" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="336" y="102" font-family="'Courier New',monospace" font-size="7.5" fill="#0A0A0A" fill-opacity="0.26">Lead_Source_</text>
+  <text x="336" y="113" font-family="'Courier New',monospace" font-size="7.5" fill="#0A0A0A" fill-opacity="0.26">Old__c</text>
+  <rect x="336" y="117" width="42" height="9" rx="4.5" fill="#0A0A0A" fill-opacity="0.10"/>
+  <text x="357" y="124.5" font-family="Outfit,system-ui,sans-serif" font-size="6.5" font-weight="700" fill="#0A0A0A" fill-opacity="0.42" text-anchor="middle" letter-spacing="0.06em">SAFE DEL</text>
+  <!-- Field 3: in perms -->
+  <rect x="418" y="86" width="54" height="42" rx="5" fill="#0A0A0A" fill-opacity="0.04" stroke="#0A0A0A" stroke-opacity="0.18" stroke-width="1"/>
+  <text x="423" y="102" font-family="'Courier New',monospace" font-size="7" fill="#0A0A0A" fill-opacity="0.50">Stage_</text>
+  <text x="423" y="113" font-family="'Courier New',monospace" font-size="7" fill="#0A0A0A" fill-opacity="0.50">Override</text>
+  <rect x="423" y="117" width="44" height="9" rx="4.5" fill="#0A0A0A" fill-opacity="0.35"/>
+  <text x="445" y="124.5" font-family="Outfit,system-ui,sans-serif" font-size="6.5" font-weight="700" fill="#F5F5F2" text-anchor="middle" letter-spacing="0.06em">IN PERMS</text>
+  <!-- Stat blocks -->
+  <rect x="248" y="146" width="110" height="46" rx="7" fill="#0A0A0A" fill-opacity="0.04" stroke="#0A0A0A" stroke-opacity="0.08" stroke-width="1"/>
+  <text x="260" y="172" font-family="Outfit,system-ui,sans-serif" font-size="28" font-weight="900" fill="#0A0A0A" fill-opacity="0.82">46</text>
+  <text x="260" y="184" font-family="Outfit,system-ui,sans-serif" font-size="7" font-weight="700" fill="#0A0A0A" fill-opacity="0.32" letter-spacing="0.06em">SAFE TO DELETE</text>
+  <rect x="364" y="146" width="108" height="46" rx="7" fill="#0A0A0A" fill-opacity="0.04" stroke="#0A0A0A" stroke-opacity="0.08" stroke-width="1"/>
+  <text x="376" y="172" font-family="Outfit,system-ui,sans-serif" font-size="28" font-weight="900" fill="#0A0A0A" fill-opacity="0.82">162</text>
+  <text x="376" y="184" font-family="Outfit,system-ui,sans-serif" font-size="7" font-weight="700" fill="#0A0A0A" fill-opacity="0.32" letter-spacing="0.06em">IN SOURCE CODE</text>
+</svg>`,
+
 };
 
 /**
