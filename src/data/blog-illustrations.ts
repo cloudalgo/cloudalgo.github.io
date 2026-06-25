@@ -962,6 +962,75 @@ const illustrations: Record<string, string> = {
   <text x="376" y="184" font-family="Outfit,system-ui,sans-serif" font-size="7" font-weight="700" fill="#0A0A0A" fill-opacity="0.32" letter-spacing="0.06em">IN SOURCE CODE</text>
 </svg>`,
 
+  // ── Apex Lint — offline Apex static analysis ────────────────────────
+  'apex-lint': `
+<svg viewBox="0 0 480 200" fill="none" xmlns="http://www.w3.org/2000/svg" class="blog-svg-illus" aria-hidden="true">
+  <!-- Apex file icon (left) -->
+  <rect x="14" y="22" width="100" height="130" rx="6" stroke="#0A0A0A" stroke-width="1.5" fill="white" fill-opacity="0.35" opacity="0.72"/>
+  <!-- Folded corner -->
+  <path d="M88 22 L114 48 L88 48 Z" stroke="#0A0A0A" stroke-width="1" fill="#0A0A0A" fill-opacity="0.05" opacity="0.4"/>
+  <!-- .cls label -->
+  <text x="64" y="50" text-anchor="middle" font-family="Outfit,sans-serif" font-size="12" font-weight="700" fill="#0A0A0A" opacity="0.62">.cls</text>
+  <!-- Code line stubs -->
+  <rect x="24" y="62" width="62" height="5" rx="2" fill="#0A0A0A" fill-opacity="0.20"/>
+  <rect x="28" y="74" width="72" height="5" rx="2" fill="#0A0A0A" fill-opacity="0.13"/>
+  <rect x="24" y="86" width="50" height="5" rx="2" fill="#0A0A0A" fill-opacity="0.18"/>
+  <rect x="28" y="98" width="66" height="5" rx="2" fill="#0A0A0A" fill-opacity="0.10"/>
+  <rect x="28" y="110" width="52" height="5" rx="2" fill="#0A0A0A" fill-opacity="0.16"/>
+  <rect x="24" y="122" width="68" height="5" rx="2" fill="#0A0A0A" fill-opacity="0.09"/>
+  <rect x="24" y="134" width="44" height="5" rx="2" fill="#0A0A0A" fill-opacity="0.14"/>
+
+  <!-- Arrow 1: file → AST -->
+  <path d="M114 90 L152 90" stroke="#0A0A0A" stroke-width="1.5" opacity="0.38" stroke-dasharray="4 3"/>
+  <path d="M148 86 L152 90 L148 94" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.45"/>
+  <text x="133" y="108" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8" fill="#0A0A0A" opacity="0.35">parse</text>
+
+  <!-- AST tree (middle, x=152-308) -->
+  <!-- Root node: MethodDecl -->
+  <rect x="194" y="38" width="82" height="22" rx="5" fill="#0A0A0A" fill-opacity="0.85"/>
+  <text x="235" y="53" text-anchor="middle" font-family="Outfit,monospace" font-size="8.5" font-weight="700" fill="white">MethodDecl</text>
+  <!-- Tree connectors -->
+  <line x1="235" y1="60" x2="197" y2="76" stroke="#0A0A0A" stroke-opacity="0.28" stroke-width="1.2"/>
+  <line x1="235" y1="60" x2="278" y2="76" stroke="#0A0A0A" stroke-opacity="0.28" stroke-width="1.2"/>
+  <!-- Left child: SOQLQuery (highlighted) -->
+  <rect x="168" y="76" width="58" height="18" rx="4" stroke="#0A0A0A" stroke-width="1.5" fill="#0A0A0A" fill-opacity="0.08" opacity="0.85"/>
+  <text x="197" y="88" text-anchor="middle" font-family="Outfit,monospace" font-size="7.5" fill="#0A0A0A" opacity="0.80">SOQLQuery</text>
+  <!-- Right child: ForLoop -->
+  <rect x="248" y="76" width="60" height="18" rx="4" stroke="#0A0A0A" stroke-width="1.2" fill-opacity="0" opacity="0.52"/>
+  <text x="278" y="88" text-anchor="middle" font-family="Outfit,monospace" font-size="7.5" fill="#0A0A0A" opacity="0.52">ForLoop</text>
+  <!-- Left leaf connector -->
+  <line x1="197" y1="94" x2="197" y2="108" stroke="#0A0A0A" stroke-opacity="0.20" stroke-width="1"/>
+  <!-- Left leaf: Identifier -->
+  <rect x="168" y="108" width="58" height="16" rx="3" stroke="#0A0A0A" stroke-width="1" fill-opacity="0" opacity="0.32"/>
+  <text x="197" y="119" text-anchor="middle" font-family="Outfit,monospace" font-size="7" fill="#0A0A0A" opacity="0.36">Identifier</text>
+  <!-- TAINT badge over SOQLQuery node -->
+  <rect x="218" y="70" width="38" height="12" rx="6" fill="#0A0A0A" fill-opacity="0.75"/>
+  <text x="237" y="79.5" text-anchor="middle" font-family="Outfit,sans-serif" font-size="6.5" font-weight="700" fill="white" letter-spacing="0.04em">TAINT</text>
+
+  <!-- Arrow 2: AST → findings -->
+  <path d="M310 90 L328 90" stroke="#0A0A0A" stroke-width="1.5" opacity="0.38" stroke-dasharray="4 3"/>
+  <path d="M324 86 L328 90 L324 94" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.45"/>
+  <text x="319" y="108" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8" fill="#0A0A0A" opacity="0.35">lint</text>
+
+  <!-- Findings (right, x=332-466) -->
+  <!-- CRITICAL -->
+  <rect x="332" y="36" width="134" height="30" rx="5" fill="#0A0A0A" fill-opacity="0.86"/>
+  <text x="345" y="50" font-family="Outfit,sans-serif" font-size="7" font-weight="700" fill="white" letter-spacing="0.08em">CRITICAL</text>
+  <text x="345" y="61" font-family="Outfit,monospace" font-size="8" fill="white" opacity="0.70">ApexSOQLInjection</text>
+  <!-- HIGH 1 -->
+  <rect x="332" y="74" width="134" height="30" rx="5" stroke="#0A0A0A" stroke-width="1.5" opacity="0.76"/>
+  <text x="345" y="88" font-family="Outfit,sans-serif" font-size="7" font-weight="700" fill="#0A0A0A" opacity="0.78" letter-spacing="0.08em">HIGH</text>
+  <text x="345" y="99" font-family="Outfit,monospace" font-size="8" fill="#0A0A0A" opacity="0.56">SoqlInLoop</text>
+  <!-- HIGH 2 -->
+  <rect x="332" y="112" width="134" height="30" rx="5" stroke="#0A0A0A" stroke-width="1.2" opacity="0.52"/>
+  <text x="345" y="126" font-family="Outfit,sans-serif" font-size="7" font-weight="700" fill="#0A0A0A" opacity="0.60" letter-spacing="0.08em">HIGH</text>
+  <text x="345" y="137" font-family="Outfit,monospace" font-size="8" fill="#0A0A0A" opacity="0.44">DmlInLoop</text>
+
+  <!-- Bottom badge -->
+  <rect x="106" y="168" width="268" height="22" rx="11" fill="#0A0A0A" fill-opacity="0.85"/>
+  <text x="240" y="183" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" font-weight="700" fill="white" letter-spacing="0.05em">41 rules · ANTLR grammar · Pure Node.js</text>
+</svg>`,
+
 };
 
 /**
