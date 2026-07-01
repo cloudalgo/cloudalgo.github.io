@@ -9,7 +9,7 @@ externalUrl: "https://bridge.cloudalgo.com/"
 seoTitle: "AlgoBridge — Salesforce to PostgreSQL Sync Tool | CloudAlgo"
 version: "1.0"
 lastUpdated: "2026-05-01"
-order: 1
+order: 2
 features:
   - icon: "sync"
     title: "Bidirectional Sync"

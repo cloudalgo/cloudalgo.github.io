@@ -1,0 +1,122 @@
+<!-- DRAFT: template prepared for CloudAlgo. Review by qualified legal counsel before relying on it. -->
+---
+import Page from '../../../../layouts/Page.astro';
+
+const docs = [
+  {
+    title: 'Privacy Policy',
+    href: '/products/orgvitals/legal/privacy',
+    blurb: 'What stays on your device, what we collect (your Google account plus optional diagnostics and analytics), and your rights.',
+  },
+  {
+    title: 'Terms of Service',
+    href: '/products/orgvitals/legal/terms',
+    blurb: 'The licence and end-user agreement for OrgVitals — your responsibilities, warranties, liability, and governing law.',
+  },
+  {
+    title: 'Data Processing & Usage',
+    href: '/products/orgvitals/legal/data-processing',
+    blurb: 'How data flows, what stays local versus what leaves your device, and our sub-processors (Google, Anthropic, GitHub).',
+  },
+  {
+    title: 'Acceptable Use Policy',
+    href: '/products/orgvitals/legal/acceptable-use',
+    blurb: 'You may only scan Salesforce orgs you own, administer, or are explicitly authorised to assess.',
+  },
+];
+---
+<Page
+  title="OrgVitals Legal — CloudAlgo"
+  description="Legal documents for OrgVitals by CloudAlgo: Privacy Policy, Terms of Service, Data Processing & Usage, and Acceptable Use Policy."
+  canonicalURL="https://cloudalgo.com/products/orgvitals/legal"
+>
+
+<div class="lx-page">
+  <main class="lx-main">
+
+    <nav class="lx-breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Home</a>
+      <span>&rarr;</span>
+      <a href="/products">Products</a>
+      <span>&rarr;</span>
+      <span>OrgVitals Legal</span>
+    </nav>
+
+    <div class="lx-eyebrow">
+      <span class="lx-eyebrow-dot"></span>
+      Legal
+    </div>
+
+    <h1 class="lx-h1">OrgVitals Legal</h1>
+    <p class="lx-intro">
+      The documents that govern how OrgVitals by CloudAlgo works and how your data is handled.
+      CloudAlgo Private Limited &middot; Last updated: July 1, 2026.
+    </p>
+
+    <div class="lx-grid">
+      {docs.map((d) => (
+        <a class="lx-card" href={d.href}>
+          <span class="lx-card-title">{d.title}</span>
+          <span class="lx-card-blurb">{d.blurb}</span>
+          <span class="lx-card-arrow">Read &rarr;</span>
+        </a>
+      ))}
+    </div>
+
+    <p class="lx-contact">
+      Questions? Contact <a href="mailto:contact@cloudalgo.com">contact@cloudalgo.com</a> or visit the
+      <a href="/products/orgvitals">OrgVitals product page</a>.
+    </p>
+
+  </main>
+</div>
+
+</Page>
+
+<style>
+  .lx-page { background: var(--ca-page-bg); min-height: 60vh; }
+  .lx-main { max-width: 760px; margin: 0 auto; padding: 72px 24px 100px; }
+
+  .lx-breadcrumb {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+    font-size: 0.8125rem; color: var(--ca-secondary-black); margin-bottom: 32px;
+  }
+  .lx-breadcrumb a { color: var(--ca-secondary-black); text-decoration: none; transition: color 0.2s; }
+  .lx-breadcrumb a:hover { color: var(--ca-black); }
+  .lx-breadcrumb span { color: #b8b8b4; }
+
+  .lx-eyebrow {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--ca-secondary-black); margin-bottom: 14px;
+  }
+  .lx-eyebrow-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ca-black); }
+
+  .lx-h1 {
+    font-size: clamp(2rem, 5vw, 3rem); font-weight: 900; letter-spacing: -0.04em;
+    line-height: 1.1; color: var(--ca-black); margin-bottom: 12px;
+  }
+  .lx-intro { font-size: 1rem; color: var(--ca-secondary-black); line-height: 1.7; margin-bottom: 40px; max-width: 560px; }
+
+  .lx-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  @media (max-width: 600px) { .lx-grid { grid-template-columns: 1fr; } }
+
+  .lx-card {
+    display: flex; flex-direction: column; gap: 8px;
+    background: var(--ca-surface); border: 1px solid var(--ca-border);
+    border-radius: 12px; padding: 22px 24px; text-decoration: none;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .lx-card:hover { border-color: var(--ca-black); transform: translateY(-2px); }
+  .lx-card-title { font-size: 1.0625rem; font-weight: 700; color: var(--ca-black); letter-spacing: -0.01em; }
+  .lx-card-blurb { font-size: 0.875rem; color: var(--ca-secondary-black); line-height: 1.6; flex: 1; }
+  .lx-card-arrow { font-size: 0.8125rem; font-weight: 700; color: var(--ca-black); margin-top: 4px; }
+
+  .lx-contact { margin-top: 36px; font-size: 0.9375rem; color: var(--ca-secondary-black); line-height: 1.7; }
+  .lx-contact a { color: var(--ca-black); font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
+
+  @media (max-width: 600px) {
+    .lx-main { padding: 56px 16px 80px; }
+    .lx-h1 { font-size: 1.875rem; }
+  }
+</style>

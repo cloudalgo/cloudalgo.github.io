@@ -6,7 +6,7 @@ tagline: "Native Salesforce fundraising for nonprofits — campaigns, donations,
 excerpt: "Pledgivo is a 2GP managed package (namespace: pledgivo) that runs entirely inside your Salesforce org. Donations become Opportunity records. Campaigns stay on the standard Campaign object. No external platform, no data sync, no second subscription."
 icon: "pledgivo"
 seoTitle: "Pledgivo — Native Salesforce Fundraising App for Nonprofits | CloudAlgo"
-order: 2
+order: 3
 features:
   - icon: "objects"
     title: "Built on Standard Objects"

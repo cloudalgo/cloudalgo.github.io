@@ -1,0 +1,104 @@
+<!-- DRAFT: template prepared for CloudAlgo. Review by qualified legal counsel before relying on it. -->
+---
+import LegalDoc from '../../../../layouts/LegalDoc.astro';
+---
+<LegalDoc
+  docTitle="Privacy Policy"
+  description="How OrgVitals by CloudAlgo handles your data: your Salesforce metadata and scan results stay on your device; we store your Google account and optional diagnostics and analytics."
+  canonicalURL="https://cloudalgo.com/products/orgvitals/legal/privacy"
+  lastUpdated="July 1, 2026"
+>
+
+  <div class="legal-summary">
+    <div class="legal-summary-label">The short version</div>
+    <ul>
+      <li>OrgVitals connects to your Salesforce org <strong>read-only</strong>. It never writes to your org.</li>
+      <li>Your metadata snapshot, scan results, and findings detail stay in a <strong>local database on your device</strong>. We never receive them.</li>
+      <li>We do store your <strong>Google account profile</strong> (needed to sign in), plus <strong>optional</strong> crash diagnostics (on by default, you can turn off) and <strong>optional</strong> product analytics (off by default).</li>
+      <li>The "Ask Vita" AI assistant is <strong>opt-in and off by default</strong>. It is the only feature that sends org metadata off your device, and it does nothing until you add your own Anthropic API key and explicitly acknowledge the data sharing. When used, requests go from your device to Anthropic's Claude API — <strong>never to us</strong>. If you never enable Vita, nothing is ever sent to Anthropic.</li>
+    </ul>
+  </div>
+
+  <h2>1. Who we are</h2>
+  <p>OrgVitals is a desktop application published by <strong>CloudAlgo Private Limited</strong>, a company incorporated in India ("CloudAlgo", "we", "us"). For the personal data described in this policy that we control, CloudAlgo Private Limited, at our registered office in India, is the data controller.</p>
+  <p>For any privacy or data-protection question, contact us at <a href="mailto:contact@cloudalgo.com">contact@cloudalgo.com</a>.</p>
+
+  <h2>2. What stays on your device</h2>
+  <p>OrgVitals is a desktop application (built on Electron, available for macOS, Windows, and Linux) that scans the health of a Salesforce org you have already authenticated using the Salesforce CLI (<code>sf</code>). The following data is created and kept <strong>locally on your machine</strong>, and CloudAlgo cannot access it:</p>
+  <ul>
+    <li>The read-only metadata snapshot OrgVitals pulls from your org — Apex, Flows, profiles, permission sets, objects, fields, reports, dashboards, org limits, Health Check score, and test coverage. Access to your org is <strong>strictly read-only</strong>; OrgVitals never writes to it.</li>
+    <li>All scan results, finding-level detail, and scan history, which are stored in a <strong>local SQLite database</strong> on your device.</li>
+    <li>Your Anthropic API key (used for the optional Ask Vita assistant), which is stored <strong>encrypted</strong> on your device.</li>
+  </ul>
+  <p>Raw Salesforce metadata, Apex source, finding-level detail, scores, and your full scan history <strong>never leave your device</strong> and live only in the local database. OrgVitals does not upload your scan results, scores, findings, scan summaries, or your Salesforce org metadata or org identity to CloudAlgo, and there is no cross-device scan history.</p>
+
+  <h3>The "Ask Vita" assistant (opt-in, off by default)</h3>
+  <p>Ask Vita is the <strong>only</strong> feature in OrgVitals that sends org metadata off your device, and it is <strong>opt-in and off by default</strong>. Before any data is sent to Anthropic, you must both (a) supply your own Anthropic API key (stored encrypted locally) and (b) explicitly acknowledge, via a checkbox on the Vita screen, that your question and the org metadata Vita reads will be sent to Anthropic's Claude API to generate answers. A consent flag (<code>ov.consent.vita</code>) records this acknowledgement.</p>
+  <p>When Vita is enabled and used, your question plus the specific org metadata it reads — such as flows, fields, users, permissions, findings, and code — are sent directly to <strong>Anthropic's Claude API</strong> under your own API key to generate answers. This data goes to Anthropic, <strong>never to CloudAlgo</strong>. You, using your own API key, are the controller of that interaction, which is governed by Anthropic's terms and privacy policy. <strong>If you never enable Vita, nothing is ever sent to Anthropic.</strong></p>
+
+  <h2>3. What we collect and store</h2>
+  <p>A limited set of information does leave your device and reaches CloudAlgo through Google Firebase. It is summarised below.</p>
+
+  <table class="legal-table">
+    <thead>
+      <tr><th>Data</th><th>Fields</th><th>Purpose</th><th>Consent status</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Account profile</strong><br />(Firestore <code>profiles/&#123;uid&#125;</code>)</td>
+        <td><code>uid</code>, <code>email</code>, <code>name</code>, <code>picture</code> (Google profile photo URL), <code>createdAt</code></td>
+        <td>Authenticating you and maintaining your account. Written when you sign in with Google.</td>
+        <td><strong>Required</strong> — not optional; needed to use the app.</td>
+      </tr>
+      <tr>
+        <td><strong>Crash / error diagnostics</strong><br />(Firestore <code>app_errors</code>)</td>
+        <td><code>userId</code>, <code>severity</code>, <code>message</code>, <code>source</code>, <code>detail</code>, <code>timestamp</code></td>
+        <td>Diagnosing crashes and errors so we can fix and improve the app.</td>
+        <td><strong>Opt-out</strong> — on by default; disable it anytime in the in-app "Privacy &amp; Data" dialog.</td>
+      </tr>
+      <tr>
+        <td><strong>Product analytics</strong><br />(Firebase / Google Analytics)</td>
+        <td>Events such as <code>login</code>, <code>scan_complete</code> (grade, score, duration), <code>tab_view</code>, <code>org_connected</code>, <code>ask_query</code>, <code>global_search_opened</code>, plus standard analytics device data.</td>
+        <td>Understanding which features are used so we can prioritise improvements.</td>
+        <td><strong>Opt-in</strong> — off by default; collected only with your explicit consent.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>Both the diagnostics and analytics toggles can be changed at any time in the in-app "Privacy &amp; Data" dialog.</p>
+
+  <h2>4. Third-party services &amp; international transfers</h2>
+  <p>OrgVitals relies on a small number of third-party services. Because these providers operate globally, your data may be processed on servers outside India, including in the United States.</p>
+  <ul>
+    <li><strong>Google</strong> — provides sign-in (Google OAuth), Firebase Authentication and Firestore (account profile and diagnostics), and Google Analytics. Governed by Google's privacy policy.</li>
+    <li><strong>Anthropic</strong> — powers the "Ask Vita" assistant, which is opt-in and off by default. Only if you enable Vita (by adding your own key and acknowledging the data sharing) and then use it, your question and the specific org metadata Vita reads are sent to Anthropic's Claude API <strong>under your own Anthropic API key</strong>, never to CloudAlgo. You are the controller of that interaction, which is governed by Anthropic's terms and privacy policy.</li>
+    <li><strong>GitHub</strong> — the app checks GitHub Releases for auto-updates, which involves standard request metadata (such as your IP address and current app version).</li>
+  </ul>
+  <p>OrgVitals also reads a remote configuration document (via Firebase) to display maintenance or deprecation notices. This is a read on our side and does not send your data.</p>
+
+  <h2>5. Legal bases</h2>
+  <p>We process personal data in line with India's Digital Personal Data Protection Act, 2023 (DPDP Act). Our legal bases are:</p>
+  <ul>
+    <li><strong>Consent</strong> — for your account profile (given when you sign in) and for product analytics (explicit opt-in).</li>
+    <li><strong>Legitimate interest</strong> — for crash and error diagnostics, to keep the app stable and secure. You can opt out at any time.</li>
+  </ul>
+
+  <h2>6. Data retention</h2>
+  <p>Your local database and encrypted API key remain on your device until you delete them or uninstall the app. We retain your account profile for as long as your account is active. Diagnostics and analytics data are retained only for as long as needed for the purposes above, after which they are deleted or aggregated. You may request deletion of your account data at any time.</p>
+
+  <h2>7. Security</h2>
+  <p>Your Anthropic API key is stored encrypted on your device. Data in transit to Google and Anthropic is protected by TLS. Access to the data we hold in Firebase is restricted. Because your metadata and scan results never leave your device, they are not exposed to any server-side breach on our side.</p>
+
+  <h2>8. Your rights</h2>
+  <p>Subject to applicable law, you may request access to, correction of, or erasure of the personal data we hold about you, and you may withdraw consent. Many controls are available directly in the app: the "Privacy &amp; Data" dialog lets you turn diagnostics and analytics on or off, and your local data can be removed from your device at any time. For requests we handle, or to withdraw consent for our processing, contact <a href="mailto:contact@cloudalgo.com">contact@cloudalgo.com</a>.</p>
+
+  <h2>9. Children</h2>
+  <p>OrgVitals is a professional tool intended for business users and is not directed to individuals under 18. We do not knowingly collect personal data from children.</p>
+
+  <h2>10. Changes to this policy</h2>
+  <p>We may update this policy from time to time. Material changes will be reflected here with a revised "Last updated" date. Continued use of OrgVitals after a change constitutes acceptance of the updated policy.</p>
+
+  <h2>11. Contact</h2>
+  <p>Questions about this Privacy Policy or your data can be sent to <a href="mailto:contact@cloudalgo.com">contact@cloudalgo.com</a>.</p>
+
+</LegalDoc>

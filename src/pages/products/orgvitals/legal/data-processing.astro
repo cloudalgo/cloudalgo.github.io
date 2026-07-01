@@ -1,0 +1,88 @@
+<!-- DRAFT: template prepared for CloudAlgo. Review by qualified legal counsel before relying on it. -->
+---
+import LegalDoc from '../../../../layouts/LegalDoc.astro';
+---
+<LegalDoc
+  docTitle="Data Processing & Usage"
+  description="A clear explanation of how OrgVitals by CloudAlgo processes data, what stays on your device versus what leaves it, and the sub-processors involved."
+  canonicalURL="https://cloudalgo.com/products/orgvitals/legal/data-processing"
+  lastUpdated="July 1, 2026"
+>
+
+  <div class="legal-summary">
+    <div class="legal-summary-label">The short version</div>
+    <ul>
+      <li>Your Salesforce metadata and scan results are processed <strong>entirely on your device</strong>.</li>
+      <li>Only your <strong>account profile</strong>, optional <strong>diagnostics</strong>, and optional <strong>analytics</strong> leave your device, via Google Firebase.</li>
+      <li>Your findings, scores, and full scan history are stored <strong>only</strong> in the local database — none of it is uploaded, and there is no cross-device history.</li>
+      <li>The Ask Vita assistant is <strong>opt-in and off by default</strong> — the only feature that sends org metadata off the device, and only to Anthropic under your own key, never to CloudAlgo. GitHub is involved only for update checks.</li>
+    </ul>
+  </div>
+
+  <h2>1. How data flows</h2>
+  <p>OrgVitals runs as a desktop application on your machine. When you run a scan, it uses your existing Salesforce CLI (<code>sf</code>) authentication to pull a <strong>read-only</strong> metadata snapshot from your org and stores it, along with all findings and scan history, in a <strong>local SQLite database</strong> on your device. This processing happens locally. CloudAlgo does not receive your metadata, Apex source, findings, or org identity.</p>
+  <p>Your findings, scores, and full scan history are stored <strong>only</strong> in this local database — none of it is uploaded to CloudAlgo, and there is no cross-device scan history.</p>
+  <p>Separately, a small amount of account and telemetry data is sent to CloudAlgo through Google Firebase. The "Ask Vita" assistant is <strong>opt-in and off by default</strong>: it is the only feature that sends org metadata off your device, and it does nothing until you add your own Anthropic API key and explicitly acknowledge (via a checkbox, recorded by the <code>ov.consent.vita</code> flag) that your question and the org metadata Vita reads will be sent to Anthropic's Claude API. When enabled and used, that data goes directly from your device to Anthropic under your own API key, never to CloudAlgo. If you never enable Vita, nothing is ever sent to Anthropic.</p>
+
+  <h2>2. Stays on your device vs. leaves your device</h2>
+  <table class="legal-table">
+    <thead>
+      <tr><th>Stays on your device</th><th>Leaves your device</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Read-only metadata snapshot (Apex, Flows, profiles, permission sets, objects, fields, reports, dashboards, limits, Health Check score, test coverage)</td>
+        <td>Account profile (<code>uid</code>, <code>email</code>, <code>name</code>, <code>picture</code>, <code>createdAt</code>) — sent to Firebase, required</td>
+      </tr>
+      <tr>
+        <td>Scan results, scores, finding-level detail, and full scan history (local SQLite database) — never uploaded, no cross-device history</td>
+        <td>Crash / error diagnostics (<code>app_errors</code>) — sent to Firebase, opt-out (on by default)</td>
+      </tr>
+      <tr>
+        <td>Your Anthropic API key (stored encrypted)</td>
+        <td>Product analytics events and device data — sent to Firebase / Google Analytics, opt-in (off by default)</td>
+      </tr>
+      <tr>
+        <td>&mdash;</td>
+        <td>Ask Vita requests (your question + the org metadata Vita reads: flows, fields, users, permissions, findings, and code) — sent to Anthropic under your own key, only if you enable Vita (opt-in, off by default) and use it; never to CloudAlgo</td>
+      </tr>
+    </tbody>
+  </table>
+  <p>OrgVitals does <strong>not</strong> upload your scan results, scores, findings, scan summaries, scan history, or your Salesforce org metadata or identity to CloudAlgo, and there is no cross-device history.</p>
+
+  <h2>3. Sub-processors</h2>
+  <p>We use the following sub-processors to provide OrgVitals. Because these providers operate globally, the data they handle may be processed outside India.</p>
+
+  <table class="legal-table">
+    <thead>
+      <tr><th>Sub-processor</th><th>Purpose</th><th>Data</th><th>Location</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Google / Firebase</strong></td>
+        <td>Sign-in (OAuth), authentication, diagnostics storage, and analytics</td>
+        <td>Account profile, crash/error logs, and product analytics events</td>
+        <td>United States / global</td>
+      </tr>
+      <tr>
+        <td><strong>Anthropic</strong></td>
+        <td>"Ask Vita" AI assistant (opt-in, off by default), only if you enable and use it, under your own API key</td>
+        <td>Your question and the org metadata Vita reads (flows, fields, users, permissions, findings, code)</td>
+        <td>United States</td>
+      </tr>
+      <tr>
+        <td><strong>GitHub</strong></td>
+        <td>Checking GitHub Releases for application auto-updates</td>
+        <td>Standard request metadata (e.g. IP address, current app version)</td>
+        <td>United States</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>4. International transfers</h2>
+  <p>Data that leaves your device may be transferred to and processed in countries outside India, including the United States, where these sub-processors operate. We rely on the sub-processors' own safeguards and contractual commitments for such transfers, consistent with applicable law.</p>
+
+  <h2>5. Your controls and rights</h2>
+  <p>You can turn crash diagnostics off and product analytics on or off at any time in the in-app "Privacy &amp; Data" dialog, and you can remove your local data by deleting it or uninstalling the app. For your rights of access, correction, erasure, and consent withdrawal, and for how we handle the data we control, see the <a href="/products/orgvitals/legal/privacy">Privacy Policy</a> or contact <a href="mailto:contact@cloudalgo.com">contact@cloudalgo.com</a>.</p>
+
+</LegalDoc>

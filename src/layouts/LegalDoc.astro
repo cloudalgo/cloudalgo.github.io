@@ -1,0 +1,340 @@
+<!-- DRAFT: template prepared for CloudAlgo. Review by qualified legal counsel before relying on it. -->
+---
+// src/layouts/LegalDoc.astro
+// Shared layout for OrgVitals legal documents. Wraps Page.astro.
+import Page from './Page.astro';
+
+export interface Props {
+  docTitle: string;
+  description: string;
+  canonicalURL: string;
+  lastUpdated: string;
+}
+
+const { docTitle, description, canonicalURL, lastUpdated } = Astro.props;
+
+const otherDocs = [
+  { title: 'Privacy Policy',           href: '/products/orgvitals/legal/privacy' },
+  { title: 'Terms of Service',         href: '/products/orgvitals/legal/terms' },
+  { title: 'Data Processing & Usage',  href: '/products/orgvitals/legal/data-processing' },
+  { title: 'Acceptable Use Policy',    href: '/products/orgvitals/legal/acceptable-use' },
+].filter((d) => d.title !== docTitle);
+---
+
+<Page
+  title={`${docTitle} — OrgVitals by CloudAlgo`}
+  description={description}
+  canonicalURL={canonicalURL}
+>
+
+<div class="ld-header">
+  <div class="container">
+    <nav class="ld-breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Home</a>
+      <span>&rarr;</span>
+      <a href="/products">Products</a>
+      <span>&rarr;</span>
+      <a href="/products/orgvitals">OrgVitals</a>
+      <span>&rarr;</span>
+      <span aria-current="page">{docTitle}</span>
+    </nav>
+
+    <div class="ld-eyebrow">
+      <span class="ld-eyebrow-dot"></span>
+      Legal
+    </div>
+
+    <h1 class="ld-h1">{docTitle}</h1>
+    <p class="ld-meta">
+      OrgVitals by CloudAlgo &nbsp;&middot;&nbsp; CloudAlgo Private Limited &nbsp;&middot;&nbsp; Last updated: {lastUpdated}
+    </p>
+  </div>
+</div>
+
+<div class="ld-body-section">
+  <div class="container ld-grid">
+    <article class="ld-body">
+      <slot />
+    </article>
+
+    <aside class="ld-side">
+      <nav class="ld-footer-nav" aria-label="More legal documents">
+        <div class="ld-footer-label">More from OrgVitals Legal</div>
+        <ul>
+          {otherDocs.map((d) => (
+            <li><a href={d.href}>{d.title} &rarr;</a></li>
+          ))}
+          <li><a href="/products/orgvitals">OrgVitals product page &rarr;</a></li>
+        </ul>
+      </nav>
+    </aside>
+  </div>
+</div>
+
+</Page>
+
+<style>
+  .ld-header {
+    background: var(--ca-surface);
+    border-bottom: 1px solid var(--ca-border);
+    padding: 7rem 0 3rem;
+  }
+  .ld-body-section {
+    background: var(--ca-page-bg);
+    padding: 3.5rem 0 5rem;
+  }
+  /* Two-column: readable article left, sticky related-docs nav right */
+  .ld-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 260px;
+    gap: 4rem;
+    align-items: start;
+  }
+  .ld-body {
+    max-width: 760px;
+  }
+  .ld-side {
+    position: sticky;
+    top: 96px;
+  }
+
+  /* ── Breadcrumb ── */
+  .ld-breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.8125rem;
+    color: var(--ca-secondary-black);
+    margin-bottom: 32px;
+  }
+  .ld-breadcrumb a {
+    color: var(--ca-secondary-black);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .ld-breadcrumb a:hover {
+    color: var(--ca-black);
+  }
+  .ld-breadcrumb span {
+    color: #b8b8b4;
+  }
+
+  /* ── Eyebrow ── */
+  .ld-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ca-secondary-black);
+    margin-bottom: 14px;
+  }
+  .ld-eyebrow-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--ca-black);
+  }
+
+  /* ── Heading + meta ── */
+  .ld-h1 {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    line-height: 1.1;
+    color: var(--ca-black);
+    margin-bottom: 12px;
+  }
+  .ld-meta {
+    font-size: 0.875rem;
+    color: #8a8a8a;
+    margin-bottom: 0;
+  }
+
+  /* ── Slotted body typography ── */
+  .ld-body :global(.legal-summary) {
+    background: var(--ca-black);
+    border-radius: 16px;
+    padding: 26px 30px;
+    margin: 0 0 40px;
+  }
+  .ld-body :global(.legal-summary .legal-summary-label) {
+    font-size: 0.6875rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.45);
+    margin-bottom: 14px;
+  }
+  .ld-body :global(.legal-summary p) {
+    color: rgba(255, 255, 255, 0.88);
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    margin: 0 0 10px;
+  }
+  .ld-body :global(.legal-summary p:last-child) {
+    margin-bottom: 0;
+  }
+  .ld-body :global(.legal-summary strong) {
+    color: #fff;
+    font-weight: 700;
+  }
+  .ld-body :global(.legal-summary ul) {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .ld-body :global(.legal-summary li) {
+    color: rgba(255, 255, 255, 0.88);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    padding-left: 18px;
+    position: relative;
+  }
+  .ld-body :global(.legal-summary li::before) {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 9px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+  }
+
+  .ld-body :global(h2) {
+    font-size: 1.375rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--ca-black);
+    margin: 40px 0 14px;
+    padding-top: 8px;
+  }
+  .ld-body :global(h2:first-child) {
+    margin-top: 0;
+  }
+  .ld-body :global(h3) {
+    font-size: 1.0625rem;
+    font-weight: 700;
+    color: var(--ca-black);
+    margin: 26px 0 10px;
+  }
+  .ld-body :global(p) {
+    font-size: 0.9375rem;
+    color: var(--ca-secondary-black);
+    line-height: 1.75;
+    margin: 0 0 14px;
+  }
+  .ld-body :global(ul),
+  .ld-body :global(ol) {
+    margin: 0 0 16px;
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .ld-body :global(li) {
+    font-size: 0.9375rem;
+    color: var(--ca-secondary-black);
+    line-height: 1.7;
+  }
+  .ld-body :global(strong) {
+    color: var(--ca-black);
+    font-weight: 600;
+  }
+  .ld-body :global(a) {
+    color: var(--ca-black);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .ld-body :global(a:hover) {
+    opacity: 0.75;
+  }
+
+  /* ── Legal table ── */
+  .ld-body :global(.legal-table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 4px 0 22px;
+    font-size: 0.875rem;
+    background: var(--ca-surface);
+    border: 1px solid var(--ca-border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .ld-body :global(.legal-table thead th) {
+    background: var(--ca-black);
+    color: #fff;
+    text-align: left;
+    font-weight: 700;
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 12px 14px;
+  }
+  .ld-body :global(.legal-table td) {
+    padding: 12px 14px;
+    border-top: 1px solid var(--ca-border);
+    color: var(--ca-secondary-black);
+    line-height: 1.6;
+    vertical-align: top;
+  }
+  .ld-body :global(.legal-table td strong) {
+    color: var(--ca-black);
+  }
+
+  /* ── Footer nav ── */
+  .ld-footer-nav {
+    margin-top: 0;
+    padding: 24px 28px;
+    background: var(--ca-surface);
+    border: 1px solid var(--ca-border);
+    border-radius: 12px;
+  }
+  .ld-footer-label {
+    font-size: 0.6875rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #8a8a8a;
+    margin-bottom: 14px;
+  }
+  .ld-footer-nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .ld-footer-nav a {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--ca-black);
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+  .ld-footer-nav a:hover {
+    opacity: 0.7;
+  }
+
+  @media (max-width: 900px) {
+    .ld-grid { grid-template-columns: 1fr; gap: 2.75rem; }
+    .ld-side { position: static; max-width: 760px; }
+    .ld-body { max-width: 760px; }
+  }
+  @media (max-width: 600px) {
+    .ld-header { padding: 5.5rem 0 2.25rem; }
+    .ld-body-section { padding: 2.5rem 0 4rem; }
+    .ld-h1 { font-size: 1.875rem; }
+    .ld-body :global(.legal-summary) { padding: 20px; }
+    .ld-body :global(.legal-table) { display: block; overflow-x: auto; }
+  }
+</style>

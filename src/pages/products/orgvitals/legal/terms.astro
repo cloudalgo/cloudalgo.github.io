@@ -1,0 +1,71 @@
+<!-- DRAFT: template prepared for CloudAlgo. Review by qualified legal counsel before relying on it. -->
+---
+import LegalDoc from '../../../../layouts/LegalDoc.astro';
+---
+<LegalDoc
+  docTitle="Terms of Service"
+  description="The Terms of Service and end-user licence agreement governing your use of OrgVitals by CloudAlgo, a read-only Salesforce org health scanner."
+  canonicalURL="https://cloudalgo.com/products/orgvitals/legal/terms"
+  lastUpdated="July 1, 2026"
+>
+
+  <div class="legal-summary">
+    <div class="legal-summary-label">The short version</div>
+    <ul>
+      <li>OrgVitals is currently <strong>free and in Preview</strong>. You accept these terms through the in-app consent gate before you can use it.</li>
+      <li>You may only scan Salesforce orgs you are <strong>authorised</strong> to assess, and you are responsible for your own credentials.</li>
+      <li>OrgVitals is a <strong>read-only, informational</strong> tool. Any remediation you choose to run is your decision and your responsibility.</li>
+      <li>The app is provided <strong>"as is"</strong>, with liability limited to the maximum extent permitted by Indian law. These terms are governed by the law of India.</li>
+    </ul>
+  </div>
+
+  <h2>1. Acceptance</h2>
+  <p>These Terms of Service ("Terms") form a binding agreement between you and <strong>CloudAlgo Private Limited</strong> ("CloudAlgo", "we", "us"). You accept them through the in-app consent gate, which you must complete before using OrgVitals. Acceptance is mandatory; if you do not agree, do not use the app.</p>
+
+  <h2>2. Licence grant</h2>
+  <p>Subject to these Terms, CloudAlgo grants you a limited, non-exclusive, non-transferable, revocable licence to install and use OrgVitals for your own internal business purposes. OrgVitals is currently offered free of charge as a Preview release. You may not:</p>
+  <ul>
+    <li>resell, sublicense, rent, or otherwise commercially redistribute the app;</li>
+    <li>reverse engineer, decompile, or disassemble the app, except to the extent that such restriction is prohibited by applicable law;</li>
+    <li>remove or alter any proprietary notices; or</li>
+    <li>use the app to build or assist in building a competing product.</li>
+  </ul>
+  <p>As a Preview release, the app may change, be limited, or be discontinued, and may contain defects.</p>
+
+  <h2>3. Your responsibilities &amp; authorization</h2>
+  <p>By connecting a Salesforce org to OrgVitals, you represent and warrant that you own, administer, or have explicit written authorization to access and scan that org. You are solely responsible for:</p>
+  <ul>
+    <li>safeguarding the Salesforce CLI authentication and any credentials used to connect an org;</li>
+    <li>safeguarding your Anthropic API key used for the "Ask Vita" assistant; and</li>
+    <li>complying with Salesforce's terms and Anthropic's terms when you use those services through OrgVitals.</li>
+  </ul>
+  <p>You are responsible for all activity carried out through your account and credentials.</p>
+
+  <h2>4. Read-only tool; your decisions</h2>
+  <p>OrgVitals connects to your Salesforce org on a strictly read-only basis and never writes to it. Its findings, grades, and recommendations are <strong>informational only</strong>. Any remediation, configuration change, or cleanup package that you generate, export, or deploy based on OrgVitals output is made at your own discretion, risk, and responsibility. You should review and test any such change before applying it to a production environment.</p>
+
+  <h2>5. Third-party services</h2>
+  <p>OrgVitals relies on third-party services, including Google (sign-in, Firebase, Analytics), Anthropic (the Ask Vita assistant), and GitHub (update checks). The Ask Vita assistant is opt-in and off by default: it is the only feature that sends org metadata off your device, and it does nothing until you add your own Anthropic API key and explicitly acknowledge the data sharing. When enabled and used, your question and the org metadata Vita reads are sent to Anthropic under your own API key, never to CloudAlgo. Your use of those services through OrgVitals is subject to their respective terms and policies. CloudAlgo is not responsible for third-party services.</p>
+
+  <h2>6. Disclaimer of warranties</h2>
+  <p>OrgVitals is provided <strong>"as is"</strong> and <strong>"as available"</strong>, without warranties of any kind, whether express, implied, or statutory, including any implied warranties of merchantability, fitness for a particular purpose, and non-infringement. We do not warrant that the app will be uninterrupted or error-free, or that its findings are accurate, complete, or current. OrgVitals is <strong>not a substitute for a professional security, compliance, or architecture review</strong> by a qualified expert.</p>
+
+  <h2>7. Limitation of liability</h2>
+  <p>To the maximum extent permitted by applicable Indian law, CloudAlgo shall not be liable for any indirect, incidental, special, consequential, exemplary, or punitive damages, or for any loss of profits, data, or goodwill, arising out of or related to your use of OrgVitals. To the maximum extent permitted by law, CloudAlgo's total aggregate liability for any claim arising out of or relating to the app shall not exceed the greater of the amount you paid us for the app in the twelve months before the claim (which, for a free Preview release, is zero) or INR 1,000.</p>
+
+  <h2>8. Indemnification</h2>
+  <p>You agree to indemnify and hold harmless CloudAlgo and its officers, employees, and agents from any claims, liabilities, damages, and expenses (including reasonable legal fees) arising out of your misuse of OrgVitals, your breach of these Terms, or your scanning of any org you were not authorised to assess.</p>
+
+  <h2>9. Suspension &amp; termination</h2>
+  <p>We may suspend or terminate your access to OrgVitals, with or without notice, if you breach these Terms or the Acceptable Use Policy, or where necessary to protect the service or other users. You may stop using the app at any time by uninstalling it. Provisions that by their nature should survive termination (including disclaimers, limitation of liability, and indemnification) will survive.</p>
+
+  <h2>10. Changes to these Terms</h2>
+  <p>We may update these Terms from time to time. Material changes will be reflected here with a revised "Last updated" date and, where appropriate, surfaced through the in-app consent gate. Continued use after a change constitutes acceptance.</p>
+
+  <h2>11. Governing law &amp; jurisdiction</h2>
+  <p>These Terms are governed by the laws of India, without regard to conflict-of-laws principles. Any dispute arising out of or relating to these Terms or OrgVitals is subject to the exclusive jurisdiction of the courts of competent jurisdiction in India.</p>
+
+  <h2>12. Contact</h2>
+  <p>Questions about these Terms can be sent to <a href="mailto:contact@cloudalgo.com">contact@cloudalgo.com</a>.</p>
+
+</LegalDoc>

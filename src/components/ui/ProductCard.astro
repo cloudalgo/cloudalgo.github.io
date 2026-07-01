@@ -15,7 +15,7 @@ const statusLabel = (s: string) =>
   s === 'ga' ? 'Generally Available' : s === 'preview' ? 'Preview' : 'Beta';
 const isEarlyAccess = data.status === 'preview' || data.status === 'beta';
 const typeLabel = (t: string) =>
-  t === 'salesforce-app' ? 'Salesforce App' : t === 'mobile-app' ? 'Mobile App' : 'Integration';
+  t === 'salesforce-app' ? 'Salesforce App' : t === 'mobile-app' ? 'Mobile App' : t === 'desktop-app' ? 'Desktop App' : 'Integration';
 const orderNum = String(data.order).padStart(2, '0');
 
 // Small icon SVGs for dark variant cards
@@ -46,6 +46,14 @@ const productIcons: Record<string, string> = {
   'pledgivo': `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M12 21C12 21 3 14.5 3 8.5C3 6 5 4 7.5 4C9.24 4 10.75 4.96 11.56 6.35C11.75 6.67 12.25 6.67 12.44 6.35C13.25 4.96 14.76 4 16.5 4C19 4 21 6 21 8.5C21 14.5 12 21 12 21Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
     <path d="M8 11 L10.5 13.5 L16 8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>`,
+  'orgvitals': `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="2" y="3" width="20" height="16" rx="2.5" stroke="currentColor" stroke-width="1.5"/>
+    <path d="M2 7 L22 7" stroke="currentColor" stroke-width="1.5"/>
+    <circle cx="4.6" cy="5" r="0.7" fill="currentColor"/>
+    <circle cx="6.8" cy="5" r="0.7" fill="currentColor"/>
+    <path d="M5 13 L8.5 13 L10.5 10 L13 16 L15 13 L19 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M8.5 22 L15.5 22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
   </svg>`,
 };
 const iconSvg = productIcons[slug] ?? productIcons['cloudalgo-flow-audit'];
@@ -122,7 +130,7 @@ const iconSvg = productIcons[slug] ?? productIcons['cloudalgo-flow-audit'];
         </a>
         {data.externalUrl ? (
           <a href={data.externalUrl} target="_blank" rel="noopener noreferrer" class="btn btn-outline" style="font-size:0.8125rem;padding:0.5rem 1.25rem;">
-            Get started ↗
+            {data.type === 'desktop-app' ? 'Download ↗' : 'Get started ↗'}
           </a>
         ) : (
           <a href="/contact" class="btn btn-outline" style="font-size:0.8125rem;padding:0.5rem 1.25rem;">

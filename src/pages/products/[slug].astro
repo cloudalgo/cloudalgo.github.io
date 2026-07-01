@@ -22,6 +22,7 @@ const osMap: Record<string, string> = {
   'salesforce-app': 'Salesforce',
   'mobile-app':     'iOS, Android',
   'integration':    'Linux, Docker',
+  'desktop-app':    'macOS, Windows, Linux',
 };
 
 const softwareApp: Record<string, unknown> = {
@@ -58,7 +59,7 @@ const productSchema: object[] = [
 const statusLabel = (s: string) =>
   s === 'ga' ? 'Generally Available' : s === 'preview' ? 'Preview' : 'Beta';
 const typeLabel = (t: string) =>
-  t === 'salesforce-app' ? 'Salesforce App' : t === 'mobile-app' ? 'Flutter App · iOS & Android' : 'Integration Connector';
+  t === 'salesforce-app' ? 'Salesforce App' : t === 'mobile-app' ? 'Flutter App · iOS & Android' : t === 'desktop-app' ? 'Desktop App · Salesforce' : 'Integration Connector';
 
 const illustrations: Record<string, string> = {
   'algobridge': `<svg viewBox="0 0 460 380" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:460px;height:auto;">
@@ -243,6 +244,49 @@ const illustrations: Record<string, string> = {
     <rect x="78" y="314" width="304" height="28" rx="8" fill="#0A0A0A" fill-opacity="0.05" stroke="#0A0A0A" stroke-width="1.5" opacity="0.45"/>
     <text x="230" y="332" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" font-weight="700" fill="#0A0A0A" opacity="0.65">NPSP Optional · Person Account Ready</text>
   </svg>`,
+  'orgvitals': `<svg viewBox="0 0 460 380" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:460px;height:auto;">
+    <!-- Desktop app window -->
+    <rect x="70" y="54" width="320" height="228" rx="12" stroke="#0A0A0A" stroke-width="2.5"/>
+    <rect x="70" y="54" width="320" height="36" rx="12" fill="#0A0A0A" fill-opacity="0.05"/>
+    <path d="M70 90 L390 90" stroke="#0A0A0A" stroke-width="1.5" opacity="0.25"/>
+    <!-- Title bar -->
+    <circle cx="90" cy="72" r="4" fill="#0A0A0A" opacity="0.25"/>
+    <circle cx="104" cy="72" r="4" fill="#0A0A0A" opacity="0.4"/>
+    <circle cx="118" cy="72" r="4" fill="#0A0A0A" opacity="0.55"/>
+    <text x="150" y="77" font-family="Outfit,sans-serif" font-size="13" font-weight="800" fill="#0A0A0A">OrgVitals</text>
+    <text x="374" y="77" text-anchor="end" font-family="Outfit,sans-serif" font-size="9" fill="#0A0A0A" opacity="0.5" letter-spacing="0.06em">HEALTH REPORT</text>
+    <!-- Left: grade dial -->
+    <text x="142" y="118" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8" font-weight="700" fill="#0A0A0A" opacity="0.5" letter-spacing="0.1em">OVERALL GRADE</text>
+    <circle cx="142" cy="180" r="46" stroke="#0A0A0A" stroke-width="6" fill="none" opacity="0.1"/>
+    <circle cx="142" cy="180" r="46" stroke="#0A0A0A" stroke-width="6" fill="none" stroke-dasharray="225 289" stroke-linecap="round" transform="rotate(-90 142 180)" opacity="0.7"/>
+    <text x="142" y="196" text-anchor="middle" font-family="Outfit,sans-serif" font-size="46" font-weight="900" fill="#0A0A0A">B</text>
+    <text x="142" y="250" text-anchor="middle" font-family="Outfit,sans-serif" font-size="12" font-weight="700" fill="#0A0A0A" opacity="0.6">78 / 100</text>
+    <!-- Right: category score bars -->
+    <text x="210" y="118" font-family="Outfit,sans-serif" font-size="8" font-weight="700" fill="#0A0A0A" opacity="0.55" letter-spacing="0.05em">SECURITY</text>
+    <rect x="210" y="124" width="168" height="8" rx="4" fill="#0A0A0A" opacity="0.08"/>
+    <rect x="210" y="124" width="100" height="8" rx="4" fill="#0A0A0A" opacity="0.6"/>
+    <text x="210" y="150" font-family="Outfit,sans-serif" font-size="8" font-weight="700" fill="#0A0A0A" opacity="0.55" letter-spacing="0.05em">CODE QUALITY</text>
+    <rect x="210" y="156" width="168" height="8" rx="4" fill="#0A0A0A" opacity="0.08"/>
+    <rect x="210" y="156" width="132" height="8" rx="4" fill="#0A0A0A" opacity="0.6"/>
+    <text x="210" y="182" font-family="Outfit,sans-serif" font-size="8" font-weight="700" fill="#0A0A0A" opacity="0.55" letter-spacing="0.05em">AUTOMATION</text>
+    <rect x="210" y="188" width="168" height="8" rx="4" fill="#0A0A0A" opacity="0.08"/>
+    <rect x="210" y="188" width="150" height="8" rx="4" fill="#0A0A0A" opacity="0.6"/>
+    <text x="210" y="214" font-family="Outfit,sans-serif" font-size="8" font-weight="700" fill="#0A0A0A" opacity="0.55" letter-spacing="0.05em">TECH DEBT</text>
+    <rect x="210" y="220" width="168" height="8" rx="4" fill="#0A0A0A" opacity="0.08"/>
+    <rect x="210" y="220" width="112" height="8" rx="4" fill="#0A0A0A" opacity="0.6"/>
+    <text x="210" y="246" font-family="Outfit,sans-serif" font-size="8" font-weight="700" fill="#0A0A0A" opacity="0.55" letter-spacing="0.05em">PERFORMANCE</text>
+    <rect x="210" y="252" width="168" height="8" rx="4" fill="#0A0A0A" opacity="0.08"/>
+    <rect x="210" y="252" width="160" height="8" rx="4" fill="#0A0A0A" opacity="0.6"/>
+    <!-- In-window footer -->
+    <text x="230" y="274" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" font-weight="600" fill="#0A0A0A" opacity="0.4">49 scanners · read-only · runs locally</text>
+    <!-- Floating badges -->
+    <rect x="76" y="302" width="106" height="28" rx="100" fill="#fff" stroke="#0A0A0A" stroke-width="1.5" opacity="0.75"/>
+    <text x="129" y="320" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" font-weight="700" fill="#0A0A0A" opacity="0.85">49 Scanners</text>
+    <rect x="190" y="302" width="86" height="28" rx="100" fill="#0A0A0A" opacity="0.85"/>
+    <text x="233" y="320" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" font-weight="700" fill="#fff">Read-only</text>
+    <rect x="284" y="302" width="100" height="28" rx="100" fill="#fff" stroke="#0A0A0A" stroke-width="1.5" opacity="0.75"/>
+    <text x="334" y="320" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" font-weight="700" fill="#0A0A0A" opacity="0.85">Local-first</text>
+  </svg>`,
 };
 const illustration = illustrations[slug] ?? '';
 
@@ -293,16 +337,17 @@ const hasPricingOrReqs = (data.pricing && data.pricing.length > 0) ||
           <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
             {data.externalUrl ? (
               <a href={data.externalUrl} target="_blank" rel="noopener noreferrer" class="btn btn-primary">
-                {data.type === 'mobile-app' ? 'Get the App ↗' : 'Get started ↗'}
+                {data.type === 'mobile-app' ? 'Get the App ↗' : data.type === 'desktop-app' ? 'Download ↗' : 'Get started ↗'}
               </a>
             ) : (
               <a href="/contact" class="btn btn-primary">Join waitlist &rarr;</a>
             )}
-            {data.type !== 'mobile-app' && (
-              <a href="/contact" class="btn btn-outline">Book a demo</a>
-            )}
-            {data.type === 'mobile-app' && (
+            {data.type === 'mobile-app' ? (
               <a href={`/apps/insurealgo/privacy`} class="btn btn-outline">Privacy Policy</a>
+            ) : data.issuesUrl ? (
+              <a href={data.issuesUrl} target="_blank" rel="noopener noreferrer" class="btn btn-outline">Log an issue ↗</a>
+            ) : (
+              <a href="/contact" class="btn btn-outline">Book a demo</a>
             )}
           </div>
         </div>
@@ -360,7 +405,7 @@ const hasPricingOrReqs = (data.pricing && data.pricing.length > 0) ||
               <dl class="glance-list">
                 <div class="glance-row">
                   <dt>Type</dt>
-                  <dd>{data.type === 'salesforce-app' ? 'Salesforce AppExchange App' : data.type === 'mobile-app' ? 'Flutter Mobile App' : 'Integration Connector'}</dd>
+                  <dd>{data.type === 'salesforce-app' ? 'Salesforce AppExchange App' : data.type === 'mobile-app' ? 'Flutter Mobile App' : data.type === 'desktop-app' ? 'Desktop App (macOS · Windows · Linux)' : 'Integration Connector'}</dd>
                 </div>
                 <div class="glance-row">
                   <dt>Status</dt>
@@ -520,6 +565,22 @@ const hasPricingOrReqs = (data.pricing && data.pricing.length > 0) ||
     </section>
   )}
 
+  <!-- ⑦b Legal & privacy links — white bg (only if legal links are set) -->
+  {data.legal && data.legal.length > 0 && (
+    <section style="background:#fff;padding:3rem 0;border-bottom:1px solid #E0E0DC;">
+      <div class="container">
+        <p class="section-label">Legal &amp; Privacy</p>
+        <div style="display:flex;flex-wrap:wrap;gap:0.75rem;margin-top:1rem;">
+          {data.legal.map(l => (
+            <a href={l.href} class="legal-link" style="display:inline-flex;align-items:center;gap:0.4rem;font-size:0.875rem;font-weight:600;color:#0A0A0A;border:1px solid #E0E0DC;border-radius:100px;padding:0.5rem 1.1rem;text-decoration:none;">
+              {l.label} <span aria-hidden="true">&rarr;</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
   <!-- ⑧ CTA strip — dark bg -->
   <section style="background:#0A0A0A;padding:4rem 0;">
     <div class="container">
@@ -535,7 +596,7 @@ const hasPricingOrReqs = (data.pricing && data.pricing.length > 0) ||
         <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
           {data.externalUrl ? (
             <a href={data.externalUrl} target="_blank" rel="noopener noreferrer" class="btn btn-light">
-              {data.type === 'mobile-app' ? 'Get the App ↗' : 'Get started ↗'}
+              {data.type === 'mobile-app' ? 'Get the App ↗' : data.type === 'desktop-app' ? 'Download ↗' : 'Get started ↗'}
             </a>
           ) : (
             <a href="/contact" class="btn btn-light">Join waitlist →</a>
@@ -555,6 +616,8 @@ const hasPricingOrReqs = (data.pricing && data.pricing.length > 0) ||
   </section>
 
 <style>
+.legal-link { transition: border-color 0.2s ease; }
+.legal-link:hover { border-color: #0A0A0A; }
 @media (max-width: 767px) {
   .prod-hero-grid { grid-template-columns: 1fr !important; }
   .prod-hero-illo { display: none !important; }
