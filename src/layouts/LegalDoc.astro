@@ -92,6 +92,7 @@ const otherDocs = [
   }
   .ld-body {
     max-width: 760px;
+    overflow-wrap: break-word;
   }
   .ld-side {
     position: sticky;
@@ -326,15 +327,16 @@ const otherDocs = [
   }
 
   @media (max-width: 900px) {
-    .ld-grid { grid-template-columns: 1fr; gap: 2.75rem; }
-    .ld-side { position: static; max-width: 760px; }
-    .ld-body { max-width: 760px; }
+    .ld-grid { grid-template-columns: minmax(0, 1fr); gap: 2.75rem; }
+    .ld-side { position: static; max-width: 100%; }
+    .ld-body { max-width: 100%; }
+    /* Wide tables scroll within their box instead of clipping/overflowing */
+    .ld-body :global(.legal-table) { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
   }
   @media (max-width: 600px) {
     .ld-header { padding: 5.5rem 0 2.25rem; }
     .ld-body-section { padding: 2.5rem 0 4rem; }
     .ld-h1 { font-size: 1.875rem; }
     .ld-body :global(.legal-summary) { padding: 20px; }
-    .ld-body :global(.legal-table) { display: block; overflow-x: auto; }
   }
 </style>
