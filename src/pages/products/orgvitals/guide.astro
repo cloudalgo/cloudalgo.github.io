@@ -471,6 +471,15 @@ sf org list             # confirm the org shows up</code></pre>
             ))}
           </ul>
         </details>
+        <script is:inline>
+          /* Set initial TOC state before paint: open on desktop, collapsed on mobile. */
+          (function () {
+            var d = document.currentScript.previousElementSibling;
+            if (d && d.tagName === 'DETAILS') {
+              d.open = window.matchMedia('(min-width: 901px)').matches;
+            }
+          })();
+        </script>
       </aside>
 
     </div>
@@ -826,6 +835,15 @@ sf org list             # confirm the org shows up</code></pre>
   // Scroll-spy: highlight the TOC link for the section currently in view.
   // Dependency-free and resilient — no errors if elements are missing.
   (() => {
+    // TOC: expanded & static on desktop, collapsible <details> on mobile.
+    const toc = document.querySelector<HTMLDetailsElement>('details.ug-toc');
+    if (toc) {
+      const mq = window.matchMedia('(min-width: 901px)');
+      const syncToc = () => { toc.open = mq.matches; };
+      syncToc();
+      mq.addEventListener('change', syncToc);
+    }
+
     const links = Array.from(
       document.querySelectorAll<HTMLAnchorElement>('.ug-toc a[data-toc]')
     );
