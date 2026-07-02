@@ -41,6 +41,7 @@ const products = defineCollection({
     icon:           z.string(),
     externalUrl:    z.string().url().optional(),
     issuesUrl:      z.string().url().optional(),
+    guideUrl:       z.string().optional(),
     seoTitle:       z.string().optional(),
     version:        z.string().optional(),
     lastUpdated:    z.string().optional(),

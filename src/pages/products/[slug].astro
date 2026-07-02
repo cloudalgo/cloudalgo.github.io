@@ -371,6 +371,8 @@ const hasPricingOrReqs = (data.pricing && data.pricing.length > 0) ||
             )}
             {data.type === 'mobile-app' ? (
               <a href={`/apps/insurealgo/privacy`} class="btn btn-outline">Privacy Policy</a>
+            ) : data.guideUrl ? (
+              <a href={data.guideUrl} class="btn btn-outline">User Guide &rarr;</a>
             ) : data.issuesUrl ? (
               <a href={data.issuesUrl} target="_blank" rel="noopener noreferrer" class="btn btn-outline">Log an issue ↗</a>
             ) : (
