@@ -15,7 +15,8 @@ const sections = [
   { id: 'history-org-family',         num: 9,  label: 'History & Org Family' },
   { id: 'ask-vita',                   num: 10, label: 'Ask Vita — AI assistant' },
   { id: 'demo-mode',                  num: 11, label: 'Demo mode & guided tour' },
-  { id: 'tips-shortcuts-faq',         num: 12, label: 'Tips, shortcuts & FAQ' },
+  { id: 'notifications-reports',      num: 12, label: 'Notifications, reports & housekeeping' },
+  { id: 'tips-shortcuts-faq',         num: 13, label: 'Tips, shortcuts & FAQ' },
 ];
 
 const releasesUrl = 'https://github.com/cloudalgo/orgvitals-releases/releases';
@@ -77,12 +78,19 @@ const releasesUrl = 'https://github.com/cloudalgo/orgvitals-releases/releases';
         <div class="ug-callout">
           <span class="ug-callout-label">About the animations</span>
           <p>
-            Every GIF below was recorded against OrgVitals' built-in <strong>demo mode</strong>, which
+            Every clip below was recorded against OrgVitals' built-in <strong>demo mode</strong>, which
             uses a synthetic sample org family (&ldquo;Acme&rdquo;) so every screen is populated with
             realistic &mdash; but entirely fake &mdash; data. You can explore the exact same thing
             yourself: <strong>Help &rarr; Take the Tour</strong> starts a guided walkthrough over this
             sample data. See <a href="#demo-mode">&sect;11</a>.
           </p>
+        </div>
+
+        <!-- Walkthrough video -->
+        <div class="ug-video-block">
+          <p class="section-label">&#9654; Full walkthrough</p>
+          <p class="ug-video-sub">A ~60-second tour of every feature.</p>
+          <video class="ug-video" src="/products/orgvitals/guide/walkthrough.mp4" controls preload="metadata" playsinline></video>
         </div>
 
         <!-- 1 -->
@@ -256,7 +264,7 @@ sf org list             # confirm the org shows up</code></pre>
           <li><strong>Scanner results grid</strong> &mdash; every check that ran, shown as <strong>pass / warn / fail</strong>, grouped by category.</li>
           <li><strong>Category breakdown</strong> &mdash; the five category scores with their own letter grades.</li>
           <li><strong>Fix These First</strong> &mdash; the highest-impact issues plus <strong>quick wins</strong> (high impact, low effort), so you always have a starting point.</li>
-          <li><strong>Export PDF</strong> &mdash; render the full report to a PDF (see <a href="#tips-shortcuts-faq">&sect;12</a>).</li>
+          <li><strong>Export PDF</strong> &mdash; render the full report to a PDF (see <a href="#notifications-reports">&sect;12</a>).</li>
         </ul>
 
         <!-- 7 -->
@@ -266,6 +274,17 @@ sf org list             # confirm the org shows up</code></pre>
         <figure class="ug-figure">
           <img src="/products/orgvitals/guide/04-findings.gif" alt="Filtering and triaging findings in OrgVitals" loading="lazy" decoding="async" width="1000" height="625" />
           <figcaption>Filtering findings by severity, category, and status.</figcaption>
+        </figure>
+
+        <p>
+          <strong>See a finding's detail.</strong> Click any finding row to expand it &mdash; you get the
+          full explanation, the affected component, an effort estimate, remediation guidance, and the
+          status controls (Open / Fixed / Ignored / Snooze) right there.
+        </p>
+
+        <figure class="ug-figure">
+          <img src="/products/orgvitals/guide/09-finding-detail.gif" alt="Expanding a finding for its full detail and status controls" loading="lazy" decoding="async" width="1000" height="625" />
+          <figcaption>Click a finding to expand its full detail and status controls.</figcaption>
         </figure>
 
         <p>
@@ -324,6 +343,28 @@ sf org list             # confirm the org shows up</code></pre>
           <li><strong>Global search</strong> &mdash; press <strong>⌘K / Ctrl-K</strong> anywhere to fuzzy-search all indexed metadata and jump straight to it.</li>
         </ul>
 
+        <p>
+          <strong>View the source.</strong> Pick a metadata type (e.g. Apex Classes), select a component,
+          and click <strong>View Source</strong> to read the syntax-highlighted, read-only source inline
+          &mdash; flagged lines and issue counts included.
+        </p>
+
+        <figure class="ug-figure">
+          <img src="/products/orgvitals/guide/10-view-source.gif" alt="Viewing a component's source inline in OrgVitals Insights" loading="lazy" decoding="async" width="1000" height="625" />
+          <figcaption>View Source: read the syntax-highlighted, read-only source with flagged lines.</figcaption>
+        </figure>
+
+        <p>
+          <strong>See the dependency graph.</strong> From the same detail panel, click <strong>Dep Graph</strong>
+          to visualize what a component depends on and what depends on it &mdash; so you understand the
+          blast radius before changing anything.
+        </p>
+
+        <figure class="ug-figure">
+          <img src="/products/orgvitals/guide/11-dependency-graph.gif" alt="Visualizing a component's dependency graph in OrgVitals Insights" loading="lazy" decoding="async" width="1000" height="625" />
+          <figcaption>Dependency graph: what a component depends on, and what depends on it.</figcaption>
+        </figure>
+
         <!-- 9 -->
         <h2 id="history-org-family">9. History &amp; Org Family</h2>
 
@@ -360,6 +401,18 @@ sf org list             # confirm the org shows up</code></pre>
           <li><strong>Metadata diff</strong> &mdash; a structural diff between two orgs across nine metadata types (Apex, triggers, VF, LWC, Aura, objects, fields, flows, workflow rules, email templates, profiles, permission sets, reports, dashboards): what exists only in A, only in B, or differs.</li>
           <li><strong>Source diff</strong> &mdash; a full line-by-line diff of a single component's source between the two orgs (split or unified view).</li>
         </ul>
+
+        <p>
+          <strong>To compare code:</strong> open <strong>Compare</strong>, pick two orgs (e.g. Production
+          vs QA), switch to the <strong>Metadata</strong> tab to see what's <em>only in A</em>,
+          <em>only in B</em>, or <em>differs</em>, then click any differing component for its
+          <strong>source line-diff</strong>.
+        </p>
+
+        <figure class="ug-figure">
+          <img src="/products/orgvitals/guide/12-family-compare.gif" alt="Comparing metadata and source between two orgs in an OrgVitals Org Family" loading="lazy" decoding="async" width="1000" height="625" />
+          <figcaption>Compare: metadata diff between two orgs, then a component-level source line-diff.</figcaption>
+        </figure>
 
         <!-- 10 -->
         <h2 id="ask-vita">10. Ask Vita &mdash; AI assistant</h2>
@@ -422,7 +475,45 @@ sf org list             # confirm the org shows up</code></pre>
         </div>
 
         <!-- 12 -->
-        <h2 id="tips-shortcuts-faq">12. Tips, shortcuts &amp; FAQ</h2>
+        <h2 id="notifications-reports">12. Notifications, reports &amp; housekeeping</h2>
+
+        <h3>Notifications</h3>
+        <p>
+          The <strong>bell</strong> in the top-right opens the notification panel &mdash; scan results,
+          warnings, export outcomes, and app updates land here, newest first. Unread items are badged on
+          the bell; open the panel to mark them read, or <strong>Clear all</strong>.
+        </p>
+
+        <figure class="ug-figure">
+          <img src="/products/orgvitals/guide/13-notifications.gif" alt="Opening the notifications panel in OrgVitals" loading="lazy" decoding="async" width="1000" height="625" />
+          <figcaption>Notifications: scan results, warnings, export outcomes, and app updates, newest first.</figcaption>
+        </figure>
+
+        <h3>Export a report (PDF) and findings (CSV)</h3>
+        <ul>
+          <li><strong>PDF</strong> &mdash; on the Dashboard, click <strong>PDF</strong> to export the full health report. OrgVitals renders it and opens a save dialog so you choose where to write the file; you'll get a notification when it's saved.</li>
+          <li><strong>CSV</strong> &mdash; on the Findings tab, click <strong>Export</strong> to save the currently-filtered findings as CSV (great for tickets or spreadsheets). Whatever filters are active is what gets exported.</li>
+        </ul>
+
+        <figure class="ug-figure">
+          <img src="/products/orgvitals/guide/14-export.gif" alt="Exporting a PDF report and CSV findings from OrgVitals" loading="lazy" decoding="async" width="1000" height="625" />
+          <figcaption>Export a PDF health report from the Dashboard, or CSV findings from the Findings tab.</figcaption>
+        </figure>
+
+        <h3>Delete an org-family mapping</h3>
+        <p>
+          An Org Family is just a saved grouping &mdash; deleting it never touches your orgs or their
+          scans. On the <strong>Org Family</strong> tab, use the <strong>trash</strong> icon next to the
+          family name to remove the grouping; the member orgs remain exactly as they were.
+        </p>
+
+        <figure class="ug-figure">
+          <img src="/products/orgvitals/guide/15-delete-family.gif" alt="Deleting an org-family mapping in OrgVitals" loading="lazy" decoding="async" width="1000" height="625" />
+          <figcaption>Deleting a family mapping removes only the grouping; the member orgs are untouched.</figcaption>
+        </figure>
+
+        <!-- 13 -->
+        <h2 id="tips-shortcuts-faq">13. Tips, shortcuts &amp; FAQ</h2>
         <p><strong>Shortcuts</strong></p>
         <ul>
           <li><strong>⌘K / Ctrl-K</strong> &mdash; open global metadata search from anywhere.</li>
@@ -828,6 +919,25 @@ sf org list             # confirm the org shows up</code></pre>
   @media (max-width: 600px) {
     .ug-body-section { padding: 2.5rem 0 4rem; }
     .ug-body h2 { font-size: 1.3rem; }
+  }
+
+  /* ── Walkthrough video ── */
+  .ug-video-block { margin: 0 0 2.25rem; }
+  .ug-video-block .section-label { margin-bottom: 0.35rem; }
+  .ug-video-sub {
+    font-size: 0.9375rem;
+    color: #8a8a8a;
+    margin: 0 0 0.85rem;
+  }
+  .ug-video {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 10;
+    background: var(--ca-surface);
+    border: 1px solid var(--ca-border);
+    border-radius: 12px;
+    box-shadow: 0 8px 28px rgba(10, 10, 10, 0.07);
   }
 </style>
 
