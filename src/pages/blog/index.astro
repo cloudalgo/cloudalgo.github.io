@@ -90,7 +90,9 @@ const formatDate = (d: Date) =>
           <div class="blog-featured-illus-panel" aria-hidden="true">
             {featuredIllustration
               ? <div class="blog-featured-illus-svg" set:html={featuredIllustration} />
-              : <div class="blog-featured-illus-empty" />
+              : featuredPost.data.image
+                ? <img class="blog-featured-illus-img" src={featuredPost.data.image} alt="" loading="eager" />
+                : <div class="blog-featured-illus-empty" />
             }
           </div>
 
@@ -237,6 +239,17 @@ const formatDate = (d: Date) =>
   transition: opacity 0.4s ease, transform 0.5s ease;
 }
 .blog-featured-card:hover .blog-featured-illus-svg svg {
+  opacity: 1;
+  transform: scale(1.03);
+}
+.blog-featured-illus-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  opacity: 0.9;
+  transition: opacity 0.4s ease, transform 0.5s ease;
+}
+.blog-featured-card:hover .blog-featured-illus-img {
   opacity: 1;
   transform: scale(1.03);
 }
