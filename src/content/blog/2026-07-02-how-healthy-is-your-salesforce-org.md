@@ -58,6 +58,13 @@ It never writes to your org. Every scanner reads. Nothing creates, edits, or del
 
 Your metadata never leaves your machine. The snapshot, the results, your whole scan history, all of it sits in a local database on your laptop. We never see it. (The one exception is the optional AI assistant, which is off until you turn it on and only talks to Anthropic under your own key. We say so plainly inside the app.)
 
+It does a lot more than hand you a grade, too. A few things people don't expect from a free desktop app:
+
+- **See what depends on what.** The Insights view maps a live dependency graph of your org. Pick any component and you can see its blast radius before you touch it, so "this class looks unused" turns into "nothing references this class."
+- **Compare two orgs, line by line.** Group production and its sandboxes into an Org Family, then diff their grades, their metadata, and even a single component's source code side by side. Perfect for "why does QA pass and prod doesn't."
+- **Hunt down tech debt.** It calls out unused Apex classes, dead fields, stale reports, abandoned automation, and the rest of the stuff quietly rotting in the org, then generates a deletion package you review and deploy yourself.
+- **Ask it questions in plain English.** Ask Vita, the opt-in AI assistant, answers things like "which flows have the highest risk?" or "which profiles have Modify All Data?" so you're not writing SOQL to audit your own org.
+
 ## Who it's for
 
 Four kinds of people get the most out of this, and none of them are "SEO managers."
