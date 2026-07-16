@@ -34,18 +34,18 @@ The integration _is_ the custom mapping. There's no shortcut.
 The integration follows MuleSoft's API-led connectivity pattern, split across three tiers:
 
 **System APIs** — one per external system, each wrapping authentication, serialisation, and basic CRUD behind a stable interface:
-- `xh-salesforce-sapi` — Salesforce connector with SOQL, upsert, and lookup resolution
-- `xh-xella-portal-sapi` — health portal API with X-Client-ID auth
-- `xl-slp-sapi` — logistics platform API with Bearer token auth
+- `dh-salesforce-sapi` — Salesforce connector with SOQL, upsert, and lookup resolution
+- `dh-portal-sapi` — health portal API with X-Client-ID auth
+- `dl-slp-sapi` — logistics platform API with Bearer token auth
 
 **Process APIs** — four orchestration applications that implement business flows without talking to external systems directly:
-- `xh-customer-papi` — member registration
-- `xh-journey-sync-papi` — portal journey sync to Salesforce
-- `xh-case-sync-papi` — Salesforce case flags sync to portal
-- `xh-order-to-shipment-papi` — order fulfilment
+- `dh-customer-papi` — member registration
+- `dh-journey-sync-papi` — portal journey sync to Salesforce
+- `dh-case-sync-papi` — Salesforce case flags sync to portal
+- `dh-order-to-shipment-papi` — order fulfilment
 
 **Batch application** — one scheduled job:
-- `xh-order-status-sync-batch` — kit tracking sync, runs every 5 minutes
+- `dh-order-status-sync-batch` — kit tracking sync, runs every 5 minutes
 
 ## The five flows
 

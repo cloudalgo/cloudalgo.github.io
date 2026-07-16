@@ -661,23 +661,23 @@ CloudAlgo built the integration layer: eight MuleSoft applications covering cust
     solution: `Eight MuleSoft applications — three System APIs, four Process APIs, and one batch job — created a complete integration layer across the health portal, Salesforce, and the logistics platform. The architecture follows API-led connectivity: each system API wraps one external system behind a stable interface, and each process API orchestrates business logic without touching external systems directly.`,
     solutionSteps: [
       {
-        title: 'Customer Onboarding (xh-customer-papi)',
+        title: 'Customer Onboarding (dh-customer-papi)',
         body: 'When a new member registers on the health portal, MuleSoft receives the registration payload and creates a Salesforce Person Account under the "Member" RecordType — splitting the full name, mapping email, phone, gender, Portal_ID__c as external ID, subscription ID, and start date. If the registration includes a Journey ID, a linked Case is created simultaneously with Journey_ID__c as the external identifier. Both Salesforce record IDs are returned to the caller.',
       },
       {
-        title: 'Journey Sync (xh-journey-sync-papi, scheduled)',
-        body: 'A scheduler fetches pending journeys from the portal (using xellaUserId and xellaJourneyId as identifiers), queries Salesforce for existing Member Accounts by Portal_ID__c, and runs a RecordType filter to prevent accidental updates to non-Member records. Valid accounts are upserted with current journey data; Cases are upserted on Journey_ID__c. Portal IDs are zipped with Salesforce Account IDs after each batch to maintain the cross-system ID map.',
+        title: 'Journey Sync (dh-journey-sync-papi, scheduled)',
+        body: 'A scheduler fetches pending journeys from the portal (using portal user ID and journey ID as identifiers), queries Salesforce for existing Member Accounts by Portal_ID__c, and runs a RecordType filter to prevent accidental updates to non-Member records. Valid accounts are upserted with current journey data; Cases are upserted on Journey_ID__c. Portal IDs are zipped with Salesforce Account IDs after each batch to maintain the cross-system ID map.',
       },
       {
-        title: 'Case Sync (xh-case-sync-papi, Object Store watermark)',
+        title: 'Case Sync (dh-case-sync-papi, Object Store watermark)',
         body: 'Salesforce support agents flag cases using four boolean fields: New_Kit_Requested__c, New_Blood_Draw_Requested__c, Cancellation_Requested__c, New_Telehealth_Requested__c. The case sync scheduler polls for cases where Integration_Timestamp__c exceeds the last-run timestamp (stored in Anypoint Object Store), transforms each flagged case into a structured request type ("new_kit", "reschedule_blood_draw", "cancellation", "follow_up"), and sends a bulk PATCH to the portal\'s journeys endpoint — up to 100 requests per batch. The Object Store watermark is updated after each successful run.',
       },
       {
-        title: 'Kit Fulfilment (xh-order-to-shipment-papi)',
+        title: 'Kit Fulfilment (dh-order-to-shipment-papi)',
         body: 'When a diagnostic kit order is created in the portal, MuleSoft POSTs it to the logistics platform via Bearer token authentication — creating the outbound shipment record in the logistics system.',
       },
       {
-        title: 'Order Status Sync (xh-order-status-sync-batch, every 5 minutes)',
+        title: 'Order Status Sync (dh-order-status-sync-batch, every 5 minutes)',
         body: 'A scheduled batch fetches pending orders from the portal, queries the logistics platform for each order\'s status and shipment details — tracking number, carrier code, service code, estimated delivery date, delivery timestamp, kit IDs — and PATCHes the order back to the portal. If an order has status updates but no shipments yet, the status is applied without shipment fields; once shipments exist, full tracking data is included.',
       },
     ],
@@ -687,7 +687,7 @@ CloudAlgo built the integration layer: eight MuleSoft applications covering cust
       { metric: '5 min', label: 'maximum shipment tracking lag — kit status, tracking URL, and estimated delivery date visible in portal within one polling cycle' },
     ],
     resultsTable: [
-      { metric: 'Customer registration in Salesforce', before: 'Manual — support staff created Account after portal sign-up', after: 'Automatic on portal registration via xh-customer-papi' },
+      { metric: 'Customer registration in Salesforce', before: 'Manual — support staff created Account after portal sign-up', after: 'Automatic on portal registration via dh-customer-papi' },
       { metric: 'Case-driven portal requests', before: 'Manual — agent logged request in Salesforce, then repeated in portal', after: 'Automatic bulk PATCH from case sync, keyed on Journey_ID__c' },
       { metric: 'Kit shipment visibility', before: 'Logistics dashboard only — no data in portal or Salesforce', after: 'Tracking number, carrier, status, delivery date synced to portal every 5 min' },
       { metric: 'Journey data in Salesforce', before: 'Stale — no scheduled sync, portal and CRM diverged over time', after: 'Scheduled sync via Journey_ID__c → Salesforce Cases + Accounts' },
