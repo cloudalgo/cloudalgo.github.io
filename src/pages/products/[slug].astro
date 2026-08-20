@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import Page from '../../layouts/Page.astro';
+import VideoPlayer from '../../components/ui/VideoPlayer.astro';
 
 export async function getStaticPaths() {
   const products = await getCollection('products', ({ data }) => data.published);
@@ -408,6 +409,28 @@ const hasPricingOrReqs = (data.pricing && data.pricing.length > 0) ||
       </div>
     </div>
   </section>
+
+  <!-- ②b The film — near-black band, only if a video is set -->
+  {data.video && (
+    <section style="background:#0A0A0A;padding:5rem 0;border-bottom:1px solid #0A0A0A;">
+      <div class="container">
+        <p class="section-label anim-fade-up" style="color:rgba(255,255,255,0.55);">See it in action</p>
+        <h2 class="anim-fade-up" style="font-size:clamp(1.75rem,3vw,2.25rem);font-weight:800;letter-spacing:-0.02em;color:#fff;margin-bottom:2rem;transition-delay:0.05s;">
+          {data.video.heading ?? `${data.title} in motion`}
+        </h2>
+        <div class="anim-fade-up" style="transition-delay:0.1s;">
+          <VideoPlayer
+            src={data.video.src}
+            poster={data.video.poster}
+            captions={data.video.captions}
+            title={data.video.title}
+            duration={data.video.duration}
+            tone="dark"
+          />
+        </div>
+      </div>
+    </section>
+  )}
 
   <!-- ③ Overview — white bg (only if markdown body has content) -->
   {hasBody && (

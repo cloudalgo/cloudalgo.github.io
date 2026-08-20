@@ -52,6 +52,14 @@ const products = defineCollection({
       description: z.string(),
     })).min(1),
     screenshots:  z.array(z.string()).optional(),
+    video: z.object({
+      src:      z.string(),
+      poster:   z.string().optional(),
+      captions: z.string().optional(),
+      title:    z.string(),
+      duration: z.string().optional(),
+      heading:  z.string().optional(),
+    }).optional(),
     pricing: z.array(z.object({
       tier:  z.string(),
       price: z.string(),
