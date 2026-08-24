@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef, useMemo, type FormEvent } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo, type SubmitEvent } from 'react';
 
 function useIsMobile() {
   const [isMobile, setIsMobile] = useState(
@@ -498,7 +498,7 @@ function StepDetails({
     }
   };
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     const allEmails = emailInput.trim() ? [...emails, emailInput.trim()] : emails;
     if (!allEmails.length) return;
@@ -673,7 +673,6 @@ export default function ScheduleWidget() {
   const [allSlots, setAllSlots] = useState<string[]>([]);
   const [slotsLoading, setSlotsLoading] = useState(false);
   const [slotsError, setSlotsError] = useState<string | null>(null);
-  const [tooltipVisible, setTooltipVisible] = useState(false);
   const [mobileShowCalendar, setMobileShowCalendar] = useState(false);
   const [visible, setVisible] = useState(openFromUrl);
   const [bouncing, setBouncing] = useState(false);
@@ -692,7 +691,6 @@ export default function ScheduleWidget() {
     if (openFromUrl) return; // already open, no fade-in delay needed
     const t = setTimeout(() => {
       setVisible(true);
-      setTooltipVisible(true);
     }, 2000);
     return () => clearTimeout(t);
   }, [openFromUrl]);
@@ -892,7 +890,6 @@ export default function ScheduleWidget() {
 
   const handleOpen = () => {
     setIsOpen(true);
-    setTooltipVisible(false);
     setScheduleHash(true);
     fetchSlots(defaultDate);
   };
