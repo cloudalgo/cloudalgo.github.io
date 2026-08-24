@@ -181,7 +181,7 @@ const isCrossOrigin = /^https?:\/\//.test(src) || (captions ? /^https?:\/\//.tes
     letter-spacing: 0.02em;
     color: var(--ca-secondary-black, var(--color-text));
   }
-  .cav--dark .cav-caption { color: rgba(var(--paper-000-rgb), 0.55); }
+  .cav--dark .cav-caption { color: var(--color-on-inverse-muted); }
 
   /* ── Pre-roll seal ───────────────────────────────────────────────────── */
   .cav-seal {
@@ -237,7 +237,7 @@ const isCrossOrigin = /^https?:\/\//.test(src) || (captions ? /^https?:\/\//.tes
   .cav-seal-meta {
     font-size: 0.75rem;
     font-weight: 500;
-    color: rgba(var(--paper-000-rgb), 0.6);
+    color: var(--color-on-inverse-a60);
     font-variant-numeric: tabular-nums;
   }
 
@@ -315,13 +315,13 @@ const isCrossOrigin = /^https?:\/\//.test(src) || (captions ? /^https?:\/\//.tes
     flex: 0 0 auto;
     font-size: 0.75rem;
     font-weight: 600;
-    color: rgba(var(--paper-000-rgb), 0.85);
+    color: var(--color-on-inverse-a85);
     font-variant-numeric: tabular-nums;
     letter-spacing: 0.02em;
     min-width: 2.6em;
     text-align: center;
   }
-  .cav-time--total { color: rgba(var(--paper-000-rgb), 0.5); }
+  .cav-time--total { color: var(--color-on-inverse-a50); }
 
   /* ── Scrubber ────────────────────────────────────────────────────────── */
   .cav-scrub {

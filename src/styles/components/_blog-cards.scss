@@ -251,7 +251,7 @@
   content: attr(data-ln);
   flex-shrink: 0;
   width: 2rem;
-  color: rgba(var(--paper-000-rgb), 0.18);
+  color: var(--color-on-inverse-ghost);
   font-size: 0.7rem;
   text-align: right;
   padding-right: 0.75rem;

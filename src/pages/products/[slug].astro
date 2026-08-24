@@ -415,7 +415,7 @@ const hasPricingOrReqs = (data.pricing && data.pricing.length > 0) ||
   {data.video && (
     <section style="background:var(--surface-inverse);padding:5rem 0;border-bottom:1px solid var(--border-strong);">
       <div class="container">
-        <SectionLabel class="anim-fade-up" style="color:rgba(var(--paper-000-rgb), 0.55);">See it in action</SectionLabel>
+        <SectionLabel class="anim-fade-up" style="color:var(--color-on-inverse-muted);">See it in action</SectionLabel>
         <h2 class="section-title section-title--sm section-title--inverse anim-fade-up" style="margin-bottom:2rem;transition-delay:0.05s;">
           {data.video.heading ?? `${data.title} in motion`}
         </h2>
@@ -637,7 +637,7 @@ const hasPricingOrReqs = (data.pricing && data.pricing.length > 0) ||
           <h2 class="section-title section-title--2xs section-title--heavy section-title--tight section-title--inverse" style="margin-bottom:0.35rem;">
             Ready to get started?
           </h2>
-          <p style="font-size:0.9375rem;color:rgba(var(--paper-000-rgb), 0.5);margin:0;">
+          <p style="font-size:0.9375rem;color:var(--color-on-inverse-a50);margin:0;">
             {data.type === 'mobile-app' ? 'Free on iOS & Android — built with Flutter' : data.externalUrl ? 'Available now — free to get started' : 'Early access — join the waitlist'}
           </p>
         </div>

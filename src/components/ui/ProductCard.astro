@@ -74,17 +74,17 @@ const iconSvg = productIcons[slug] ?? productIcons['cloudalgo-flow-audit'];
             {statusLabel(data.status)}
           </span>
         ) : (
-          <span style="border:1px solid rgba(var(--paper-000-rgb), 0.4);color:rgba(var(--paper-000-rgb), 0.7);font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:100px;text-transform:uppercase;letter-spacing:0.06em;">
+          <span style="border:1px solid rgba(var(--paper-000-rgb), 0.4);color:var(--color-on-inverse-strong);font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:100px;text-transform:uppercase;letter-spacing:0.06em;">
             {statusLabel(data.status)}
           </span>
         )}
         {isEarlyAccess && (
-          <span style="font-size:0.65rem;color:rgba(var(--paper-000-rgb), 0.4);">Early access</span>
+          <span style="font-size:0.65rem;color:var(--color-on-inverse-a40);">Early access</span>
         )}
       </div>
       <div style="font-size:1rem;font-weight:700;color:var(--color-on-inverse);margin-bottom:0.35rem;">{data.title}</div>
-      <div style="font-size:0.85rem;color:rgba(var(--paper-000-rgb), 0.55);line-height:1.6;margin-bottom:1rem;">{data.excerpt}</div>
-      <a href={`/products/${slug}`} style="font-size:0.8rem;font-weight:700;color:rgba(var(--paper-000-rgb), 0.8);text-decoration:underline;text-underline-offset:3px;transition:color 0.2s;margin-top:auto;" class="prod-card-link-dark">
+      <div style="font-size:0.85rem;color:var(--color-on-inverse-muted);line-height:1.6;margin-bottom:1rem;">{data.excerpt}</div>
+      <a href={`/products/${slug}`} style="font-size:0.8rem;font-weight:700;color:var(--color-on-inverse-a80);text-decoration:underline;text-underline-offset:3px;transition:color 0.2s;margin-top:auto;" class="prod-card-link-dark">
         Learn more &rarr;
       </a>
     </div>

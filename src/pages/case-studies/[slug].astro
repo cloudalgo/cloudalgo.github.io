@@ -402,11 +402,11 @@ const schema = {
       <div class="csd-two-col">
         <div class="csd-col-label-block">
           <SectionLabel class="section-label--inverse">The solution</SectionLabel>
-          <div class="csd-col-number" style="color:rgba(var(--paper-000-rgb), 0.08);" aria-hidden="true">{cs.toolComparison ? '03' : '02'}</div>
+          <div class="csd-col-number" style="color:var(--color-on-inverse-a08);" aria-hidden="true">{cs.toolComparison ? '03' : '02'}</div>
         </div>
         <div class="csd-col-content">
           <h2 class="section-title section-title--xs section-title--inverse csd-section-title">What we built.</h2>
-          <p class="paragraph-large csd-body-text" style="color:rgba(var(--paper-000-rgb), 0.6);">{cs.solution}</p>
+          <p class="paragraph-large csd-body-text" style="color:var(--color-on-inverse-a60);">{cs.solution}</p>
         </div>
       </div>
       <div class="csd-steps">
@@ -734,7 +734,7 @@ const schema = {
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: rgba(var(--paper-000-rgb), 0.5);
+  color: var(--color-on-inverse-a50);
 }
 .csd-tool-table tbody tr {
   border-bottom: 1px solid var(--border-default);
@@ -772,7 +772,7 @@ const schema = {
   font-size: 0.7rem;
   font-weight: 900;
   letter-spacing: 0.1em;
-  color: rgba(var(--paper-000-rgb), 0.2);
+  color: var(--color-on-inverse-a20);
   font-family: 'Outfit', sans-serif;
   margin-bottom: 0.875rem;
 }
@@ -785,7 +785,7 @@ const schema = {
 }
 .csd-step-text {
   font-size: 0.875rem;
-  color: rgba(var(--paper-000-rgb), 0.5);
+  color: var(--color-on-inverse-a50);
   line-height: 1.75;
 }
 
@@ -871,7 +871,7 @@ const schema = {
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: rgba(var(--paper-000-rgb), 0.5);
+  color: var(--color-on-inverse-a50);
 }
 .csd-results-table tbody tr { border-bottom: 1px solid var(--border-default); }
 .csd-results-table tbody tr:last-child { border-bottom: none; }
@@ -901,7 +901,7 @@ const schema = {
   font-size: 0.7rem;
   font-weight: 900;
   letter-spacing: 0.1em;
-  color: rgba(var(--paper-000-rgb), 0.15);
+  color: var(--color-on-inverse-a15);
   font-family: 'Outfit', sans-serif;
   margin-bottom: 0.75rem;
 }
@@ -914,7 +914,7 @@ const schema = {
 }
 .csd-demonstrate-body {
   font-size: 0.875rem;
-  color: rgba(var(--paper-000-rgb), 0.5);
+  color: var(--color-on-inverse-a50);
   line-height: 1.75;
 }
 
@@ -1012,13 +1012,13 @@ const schema = {
 
 /* ── CTA ── */
 .csd-cta { background: var(--surface-inverse); padding: 5rem 0; text-align: center; }
-.csd-cta-label { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(var(--paper-000-rgb), 0.35); margin-bottom: 1rem; }
+.csd-cta-label { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-on-inverse-a35); margin-bottom: 1rem; }
 .csd-cta-title { font-size: clamp(2rem, 3.5vw, 3rem); font-weight: 900; letter-spacing: -0.03em; color: var(--color-on-inverse); margin-bottom: 0.875rem; line-height: 1.1; }
-.csd-cta-sub { font-size: 1rem; color: rgba(var(--paper-000-rgb), 0.45); line-height: 1.7; max-width: 420px; margin: 0 auto 2.5rem; }
+.csd-cta-sub { font-size: 1rem; color: var(--color-on-inverse-faint); line-height: 1.7; max-width: 420px; margin: 0 auto 2.5rem; }
 .csd-cta-actions { display: flex; align-items: center; justify-content: center; gap: 1rem; flex-wrap: wrap; }
 .csd-cta-btn-primary { background: var(--surface-card); color: var(--color-heading); padding: 0.875rem 1.75rem; border-radius: 100px; font-weight: 700; font-size: 0.9375rem; text-decoration: none; transition: opacity 150ms, transform 150ms; }
 .csd-cta-btn-primary:hover { opacity: 0.88; transform: translateY(-1px); color: var(--color-heading); }
-.csd-cta-btn-secondary { color: rgba(var(--paper-000-rgb), 0.55); padding: 0.875rem 1.75rem; border-radius: 100px; border: 1px solid rgba(var(--paper-000-rgb), 0.2); font-weight: 600; font-size: 0.9375rem; text-decoration: none; transition: color 150ms, border-color 150ms; }
+.csd-cta-btn-secondary { color: var(--color-on-inverse-muted); padding: 0.875rem 1.75rem; border-radius: 100px; border: 1px solid rgba(var(--paper-000-rgb), 0.2); font-weight: 600; font-size: 0.9375rem; text-decoration: none; transition: color 150ms, border-color 150ms; }
 .csd-cta-btn-secondary:hover { color: var(--color-on-inverse); border-color: rgba(var(--paper-000-rgb), 0.5); }
 
 /* ── Responsive ── */

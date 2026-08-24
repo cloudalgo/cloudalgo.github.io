@@ -47,7 +47,7 @@
   --section-label-tracking: 0.1em;
   --section-label-transform: uppercase;
   --section-label-color: var(--color-text);
-  --section-label-color-inverse: rgba(var(--paper-000-rgb), 0.4);
+  --section-label-color-inverse: var(--color-on-inverse-a40);
   --section-label-margin-bottom: 1rem;
 
   /* Section titles -- the h2 that opens a section.

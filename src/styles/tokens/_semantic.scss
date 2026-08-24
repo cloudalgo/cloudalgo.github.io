@@ -37,6 +37,52 @@
   --color-on-inverse: var(--paper-000);
   --color-on-inverse-soft: var(--paper-025);
 
+  /* Text on an inverse surface.
+     White at an alpha, because a solid ink tone would not sit on the
+     near-black band the way a translucent one does. Fifty-two
+     declarations used it and between them they picked nineteen
+     different alphas, so the ramp below is drift as much as design.
+
+     The five role names mirror the paper-side ramp above -- body,
+     strong, muted, faint, ghost -- and each takes the modal alpha of
+     the band it names. The -aNN rungs are the departures, kept exactly
+     and named for their alpha:
+
+       band    role    alpha  n    departures
+       body    body     0.88  3    a90 x1, a85 x1, a80 x1
+       strong  strong   0.70  3    a75 x2, a65 x2
+       muted   muted    0.55  10   a60 x6, a50 x7
+       faint   faint    0.45  5    a40 x2, a38 x1, a35 x2
+       ghost   ghost    0.18  2    a28 x1, a20 x1, a15 x1, a08 x1
+
+     Converging is repointing the rungs at the role above them and
+     deleting them; nothing else in the sheet knows the alphas.
+
+     None of this survives a theme whose inverse surface is not
+     near-black -- white-at-alpha only reads on ink. That is the point
+     of naming it: a theme that wants ink-on-paper here overrides five
+     tokens instead of hunting fifty-two declarations. */
+  --color-on-inverse-body: rgba(var(--paper-000-rgb), 0.88);
+  --color-on-inverse-strong: rgba(var(--paper-000-rgb), 0.7);
+  --color-on-inverse-muted: rgba(var(--paper-000-rgb), 0.55);
+  --color-on-inverse-faint: rgba(var(--paper-000-rgb), 0.45);
+  --color-on-inverse-ghost: rgba(var(--paper-000-rgb), 0.18);
+
+  --color-on-inverse-a90: rgba(var(--paper-000-rgb), 0.9);
+  --color-on-inverse-a85: rgba(var(--paper-000-rgb), 0.85);
+  --color-on-inverse-a80: rgba(var(--paper-000-rgb), 0.8);
+  --color-on-inverse-a75: rgba(var(--paper-000-rgb), 0.75);
+  --color-on-inverse-a65: rgba(var(--paper-000-rgb), 0.65);
+  --color-on-inverse-a60: rgba(var(--paper-000-rgb), 0.6);
+  --color-on-inverse-a50: rgba(var(--paper-000-rgb), 0.5);
+  --color-on-inverse-a40: rgba(var(--paper-000-rgb), 0.4);
+  --color-on-inverse-a38: rgba(var(--paper-000-rgb), 0.38);
+  --color-on-inverse-a35: rgba(var(--paper-000-rgb), 0.35);
+  --color-on-inverse-a28: rgba(var(--paper-000-rgb), 0.28);
+  --color-on-inverse-a20: rgba(var(--paper-000-rgb), 0.2);
+  --color-on-inverse-a15: rgba(var(--paper-000-rgb), 0.15);
+  --color-on-inverse-a08: rgba(var(--paper-000-rgb), 0.08);
+
   /* Rules */
   --border-default: var(--paper-200);
   --border-strong: var(--ink-900);

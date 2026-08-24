@@ -18,7 +18,7 @@
 .card-bg:hover .card-text { color: var(--color-on-inverse); }
 .card-bg:hover .card-icon { color: var(--color-on-inverse); }
 .card-bg p { color: var(--ca-secondary-black); flex: 1; margin: 0 0 1.5rem; font-size: 0.9375rem; line-height: 1.65; }
-.card-bg:hover p { color: rgba(var(--paper-000-rgb), 0.75); }
+.card-bg:hover p { color: var(--color-on-inverse-a75); }
 .card-bg:hover .btn-outline { background: var(--surface-card); color: var(--ca-black); border-color: var(--focus-halo); }
 
 /* Service-card icon motion. Parts are animated, not the whole glyph, so the
