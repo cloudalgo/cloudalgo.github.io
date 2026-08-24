@@ -159,11 +159,11 @@ const isCrossOrigin = /^https?:\/\//.test(src) || (captions ? /^https?:\/\//.tes
     border: 1px solid var(--ca-border, var(--border-default));
   }
   .cav--dark .cav-frame {
-    border-color: rgba(255, 255, 255, 0.16);
-    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+    border-color: rgba(var(--paper-000-rgb), 0.16);
+    box-shadow: 0 24px 60px rgba(var(--ink-000-rgb), 0.45);
   }
   .cav--light .cav-frame {
-    box-shadow: 0 10px 34px rgba(10, 10, 10, 0.09);
+    box-shadow: 0 10px 34px rgba(var(--ink-900-rgb), 0.09);
   }
 
   .cav-video {
@@ -181,7 +181,7 @@ const isCrossOrigin = /^https?:\/\//.test(src) || (captions ? /^https?:\/\//.tes
     letter-spacing: 0.02em;
     color: var(--ca-secondary-black, var(--color-text));
   }
-  .cav--dark .cav-caption { color: rgba(255, 255, 255, 0.55); }
+  .cav--dark .cav-caption { color: rgba(var(--paper-000-rgb), 0.55); }
 
   /* ── Pre-roll seal ───────────────────────────────────────────────────── */
   .cav-seal {
@@ -196,7 +196,7 @@ const isCrossOrigin = /^https?:\/\//.test(src) || (captions ? /^https?:\/\//.tes
     border: 0;
     padding: 0;
     cursor: pointer;
-    background: radial-gradient(ellipse at center, rgba(10, 10, 10, 0.18) 0%, rgba(10, 10, 10, 0.55) 100%);
+    background: radial-gradient(ellipse at center, rgba(var(--ink-900-rgb), 0.18) 0%, rgba(var(--ink-900-rgb), 0.55) 100%);
     font-family: inherit;
     /* Hidden the moment playback starts; JS toggles this attribute. */
   }
@@ -237,7 +237,7 @@ const isCrossOrigin = /^https?:\/\//.test(src) || (captions ? /^https?:\/\//.tes
   .cav-seal-meta {
     font-size: 0.75rem;
     font-weight: 500;
-    color: rgba(255, 255, 255, 0.6);
+    color: rgba(var(--paper-000-rgb), 0.6);
     font-variant-numeric: tabular-nums;
   }
 
@@ -253,7 +253,7 @@ const isCrossOrigin = /^https?:\/\//.test(src) || (captions ? /^https?:\/\//.tes
     align-items: center;
     gap: 0.6rem;
     padding: 2.4rem 0.9rem 0.75rem;
-    background: linear-gradient(to top, rgba(10, 10, 10, 0.92) 0%, rgba(10, 10, 10, 0.65) 45%, rgba(10, 10, 10, 0) 100%);
+    background: linear-gradient(to top, rgba(var(--ink-900-rgb), 0.92) 0%, rgba(var(--ink-900-rgb), 0.65) 45%, rgba(var(--ink-900-rgb), 0) 100%);
     opacity: 1;
     transform: translateY(0);
     transition: opacity 0.25s ease, transform 0.25s ease;
@@ -275,8 +275,8 @@ const isCrossOrigin = /^https?:\/\//.test(src) || (captions ? /^https?:\/\//.tes
     width: 34px;
     height: 34px;
     border-radius: 100px;
-    border: 1px solid rgba(255, 255, 255, 0.22);
-    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(var(--paper-000-rgb), 0.22);
+    background: rgba(var(--paper-000-rgb), 0.06);
     color: var(--color-on-inverse);
     cursor: pointer;
     padding: 0;
@@ -286,7 +286,7 @@ const isCrossOrigin = /^https?:\/\//.test(src) || (captions ? /^https?:\/\//.tes
   .cav-btn:focus-visible { outline: 2px solid var(--focus-halo); outline-offset: 2px; }
 
   .cav-btn--play { width: 38px; height: 38px; background: var(--surface-card); border-color: var(--focus-halo); color: var(--ca-black, var(--color-heading)); }
-  .cav-btn--play:hover { background: rgba(255, 255, 255, 0.86); }
+  .cav-btn--play:hover { background: rgba(var(--paper-000-rgb), 0.86); }
   .cav-btn--play .cav-i-play { margin-left: 2px; }
 
   .cav-btn--cc {
@@ -315,13 +315,13 @@ const isCrossOrigin = /^https?:\/\//.test(src) || (captions ? /^https?:\/\//.tes
     flex: 0 0 auto;
     font-size: 0.75rem;
     font-weight: 600;
-    color: rgba(255, 255, 255, 0.85);
+    color: rgba(var(--paper-000-rgb), 0.85);
     font-variant-numeric: tabular-nums;
     letter-spacing: 0.02em;
     min-width: 2.6em;
     text-align: center;
   }
-  .cav-time--total { color: rgba(255, 255, 255, 0.5); }
+  .cav-time--total { color: rgba(var(--paper-000-rgb), 0.5); }
 
   /* ── Scrubber ────────────────────────────────────────────────────────── */
   .cav-scrub {
@@ -341,7 +341,7 @@ const isCrossOrigin = /^https?:\/\//.test(src) || (captions ? /^https?:\/\//.tes
     width: 100%;
     height: 3px;
     border-radius: 100px;
-    background: rgba(255, 255, 255, 0.24);
+    background: rgba(var(--paper-000-rgb), 0.24);
   }
   .cav-buffered,
   .cav-played {
@@ -352,7 +352,7 @@ const isCrossOrigin = /^https?:\/\//.test(src) || (captions ? /^https?:\/\//.tes
     border-radius: 100px;
     width: 0%;
   }
-  .cav-buffered { background: rgba(255, 255, 255, 0.34); }
+  .cav-buffered { background: rgba(var(--paper-000-rgb), 0.34); }
   .cav-played { background: var(--surface-card); }
 
   .cav-knob {

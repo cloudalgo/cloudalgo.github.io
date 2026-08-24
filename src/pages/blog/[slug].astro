@@ -296,7 +296,7 @@ const schema = {
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 3px;
-  text-decoration-color: rgba(10, 10, 10, 0.35);
+  text-decoration-color: rgba(var(--ink-900-rgb), 0.35);
   transition: text-decoration-color 0.2s ease, color 0.2s ease;
 }
 :global(.blog-post-details .blog-content p a:hover),
@@ -434,12 +434,12 @@ const schema = {
   align-items: center;
   gap: 0.375rem;
   padding: 0.4rem 0.75rem;
-  background: rgba(255, 255, 255, 0.18);
+  background: rgba(var(--paper-000-rgb), 0.18);
   backdrop-filter: blur(28px) saturate(180%);
   -webkit-backdrop-filter: blur(28px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(var(--paper-000-rgb), 0.5);
   border-radius: 100px;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 24px rgba(var(--ink-000-rgb), 0.08);
   white-space: nowrap;
   transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -478,7 +478,7 @@ const schema = {
 .sticky-share-label {
   font-size: 0.6875rem;
   font-weight: 700;
-  color: rgba(0,0,0,0.4);
+  color: rgba(var(--ink-000-rgb), 0.4);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   padding-right: 0.25rem;
@@ -489,7 +489,7 @@ const schema = {
   justify-content: center;
   width: 30px;
   height: 30px;
-  background: rgba(10, 10, 10, 0.75);
+  background: rgba(var(--ink-900-rgb), 0.75);
   color: var(--color-on-inverse);
   border-radius: 50%;
   text-decoration: none;
@@ -503,9 +503,9 @@ const schema = {
   position: absolute;
   top: 8px;
   right: 12px;
-  background: rgba(255,255,255,0.08);
-  color: rgba(255,255,255,0.55);
-  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(var(--paper-000-rgb), 0.08);
+  color: rgba(var(--paper-000-rgb), 0.55);
+  border: 1px solid rgba(var(--paper-000-rgb), 0.12);
   border-radius: 6px;
   padding: 0.2rem 0.625rem;
   font-size: 0.75rem;
@@ -516,7 +516,7 @@ const schema = {
   z-index: 1;
 }
 :global(.code-copy-btn:hover) {
-  background: rgba(255,255,255,0.15);
+  background: rgba(var(--paper-000-rgb), 0.15);
   color: var(--color-on-inverse);
 }
 
@@ -541,7 +541,7 @@ const schema = {
 }
 :global(.blog-cta-block p) {
   font-size: 0.9375rem;
-  color: rgba(255,255,255,0.55);
+  color: rgba(var(--paper-000-rgb), 0.55);
   line-height: 1.7;
   margin: 0;
   max-width: 480px;
@@ -576,7 +576,7 @@ const schema = {
   gap: 1.5rem;
 }
 :global(.blog-cta-inline p) {
-  color: rgba(255,255,255,0.75);
+  color: rgba(var(--paper-000-rgb), 0.75);
   font-size: 0.9375rem;
   line-height: 1.75;
   margin: 0;
@@ -604,7 +604,7 @@ const schema = {
 :global(.blog-cta-inline__buttons a:not(:first-child)) {
   background: transparent;
   color: var(--color-on-inverse);
-  border: 1.5px solid rgba(255,255,255,0.4);
+  border: 1.5px solid rgba(var(--paper-000-rgb), 0.4);
 }
 :global(.blog-cta-inline__buttons a:hover) { opacity: 0.8; }
 
@@ -625,7 +625,7 @@ const schema = {
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.35);
+  color: rgba(var(--paper-000-rgb), 0.35);
   margin-bottom: 0.625rem;
 }
 .blog-bottom-cta-title {
@@ -638,7 +638,7 @@ const schema = {
 }
 .blog-bottom-cta-sub {
   font-size: 0.9375rem;
-  color: rgba(255,255,255,0.45);
+  color: rgba(var(--paper-000-rgb), 0.45);
   line-height: 1.7;
   max-width: 400px;
 }
@@ -667,17 +667,17 @@ const schema = {
   align-items: center;
   justify-content: center;
   background: transparent;
-  color: rgba(255,255,255,0.55);
+  color: rgba(var(--paper-000-rgb), 0.55);
   padding: 0.8rem 1.625rem;
   border-radius: 100px;
-  border: 1px solid rgba(255,255,255,0.2);
+  border: 1px solid rgba(var(--paper-000-rgb), 0.2);
   font-weight: 600;
   font-size: 0.9375rem;
   text-decoration: none;
   transition: color 150ms, border-color 150ms;
   white-space: nowrap;
 }
-.blog-bottom-cta-secondary:hover { color: var(--color-on-inverse); border-color: rgba(255,255,255,0.5); }
+.blog-bottom-cta-secondary:hover { color: var(--color-on-inverse); border-color: rgba(var(--paper-000-rgb), 0.5); }
 @media (max-width: 767px) {
   .blog-bottom-cta-inner { flex-direction: column; align-items: flex-start; }
   .blog-bottom-cta-actions { flex-direction: row; flex-wrap: wrap; }

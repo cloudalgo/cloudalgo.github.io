@@ -12,13 +12,13 @@
   display: flex;
   flex-direction: column;
 }
-.card-bg:hover { background: var(--ca-black); border-color: var(--ca-black); color: var(--color-on-inverse); transform: translateY(-6px); box-shadow: 0 20px 40px rgba(10, 10, 10, 0.18); }
+.card-bg:hover { background: var(--ca-black); border-color: var(--ca-black); color: var(--color-on-inverse); transform: translateY(-6px); box-shadow: 0 20px 40px rgba(var(--ink-900-rgb), 0.18); }
 .card-icon { font-size: 2.5rem; color: var(--ca-black); line-height: 1; margin-bottom: 1.25rem; }
 .card-text { color: var(--ca-black); margin-bottom: 0.75rem; font-weight: 700; }
 .card-bg:hover .card-text { color: var(--color-on-inverse); }
 .card-bg:hover .card-icon { color: var(--color-on-inverse); }
 .card-bg p { color: var(--ca-secondary-black); flex: 1; margin: 0 0 1.5rem; font-size: 0.9375rem; line-height: 1.65; }
-.card-bg:hover p { color: rgba(255,255,255,0.75); }
+.card-bg:hover p { color: rgba(var(--paper-000-rgb), 0.75); }
 .card-bg:hover .btn-outline { background: var(--surface-card); color: var(--ca-black); border-color: var(--focus-halo); }
 
 /* Service-card icon motion. Parts are animated, not the whole glyph, so the
@@ -50,7 +50,7 @@
 }
 .product-card-dark:hover {
   transform: translateY(-6px);
-  background: rgba(255, 255, 255, 0.09) !important;
-  border-color: rgba(255, 255, 255, 0.25) !important;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  background: rgba(var(--paper-000-rgb), 0.09) !important;
+  border-color: rgba(var(--paper-000-rgb), 0.25) !important;
+  box-shadow: 0 20px 40px rgba(var(--ink-000-rgb), 0.4);
 }

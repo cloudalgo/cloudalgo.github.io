@@ -5,7 +5,7 @@
   transition: border-color 0.3s, transform 0.3s ease, box-shadow 0.3s ease;
   background: var(--ca-surface);
 }
-.blog-card:hover { border-color: var(--ca-black); transform: translateY(-6px); box-shadow: 0 16px 32px rgba(10, 10, 10, 0.08); }
+.blog-card:hover { border-color: var(--ca-black); transform: translateY(-6px); box-shadow: 0 16px 32px rgba(var(--ink-900-rgb), 0.08); }
 .blog-card-img { width: 100%; height: 200px; object-fit: cover; }
 .blog-card-body { padding: 1.25rem; }
 .blog-card-category { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ca-secondary-black); margin-bottom: 0.5rem; }

@@ -7,8 +7,8 @@
   /* Header */
   --header-h: 4.375rem;              /* 38px logo + 2 x 1rem padding */
   --header-bg: var(--surface-card);
-  --header-scrolled-bg: rgb(255 255 255 / 0.6);
-  --header-scrolled-border: rgb(255 255 255 / 0.4);
+  --header-scrolled-bg: rgba(var(--paper-000-rgb), 0.6);
+  --header-scrolled-border: rgba(var(--paper-000-rgb), 0.4);
 
   /* Buttons */
   --btn-radius: var(--radius-pill);
@@ -23,7 +23,7 @@
   --card-bg: var(--surface-card);
   --card-border: var(--border-default);
   --card-border-hover: var(--border-strong);
-  --card-shadow-hover: 0 16px 32px rgb(10 10 10 / 0.08);
+  --card-shadow-hover: 0 16px 32px rgba(var(--ink-900-rgb), 0.08);
 
   /* Badges / tags */
   --badge-radius: var(--radius-pill);

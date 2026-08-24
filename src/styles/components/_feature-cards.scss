@@ -13,7 +13,7 @@
   padding: 2rem;
   transition: border-color 0.3s, transform 0.3s ease, box-shadow 0.3s ease;
 }
-.why-card:hover { border-color: var(--ca-black); transform: translateY(-6px); box-shadow: 0 16px 32px rgba(10, 10, 10, 0.08); }
+.why-card:hover { border-color: var(--ca-black); transform: translateY(-6px); box-shadow: 0 16px 32px rgba(var(--ink-900-rgb), 0.08); }
 
 .why-card-number {
   font-size: 3.5rem;

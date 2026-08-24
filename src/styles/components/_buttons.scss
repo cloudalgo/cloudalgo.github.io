@@ -43,7 +43,7 @@
 .btn-ghost-inverse {
   background-color: transparent;
   color: var(--color-on-inverse);
-  border-color: rgba(255,255,255,0.3);
+  border-color: rgba(var(--paper-000-rgb), 0.3);
 }
 
 /* Size variants. Both were inline `style` on the call sites before the

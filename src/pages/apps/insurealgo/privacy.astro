@@ -233,7 +233,7 @@ import Page from '../../../layouts/Page.astro';
     font-weight: 800;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.45);
+    color: rgba(var(--paper-000-rgb), 0.45);
     margin-bottom: 16px;
   }
 
@@ -250,14 +250,14 @@ import Page from '../../../layouts/Page.astro';
     gap: 10px;
     font-size: 0.9375rem;
     font-weight: 500;
-    color: rgba(255, 255, 255, 0.88);
+    color: rgba(var(--paper-000-rgb), 0.88);
   }
 
   .pp-check {
     width: 18px;
     height: 18px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.12);
+    background: rgba(var(--paper-000-rgb), 0.12);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -277,7 +277,7 @@ import Page from '../../../layouts/Page.astro';
     border-radius: 12px;
     padding: 28px 28px 24px;
     margin-bottom: 12px;
-    box-shadow: 0 1px 4px rgba(0,0,0,.06), 0 4px 16px rgba(0,0,0,.05);
+    box-shadow: 0 1px 4px rgba(var(--ink-000-rgb), .06), 0 4px 16px rgba(var(--ink-000-rgb), .05);
   }
 
   .pp-section-header {
@@ -373,7 +373,7 @@ import Page from '../../../layouts/Page.astro';
     border-radius: 12px;
     padding: 24px 28px;
     margin-bottom: 12px;
-    box-shadow: 0 1px 4px rgba(0,0,0,.06), 0 4px 16px rgba(0,0,0,.05);
+    box-shadow: 0 1px 4px rgba(var(--ink-000-rgb), .06), 0 4px 16px rgba(var(--ink-000-rgb), .05);
     position: relative;
     overflow: hidden;
   }
@@ -421,7 +421,7 @@ import Page from '../../../layouts/Page.astro';
     display: flex;
     align-items: center;
     justify-content: space-between;
-    box-shadow: 0 1px 4px rgba(0,0,0,.06), 0 4px 16px rgba(0,0,0,.05);
+    box-shadow: 0 1px 4px rgba(var(--ink-000-rgb), .06), 0 4px 16px rgba(var(--ink-000-rgb), .05);
     margin-top: 40px;
     gap: 20px;
     flex-wrap: wrap;

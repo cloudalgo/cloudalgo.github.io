@@ -8,19 +8,19 @@ const products = allProducts.sort((a, b) => a.data.order - b.data.order);
 
 <section style="background:var(--surface-inverse);padding:6rem 0;border-top:1px solid var(--border-on-inverse);position:relative;overflow:hidden;">
   <!-- Parallax decorative shapes (white on dark) -->
-  <div data-parallax="0.08" style="position:absolute;top:-60px;left:-60px;width:210px;height:210px;border-radius:50%;border:1px solid rgba(255,255,255,0.06);pointer-events:none;" aria-hidden="true"></div>
-  <div data-parallax="0.21" style="position:absolute;bottom:50px;right:7%;width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.1);pointer-events:none;" aria-hidden="true"></div>
-  <div data-parallax="0.14" style="position:absolute;top:40%;left:14%;width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.07);pointer-events:none;" aria-hidden="true"></div>
-  <div data-parallax="0.1" style="position:absolute;bottom:-40px;right:-30px;width:160px;height:160px;border-radius:50%;border:1px solid rgba(255,255,255,0.04);pointer-events:none;" aria-hidden="true"></div>
+  <div data-parallax="0.08" style="position:absolute;top:-60px;left:-60px;width:210px;height:210px;border-radius:50%;border:1px solid rgba(var(--paper-000-rgb), 0.06);pointer-events:none;" aria-hidden="true"></div>
+  <div data-parallax="0.21" style="position:absolute;bottom:50px;right:7%;width:10px;height:10px;border-radius:50%;background:rgba(var(--paper-000-rgb), 0.1);pointer-events:none;" aria-hidden="true"></div>
+  <div data-parallax="0.14" style="position:absolute;top:40%;left:14%;width:6px;height:6px;border-radius:50%;background:rgba(var(--paper-000-rgb), 0.07);pointer-events:none;" aria-hidden="true"></div>
+  <div data-parallax="0.1" style="position:absolute;bottom:-40px;right:-30px;width:160px;height:160px;border-radius:50%;border:1px solid rgba(var(--paper-000-rgb), 0.04);pointer-events:none;" aria-hidden="true"></div>
   <div class="container">
-    <p style="font-size:0.75rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:0.75rem;" class="anim-fade-up">
+    <p style="font-size:0.75rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(var(--paper-000-rgb), 0.4);margin-bottom:0.75rem;" class="anim-fade-up">
       Our Products
     </p>
     <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:2.5rem;">
       <h2 class="anim-fade-up" style="font-size:clamp(2rem,3.5vw,2.75rem);font-weight:800;letter-spacing:-0.025em;color:var(--color-on-inverse);margin:0;transition-delay:0.05s;">
         Built in-house,<br/>for Salesforce teams.
       </h2>
-      <a href="/products" style="font-size:0.9375rem;font-weight:700;color:rgba(255,255,255,0.6);white-space:nowrap;transition:color 0.2s;" class="anim-fade-up products-view-all">
+      <a href="/products" style="font-size:0.9375rem;font-weight:700;color:rgba(var(--paper-000-rgb), 0.6);white-space:nowrap;transition:color 0.2s;" class="anim-fade-up products-view-all">
         View all products →
       </a>
     </div>
@@ -35,5 +35,5 @@ const products = allProducts.sort((a, b) => a.data.order - b.data.order);
 </section>
 
 <style>
-.products-view-all:hover { color: rgba(255,255,255,0.9); }
+.products-view-all:hover { color: rgba(var(--paper-000-rgb), 0.9); }
 </style>

@@ -34,6 +34,17 @@
   --paper-300: #CFCFCA; /* toggle tracks, bullet dots, ghost numerals */
   --paper-400: #B4B4B0; /* faintest metadata text */
 
+  /* Channel triplets — the same ramp values in the form rgba() needs.
+     A colour used at partial alpha is still a palette colour: without
+     these, every scrim, hairline and shadow hardcodes the ink and
+     survives a theme swap unchanged. Keep each in step with the hex
+     above it. */
+  --ink-900-rgb:   10, 10, 10;    /* == --ink-900  */
+  --ink-000-rgb:    0, 0, 0;      /* == --ink-000, shadows only */
+  --paper-000-rgb: 255, 255, 255; /* == --paper-000 */
+  --paper-100-rgb: 245, 245, 242; /* == --paper-100 */
+  --paper-200-rgb: 224, 224, 220; /* == --paper-200 */
+
   /* Accent ramp.
      The brand is monochrome today, so the accent resolves to ink.
      A theme file redefines these three and the accent appears

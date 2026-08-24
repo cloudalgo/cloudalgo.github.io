@@ -63,28 +63,28 @@ const iconSvg = productIcons[slug] ?? productIcons['cloudalgo-flow-audit'];
 ---
 
 {dark ? (
-  <div class="product-card-dark" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:12px;padding:1.75rem;display:flex;gap:1.25rem;align-items:flex-start;height:100%;">
-    <div style="width:44px;height:44px;border-radius:10px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);flex-shrink:0;display:flex;align-items:center;justify-content:center;color:var(--color-on-inverse);overflow:hidden;">
+  <div class="product-card-dark" style="background:rgba(var(--paper-000-rgb), 0.06);border:1px solid rgba(var(--paper-000-rgb), 0.12);border-radius:12px;padding:1.75rem;display:flex;gap:1.25rem;align-items:flex-start;height:100%;">
+    <div style="width:44px;height:44px;border-radius:10px;background:rgba(var(--paper-000-rgb), 0.08);border:1px solid rgba(var(--paper-000-rgb), 0.15);flex-shrink:0;display:flex;align-items:center;justify-content:center;color:var(--color-on-inverse);overflow:hidden;">
       <Fragment set:html={iconSvg} />
     </div>
     <div style="flex:1;min-width:0;display:flex;flex-direction:column;height:100%;">
       <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem;flex-wrap:wrap;">
         {data.status === 'ga' ? (
-          <span style="background:rgba(255,255,255,0.9);color:var(--color-heading);font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:100px;text-transform:uppercase;letter-spacing:0.06em;">
+          <span style="background:rgba(var(--paper-000-rgb), 0.9);color:var(--color-heading);font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:100px;text-transform:uppercase;letter-spacing:0.06em;">
             {statusLabel(data.status)}
           </span>
         ) : (
-          <span style="border:1px solid rgba(255,255,255,0.4);color:rgba(255,255,255,0.7);font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:100px;text-transform:uppercase;letter-spacing:0.06em;">
+          <span style="border:1px solid rgba(var(--paper-000-rgb), 0.4);color:rgba(var(--paper-000-rgb), 0.7);font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:100px;text-transform:uppercase;letter-spacing:0.06em;">
             {statusLabel(data.status)}
           </span>
         )}
         {isEarlyAccess && (
-          <span style="font-size:0.65rem;color:rgba(255,255,255,0.4);">Early access</span>
+          <span style="font-size:0.65rem;color:rgba(var(--paper-000-rgb), 0.4);">Early access</span>
         )}
       </div>
       <div style="font-size:1rem;font-weight:700;color:var(--color-on-inverse);margin-bottom:0.35rem;">{data.title}</div>
-      <div style="font-size:0.85rem;color:rgba(255,255,255,0.55);line-height:1.6;margin-bottom:1rem;">{data.excerpt}</div>
-      <a href={`/products/${slug}`} style="font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.8);text-decoration:underline;text-underline-offset:3px;transition:color 0.2s;margin-top:auto;" class="prod-card-link-dark">
+      <div style="font-size:0.85rem;color:rgba(var(--paper-000-rgb), 0.55);line-height:1.6;margin-bottom:1rem;">{data.excerpt}</div>
+      <a href={`/products/${slug}`} style="font-size:0.8rem;font-weight:700;color:rgba(var(--paper-000-rgb), 0.8);text-decoration:underline;text-underline-offset:3px;transition:color 0.2s;margin-top:auto;" class="prod-card-link-dark">
         Learn more &rarr;
       </a>
     </div>
@@ -159,7 +159,7 @@ const iconSvg = productIcons[slug] ?? productIcons['cloudalgo-flow-audit'];
 }
 .prod-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 40px rgba(10,10,10,0.1), 0 2px 8px rgba(10,10,10,0.06);
+  box-shadow: 0 12px 40px rgba(var(--ink-900-rgb), 0.1), 0 2px 8px rgba(var(--ink-900-rgb), 0.06);
   border-color: var(--border-strong);
 }
 

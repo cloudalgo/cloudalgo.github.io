@@ -266,7 +266,7 @@
   content: attr(data-ln);
   flex-shrink: 0;
   width: 2rem;
-  color: rgba(255,255,255,0.18);
+  color: rgba(var(--paper-000-rgb), 0.18);
   font-size: 0.7rem;
   text-align: right;
   padding-right: 0.75rem;
@@ -284,7 +284,7 @@
   border: 1px solid var(--border-default);
   margin: 1.75rem auto;
   display: block;
-  box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+  box-shadow: 0 2px 16px rgba(var(--ink-000-rgb), 0.06);
 }
 .blog-post-details .blog-content figure {
   margin: 2rem 0;
