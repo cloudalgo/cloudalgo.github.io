@@ -39,7 +39,7 @@ const illustrations: Record<string, string> = {
 
   <!-- Field mapping hint -->
   <text x="240" y="165" text-anchor="middle" font-family="Outfit,monospace" font-size="9" fill="#5A5A5A" opacity="0.6">External_Id__c → id</text>
-  <path d="M80" y1="152" x2="380" y2="152" stroke="#0A0A0A" stroke-width="1" stroke-dasharray="3 3" opacity="0.15"/>
+  <line x1="80" y1="152" x2="380" y2="152" stroke="#0A0A0A" stroke-width="1" stroke-dasharray="3 3" opacity="0.15"/>
 </svg>`,
 
   // ── LWC Navigation in Experience Cloud ─────────────────────────────
