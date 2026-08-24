@@ -18,12 +18,23 @@
   --btn-fg: var(--color-on-accent);
   --btn-border: var(--color-accent);
 
-  /* Cards */
+  /* Cards.
+     `--card-radius` is the one every card would use if the radii had
+     never drifted; the -xl and -2xl entries below exist only so the
+     two drifted groups can be named rather than hardcoded. See
+     components/_card.scss for which card sits where. */
   --card-radius: var(--radius-lg);
+  --card-radius-xl: var(--radius-xl);
+  --card-radius-2xl: var(--radius-2xl);
   --card-bg: var(--surface-card);
+  --card-border-width: 1px;
   --card-border: var(--border-default);
   --card-border-hover: var(--border-strong);
   --card-shadow-hover: 0 16px 32px rgba(var(--ink-900-rgb), 0.08);
+  /* The two-layer lift shared by the case-study and product cards:
+     a wide ambient shadow plus a tight contact shadow underneath. */
+  --card-shadow-lift: 0 12px 40px rgba(var(--ink-900-rgb), 0.1),
+                      0 2px 8px rgba(var(--ink-900-rgb), 0.06);
 
   /* Badges / tags.
      The full knob set, because every badge on the site is one

@@ -7,13 +7,10 @@
 @media (max-width: 767px) { .why-us-grid { grid-template-columns: 1fr; } }
 
 .why-card {
-  background: var(--ca-surface);
-  border: 1px solid var(--ca-border);
-  border-radius: 12px;
   padding: 2rem;
   transition: border-color 0.3s, transform 0.3s ease, box-shadow 0.3s ease;
 }
-.why-card:hover { border-color: var(--ca-black); transform: translateY(-6px); box-shadow: 0 16px 32px rgba(var(--ink-900-rgb), 0.08); }
+.why-card:hover { border-color: var(--card-border-hover); transform: translateY(-6px); box-shadow: var(--card-shadow-hover); }
 
 .why-card-number {
   font-size: 3.5rem;

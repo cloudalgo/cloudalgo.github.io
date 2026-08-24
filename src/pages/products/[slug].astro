@@ -396,7 +396,7 @@ const hasPricingOrReqs = (data.pricing && data.pricing.length > 0) ||
       <h2 class="feat-heading anim-fade-up">Key Features</h2>
       <div class="feat-grid">
         {data.features.map((f, i) => (
-          <div class="feat-card anim-fade-up" style={`transition-delay:${i * 0.06}s;`}>
+          <div class="card card--radius-xl feat-card anim-fade-up" style={`transition-delay:${i * 0.06}s;`}>
             <div class="feat-card-top">
               <span class="feat-icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24" width="22" height="22" fill="none" set:html={featIcon(f.icon)}></svg>
@@ -681,9 +681,6 @@ const hasPricingOrReqs = (data.pricing && data.pricing.length > 0) ||
   gap: 1.25rem;
 }
 .feat-card {
-  background: var(--surface-card);
-  border: 1px solid var(--border-default);
-  border-radius: 14px;
   padding: 1.75rem;
   display: flex;
   flex-direction: column;
@@ -694,7 +691,7 @@ const hasPricingOrReqs = (data.pricing && data.pricing.length > 0) ||
 }
 .feat-card:hover {
   transform: translateY(-4px);
-  border-color: var(--border-strong);
+  border-color: var(--card-border-hover);
   box-shadow: 0 12px 32px rgba(var(--ink-900-rgb), 0.08);
 }
 .feat-card-top {

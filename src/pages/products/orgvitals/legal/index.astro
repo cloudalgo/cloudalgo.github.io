@@ -55,7 +55,7 @@ const docs = [
 
     <div class="lx-grid">
       {docs.map((d) => (
-        <a class="lx-card" href={d.href}>
+        <a class="card lx-card" href={d.href}>
           <span class="lx-card-title">{d.title}</span>
           <span class="lx-card-blurb">{d.blurb}</span>
           <span class="lx-card-arrow">Read &rarr;</span>
@@ -103,11 +103,10 @@ const docs = [
 
   .lx-card {
     display: flex; flex-direction: column; gap: 8px;
-    background: var(--ca-surface); border: 1px solid var(--ca-border);
-    border-radius: 12px; padding: 22px 24px; text-decoration: none;
+    padding: 22px 24px; text-decoration: none;
     transition: border-color 0.2s, transform 0.2s;
   }
-  .lx-card:hover { border-color: var(--ca-black); transform: translateY(-2px); }
+  .lx-card:hover { border-color: var(--card-border-hover); transform: translateY(-2px); }
   .lx-card-title { font-size: 1.0625rem; font-weight: 700; color: var(--ca-black); letter-spacing: -0.01em; }
   .lx-card-blurb { font-size: 0.875rem; color: var(--ca-secondary-black); line-height: 1.6; flex: 1; }
   .lx-card-arrow { font-size: 0.8125rem; font-weight: 700; color: var(--ca-black); margin-top: 4px; }

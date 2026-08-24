@@ -193,7 +193,7 @@ const illustrationSvg = contentIllustration || illustrations[category] || illust
 ---
 
 <article
-  class="blog-card-new"
+  class="card card--radius-xl blog-card-new"
   data-category={category}
   style={`animation-delay:${delay}ms`}
 >
@@ -235,9 +235,6 @@ const illustrationSvg = contentIllustration || illustrations[category] || illust
 
 /* ── Card shell ─────────────────────────────────────── */
 .blog-card-new {
-  background: var(--surface-card);
-  border: 1px solid var(--border-default);
-  border-radius: 14px;
   overflow: hidden;
   display: flex;
   flex-direction: column;

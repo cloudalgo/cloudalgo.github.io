@@ -567,14 +567,14 @@ const schema = {
       <div class="container">
         <div class="csd-nav-grid">
           {prev ? (
-            <a href={`/case-studies/${prev.id}`} class="csd-nav-card csd-nav-card--prev">
+            <a href={`/case-studies/${prev.id}`} class="card csd-nav-card csd-nav-card--prev">
               <span class="csd-nav-direction">&larr; Previous</span>
               <span class="csd-nav-company">{prev.company}</span>
               <span class="csd-nav-headline">{prev.headline}</span>
             </a>
           ) : <div />}
           {next ? (
-            <a href={`/case-studies/${next.id}`} class="csd-nav-card csd-nav-card--next">
+            <a href={`/case-studies/${next.id}`} class="card csd-nav-card csd-nav-card--next">
               <span class="csd-nav-direction">Next &rarr;</span>
               <span class="csd-nav-company">{next.company}</span>
               <span class="csd-nav-headline">{next.headline}</span>
@@ -1003,13 +1003,10 @@ const schema = {
   flex-direction: column;
   gap: 0.375rem;
   padding: 1.5rem;
-  background: var(--surface-card);
-  border: 1px solid var(--border-default);
-  border-radius: 12px;
   text-decoration: none;
   transition: border-color 200ms, transform 200ms cubic-bezier(0.34,1.56,0.64,1);
 }
-.csd-nav-card:hover { border-color: var(--border-strong); transform: translateY(-2px); }
+.csd-nav-card:hover { border-color: var(--card-border-hover); transform: translateY(-2px); }
 .csd-nav-card--next { text-align: right; }
 .csd-nav-direction { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--color-text); }
 .csd-nav-company { font-size: 1.125rem; font-weight: 900; color: var(--color-heading); letter-spacing: -0.02em; }

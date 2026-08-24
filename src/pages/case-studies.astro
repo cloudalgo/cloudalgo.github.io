@@ -81,7 +81,7 @@ import Badge from '@/components/ui/Badge.astro';
       <div class="cs-grid">
         {caseStudies.map((cs) => (
           <article
-            class="cs-card"
+            class="card card--radius-2xl card--lift cs-card"
             onclick={`window.location='/case-studies/${cs.id}'`}
             style="cursor:pointer;"
           >
@@ -296,19 +296,10 @@ import Badge from '@/components/ui/Badge.astro';
   margin: 0 auto;
 }
 
-/* Card */
+/* Card. Shell and hover come from `.card card--radius-2xl card--lift`. */
 .cs-card {
-  background: var(--surface-card);
-  border: 1px solid var(--border-default);
-  border-radius: 16px;
   overflow: hidden;
   position: relative;
-  transition: transform 220ms cubic-bezier(0.34,1.56,0.64,1), box-shadow 220ms ease, border-color 220ms ease;
-}
-.cs-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 40px rgba(var(--ink-900-rgb), 0.1), 0 2px 8px rgba(var(--ink-900-rgb), 0.06);
-  border-color: var(--border-strong);
 }
 .cs-card-metric-bg {
   position: absolute;

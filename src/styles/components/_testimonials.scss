@@ -11,9 +11,6 @@
 /* Two or more quotes: let the grid use the full container width. */
 .testimonial-grid:has(> :nth-child(2)) { max-width: none; }
 .testimonial-card {
-  background: var(--ca-surface);
-  border: 1px solid var(--ca-border);
-  border-radius: 12px;
   padding: 2.5rem;
 }
 .testimonial-quote-mark {

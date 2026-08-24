@@ -1,0 +1,84 @@
+/* ─── Card ────────────────────────────────────────────────
+   The bordered surface: a panel that holds content and reads
+   as a distinct object against the page.
+
+   Eleven of them existed, each declaring the same three lines
+   independently, and each having drifted from the others:
+
+     class               radius  padding          hover
+     testimonial-card     12     2.5rem           --
+     why-card             12     2rem             -6px + 16/32 shadow
+     csd-nav-card         12     1.5rem           -2px, spring
+     indutries-card-bg    12     1.75 / 1.25rem   fills black
+     lx-card              12     22px 24px        -2px, ease
+     contact-info-card    14     1.75rem          --
+     contact-next-card    14     1.75rem          --
+     feat-card            14     1.75rem          -4px + 12/32 shadow
+     blog-card-new        14     (body pads)      8/32 shadow, no lift
+     cs-card              16     (body pads)      -4px + two-layer
+     prod-card            16     (body pads)      -4px + two-layer
+
+   Three radii, seven paddings and six hover treatments is drift,
+   not intent -- but converging them would change how the site
+   renders, and this phase may not. So every value above is
+   preserved exactly. What changes is where it lives: one `.card`
+   carrying the shell the eleven agree on (surface, hairline,
+   radius), and each card's own rule keeping only what makes it
+   that card.
+
+   Four of the eleven also reached the shell through the legacy
+   `--ca-surface` / `--ca-border` aliases while the other seven used
+   `--surface-card` / `--border-default`. Those alias pairs resolve
+   to the same values, so folding them into `--card-*` is a no-op
+   that happens to end the split.
+
+   Three further cards are deliberately NOT `.card`: the featured
+   blog card and the contact certification card are inverse
+   surfaces, and the cookie-consent category card sits on
+   translucent paper. An inverse tone belongs here eventually --
+   it is not invented now, on two call sites that disagree about
+   whether it has a border.
+
+   `.card` declares no literal appearance: restyling every card on
+   the site is editing --card-* in tokens/_components.scss. */
+
+.card {
+  background: var(--card-bg);
+  border: var(--card-border-width) solid var(--card-border);
+  border-radius: var(--card-radius);
+}
+
+/* ── Radius ──
+   Named after the scale step rather than the pixel count, so that
+   converging the cards later is deleting these two classes rather
+   than editing every call site. 12px is `.card` itself. */
+
+.card--radius-xl {
+  --card-radius: var(--card-radius-xl);
+}
+
+.card--radius-2xl {
+  --card-radius: var(--card-radius-2xl);
+}
+
+/* ── Lift ──
+   The one hover treatment more than a single card uses: the
+   case-study and product cards had byte-identical rules for it.
+   The others stayed unique and kept their own :hover rule beside
+   their own class.
+
+   The spring easing overshoots, which is what gives the lift its
+   snap; the shadow and border transition linearly underneath so
+   only the position bounces. */
+
+.card--lift {
+  transition: transform 220ms cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 220ms ease,
+              border-color 220ms ease;
+}
+
+.card--lift:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--card-shadow-lift);
+  border-color: var(--card-border-hover);
+}
