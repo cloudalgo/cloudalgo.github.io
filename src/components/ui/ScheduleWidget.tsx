@@ -28,6 +28,17 @@ const FOCUSABLE_SELECTOR =
   'a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), ' +
   'select:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
+// Dates and times are rendered in the visitor's own locale rather than forced
+// into US English. `undefined` lets Intl fall back to the host default.
+const LOCALE = typeof navigator !== 'undefined' ? navigator.language : undefined;
+
+// Monday-first short weekday names, to match getFirstDayOffset(). 2024-01-01
+// was a Monday, so seven days from there cover the week in display order.
+const WEEKDAY_LABELS = (() => {
+  const fmt = new Intl.DateTimeFormat(LOCALE, { weekday: 'short' });
+  return Array.from({ length: 7 }, (_, i) => fmt.format(new Date(2024, 0, 1 + i)));
+})();
+
 type Step = 'date' | 'details' | 'confirmed';
 
 // ── Utilities ──────────────────────────────────────────────────────────────
@@ -44,10 +55,9 @@ function istSlotToLocal(date: Date, istTime: string, timezone: string): string {
   const d = new Date(
     `${toDateStr(date)}T${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:00+05:30`
   );
-  return d.toLocaleTimeString('en-US', {
+  return d.toLocaleTimeString(LOCALE, {
     hour: 'numeric',
     minute: '2-digit',
-    hour12: true,
     timeZone: timezone,
   });
 }
@@ -61,7 +71,7 @@ function addSlotMinutes(istTime: string, minutes: number): string {
 function formatBookingSummary(date: Date, istTime: string, timezone: string): string {
   const start = istSlotToLocal(date, istTime, timezone);
   const end = istSlotToLocal(date, addSlotMinutes(istTime, SLOT_DURATION_MIN), timezone);
-  const dateLabel = date.toLocaleDateString('en-US', {
+  const dateLabel = date.toLocaleDateString(LOCALE, {
     weekday: 'long',
     month: 'long',
     day: 'numeric',
@@ -72,7 +82,7 @@ function formatBookingSummary(date: Date, istTime: string, timezone: string): st
 
 function getTimezoneLabel(timezone: string): string {
   try {
-    const parts = new Intl.DateTimeFormat('en-US', {
+    const parts = new Intl.DateTimeFormat(LOCALE, {
       timeZoneName: 'long',
       timeZone: timezone,
     }).formatToParts(new Date());
@@ -119,14 +129,54 @@ function addBusinessDays(from: Date, days: number): Date {
   return result;
 }
 
-function isScheduleHash(): boolean {
-  return typeof window !== 'undefined' && window.location.hash === '#schedule';
+// The fragment carries the booking selection so a date and slot survive a
+// reload and can be shared: #schedule, #schedule/YYYY-MM-DD, or
+// #schedule/YYYY-MM-DD/HH:MM where HH:MM is the slot's IST key.
+interface ScheduleHash {
+  open: boolean;
+  date: Date | null;
+  time: string | null;
 }
 
-function setScheduleHash(open: boolean) {
+function parseScheduleHash(): ScheduleHash {
+  const closed: ScheduleHash = { open: false, date: null, time: null };
+  if (typeof window === 'undefined') return closed;
+
+  const [name, dateStr, timeStr] = window.location.hash.replace(/^#/, '').split('/');
+  if (name !== 'schedule') return closed;
+
+  let date: Date | null = null;
+  if (dateStr && /^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
+    const [y, m, d] = dateStr.split('-').map(Number);
+    const parsed = new Date(y, m - 1, d);
+    // Round-tripping rejects impossible dates like 2026-02-31; the calendar
+    // offers no past or weekend days, so a link to one falls back to the default
+    if (
+      toDateStr(parsed) === dateStr &&
+      !isPastDate(y, m - 1, d) &&
+      !isWeekend(y, m - 1, d)
+    ) {
+      date = parsed;
+    }
+  }
+
+  // A time without a usable date has nothing to book against
+  const time = date && timeStr && /^\d{2}:\d{2}$/.test(timeStr) ? timeStr : null;
+  return { open: true, date, time };
+}
+
+function setScheduleHash(open: boolean, date?: Date | null, time?: string | null) {
   if (typeof window === 'undefined') return;
   const base = window.location.pathname + window.location.search;
-  history.replaceState(null, '', open ? base + '#schedule' : base);
+  let hash = '';
+  if (open) {
+    hash = '#schedule';
+    if (date) {
+      hash += `/${toDateStr(date)}`;
+      if (time) hash += `/${time}`;
+    }
+  }
+  history.replaceState(null, '', base + hash);
 }
 
 // ── ScheduleLauncher ───────────────────────────────────────────────────────
@@ -184,7 +234,7 @@ function StepDatePicker({
   const isCurrentMonth =
     year === today.getFullYear() && month === today.getMonth();
 
-  const monthLabel = currentMonth.toLocaleDateString('en-US', {
+  const monthLabel = currentMonth.toLocaleDateString(LOCALE, {
     month: 'long',
     year: 'numeric',
   });
@@ -235,7 +285,7 @@ function StepDatePicker({
           </div>
 
           <div className="sw-cal-grid">
-            {['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'].map(d => (
+            {WEEKDAY_LABELS.map(d => (
               <span key={d} className="sw-cal-dow">{d}</span>
             ))}
             {cells.map((day, i) => {
@@ -278,7 +328,7 @@ function StepDatePicker({
           {selectedDate && (
             <>
               <h3 className="sw-slots-heading">
-                {selectedDate.toLocaleDateString('en-US', {
+                {selectedDate.toLocaleDateString(LOCALE, {
                   weekday: 'long',
                   month: 'long',
                   day: 'numeric',
@@ -287,7 +337,7 @@ function StepDatePicker({
               {slotsLoading && (
                 <div role="status" aria-live="polite">
                   <span style={{ position: 'absolute', width: 1, height: 1, overflow: 'hidden', clip: 'rect(0,0,0,0)' }}>
-                    Loading available slots...
+                    Loading available slots…
                   </span>
                   <div className="sw-spinner" />
                 </div>
@@ -334,10 +384,10 @@ function StepDatePicker({
             </button>
             <div className="sw-mobile-panel-date">
               <strong>{selectedDate
-                ? selectedDate.toLocaleDateString('en-US', { weekday: 'long' })
+                ? selectedDate.toLocaleDateString(LOCALE, { weekday: 'long' })
                 : 'Select a date'}</strong>
               {selectedDate && (
-                <span>{selectedDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
+                <span>{selectedDate.toLocaleDateString(LOCALE, { month: 'long', day: 'numeric', year: 'numeric' })}</span>
               )}
             </div>
             <button className="sw-modal-close sw-modal-close--inline" onClick={onClose} aria-label="Close">
@@ -364,7 +414,7 @@ function StepDatePicker({
             {slotsLoading && (
               <div role="status" aria-live="polite">
                 <span style={{ position: 'absolute', width: 1, height: 1, overflow: 'hidden', clip: 'rect(0,0,0,0)' }}>
-                  Loading available slots...
+                  Loading available slots…
                 </span>
                 <div className="sw-spinner" style={{ margin: '32px auto' }} />
               </div>
@@ -592,7 +642,7 @@ function StepConfirmation({
         <IoCloseOutline />
       </button>
       <div className="sw-confirmed-icon"><FiCheck /></div>
-      <h2 className="sw-confirmed-heading">You're scheduled!</h2>
+      <h2 className="sw-confirmed-heading">You’re scheduled!</h2>
       <p className="sw-confirmed-detail">{summary}</p>
       <p className="sw-confirmed-email">
         A confirmation email has been sent to <strong>{email}</strong>.
@@ -607,13 +657,17 @@ function StepConfirmation({
 // ── ScheduleWidget (root) ──────────────────────────────────────────────────
 
 export default function ScheduleWidget() {
-  const openFromUrl = useMemo(() => isScheduleHash(), []);
-  const defaultDate = useMemo(() => addBusinessDays(new Date(), 2), []);
+  const initialHash = useMemo(() => parseScheduleHash(), []);
+  const openFromUrl = initialHash.open;
+  const defaultDate = useMemo(
+    () => initialHash.date ?? addBusinessDays(new Date(), 2),
+    [initialHash]
+  );
 
   const [isOpen, setIsOpen] = useState(openFromUrl);
-  const [step, setStep] = useState<Step>('date');
+  const [step, setStep] = useState<Step>(initialHash.time ? 'details' : 'date');
   const [selectedDate, setSelectedDate] = useState<Date | null>(defaultDate);
-  const [selectedTime, setSelectedTime] = useState<string | null>(null);
+  const [selectedTime, setSelectedTime] = useState<string | null>(initialHash.time);
   const [confirmedEmail, setConfirmedEmail] = useState('');
   const [availableSlots, setAvailableSlots] = useState<string[]>([]);
   const [allSlots, setAllSlots] = useState<string[]>([]);
@@ -642,19 +696,6 @@ export default function ScheduleWidget() {
     }, 2000);
     return () => clearTimeout(t);
   }, [openFromUrl]);
-
-  useEffect(() => {
-    const onHashChange = () => {
-      if (window.location.hash === '#schedule') {
-        setIsOpen(true);
-        setVisible(true);
-      } else {
-        setIsOpen(false);
-      }
-    };
-    window.addEventListener('hashchange', onHashChange);
-    return () => window.removeEventListener('hashchange', onHashChange);
-  }, []);
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? 'hidden' : '';
@@ -708,19 +749,63 @@ export default function ScheduleWidget() {
     }
   }, [fetchSlots, defaultDate, openFromUrl]);
 
+  // Fragment changes that come from outside the widget: an in-page #schedule
+  // link, or the visitor editing the URL. Our own writes use replaceState,
+  // which does not fire hashchange, so this never sees them.
+  useEffect(() => {
+    const onHashChange = () => {
+      const { open, date, time } = parseScheduleHash();
+      if (!open) {
+        setIsOpen(false);
+        return;
+      }
+      setIsOpen(true);
+      setVisible(true);
+      if (date) {
+        setSelectedDate(date);
+        setCurrentMonth(new Date(date.getFullYear(), date.getMonth(), 1));
+        fetchSlots(date);
+      }
+      setSelectedTime(time);
+      setStep(time ? 'details' : 'date');
+    };
+    window.addEventListener('hashchange', onHashChange);
+    return () => window.removeEventListener('hashchange', onHashChange);
+  }, [fetchSlots]);
+
+  // A shared link can name a slot that has since been taken. Once real
+  // availability arrives, drop back to the calendar rather than let someone
+  // fill in a booking that cannot succeed. A failed fetch leaves slots empty,
+  // so this stays put instead of bouncing them out on a transient error.
+  const deepLinkedTime = initialHash.time;
+  const deepLinkChecked = useRef(false);
+  useEffect(() => {
+    if (!deepLinkedTime || deepLinkChecked.current) return;
+    if (slotsLoading || availableSlots.length === 0) return;
+    deepLinkChecked.current = true;
+    if (!availableSlots.includes(deepLinkedTime)) {
+      setSelectedTime(null);
+      setStep('date');
+      setScheduleHash(true, selectedDate, null);
+    }
+  }, [deepLinkedTime, slotsLoading, availableSlots, selectedDate]);
+
   const handleSelectDate = (date: Date) => {
     setSelectedDate(date);
+    setScheduleHash(true, date, null);
     fetchSlots(date);
     setMobileShowCalendar(false);
   };
 
   const handleSelectSlot = (slot: string) => {
     setSelectedTime(slot);
+    setScheduleHash(true, selectedDate, slot);
     setStep('details');
   };
 
   const handleBack = () => {
     setSelectedTime(null);
+    setScheduleHash(true, selectedDate, null);
     setStep('date');
   };
 

@@ -1270,6 +1270,8 @@ textarea.form-control { resize: vertical; min-height: 140px; }
   color: #aaa;
   padding: 4px 0 8px;
   letter-spacing: 0.02em;
+  /* Names come from Intl now, so casing is applied here rather than baked in */
+  text-transform: uppercase;
 }
 .sw-cal-day {
   border: none;
