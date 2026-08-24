@@ -1,0 +1,38 @@
+/* ─── Featured / Why Us cards ─────────────────────────── */
+.why-us-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+@media (max-width: 767px) { .why-us-grid { grid-template-columns: 1fr; } }
+
+.why-card {
+  background: var(--ca-surface);
+  border: 1px solid var(--ca-border);
+  border-radius: 12px;
+  padding: 2rem;
+  transition: border-color 0.3s, transform 0.3s ease, box-shadow 0.3s ease;
+}
+.why-card:hover { border-color: var(--ca-black); transform: translateY(-6px); box-shadow: 0 16px 32px rgba(10, 10, 10, 0.08); }
+
+.why-card-number {
+  font-size: 3.5rem;
+  font-weight: 900;
+  color: var(--ca-border);
+  line-height: 1;
+  margin-bottom: 0.75rem;
+  font-family: 'Outfit', sans-serif;
+  letter-spacing: -0.03em;
+}
+.why-card h3 {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--ca-black);
+  margin-bottom: 0.5rem;
+}
+.why-card p {
+  font-size: 0.9375rem;
+  color: var(--ca-secondary-black);
+  line-height: 1.65;
+  margin: 0;
+}

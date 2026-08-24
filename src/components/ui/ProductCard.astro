@@ -63,13 +63,13 @@ const iconSvg = productIcons[slug] ?? productIcons['cloudalgo-flow-audit'];
 
 {dark ? (
   <div class="product-card-dark" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:12px;padding:1.75rem;display:flex;gap:1.25rem;align-items:flex-start;height:100%;">
-    <div style="width:44px;height:44px;border-radius:10px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);flex-shrink:0;display:flex;align-items:center;justify-content:center;color:#fff;overflow:hidden;">
+    <div style="width:44px;height:44px;border-radius:10px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);flex-shrink:0;display:flex;align-items:center;justify-content:center;color:var(--color-on-inverse);overflow:hidden;">
       <Fragment set:html={iconSvg} />
     </div>
     <div style="flex:1;min-width:0;display:flex;flex-direction:column;height:100%;">
       <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem;flex-wrap:wrap;">
         {data.status === 'ga' ? (
-          <span style="background:rgba(255,255,255,0.9);color:#0A0A0A;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:100px;text-transform:uppercase;letter-spacing:0.06em;">
+          <span style="background:rgba(255,255,255,0.9);color:var(--color-heading);font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:100px;text-transform:uppercase;letter-spacing:0.06em;">
             {statusLabel(data.status)}
           </span>
         ) : (
@@ -81,7 +81,7 @@ const iconSvg = productIcons[slug] ?? productIcons['cloudalgo-flow-audit'];
           <span style="font-size:0.65rem;color:rgba(255,255,255,0.4);">Early access</span>
         )}
       </div>
-      <div style="font-size:1rem;font-weight:700;color:#fff;margin-bottom:0.35rem;">{data.title}</div>
+      <div style="font-size:1rem;font-weight:700;color:var(--color-on-inverse);margin-bottom:0.35rem;">{data.title}</div>
       <div style="font-size:0.85rem;color:rgba(255,255,255,0.55);line-height:1.6;margin-bottom:1rem;">{data.excerpt}</div>
       <a href={`/products/${slug}`} style="font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.8);text-decoration:underline;text-underline-offset:3px;transition:color 0.2s;margin-top:auto;" class="prod-card-link-dark">
         Learn more &rarr;
@@ -100,16 +100,16 @@ const iconSvg = productIcons[slug] ?? productIcons['cloudalgo-flow-audit'];
       <h2 class="prod-card-title">{data.title}</h2>
       <div style="margin-bottom:0.75rem;">
         {data.status === 'ga' ? (
-          <span style="background:#0A0A0A;color:#fff;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:100px;text-transform:uppercase;letter-spacing:0.06em;">
+          <span style="background:var(--surface-inverse);color:var(--color-on-inverse);font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:100px;text-transform:uppercase;letter-spacing:0.06em;">
             {statusLabel(data.status)}
           </span>
         ) : (
-          <span style="border:1.5px solid #0A0A0A;color:#0A0A0A;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:100px;text-transform:uppercase;letter-spacing:0.06em;">
+          <span style="border:1.5px solid var(--border-strong);color:var(--color-heading);font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:100px;text-transform:uppercase;letter-spacing:0.06em;">
             {statusLabel(data.status)}
           </span>
         )}
         {isEarlyAccess && (
-          <span style="font-size:0.65rem;color:#5A5A5A;margin-left:0.4rem;">Early access</span>
+          <span style="font-size:0.65rem;color:var(--color-text);margin-left:0.4rem;">Early access</span>
         )}
       </div>
       <p class="prod-card-excerpt">{data.excerpt}</p>
@@ -117,8 +117,8 @@ const iconSvg = productIcons[slug] ?? productIcons['cloudalgo-flow-audit'];
         {data.features.slice(0, 3).map(f => (
           <li>
             <svg width="16" height="16" viewBox="0 0 18 18" fill="none" aria-hidden="true">
-              <rect x="0.75" y="0.75" width="16.5" height="16.5" rx="4.25" stroke="#0A0A0A" stroke-width="1.5"/>
-              <path d="M5.5 9L7.8 11.5L12.5 6.5" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <rect x="0.75" y="0.75" width="16.5" height="16.5" rx="4.25" stroke="var(--illus-ink)" stroke-width="1.5"/>
+              <path d="M5.5 9L7.8 11.5L12.5 6.5" stroke="var(--illus-ink)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
             <span>{f.title}</span>
           </li>
@@ -145,8 +145,8 @@ const iconSvg = productIcons[slug] ?? productIcons['cloudalgo-flow-audit'];
 <style>
 /* Light card — matches case study card pattern */
 .prod-card {
-  background: #fff;
-  border: 1px solid #E0E0DC;
+  background: var(--surface-card);
+  border: 1px solid var(--border-default);
   border-radius: 16px;
   overflow: hidden;
   transition: transform 220ms cubic-bezier(0.34,1.56,0.64,1),
@@ -159,7 +159,7 @@ const iconSvg = productIcons[slug] ?? productIcons['cloudalgo-flow-audit'];
 .prod-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 12px 40px rgba(10,10,10,0.1), 0 2px 8px rgba(10,10,10,0.06);
-  border-color: #0A0A0A;
+  border-color: var(--border-strong);
 }
 
 .prod-card-body {
@@ -177,31 +177,31 @@ const iconSvg = productIcons[slug] ?? productIcons['cloudalgo-flow-audit'];
 .prod-card-index {
   font-size: 0.7rem;
   font-weight: 700;
-  color: #0A0A0A;
+  color: var(--color-heading);
   letter-spacing: 0.04em;
 }
 .prod-card-dot {
   font-size: 0.7rem;
-  color: #AEAEA8;
+  color: var(--color-text-faintest);
 }
 .prod-card-type {
   font-size: 0.7rem;
   font-weight: 600;
-  color: #5A5A5A;
+  color: var(--color-text);
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
 .prod-card-title {
   font-size: 1.25rem;
   font-weight: 800;
-  color: #0A0A0A;
+  color: var(--color-heading);
   letter-spacing: -0.02em;
   line-height: 1.2;
   margin-bottom: 0.625rem;
 }
 .prod-card-excerpt {
   font-size: 0.9rem;
-  color: #5A5A5A;
+  color: var(--color-text);
   line-height: 1.65;
   margin-bottom: 1rem;
   flex: 1;
@@ -222,7 +222,7 @@ const iconSvg = productIcons[slug] ?? productIcons['cloudalgo-flow-audit'];
 .prod-card-features li svg { flex-shrink: 0; margin-top: 0.1rem; }
 .prod-card-features li span {
   font-size: 0.875rem;
-  color: #5A5A5A;
+  color: var(--color-text);
   line-height: 1.5;
 }
 .prod-card-ctas {
@@ -231,5 +231,5 @@ const iconSvg = productIcons[slug] ?? productIcons['cloudalgo-flow-audit'];
   flex-wrap: wrap;
   margin-top: auto;
 }
-.prod-card-link-dark:hover { color: #fff !important; }
+.prod-card-link-dark:hover { color: var(--color-on-inverse) !important; }
 </style>

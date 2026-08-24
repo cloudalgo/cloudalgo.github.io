@@ -1,0 +1,45 @@
+/* ─── Footer ──────────────────────────────────────────── */
+.main-footer {
+  border-top: 1px solid var(--ca-border);
+}
+
+/* Footer CTA strip */
+.footer-cta {
+  background-color: var(--surface-inverse-soft);
+  padding: 5rem 0;
+  text-align: center;
+}
+.footer-cta h2 {
+  color: var(--color-on-inverse);
+  font-size: 3.5rem;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  margin-bottom: 1.75rem;
+}
+@media (max-width: 767px) {
+  .footer-cta h2 { font-size: 2.25rem; }
+  .footer-cta { padding: 3.5rem 0; }
+}
+
+/* Footer nav */
+.footer {
+  background-color: var(--ca-grey2);
+  padding: 3.5rem 0;
+  font-size: 0.9375rem;
+  color: var(--ca-secondary-black);
+}
+.footer-brand {
+  font-size: 1.125rem;
+  font-weight: 800;
+  color: var(--ca-black);
+  letter-spacing: -0.02em;
+  margin-bottom: 0.75rem;
+}
+.footer address { line-height: 1.7; margin-bottom: 1.25rem; font-style: normal; font-size: 0.9375rem; }
+.copy-right { margin-top: 1.5rem; font-size: 0.8125rem; color: var(--color-text-faint); }
+
+.page-links { display: flex; }
+.page-links ul { list-style: none; margin: 0; padding: 0; width: 50%; }
+.page-links ul li { margin: 0.75rem 0; }
+.page-links ul li a { text-decoration: none; color: var(--ca-secondary-black); font-size: 0.9375rem; }
+.page-links ul li a:hover { color: var(--ca-black); }

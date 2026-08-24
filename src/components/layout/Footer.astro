@@ -80,7 +80,7 @@ const year = new Date().getFullYear()
 
 /* ── Footer wrapper ──────────────────────────────────────── */
 .ca-footer {
-  background: #0A0A0A;
+  background: var(--surface-inverse);
   color: rgba(255,255,255,0.55);
 }
 
@@ -109,7 +109,7 @@ const year = new Date().getFullYear()
 .ca-fbrand-talk {
   font-size: clamp(2rem, 4vw, 3rem);
   font-weight: 900;
-  color: #fff;
+  color: var(--color-on-inverse);
   letter-spacing: -0.04em;
   line-height: 1.1;
   margin-bottom: 0.5rem;
@@ -122,7 +122,7 @@ const year = new Date().getFullYear()
   margin-bottom: 1.75rem;
   transition: color 0.2s;
 }
-.ca-fbrand-email-cta:hover { color: #fff; }
+.ca-fbrand-email-cta:hover { color: var(--color-on-inverse); }
 .ca-fbrand-desc {
   font-size: 0.875rem;
   line-height: 1.8;
@@ -157,5 +157,5 @@ const year = new Date().getFullYear()
   font-size: 0.9375rem;
   transition: color 0.2s;
 }
-.ca-flinks a:hover { color: #fff; }
+.ca-flinks a:hover { color: var(--color-on-inverse); }
 </style>

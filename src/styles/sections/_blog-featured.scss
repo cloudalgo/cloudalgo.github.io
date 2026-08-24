@@ -1,0 +1,58 @@
+/* ─── Blog featured sections ──────────────────────────── */
+.blog-post-section { color: var(--text-black); }
+.blog-post-section .card {
+  border: 1px solid var(--ca-border);
+  overflow: hidden;
+  border-radius: 12px;
+}
+.blog-post-section .card-title {
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
+}
+.blog-post-section .card-title a { color: var(--text-black); font-weight: 800; }
+.blog-post-section .card-title a:hover { color: var(--color-link-hover); }
+.blog-post-section .card-body { padding: 2.5rem; font-size: 1.0625rem; }
+.blog-post-section .card-text { color: var(--ca-secondary-black); margin-bottom: 0.75rem; }
+.blog-post-section .text-muted { color: var(--ca-secondary-black) !important; font-size: 0.875rem; }
+.blog-post-section img { height: 100%; transition: transform 0.4s ease-out; }
+.blog-post-section:hover img { transform: scale(1.05); }
+@media (max-width: 1399px) {
+  .blog-post-section .card-title { font-size: 1.5rem; }
+  .blog-post-section .card-body { padding: 1.75rem; }
+}
+
+/* Last / bottom pick */
+.last-post-section .card { border: none; background: var(--ca-surface); border: 1px solid var(--ca-border); border-radius: 12px; }
+.last-post-section .card-body { padding: 2rem; }
+.last-post-section .card-text { color: var(--ca-secondary-black); }
+.last-post-section .card-title { color: var(--ca-black); }
+
+.editors-pick-img-wrap img,
+.bottom-pick-img-wrap img { width: 100%; height: 100%; object-fit: cover; }
+.editor-pick-placeholder { width: 100%; height: 100%; min-height: 150px; background: var(--border-default); }
+
+.latest-post-section.section-padding--vertical,
+.blog-grid-section.section-padding--vertical,
+.last-post-section.section-padding--vertical { padding-top: 3rem; padding-bottom: 3rem; }
+
+.blog-grid-section { background: var(--ca-grey2); }
+
+/* Load More */
+.load-more-wrap { text-align: center; margin-top: 0.5rem; }
+.btn-load-more {
+  display: inline-block;
+  padding: 0.75rem 2.5rem;
+  background: transparent;
+  border: 1.5px solid var(--ca-black);
+  color: var(--ca-black);
+  font-weight: 700;
+  font-size: 0.9375rem;
+  text-decoration: none;
+  cursor: pointer;
+  font-family: 'Outfit', system-ui, sans-serif;
+  border-radius: 100px;
+  transition: background 0.2s, color 0.2s;
+}
+.btn-load-more:hover { background: var(--ca-black); color: var(--color-on-inverse); }

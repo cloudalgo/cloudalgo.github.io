@@ -1,0 +1,35 @@
+/* ─── Stats / Milestone ───────────────────────────────── */
+.counts {
+  background: var(--ca-surface);
+  border-top: 1px solid var(--ca-border);
+  border-bottom: 1px solid var(--ca-border);
+  padding: 3.5rem 0;
+}
+.milestone-counter { text-align: center; color: var(--ca-black); font-weight: 700; }
+.count-outer {
+  font-size: 3rem;
+  font-weight: 900;
+  color: var(--ca-black);
+  letter-spacing: -0.03em;
+  font-family: 'Outfit', sans-serif;
+  /* Digits are the same width, so a counter ticking 8 -> 9 -> 10 does not
+     shuffle the label under it. */
+  font-variant-numeric: tabular-nums;
+}
+.milestone-details { font-size: 1rem; font-weight: 500; color: var(--ca-secondary-black); margin-top: 0.25rem; }
+@media (max-width: 991px) {
+  .count-outer { font-size: 2.25rem; }
+}
+@media (max-width: 767px) {
+  .milestone-counter { margin: 1.5rem 0; padding: 0 1rem; }
+  .count-outer { font-size: 2rem; }
+  .milestone-details { font-size: 0.875rem; }
+}
+
+/* Stats dividers between items on desktop */
+.stats-divider {
+  border: none;
+  border-left: 1px solid var(--ca-border);
+  height: 3rem;
+  align-self: center;
+}

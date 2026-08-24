@@ -1,0 +1,26 @@
+/* ─── About section ───────────────────────────────────── */
+.about-section_inner { max-width: 480px; margin: auto; }
+.about-section_inner h2 { font-size: 2.5rem; font-weight: 800; margin-bottom: 1.5rem; }
+.about-section_inner p { margin-bottom: 1.5rem; }
+@media (max-width: 767px) {
+  .about-section { text-align: center; }
+  .about-section_inner { max-width: 100%; }
+  .about-section_inner h2 { font-size: 1.875rem; margin-top: 1.5rem; }
+}
+
+/* ─── Heading + description ───────────────────────────── */
+.heading-n-description { margin-bottom: 3rem; }
+.heading-n-description h2 { margin-bottom: 1rem; }
+.heading-n-description.text-center { text-align: center; }
+.heading-n-description.text-center p { max-width: 680px; margin-left: auto; margin-right: auto; }
+
+/* Section label (small eyebrow) */
+.section-label {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ca-secondary-black);
+  margin-bottom: 1rem;
+}

@@ -26,164 +26,164 @@ const contentIllustration = getBlogIllustration(slug);
 const illustrations: Record<string, string> = {
   Salesforce: `
 <svg viewBox="0 0 480 200" fill="none" xmlns="http://www.w3.org/2000/svg" class="blog-svg-illus" aria-hidden="true">
-  <rect x="36" y="18" width="250" height="164" rx="8" stroke="#0A0A0A" stroke-width="1.5" opacity="0.75"/>
-  <rect x="36" y="18" width="250" height="30" rx="8" stroke="none" fill="#0A0A0A" opacity="0.07"/>
-  <path d="M36 48 L286 48" stroke="#0A0A0A" stroke-width="1" opacity="0.4"/>
-  <circle cx="52" cy="33" r="4" fill="#0A0A0A" opacity="0.35"/>
-  <circle cx="66" cy="33" r="4" fill="#0A0A0A" opacity="0.25"/>
-  <circle cx="80" cy="33" r="4" fill="#0A0A0A" opacity="0.18"/>
-  <path d="M52 65 L230 65" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" opacity="0.3"/>
-  <path d="M52 80 L200 80" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" opacity="0.25"/>
-  <path d="M52 95 L220 95" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" opacity="0.3"/>
-  <path d="M52 110 L175 110" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" opacity="0.2"/>
-  <rect x="52" y="128" width="62" height="22" rx="4" stroke="#0A0A0A" stroke-width="1.5" opacity="0.5"/>
-  <path d="M62 139 L104 139" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
-  <rect x="126" y="128" width="62" height="22" rx="4" stroke="#0A0A0A" stroke-width="1.5" fill="#0A0A0A" opacity="0.8"/>
-  <path d="M136 139 L178 139" stroke="#fff" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
-  <rect x="320" y="28" width="132" height="70" rx="8" stroke="#0A0A0A" stroke-width="1.5" opacity="0.6"/>
-  <text x="386" y="60" text-anchor="middle" font-family="Outfit,sans-serif" font-size="24" font-weight="900" fill="#0A0A0A" opacity="0.8">92%</text>
-  <text x="386" y="82" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" fill="#5A5A5A">Success Rate</text>
+  <rect x="36" y="18" width="250" height="164" rx="8" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.75"/>
+  <rect x="36" y="18" width="250" height="30" rx="8" stroke="none" fill="var(--illus-ink)" opacity="0.07"/>
+  <path d="M36 48 L286 48" stroke="var(--illus-ink)" stroke-width="1" opacity="0.4"/>
+  <circle cx="52" cy="33" r="4" fill="var(--illus-ink)" opacity="0.35"/>
+  <circle cx="66" cy="33" r="4" fill="var(--illus-ink)" opacity="0.25"/>
+  <circle cx="80" cy="33" r="4" fill="var(--illus-ink)" opacity="0.18"/>
+  <path d="M52 65 L230 65" stroke="var(--illus-ink)" stroke-width="1.5" stroke-linecap="round" opacity="0.3"/>
+  <path d="M52 80 L200 80" stroke="var(--illus-ink)" stroke-width="1.5" stroke-linecap="round" opacity="0.25"/>
+  <path d="M52 95 L220 95" stroke="var(--illus-ink)" stroke-width="1.5" stroke-linecap="round" opacity="0.3"/>
+  <path d="M52 110 L175 110" stroke="var(--illus-ink)" stroke-width="1.5" stroke-linecap="round" opacity="0.2"/>
+  <rect x="52" y="128" width="62" height="22" rx="4" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.5"/>
+  <path d="M62 139 L104 139" stroke="var(--illus-ink)" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+  <rect x="126" y="128" width="62" height="22" rx="4" stroke="var(--illus-ink)" stroke-width="1.5" fill="var(--illus-ink)" opacity="0.8"/>
+  <path d="M136 139 L178 139" stroke="var(--illus-surface)" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
+  <rect x="320" y="28" width="132" height="70" rx="8" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.6"/>
+  <text x="386" y="60" text-anchor="middle" font-family="Outfit,sans-serif" font-size="24" font-weight="900" fill="var(--illus-ink)" opacity="0.8">92%</text>
+  <text x="386" y="82" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" fill="var(--illus-ink-soft)">Success Rate</text>
   <g class="sf-cloud">
-    <path d="M362 148 C350 148 342 141 342 133 C342 127 347 122 354 121 C356 114 363 109 371 109 C378 109 384 113 386 119 C390 119 395 123 395 128 C395 135 388 141 379 141 Z" stroke="#0A0A0A" stroke-width="1.5" fill="none" opacity="0.7"/>
+    <path d="M362 148 C350 148 342 141 342 133 C342 127 347 122 354 121 C356 114 363 109 371 109 C378 109 384 113 386 119 C390 119 395 123 395 128 C395 135 388 141 379 141 Z" stroke="var(--illus-ink)" stroke-width="1.5" fill="none" opacity="0.7"/>
   </g>
   <g class="sf-bolt">
-    <path d="M370 116 L365 127 L370 127 L365 138" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+    <path d="M370 116 L365 127 L370 127 L365 138" stroke="var(--illus-ink)" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
   </g>
-  <circle cx="430" cy="120" r="22" stroke="#0A0A0A" stroke-width="1.5" opacity="0.3"/>
-  <circle cx="430" cy="120" r="14" stroke="#0A0A0A" stroke-width="1" opacity="0.2"/>
-  <path d="M430 105 L430 120 L440 120" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" opacity="0.45"/>
+  <circle cx="430" cy="120" r="22" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.3"/>
+  <circle cx="430" cy="120" r="14" stroke="var(--illus-ink)" stroke-width="1" opacity="0.2"/>
+  <path d="M430 105 L430 120 L440 120" stroke="var(--illus-ink)" stroke-width="1.5" stroke-linecap="round" opacity="0.45"/>
 </svg>`,
 
   Heroku: `
 <svg viewBox="0 0 480 200" fill="none" xmlns="http://www.w3.org/2000/svg" class="blog-svg-illus" aria-hidden="true">
-  <rect x="50" y="20" width="280" height="162" rx="8" stroke="#0A0A0A" stroke-width="1.5" opacity="0.75"/>
-  <rect x="50" y="20" width="280" height="28" rx="8" stroke="none" fill="#0A0A0A" opacity="0.07"/>
-  <path d="M50 48 L330 48" stroke="#0A0A0A" stroke-width="1" opacity="0.4"/>
-  <circle cx="66" cy="34" r="4" fill="#0A0A0A" opacity="0.35"/>
-  <circle cx="80" cy="34" r="4" fill="#0A0A0A" opacity="0.25"/>
-  <circle cx="94" cy="34" r="4" fill="#0A0A0A" opacity="0.18"/>
-  <text x="66" y="66" font-family="Outfit,monospace" font-size="10" fill="#5A5A5A" opacity="0.6">$</text>
-  <text x="78" y="66" font-family="Outfit,monospace" font-size="10" fill="#0A0A0A" opacity="0.7">git push heroku main</text>
+  <rect x="50" y="20" width="280" height="162" rx="8" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.75"/>
+  <rect x="50" y="20" width="280" height="28" rx="8" stroke="none" fill="var(--illus-ink)" opacity="0.07"/>
+  <path d="M50 48 L330 48" stroke="var(--illus-ink)" stroke-width="1" opacity="0.4"/>
+  <circle cx="66" cy="34" r="4" fill="var(--illus-ink)" opacity="0.35"/>
+  <circle cx="80" cy="34" r="4" fill="var(--illus-ink)" opacity="0.25"/>
+  <circle cx="94" cy="34" r="4" fill="var(--illus-ink)" opacity="0.18"/>
+  <text x="66" y="66" font-family="Outfit,monospace" font-size="10" fill="var(--illus-ink-soft)" opacity="0.6">$</text>
+  <text x="78" y="66" font-family="Outfit,monospace" font-size="10" fill="var(--illus-ink)" opacity="0.7">git push heroku main</text>
   <g class="heroku-lines">
-    <text x="66" y="84" font-family="Outfit,monospace" font-size="9" fill="#5A5A5A" opacity="0.5">remote: Compressing source files...</text>
-    <text x="66" y="100" font-family="Outfit,monospace" font-size="9" fill="#5A5A5A" opacity="0.45">remote: Building source: Node.js</text>
-    <text x="66" y="116" font-family="Outfit,monospace" font-size="9" fill="#5A5A5A" opacity="0.4">remote: -----> Installing dependencies</text>
-    <text x="66" y="132" font-family="Outfit,monospace" font-size="9" fill="#5A5A5A" opacity="0.5">remote: -----> Build succeeded!</text>
+    <text x="66" y="84" font-family="Outfit,monospace" font-size="9" fill="var(--illus-ink-soft)" opacity="0.5">remote: Compressing source files...</text>
+    <text x="66" y="100" font-family="Outfit,monospace" font-size="9" fill="var(--illus-ink-soft)" opacity="0.45">remote: Building source: Node.js</text>
+    <text x="66" y="116" font-family="Outfit,monospace" font-size="9" fill="var(--illus-ink-soft)" opacity="0.4">remote: -----> Installing dependencies</text>
+    <text x="66" y="132" font-family="Outfit,monospace" font-size="9" fill="var(--illus-ink-soft)" opacity="0.5">remote: -----> Build succeeded!</text>
   </g>
   <g class="heroku-success">
-    <rect x="66" y="146" width="238" height="20" rx="4" fill="#0A0A0A" opacity="0.85"/>
-    <text x="185" y="160" text-anchor="middle" font-family="Outfit,monospace" font-size="9" font-weight="700" fill="#fff">✓ Deployed to production</text>
+    <rect x="66" y="146" width="238" height="20" rx="4" fill="var(--illus-ink)" opacity="0.85"/>
+    <text x="185" y="160" text-anchor="middle" font-family="Outfit,monospace" font-size="9" font-weight="700" fill="var(--illus-surface)">✓ Deployed to production</text>
   </g>
   <g class="heroku-rocket">
-    <path d="M400 160 C400 140 420 120 420 95" stroke="#0A0A0A" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.4"/>
-    <path d="M420 95 L414 105 L420 100 L426 105 Z" stroke="#0A0A0A" stroke-width="1.5" fill="none" opacity="0.6"/>
-    <path d="M412 108 C412 100 420 94 428 94 C428 104 422 112 412 114 Z" stroke="#0A0A0A" stroke-width="1.5" fill="none" opacity="0.6"/>
-    <circle cx="420" cy="92" r="5" stroke="#0A0A0A" stroke-width="1.5" opacity="0.7"/>
+    <path d="M400 160 C400 140 420 120 420 95" stroke="var(--illus-ink)" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.4"/>
+    <path d="M420 95 L414 105 L420 100 L426 105 Z" stroke="var(--illus-ink)" stroke-width="1.5" fill="none" opacity="0.6"/>
+    <path d="M412 108 C412 100 420 94 428 94 C428 104 422 112 412 114 Z" stroke="var(--illus-ink)" stroke-width="1.5" fill="none" opacity="0.6"/>
+    <circle cx="420" cy="92" r="5" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.7"/>
   </g>
-  <path d="M370 150 C360 150 352 144 352 136 C352 130 356 125 362 124 C364 118 370 114 377 114 C383 114 388 118 390 123 C393 123 397 127 397 131 C397 137 392 142 385 142 Z" stroke="#0A0A0A" stroke-width="1.5" fill="none" opacity="0.45"/>
+  <path d="M370 150 C360 150 352 144 352 136 C352 130 356 125 362 124 C364 118 370 114 377 114 C383 114 388 118 390 123 C393 123 397 127 397 131 C397 137 392 142 385 142 Z" stroke="var(--illus-ink)" stroke-width="1.5" fill="none" opacity="0.45"/>
 </svg>`,
 
   MuleSoft: `
 <svg viewBox="0 0 480 200" fill="none" xmlns="http://www.w3.org/2000/svg" class="blog-svg-illus" aria-hidden="true">
-  <circle cx="240" cy="100" r="28" stroke="#0A0A0A" stroke-width="2" opacity="0.8"/>
-  <circle cx="240" cy="100" r="16" stroke="#0A0A0A" stroke-width="1.5" opacity="0.4"/>
-  <text x="240" y="97" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8" font-weight="700" fill="#0A0A0A">API</text>
-  <text x="240" y="109" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8" font-weight="700" fill="#0A0A0A">HUB</text>
+  <circle cx="240" cy="100" r="28" stroke="var(--illus-ink)" stroke-width="2" opacity="0.8"/>
+  <circle cx="240" cy="100" r="16" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.4"/>
+  <text x="240" y="97" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8" font-weight="700" fill="var(--illus-ink)">API</text>
+  <text x="240" y="109" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8" font-weight="700" fill="var(--illus-ink)">HUB</text>
   <g class="mule-node1">
-    <circle cx="80" cy="55" r="18" stroke="#0A0A0A" stroke-width="1.5" opacity="0.6"/>
-    <text x="80" y="52" text-anchor="middle" font-family="Outfit,sans-serif" font-size="7" font-weight="700" fill="#0A0A0A">Sales</text>
-    <text x="80" y="63" text-anchor="middle" font-family="Outfit,sans-serif" font-size="7" fill="#5A5A5A">force</text>
+    <circle cx="80" cy="55" r="18" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.6"/>
+    <text x="80" y="52" text-anchor="middle" font-family="Outfit,sans-serif" font-size="7" font-weight="700" fill="var(--illus-ink)">Sales</text>
+    <text x="80" y="63" text-anchor="middle" font-family="Outfit,sans-serif" font-size="7" fill="var(--illus-ink-soft)">force</text>
   </g>
   <g class="mule-node2">
-    <circle cx="80" cy="145" r="18" stroke="#0A0A0A" stroke-width="1.5" opacity="0.6"/>
-    <text x="80" y="142" text-anchor="middle" font-family="Outfit,sans-serif" font-size="7" font-weight="700" fill="#0A0A0A">ERP</text>
-    <text x="80" y="153" text-anchor="middle" font-family="Outfit,sans-serif" font-size="7" fill="#5A5A5A">SAP</text>
+    <circle cx="80" cy="145" r="18" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.6"/>
+    <text x="80" y="142" text-anchor="middle" font-family="Outfit,sans-serif" font-size="7" font-weight="700" fill="var(--illus-ink)">ERP</text>
+    <text x="80" y="153" text-anchor="middle" font-family="Outfit,sans-serif" font-size="7" fill="var(--illus-ink-soft)">SAP</text>
   </g>
   <g class="mule-node3">
-    <circle cx="400" cy="55" r="18" stroke="#0A0A0A" stroke-width="1.5" opacity="0.6"/>
-    <text x="400" y="52" text-anchor="middle" font-family="Outfit,sans-serif" font-size="7" font-weight="700" fill="#0A0A0A">AWS</text>
-    <text x="400" y="63" text-anchor="middle" font-family="Outfit,sans-serif" font-size="7" fill="#5A5A5A">Cloud</text>
+    <circle cx="400" cy="55" r="18" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.6"/>
+    <text x="400" y="52" text-anchor="middle" font-family="Outfit,sans-serif" font-size="7" font-weight="700" fill="var(--illus-ink)">AWS</text>
+    <text x="400" y="63" text-anchor="middle" font-family="Outfit,sans-serif" font-size="7" fill="var(--illus-ink-soft)">Cloud</text>
   </g>
   <g class="mule-node4">
-    <circle cx="400" cy="145" r="18" stroke="#0A0A0A" stroke-width="1.5" opacity="0.6"/>
-    <text x="400" y="142" text-anchor="middle" font-family="Outfit,sans-serif" font-size="7" font-weight="700" fill="#0A0A0A">DB</text>
-    <text x="400" y="153" text-anchor="middle" font-family="Outfit,sans-serif" font-size="7" fill="#5A5A5A">SQL</text>
+    <circle cx="400" cy="145" r="18" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.6"/>
+    <text x="400" y="142" text-anchor="middle" font-family="Outfit,sans-serif" font-size="7" font-weight="700" fill="var(--illus-ink)">DB</text>
+    <text x="400" y="153" text-anchor="middle" font-family="Outfit,sans-serif" font-size="7" fill="var(--illus-ink-soft)">SQL</text>
   </g>
-  <line x1="98" y1="62" x2="213" y2="88" stroke="#0A0A0A" stroke-width="1.5" stroke-dasharray="6 4" opacity="0.45" class="mule-line"/>
-  <line x1="98" y1="138" x2="213" y2="112" stroke="#0A0A0A" stroke-width="1.5" stroke-dasharray="6 4" opacity="0.45" class="mule-line"/>
-  <line x1="267" y1="88" x2="382" y2="62" stroke="#0A0A0A" stroke-width="1.5" stroke-dasharray="6 4" opacity="0.45" class="mule-line"/>
-  <line x1="267" y1="112" x2="382" y2="138" stroke="#0A0A0A" stroke-width="1.5" stroke-dasharray="6 4" opacity="0.45" class="mule-line"/>
-  <circle cx="152" cy="74" r="4" fill="#0A0A0A" opacity="0.5" class="mule-pulse"/>
-  <circle cx="327" cy="74" r="4" fill="#0A0A0A" opacity="0.5" class="mule-pulse2"/>
-  <circle cx="152" cy="126" r="4" fill="#0A0A0A" opacity="0.5" class="mule-pulse3"/>
-  <circle cx="327" cy="126" r="4" fill="#0A0A0A" opacity="0.5" class="mule-pulse4"/>
+  <line x1="98" y1="62" x2="213" y2="88" stroke="var(--illus-ink)" stroke-width="1.5" stroke-dasharray="6 4" opacity="0.45" class="mule-line"/>
+  <line x1="98" y1="138" x2="213" y2="112" stroke="var(--illus-ink)" stroke-width="1.5" stroke-dasharray="6 4" opacity="0.45" class="mule-line"/>
+  <line x1="267" y1="88" x2="382" y2="62" stroke="var(--illus-ink)" stroke-width="1.5" stroke-dasharray="6 4" opacity="0.45" class="mule-line"/>
+  <line x1="267" y1="112" x2="382" y2="138" stroke="var(--illus-ink)" stroke-width="1.5" stroke-dasharray="6 4" opacity="0.45" class="mule-line"/>
+  <circle cx="152" cy="74" r="4" fill="var(--illus-ink)" opacity="0.5" class="mule-pulse"/>
+  <circle cx="327" cy="74" r="4" fill="var(--illus-ink)" opacity="0.5" class="mule-pulse2"/>
+  <circle cx="152" cy="126" r="4" fill="var(--illus-ink)" opacity="0.5" class="mule-pulse3"/>
+  <circle cx="327" cy="126" r="4" fill="var(--illus-ink)" opacity="0.5" class="mule-pulse4"/>
 </svg>`,
 
   AWS: `
 <svg viewBox="0 0 480 200" fill="none" xmlns="http://www.w3.org/2000/svg" class="blog-svg-illus" aria-hidden="true">
   <g class="aws-cloud">
-    <path d="M170 72 C142 72 122 58 122 42 C122 30 133 20 148 18 C150 6 163 -2 178 -2 C190 -2 200 4 205 14 C210 12 216 10 222 10 C242 10 258 24 258 42 C258 60 242 74 222 74 Z" stroke="#0A0A0A" stroke-width="1.5" fill="none" opacity="0.7"/>
-    <text x="190" y="44" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" font-weight="700" fill="#0A0A0A" opacity="0.6">AWS Region</text>
+    <path d="M170 72 C142 72 122 58 122 42 C122 30 133 20 148 18 C150 6 163 -2 178 -2 C190 -2 200 4 205 14 C210 12 216 10 222 10 C242 10 258 24 258 42 C258 60 242 74 222 74 Z" stroke="var(--illus-ink)" stroke-width="1.5" fill="none" opacity="0.7"/>
+    <text x="190" y="44" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" font-weight="700" fill="var(--illus-ink)" opacity="0.6">AWS Region</text>
   </g>
-  <rect x="100" y="90" width="280" height="90" rx="8" stroke="#0A0A0A" stroke-width="1.5" opacity="0.65"/>
-  <text x="122" y="106" font-family="Outfit,sans-serif" font-size="8" fill="#5A5A5A">VPC</text>
-  <rect x="116" y="112" width="60" height="52" rx="4" stroke="#0A0A0A" stroke-width="1.5" opacity="0.6"/>
-  <text x="146" y="133" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8" font-weight="700" fill="#0A0A0A">EC2</text>
-  <path d="M130 144 L162 144" stroke="#0A0A0A" stroke-width="1" opacity="0.3"/>
-  <path d="M130 152 L155 152" stroke="#0A0A0A" stroke-width="1" opacity="0.3"/>
-  <rect x="196" y="112" width="60" height="52" rx="4" stroke="#0A0A0A" stroke-width="1.5" fill="#0A0A0A" opacity="0.8"/>
-  <text x="226" y="133" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8" font-weight="700" fill="#fff">RDS</text>
-  <path d="M210 144 L242 144" stroke="#fff" stroke-width="1" opacity="0.3"/>
-  <path d="M210 152 L235 152" stroke="#fff" stroke-width="1" opacity="0.3"/>
-  <rect x="276" y="112" width="88" height="52" rx="4" stroke="#0A0A0A" stroke-width="1.5" opacity="0.6"/>
-  <text x="320" y="133" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8" font-weight="700" fill="#0A0A0A">S3 / Redshift</text>
-  <path d="M290 144 L352 144" stroke="#0A0A0A" stroke-width="1" opacity="0.3"/>
-  <path d="M290 152 L335 152" stroke="#0A0A0A" stroke-width="1" opacity="0.3"/>
-  <path d="M176 74 L176 90" stroke="#0A0A0A" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.4"/>
-  <path d="M146 90 L146 112" stroke="#0A0A0A" stroke-width="1.5" opacity="0.3"/>
-  <path d="M226 90 L226 112" stroke="#0A0A0A" stroke-width="1.5" opacity="0.3"/>
-  <path d="M320 90 L320 112" stroke="#0A0A0A" stroke-width="1.5" opacity="0.3"/>
-  <rect x="360" y="20" width="88" height="52" rx="6" stroke="#0A0A0A" stroke-width="1.5" opacity="0.55"/>
-  <text x="404" y="42" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" font-weight="700" fill="#0A0A0A">Lambda</text>
-  <text x="404" y="56" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8" fill="#5A5A5A">Serverless</text>
-  <path d="M404 72 L404 90 L320 90" stroke="#0A0A0A" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.35"/>
+  <rect x="100" y="90" width="280" height="90" rx="8" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.65"/>
+  <text x="122" y="106" font-family="Outfit,sans-serif" font-size="8" fill="var(--illus-ink-soft)">VPC</text>
+  <rect x="116" y="112" width="60" height="52" rx="4" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.6"/>
+  <text x="146" y="133" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8" font-weight="700" fill="var(--illus-ink)">EC2</text>
+  <path d="M130 144 L162 144" stroke="var(--illus-ink)" stroke-width="1" opacity="0.3"/>
+  <path d="M130 152 L155 152" stroke="var(--illus-ink)" stroke-width="1" opacity="0.3"/>
+  <rect x="196" y="112" width="60" height="52" rx="4" stroke="var(--illus-ink)" stroke-width="1.5" fill="var(--illus-ink)" opacity="0.8"/>
+  <text x="226" y="133" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8" font-weight="700" fill="var(--illus-surface)">RDS</text>
+  <path d="M210 144 L242 144" stroke="var(--illus-surface)" stroke-width="1" opacity="0.3"/>
+  <path d="M210 152 L235 152" stroke="var(--illus-surface)" stroke-width="1" opacity="0.3"/>
+  <rect x="276" y="112" width="88" height="52" rx="4" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.6"/>
+  <text x="320" y="133" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8" font-weight="700" fill="var(--illus-ink)">S3 / Redshift</text>
+  <path d="M290 144 L352 144" stroke="var(--illus-ink)" stroke-width="1" opacity="0.3"/>
+  <path d="M290 152 L335 152" stroke="var(--illus-ink)" stroke-width="1" opacity="0.3"/>
+  <path d="M176 74 L176 90" stroke="var(--illus-ink)" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.4"/>
+  <path d="M146 90 L146 112" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.3"/>
+  <path d="M226 90 L226 112" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.3"/>
+  <path d="M320 90 L320 112" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.3"/>
+  <rect x="360" y="20" width="88" height="52" rx="6" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.55"/>
+  <text x="404" y="42" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" font-weight="700" fill="var(--illus-ink)">Lambda</text>
+  <text x="404" y="56" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8" fill="var(--illus-ink-soft)">Serverless</text>
+  <path d="M404 72 L404 90 L320 90" stroke="var(--illus-ink)" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.35"/>
 </svg>`,
 
   Product: `
 <svg viewBox="0 0 480 200" fill="none" xmlns="http://www.w3.org/2000/svg" class="blog-svg-illus" aria-hidden="true">
-  <path d="M200 30 L280 70 L280 150 L200 190 L120 150 L120 70 Z" stroke="#0A0A0A" stroke-width="1.5" stroke-linejoin="round" opacity="0.7"/>
-  <path d="M200 30 L200 110 L280 70" stroke="#0A0A0A" stroke-width="1" opacity="0.35"/>
-  <path d="M200 110 L120 70" stroke="#0A0A0A" stroke-width="1" opacity="0.35"/>
-  <path d="M200 110 L200 190" stroke="#0A0A0A" stroke-width="1" opacity="0.3"/>
-  <path d="M162 120 C162 110 178 103 200 102 C222 103 238 110 238 120 L238 148 C238 158 222 165 200 167 C178 165 162 158 162 148 Z" stroke="#0A0A0A" stroke-width="1.5" fill="none" opacity="0.6"/>
-  <path d="M185 132 L195 142 L218 120" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.8"/>
-  <rect x="326" y="30" width="62" height="22" rx="11" stroke="#0A0A0A" stroke-width="1.5" fill="#0A0A0A" opacity="0.85"/>
-  <text x="357" y="45" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" font-weight="700" fill="#fff">v2.4.1</text>
+  <path d="M200 30 L280 70 L280 150 L200 190 L120 150 L120 70 Z" stroke="var(--illus-ink)" stroke-width="1.5" stroke-linejoin="round" opacity="0.7"/>
+  <path d="M200 30 L200 110 L280 70" stroke="var(--illus-ink)" stroke-width="1" opacity="0.35"/>
+  <path d="M200 110 L120 70" stroke="var(--illus-ink)" stroke-width="1" opacity="0.35"/>
+  <path d="M200 110 L200 190" stroke="var(--illus-ink)" stroke-width="1" opacity="0.3"/>
+  <path d="M162 120 C162 110 178 103 200 102 C222 103 238 110 238 120 L238 148 C238 158 222 165 200 167 C178 165 162 158 162 148 Z" stroke="var(--illus-ink)" stroke-width="1.5" fill="none" opacity="0.6"/>
+  <path d="M185 132 L195 142 L218 120" stroke="var(--illus-ink)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.8"/>
+  <rect x="326" y="30" width="62" height="22" rx="11" stroke="var(--illus-ink)" stroke-width="1.5" fill="var(--illus-ink)" opacity="0.85"/>
+  <text x="357" y="45" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" font-weight="700" fill="var(--illus-surface)">v2.4.1</text>
   <g class="product-star1">
-    <circle cx="348" cy="90" r="3" fill="#0A0A0A" opacity="0.5"/>
-    <circle cx="348" cy="90" r="6" stroke="#0A0A0A" stroke-width="1" opacity="0.2"/>
+    <circle cx="348" cy="90" r="3" fill="var(--illus-ink)" opacity="0.5"/>
+    <circle cx="348" cy="90" r="6" stroke="var(--illus-ink)" stroke-width="1" opacity="0.2"/>
   </g>
   <g class="product-star2">
-    <circle cx="374" cy="118" r="3" fill="#0A0A0A" opacity="0.45"/>
-    <circle cx="374" cy="118" r="6" stroke="#0A0A0A" stroke-width="1" opacity="0.2"/>
+    <circle cx="374" cy="118" r="3" fill="var(--illus-ink)" opacity="0.45"/>
+    <circle cx="374" cy="118" r="6" stroke="var(--illus-ink)" stroke-width="1" opacity="0.2"/>
   </g>
   <g class="product-star3">
-    <circle cx="350" cy="148" r="3" fill="#0A0A0A" opacity="0.4"/>
-    <circle cx="350" cy="148" r="6" stroke="#0A0A0A" stroke-width="1" opacity="0.2"/>
+    <circle cx="350" cy="148" r="3" fill="var(--illus-ink)" opacity="0.4"/>
+    <circle cx="350" cy="148" r="6" stroke="var(--illus-ink)" stroke-width="1" opacity="0.2"/>
   </g>
   <g class="product-star4">
-    <circle cx="396" cy="80" r="2.5" fill="#0A0A0A" opacity="0.3"/>
+    <circle cx="396" cy="80" r="2.5" fill="var(--illus-ink)" opacity="0.3"/>
   </g>
   <g class="product-star5">
-    <circle cx="410" cy="140" r="2.5" fill="#0A0A0A" opacity="0.3"/>
+    <circle cx="410" cy="140" r="2.5" fill="var(--illus-ink)" opacity="0.3"/>
   </g>
   <g class="product-star6">
-    <circle cx="330" cy="130" r="2" fill="#0A0A0A" opacity="0.25"/>
+    <circle cx="330" cy="130" r="2" fill="var(--illus-ink)" opacity="0.25"/>
   </g>
-  <rect x="326" y="64" width="100" height="60" rx="6" stroke="#0A0A0A" stroke-width="1.5" opacity="0.4"/>
-  <path d="M344 84 L408 84" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" opacity="0.3"/>
-  <path d="M344 96 L390 96" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" opacity="0.25"/>
-  <path d="M344 108 L400 108" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" opacity="0.3"/>
+  <rect x="326" y="64" width="100" height="60" rx="6" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.4"/>
+  <path d="M344 84 L408 84" stroke="var(--illus-ink)" stroke-width="1.5" stroke-linecap="round" opacity="0.3"/>
+  <path d="M344 96 L390 96" stroke="var(--illus-ink)" stroke-width="1.5" stroke-linecap="round" opacity="0.25"/>
+  <path d="M344 108 L400 108" stroke="var(--illus-ink)" stroke-width="1.5" stroke-linecap="round" opacity="0.3"/>
 </svg>`,
 };
 
@@ -234,8 +234,8 @@ const illustrationSvg = contentIllustration || illustrations[category] || illust
 
 /* ── Card shell ─────────────────────────────────────── */
 .blog-card-new {
-  background: #fff;
-  border: 1px solid #E0E0DC;
+  background: var(--surface-card);
+  border: 1px solid var(--border-default);
   border-radius: 14px;
   overflow: hidden;
   display: flex;
@@ -246,7 +246,7 @@ const illustrationSvg = contentIllustration || illustrations[category] || illust
   animation: cardIn 0.5s ease both;
 }
 .blog-card-new:hover {
-  border-color: #0A0A0A;
+  border-color: var(--border-strong);
   box-shadow: 0 8px 32px rgba(10,10,10,0.07);
 }
 
@@ -255,7 +255,7 @@ const illustrationSvg = contentIllustration || illustrations[category] || illust
   display: block;
   overflow: hidden;
   height: 220px;
-  background: #F0EFEB;
+  background: var(--surface-tint);
   position: relative;
   flex-shrink: 0;
 }
@@ -304,15 +304,15 @@ const illustrationSvg = contentIllustration || illustrations[category] || illust
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #5A5A5A;
-  background: #F5F5F2;
-  border: 1px solid #E0E0DC;
+  color: var(--color-text);
+  background: var(--surface-page);
+  border: 1px solid var(--border-default);
   border-radius: 100px;
   padding: 0.2rem 0.625rem;
 }
 .blog-read-time {
   font-size: 0.75rem;
-  color: #999;
+  color: var(--color-text-faint);
   font-weight: 500;
 }
 .blog-card-title {
@@ -323,9 +323,9 @@ const illustrationSvg = contentIllustration || illustrations[category] || illust
   margin: 0;
 }
 .blog-card-title a {
-  color: #0A0A0A;
+  color: var(--color-heading);
   text-decoration: none;
-  background-image: linear-gradient(#0A0A0A, #0A0A0A);
+  background-image: linear-gradient(var(--surface-inverse), var(--surface-inverse));
   background-position: 0 100%;
   background-repeat: no-repeat;
   background-size: 0% 1.5px;
@@ -336,7 +336,7 @@ const illustrationSvg = contentIllustration || illustrations[category] || illust
 }
 .blog-card-excerpt {
   font-size: 0.875rem;
-  color: #5A5A5A;
+  color: var(--color-text);
   line-height: 1.65;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -351,24 +351,24 @@ const illustrationSvg = contentIllustration || illustrations[category] || illust
   gap: 0.625rem;
   margin-top: auto;
   padding-top: 0.75rem;
-  border-top: 1px solid #F0EFEB;
+  border-top: 1px solid var(--surface-tint);
 }
 .blog-author-photo {
   width: 28px;
   height: 28px;
   border-radius: 50%;
   object-fit: cover;
-  border: 1.5px solid #E0E0DC;
+  border: 1.5px solid var(--border-default);
   flex-shrink: 0;
 }
 .blog-meta-text {
   font-size: 0.8125rem;
-  color: #888;
+  color: var(--color-text-muted);
   display: flex;
   align-items: center;
   gap: 0.375rem;
 }
-.blog-author-name { font-weight: 600; color: #5A5A5A; }
+.blog-author-name { font-weight: 600; color: var(--color-text); }
 .blog-meta-dot { opacity: 0.5; }
 
 /* ── Illustration hover animations ─────────────────── */

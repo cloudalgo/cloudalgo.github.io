@@ -4,7 +4,6 @@ import { readdirSync } from 'node:fs';
 import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
-import tailwindcss from '@tailwindcss/vite';
 
 // Blog slugs dropped their YYYY-MM-DD- filename prefix (see src/content.config.ts).
 // Anything already indexed at the dated path is redirected to the clean one.
@@ -45,7 +44,4 @@ export default defineConfig({
     react(),
     sitemap(),
   ],
-  vite: {
-    plugins: [tailwindcss()],
-  },
 });

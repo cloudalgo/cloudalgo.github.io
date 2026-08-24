@@ -1,0 +1,22 @@
+/* ─── Contact ─────────────────────────────────────────── */
+.contact-form { padding: 4rem 0; }
+
+.form-control {
+  display: block;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1.5px solid var(--ca-border);
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: 'Outfit', sans-serif;
+  transition: border-color 0.2s;
+  background: var(--surface-card);
+  color: var(--ca-black);
+}
+.form-control:focus { border-color: var(--ca-black); }
+.form-control:focus:not(:focus-visible) { outline: none; }
+textarea.form-control { resize: vertical; min-height: 140px; }
+.form-group { margin-bottom: 0; }
+.error-line { color: var(--input-message-invalid); font-size: 0.8rem; display: block; margin-top: 0.25rem; }
+.form-label { font-weight: 600; margin-bottom: 0.35rem; display: block; font-size: 0.9375rem; color: var(--ca-black); }
+.text-danger { color: var(--color-danger); font-size: 0.8rem; }

@@ -155,7 +155,7 @@ export default function ContactForm() {
 
       <div className="row mt-5">
         <div className="col-12">
-          <button type="submit" className="btn btn-secondary py-2 px-4"
+          <button type="submit" className="btn btn-secondary"
             disabled={status === 'sending'}>
             {status === 'sending' ? 'Sending…' : 'Send My Project Details'}
             <span className="icon-arrow_forward" aria-hidden="true"></span>

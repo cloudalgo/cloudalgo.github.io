@@ -19,7 +19,7 @@ const isActive = (href: string) =>
       <img src="/email-logo-dark.svg" alt="CloudAlgo" width="174" height="32" />
     </a>
 
-    <nav class="hidden lg:block">
+    <nav class="nav-desktop">
       <ul class="nav-links">
         {navLinks.map(link => (
           <li>
@@ -39,11 +39,11 @@ const isActive = (href: string) =>
     </nav>
 
     <!-- Animated hamburger toggle -->
-    <button id="mobile-toggle" class="hamburger lg:hidden" aria-label="Toggle menu" aria-expanded="false" aria-controls="mobile-menu">
+    <button id="mobile-toggle" class="hamburger" aria-label="Toggle menu" aria-expanded="false" aria-controls="mobile-menu">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <line class="ham-top" x1="3" y1="6"  x2="21" y2="6"  stroke="#0A0A0A" stroke-width="2" stroke-linecap="round"/>
-        <line class="ham-mid" x1="3" y1="12" x2="21" y2="12" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round"/>
-        <line class="ham-bot" x1="3" y1="18" x2="21" y2="18" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round"/>
+        <line class="ham-top" x1="3" y1="6"  x2="21" y2="6"  stroke="var(--illus-ink)" stroke-width="2" stroke-linecap="round"/>
+        <line class="ham-mid" x1="3" y1="12" x2="21" y2="12" stroke="var(--illus-ink)" stroke-width="2" stroke-linecap="round"/>
+        <line class="ham-bot" x1="3" y1="18" x2="21" y2="18" stroke="var(--illus-ink)" stroke-width="2" stroke-linecap="round"/>
       </svg>
     </button>
   </div>
@@ -55,14 +55,14 @@ const isActive = (href: string) =>
         <li>
           <a href={link.href}
              aria-current={isActive(link.href) ? 'page' : undefined}
-             style="color:#0A0A0A;font-weight:600;font-size:1rem;display:block;padding:0.5rem 0;border-bottom:1px solid #E0E0DC;">
+             style="color:var(--color-heading);font-weight:600;font-size:1rem;display:block;padding:0.5rem 0;border-bottom:1px solid var(--border-default);">
             {link.label}
           </a>
         </li>
       ))}
       <li style="margin-top:0.75rem;">
         <a href="#schedule" id="book-btn-mobile"
-           style="display:inline-flex;background:#0A0A0A;color:#fff;padding:0.75rem 1.75rem;border-radius:100px;font-weight:700;font-size:0.9375rem;text-decoration:none;">
+           style="display:inline-flex;background:var(--surface-inverse);color:var(--color-on-inverse);padding:0.75rem 1.75rem;border-radius:100px;font-weight:700;font-size:0.9375rem;text-decoration:none;">
           Book Consultation
         </a>
       </li>
@@ -71,6 +71,15 @@ const isActive = (href: string) =>
 </header>
 
 <style>
+/* ── Desktop nav / hamburger visibility ────────────────── */
+/* Single 1024px switch: exactly one of the two is ever displayed. */
+.nav-desktop { display: none; }
+.hamburger { display: flex; }
+@media (min-width: 1024px) {
+  .nav-desktop { display: block; }
+  .hamburger { display: none; }
+}
+
 /* ── Hamburger button ──────────────────────────────────── */
 .hamburger {
   background: none;
@@ -79,10 +88,6 @@ const isActive = (href: string) =>
   padding: 0.4rem;
   align-items: center;
   justify-content: center;
-}
-/* Only apply flex when visible (mobile) */
-@media (max-width: 1023px) {
-  .hamburger { display: flex; }
 }
 
 .ham-top,
@@ -116,8 +121,8 @@ const isActive = (href: string) =>
   top: 100%;
   left: 0;
   right: 0;
-  background: #fff;
-  border-top: 1px solid #E0E0DC;
+  background: var(--surface-card);
+  border-top: 1px solid var(--border-default);
   padding: 1.25rem 1.5rem;
   /* A static cap, so it costs no per-frame layout. A nav too long for the
      screen scrolls instead of being cut off. */

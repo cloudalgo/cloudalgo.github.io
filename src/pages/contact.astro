@@ -37,65 +37,65 @@ import ContactForm from '../components/ui/ContactForm.tsx';
           <svg viewBox="0 0 440 340" fill="none" xmlns="http://www.w3.org/2000/svg" class="contact-svg">
 
             <!-- Client box (top-left) -->
-            <rect x="20" y="30" width="140" height="100" rx="10" stroke="#0A0A0A" stroke-width="2" opacity="0.8"/>
-            <text x="90" y="72" text-anchor="middle" font-family="Outfit,sans-serif" font-size="12" font-weight="700" fill="#0A0A0A" opacity="0.75">Your Company</text>
+            <rect x="20" y="30" width="140" height="100" rx="10" stroke="var(--illus-ink)" stroke-width="2" opacity="0.8"/>
+            <text x="90" y="72" text-anchor="middle" font-family="Outfit,sans-serif" font-size="12" font-weight="700" fill="var(--illus-ink)" opacity="0.75">Your Company</text>
             <!-- Person icon inside -->
-            <circle cx="90" cy="95" r="10" stroke="#0A0A0A" stroke-width="1.5" opacity="0.5"/>
-            <path d="M74 118 C74 108 82 102 90 102 C98 102 106 108 106 118" stroke="#0A0A0A" stroke-width="1.5" opacity="0" fill="none"/>
+            <circle cx="90" cy="95" r="10" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.5"/>
+            <path d="M74 118 C74 108 82 102 90 102 C98 102 106 108 106 118" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0" fill="none"/>
 
             <!-- CloudAlgo box (bottom-right) -->
-            <rect x="280" y="210" width="140" height="100" rx="10" stroke="#0A0A0A" stroke-width="2" fill="#0A0A0A" opacity="0.9"/>
-            <text x="350" y="252" text-anchor="middle" font-family="Outfit,sans-serif" font-size="12" font-weight="700" fill="#fff">CloudAlgo</text>
+            <rect x="280" y="210" width="140" height="100" rx="10" stroke="var(--illus-ink)" stroke-width="2" fill="var(--illus-ink)" opacity="0.9"/>
+            <text x="350" y="252" text-anchor="middle" font-family="Outfit,sans-serif" font-size="12" font-weight="700" fill="var(--illus-surface)">CloudAlgo</text>
             <text x="350" y="270" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" fill="rgba(255,255,255,0.6)">Salesforce Experts</text>
             <!-- Checkmark -->
             <path d="M340 288 L347 296 L362 280" stroke="rgba(255,255,255,0.7)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
 
             <!-- Message path: client → CloudAlgo -->
             <path d="M160 80 C220 80 220 260 280 260"
-                  stroke="#0A0A0A" stroke-width="1.5" stroke-dasharray="8 5" opacity="0.3"/>
+                  stroke="var(--illus-ink)" stroke-width="1.5" stroke-dasharray="8 5" opacity="0.3"/>
 
             <!-- Message envelope 1 (travelling down) -->
             <g transform="translate(175, 130)">
-              <rect x="-18" y="-12" width="36" height="24" rx="4" stroke="#0A0A0A" stroke-width="1.5" fill="#fff" opacity="0.9"/>
-              <path d="M-18 -12 L0 2 L18 -12" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
+              <rect x="-18" y="-12" width="36" height="24" rx="4" stroke="var(--illus-ink)" stroke-width="1.5" fill="var(--illus-surface)" opacity="0.9"/>
+              <path d="M-18 -12 L0 2 L18 -12" stroke="var(--illus-ink)" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
             </g>
 
             <!-- Message envelope 2 (travelling) -->
             <g transform="translate(220, 185)">
-              <rect x="-14" y="-10" width="28" height="20" rx="3" stroke="#0A0A0A" stroke-width="1.5" fill="#fff" opacity="0.85"/>
-              <path d="M-14 -10 L0 2 L14 -10" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+              <rect x="-14" y="-10" width="28" height="20" rx="3" stroke="var(--illus-ink)" stroke-width="1.5" fill="var(--illus-surface)" opacity="0.85"/>
+              <path d="M-14 -10 L0 2 L14 -10" stroke="var(--illus-ink)" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
             </g>
 
             <!-- Reply path: CloudAlgo → client -->
             <path d="M280 228 C240 228 200 90 160 90"
-                  stroke="#0A0A0A" stroke-width="1.5" stroke-dasharray="5 6" opacity="0.18"/>
+                  stroke="var(--illus-ink)" stroke-width="1.5" stroke-dasharray="5 6" opacity="0.18"/>
 
             <!-- Reply checkmark bubble -->
             <g transform="translate(240, 150)">
-              <circle r="14" stroke="#0A0A0A" stroke-width="1.5" fill="#fff" opacity="0.8"/>
-              <path d="M-5 0 L-1 4 L7 -4" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.7"/>
+              <circle r="14" stroke="var(--illus-ink)" stroke-width="1.5" fill="var(--illus-surface)" opacity="0.8"/>
+              <path d="M-5 0 L-1 4 L7 -4" stroke="var(--illus-ink)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.7"/>
             </g>
 
             <!-- Floating time badge -->
-            <rect x="290" y="60" width="130" height="40" rx="20" stroke="#0A0A0A" stroke-width="1.5" opacity="0.6" fill="#fff"/>
-            <text x="355" y="78" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" font-weight="700" fill="#0A0A0A" opacity="0.8">⏱ 1 business day</text>
-            <text x="355" y="91" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" fill="#5A5A5A" opacity="0.7">guaranteed response</text>
+            <rect x="290" y="60" width="130" height="40" rx="20" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.6" fill="var(--illus-surface)"/>
+            <text x="355" y="78" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" font-weight="700" fill="var(--illus-ink)" opacity="0.8">⏱ 1 business day</text>
+            <text x="355" y="91" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" fill="var(--illus-ink-soft)" opacity="0.7">guaranteed response</text>
 
             <!-- Floating project tag -->
-            <rect x="20" y="170" width="120" height="36" rx="8" stroke="#0A0A0A" stroke-width="1.5" opacity="0.55" fill="#fff"/>
-            <text x="80" y="185" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" font-weight="700" fill="#0A0A0A" opacity="0.7">Salesforce Project</text>
-            <text x="80" y="198" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8" fill="#5A5A5A" opacity="0.6">Implementation · Integration</text>
+            <rect x="20" y="170" width="120" height="36" rx="8" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.55" fill="var(--illus-surface)"/>
+            <text x="80" y="185" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" font-weight="700" fill="var(--illus-ink)" opacity="0.7">Salesforce Project</text>
+            <text x="80" y="198" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8" fill="var(--illus-ink-soft)" opacity="0.6">Implementation · Integration</text>
 
             <!-- Three dots / typing indicator (bottom left) -->
-            <rect x="20" y="240" width="80" height="32" rx="16" stroke="#0A0A0A" stroke-width="1.5" opacity="0.4" fill="#fff"/>
-            <circle cx="42" cy="256" r="3.5" fill="#0A0A0A" opacity="0.35"/>
-            <circle cx="55" cy="256" r="3.5" fill="#0A0A0A" opacity="0.5" class="contact-dot-b"/>
-            <circle cx="68" cy="256" r="3.5" fill="#0A0A0A" opacity="0.35" class="contact-dot-c"/>
+            <rect x="20" y="240" width="80" height="32" rx="16" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.4" fill="var(--illus-surface)"/>
+            <circle cx="42" cy="256" r="3.5" fill="var(--illus-ink)" opacity="0.35"/>
+            <circle cx="55" cy="256" r="3.5" fill="var(--illus-ink)" opacity="0.5" class="contact-dot-b"/>
+            <circle cx="68" cy="256" r="3.5" fill="var(--illus-ink)" opacity="0.35" class="contact-dot-c"/>
 
             <!-- Decorative circles -->
-            <circle cx="420" cy="170" r="6" stroke="#0A0A0A" stroke-width="1.5" opacity="0.2"/>
-            <circle cx="20" cy="310" r="4" fill="#0A0A0A" opacity="0.12"/>
-            <circle cx="420" cy="310" r="4" fill="#0A0A0A" opacity="0.1"/>
+            <circle cx="420" cy="170" r="6" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.2"/>
+            <circle cx="20" cy="310" r="4" fill="var(--illus-ink)" opacity="0.12"/>
+            <circle cx="420" cy="310" r="4" fill="var(--illus-ink)" opacity="0.1"/>
           </svg>
         </div>
 
@@ -218,10 +218,10 @@ import ContactForm from '../components/ui/ContactForm.tsx';
 <style>
 /* ── Hero ─────────────────────────────── */
 .contact-hero {
-  background: #F5F5F2;
+  background: var(--surface-page);
   padding-top: 7rem;
   padding-bottom: 3rem;
-  border-bottom: 1px solid #E0E0DC;
+  border-bottom: 1px solid var(--border-default);
   overflow: hidden;
 }
 .contact-hero-inner {
@@ -236,12 +236,12 @@ import ContactForm from '../components/ui/ContactForm.tsx';
   font-weight: 900;
   letter-spacing: -0.04em;
   line-height: 1.05;
-  color: #0A0A0A;
+  color: var(--color-heading);
   margin: 1rem 0 1.25rem;
 }
 .contact-hero-sub {
   font-size: 1rem;
-  color: #5A5A5A;
+  color: var(--color-text);
   line-height: 1.75;
   max-width: 400px;
   margin-bottom: 1.75rem;
@@ -252,13 +252,13 @@ import ContactForm from '../components/ui/ContactForm.tsx';
   gap: 0.5rem;
   font-size: 1rem;
   font-weight: 700;
-  color: #0A0A0A;
+  color: var(--color-heading);
   text-decoration: underline;
   text-underline-offset: 4px;
   text-decoration-thickness: 1.5px;
   transition: opacity 0.2s;
 }
-.contact-email-link:hover { opacity: 0.6; color: #0A0A0A; }
+.contact-email-link:hover { opacity: 0.6; color: var(--color-heading); }
 
 .contact-hero-illus {
   display: flex;
@@ -277,8 +277,8 @@ import ContactForm from '../components/ui/ContactForm.tsx';
 
 /* ── Stats strip ──────────────────────── */
 .contact-stats {
-  background: #fff;
-  border-bottom: 1px solid #E0E0DC;
+  background: var(--surface-card);
+  border-bottom: 1px solid var(--border-default);
   padding: 2rem 0;
 }
 .contact-stats-row {
@@ -296,27 +296,27 @@ import ContactForm from '../components/ui/ContactForm.tsx';
   flex: 1;
   min-width: 120px;
   padding: 0.5rem 1rem;
-  border-right: 1px solid #E0E0DC;
+  border-right: 1px solid var(--border-default);
 }
 .contact-stat:last-child { border-right: none; }
 .contact-stat-num {
   font-size: 1.875rem;
   font-weight: 900;
-  color: #0A0A0A;
+  color: var(--color-heading);
   letter-spacing: -0.03em;
   font-family: 'Outfit', sans-serif;
   line-height: 1;
 }
 .contact-stat-label {
   font-size: 0.8125rem;
-  color: #5A5A5A;
+  color: var(--color-text);
   font-weight: 500;
   margin-top: 0.25rem;
 }
 
 /* ── Body: form + sidebar ─────────────── */
 .contact-body {
-  background: #F5F5F2;
+  background: var(--surface-page);
   padding: 4rem 0 5rem;
 }
 .contact-grid {
@@ -330,14 +330,14 @@ import ContactForm from '../components/ui/ContactForm.tsx';
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #5A5A5A;
+  color: var(--color-text);
   margin-bottom: 1.25rem;
 }
 
 /* Form column */
 .contact-form-col {
-  background: #fff;
-  border: 1px solid #E0E0DC;
+  background: var(--surface-card);
+  border: 1px solid var(--border-default);
   border-radius: 14px;
   padding: 2.5rem;
 }
@@ -351,8 +351,8 @@ import ContactForm from '../components/ui/ContactForm.tsx';
 
 /* Info card */
 .contact-info-card {
-  background: #fff;
-  border: 1px solid #E0E0DC;
+  background: var(--surface-card);
+  border: 1px solid var(--border-default);
   border-radius: 14px;
   padding: 1.75rem;
 }
@@ -372,36 +372,36 @@ import ContactForm from '../components/ui/ContactForm.tsx';
 .contact-info-icon {
   width: 32px;
   height: 32px;
-  background: #F5F5F2;
-  border: 1px solid #E0E0DC;
+  background: var(--surface-page);
+  border: 1px solid var(--border-default);
   border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  color: #0A0A0A;
+  color: var(--color-heading);
 }
 .contact-info-label {
   font-size: 0.6875rem;
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: #5A5A5A;
+  color: var(--color-text);
   margin-bottom: 0.2rem;
 }
 .contact-info-value {
   font-size: 0.9375rem;
   font-weight: 600;
-  color: #0A0A0A;
+  color: var(--color-heading);
   text-decoration: none;
   transition: opacity 0.2s;
 }
-.contact-info-value:hover { opacity: 0.6; color: #0A0A0A; }
+.contact-info-value:hover { opacity: 0.6; color: var(--color-heading); }
 
 /* What happens next card */
 .contact-next-card {
-  background: #fff;
-  border: 1px solid #E0E0DC;
+  background: var(--surface-card);
+  border: 1px solid var(--border-default);
   border-radius: 14px;
   padding: 1.75rem;
 }
@@ -421,7 +421,7 @@ import ContactForm from '../components/ui/ContactForm.tsx';
 .contact-next-num {
   font-size: 1.5rem;
   font-weight: 900;
-  color: #E0E0DC;
+  color: var(--color-text-ghost);
   letter-spacing: -0.03em;
   font-family: 'Outfit', sans-serif;
   line-height: 1;
@@ -432,19 +432,19 @@ import ContactForm from '../components/ui/ContactForm.tsx';
   display: block;
   font-size: 0.875rem;
   font-weight: 700;
-  color: #0A0A0A;
+  color: var(--color-heading);
   margin-bottom: 0.25rem;
 }
 .contact-next-list p {
   font-size: 0.8125rem;
-  color: #5A5A5A;
+  color: var(--color-text);
   line-height: 1.6;
   margin: 0;
 }
 
 /* Cert card */
 .contact-cert-card {
-  background: #0A0A0A;
+  background: var(--surface-inverse);
   border-radius: 14px;
   padding: 1.5rem 1.75rem;
   display: flex;
@@ -468,7 +468,7 @@ import ContactForm from '../components/ui/ContactForm.tsx';
   .contact-hero-illus { display: none; }
   .contact-hero-title { font-size: 2.75rem; }
   .contact-stats-row { justify-content: center; }
-  .contact-stat { border-right: none; border-bottom: 1px solid #E0E0DC; }
+  .contact-stat { border-right: none; border-bottom: 1px solid var(--border-default); }
   .contact-stat:last-child { border-bottom: none; }
   .contact-form-col { padding: 1.5rem; }
 }

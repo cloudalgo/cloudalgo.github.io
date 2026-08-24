@@ -1,0 +1,16 @@
+/* ─── Industries (About page) ─────────────────────────── */
+.indutries-card { padding: 0.75rem; display: flex; }
+.indutries-card-bg {
+  background: var(--ca-surface);
+  border: 1px solid var(--ca-border);
+  border-radius: 12px;
+  padding: 1.75rem 1.25rem;
+  width: 100%;
+  text-align: center;
+  transition: border-color 0.3s, background 0.3s;
+}
+.indutries-card-bg:hover { border-color: var(--ca-black); background: var(--ca-black); }
+.indutries-card-icon { color: var(--ca-black); margin-bottom: 0.75rem; font-size: 1.75rem; }
+.indutries-card-text { font-size: 0.9375rem; font-weight: 600; color: var(--ca-black); }
+.indutries-card-bg:hover .indutries-card-text { color: var(--color-on-inverse); }
+.indutries-card-bg:hover .indutries-card-icon { color: var(--color-on-inverse); }

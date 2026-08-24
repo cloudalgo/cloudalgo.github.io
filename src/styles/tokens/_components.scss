@@ -1,0 +1,75 @@
+// ─── Layer 3: component tokens ────────────────────────────
+// Per-component knobs. A component reads these; overriding one
+// restyles that component alone without disturbing anything
+// else that shares the same semantic token.
+
+:root {
+  /* Header */
+  --header-h: 4.375rem;              /* 38px logo + 2 x 1rem padding */
+  --header-bg: var(--surface-card);
+  --header-scrolled-bg: rgb(255 255 255 / 0.6);
+  --header-scrolled-border: rgb(255 255 255 / 0.4);
+
+  /* Buttons */
+  --btn-radius: var(--radius-pill);
+  --btn-padding: 0.75rem 1.75rem;
+  --btn-weight: var(--weight-bold);
+  --btn-bg: var(--color-accent);
+  --btn-fg: var(--color-on-accent);
+  --btn-border: var(--color-accent);
+
+  /* Cards */
+  --card-radius: var(--radius-lg);
+  --card-bg: var(--surface-card);
+  --card-border: var(--border-default);
+  --card-border-hover: var(--border-strong);
+  --card-shadow-hover: 0 16px 32px rgb(10 10 10 / 0.08);
+
+  /* Badges / tags */
+  --badge-radius: var(--radius-pill);
+  --badge-bg: var(--surface-inverse);
+  --badge-fg: var(--color-on-inverse);
+  --badge-size: 0.6875rem;
+
+  /* Inputs */
+  --input-radius: var(--radius-md);
+  --input-bg: var(--surface-card);
+  --input-border: var(--border-default);
+  --input-border-focus: var(--border-strong);
+
+  /* Inline illustrations.
+     Every SVG in the site paints from these five. They are their
+     own knobs rather than reads of the text tokens, so a theme can
+     restyle the artwork without touching body copy — and a brand
+     swap reaches the illustrations instead of leaving them black. */
+  --illus-ink: var(--color-heading);
+  --illus-ink-soft: var(--color-text);
+  --illus-ink-faint: var(--color-text-muted);
+  --illus-surface: var(--surface-card);
+  --illus-sunk: var(--surface-page);
+  --illus-hardware: var(--hardware-800);
+
+  /* Code blocks & terminal chrome.
+     Anchored on the fixed --code-* primitives, not on the surface
+     tokens: a syntax block has to stay dark-on-light-text however
+     the page is themed, or the code stops being readable. */
+  --code-surface: var(--code-bg);
+  --code-titlebar: var(--code-bar);
+  --code-border: var(--code-rule);
+  --code-line-number: var(--code-gutter);
+  --code-text: var(--code-fg);
+  --code-inline-fg: var(--code-literal);
+
+  /* Form validation */
+  --input-border-invalid: var(--color-danger);
+  --input-message-invalid: var(--color-danger);
+
+  /* Section rhythm */
+  --section-padding-y: 6rem;
+  --section-padding-y-sm: 3.75rem;
+  --container-max: 1278px;
+}
+
+@media (max-width: 991px) {
+  :root { --section-padding-y: var(--section-padding-y-sm); }
+}

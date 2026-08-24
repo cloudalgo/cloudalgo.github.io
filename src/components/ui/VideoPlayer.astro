@@ -155,8 +155,8 @@ const isCrossOrigin = /^https?:\/\//.test(src) || (captions ? /^https?:\/\//.tes
     aspect-ratio: var(--cav-ratio, 16 / 9);
     border-radius: 12px;
     overflow: hidden;
-    background: var(--ca-black, #0A0A0A);
-    border: 1px solid var(--ca-border, #E0E0DC);
+    background: var(--ca-black, var(--surface-inverse));
+    border: 1px solid var(--ca-border, var(--border-default));
   }
   .cav--dark .cav-frame {
     border-color: rgba(255, 255, 255, 0.16);
@@ -171,7 +171,7 @@ const isCrossOrigin = /^https?:\/\//.test(src) || (captions ? /^https?:\/\//.tes
     width: 100%;
     height: 100%;
     object-fit: contain;
-    background: var(--ca-black, #0A0A0A);
+    background: var(--ca-black, var(--surface-inverse));
   }
 
   .cav-caption {
@@ -179,7 +179,7 @@ const isCrossOrigin = /^https?:\/\//.test(src) || (captions ? /^https?:\/\//.tes
     font-size: 0.8125rem;
     font-weight: 600;
     letter-spacing: 0.02em;
-    color: var(--ca-secondary-black, #5A5A5A);
+    color: var(--ca-secondary-black, var(--color-text));
   }
   .cav--dark .cav-caption { color: rgba(255, 255, 255, 0.55); }
 
@@ -208,17 +208,17 @@ const isCrossOrigin = /^https?:\/\//.test(src) || (captions ? /^https?:\/\//.tes
     width: 74px;
     height: 74px;
     border-radius: 100px;
-    background: #fff;
-    color: var(--ca-black, #0A0A0A);
+    background: var(--surface-card);
+    color: var(--ca-black, var(--color-heading));
     padding-left: 4px; /* optically centre the triangle */
     transition: transform 0.25s ease, background 0.25s ease, color 0.25s ease;
   }
   .cav-seal:hover .cav-seal-disc,
   .cav-seal:focus-visible .cav-seal-disc {
     transform: scale(1.07);
-    background: var(--ca-black, #0A0A0A);
-    color: #fff;
-    box-shadow: 0 0 0 2px #fff;
+    background: var(--ca-black, var(--surface-inverse));
+    color: var(--color-on-inverse);
+    box-shadow: 0 0 0 2px var(--focus-halo);
   }
 
   .cav-seal-text {
@@ -232,7 +232,7 @@ const isCrossOrigin = /^https?:\/\//.test(src) || (captions ? /^https?:\/\//.tes
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: #fff;
+    color: var(--color-on-inverse);
   }
   .cav-seal-meta {
     font-size: 0.75rem;
@@ -241,7 +241,7 @@ const isCrossOrigin = /^https?:\/\//.test(src) || (captions ? /^https?:\/\//.tes
     font-variant-numeric: tabular-nums;
   }
 
-  .cav-seal:focus-visible { outline: 2px solid #fff; outline-offset: -6px; }
+  .cav-seal:focus-visible { outline: 2px solid var(--focus-halo); outline-offset: -6px; }
 
   /* ── Control bar ─────────────────────────────────────────────────────── */
   .cav-bar {
@@ -277,15 +277,15 @@ const isCrossOrigin = /^https?:\/\//.test(src) || (captions ? /^https?:\/\//.tes
     border-radius: 100px;
     border: 1px solid rgba(255, 255, 255, 0.22);
     background: rgba(255, 255, 255, 0.06);
-    color: #fff;
+    color: var(--color-on-inverse);
     cursor: pointer;
     padding: 0;
     transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
   }
-  .cav-btn:hover { background: #fff; border-color: #fff; color: var(--ca-black, #0A0A0A); }
-  .cav-btn:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+  .cav-btn:hover { background: var(--surface-card); border-color: var(--focus-halo); color: var(--ca-black, var(--color-heading)); }
+  .cav-btn:focus-visible { outline: 2px solid var(--focus-halo); outline-offset: 2px; }
 
-  .cav-btn--play { width: 38px; height: 38px; background: #fff; border-color: #fff; color: var(--ca-black, #0A0A0A); }
+  .cav-btn--play { width: 38px; height: 38px; background: var(--surface-card); border-color: var(--focus-halo); color: var(--ca-black, var(--color-heading)); }
   .cav-btn--play:hover { background: rgba(255, 255, 255, 0.86); }
   .cav-btn--play .cav-i-play { margin-left: 2px; }
 
@@ -298,9 +298,9 @@ const isCrossOrigin = /^https?:\/\//.test(src) || (captions ? /^https?:\/\//.tes
     letter-spacing: 0.06em;
   }
   .cav-btn--cc[aria-pressed='true'] {
-    background: #fff;
-    border-color: #fff;
-    color: var(--ca-black, #0A0A0A);
+    background: var(--surface-card);
+    border-color: var(--focus-halo);
+    color: var(--ca-black, var(--color-heading));
   }
 
   /* Icon swapping is driven by a single state class on the player. */
@@ -333,7 +333,7 @@ const isCrossOrigin = /^https?:\/\//.test(src) || (captions ? /^https?:\/\//.tes
     cursor: pointer;
     touch-action: none;
   }
-  .cav-scrub:focus-visible { outline: 2px solid #fff; outline-offset: 3px; border-radius: 100px; }
+  .cav-scrub:focus-visible { outline: 2px solid var(--focus-halo); outline-offset: 3px; border-radius: 100px; }
 
   .cav-track {
     position: relative;
@@ -353,7 +353,7 @@ const isCrossOrigin = /^https?:\/\//.test(src) || (captions ? /^https?:\/\//.tes
     width: 0%;
   }
   .cav-buffered { background: rgba(255, 255, 255, 0.34); }
-  .cav-played { background: #fff; }
+  .cav-played { background: var(--surface-card); }
 
   .cav-knob {
     position: absolute;
@@ -362,7 +362,7 @@ const isCrossOrigin = /^https?:\/\//.test(src) || (captions ? /^https?:\/\//.tes
     width: 11px;
     height: 11px;
     border-radius: 100px;
-    background: #fff;
+    background: var(--surface-card);
     transform: translate(-50%, -50%) scale(0.7);
     transition: transform 0.16s ease;
   }

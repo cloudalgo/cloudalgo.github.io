@@ -1,0 +1,27 @@
+// ─── Legacy aliases ───────────────────────────────────────
+// The former global.css exposed a flat --ca-* namespace and
+// roughly 400 call sites still read it. Rather than rewrite
+// them all at once, the old names are re-pointed at the
+// semantic layer: every existing `var(--ca-black)` now resolves
+// through the token chain, so a theme swap already reaches them.
+//
+// These are migrated to their semantic equivalents file by file.
+// This partial shrinks as that lands, and is deleted when empty.
+
+:root {
+  --ca-black: var(--color-heading);
+  --ca-primary-black: var(--color-heading);
+  --ca-primary-black2: var(--color-heading);
+  --ca-secondary-black: var(--color-text);
+  --ca-grey: var(--surface-card);
+  --ca-grey2: var(--surface-page);
+  --ca-page-bg: var(--surface-page);
+  --ca-surface: var(--surface-card);
+  --ca-border: var(--border-default);
+  --text-black: var(--color-heading);
+  --ca-header-h: var(--header-h);
+
+  /* Deprecated: the redesign removed orange and this mapped to
+     black. Kept so any stray reference still resolves. */
+  --ca-orange: var(--color-accent);
+}

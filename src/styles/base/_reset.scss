@@ -1,0 +1,136 @@
+// ─── Reset ────────────────────────────────────────────────
+// Replaces Tailwind's Preflight, which the site relied on
+// until Tailwind was removed. Every rule here reproduces a
+// Preflight behaviour the existing markup depends on — this is
+// a faithful port, not a fresh opinion.
+//
+// The three that carry the most weight:
+//   * universal margin/padding zeroing (body's 8px UA margin
+//     alone would inset the whole page)
+//   * `ol, ul { list-style: none }` (nav and card lists have no
+//     markers in the current design)
+//   * `img, svg, video { display: block }` (inline images
+//     otherwise pick up the baseline descender gap)
+
+*,
+*::before,
+*::after,
+::backdrop {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: 0 solid;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  tab-size: 4;
+}
+
+body { line-height: inherit; }
+
+hr {
+  height: 0;
+  color: inherit;
+  border-top-width: 1px;
+}
+
+abbr:where([title]) { text-decoration: underline dotted; }
+
+b,
+strong { font-weight: bolder; }
+
+code,
+kbd,
+samp,
+pre {
+  font-family: var(--font-mono);
+  font-size: 1em;
+}
+
+small { font-size: 80%; }
+
+sub,
+sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+sub { bottom: -0.25em; }
+sup { top: -0.5em; }
+
+table {
+  text-indent: 0;
+  border-color: inherit;
+  border-collapse: collapse;
+}
+
+// Form controls inherit type rather than falling back to the UA font
+button,
+input,
+optgroup,
+select,
+textarea {
+  font: inherit;
+  font-feature-settings: inherit;
+  font-variation-settings: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+  background-color: transparent;
+  opacity: 1;
+}
+
+button,
+input:where([type='button'], [type='reset'], [type='submit']) {
+  -webkit-appearance: button;
+  appearance: button;
+}
+
+:-moz-focusring { outline: auto; }
+
+progress { vertical-align: baseline; }
+
+::-webkit-inner-spin-button,
+::-webkit-outer-spin-button { height: auto; }
+
+::-webkit-search-decoration { -webkit-appearance: none; }
+
+input::placeholder,
+textarea::placeholder {
+  color: currentColor;
+  opacity: 0.5;
+}
+
+textarea { resize: vertical; }
+
+summary { display: list-item; }
+
+ol,
+ul,
+menu { list-style: none; }
+
+img,
+svg,
+video,
+canvas,
+audio,
+iframe,
+embed,
+object {
+  display: block;
+  vertical-align: middle;
+}
+
+img,
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+[hidden]:where(:not([hidden='until-found'])) { display: none !important; }
+
+button,
+[role='button'] { cursor: pointer; }
+
+:disabled { cursor: default; }

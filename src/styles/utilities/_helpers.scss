@@ -1,0 +1,10 @@
+/* ─── Utility helpers ─────────────────────────────────── */
+.justify-content-center { justify-content: center; }
+.justify-content-between { justify-content: space-between; }
+.align-items-center { align-items: center; }
+.g-0 { --bs-gutter-x: 0; --bs-gutter-y: 0; margin-right: 0; margin-left: 0; }
+.g-0 > * { padding-right: 0; padding-left: 0; }
+.ps-lg-5 { padding-left: 0; }
+@media (min-width: 992px) { .ps-lg-5 { padding-left: 3rem; } }
+.text-md-end { text-align: left; }
+@media (min-width: 768px) { .text-md-end { text-align: right; } }

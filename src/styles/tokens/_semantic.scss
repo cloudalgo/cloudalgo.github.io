@@ -1,0 +1,63 @@
+// ─── Layer 2: semantics ───────────────────────────────────
+// Purpose, not appearance. This is the layer a theme redefines:
+// point these at a different set of primitives under one
+// selector and the whole site changes without a component edit.
+//
+// Read these from components. Never read a primitive directly.
+
+:root {
+  /* Text */
+  --color-heading: var(--ink-900);
+  --color-text: var(--ink-500);
+  --color-text-strong: var(--ink-900);
+  --color-text-muted: var(--ink-400);
+  --color-text-faint: var(--ink-300);
+  --color-text-faintest: var(--paper-400);
+  /* Long-form reading copy. Deliberately darker than --color-text:
+     UI metadata can sit at #5A5A5A, an 1100-word article cannot. */
+  --color-prose: var(--ink-860);
+  --color-prose-soft: var(--ink-840);
+  --color-text-disabled: var(--paper-250);
+  /* Oversized decorative numerals and watermark labels — reads as
+     texture, not copy, so it is exempt from the AA contrast floor. */
+  --color-text-ghost: var(--paper-200);
+  --color-link: var(--ink-900);
+  --color-link-hover: var(--ink-600);
+
+  /* Surfaces */
+  --surface-page: var(--paper-100);
+  --surface-card: var(--paper-000);
+  --surface-sunk: var(--paper-100);
+  --surface-wash: var(--paper-050);
+  --surface-tint: var(--paper-150);
+  --surface-ghost: var(--paper-300);
+  --surface-inverse-raised: var(--ink-880);
+  --surface-inverse: var(--ink-900);
+  --surface-inverse-soft: var(--ink-800);
+  --color-on-inverse: var(--paper-000);
+  --color-on-inverse-soft: var(--paper-025);
+
+  /* Rules */
+  --border-default: var(--paper-200);
+  --border-strong: var(--ink-900);
+  --border-on-inverse: var(--ink-870);
+
+  /* Accent */
+  --color-accent: var(--accent-500);
+  --color-accent-hover: var(--accent-600);
+  --color-on-accent: var(--paper-000);
+
+  /* Focus. The halo sits between the element and the ring so the
+     indicator stays visible on both paper and inverse surfaces. */
+  --focus-ring: var(--ink-900);
+  --focus-halo: var(--paper-000);
+
+  /* Status */
+  --color-danger: var(--danger-500);
+  --color-danger-soft: var(--danger-400);
+
+  /* Type roles */
+  --font-heading: var(--family-sans);
+  --font-body: var(--family-sans);
+  --font-mono: var(--family-mono);
+}

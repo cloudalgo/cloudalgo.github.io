@@ -1,0 +1,47 @@
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Outfit', system-ui, sans-serif;
+  font-size: 1rem;
+  color: var(--ca-secondary-black);
+  background-color: var(--ca-grey2);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img { max-width: 100%; }
+
+a {
+  text-decoration: none;
+  color: var(--ca-black);
+  transition-duration: 0.3s;
+}
+a:hover { color: var(--color-link-hover); }
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Outfit', system-ui, sans-serif;
+  color: var(--ca-black);
+  line-height: 1.15;
+}
+
+h1 { font-size: 5.5rem; font-weight: 900; letter-spacing: -0.03em; }
+h2 { font-size: 3.5rem; font-weight: 800; letter-spacing: -0.02em; }
+h3 { font-size: 1.375rem; font-weight: 700; }
+h4 { font-size: calc(1.275rem + 0.3vw); font-weight: 700; }
+h5 { font-size: 1.25rem; font-weight: 700; }
+h6 { font-size: 1rem; font-weight: 700; }
+
+@media (max-width: 767px) {
+  h1 { font-size: 3rem; }
+  h2 { font-size: 2.25rem; }
+}
+
+@media (max-width: 1200px) {
+  html { font-size: 85%; }
+}
+
+.paragraph-large { font-size: 1.125rem; line-height: 1.75; }
+.paragraph-medium { font-size: 1rem; line-height: 1.7; }
+.paragraph-small { font-size: 0.875rem; }
+.font32 { font-size: 2rem; }
+@media (max-width: 767px) { .font32 { font-size: 1.75rem; } }

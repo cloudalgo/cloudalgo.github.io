@@ -1,0 +1,52 @@
+// CloudAlgo global stylesheet.
+//
+// Load order IS the cascade — these partials were sliced out of the former
+// single global.css in source order, and several later rules deliberately
+// override earlier ones (base/_a11y.scss is last on purpose so its focus rings
+// beat any earlier `outline: none`). Reorder with care.
+
+// ── Tokens (primitive -> semantic -> component) ───────────
+// Order matters: each layer resolves against the one above it.
+@use 'tokens/primitives';
+@use 'tokens/semantic';
+@use 'tokens/components';
+@use 'tokens/compat';
+
+// ── Base ──────────────────────────────────────────────────
+@use 'base/reset';
+@use 'base/elements';
+
+// ── Layout ────────────────────────────────────────────────
+@use 'layout/container';
+@use 'layout/header';
+
+// ── Components ────────────────────────────────────────────
+@use 'components/buttons';
+
+// ── Page sections ─────────────────────────────────────────
+@use 'sections/hero';
+@use 'sections/about';
+
+@use 'components/feature-cards';
+@use 'components/service-cards';
+@use 'components/stats';
+@use 'components/testimonials';
+
+@use 'sections/blog-featured';
+@use 'components/blog-cards';
+
+@use 'utilities/helpers';
+@use 'components/blog-card';
+
+@use 'layout/footer';
+
+@use 'sections/services';
+@use 'sections/industries';
+@use 'components/forms';
+
+@use 'base/motion';
+@use 'utilities/grid';
+@use 'components/schedule-widget';
+
+// Last, so the focus indicators win. See the note in the file.
+@use 'base/a11y';
