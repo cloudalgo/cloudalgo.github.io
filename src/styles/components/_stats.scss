@@ -1,11 +1,11 @@
 /* ─── Stats / Milestone ───────────────────────────────── */
 .counts {
-  background: var(--ca-surface);
-  border-top: 1px solid var(--ca-border);
-  border-bottom: 1px solid var(--ca-border);
+  background: var(--surface-card);
+  border-top: 1px solid var(--border-default);
+  border-bottom: 1px solid var(--border-default);
   padding: 3.5rem 0;
 }
-.milestone-counter { text-align: center; color: var(--ca-black); font-weight: 700; }
+.milestone-counter { text-align: center; color: var(--color-heading); font-weight: 700; }
 /* Type comes from `.stat-num stat-num--xl stat-num--leading-inherit`;
    what stays here is the counter's own tabular figures and the two
    responsive sizes, which override the atom by source order. */
@@ -27,7 +27,7 @@
 /* Stats dividers between items on desktop */
 .stats-divider {
   border: none;
-  border-left: 1px solid var(--ca-border);
+  border-left: 1px solid var(--border-default);
   height: 3rem;
   align-self: center;
 }

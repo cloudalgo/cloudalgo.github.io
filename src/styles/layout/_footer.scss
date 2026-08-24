@@ -1,6 +1,6 @@
 /* ─── Footer ──────────────────────────────────────────── */
 .main-footer {
-  border-top: 1px solid var(--ca-border);
+  border-top: 1px solid var(--border-default);
 }
 
 /* Footer CTA strip */
@@ -23,15 +23,15 @@
 
 /* Footer nav */
 .footer {
-  background-color: var(--ca-grey2);
+  background-color: var(--surface-page);
   padding: 3.5rem 0;
   font-size: 0.9375rem;
-  color: var(--ca-secondary-black);
+  color: var(--color-text);
 }
 .footer-brand {
   font-size: 1.125rem;
   font-weight: 800;
-  color: var(--ca-black);
+  color: var(--color-heading);
   letter-spacing: -0.02em;
   margin-bottom: 0.75rem;
 }
@@ -41,5 +41,5 @@
 .page-links { display: flex; }
 .page-links ul { list-style: none; margin: 0; padding: 0; width: 50%; }
 .page-links ul li { margin: 0.75rem 0; }
-.page-links ul li a { text-decoration: none; color: var(--ca-secondary-black); font-size: 0.9375rem; }
-.page-links ul li a:hover { color: var(--ca-black); }
+.page-links ul li a { text-decoration: none; color: var(--color-text); font-size: 0.9375rem; }
+.page-links ul li a:hover { color: var(--color-heading); }

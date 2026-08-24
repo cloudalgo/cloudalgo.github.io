@@ -14,29 +14,29 @@
   font-family: var(--font-body);
 }
 .btn-primary {
-  background-color: var(--ca-black);
+  background-color: var(--surface-inverse);
   color: var(--color-on-inverse);
-  border-color: var(--ca-black);
+  border-color: var(--border-strong);
 }
 .btn-primary:hover { opacity: 0.8; color: var(--color-on-inverse); }
 .btn-secondary {
-  background-color: var(--ca-black);
+  background-color: var(--surface-inverse);
   color: var(--color-on-inverse);
-  border-color: var(--ca-black);
+  border-color: var(--border-strong);
 }
 .btn-secondary:hover { opacity: 0.8; color: var(--color-on-inverse); }
 .btn-outline {
   background-color: transparent;
-  color: var(--ca-black);
-  border-color: var(--ca-black);
+  color: var(--color-heading);
+  border-color: var(--border-strong);
 }
-.btn-outline:hover { background-color: var(--ca-black); color: var(--color-on-inverse); }
+.btn-outline:hover { background-color: var(--surface-inverse); color: var(--color-on-inverse); }
 .btn-light {
   background-color: var(--surface-card);
-  color: var(--ca-black);
-  border-color: var(--ca-black);
+  color: var(--color-heading);
+  border-color: var(--border-strong);
 }
-.btn-light:hover { background-color: var(--ca-black); color: var(--color-on-inverse); }
+.btn-light:hover { background-color: var(--surface-inverse); color: var(--color-on-inverse); }
 
 /* Ghost button for use on a near-black CTA band. Transparent fill, light
    text, and a hairline that reads against the dark surface. */

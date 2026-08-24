@@ -75,12 +75,12 @@ const otherDocs = [
 
 <style>
   .ld-header {
-    background: var(--ca-surface);
-    border-bottom: 1px solid var(--ca-border);
+    background: var(--surface-card);
+    border-bottom: 1px solid var(--border-default);
     padding: 7rem 0 3rem;
   }
   .ld-body-section {
-    background: var(--ca-page-bg);
+    background: var(--surface-page);
     padding: 3.5rem 0 5rem;
   }
   /* Two-column: readable article left, sticky related-docs nav right */
@@ -106,16 +106,16 @@ const otherDocs = [
     align-items: center;
     gap: 8px;
     font-size: 0.8125rem;
-    color: var(--ca-secondary-black);
+    color: var(--color-text);
     margin-bottom: 32px;
   }
   .ld-breadcrumb a {
-    color: var(--ca-secondary-black);
+    color: var(--color-text);
     text-decoration: none;
     transition: color 0.2s;
   }
   .ld-breadcrumb a:hover {
-    color: var(--ca-black);
+    color: var(--color-heading);
   }
   .ld-breadcrumb span {
     color: var(--color-text-faintest);
@@ -130,14 +130,14 @@ const otherDocs = [
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--ca-secondary-black);
+    color: var(--color-text);
     margin-bottom: 14px;
   }
   .ld-eyebrow-dot {
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    background: var(--ca-black);
+    background: var(--surface-inverse);
   }
 
   /* ── Heading + meta ── */
@@ -146,7 +146,7 @@ const otherDocs = [
     font-weight: 900;
     letter-spacing: -0.04em;
     line-height: 1.1;
-    color: var(--ca-black);
+    color: var(--color-heading);
     margin-bottom: 12px;
   }
   .ld-meta {
@@ -157,7 +157,7 @@ const otherDocs = [
 
   /* ── Slotted body typography ── */
   .ld-body :global(.legal-summary) {
-    background: var(--ca-black);
+    background: var(--surface-inverse);
     border-radius: 16px;
     padding: 26px 30px;
     margin: 0 0 40px;
@@ -213,7 +213,7 @@ const otherDocs = [
     font-size: 1.375rem;
     font-weight: 800;
     letter-spacing: -0.02em;
-    color: var(--ca-black);
+    color: var(--color-heading);
     margin: 40px 0 14px;
     padding-top: 8px;
   }
@@ -223,12 +223,12 @@ const otherDocs = [
   .ld-body :global(h3) {
     font-size: 1.0625rem;
     font-weight: 700;
-    color: var(--ca-black);
+    color: var(--color-heading);
     margin: 26px 0 10px;
   }
   .ld-body :global(p) {
     font-size: 0.9375rem;
-    color: var(--ca-secondary-black);
+    color: var(--color-text);
     line-height: 1.75;
     margin: 0 0 14px;
   }
@@ -242,15 +242,15 @@ const otherDocs = [
   }
   .ld-body :global(li) {
     font-size: 0.9375rem;
-    color: var(--ca-secondary-black);
+    color: var(--color-text);
     line-height: 1.7;
   }
   .ld-body :global(strong) {
-    color: var(--ca-black);
+    color: var(--color-heading);
     font-weight: 600;
   }
   .ld-body :global(a) {
-    color: var(--ca-black);
+    color: var(--color-heading);
     font-weight: 600;
     text-decoration: underline;
     text-underline-offset: 2px;
@@ -265,13 +265,13 @@ const otherDocs = [
     border-collapse: collapse;
     margin: 4px 0 22px;
     font-size: 0.875rem;
-    background: var(--ca-surface);
-    border: 1px solid var(--ca-border);
+    background: var(--surface-card);
+    border: 1px solid var(--border-default);
     border-radius: 12px;
     overflow: hidden;
   }
   .ld-body :global(.legal-table thead th) {
-    background: var(--ca-black);
+    background: var(--surface-inverse);
     color: var(--color-on-inverse);
     text-align: left;
     font-weight: 700;
@@ -282,21 +282,21 @@ const otherDocs = [
   }
   .ld-body :global(.legal-table td) {
     padding: 12px 14px;
-    border-top: 1px solid var(--ca-border);
-    color: var(--ca-secondary-black);
+    border-top: 1px solid var(--border-default);
+    color: var(--color-text);
     line-height: 1.6;
     vertical-align: top;
   }
   .ld-body :global(.legal-table td strong) {
-    color: var(--ca-black);
+    color: var(--color-heading);
   }
 
   /* ── Footer nav ── */
   .ld-footer-nav {
     margin-top: 0;
     padding: 24px 28px;
-    background: var(--ca-surface);
-    border: 1px solid var(--ca-border);
+    background: var(--surface-card);
+    border: 1px solid var(--border-default);
     border-radius: 12px;
   }
   .ld-footer-label {
@@ -318,7 +318,7 @@ const otherDocs = [
   .ld-footer-nav a {
     font-size: 0.9375rem;
     font-weight: 600;
-    color: var(--ca-black);
+    color: var(--color-heading);
     text-decoration: none;
     transition: opacity 0.2s;
   }

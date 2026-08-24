@@ -3,8 +3,8 @@ html { scroll-behavior: smooth; }
 body {
   font-family: var(--font-body);
   font-size: 1rem;
-  color: var(--ca-secondary-black);
-  background-color: var(--ca-grey2);
+  color: var(--color-text);
+  background-color: var(--surface-page);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -13,14 +13,14 @@ img { max-width: 100%; }
 
 a {
   text-decoration: none;
-  color: var(--ca-black);
+  color: var(--color-heading);
   transition-duration: 0.3s;
 }
 a:hover { color: var(--color-link-hover); }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
-  color: var(--ca-black);
+  color: var(--color-heading);
   line-height: 1.15;
 }
 

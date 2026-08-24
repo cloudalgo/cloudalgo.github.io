@@ -23,7 +23,7 @@
   }
 }
 
-.grey-bg  { background-color: var(--ca-grey); }
-.grey-bg2 { background-color: var(--ca-grey2); }
-.dark-bg  { background-color: var(--ca-black); }
-.surface-bg { background-color: var(--ca-surface); }
+.grey-bg  { background-color: var(--surface-card); }
+.grey-bg2 { background-color: var(--surface-page); }
+.dark-bg  { background-color: var(--surface-inverse); }
+.surface-bg { background-color: var(--surface-card); }

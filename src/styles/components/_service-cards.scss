@@ -1,9 +1,9 @@
 /* ─── Service cards ───────────────────────────────────── */
-.services-section { background-color: var(--ca-grey2); }
+.services-section { background-color: var(--surface-page); }
 
 .card-bg {
-  background: var(--ca-surface);
-  border: 1px solid var(--ca-border);
+  background: var(--surface-card);
+  border: 1px solid var(--border-default);
   border-radius: 12px;
   padding: 2rem;
   height: 100%;
@@ -12,14 +12,14 @@
   display: flex;
   flex-direction: column;
 }
-.card-bg:hover { background: var(--ca-black); border-color: var(--ca-black); color: var(--color-on-inverse); transform: translateY(-6px); box-shadow: 0 20px 40px var(--color-ink-a18); }
-.card-icon { font-size: 2.5rem; color: var(--ca-black); line-height: 1; margin-bottom: 1.25rem; }
-.card-text { color: var(--ca-black); margin-bottom: 0.75rem; font-weight: 700; }
+.card-bg:hover { background: var(--surface-inverse); border-color: var(--border-strong); color: var(--color-on-inverse); transform: translateY(-6px); box-shadow: 0 20px 40px var(--color-ink-a18); }
+.card-icon { font-size: 2.5rem; color: var(--color-heading); line-height: 1; margin-bottom: 1.25rem; }
+.card-text { color: var(--color-heading); margin-bottom: 0.75rem; font-weight: 700; }
 .card-bg:hover .card-text { color: var(--color-on-inverse); }
 .card-bg:hover .card-icon { color: var(--color-on-inverse); }
-.card-bg p { color: var(--ca-secondary-black); flex: 1; margin: 0 0 1.5rem; font-size: 0.9375rem; line-height: 1.65; }
+.card-bg p { color: var(--color-text); flex: 1; margin: 0 0 1.5rem; font-size: 0.9375rem; line-height: 1.65; }
 .card-bg:hover p { color: var(--color-on-inverse-a75); }
-.card-bg:hover .btn-outline { background: var(--surface-card); color: var(--ca-black); border-color: var(--focus-halo); }
+.card-bg:hover .btn-outline { background: var(--surface-card); color: var(--color-heading); border-color: var(--focus-halo); }
 
 /* Service-card icon motion. Parts are animated, not the whole glyph, so the
    icon stays optically aligned with the heading below it. */

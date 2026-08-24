@@ -2,5 +2,5 @@
 .with-arrow::before { content: '→ '; margin-right: 0.5rem; }
 ul.arrow { list-style: none; padding-left: 0; }
 ul.arrow li { padding-left: 1.5rem; position: relative; margin-bottom: 0.5rem; }
-ul.arrow li::before { content: '→'; position: absolute; left: 0; color: var(--ca-black); }
-.card-1 { border-left: 3px solid var(--ca-black); padding-left: 1.5rem; margin-bottom: 2.5rem; }
+ul.arrow li::before { content: '→'; position: absolute; left: 0; color: var(--color-heading); }
+.card-1 { border-left: 3px solid var(--border-strong); padding-left: 1.5rem; margin-bottom: 2.5rem; }

@@ -292,7 +292,7 @@ const schema = {
 :global(.blog-post-details .blog-content p a),
 :global(.blog-post-details .blog-content li a),
 :global(.blog-post-details .blog-content td a) {
-  color: var(--ca-black);
+  color: var(--color-heading);
   font-weight: 600;
   text-decoration: underline;
   text-decoration-thickness: 1px;
@@ -303,11 +303,11 @@ const schema = {
 :global(.blog-post-details .blog-content p a:hover),
 :global(.blog-post-details .blog-content li a:hover),
 :global(.blog-post-details .blog-content td a:hover) {
-  text-decoration-color: var(--ca-black);
+  text-decoration-color: var(--color-heading);
   text-decoration-thickness: 2px;
 }
 :global(.blog-post-details .blog-content a:focus-visible) {
-  outline: 2px solid var(--ca-black);
+  outline: 2px solid var(--focus-ring);
   outline-offset: 3px;
   border-radius: 2px;
 }
@@ -365,7 +365,7 @@ const schema = {
 /* ── Section divider ────────────────────────────── */
 :global(.blog-post-details .blog-content hr) {
   border: 0;
-  border-top: 1px solid var(--ca-border);
+  border-top: 1px solid var(--border-default);
   margin: 3.5rem auto;
   width: min(100%, 920px);
 }

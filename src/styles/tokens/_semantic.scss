@@ -31,6 +31,12 @@
   --surface-wash: var(--paper-050);
   --surface-tint: var(--paper-150);
   --surface-ghost: var(--paper-300);
+  /* The flat tone a blog card shows while its image is missing or
+     still loading. Same value as --border-default, which is what the
+     one call site used to read -- a background borrowing a border
+     token. Named rather than repointed because the value is right
+     and only the name was wrong. */
+  --surface-placeholder: var(--paper-200);
   --surface-inverse-raised: var(--ink-880);
   --surface-inverse: var(--ink-900);
   --surface-inverse-soft: var(--ink-800);

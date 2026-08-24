@@ -3,7 +3,7 @@
 :target,
 [id]:target,
 main[id] {
-  scroll-margin-top: calc(var(--ca-header-h) + 1.5rem);
+  scroll-margin-top: calc(var(--header-h) + 1.5rem);
 }
 
 .header {
@@ -12,7 +12,7 @@ main[id] {
   left: 0;
   right: 0;
   z-index: 999;
-  background-color: var(--ca-surface);
+  background-color: var(--surface-card);
   border-bottom: 1px solid transparent;
   transition: background-color 0.35s ease, border-color 0.35s ease, backdrop-filter 0.35s ease;
 }
@@ -33,7 +33,7 @@ main[id] {
   transform: scaleX(0);
   transform-origin: 0 50%;
   will-change: transform;
-  background-color: var(--ca-black);
+  background-color: var(--surface-inverse);
   z-index: 1001;
   transition: transform 0.1s linear;
 }
@@ -72,15 +72,15 @@ main[id] {
   display: inline-block;
   font-size: 0.9375rem;
   font-weight: 600;
-  color: var(--ca-secondary-black) !important;
+  color: var(--color-text) !important;
   padding: 0.5rem 0.875rem;
   position: relative;
   white-space: nowrap;
   transition: color 0.2s;
   border-radius: 6px;
 }
-.nav-link:hover { color: var(--ca-black) !important; }
-.nav-link.active { color: var(--ca-black) !important; font-weight: 700; }
+.nav-link:hover { color: var(--color-heading) !important; }
+.nav-link.active { color: var(--color-heading) !important; font-weight: 700; }
 
 .nav-link:not(.join-us)::after {
   content: '';
@@ -89,7 +89,7 @@ main[id] {
   left: 0.875rem;
   right: 0.875rem;
   height: 2px;
-  background: var(--ca-black);
+  background: var(--surface-inverse);
   border-radius: 1px;
   transform: scaleX(0);
   transform-origin: left;
@@ -101,7 +101,7 @@ main[id] {
 }
 
 .join-us {
-  background-color: var(--ca-black) !important;
+  background-color: var(--surface-inverse) !important;
   color: var(--color-on-inverse) !important;
   border-radius: 100px;
   padding: 0.5rem 1.25rem !important;

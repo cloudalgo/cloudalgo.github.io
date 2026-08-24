@@ -174,7 +174,7 @@ import Page from '../../../layouts/Page.astro';
 <style>
   /* ── Page wrapper ── */
   .pp-page {
-    background: var(--ca-page-bg);
+    background: var(--surface-page);
     min-height: 60vh;
   }
 
@@ -193,7 +193,7 @@ import Page from '../../../layouts/Page.astro';
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--ca-secondary-black);
+    color: var(--color-text);
     margin-bottom: 14px;
   }
 
@@ -201,7 +201,7 @@ import Page from '../../../layouts/Page.astro';
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    background: var(--ca-black);
+    background: var(--surface-inverse);
   }
 
   /* ── Heading ── */
@@ -210,7 +210,7 @@ import Page from '../../../layouts/Page.astro';
     font-weight: 900;
     letter-spacing: -0.04em;
     line-height: 1.1;
-    color: var(--ca-black);
+    color: var(--color-heading);
     margin-bottom: 12px;
   }
 
@@ -222,7 +222,7 @@ import Page from '../../../layouts/Page.astro';
 
   /* ── Summary card ── */
   .pp-summary {
-    background: var(--ca-black);
+    background: var(--surface-inverse);
     border-radius: 16px;
     padding: 28px 32px;
     margin-bottom: 40px;
@@ -272,8 +272,8 @@ import Page from '../../../layouts/Page.astro';
 
   /* ── Section cards ── */
   .pp-section {
-    background: var(--ca-surface);
-    border: 1px solid var(--ca-border);
+    background: var(--surface-card);
+    border: 1px solid var(--border-default);
     border-radius: 12px;
     padding: 28px 28px 24px;
     margin-bottom: 12px;
@@ -291,8 +291,8 @@ import Page from '../../../layouts/Page.astro';
     width: 34px;
     height: 34px;
     border-radius: 10px;
-    background: var(--ca-page-bg);
-    border: 1px solid var(--ca-border);
+    background: var(--surface-page);
+    border: 1px solid var(--border-default);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -302,19 +302,19 @@ import Page from '../../../layouts/Page.astro';
   .pp-icon svg {
     width: 16px;
     height: 16px;
-    fill: var(--ca-black);
+    fill: var(--color-heading);
   }
 
   .pp-section h3 {
     font-size: 1rem;
     font-weight: 700;
-    color: var(--ca-black);
+    color: var(--color-heading);
     letter-spacing: -0.01em;
   }
 
   .pp-section p {
     font-size: 0.9375rem;
-    color: var(--ca-secondary-black);
+    color: var(--color-text);
     margin-bottom: 10px;
     line-height: 1.7;
   }
@@ -338,7 +338,7 @@ import Page from '../../../layouts/Page.astro';
 
   .pp-list li {
     font-size: 0.9375rem;
-    color: var(--ca-secondary-black);
+    color: var(--color-text);
     display: flex;
     align-items: flex-start;
     gap: 10px;
@@ -355,12 +355,12 @@ import Page from '../../../layouts/Page.astro';
   }
 
   .pp-section strong {
-    color: var(--ca-black);
+    color: var(--color-heading);
     font-weight: 600;
   }
 
   .pp-link {
-    color: var(--ca-black);
+    color: var(--color-heading);
     font-weight: 600;
     text-decoration: underline;
     text-underline-offset: 2px;
@@ -368,8 +368,8 @@ import Page from '../../../layouts/Page.astro';
 
   /* ── Liability card ── */
   .pp-liability {
-    background: var(--ca-surface);
-    border: 1px solid var(--ca-border);
+    background: var(--surface-card);
+    border: 1px solid var(--border-default);
     border-radius: 12px;
     padding: 24px 28px;
     margin-bottom: 12px;
@@ -383,7 +383,7 @@ import Page from '../../../layouts/Page.astro';
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 3px;
-    background: var(--ca-black);
+    background: var(--surface-inverse);
     border-radius: 12px 12px 0 0;
   }
 
@@ -398,7 +398,7 @@ import Page from '../../../layouts/Page.astro';
 
   .pp-liability p {
     font-size: 0.875rem;
-    color: var(--ca-secondary-black);
+    color: var(--color-text);
     line-height: 1.7;
     margin-bottom: 8px;
   }
@@ -408,14 +408,14 @@ import Page from '../../../layouts/Page.astro';
   }
 
   .pp-liability strong {
-    color: var(--ca-black);
+    color: var(--color-heading);
     font-weight: 600;
   }
 
   /* ── Contact card ── */
   .pp-contact {
-    background: var(--ca-surface);
-    border: 1px solid var(--ca-border);
+    background: var(--surface-card);
+    border: 1px solid var(--border-default);
     border-radius: 12px;
     padding: 24px 28px;
     display: flex;
@@ -436,19 +436,19 @@ import Page from '../../../layouts/Page.astro';
   .pp-contact-title {
     font-size: 0.9375rem;
     font-weight: 700;
-    color: var(--ca-black);
+    color: var(--color-heading);
   }
 
   .pp-contact-sub {
     font-size: 0.875rem;
-    color: var(--ca-secondary-black);
+    color: var(--color-text);
   }
 
   .pp-contact-btn {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    background: var(--ca-black);
+    background: var(--surface-inverse);
     color: var(--color-on-inverse);
     border-radius: 100px;
     padding: 10px 20px;

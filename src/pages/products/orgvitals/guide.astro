@@ -594,7 +594,7 @@ sf org list             # confirm the org shows up</code></pre>
   }
 
   .ug-body-section {
-    background: var(--ca-page-bg);
+    background: var(--surface-page);
     padding: 3.5rem 0 5rem;
   }
   .ug-grid {
@@ -613,15 +613,15 @@ sf org list             # confirm the org shows up</code></pre>
   .ug-lead {
     font-size: 1.0625rem;
     line-height: 1.75;
-    color: var(--ca-secondary-black);
+    color: var(--color-text);
     margin: 0 0 1.5rem;
   }
   .ug-meta-list {
     list-style: none;
     margin: 0 0 1.75rem;
     padding: 1.25rem 1.5rem;
-    background: var(--ca-surface);
-    border: 1px solid var(--ca-border);
+    background: var(--surface-card);
+    border: 1px solid var(--border-default);
     border-radius: 12px;
     display: flex;
     flex-direction: column;
@@ -629,16 +629,16 @@ sf org list             # confirm the org shows up</code></pre>
   }
   .ug-meta-list li {
     font-size: 0.9375rem;
-    color: var(--ca-secondary-black);
+    color: var(--color-text);
     line-height: 1.6;
   }
-  .ug-meta-list strong { color: var(--ca-black); font-weight: 700; }
+  .ug-meta-list strong { color: var(--color-heading); font-weight: 700; }
 
   /* ── Callout ── */
   .ug-callout {
     background: var(--surface-tint);
-    border: 1px solid var(--ca-border);
-    border-left: 3px solid var(--ca-black);
+    border: 1px solid var(--border-default);
+    border-left: 3px solid var(--border-strong);
     border-radius: 10px;
     padding: 1.1rem 1.4rem;
     margin: 0 0 2rem;
@@ -649,14 +649,14 @@ sf org list             # confirm the org shows up</code></pre>
     font-weight: 800;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--ca-black);
+    color: var(--color-heading);
     margin-bottom: 0.5rem;
   }
   .ug-callout p {
     margin: 0;
     font-size: 0.9375rem;
     line-height: 1.7;
-    color: var(--ca-secondary-black);
+    color: var(--color-text);
   }
 
   /* ── Body typography ── */
@@ -664,7 +664,7 @@ sf org list             # confirm the org shows up</code></pre>
     font-size: 1.5rem;
     font-weight: 800;
     letter-spacing: -0.02em;
-    color: var(--ca-black);
+    color: var(--color-heading);
     margin: 3.25rem 0 1rem;
     padding-top: 0.5rem;
     scroll-margin-top: 90px;
@@ -672,13 +672,13 @@ sf org list             # confirm the org shows up</code></pre>
   .ug-body h3 {
     font-size: 1.125rem;
     font-weight: 700;
-    color: var(--ca-black);
+    color: var(--color-heading);
     margin: 2rem 0 0.75rem;
     scroll-margin-top: 90px;
   }
   .ug-body p {
     font-size: 1rem;
-    color: var(--ca-secondary-black);
+    color: var(--color-text);
     line-height: 1.7;
     margin: 0 0 1rem;
   }
@@ -692,13 +692,13 @@ sf org list             # confirm the org shows up</code></pre>
   }
   .ug-body li {
     font-size: 1rem;
-    color: var(--ca-secondary-black);
+    color: var(--color-text);
     line-height: 1.65;
   }
-  .ug-body strong { color: var(--ca-black); font-weight: 700; }
+  .ug-body strong { color: var(--color-heading); font-weight: 700; }
   .ug-body em { font-style: italic; }
   .ug-body a {
-    color: var(--ca-black);
+    color: var(--color-heading);
     font-weight: 600;
     text-decoration: underline;
     text-underline-offset: 2px;
@@ -708,16 +708,16 @@ sf org list             # confirm the org shows up</code></pre>
     font-family: 'SF Mono', 'Fira Code', ui-monospace, monospace;
     font-size: 0.8125rem;
     background: var(--surface-tint);
-    border: 1px solid var(--ca-border);
+    border: 1px solid var(--border-default);
     padding: 1px 5px;
     border-radius: 4px;
-    color: var(--ca-black);
+    color: var(--color-heading);
   }
   .ug-table-title { margin-bottom: 0.5rem; }
 
   /* ── Code block ── */
   .ug-code {
-    background: var(--ca-black);
+    background: var(--surface-inverse);
     color: var(--color-on-inverse-soft);
     border-radius: 12px;
     padding: 1.1rem 1.35rem;
@@ -745,8 +745,8 @@ sf org list             # confirm the org shows up</code></pre>
     height: auto;
     aspect-ratio: 16 / 10;
     object-fit: cover;
-    background: var(--ca-surface);
-    border: 1px solid var(--ca-border);
+    background: var(--surface-card);
+    border: 1px solid var(--border-default);
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 8px 28px var(--shadow-ink);
@@ -761,7 +761,7 @@ sf org list             # confirm the org shows up</code></pre>
   /* ── Tables ── */
   .ug-table-wrap {
     margin: 0.25rem 0 1.75rem;
-    border: 1px solid var(--ca-border);
+    border: 1px solid var(--border-default);
     border-radius: 12px;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
@@ -770,10 +770,10 @@ sf org list             # confirm the org shows up</code></pre>
     width: 100%;
     border-collapse: collapse;
     font-size: 0.875rem;
-    background: var(--ca-surface);
+    background: var(--surface-card);
   }
   .ug-table thead th {
-    background: var(--ca-black);
+    background: var(--surface-inverse);
     color: var(--color-on-inverse);
     text-align: left;
     font-weight: 700;
@@ -784,26 +784,26 @@ sf org list             # confirm the org shows up</code></pre>
   }
   .ug-table td {
     padding: 11px 14px;
-    border-top: 1px solid var(--ca-border);
-    color: var(--ca-secondary-black);
+    border-top: 1px solid var(--border-default);
+    color: var(--color-text);
     line-height: 1.55;
     vertical-align: top;
   }
-  .ug-table td strong { color: var(--ca-black); }
+  .ug-table td strong { color: var(--color-heading); }
 
   /* ── Sign-off + more nav ── */
   .ug-signoff {
     margin-top: 2.5rem;
     padding-top: 1.5rem;
-    border-top: 1px solid var(--ca-border);
+    border-top: 1px solid var(--border-default);
     font-size: 0.9375rem;
     color: var(--color-text-muted);
   }
   .ug-more {
     margin-top: 2rem;
     padding: 1.4rem 1.6rem;
-    background: var(--ca-surface);
-    border: 1px solid var(--ca-border);
+    background: var(--surface-card);
+    border: 1px solid var(--border-default);
     border-radius: 12px;
   }
   .ug-more-label {
@@ -826,7 +826,7 @@ sf org list             # confirm the org shows up</code></pre>
   .ug-more a {
     font-size: 0.9375rem;
     font-weight: 600;
-    color: var(--ca-black);
+    color: var(--color-heading);
     text-decoration: none;
   }
   .ug-more a:hover { opacity: 0.7; }
@@ -834,8 +834,8 @@ sf org list             # confirm the org shows up</code></pre>
   /* ── TOC ── */
   .ug-toc {
     padding: 1.25rem 1.4rem;
-    background: var(--ca-surface);
-    border: 1px solid var(--ca-border);
+    background: var(--surface-card);
+    border: 1px solid var(--border-default);
     border-radius: 12px;
   }
   .ug-toc-label {
@@ -860,19 +860,19 @@ sf org list             # confirm the org shows up</code></pre>
     gap: 0.5rem;
     font-size: 0.8125rem;
     line-height: 1.4;
-    color: var(--ca-secondary-black);
+    color: var(--color-text);
     text-decoration: none;
     padding: 0.35rem 0.5rem;
     border-radius: 7px;
     border-left: 2px solid transparent;
     transition: color 0.18s ease, background 0.18s ease, border-color 0.18s ease;
   }
-  .ug-toc a:hover { color: var(--ca-black); background: var(--ca-page-bg); }
+  .ug-toc a:hover { color: var(--color-heading); background: var(--surface-page); }
   .ug-toc a.active {
-    color: var(--ca-black);
+    color: var(--color-heading);
     font-weight: 700;
-    background: var(--ca-page-bg);
-    border-left-color: var(--ca-black);
+    background: var(--surface-page);
+    border-left-color: var(--border-strong);
   }
   .ug-toc-num {
     font-size: 0.6875rem;
@@ -880,7 +880,7 @@ sf org list             # confirm the org shows up</code></pre>
     color: var(--color-text-faintest);
     min-width: 1.1em;
   }
-  .ug-toc a.active .ug-toc-num { color: var(--ca-black); }
+  .ug-toc a.active .ug-toc-num { color: var(--color-heading); }
   /* Collapsible on mobile: summary is the tappable "On this page" bar. */
   .ug-toc > summary {
     list-style: none;
@@ -934,8 +934,8 @@ sf org list             # confirm the org shows up</code></pre>
     width: 100%;
     height: auto;
     aspect-ratio: 16 / 10;
-    background: var(--ca-surface);
-    border: 1px solid var(--ca-border);
+    background: var(--surface-card);
+    border: 1px solid var(--border-default);
     border-radius: 12px;
     box-shadow: 0 8px 28px var(--shadow-ink);
   }

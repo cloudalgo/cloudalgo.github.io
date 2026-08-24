@@ -74,29 +74,29 @@ const docs = [
 </Page>
 
 <style>
-  .lx-page { background: var(--ca-page-bg); min-height: 60vh; }
+  .lx-page { background: var(--surface-page); min-height: 60vh; }
   .lx-main { max-width: 760px; margin: 0 auto; padding: 72px 24px 100px; }
 
   .lx-breadcrumb {
     display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
-    font-size: 0.8125rem; color: var(--ca-secondary-black); margin-bottom: 32px;
+    font-size: 0.8125rem; color: var(--color-text); margin-bottom: 32px;
   }
-  .lx-breadcrumb a { color: var(--ca-secondary-black); text-decoration: none; transition: color 0.2s; }
-  .lx-breadcrumb a:hover { color: var(--ca-black); }
+  .lx-breadcrumb a { color: var(--color-text); text-decoration: none; transition: color 0.2s; }
+  .lx-breadcrumb a:hover { color: var(--color-heading); }
   .lx-breadcrumb span { color: var(--color-text-faintest); }
 
   .lx-eyebrow {
     display: inline-flex; align-items: center; gap: 6px;
     font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
-    color: var(--ca-secondary-black); margin-bottom: 14px;
+    color: var(--color-text); margin-bottom: 14px;
   }
-  .lx-eyebrow-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ca-black); }
+  .lx-eyebrow-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--surface-inverse); }
 
   .lx-h1 {
     font-size: clamp(2rem, 5vw, 3rem); font-weight: 900; letter-spacing: -0.04em;
-    line-height: 1.1; color: var(--ca-black); margin-bottom: 12px;
+    line-height: 1.1; color: var(--color-heading); margin-bottom: 12px;
   }
-  .lx-intro { font-size: 1rem; color: var(--ca-secondary-black); line-height: 1.7; margin-bottom: 40px; max-width: 560px; }
+  .lx-intro { font-size: 1rem; color: var(--color-text); line-height: 1.7; margin-bottom: 40px; max-width: 560px; }
 
   .lx-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
   @media (max-width: 600px) { .lx-grid { grid-template-columns: 1fr; } }
@@ -107,12 +107,12 @@ const docs = [
     transition: border-color 0.2s, transform 0.2s;
   }
   .lx-card:hover { border-color: var(--card-border-hover); transform: translateY(-2px); }
-  .lx-card-title { font-size: 1.0625rem; font-weight: 700; color: var(--ca-black); letter-spacing: -0.01em; }
-  .lx-card-blurb { font-size: 0.875rem; color: var(--ca-secondary-black); line-height: 1.6; flex: 1; }
-  .lx-card-arrow { font-size: 0.8125rem; font-weight: 700; color: var(--ca-black); margin-top: 4px; }
+  .lx-card-title { font-size: 1.0625rem; font-weight: 700; color: var(--color-heading); letter-spacing: -0.01em; }
+  .lx-card-blurb { font-size: 0.875rem; color: var(--color-text); line-height: 1.6; flex: 1; }
+  .lx-card-arrow { font-size: 0.8125rem; font-weight: 700; color: var(--color-heading); margin-top: 4px; }
 
-  .lx-contact { margin-top: 36px; font-size: 0.9375rem; color: var(--ca-secondary-black); line-height: 1.7; }
-  .lx-contact a { color: var(--ca-black); font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
+  .lx-contact { margin-top: 36px; font-size: 0.9375rem; color: var(--color-text); line-height: 1.7; }
+  .lx-contact a { color: var(--color-heading); font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
 
   @media (max-width: 600px) {
     .lx-main { padding: 56px 16px 80px; }

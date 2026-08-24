@@ -1,6 +1,6 @@
 /* ─── Hero ─────────────────────────────────────────────── */
 .hero-section {
-  background-color: var(--ca-grey2);
+  background-color: var(--surface-page);
   padding-top: 8rem;
   padding-bottom: 5rem;
   overflow: hidden;
@@ -15,21 +15,21 @@
 
 /* Inner page header (replaces old dark hero banners) */
 .page-header {
-  background-color: var(--ca-surface);
-  border-bottom: 1px solid var(--ca-border);
+  background-color: var(--surface-card);
+  border-bottom: 1px solid var(--border-default);
   padding-top: 7rem;
   padding-bottom: 3.5rem;
 }
 .page-header h1 {
   font-size: 3.5rem;
   font-weight: 900;
-  color: var(--ca-black);
+  color: var(--color-heading);
   margin-bottom: 0.75rem;
   letter-spacing: -0.03em;
 }
 .page-header p {
   font-size: 1.125rem;
-  color: var(--ca-secondary-black);
+  color: var(--color-text);
   max-width: 600px;
 }
 @media (max-width: 767px) {
@@ -43,8 +43,8 @@
   align-items: center;
   gap: 0.5rem;
   font-size: 0.875rem;
-  color: var(--ca-secondary-black);
+  color: var(--color-text);
   margin-bottom: 1rem;
 }
-.breadcrumb a { color: var(--ca-secondary-black); }
-.breadcrumb a:hover { color: var(--ca-black); }
+.breadcrumb a { color: var(--color-text); }
+.breadcrumb a:hover { color: var(--color-heading); }
