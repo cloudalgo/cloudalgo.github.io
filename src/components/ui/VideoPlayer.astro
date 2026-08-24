@@ -163,7 +163,7 @@ const isCrossOrigin = /^https?:\/\//.test(src) || (captions ? /^https?:\/\//.tes
     box-shadow: 0 24px 60px rgba(var(--ink-000-rgb), 0.45);
   }
   .cav--light .cav-frame {
-    box-shadow: 0 10px 34px rgba(var(--ink-900-rgb), 0.09);
+    box-shadow: 0 10px 34px var(--color-ink-a09);
   }
 
   .cav-video {
@@ -196,7 +196,7 @@ const isCrossOrigin = /^https?:\/\//.test(src) || (captions ? /^https?:\/\//.tes
     border: 0;
     padding: 0;
     cursor: pointer;
-    background: radial-gradient(ellipse at center, rgba(var(--ink-900-rgb), 0.18) 0%, rgba(var(--ink-900-rgb), 0.55) 100%);
+    background: radial-gradient(ellipse at center, var(--color-ink-a18) 0%, var(--color-ink-a55) 100%);
     font-family: inherit;
     /* Hidden the moment playback starts; JS toggles this attribute. */
   }
@@ -253,7 +253,7 @@ const isCrossOrigin = /^https?:\/\//.test(src) || (captions ? /^https?:\/\//.tes
     align-items: center;
     gap: 0.6rem;
     padding: 2.4rem 0.9rem 0.75rem;
-    background: linear-gradient(to top, rgba(var(--ink-900-rgb), 0.92) 0%, rgba(var(--ink-900-rgb), 0.65) 45%, rgba(var(--ink-900-rgb), 0) 100%);
+    background: linear-gradient(to top, var(--color-ink-a92) 0%, var(--color-ink-a65) 45%, var(--color-ink-a00) 100%);
     opacity: 1;
     transform: translateY(0);
     transition: opacity 0.25s ease, transform 0.25s ease;

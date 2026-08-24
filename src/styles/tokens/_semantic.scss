@@ -83,6 +83,67 @@
   --color-on-inverse-a15: rgba(var(--paper-000-rgb), 0.15);
   --color-on-inverse-a08: rgba(var(--paper-000-rgb), 0.08);
 
+  /* Ink at an alpha.
+     The mirror of the white-at-alpha ramp above, and the reason it
+     exists is the same: 112 declarations were spelling
+     `rgba(var(--ink-900-rgb), N)` inline, which is a component reading
+     a primitive -- the one thing this layer says not to do. They picked
+     27 different alphas between them, so the ramp below is drift as
+     much as design.
+
+     Unlike the on-inverse ramp these are not one text band; they are
+     four unrelated jobs that happen to share a colour, and only three
+     of them repeat often enough to earn a role name:
+
+       role                 alpha  n   what it is
+       --illus-wash          0.05  24  fill inside an outlined shape in
+                                       an inline SVG illustration
+       --surface-ink-glass   0.72   2  a translucent ink chip sitting
+                                       over blurred page content
+       --shadow-ink          0.07   3  the colour of a card shadow
+
+     Everything else is a one- or two-off and reads the rung directly.
+     By job: 83 SVG fills (0.02-0.65), 6 SVG strokes (0.08-0.82),
+     9 shadows (0.06-0.18), 5 scrims and glass chips (0.35-0.88),
+     5 gradient stops in the video player (0-0.92), 3 numeral
+     watermarks (0.07-0.25), 1 link underline (0.35).
+
+     A theme that changes ink flows through --ink-900-rgb without
+     touching a rung. A theme that wants a different *depth* of wash
+     -- heavier illustration fills, softer shadows -- repoints the
+     three roles instead of hunting 112 declarations. */
+  --color-ink-a00: rgba(var(--ink-900-rgb), 0);
+  --color-ink-a02: rgba(var(--ink-900-rgb), 0.02);
+  --color-ink-a03: rgba(var(--ink-900-rgb), 0.03);
+  --color-ink-a04: rgba(var(--ink-900-rgb), 0.04);
+  --color-ink-a05: rgba(var(--ink-900-rgb), 0.05);
+  --color-ink-a06: rgba(var(--ink-900-rgb), 0.06);
+  --color-ink-a07: rgba(var(--ink-900-rgb), 0.07);
+  --color-ink-a08: rgba(var(--ink-900-rgb), 0.08);
+  --color-ink-a09: rgba(var(--ink-900-rgb), 0.09);
+  --color-ink-a10: rgba(var(--ink-900-rgb), 0.1);
+  --color-ink-a13: rgba(var(--ink-900-rgb), 0.13);
+  --color-ink-a14: rgba(var(--ink-900-rgb), 0.14);
+  --color-ink-a15: rgba(var(--ink-900-rgb), 0.15);
+  --color-ink-a18: rgba(var(--ink-900-rgb), 0.18);
+  --color-ink-a20: rgba(var(--ink-900-rgb), 0.2);
+  --color-ink-a22: rgba(var(--ink-900-rgb), 0.22);
+  --color-ink-a25: rgba(var(--ink-900-rgb), 0.25);
+  --color-ink-a35: rgba(var(--ink-900-rgb), 0.35);
+  --color-ink-a42: rgba(var(--ink-900-rgb), 0.42);
+  --color-ink-a50: rgba(var(--ink-900-rgb), 0.5);
+  --color-ink-a55: rgba(var(--ink-900-rgb), 0.55);
+  --color-ink-a65: rgba(var(--ink-900-rgb), 0.65);
+  --color-ink-a72: rgba(var(--ink-900-rgb), 0.72);
+  --color-ink-a75: rgba(var(--ink-900-rgb), 0.75);
+  --color-ink-a82: rgba(var(--ink-900-rgb), 0.82);
+  --color-ink-a88: rgba(var(--ink-900-rgb), 0.88);
+  --color-ink-a92: rgba(var(--ink-900-rgb), 0.92);
+
+  --illus-wash: var(--color-ink-a05);
+  --surface-ink-glass: var(--color-ink-a72);
+  --shadow-ink: var(--color-ink-a07);
+
   /* Rules */
   --border-default: var(--paper-200);
   --border-strong: var(--ink-900);

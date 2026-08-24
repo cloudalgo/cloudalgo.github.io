@@ -30,11 +30,11 @@
   --card-border-width: 1px;
   --card-border: var(--border-default);
   --card-border-hover: var(--border-strong);
-  --card-shadow-hover: 0 16px 32px rgba(var(--ink-900-rgb), 0.08);
+  --card-shadow-hover: 0 16px 32px var(--color-ink-a08);
   /* The two-layer lift shared by the case-study and product cards:
      a wide ambient shadow plus a tight contact shadow underneath. */
-  --card-shadow-lift: 0 12px 40px rgba(var(--ink-900-rgb), 0.1),
-                      0 2px 8px rgba(var(--ink-900-rgb), 0.06);
+  --card-shadow-lift: 0 12px 40px var(--color-ink-a10),
+                      0 2px 8px var(--color-ink-a06);
 
   /* Section labels -- the uppercase eyebrow above a section title.
      `--section-label-size-xs` and `--section-label-color-inverse`
@@ -65,9 +65,8 @@
      figures, four labels and five ordinals that existed before the
      classes; see components/_numerals.scss for the drift tables.
 
-     The two `rgba(var(--ink-900-rgb), ...)` values are still spelled out
-     because the ink-alpha ramp has not been named yet (the on-inverse
-     ramp in _semantic.scss is its mirror). They move there when it lands. */
+     The three watermark colours read the ink-alpha ramp in
+     _semantic.scss -- three of the 27 rungs that ramp names. */
   --stat-num-family: var(--font-heading);
   --stat-num-size: 2rem;
   --stat-num-weight: var(--weight-black);
@@ -76,7 +75,7 @@
   --stat-num-color: var(--color-heading);
   --stat-num-color-ghost: var(--color-text-ghost);
   --stat-num-color-rule: var(--border-default);
-  --stat-num-color-watermark: rgba(var(--ink-900-rgb), 0.07);
+  --stat-num-color-watermark: var(--color-ink-a07);
 
   --stat-label-size: 0.8125rem;
   --stat-label-weight: var(--weight-medium);
@@ -87,8 +86,8 @@
   --ordinal-weight: var(--weight-black);
   --ordinal-tracking: 0.1em;
   --ordinal-color: var(--color-text);
-  --ordinal-color-watermark: rgba(var(--ink-900-rgb), 0.2);
-  --ordinal-color-watermark-strong: rgba(var(--ink-900-rgb), 0.25);
+  --ordinal-color-watermark: var(--color-ink-a20);
+  --ordinal-color-watermark-strong: var(--color-ink-a25);
 
   /* Badges / tags.
      The full knob set, because every badge on the site is one
