@@ -1,18 +1,50 @@
 /* ─── Section label ───────────────────────────────────────
    The small uppercase eyebrow above a section heading. Lived in
-   sections/_about.scss, which was never its home -- it is used on 33
+   sections/_about.scss, which was never its home -- it is used on 37
    headings across the site, not just the about page.
 
    It is the only rule at this specificity anywhere in the sheet (the one
    other match, .ug-video-block .section-label in the guide page, is a
    scoped descendant), so lifting it out does not move it in the cascade.
-   It is @use'd from main.scss in the slot _about.scss used to occupy. */
+   It is @use'd from main.scss in the slot _about.scss used to occupy.
+
+   Four eyebrows never reached the SectionLabel component and stayed
+   inline `style=` attributes at the call site. They are folded in here,
+   and between them they departed on three axes:
+
+     where                     size      colour                 display
+     ProductsSection           0.75      paper-000 @ 0.4        block
+     services/index process    0.75      paper-000 @ 0.45       block
+     services/index numbers    0.75      --color-text           block
+     products/[slug] glance    0.6875    --color-text           block
+
+   The colour column is the same inverse-tone axis the section title
+   has, at three different alphas -- 0.4 twice more among the component's
+   own call sites, 0.45 once, 0.55 once. `--inverse` is the modal 0.4;
+   the other two stay inline until the on-inverse text ramp is named.
+
+   `--block` looks like a formality and is not: an inline-block sits on
+   the baseline of a line box sized by the *parent's* line-height, which
+   on a 1rem/1.7 container leaves about 7px of air under a 0.75rem
+   eyebrow that a block box does not. The four were block, so they stay
+   block.
+
+   `.section-label` declares no literal appearance: restyling every
+   eyebrow on the site is editing --section-label-* in
+   tokens/_components.scss. */
+
 .section-label {
-  display: inline-block;
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--ca-secondary-black);
-  margin-bottom: 1rem;
+  display: var(--section-label-display);
+  font-size: var(--section-label-size);
+  font-weight: var(--section-label-weight);
+  letter-spacing: var(--section-label-tracking);
+  text-transform: var(--section-label-transform);
+  color: var(--section-label-color);
+  margin-bottom: var(--section-label-margin-bottom);
 }
+
+.section-label--block { --section-label-display: block; }
+
+.section-label--xs { --section-label-size: var(--section-label-size-xs); }
+
+.section-label--inverse { --section-label-color: var(--section-label-color-inverse); }

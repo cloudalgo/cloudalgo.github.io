@@ -36,6 +36,20 @@
   --card-shadow-lift: 0 12px 40px rgba(var(--ink-900-rgb), 0.1),
                       0 2px 8px rgba(var(--ink-900-rgb), 0.06);
 
+  /* Section labels -- the uppercase eyebrow above a section title.
+     `--section-label-size-xs` and `--section-label-color-inverse`
+     exist so the two headings that depart can name it; see
+     components/_section-label.scss. */
+  --section-label-display: inline-block;
+  --section-label-size: 0.75rem;
+  --section-label-size-xs: 0.6875rem;
+  --section-label-weight: var(--weight-bold);
+  --section-label-tracking: 0.1em;
+  --section-label-transform: uppercase;
+  --section-label-color: var(--color-text);
+  --section-label-color-inverse: rgba(var(--paper-000-rgb), 0.4);
+  --section-label-margin-bottom: 1rem;
+
   /* Section titles -- the h2 that opens a section.
      The defaults are the modal combination across the nineteen that
      existed before the class; see components/_section-title.scss for

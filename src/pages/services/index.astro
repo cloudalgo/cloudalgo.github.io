@@ -2,6 +2,7 @@
 import Page from '../../layouts/Page.astro';
 import PageHeader from '@/components/ui/PageHeader.astro';
 import Button from '../../components/ui/Button.astro';
+import SectionLabel from '../../components/ui/SectionLabel.astro';
 
 const services = [
   {
@@ -497,9 +498,9 @@ const steps = [
 
             <!-- Text column — alternates side -->
             <div class={`col-lg-6 ${isEven ? '' : 'order-lg-2'} anim-fade-up`}>
-              <p style="font-size:0.75rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--color-text);margin-bottom:0.75rem;">
+              <SectionLabel class="section-label--block" style="margin-bottom:0.75rem;">
                 {svc.number}
-              </p>
+              </SectionLabel>
               <h2 class="section-title section-title--md section-title--tight" style="margin-bottom:0.875rem;line-height:1.15;">
                 {svc.title}
               </h2>
@@ -545,9 +546,9 @@ const steps = [
   <!-- Process -->
   <section style="background:var(--surface-inverse);padding:6rem 0;border-top:1px solid var(--border-on-inverse);">
     <div class="container">
-      <p style="font-size:0.75rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(var(--paper-000-rgb), 0.45);margin-bottom:0.75rem;">
+      <SectionLabel class="section-label--block" style="color:rgba(var(--paper-000-rgb), 0.45);margin-bottom:0.75rem;">
         How we work
-      </p>
+      </SectionLabel>
       <h2 class="section-title section-title--tight section-title--inverse anim-fade-up" style="margin-bottom:3.5rem;">
         Our delivery process
       </h2>
