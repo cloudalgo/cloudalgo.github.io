@@ -16,9 +16,9 @@ interface Props {
 // scope for this change (other pages still use it), so this duplicates those
 // five SVGs — a deliberate, accepted cost of scoping this rewrite to the
 // homepage; do not extract a shared module for it.
-function SalesforceIllustration(props: SVGProps<SVGSVGElement>) {
+function SalesforceIllustration() {
   return (
-    <svg viewBox="0 0 480 200" fill="none" xmlns="http://www.w3.org/2000/svg" className="blog-svg-illus" aria-hidden="true" {...props}>
+    <svg viewBox="0 0 480 200" fill="none" xmlns="http://www.w3.org/2000/svg" className="blog-svg-illus" aria-hidden="true">
       <rect x="36" y="18" width="250" height="164" rx="8" stroke="#0A0A0A" strokeWidth="1.5" opacity="0.75" />
       <rect x="36" y="18" width="250" height="30" rx="8" stroke="none" fill="#0A0A0A" opacity="0.07" />
       <path d="M36 48 L286 48" stroke="#0A0A0A" strokeWidth="1" opacity="0.4" />
@@ -49,9 +49,9 @@ function SalesforceIllustration(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-function HerokuIllustration(props: SVGProps<SVGSVGElement>) {
+function HerokuIllustration() {
   return (
-    <svg viewBox="0 0 480 200" fill="none" xmlns="http://www.w3.org/2000/svg" className="blog-svg-illus" aria-hidden="true" {...props}>
+    <svg viewBox="0 0 480 200" fill="none" xmlns="http://www.w3.org/2000/svg" className="blog-svg-illus" aria-hidden="true">
       <rect x="50" y="20" width="280" height="162" rx="8" stroke="#0A0A0A" strokeWidth="1.5" opacity="0.75" />
       <rect x="50" y="20" width="280" height="28" rx="8" stroke="none" fill="#0A0A0A" opacity="0.07" />
       <path d="M50 48 L330 48" stroke="#0A0A0A" strokeWidth="1" opacity="0.4" />
@@ -81,9 +81,9 @@ function HerokuIllustration(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-function MuleSoftIllustration(props: SVGProps<SVGSVGElement>) {
+function MuleSoftIllustration() {
   return (
-    <svg viewBox="0 0 480 200" fill="none" xmlns="http://www.w3.org/2000/svg" className="blog-svg-illus" aria-hidden="true" {...props}>
+    <svg viewBox="0 0 480 200" fill="none" xmlns="http://www.w3.org/2000/svg" className="blog-svg-illus" aria-hidden="true">
       <circle cx="240" cy="100" r="28" stroke="#0A0A0A" strokeWidth="2" opacity="0.8" />
       <circle cx="240" cy="100" r="16" stroke="#0A0A0A" strokeWidth="1.5" opacity="0.4" />
       <text x="240" y="97" textAnchor="middle" fontFamily="Outfit,sans-serif" fontSize="8" fontWeight="700" fill="#0A0A0A">API</text>
@@ -120,9 +120,9 @@ function MuleSoftIllustration(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-function AWSIllustration(props: SVGProps<SVGSVGElement>) {
+function AWSIllustration() {
   return (
-    <svg viewBox="0 0 480 200" fill="none" xmlns="http://www.w3.org/2000/svg" className="blog-svg-illus" aria-hidden="true" {...props}>
+    <svg viewBox="0 0 480 200" fill="none" xmlns="http://www.w3.org/2000/svg" className="blog-svg-illus" aria-hidden="true">
       <g className="aws-cloud">
         <path d="M170 72 C142 72 122 58 122 42 C122 30 133 20 148 18 C150 6 163 -2 178 -2 C190 -2 200 4 205 14 C210 12 216 10 222 10 C242 10 258 24 258 42 C258 60 242 74 222 74 Z" stroke="#0A0A0A" strokeWidth="1.5" fill="none" opacity="0.7" />
         <text x="190" y="44" textAnchor="middle" fontFamily="Outfit,sans-serif" fontSize="9" fontWeight="700" fill="#0A0A0A" opacity="0.6">AWS Region</text>
@@ -153,9 +153,9 @@ function AWSIllustration(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-function ProductIllustration(props: SVGProps<SVGSVGElement>) {
+function ProductIllustration() {
   return (
-    <svg viewBox="0 0 480 200" fill="none" xmlns="http://www.w3.org/2000/svg" className="blog-svg-illus" aria-hidden="true" {...props}>
+    <svg viewBox="0 0 480 200" fill="none" xmlns="http://www.w3.org/2000/svg" className="blog-svg-illus" aria-hidden="true">
       <path d="M200 30 L280 70 L280 150 L200 190 L120 150 L120 70 Z" stroke="#0A0A0A" strokeWidth="1.5" strokeLinejoin="round" opacity="0.7" />
       <path d="M200 30 L200 110 L280 70" stroke="#0A0A0A" strokeWidth="1" opacity="0.35" />
       <path d="M200 110 L120 70" stroke="#0A0A0A" strokeWidth="1" opacity="0.35" />
@@ -272,10 +272,15 @@ export default function BlogPreview({ posts }: Props) {
           {posts.map((post) => {
             const contentIllustration = getBlogIllustration(post.slug);
             const CategoryIllustration = categoryIllustrations[post.category] ?? categoryIllustrations.Salesforce;
-            const formattedDate = new Date(post.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+            // Pinned to UTC (Ruling C12): this island hydrates a second time in the
+            // visitor's own timezone, on top of BlogCard.astro's build-time-only render.
+            // Blog frontmatter dates are date-only and parse as UTC midnight, so without
+            // this pin a visitor west of UTC would see the date roll back a day at
+            // hydration (and get a React hydration text mismatch in the process).
+            const formattedDate = new Date(post.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
             return (
               <div key={post.slug} className="col-lg-4 col-md-4" style={{ marginBottom: '1.5rem', display: 'flex' }}>
-                <motion.article className="blog-card-new" variants={cardVariants} style={{ width: '100%' }}>
+                <motion.article className="blog-card-new" data-category={post.category} variants={cardVariants} style={{ width: '100%' }}>
                   <a href={`/blog/${post.slug}`} className="blog-card-thumb" aria-label={`Read: ${post.title}`} tabIndex={-1}>
                     {contentIllustration ? (
                       // Content-specific illustrations come from the existing, unmodified
