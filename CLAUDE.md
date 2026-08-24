@@ -13,9 +13,11 @@ npm run astro check  # TypeScript / Astro type-checking (no separate test suite)
 
 Node ≥ 22.12.0 is required (enforced in CI via `node-version: 22`).
 
+**Do not upgrade TypeScript to 7.** `@astrojs/check` peer-caps at `typescript ^5 || ^6`, and `npm run astro check` is the only type gate this project has. Revisit when `@astrojs/check` ships TS 7 support.
+
 ## Architecture
 
-**Stack**: Astro 6 (static output) · React 19 · Tailwind CSS 4 · TypeScript strict mode
+**Stack**: Astro 7 (static output) · React 19 · Tailwind CSS 4 · TypeScript 6, strict mode
 
 ### Two-tier layout system
 
@@ -30,8 +32,18 @@ Every page imports `Page` (not `Base` directly) and passes `title`, `description
 
 The rule is purely interactive vs static:
 
-- **`.astro` components** — all layout and section components (`src/components/layout/`, `src/components/sections/`); they own copy, structure, and static markup
-- **`.tsx` React components** — only the three interactive UI widgets in `src/components/ui/`: `ContactForm`, `StatsCounter`, `TestimonialsSlider`
+- **`.astro` components** — all layout and section components (`src/components/layout/`, `src/components/sections/`), plus the `src/components/ui/` widgets whose interactivity is small enough for an inline `<script>` (`CookieConsent`, `VideoPlayer`, `BlogCard`, `ProductCard`); they own copy, structure, and static markup
+- **`.tsx` React components** — only the three hydrated islands, all in `src/components/ui/`:
+
+| Island | Mounted by | Directive |
+|---|---|---|
+| `ContactForm` | `src/pages/contact.astro` | `client:load` |
+| `StatsCounter` | `src/components/sections/StatsBar.astro` | `client:load` |
+| `ScheduleWidget` | `src/layouts/Page.astro` (site-wide) | `client:only="react"` |
+
+Testimonials used to be a Swiper React slider; it is now static markup in `src/components/sections/Testimonials.astro`. Do not reintroduce a carousel for a single quote.
+
+**Keep entrance animations outside the island.** `anim-fade-up` belongs on an Astro wrapper around the island, never on a node inside the React tree — `Base.astro`'s observer writes `in-view` onto it, and if React owns that node it is a hydration race. See `StatsBar.astro`.
 
 ### Content collections (Astro content layer v2)
 
@@ -90,10 +102,20 @@ Inline SVGs used as section illustrations follow this pattern: `viewBox="0 0 320
 
 `Base.astro` registers a single `IntersectionObserver` that adds `.in-view` to any element with class `anim-fade-up` or `anim-scale-pop`. Transitions are CSS-only and respect `prefers-reduced-motion`.
 
-### Open configuration items
+### Astro 7 gotchas
 
-- **ContactForm** (`src/components/ui/ContactForm.tsx`): Formspree endpoint contains placeholder `YOUR_FORM_ID` — replace with real form ID before going live
-- **Google Analytics** (`src/layouts/Base.astro`): GA4 snippet is commented out with placeholder `GA_MEASUREMENT_ID`
+Astro 7 bundles with **rolldown** instead of rollup/esbuild. Two things bite, and neither fails the build:
+
+- **The `---` frontmatter fence must be the first bytes of a `.astro` file.** Not a blank line, not an HTML comment above it. If anything precedes it the frontmatter is parsed as markup and you get a misleading `Expected '}' but found ':'`. Put file-level notes *inside* the fence as JS comments.
+- **Default-importing a CommonJS package can yield the module object instead of the export.** Rolldown emits the CJS interop in node mode, so `default` ends up bound to `module.exports` and React throws "element type is invalid" *at runtime while the build stays green*. Named imports are unaffected. Prefer a named import, or avoid the CJS dependency; `react-countup` was dropped for exactly this reason.
+
+Because a green build no longer implies a working page, load the built site before shipping a dependency or bundler change — `npm run preview` and check the browser console, not just `npm run build`.
+
+### Third-party integrations (all live — no placeholders left)
+
+- **ContactForm** (`src/components/ui/ContactForm.tsx`) — posts to the HubSpot Forms API (`api.hsforms.com/submissions/v3/integration/submit/<portal>/<form>`). Portal and form IDs are real constants at the top of the file. Not Formspree.
+- **Analytics** — every tracker is injected from `injectTrackers()` in `src/components/ui/CookieConsent.astro`, and **only after consent**: GA4 (`G-5WYSWY2G6Z`), the HubSpot tracking script, and Microsoft Clarity. Nothing loads from `Base.astro`.
+- `Base.astro` only *emits* events (`scroll_depth`, `outbound_click`, `cta_click`) via `gtag?.(…)`. The optional call is deliberate: before consent `gtag` is undefined and the events are no-ops. Any new tracker goes in `injectTrackers()`, never in a layout.
 
 ### Deployment
 
