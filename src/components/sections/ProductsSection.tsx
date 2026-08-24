@@ -1,19 +1,83 @@
 import { motion, useReducedMotion, type Variants } from 'framer-motion';
+import type { ReactElement, SVGProps } from 'react';
 import type { HomeProductCard } from '@/types/homepage';
 
 interface Props {
   products: HomeProductCard[];
 }
 
-// Small icon SVGs for dark variant cards — transcribed verbatim from
-// src/components/ui/ProductCard.astro's `productIcons` map (the binding
-// content authority for this port).
-const productIcons: Record<string, string> = {
-  'algobridge': `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="4" width="8" height="16" rx="2" stroke="currentColor" stroke-width="1.5"/><rect x="15" y="4" width="8" height="16" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M9.5 9 L14.5 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M13 7.5 L14.5 9 L13 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M14.5 15 L9.5 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M11 13.5 L9.5 15 L11 16.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
-  'sf-sync-connector': `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="7" width="8" height="10" rx="2" stroke="currentColor" stroke-width="1.5"/><rect x="15" y="7" width="8" height="10" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M9.5 10 L14.5 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M13 8.5 L14.5 10 L13 11.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M14.5 14 L9.5 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M11 12.5 L9.5 14 L11 15.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
-  'insurealgo': `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="1" width="14" height="22" rx="3" stroke="currentColor" stroke-width="1.5"/><path d="M9 5 L15 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M12 9 L12 9.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M9 13 L12 15 L15 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="20" r="1" fill="currentColor"/></svg>`,
-  'pledgivo': `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 21C12 21 3 14.5 3 8.5C3 6 5 4 7.5 4C9.24 4 10.75 4.96 11.56 6.35C11.75 6.67 12.25 6.67 12.44 6.35C13.25 4.96 14.76 4 16.5 4C19 4 21 6 21 8.5C21 14.5 12 21 12 21Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M8 11 L10.5 13.5 L16 8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
-  'orgvitals': `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="3" width="20" height="16" rx="2.5" stroke="currentColor" stroke-width="1.5"/><path d="M2 7 L22 7" stroke="currentColor" stroke-width="1.5"/><circle cx="4.6" cy="5" r="0.7" fill="currentColor"/><circle cx="6.8" cy="5" r="0.7" fill="currentColor"/><path d="M5 13 L8.5 13 L10.5 10 L13 16 L15 13 L19 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M8.5 22 L15.5 22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>`,
+// Small icon SVGs for dark variant cards — transcribed verbatim (geometry and
+// every attribute byte-identical, kebab-case attrs converted to camelCase
+// for JSX) from src/components/ui/ProductCard.astro's `productIcons` map
+// (the binding content authority for this port). Inline JSX per Ruling C7 —
+// not `dangerouslySetInnerHTML` — matching the IconConsulting/IconProduct/
+// IconSupport pattern established in Services.tsx.
+function IconAlgobridge(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <rect x="1" y="4" width="8" height="16" rx="2" stroke="currentColor" strokeWidth="1.5" />
+      <rect x="15" y="4" width="8" height="16" rx="2" stroke="currentColor" strokeWidth="1.5" />
+      <path d="M9.5 9 L14.5 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      <path d="M13 7.5 L14.5 9 L13 10.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M14.5 15 L9.5 15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      <path d="M11 13.5 L9.5 15 L11 16.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function IconSfSyncConnector(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <rect x="1" y="7" width="8" height="10" rx="2" stroke="currentColor" strokeWidth="1.5" />
+      <rect x="15" y="7" width="8" height="10" rx="2" stroke="currentColor" strokeWidth="1.5" />
+      <path d="M9.5 10 L14.5 10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      <path d="M13 8.5 L14.5 10 L13 11.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M14.5 14 L9.5 14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      <path d="M11 12.5 L9.5 14 L11 15.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function IconInsurealgo(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <rect x="5" y="1" width="14" height="22" rx="3" stroke="currentColor" strokeWidth="1.5" />
+      <path d="M9 5 L15 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      <path d="M12 9 L12 9.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+      <path d="M9 13 L12 15 L15 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      <circle cx="12" cy="20" r="1" fill="currentColor" />
+    </svg>
+  );
+}
+
+function IconPledgivo(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <path d="M12 21C12 21 3 14.5 3 8.5C3 6 5 4 7.5 4C9.24 4 10.75 4.96 11.56 6.35C11.75 6.67 12.25 6.67 12.44 6.35C13.25 4.96 14.76 4 16.5 4C19 4 21 6 21 8.5C21 14.5 12 21 12 21Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
+      <path d="M8 11 L10.5 13.5 L16 8.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function IconOrgvitals(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <rect x="2" y="3" width="20" height="16" rx="2.5" stroke="currentColor" strokeWidth="1.5" />
+      <path d="M2 7 L22 7" stroke="currentColor" strokeWidth="1.5" />
+      <circle cx="4.6" cy="5" r="0.7" fill="currentColor" />
+      <circle cx="6.8" cy="5" r="0.7" fill="currentColor" />
+      <path d="M5 13 L8.5 13 L10.5 10 L13 16 L15 13 L19 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M8.5 22 L15.5 22" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+const productIcons: Record<string, (props: SVGProps<SVGSVGElement>) => ReactElement> = {
+  'algobridge': IconAlgobridge,
+  'sf-sync-connector': IconSfSyncConnector,
+  'insurealgo': IconInsurealgo,
+  'pledgivo': IconPledgivo,
+  'orgvitals': IconOrgvitals,
 };
 
 function statusLabel(status: HomeProductCard['status']): string {
@@ -91,12 +155,12 @@ export default function ProductsSection({ products }: Props) {
         >
           {products.map((product) => {
             const isEarlyAccess = product.status === 'preview' || product.status === 'beta';
-            const iconSvg = productIcons[product.id];
+            const Icon = productIcons[product.id];
             return (
               <motion.div key={product.id} variants={cardVariants} style={{ display: 'flex' }}>
                 <div className="product-card-dark" style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 12, padding: '1.75rem', display: 'flex', gap: '1.25rem', alignItems: 'flex-start', height: '100%' }}>
                   <div style={{ width: 44, height: 44, borderRadius: 10, background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', overflow: 'hidden' }}>
-                    {iconSvg && <span dangerouslySetInnerHTML={{ __html: iconSvg }} />}
+                    {Icon && <Icon />}
                   </div>
                   <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', height: '100%' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem', flexWrap: 'wrap' }}>
