@@ -53,7 +53,7 @@ const schema = {
       <div class="csd-hero-inner">
         <div class="csd-hero-text">
           <div class="csd-hero-meta">
-            <span class="csd-index">{cs.index}</span>
+            <span class="ordinal">{cs.index}</span>
             <Badge tone="outline" context="facet">{cs.industry}</Badge>
             <Badge tone="outline" context="facet">{cs.service}</Badge>
           </div>
@@ -61,13 +61,13 @@ const schema = {
           <p class="csd-hero-sub">{cs.executiveSummary}</p>
           <div class="csd-hero-stats">
             <div class="csd-hero-stat">
-              <span class="csd-hero-stat-num">{cs.metric}</span>
-              <span class="csd-hero-stat-label">{cs.metricLabel}</span>
+              <span class="stat-num stat-num--tight">{cs.metric}</span>
+              <span class="stat-label stat-label--xs">{cs.metricLabel}</span>
             </div>
             <div class="csd-hero-divider"></div>
             <div class="csd-hero-stat">
-              <span class="csd-hero-stat-num">{cs.duration}</span>
-              <span class="csd-hero-stat-label">engagement</span>
+              <span class="stat-num stat-num--tight">{cs.duration}</span>
+              <span class="stat-label stat-label--xs">engagement</span>
             </div>
           </div>
         </div>
@@ -337,7 +337,7 @@ const schema = {
     <div class="container csd-two-col">
       <div class="csd-col-label-block">
         <SectionLabel>The challenge</SectionLabel>
-        <div class="csd-col-number" aria-hidden="true">01</div>
+        <div class="stat-num stat-num--3xl stat-num--tighter stat-num--watermark csd-col-number" aria-hidden="true">01</div>
       </div>
       <div class="csd-col-content">
         <h2 class="section-title section-title--xs csd-section-title">What needed solving.</h2>
@@ -363,7 +363,7 @@ const schema = {
         <div class="csd-two-col" style="margin-bottom:2.5rem;">
           <div class="csd-col-label-block">
             <SectionLabel>Why standard tools failed</SectionLabel>
-            <div class="csd-col-number" aria-hidden="true">02</div>
+            <div class="stat-num stat-num--3xl stat-num--tighter stat-num--watermark csd-col-number" aria-hidden="true">02</div>
           </div>
           <div class="csd-col-content">
             <h2 class="section-title section-title--xs csd-section-title">Why off-the-shelf wasn't enough.</h2>
@@ -402,7 +402,7 @@ const schema = {
       <div class="csd-two-col">
         <div class="csd-col-label-block">
           <SectionLabel class="section-label--inverse">The solution</SectionLabel>
-          <div class="csd-col-number" style="color:var(--color-on-inverse-a08);" aria-hidden="true">{cs.toolComparison ? '03' : '02'}</div>
+          <div class="stat-num stat-num--3xl stat-num--tighter stat-num--watermark csd-col-number" style="color:var(--color-on-inverse-a08);" aria-hidden="true">{cs.toolComparison ? '03' : '02'}</div>
         </div>
         <div class="csd-col-content">
           <h2 class="section-title section-title--xs section-title--inverse csd-section-title">What we built.</h2>
@@ -412,7 +412,7 @@ const schema = {
       <div class="csd-steps">
         {cs.solutionSteps.map((step, i) => (
           <div class="csd-step anim-fade-up" style={`transition-delay:${i * 0.08}s`}>
-            <div class="csd-step-num">{String(i + 1).padStart(2, '0')}</div>
+            <div class="ordinal ordinal--on-inverse csd-step-num">{String(i + 1).padStart(2, '0')}</div>
             <div class="csd-step-body">
               <h3 class="csd-step-title">{step.title}</h3>
               <p class="csd-step-text">{step.body}</p>
@@ -430,7 +430,7 @@ const schema = {
         <div class="csd-two-col" style="margin-bottom:2.5rem;">
           <div class="csd-col-label-block">
             <SectionLabel>Engineering depth</SectionLabel>
-            <div class="csd-col-number" aria-hidden="true">{cs.toolComparison ? '04' : '03'}</div>
+            <div class="stat-num stat-num--3xl stat-num--tighter stat-num--watermark csd-col-number" aria-hidden="true">{cs.toolComparison ? '04' : '03'}</div>
           </div>
           <div class="csd-col-content">
             <h2 class="section-title section-title--xs csd-section-title">Technical highlights.</h2>
@@ -439,7 +439,7 @@ const schema = {
         <div class="csd-highlights">
           {cs.technicalHighlights.map((h, i) => (
             <div class="csd-highlight anim-fade-up" style={`transition-delay:${i * 0.07}s`}>
-              <div class="csd-highlight-num">{String(i + 1).padStart(2, '0')}</div>
+              <div class="ordinal ordinal--watermark csd-highlight-num">{String(i + 1).padStart(2, '0')}</div>
               <h3 class="csd-highlight-title">{h.title}</h3>
               <p class="csd-highlight-body">{h.body}</p>
             </div>
@@ -455,7 +455,7 @@ const schema = {
       <div class="csd-two-col" style="margin-bottom:3rem;">
         <div class="csd-col-label-block">
           <SectionLabel>The results</SectionLabel>
-          <div class="csd-col-number" aria-hidden="true">{cs.technicalHighlights ? (cs.toolComparison ? '05' : '04') : (cs.toolComparison ? '04' : '03')}</div>
+          <div class="stat-num stat-num--3xl stat-num--tighter stat-num--watermark csd-col-number" aria-hidden="true">{cs.technicalHighlights ? (cs.toolComparison ? '05' : '04') : (cs.toolComparison ? '04' : '03')}</div>
         </div>
         <div class="csd-col-content">
           <h2 class="section-title section-title--xs csd-section-title">Measurable outcomes.</h2>
@@ -464,7 +464,7 @@ const schema = {
       <div class="csd-outcomes">
         {cs.outcomes.map((o, i) => (
           <div class="csd-outcome anim-scale-pop" style={`transition-delay:${i * 0.07}s`}>
-            <div class="csd-outcome-num">{o.metric}</div>
+            <div class="stat-num stat-num--fluid stat-num--tight csd-outcome-num">{o.metric}</div>
             <div class="csd-outcome-label">{o.label}</div>
           </div>
         ))}
@@ -509,7 +509,7 @@ const schema = {
         <div class="csd-demonstrates">
           {cs.whatDemonstrates.map((d, i) => (
             <div class="csd-demonstrate anim-fade-up" style={`transition-delay:${i * 0.07}s`}>
-              <div class="csd-demonstrate-num">{String(i + 1).padStart(2, '0')}</div>
+              <div class="ordinal ordinal--on-inverse-faint csd-demonstrate-num">{String(i + 1).padStart(2, '0')}</div>
               <h3 class="csd-demonstrate-title">{d.title}</h3>
               <p class="csd-demonstrate-body">{d.body}</p>
             </div>
@@ -617,13 +617,7 @@ const schema = {
   margin-bottom: 1.25rem;
   flex-wrap: wrap;
 }
-.csd-index {
-  font-size: 0.7rem;
-  font-weight: 900;
-  letter-spacing: 0.1em;
-  color: var(--color-text);
-  font-family: var(--font-heading);
-}.csd-hero-title {
+.csd-hero-title {
   font-size: clamp(1.875rem, 3.5vw, 3rem);
   font-weight: 900;
   letter-spacing: -0.03em;
@@ -640,15 +634,8 @@ const schema = {
 }
 .csd-hero-stats { display: flex; align-items: center; gap: 2rem; }
 .csd-hero-stat { display: flex; flex-direction: column; gap: 0.25rem; }
-.csd-hero-stat-num {
-  font-size: 2rem;
-  font-weight: 900;
-  letter-spacing: -0.04em;
-  color: var(--color-heading);
-  font-family: var(--font-heading);
-  line-height: 1;
-}
-.csd-hero-stat-label { font-size: 0.75rem; color: var(--color-text); font-weight: 500; }
+/* The hero stat's type comes from `.stat-num stat-num--tight` and
+   `.stat-label stat-label--xs`. */
 .csd-hero-divider { width: 1px; height: 40px; background: var(--border-default); }
 .csd-hero-illo { display: flex; justify-content: center; align-items: center; }
 .csd-hero-svg  { width: 100%; max-width: 420px; height: auto; }
@@ -666,13 +653,11 @@ const schema = {
   align-items: start;
 }
 .csd-col-label-block { position: relative; padding-top: 0.25rem; }
+/* Type comes from `.stat-num stat-num--3xl stat-num--tighter
+   stat-num--watermark`; the section number is decorative, hence
+   user-select. It is hidden outright below 991px -- see the media
+   query at the foot of this file. */
 .csd-col-number {
-  font-size: 7rem;
-  font-weight: 900;
-  letter-spacing: -0.05em;
-  color: rgba(var(--ink-900-rgb), 0.07);
-  font-family: var(--font-heading);
-  line-height: 1;
   margin-top: 0.5rem;
   user-select: none;
 }
@@ -768,14 +753,8 @@ const schema = {
   padding: 1.75rem;
   background: rgba(var(--paper-000-rgb), 0.03);
 }
-.csd-step-num {
-  font-size: 0.7rem;
-  font-weight: 900;
-  letter-spacing: 0.1em;
-  color: var(--color-on-inverse-a20);
-  font-family: var(--font-heading);
-  margin-bottom: 0.875rem;
-}
+/* Type comes from `.ordinal ordinal--on-inverse`. */
+.csd-step-num { margin-bottom: 0.875rem; }
 .csd-step-title {
   font-size: 0.95rem;
   font-weight: 800;
@@ -801,14 +780,8 @@ const schema = {
   border-radius: 12px;
   padding: 1.75rem;
 }
-.csd-highlight-num {
-  font-size: 0.7rem;
-  font-weight: 900;
-  letter-spacing: 0.1em;
-  color: rgba(var(--ink-900-rgb), 0.2);
-  font-family: var(--font-heading);
-  margin-bottom: 0.75rem;
-}
+/* Type comes from `.ordinal ordinal--watermark`. */
+.csd-highlight-num { margin-bottom: 0.75rem; }
 .csd-highlight-title {
   font-size: 1rem;
   font-weight: 800;
@@ -835,15 +808,8 @@ const schema = {
   border-radius: 14px;
   padding: 2rem 1.75rem;
 }
-.csd-outcome-num {
-  font-size: clamp(2.5rem, 4vw, 3.5rem);
-  font-weight: 900;
-  letter-spacing: -0.04em;
-  color: var(--color-heading);
-  font-family: var(--font-heading);
-  line-height: 1;
-  margin-bottom: 0.625rem;
-}
+/* Type comes from `.stat-num stat-num--fluid stat-num--tight`. */
+.csd-outcome-num { margin-bottom: 0.625rem; }
 .csd-outcome-label {
   font-size: 0.875rem;
   color: var(--color-text);
@@ -897,14 +863,8 @@ const schema = {
   padding: 1.75rem;
   background: rgba(var(--paper-000-rgb), 0.03);
 }
-.csd-demonstrate-num {
-  font-size: 0.7rem;
-  font-weight: 900;
-  letter-spacing: 0.1em;
-  color: var(--color-on-inverse-a15);
-  font-family: var(--font-heading);
-  margin-bottom: 0.75rem;
-}
+/* Type comes from `.ordinal ordinal--on-inverse-faint`. */
+.csd-demonstrate-num { margin-bottom: 0.75rem; }
 .csd-demonstrate-title {
   font-size: 0.95rem;
   font-weight: 800;

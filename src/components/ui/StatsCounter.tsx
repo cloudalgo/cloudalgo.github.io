@@ -50,8 +50,8 @@ function Stat({ stat, run }: { stat: (typeof STATS)[number]; run: boolean }) {
         {/* Until the counter starts, render the final figure so the markup is
             never wrong for no-JS readers, for a crawler, or for anyone who
             never scrolls this far. */}
-        <div className="count-outer">{run ? value : stat.end}{stat.suffix}</div>
-        <div className="milestone-details">{stat.label}</div>
+        <div className="stat-num stat-num--xl stat-num--leading-inherit count-outer">{run ? value : stat.end}{stat.suffix}</div>
+        <div className="stat-label stat-label--lg milestone-details">{stat.label}</div>
       </div>
     </div>
   );

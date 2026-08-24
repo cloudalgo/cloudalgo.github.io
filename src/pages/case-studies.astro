@@ -85,7 +85,7 @@ import Badge from '@/components/ui/Badge.astro';
             onclick={`window.location='/case-studies/${cs.id}'`}
             style="cursor:pointer;"
           >
-            <div class="cs-card-metric-bg" aria-hidden="true">{cs.metric}</div>
+            <div class="stat-num stat-num--3xl stat-num--tighter cs-card-metric-bg" aria-hidden="true">{cs.metric}</div>
 
             <div class="cs-card-illo" aria-hidden="true">
               {cs.id === 'nonprofit-web-platform' && (
@@ -210,15 +210,15 @@ import Badge from '@/components/ui/Badge.astro';
 
             <div class="cs-card-body">
               <div class="cs-card-header">
-                <span class="cs-card-index">{cs.index}</span>
+                <span class="ordinal ordinal--wide ordinal--watermark-strong">{cs.index}</span>
                 <span class="cs-card-industry">{cs.industry}</span>
                 <span class="cs-card-service">{cs.service}</span>
               </div>
               <h2 class="cs-card-company">{cs.company}</h2>
               <p class="cs-card-headline">{cs.headline}</p>
               <div class="cs-card-metric-row">
-                <span class="cs-card-metric-num">{cs.metric}</span>
-                <span class="cs-card-metric-desc">{cs.metricLabel}</span>
+                <span class="stat-num stat-num--lg stat-num--tight">{cs.metric}</span>
+                <span class="stat-label stat-label--sm cs-card-metric-desc">{cs.metricLabel}</span>
               </div>
               <p class="cs-card-summary">{cs.summary}</p>
               <div class="cs-card-meta">
@@ -301,16 +301,12 @@ import Badge from '@/components/ui/Badge.astro';
   overflow: hidden;
   position: relative;
 }
+/* Type comes from `.stat-num stat-num--3xl stat-num--tighter`; this is
+   the watermark's placement, and the 0.04 that makes it a watermark. */
 .cs-card-metric-bg {
   position: absolute;
   top: 8px; right: 16px;
-  font-size: 7rem;
-  font-weight: 900;
-  letter-spacing: -0.05em;
-  color: var(--color-heading);
   opacity: 0.04;
-  font-family: var(--font-heading);
-  line-height: 1;
   pointer-events: none;
   user-select: none;
   z-index: 0;
@@ -334,13 +330,6 @@ import Badge from '@/components/ui/Badge.astro';
   gap: 0.5rem;
   margin-bottom: 0.75rem;
   flex-wrap: wrap;
-}
-.cs-card-index {
-  font-size: 0.7rem;
-  font-weight: 900;
-  color: rgba(var(--ink-900-rgb), 0.25);
-  font-family: var(--font-heading);
-  letter-spacing: 0.08em;
 }
 .cs-card-industry, .cs-card-service {
   font-size: 0.7rem;
@@ -376,18 +365,9 @@ import Badge from '@/components/ui/Badge.astro';
   padding-bottom: 1rem;
   border-bottom: 1px solid var(--border-default);
 }
-.cs-card-metric-num {
-  font-size: 2.5rem;
-  font-weight: 900;
-  letter-spacing: -0.04em;
-  color: var(--color-heading);
-  font-family: var(--font-heading);
-  line-height: 1;
-}
+/* Type for both comes from `.stat-num stat-num--lg stat-num--tight`
+   and `.stat-label stat-label--sm`. */
 .cs-card-metric-desc {
-  font-size: 0.8rem;
-  color: var(--color-text);
-  font-weight: 500;
   line-height: 1.4;
   max-width: 200px;
 }

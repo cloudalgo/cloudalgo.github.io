@@ -113,8 +113,8 @@ import Breadcrumb from '@/components/ui/Breadcrumb.astro';
           { num: '< 1 day', label: 'Response time' },
         ].map(s => (
           <div class="contact-stat">
-            <span class="contact-stat-num">{s.num}</span>
-            <span class="contact-stat-label">{s.label}</span>
+            <span class="stat-num stat-num--md">{s.num}</span>
+            <span class="stat-label contact-stat-label">{s.label}</span>
           </div>
         ))}
       </div>
@@ -174,21 +174,21 @@ import Breadcrumb from '@/components/ui/Breadcrumb.astro';
             <p class="contact-col-label">What happens next</p>
             <ol class="contact-next-list">
               <li>
-                <span class="contact-next-num">01</span>
+                <span class="stat-num stat-num--xs stat-num--ghost contact-next-num">01</span>
                 <div>
                   <strong>We review your message</strong>
                   <p>Within one business day, a certified architect reads your requirements.</p>
                 </div>
               </li>
               <li>
-                <span class="contact-next-num">02</span>
+                <span class="stat-num stat-num--xs stat-num--ghost contact-next-num">02</span>
                 <div>
                   <strong>Scoping call</strong>
                   <p>We schedule a 30-min call to understand your goals and constraints.</p>
                 </div>
               </li>
               <li>
-                <span class="contact-next-num">03</span>
+                <span class="stat-num stat-num--xs stat-num--ghost contact-next-num">03</span>
                 <div>
                   <strong>Proposal</strong>
                   <p>You receive a clear scope, timeline, and transparent fixed price.</p>
@@ -298,20 +298,8 @@ import Breadcrumb from '@/components/ui/Breadcrumb.astro';
   border-right: 1px solid var(--border-default);
 }
 .contact-stat:last-child { border-right: none; }
-.contact-stat-num {
-  font-size: 1.875rem;
-  font-weight: 900;
-  color: var(--color-heading);
-  letter-spacing: -0.03em;
-  font-family: var(--font-heading);
-  line-height: 1;
-}
-.contact-stat-label {
-  font-size: 0.8125rem;
-  color: var(--color-text);
-  font-weight: 500;
-  margin-top: 0.25rem;
-}
+/* Type for both comes from `.stat-num stat-num--md` and `.stat-label`. */
+.contact-stat-label { margin-top: 0.25rem; }
 
 /* ── Body: form + sidebar ─────────────── */
 .contact-body {
@@ -411,13 +399,9 @@ import Breadcrumb from '@/components/ui/Breadcrumb.astro';
   gap: 1rem;
   align-items: flex-start;
 }
+/* Type comes from `.stat-num stat-num--xs stat-num--ghost`; the width
+   is what keeps the three rows' copy on one left edge. */
 .contact-next-num {
-  font-size: 1.5rem;
-  font-weight: 900;
-  color: var(--color-text-ghost);
-  letter-spacing: -0.03em;
-  font-family: var(--font-heading);
-  line-height: 1;
   flex-shrink: 0;
   width: 2.5rem;
 }

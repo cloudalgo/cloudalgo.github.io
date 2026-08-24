@@ -12,15 +12,8 @@
 }
 .why-card:hover { border-color: var(--card-border-hover); transform: translateY(-6px); box-shadow: var(--card-shadow-hover); }
 
-.why-card-number {
-  font-size: 3.5rem;
-  font-weight: 900;
-  color: var(--ca-border);
-  line-height: 1;
-  margin-bottom: 0.75rem;
-  font-family: var(--font-heading);
-  letter-spacing: -0.03em;
-}
+/* Type comes from `.stat-num stat-num--2xl stat-num--rule`. */
+.why-card-number { margin-bottom: 0.75rem; }
 .why-card h3 {
   font-size: 1.125rem;
   font-weight: 700;

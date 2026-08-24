@@ -6,17 +6,15 @@
   padding: 3.5rem 0;
 }
 .milestone-counter { text-align: center; color: var(--ca-black); font-weight: 700; }
+/* Type comes from `.stat-num stat-num--xl stat-num--leading-inherit`;
+   what stays here is the counter's own tabular figures and the two
+   responsive sizes, which override the atom by source order. */
 .count-outer {
-  font-size: 3rem;
-  font-weight: 900;
-  color: var(--ca-black);
-  letter-spacing: -0.03em;
-  font-family: var(--font-heading);
   /* Digits are the same width, so a counter ticking 8 -> 9 -> 10 does not
      shuffle the label under it. */
   font-variant-numeric: tabular-nums;
 }
-.milestone-details { font-size: 1rem; font-weight: 500; color: var(--ca-secondary-black); margin-top: 0.25rem; }
+.milestone-details { margin-top: 0.25rem; }
 @media (max-width: 991px) {
   .count-outer { font-size: 2.25rem; }
 }

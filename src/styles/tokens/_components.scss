@@ -59,6 +59,37 @@
   --section-title-tracking: -0.02em;
   --section-title-color: var(--color-heading);
 
+  /* Numerals -- the oversized figure in a stat, the small line of copy
+     under it, and the two-digit ordinal that numbers a step, a column or
+     a card. The defaults below are the modal values across the thirteen
+     figures, four labels and five ordinals that existed before the
+     classes; see components/_numerals.scss for the drift tables.
+
+     The two `rgba(var(--ink-900-rgb), ...)` values are still spelled out
+     because the ink-alpha ramp has not been named yet (the on-inverse
+     ramp in _semantic.scss is its mirror). They move there when it lands. */
+  --stat-num-family: var(--font-heading);
+  --stat-num-size: 2rem;
+  --stat-num-weight: var(--weight-black);
+  --stat-num-tracking: -0.03em;
+  --stat-num-leading: 1;
+  --stat-num-color: var(--color-heading);
+  --stat-num-color-ghost: var(--color-text-ghost);
+  --stat-num-color-rule: var(--border-default);
+  --stat-num-color-watermark: rgba(var(--ink-900-rgb), 0.07);
+
+  --stat-label-size: 0.8125rem;
+  --stat-label-weight: var(--weight-medium);
+  --stat-label-color: var(--color-text);
+
+  --ordinal-family: var(--font-heading);
+  --ordinal-size: 0.7rem;
+  --ordinal-weight: var(--weight-black);
+  --ordinal-tracking: 0.1em;
+  --ordinal-color: var(--color-text);
+  --ordinal-color-watermark: rgba(var(--ink-900-rgb), 0.2);
+  --ordinal-color-watermark-strong: rgba(var(--ink-900-rgb), 0.25);
+
   /* Badges / tags.
      The full knob set, because every badge on the site is one
      `.badge` reading these; a variant overrides only the knobs it

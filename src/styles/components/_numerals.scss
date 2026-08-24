@@ -1,0 +1,122 @@
+/* Numerals.
+   -----------------------------------------------------------------
+   Three related atoms, kept in one file because they are one family:
+   the oversized figure in a stat, the label under it, and the small
+   two-digit ordinal that numbers a step, a column or a card.
+
+   Every rule reads only `--stat-num-*` / `--stat-label-*` / `--ordinal-*`
+   so a theme can move all of them from tokens/_components.scss. A
+   modifier overrides one knob and nothing else.
+
+   `.stat-num` -- what the thirteen figures declared before the class:
+
+   | site                | size                       | tracking | leading | colour           |
+   |---------------------|----------------------------|----------|---------|------------------|
+   | .csd-hero-stat-num  | 2rem                       | -0.04em  | 1       | heading          |
+   | services/index :559 | 2rem                       | -0.03em  | (none)  | on-inverse-ghost |
+   | .cs-card-metric-num | 2.5rem                     | -0.04em  | 1       | heading          |
+   | about :33           | 2.5rem                     | -0.03em  | (none)  | heading          |
+   | .count-outer        | 3rem                       | -0.03em  | (none)  | heading          |
+   | .why-card-number    | 3.5rem                     | -0.03em  | 1       | border-default   |
+   | .csd-col-number     | 7rem                       | -0.05em  | 1       | ink @ 0.07       |
+   | .cs-card-metric-bg  | 7rem                       | -0.05em  | 1       | heading @ 0.04   |
+   | .csd-outcome-num    | clamp(2.5rem, 4vw, 3.5rem) | -0.04em  | 1       | heading          |
+   | 404 :11             | clamp(6rem, 15vw, 12rem)   | -0.05em  | 1       | text-ghost       |
+   | .contact-stat-num   | 1.875rem                   | -0.03em  | 1       | heading          |
+   | services/index :484 | 1.75rem                    | -0.03em  | (none)  | heading          |
+   | .contact-next-num   | 1.5rem                     | -0.03em  | 1       | text-ghost       |
+
+   Four of them never set `line-height`, so they sit on the body's 1.7
+   and their box is taller than the digits. That is a real difference in
+   vertical rhythm, not a rounding error, so it gets a name
+   (`--leading-inherit`) rather than being quietly normalised. For an
+   inherited property, `inherit` and no declaration at all compute to the
+   same value.
+
+   Everything that is position, spacing or opacity -- `margin-*`,
+   `user-select`, `opacity`, `width`, `flex-shrink`, `font-variant-numeric`,
+   and the two responsive size overrides -- stays with the site that
+   needs it. This file owns type only.
+   ----------------------------------------------------------------- */
+
+.stat-num {
+  font-family: var(--stat-num-family);
+  font-size: var(--stat-num-size);
+  font-weight: var(--stat-num-weight);
+  letter-spacing: var(--stat-num-tracking);
+  line-height: var(--stat-num-leading);
+  color: var(--stat-num-color);
+}
+
+.stat-num--xs    { --stat-num-size: 1.5rem; }
+.stat-num--sm    { --stat-num-size: 1.75rem; }
+.stat-num--md    { --stat-num-size: 1.875rem; }
+.stat-num--lg    { --stat-num-size: 2.5rem; }
+.stat-num--xl    { --stat-num-size: 3rem; }
+.stat-num--2xl   { --stat-num-size: 3.5rem; }
+.stat-num--3xl   { --stat-num-size: 7rem; }
+.stat-num--fluid { --stat-num-size: clamp(2.5rem, 4vw, 3.5rem); }
+.stat-num--hero  { --stat-num-size: clamp(6rem, 15vw, 12rem); }
+
+.stat-num--tight   { --stat-num-tracking: -0.04em; }
+.stat-num--tighter { --stat-num-tracking: -0.05em; }
+
+.stat-num--leading-inherit { --stat-num-leading: inherit; }
+
+.stat-num--ghost     { --stat-num-color: var(--stat-num-color-ghost); }
+.stat-num--rule      { --stat-num-color: var(--stat-num-color-rule); }
+.stat-num--watermark { --stat-num-color: var(--stat-num-color-watermark); }
+.stat-num--on-inverse-ghost { --stat-num-color: var(--color-on-inverse-ghost); }
+
+/* `.stat-label` -- the line under a figure. All six are weight 500 in
+   the body colour and differ only in size; `.cs-card-metric-desc` also
+   sets its own `line-height` and `max-width`, which stay with it.
+
+   | site                 | size      |
+   |----------------------|-----------|
+   | .contact-stat-label  | 0.8125rem |
+   | services/index :485  | 0.8125rem |
+   | .cs-card-metric-desc | 0.8rem    |
+   | .csd-hero-stat-label | 0.75rem   |
+   | about :34            | 0.875rem  |
+   | .milestone-details   | 1rem      | */
+
+.stat-label {
+  font-size: var(--stat-label-size);
+  font-weight: var(--stat-label-weight);
+  color: var(--stat-label-color);
+}
+
+.stat-label--xs { --stat-label-size: 0.75rem; }
+.stat-label--sm { --stat-label-size: 0.8rem; }
+.stat-label--md { --stat-label-size: 0.875rem; }
+.stat-label--lg { --stat-label-size: 1rem; }
+
+/* `.ordinal` -- the 01 / 02 / 03 kicker. All five are 0.7rem weight 900
+   in the heading family; they differ only in tracking and colour.
+
+   | site                | tracking | colour                |
+   |---------------------|----------|-----------------------|
+   | .csd-index          | 0.1em    | text                  |
+   | .csd-step-num       | 0.1em    | on-inverse @ 0.20     |
+   | .csd-demonstrate-num| 0.1em    | on-inverse @ 0.15     |
+   | .csd-highlight-num  | 0.1em    | ink @ 0.20            |
+   | .cs-card-index      | 0.08em   | ink @ 0.25            |
+
+   The two ink alphas are 0.05 apart and mean the same thing; they keep
+   separate names until Phase 7 converges them. */
+
+.ordinal {
+  font-family: var(--ordinal-family);
+  font-size: var(--ordinal-size);
+  font-weight: var(--ordinal-weight);
+  letter-spacing: var(--ordinal-tracking);
+  color: var(--ordinal-color);
+}
+
+.ordinal--wide { --ordinal-tracking: 0.08em; }
+
+.ordinal--on-inverse       { --ordinal-color: var(--color-on-inverse-a20); }
+.ordinal--on-inverse-faint { --ordinal-color: var(--color-on-inverse-a15); }
+.ordinal--watermark        { --ordinal-color: var(--ordinal-color-watermark); }
+.ordinal--watermark-strong { --ordinal-color: var(--ordinal-color-watermark-strong); }
