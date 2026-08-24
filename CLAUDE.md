@@ -2,6 +2,13 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Required skills
+
+Invoke these at the start of any session doing work in this repository:
+
+- **`latest-astro`** — this site is built on Astro; the skill carries current Astro 4.x–5.x API knowledge (Content Layer API, Server Islands, Actions API) that supersedes stale defaults. Note the project is on Astro **6.4.5**, ahead of the skill's coverage — verify v6-specific behaviour against the v6 docs.
+- **`framer-motion`** — all page/section UI animation in this project is built with `framer-motion` (v13). Invoke before writing or editing any animated React section.
+
 ## Commands
 
 ```bash
@@ -28,10 +35,22 @@ Every page imports `Page` (not `Base` directly) and passes `title`, `description
 
 ### Component split: Astro vs React
 
-The rule is purely interactive vs static:
+- **`.astro` components** — layout shell (`src/components/layout/`), pages, and any section that is purely static markup; they own copy and structure, and do data loading (`getCollection`) before passing serialized props down
+- **`.tsx` React components** — the interactive UI widgets in `src/components/ui/` (`ContactForm`, `StatsCounter`, `TestimonialsSlider`) **and** the animated homepage sections in `src/components/sections/`
 
-- **`.astro` components** — all layout and section components (`src/components/layout/`, `src/components/sections/`); they own copy, structure, and static markup
-- **`.tsx` React components** — only the three interactive UI widgets in `src/components/ui/`: `ContactForm`, `StatsCounter`, `TestimonialsSlider`
+Homepage sections are being migrated from `.astro` to `.tsx` + framer-motion (`Services`, `WhyUs`, `ProductsSection`, `BlogPreview` so far). Both files exist side by side during the migration — check `src/pages/index.astro` for which variant is actually mounted before editing.
+
+### UI animation: framer-motion
+
+`framer-motion` v13 is the only animation library for React section UI. Conventions established in `src/components/sections/Services.tsx`:
+
+- Import `{ motion, useReducedMotion, type Variants }`; declare named `Variants` objects at module scope (`headingVariants`, `cardVariants`, …) rather than inline props
+- Entrance animation is `initial="hidden"` + `whileInView={reduceMotion ? undefined : 'show'}` with `viewport={{ once: true, amount: 0.2–0.4 }}` — never `animate` on mount
+- **Always** gate motion on `const reduceMotion = useReducedMotion()` and pass `undefined` for the animated prop when true; this is the accessibility contract, not optional
+- Stagger children via a parent container variant (`staggerChildren`), not per-child delays
+- Hover affordances use `whileHover` with a short `transition={{ duration: 0.2, ease: 'easeOut' }}`
+- Icons are inline JSX SVG with `stroke="currentColor"` — never `dangerouslySetInnerHTML`
+- Astro-side sections keep using the CSS-only `anim-fade-up` / `anim-scale-pop` IntersectionObserver from `Base.astro`; do not mix the two systems inside one section
 
 ### Content collections (Astro content layer v2)
 
