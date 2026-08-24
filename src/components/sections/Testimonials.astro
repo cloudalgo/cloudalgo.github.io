@@ -1,16 +1,46 @@
 ---
-import TestimonialsSlider from '../ui/TestimonialsSlider.tsx';
+// Static pull-quote(s). This was a Swiper carousel, but with a single testimonial
+// the autoplay and nav arrows went nowhere. Add entries to TESTIMONIALS and the
+// grid widens on its own — no JS, no hydration.
+const TESTIMONIALS = [
+  {
+    quote:
+      'The team at CloudAlgo has been extremely helpful in elevating our Salesforce consulting services to new heights. Their expertise, dedication, collaboration, and innovative solutions have consistently exceeded our expectations. Their exceptional communication, flexibility and unwavering work ethic have been phenomenal.',
+    author: 'Jessica Lillquist',
+    company: 'Minlopro Partners',
+    photo: '/testimonials-user.webp',
+  },
+];
+
+const heading = TESTIMONIALS.length > 1 ? 'In our clients\u2019 words' : 'In a client\u2019s words';
 ---
-<section id="testimonial-slider" style="background:#F5F5F2;padding:6rem 0;border-top:1px solid #E0E0DC;">
+<section id="testimonial-slider" style="padding:6rem 0;border-top:1px solid var(--ca-border);">
   <div style="max-width:1278px;margin:0 auto;padding:0 1.5rem;">
-    <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:3rem;gap:1rem;flex-wrap:wrap;">
-      <div>
-        <p class="section-label anim-fade-up">Client stories</p>
-        <h2 class="anim-fade-up" style="font-size:clamp(2rem,3.5vw,3rem);font-weight:800;letter-spacing:-0.02em;margin:0;transition-delay:0.05s;">
-          What our clients say
-        </h2>
-      </div>
+    <div style="margin-bottom:3rem;">
+      <p class="section-label anim-fade-up">Client stories</p>
+      <h2 class="anim-fade-up" style="font-size:clamp(2rem,3.5vw,3rem);font-weight:800;letter-spacing:-0.02em;margin:0;transition-delay:0.05s;">
+        {heading}
+      </h2>
     </div>
-    <TestimonialsSlider client:visible />
+
+    <div class="testimonial-grid">
+      {TESTIMONIALS.map((t, i) => (
+        <figure class="testimonial-card anim-fade-up" style={`transition-delay:${0.1 + i * 0.08}s;margin:0;`}>
+          <span class="testimonial-quote-mark" aria-hidden="true">&ldquo;</span>
+          <blockquote class="slider-caption" style="margin:0;">{t.quote}</blockquote>
+          <figcaption class="blockquote-footer">
+            {t.photo && (
+              <div class="user-photo">
+                <img src={t.photo} alt="" width="48" height="48" loading="lazy" />
+              </div>
+            )}
+            <div>
+              <strong style="display:block;font-size:0.9375rem;">{t.author}</strong>
+              <cite>{t.company}</cite>
+            </div>
+          </figcaption>
+        </figure>
+      ))}
+    </div>
   </div>
 </section>
