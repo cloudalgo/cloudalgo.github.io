@@ -2,7 +2,7 @@
 title: "Salesforce Consulting & Implementation"
 order: 1
 icon: "☁️"
-excerpt: "CRM customization, communities, Force.com development, MuleSoft integrations, and Heroku solutions."
+excerpt: "CRM customization, Experience Cloud, custom Salesforce Platform development, MuleSoft integrations, and Heroku solutions."
 ---
 
 ## Salesforce Consulting & Implementation

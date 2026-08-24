@@ -1,8 +1,8 @@
 ---
-title: "Streamlining ViralSweep Entries into Salesforce Leads and Custom Objects"
+title: "Getting ViralSweep Entries into Salesforce Leads Automatically"
 date: 2022-11-11
 category: Salesforce
-excerpt: "How to push ViralSweep contest entries into Salesforce Leads or custom objects automatically using the Salesforce REST API and webhook support."
+excerpt: "Three ways to move contest entries from ViralSweep into Salesforce — Zapier, webhooks, or custom Apex — and how to pick between them before you build the wrong one."
 readTime: 3
 image: /blog-images/a08376513035a117d1b150b7224680ffd386769a-1200x600.jpg
 published: true
@@ -11,72 +11,34 @@ authorDesignation: "Technical Architect"
 authorPhoto: "/blog-images/32c050b8f0ed847ec0b34f5144d2fa6b03a40888-200x200.jpg"
 ---
 
-In the fast-paced world of digital marketing, lead generation is the lifeblood of any successful business. One effective way to capture leads and engage potential customers is through ViralSweep, a versatile and powerful sweepstakes and contest platform. But what happens after you've collected those valuable entries? How do you seamlessly integrate them into Salesforce, one of the world's leading CRM platforms? In this blog post, we'll explore how to connect ViralSweep entries to Salesforce Leads and Custom Objects to optimize your sales and marketing processes.
+A contest that collected four thousand entries is worth nothing while those entries sit in ViralSweep and your sales team works out of Salesforce. The question is only how the data gets across — and the three available routes differ enough that picking the wrong one is expensive to undo.
 
-## Why Integrate ViralSweep with Salesforce?
+## Pick the route before you build anything
 
-Before diving into the technical aspects, it's important to understand the significance of this integration. Integrating ViralSweep with Salesforce offers several key advantages:
+**Zapier** is the fastest to stand up and needs no code. It suits campaigns where entries arrive at a modest rate and map cleanly onto Lead fields. You pay per task, so a viral campaign that spikes will cost more than you planned, and the field mapping lives in Zapier rather than anywhere your team version-controls.
 
-### 1. Centralized Data Management:
+**Webhooks** post each entry to an endpoint you own the moment it is submitted. More setup than Zapier, no per-task cost, and you control what happens on failure. This is usually the right answer for a campaign that runs continuously.
 
-Integrating ViralSweep entries into Salesforce allows you to keep all your lead data in one place. This ensures that your sales and marketing teams have easy access to up-to-date information about potential customers.
+**Custom Apex** is worth it when entries need real work on arrival — deduplicating against existing Leads and Contacts, matching to an Account, applying assignment logic that Salesforce's own rules cannot express, or writing to a custom object rather than Lead. Our implementation is on [GitHub](https://github.com/cloudalgo).
 
-### 2. Automation:
+The decision hinges on one question: does an entry become a Lead as-is, or does something have to happen to it first? If it is the former, do not write Apex.
 
-Manual data entry can be time-consuming and error-prone. By automating the process, you reduce the risk of data entry errors and free up your team's time for more strategic tasks.
+## Setting it up
 
-### 3. Enhanced Lead Nurturing:
+Configure the ViralSweep campaign to collect the fields you actually need in Salesforce, including any custom ones. Adding a field after entries start arriving means the early records are missing it permanently.
 
-With ViralSweep data integrated into Salesforce, you can use Salesforce's robust lead nurturing capabilities to engage and convert leads more effectively.
+Then map ViralSweep's fields to Salesforce fields. `LastName` and `Company` are required on Lead, and a contest form that only asks for a first name and email will fail validation on every single record. Decide up front what fills those — a form field, or a default like "Unknown" that your team can filter on later.
 
-Now, let's explore how to set up this integration.
+Test with real submissions through the live form before the campaign opens. Testing the Zap or webhook in isolation misses the failures that matter: a name with an apostrophe, a duplicate email, a required field left blank.
 
-## Steps to Integrate ViralSweep Entries into Salesforce
+## Three things that bite afterwards
 
-### 1. Set Up Your ViralSweep Campaign:
+**Duplicates.** The same person entering twice, or an entrant who is already a Contact, will create a second Lead unless something stops it. Salesforce's duplicate rules handle the simple cases; anything involving an existing Contact usually needs Apex.
 
-First, create your ViralSweep campaign and configure it to collect the necessary lead information, such as names, email addresses, and any custom fields specific to your business.
+**Volume.** A campaign that goes viral generates entries in bursts. If they arrive through Zapier, that is a task-count problem. If they arrive through Apex, it is a governor limit problem — bulkify the handler and do not write per-record callouts.
 
-### 2. Choose an Integration Method:
-
-ViralSweep offers various integration options, including native integrations, webhook notifications, and Zapier. Choose the one that best suits your needs.
-
-### 3. Connect ViralSweep to Salesforce:
-
-For this example, let's assume you're using Zapier, a user-friendly automation platform. Create a Zap that connects ViralSweep to Salesforce. You'll need to set up a trigger that fires when a new entry is received in ViralSweep.
-
-### 4. Map ViralSweep Fields to Salesforce:
-
-In Zapier, you can easily map the fields from your ViralSweep entry form to Salesforce Lead or Custom Object fields. This ensures that the data is transferred accurately.
-
-### 5. Set Up Actions in Salesforce:
-
-Once the data is in Salesforce, you can configure actions to be taken automatically, such as assigning the lead to a specific sales representative or triggering a follow-up email campaign.
-
-### 6. Test and Monitor:
-
-Before going live, thoroughly test the integration to ensure that data flows correctly from ViralSweep to Salesforce. Continuously monitor the integration to address any issues that may arise.
-
-## Additional Tips for Success
-
-**Data Validation:**Implement data validation rules in Salesforce to maintain data accuracy and consistency.
-
-**Lead Scoring:**Use Salesforce's lead scoring features to prioritize leads and focus your efforts on the most promising ones.
-
-**Regular Updates:**Keep your integration up to date by staying informed about updates from both ViralSweep and Salesforce.
-
-**Security:**Ensure that your integration follows best practices for data security and privacy compliance.
-
-## Custom Apex Implementation
-
-For a more advanced and customized integration between ViralSweep and Salesforce, you can explore the option of implementing custom Apex code. This approach allows you to tailor the integration to your specific business needs and unlock even more powerful capabilities.
-
-To learn more about implementing a custom Apex solution for integrating ViralSweep with Salesforce,**Please visit [https://github.com/cloudalgo](https://github.com/cloudalgo).**
-
-In conclusion, integrating ViralSweep entries into Salesforce can greatly enhance your lead generation and management processes. By centralizing your lead data, automating tasks, and leveraging Salesforce's powerful features, you can streamline your sales and marketing efforts, ultimately leading to higher conversion rates and business success. Whether you choose a simple integration method or opt for a custom Apex implementation, take the time to set up the integration properly, and you'll be well on your way to maximizing the potential of your ViralSweep campaigns.
+**Consent.** Contest entrants opted into a sweepstakes, which is not the same as opting into marketing email. Capture the marketing consent separately on the entry form and map it to a field, or you inherit a compliance problem along with the leads.
 
 ---
 
 Connecting marketing tools to Salesforce is one of the most common projects we take on. If your data is not flowing the way it should, [get in touch](/contact) and we can help you work through it.
-
-<div

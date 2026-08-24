@@ -56,17 +56,18 @@ const schema = {
 
   <!-- ── Page header — white, matches site style ── -->
   <div class="page-header" style="padding-bottom:2.5rem;">
-    <div class="container" style="max-width:800px;">
+    <div class="container">
       <nav class="breadcrumb">
         <a href="/blog">&larr; All articles</a>
       </nav>
       <span class="blog-badges" style="margin-bottom:1rem;display:inline-block;">{post.data.category}</span>
-      <h1 style="font-size:clamp(1.875rem,4vw,3rem);line-height:1.15;margin-bottom:1.5rem;">{post.data.title}</h1>
+      <h1 class="post-title" style="font-size:clamp(1.875rem,4vw,3rem);line-height:1.15;margin-bottom:1.5rem;">{post.data.title}</h1>
       <div style="display:flex;align-items:center;gap:0.875rem;flex-wrap:wrap;">
         {authorPhoto && (
           <img src={authorPhoto} alt={author}
+               width="44" height="44"
                style="width:44px;height:44px;border-radius:50%;object-fit:cover;border:1.5px solid #E0E0DC;flex-shrink:0;"
-               loading="lazy" />
+               loading="eager" decoding="async" />
         )}
         <div>
           <div style="font-size:0.9375rem;font-weight:700;color:#0A0A0A;">{author}</div>
@@ -80,12 +81,12 @@ const schema = {
 
   <!-- ── Illustration hero — dark strip ── -->
   <div class="post-hero-illus">
-    <div class="container" style="max-width:900px;">
+    <div class="container">
       {illustration
         ? <div class="post-hero-svg" set:html={illustration} />
         : post.data.image
           ? <div class="post-hero-img">
-              <img src={post.data.image} alt={post.data.title} loading="eager" />
+              <img src={post.data.image} alt={post.data.title} loading="eager" fetchpriority="high" decoding="async" />
             </div>
           : <div class="post-hero-fallback" aria-hidden="true">
               <svg viewBox="0 0 480 160" fill="none" style="width:60%;opacity:0.15">
@@ -99,19 +100,19 @@ const schema = {
   </div>
 
   <!-- ── Sticky share bar ── -->
-  <div class="sticky-share" id="sticky-share" aria-label="Share this article">
+  <div class="sticky-share" id="sticky-share" role="group" aria-label="Share this article">
     <span class="sticky-share-label">Share</span>
     <a href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(postUrl)}&text=${encodeURIComponent(post.data.title)}`}
-       target="_blank" rel="noopener noreferrer" class="sticky-share-btn" title="Share on X">
-      <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="none" viewBox="0 0 18 18">
+       target="_blank" rel="noopener noreferrer" class="sticky-share-btn" title="Share on X" aria-label="Share on X">
+      <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="none" viewBox="0 0 18 18" aria-hidden="true">
         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
           d="M16.5 3.008c-.75.367-1.485.516-2.25.742-.84-.949-2.087-1.001-3.285-.553C9.767 3.646 8.983 4.742 9 6v.75c-2.434.062-4.601-1.046-6-3 0 0-3.136 5.575 3 8.25-1.404.935-2.804 1.566-4.5 1.5 2.481 1.352 5.185 1.817 7.525 1.138 2.685-.78 4.892-2.793 5.739-5.807.252-.916.378-1.864.373-2.814-.002-.187 1.132-2.08 1.363-3.01z"/>
       </svg>
       <span>X / Twitter</span>
     </a>
     <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(postUrl)}`}
-       target="_blank" rel="noopener noreferrer" class="sticky-share-btn" title="Share on LinkedIn">
-      <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="none" viewBox="0 0 24 24">
+       target="_blank" rel="noopener noreferrer" class="sticky-share-btn" title="Share on LinkedIn" aria-label="Share on LinkedIn">
+      <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="none" viewBox="0 0 24 24" aria-hidden="true">
         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
           d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/>
         <circle cx="4" cy="4" r="2" stroke="currentColor" stroke-width="1.5"/>
@@ -122,7 +123,7 @@ const schema = {
 
   <!-- ── Article content ── -->
   <section class="blog-post-details">
-    <div class="container" style="max-width:720px;">
+    <div class="container">
       <div class="blog-content">
         <Content />
       </div>
@@ -201,9 +202,15 @@ const schema = {
 .post-hero-img img {
   width: 100%;
   height: auto;
-  max-height: 280px;
+  max-height: 420px;
   object-fit: cover;
   display: block;
+}
+/* Designed SVG hero panels carry text and layout — never crop them. */
+.post-hero-img img[src$=".svg"] {
+  max-height: none;
+  object-fit: contain;
+  margin: 0 auto;
 }
 
 /* ── Content section ────────────────────────────── */
@@ -212,6 +219,179 @@ const schema = {
   padding-top: 3.5rem;
   padding-bottom: 5rem;
   font-size: 1.0625rem;
+}
+
+/* ── Reading layout ──────────────────────────────
+   The page chrome spans the full 1278px container so the article lines
+   up with every other page. Inside it, prose is held to a ~68ch measure
+   while code, tables, figures and CTA blocks break out into a wider
+   band — full-width structure, book-width text. */
+:global(.blog-content) {
+  display: grid;
+  /* ~72 characters at 18px Outfit */
+  grid-template-columns: minmax(0, 1fr) min(40rem, 100%) minmax(0, 1fr);
+}
+:global(.blog-content > *) {
+  grid-column: 2;
+  min-width: 0;
+}
+:global(.blog-content > pre),
+:global(.blog-content > table),
+:global(.blog-content > figure),
+:global(.blog-content > hr),
+:global(.blog-content > .blog-cta-inline),
+:global(.blog-content > .blog-cta-block) {
+  grid-column: 1 / -1;
+  width: min(100%, 920px);
+  justify-self: center;
+}
+
+/* ── Prose typography ───────────────────────────── */
+:global(.blog-post-details .blog-content p) {
+  font-size: 1.125rem;
+  line-height: 1.8;
+  margin-top: 1.5rem;
+  color: #1F1F1F;
+  text-wrap: pretty;
+}
+/* Standfirst — the opening paragraph sets the entry point. */
+:global(.blog-post-details .blog-content > p:first-of-type) {
+  font-size: 1.3125rem;
+  line-height: 1.65;
+  color: #3A3A3A;
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}
+:global(.blog-post-details .blog-content h2) {
+  font-size: 2rem;
+  line-height: 1.2;
+  margin-top: 3.75rem;
+  margin-bottom: 1rem;
+  scroll-margin-top: 6rem;
+  text-wrap: balance;
+}
+:global(.blog-post-details .blog-content h3) {
+  font-size: 1.3125rem;
+  line-height: 1.3;
+  margin-top: 2.75rem;
+  margin-bottom: 0.625rem;
+  scroll-margin-top: 6rem;
+  text-wrap: balance;
+}
+:global(.blog-post-details .blog-content li) {
+  font-size: 1.125rem;
+  line-height: 1.75;
+  color: #1F1F1F;
+  margin-bottom: 0.625rem;
+}
+:global(.blog-post-details .blog-content li p) {
+  margin-top: 0.5rem;
+}
+
+/* Prose links read as links — underlined, not colour-only. */
+:global(.blog-post-details .blog-content p a),
+:global(.blog-post-details .blog-content li a),
+:global(.blog-post-details .blog-content td a) {
+  color: var(--ca-black);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  text-decoration-color: rgba(10, 10, 10, 0.35);
+  transition: text-decoration-color 0.2s ease, color 0.2s ease;
+}
+:global(.blog-post-details .blog-content p a:hover),
+:global(.blog-post-details .blog-content li a:hover),
+:global(.blog-post-details .blog-content td a:hover) {
+  text-decoration-color: var(--ca-black);
+  text-decoration-thickness: 2px;
+}
+:global(.blog-post-details .blog-content a:focus-visible) {
+  outline: 2px solid var(--ca-black);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* ── Blockquote — a pull-quote, not a shout ─────── */
+:global(.blog-post-details .blog-content blockquote) {
+  font-weight: 500;
+  font-size: 1.1875rem;
+  line-height: 1.7;
+  color: #1F1F1F;
+  margin: 2.75rem 0;
+  padding: 1.5rem 1.75rem;
+  border-radius: 0 8px 8px 0;
+}
+:global(.blog-post-details .blog-content blockquote p) {
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
+  margin-top: 0;
+}
+:global(.blog-post-details .blog-content blockquote p + p) {
+  margin-top: 1rem;
+}
+
+/* ── Inline code — monochrome, matches the palette ─ */
+:global(.blog-post-details .blog-content :not(pre) > code) {
+  color: #0A0A0A;
+  background: #F0EFEB;
+  border: 1px solid #E0E0DC;
+  font-size: 0.875em;
+  word-break: break-word;
+}
+
+/* ── Code blocks — line-height 1 was unreadable ──── */
+:global(.blog-post-details .blog-content pre code) {
+  font-size: 0.8125rem;
+  line-height: 1.65;
+  padding: 1rem 1.25rem;
+}
+/* Shiki emits a literal newline between each .line; because .line is a
+   flex box those newlines form their own line boxes and double the
+   spacing. Zero the container's line-height and set it per line. */
+:global(.blog-post-details .blog-content pre.has-line-numbers code) {
+  line-height: 0;
+}
+:global(.blog-post-details .blog-content pre.has-line-numbers .line) {
+  line-height: 1.65;
+  padding: 0;
+}
+:global(.blog-post-details .blog-content pre.has-line-numbers .line::before) {
+  line-height: 1.65;
+  font-size: 0.75rem;
+}
+
+/* ── Section divider ────────────────────────────── */
+:global(.blog-post-details .blog-content hr) {
+  border: 0;
+  border-top: 1px solid var(--ca-border);
+  margin: 3.5rem auto;
+  width: min(100%, 920px);
+}
+
+/* Captions were #999 on white — below AA contrast. */
+:global(.blog-post-details .blog-content figcaption) {
+  color: #5A5A5A;
+  font-size: 0.875rem;
+}
+
+/* ── Article title measure ──────────────────────── */
+.post-title {
+  max-width: 22ch;
+  text-wrap: balance;
+}
+
+@media (max-width: 767px) {
+  :global(.blog-post-details .blog-content p),
+  :global(.blog-post-details .blog-content li) {
+    font-size: 1.0625rem;
+    line-height: 1.75;
+  }
+  :global(.blog-post-details .blog-content > p:first-of-type) { font-size: 1.1875rem; }
+  :global(.blog-post-details .blog-content h2) { font-size: 1.625rem; margin-top: 2.75rem; }
+  :global(.blog-post-details .blog-content h3) { font-size: 1.1875rem; margin-top: 2rem; }
+  :global(.blog-post-details .blog-content blockquote) { padding: 1.25rem 1.25rem; margin: 2rem 0; }
 }
 
 
@@ -272,6 +452,35 @@ const schema = {
 }
 .sticky-share.is-visible {
   transform: translateX(-50%) translateY(0);
+}
+
+/* On wide screens the share bar moves out of the reading column into the
+   left gutter, so it never sits on top of the prose. */
+@media (min-width: 1200px) {
+  .sticky-share {
+    top: 50%;
+    bottom: auto;
+    left: max(1.5rem, calc(50% - 639px));
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.75rem 0.5rem;
+    /* The rail is only ~48px wide, so a -100% slide still leaves it
+       peeking on screen — park it well clear of the left edge. */
+    transform: translateY(-50%) translateX(calc(-100% - 6rem));
+    opacity: 0;
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease;
+  }
+  .sticky-share.is-visible {
+    transform: translateY(-50%) translateX(0);
+    opacity: 1;
+  }
+  .sticky-share-label {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sticky-share { transition: none; }
 }
 .sticky-share-label {
   font-size: 0.6875rem;
@@ -499,6 +708,8 @@ const schema = {
     // Copy button
     const btn = document.createElement('button');
     btn.className = 'code-copy-btn';
+    btn.type = 'button';
+    btn.setAttribute('aria-live', 'polite');
     btn.textContent = 'Copy';
     btn.addEventListener('click', () => {
       const code = Array.from(lines).map(l => l.textContent ?? '').join('\n');

@@ -3,9 +3,12 @@ title: "We're Building an Offline Salesforce Org Health Checker. First We Had to
 date: 2026-06-26
 category: Salesforce
 excerpt: "We wanted one runtime: Node. So the Apex analysis had to run in Node too, with no JVM anywhere in the picture. Here's how we built a 41-rule static analysis engine — and why we open-sourced it."
-readTime: 10
+readTime: 9
 published: true
 image: /blog-images/apex-lint-hero.svg
+author: "Sandeep Kumar"
+authorDesignation: "Founder, CloudAlgo"
+authorPhoto: "/blog-images/a0bac224191c550df6e3a1f8ade4206b0927cbfb-515x515.jpg"
 ---
 
 We've been building a desktop app that scans a Salesforce org's health and runs completely offline. You point it at an org, it pulls the metadata down once, and from there everything happens on your machine. No org code leaving your laptop for some analysis cloud, no connection required to run a scan, no per-seat SaaS meter running in the background.

@@ -3,7 +3,7 @@ title: "Converting Date, Time, and Timezone to a GMT DateTime in Salesforce"
 date: 2022-06-06
 category: Salesforce
 excerpt: "A single Apex function that converts a user-supplied date, time, and timezone string into a GMT DateTime value — with a note on daylight saving."
-readTime: 3
+readTime: 2
 image: /blog-images/d1803b192e6851dc7fb5fc43ddb8f61a3934fb15-1400x563.jpg
 published: true
 featured: bottom-pick
@@ -23,53 +23,51 @@ America/Denver - MST
 Pacific/Honolulu - HST*
 
 
-```
-1  /**
-2  * Make sure that Timezone value should be java date time zone ids
-3  * https://docs.oracle.com/javase/8/docs/api/java/time/ZoneId.html
-4  * Also for daylight saving please use Country/City zone ids instead of Abberivation for example :
-5  America/New_York  - EST
-6  America/Los_Angeles - PST
-7  America/Chicago -CST
-8  America/Denver - MST
-9  Pacific/Honolulu - HST
-10  */
-11
-12  public static DateTime getDateTimeValueInGMTAsPerTimezone(
-13    String timezoneValue,
-14    Date dateValue,
-15    Time timevalue
-16  ) {
-17    Timezone tz = Timezone.getTimeZone(timezoneValue);
-18    Long dateTimeInMiliseconds = Datetime.newInstanceGmt(dateValue, timevalue)
-19      .getTime();
-20    Long timezoneOffset = tz.getOffset(
-21      Datetime.newInstanceGmt(dateValue, timevalue)
-22    );
-23    return Datetime.newInstance(dateTimeInMiliseconds - timeZoneOffset);
-24  }
-25/*
-26Use case 1 :  Daylight saving testing
-27  Date myDate = Date.newInstance(2022, 12, 22);
-28  Time myTime =Time.newInstance(18, 30, 2, 20);
-29  String timeZone = 'America/Los_Angeles';
-30  DateTime GMT = getDateTimeValueInGMTAsPerTimezone(timeZone,myDate,myTime);
-31  System.debug('GMT -->'+GMT); //output 2022-12-23 02:30:02 (this is the GMT)
-32
-33Use case 2 :  Non Daylight saving testing
-34  Date myDate = Date.newInstance(2022, 05, 22);
-35  Time myTime =Time.newInstance(18, 30, 2, 20);
-36  String timeZone = 'America/Los_Angeles';
-37  DateTime GMT = getDateTimeValueInGMTAsPerTimezone(timeZone,myDate,myTime);
-38  System.debug('GMT -->'+GMT); //output 2022-05-23 01:30:02 (this is the GMT)
-39
-40
-41*/
-42
+```apex
+  /**
+  * Make sure that Timezone value should be java date time zone ids
+  * https://docs.oracle.com/javase/8/docs/api/java/time/ZoneId.html
+  * Also for daylight saving please use Country/City zone ids instead of Abberivation for example :
+  America/New_York  - EST
+  America/Los_Angeles - PST
+  America/Chicago -CST
+  America/Denver - MST
+  Pacific/Honolulu - HST
+  */
+
+  public static DateTime getDateTimeValueInGMTAsPerTimezone(
+    String timezoneValue,
+    Date dateValue,
+    Time timevalue
+  ) {
+    Timezone tz = Timezone.getTimeZone(timezoneValue);
+    Long dateTimeInMiliseconds = Datetime.newInstanceGmt(dateValue, timevalue)
+      .getTime();
+    Long timezoneOffset = tz.getOffset(
+      Datetime.newInstanceGmt(dateValue, timevalue)
+    );
+    return Datetime.newInstance(dateTimeInMiliseconds - timeZoneOffset);
+  }
+/*
+Use case 1 :  Daylight saving testing
+  Date myDate = Date.newInstance(2022, 12, 22);
+  Time myTime =Time.newInstance(18, 30, 2, 20);
+  String timeZone = 'America/Los_Angeles';
+  DateTime GMT = getDateTimeValueInGMTAsPerTimezone(timeZone,myDate,myTime);
+  System.debug('GMT -->'+GMT); //output 2022-12-23 02:30:02 (this is the GMT)
+
+Use case 2 :  Non Daylight saving testing
+  Date myDate = Date.newInstance(2022, 05, 22);
+  Time myTime =Time.newInstance(18, 30, 2, 20);
+  String timeZone = 'America/Los_Angeles';
+  DateTime GMT = getDateTimeValueInGMTAsPerTimezone(timeZone,myDate,myTime);
+  System.debug('GMT -->'+GMT); //output 2022-05-23 01:30:02 (this is the GMT)
+
+
+*/
+
 ```
 
 ---
 
-If you are working with time formatting in the same codebase, [How to Format an Apex Time Value as a Readable String](/blog/formatting-a-apex-time-into-string-in-apex-class) covers the display side of the same problem.
-
-<div
+If you are working with time formatting in the same codebase, [How to Format an Apex Time Value as a Readable String](/blog/format-apex-time-as-string) covers the display side of the same problem.

@@ -3,7 +3,7 @@ title: "How to Architect Salesforce and Heroku Without Creating a Maintenance Ni
 date: 2026-05-29
 category: Heroku
 excerpt: "REST, Platform Events, or RabbitMQ — how to choose the right Salesforce-Heroku integration pattern based on team ownership, cost, and failure modes."
-readTime: 7
+readTime: 4
 published: true
 author: "Sandeep Kumar"
 authorDesignation: "Technical Architect"

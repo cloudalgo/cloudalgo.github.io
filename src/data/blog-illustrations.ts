@@ -4,7 +4,7 @@
 const illustrations: Record<string, string> = {
 
   // ── Heroku Connect & Best Practices ────────────────────────────────
-  'heroku-connect-and-best-practice': `
+  'heroku-connect-lessons-learned': `
 <svg viewBox="0 0 480 200" fill="none" xmlns="http://www.w3.org/2000/svg" class="blog-svg-illus" aria-hidden="true">
   <!-- PostgreSQL cylinder (left) -->
   <ellipse cx="100" cy="62" rx="50" ry="14" stroke="#0A0A0A" stroke-width="1.5" opacity="0.8"/>
@@ -125,7 +125,7 @@ const illustrations: Record<string, string> = {
 </svg>`,
 
   // ── Apex Time to String Formatting ─────────────────────────────────
-  'formatting-a-apex-time-into-string': `
+  'format-apex-time-as-string': `
 <svg viewBox="0 0 480 200" fill="none" xmlns="http://www.w3.org/2000/svg" class="blog-svg-illus" aria-hidden="true">
   <!-- Code editor window -->
   <rect x="30" y="20" width="420" height="160" rx="8" stroke="#0A0A0A" stroke-width="1.5" opacity="0.75"/>
@@ -244,7 +244,7 @@ const illustrations: Record<string, string> = {
 </svg>`,
 
   // ── Dynamic JavaScript Import in LWC ───────────────────────────────
-  'dynamic-javascript-import-in-salesforce': `
+  'loading-stripe-js-in-lwc': `
 <svg viewBox="0 0 480 200" fill="none" xmlns="http://www.w3.org/2000/svg" class="blog-svg-illus" aria-hidden="true">
   <!-- LWC component frame (left) -->
   <rect x="24" y="22" width="200" height="156" rx="8" stroke="#0A0A0A" stroke-width="1.5" opacity="0.75"/>
@@ -281,7 +281,7 @@ const illustrations: Record<string, string> = {
 </svg>`,
 
   // ── REST & SOAP APIs with Node.js ───────────────────────────────────
-  'a-comprehensive-guide-to-using-rest-and-soap': `
+  'salesforce-rest-and-soap-apis': `
 <svg viewBox="0 0 480 200" fill="none" xmlns="http://www.w3.org/2000/svg" class="blog-svg-illus" aria-hidden="true">
   <!-- Node.js server (left) -->
   <rect x="22" y="50" width="110" height="100" rx="8" stroke="#0A0A0A" stroke-width="1.5" opacity="0.75"/>
@@ -326,54 +326,8 @@ const illustrations: Record<string, string> = {
   <text x="365" y="151" text-anchor="middle" font-family="Outfit,monospace" font-size="8" fill="#5A5A5A" opacity="0.7">Bearer eyJhbGci...</text>
 </svg>`,
 
-  // ── Salesforce Career Opportunities ────────────────────────────────
-  'exploring-new-job-opportunities': `
-<svg viewBox="0 0 480 200" fill="none" xmlns="http://www.w3.org/2000/svg" class="blog-svg-illus" aria-hidden="true">
-  <!-- Career ladder / growth chart (left) -->
-  <path d="M60 170 L60 30" stroke="#0A0A0A" stroke-width="1.5" opacity="0.3"/>
-  <path d="M60 170 L440 170" stroke="#0A0A0A" stroke-width="1.5" opacity="0.3"/>
-  <!-- Steps going up -->
-  <polyline points="80,170 80,140 140,140 140,110 200,110 200,80 260,80 260,50 320,50"
-            stroke="#0A0A0A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.8"/>
-
-  <!-- Role dots on steps -->
-  <circle cx="80" cy="140" r="6" fill="#0A0A0A" opacity="0.6"/>
-  <circle cx="140" cy="110" r="6" fill="#0A0A0A" opacity="0.7"/>
-  <circle cx="200" cy="80" r="6" fill="#0A0A0A" opacity="0.8"/>
-  <circle cx="260" cy="50" r="7" fill="#0A0A0A" opacity="0.9"/>
-
-  <!-- Role labels -->
-  <text x="80" y="158" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8" font-weight="600" fill="#5A5A5A">Admin</text>
-  <text x="140" y="128" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8" font-weight="600" fill="#5A5A5A">Developer</text>
-  <text x="200" y="98" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8" font-weight="600" fill="#5A5A5A">Consultant</text>
-  <text x="260" y="40" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8" font-weight="700" fill="#0A0A0A">Architect</text>
-
-  <!-- Certification badges (right) -->
-  <rect x="340" y="22" width="122" height="148" rx="8" stroke="#0A0A0A" stroke-width="1.5" opacity="0.6"/>
-  <text x="401" y="42" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8" font-weight="700" fill="#5A5A5A">CERTIFICATIONS</text>
-  <path d="M346 52 L456 52" stroke="#0A0A0A" stroke-width="1" opacity="0.2"/>
-
-  <!-- Badge 1 -->
-  <path d="M366 72 L376 66 L386 72 L386 84 L376 90 L366 84 Z" stroke="#0A0A0A" stroke-width="1.5" opacity="0.8" fill="#0A0A0A" fill-opacity="0.06"/>
-  <text x="376" y="81" text-anchor="middle" font-family="Outfit,monospace" font-size="6" font-weight="700" fill="#0A0A0A">ADM</text>
-  <text x="400" y="75" font-family="Outfit,sans-serif" font-size="8" fill="#0A0A0A" opacity="0.75">Admin 201</text>
-  <text x="400" y="87" font-family="Outfit,sans-serif" font-size="7" fill="#5A5A5A" opacity="0.6">Platform Dev I</text>
-
-  <!-- Badge 2 -->
-  <path d="M366 106 L376 100 L386 106 L386 118 L376 124 L366 118 Z" stroke="#0A0A0A" stroke-width="1.5" opacity="0.8" fill="#0A0A0A" fill-opacity="0.06"/>
-  <text x="376" y="115" text-anchor="middle" font-family="Outfit,monospace" font-size="6" font-weight="700" fill="#0A0A0A">DEV</text>
-  <text x="400" y="109" font-family="Outfit,sans-serif" font-size="8" fill="#0A0A0A" opacity="0.75">Platform Dev II</text>
-  <text x="400" y="121" font-family="Outfit,sans-serif" font-size="7" fill="#5A5A5A" opacity="0.6">Apex Specialist</text>
-
-  <!-- Badge 3 -->
-  <path d="M366 140 L376 134 L386 140 L386 152 L376 158 L366 152 Z" stroke="#0A0A0A" stroke-width="1.5" opacity="0.8" fill="#0A0A0A" fill-opacity="0.85"/>
-  <text x="376" y="149" text-anchor="middle" font-family="Outfit,monospace" font-size="6" font-weight="700" fill="#fff">ARC</text>
-  <text x="400" y="143" font-family="Outfit,sans-serif" font-size="8" font-weight="700" fill="#0A0A0A">Architect</text>
-  <text x="400" y="155" font-family="Outfit,sans-serif" font-size="7" fill="#5A5A5A" opacity="0.6">System Design</text>
-</svg>`,
-
   // ── Advanced SOQL Queries ───────────────────────────────────────────
-  'mastering-advanced-soql': `
+  'advanced-soql-queries': `
 <svg viewBox="0 0 480 200" fill="none" xmlns="http://www.w3.org/2000/svg" class="blog-svg-illus" aria-hidden="true">
   <!-- SOQL query block (top) -->
   <rect x="24" y="16" width="432" height="88" rx="8" stroke="#0A0A0A" stroke-width="1.5" opacity="0.75"/>
@@ -419,7 +373,7 @@ const illustrations: Record<string, string> = {
 </svg>`,
 
   // ── Salesforce OAuth Setup ──────────────────────────────────────────
-  'salesforce-oauth-setup': `
+  'salesforce-oauth-connected-app': `
 <svg viewBox="0 0 480 200" fill="none" xmlns="http://www.w3.org/2000/svg" class="blog-svg-illus" aria-hidden="true">
   <!-- App box (left) -->
   <rect x="22" y="70" width="100" height="60" rx="8" stroke="#0A0A0A" stroke-width="1.5" opacity="0.75"/>
@@ -466,7 +420,7 @@ const illustrations: Record<string, string> = {
 </svg>`,
 
   // ── Apache Airflow & Medallion Architecture ─────────────────────────
-  'leveraging-apache-airflow': `
+  'apache-airflow-on-heroku': `
 <svg viewBox="0 0 480 200" fill="none" xmlns="http://www.w3.org/2000/svg" class="blog-svg-illus" aria-hidden="true">
   <!-- DAG container -->
   <rect x="14" y="14" width="452" height="136" rx="8" stroke="#0A0A0A" stroke-width="1.5" opacity="0.7"/>
@@ -524,7 +478,7 @@ const illustrations: Record<string, string> = {
 </svg>`,
 
   // ── RabbitMQ Async Process in Heroku ───────────────────────────────
-  'an-effective-method-for-launching-an-asynchronous': `
+  'async-heroku-processes': `
 <svg viewBox="0 0 480 200" fill="none" xmlns="http://www.w3.org/2000/svg" class="blog-svg-illus" aria-hidden="true">
   <!-- Salesforce (left) -->
   <rect x="18" y="60" width="108" height="80" rx="8" stroke="#0A0A0A" stroke-width="1.5" opacity="0.75"/>

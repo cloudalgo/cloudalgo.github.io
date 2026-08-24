@@ -3,9 +3,12 @@ title: "Before You Delete That Salesforce Field: How We Built a Seven-Pass Safet
 date: 2026-06-16
 category: Salesforce
 excerpt: "A client wanted to clean up 800+ legacy custom fields before a major data migration. The native dependency graph wasn't enough. Here's the script we built — and what it found."
-readTime: 7
+readTime: 6
 published: true
 image: /blog-images/salesforce-field-impact-hero.svg
+author: "Sandeep Kumar"
+authorDesignation: "Founder, CloudAlgo"
+authorPhoto: "/blog-images/a0bac224191c550df6e3a1f8ade4206b0927cbfb-515x515.jpg"
 ---
 
 A client asked us to help prep their Salesforce org for a data migration. Eight years of history — product pivots, reorgs, features that got halfway built and then quietly abandoned. The schema had somewhere north of 800 custom fields on Account alone. Nobody on their team could tell you with confidence which ones were actually being used.

@@ -3,7 +3,7 @@ title: "Heroku Connect at Scale: What Goes Wrong and How to Fix It"
 date: 2026-05-29
 category: Heroku
 excerpt: "Heroku Connect is easy to misconfigure in ways that only surface at volume. Here are the failure modes we see most often and how to address them."
-readTime: 6
+readTime: 4
 published: true
 author: "Sandeep Kumar"
 authorDesignation: "Technical Architect"

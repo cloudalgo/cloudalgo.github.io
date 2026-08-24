@@ -3,12 +3,13 @@ title: "How healthy is your Salesforce org, really? A free, offline way to find 
 date: 2026-07-02
 category: Salesforce
 excerpt: "Nobody can tell you how healthy a Salesforce org is until something breaks on a Friday. OrgVitals scans it in a few minutes, grades it A to F, and tells you exactly what to fix first. It runs on your laptop, uploads nothing, and it's free right now."
-readTime: 8
+readTime: 9
 published: true
 featured: editors-pick
 image: /blog-images/orgvitals-hero.svg
 author: "Sandeep Kumar"
 authorDesignation: "Founder, CloudAlgo"
+authorPhoto: "/blog-images/a0bac224191c550df6e3a1f8ade4206b0927cbfb-515x515.jpg"
 ---
 
 Here's a question every Salesforce team gets asked eventually, usually by someone senior, usually at the worst possible moment: **how healthy is our org?**

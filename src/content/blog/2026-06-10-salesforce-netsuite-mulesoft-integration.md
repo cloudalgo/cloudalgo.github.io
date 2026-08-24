@@ -3,7 +3,7 @@ title: "Connecting Salesforce and NetSuite with MuleSoft: Four Flows, Zero Manua
 date: 2026-06-10
 category: MuleSoft
 excerpt: "How we built a bidirectional Salesforce ↔ NetSuite integration using MuleSoft API-led connectivity — Platform Events for real-time orders and customers, watermark-based scheduled sync for invoices and refunds, and SOAP/XML for complex Sales Order operations."
-readTime: 6
+readTime: 7
 published: true
 author: "Sandeep Kumar"
 authorDesignation: "Technical Architect"
