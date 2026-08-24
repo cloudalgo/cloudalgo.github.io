@@ -205,10 +205,10 @@ import Badge from '@/components/ui/Badge.astro';
   transform: translateX(-50%) translateY(20px);
   width: 90%;
   max-width: 760px;
-  background: rgba(var(--paper-000-rgb), 0.82);
+  background: var(--color-paper-a82);
   backdrop-filter: blur(18px) saturate(160%);
   -webkit-backdrop-filter: blur(18px) saturate(160%);
-  border: 1px solid rgba(var(--paper-200-rgb), 0.7);
+  border: 1px solid var(--border-glass);
   border-radius: 12px;
   box-shadow: 0 8px 40px var(--color-shadow-a14), 0 2px 8px var(--color-shadow-a06);
   z-index: 1000;
@@ -358,8 +358,8 @@ import Badge from '@/components/ui/Badge.astro';
 
 /* ── Category cards ── */
 .ca-cat-card {
-  background: rgba(var(--paper-100-rgb), 0.7);
-  border: 1px solid rgba(var(--paper-200-rgb), 0.8);
+  background: var(--surface-glass);
+  border: 1px solid var(--border-glass-strong);
   border-radius: 12px;
   padding: 0.875rem 1rem;
   transition: border-color 0.2s;

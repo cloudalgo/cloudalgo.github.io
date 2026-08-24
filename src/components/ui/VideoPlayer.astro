@@ -159,7 +159,7 @@ const isCrossOrigin = /^https?:\/\//.test(src) || (captions ? /^https?:\/\//.tes
     border: 1px solid var(--ca-border, var(--border-default));
   }
   .cav--dark .cav-frame {
-    border-color: rgba(var(--paper-000-rgb), 0.16);
+    border-color: var(--color-paper-a16);
     box-shadow: 0 24px 60px var(--color-shadow-a45);
   }
   .cav--light .cav-frame {
@@ -275,8 +275,8 @@ const isCrossOrigin = /^https?:\/\//.test(src) || (captions ? /^https?:\/\//.tes
     width: 34px;
     height: 34px;
     border-radius: 100px;
-    border: 1px solid rgba(var(--paper-000-rgb), 0.22);
-    background: rgba(var(--paper-000-rgb), 0.06);
+    border: 1px solid var(--color-paper-a22);
+    background: var(--color-paper-a06);
     color: var(--color-on-inverse);
     cursor: pointer;
     padding: 0;
@@ -286,7 +286,7 @@ const isCrossOrigin = /^https?:\/\//.test(src) || (captions ? /^https?:\/\//.tes
   .cav-btn:focus-visible { outline: 2px solid var(--focus-halo); outline-offset: 2px; }
 
   .cav-btn--play { width: 38px; height: 38px; background: var(--surface-card); border-color: var(--focus-halo); color: var(--ca-black, var(--color-heading)); }
-  .cav-btn--play:hover { background: rgba(var(--paper-000-rgb), 0.86); }
+  .cav-btn--play:hover { background: var(--color-paper-a86); }
   .cav-btn--play .cav-i-play { margin-left: 2px; }
 
   .cav-btn--cc {
@@ -341,7 +341,7 @@ const isCrossOrigin = /^https?:\/\//.test(src) || (captions ? /^https?:\/\//.tes
     width: 100%;
     height: 3px;
     border-radius: 100px;
-    background: rgba(var(--paper-000-rgb), 0.24);
+    background: var(--color-paper-a24);
   }
   .cav-buffered,
   .cav-played {
@@ -352,7 +352,7 @@ const isCrossOrigin = /^https?:\/\//.test(src) || (captions ? /^https?:\/\//.tes
     border-radius: 100px;
     width: 0%;
   }
-  .cav-buffered { background: rgba(var(--paper-000-rgb), 0.34); }
+  .cav-buffered { background: var(--color-paper-a34); }
   .cav-played { background: var(--surface-card); }
 
   .cav-knob {

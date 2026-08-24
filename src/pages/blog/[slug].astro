@@ -435,10 +435,10 @@ const schema = {
   align-items: center;
   gap: 0.375rem;
   padding: 0.4rem 0.75rem;
-  background: rgba(var(--paper-000-rgb), 0.18);
+  background: var(--color-paper-a18);
   backdrop-filter: blur(28px) saturate(180%);
   -webkit-backdrop-filter: blur(28px) saturate(180%);
-  border: 1px solid rgba(var(--paper-000-rgb), 0.5);
+  border: 1px solid var(--color-paper-a50);
   border-radius: 100px;
   box-shadow: 0 4px 24px var(--color-shadow-a08);
   white-space: nowrap;
@@ -504,9 +504,9 @@ const schema = {
   position: absolute;
   top: 8px;
   right: 12px;
-  background: rgba(var(--paper-000-rgb), 0.08);
+  background: var(--color-paper-a08);
   color: var(--color-on-inverse-muted);
-  border: 1px solid rgba(var(--paper-000-rgb), 0.12);
+  border: 1px solid var(--color-paper-a12);
   border-radius: 6px;
   padding: 0.2rem 0.625rem;
   font-size: 0.75rem;
@@ -517,7 +517,7 @@ const schema = {
   z-index: 1;
 }
 :global(.code-copy-btn:hover) {
-  background: rgba(var(--paper-000-rgb), 0.15);
+  background: var(--color-paper-a15);
   color: var(--color-on-inverse);
 }
 
@@ -605,7 +605,7 @@ const schema = {
 :global(.blog-cta-inline__buttons a:not(:first-child)) {
   background: transparent;
   color: var(--color-on-inverse);
-  border: 1.5px solid rgba(var(--paper-000-rgb), 0.4);
+  border: 1.5px solid var(--color-paper-a40);
 }
 :global(.blog-cta-inline__buttons a:hover) { opacity: 0.8; }
 
@@ -671,14 +671,14 @@ const schema = {
   color: var(--color-on-inverse-muted);
   padding: 0.8rem 1.625rem;
   border-radius: 100px;
-  border: 1px solid rgba(var(--paper-000-rgb), 0.2);
+  border: 1px solid var(--color-paper-a20);
   font-weight: 600;
   font-size: 0.9375rem;
   text-decoration: none;
   transition: color 150ms, border-color 150ms;
   white-space: nowrap;
 }
-.blog-bottom-cta-secondary:hover { color: var(--color-on-inverse); border-color: rgba(var(--paper-000-rgb), 0.5); }
+.blog-bottom-cta-secondary:hover { color: var(--color-on-inverse); border-color: var(--color-paper-a50); }
 @media (max-width: 767px) {
   .blog-bottom-cta-inner { flex-direction: column; align-items: flex-start; }
   .blog-bottom-cta-actions { flex-direction: row; flex-wrap: wrap; }

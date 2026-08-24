@@ -37,6 +37,61 @@
   --color-on-inverse: var(--paper-000);
   --color-on-inverse-soft: var(--paper-025);
 
+  /* White at an alpha.
+     One ramp, two audiences. The five --color-on-inverse-* roles below
+     are text; everything else that reaches for translucent white -- 33
+     borders, 20 glass backgrounds, 19 illustration fills and strokes on
+     dark art, 3 inset highlights, 4 shadows -- is surface material, and
+     was spelling `rgba(var(--paper-000-rgb), N)` inline at 79 sites.
+
+     Both now read these rungs, so an alpha is written once. The
+     on-inverse names stay a labelled view onto the ramp rather than a
+     second copy of it: they carry the text semantics and they carry the
+     convergence plan in their own comment, which renaming them away
+     would have thrown out.
+
+     No role names on the material side. Borders spread over sixteen
+     alphas with no modal (0.5 x5, 0.4 x4, 0.2 x4), backgrounds over
+     sixteen with none above x2 -- there is no band here to name, only a
+     list, and asserting soft/medium/strong over it would be inventing a
+     hierarchy rather than recording one. Phase 7 is where that
+     hierarchy gets decided; until then the spread is the finding. */
+  --color-paper-a00: rgba(var(--paper-000-rgb), 0);
+  --color-paper-a03: rgba(var(--paper-000-rgb), 0.03);
+  --color-paper-a04: rgba(var(--paper-000-rgb), 0.04);
+  --color-paper-a06: rgba(var(--paper-000-rgb), 0.06);
+  --color-paper-a07: rgba(var(--paper-000-rgb), 0.07);
+  --color-paper-a08: rgba(var(--paper-000-rgb), 0.08);
+  --color-paper-a09: rgba(var(--paper-000-rgb), 0.09);
+  --color-paper-a10: rgba(var(--paper-000-rgb), 0.1);
+  --color-paper-a12: rgba(var(--paper-000-rgb), 0.12);
+  --color-paper-a15: rgba(var(--paper-000-rgb), 0.15);
+  --color-paper-a16: rgba(var(--paper-000-rgb), 0.16);
+  --color-paper-a18: rgba(var(--paper-000-rgb), 0.18);
+  --color-paper-a20: rgba(var(--paper-000-rgb), 0.2);
+  --color-paper-a22: rgba(var(--paper-000-rgb), 0.22);
+  --color-paper-a24: rgba(var(--paper-000-rgb), 0.24);
+  --color-paper-a25: rgba(var(--paper-000-rgb), 0.25);
+  --color-paper-a28: rgba(var(--paper-000-rgb), 0.28);
+  --color-paper-a30: rgba(var(--paper-000-rgb), 0.3);
+  --color-paper-a34: rgba(var(--paper-000-rgb), 0.34);
+  --color-paper-a35: rgba(var(--paper-000-rgb), 0.35);
+  --color-paper-a38: rgba(var(--paper-000-rgb), 0.38);
+  --color-paper-a40: rgba(var(--paper-000-rgb), 0.4);
+  --color-paper-a45: rgba(var(--paper-000-rgb), 0.45);
+  --color-paper-a50: rgba(var(--paper-000-rgb), 0.5);
+  --color-paper-a55: rgba(var(--paper-000-rgb), 0.55);
+  --color-paper-a60: rgba(var(--paper-000-rgb), 0.6);
+  --color-paper-a65: rgba(var(--paper-000-rgb), 0.65);
+  --color-paper-a70: rgba(var(--paper-000-rgb), 0.7);
+  --color-paper-a75: rgba(var(--paper-000-rgb), 0.75);
+  --color-paper-a80: rgba(var(--paper-000-rgb), 0.8);
+  --color-paper-a82: rgba(var(--paper-000-rgb), 0.82);
+  --color-paper-a85: rgba(var(--paper-000-rgb), 0.85);
+  --color-paper-a86: rgba(var(--paper-000-rgb), 0.86);
+  --color-paper-a88: rgba(var(--paper-000-rgb), 0.88);
+  --color-paper-a90: rgba(var(--paper-000-rgb), 0.9);
+
   /* Text on an inverse surface.
      White at an alpha, because a solid ink tone would not sit on the
      near-black band the way a translucent one does. Fifty-two
@@ -62,26 +117,26 @@
      near-black -- white-at-alpha only reads on ink. That is the point
      of naming it: a theme that wants ink-on-paper here overrides five
      tokens instead of hunting fifty-two declarations. */
-  --color-on-inverse-body: rgba(var(--paper-000-rgb), 0.88);
-  --color-on-inverse-strong: rgba(var(--paper-000-rgb), 0.7);
-  --color-on-inverse-muted: rgba(var(--paper-000-rgb), 0.55);
-  --color-on-inverse-faint: rgba(var(--paper-000-rgb), 0.45);
-  --color-on-inverse-ghost: rgba(var(--paper-000-rgb), 0.18);
+  --color-on-inverse-body: var(--color-paper-a88);
+  --color-on-inverse-strong: var(--color-paper-a70);
+  --color-on-inverse-muted: var(--color-paper-a55);
+  --color-on-inverse-faint: var(--color-paper-a45);
+  --color-on-inverse-ghost: var(--color-paper-a18);
 
-  --color-on-inverse-a90: rgba(var(--paper-000-rgb), 0.9);
-  --color-on-inverse-a85: rgba(var(--paper-000-rgb), 0.85);
-  --color-on-inverse-a80: rgba(var(--paper-000-rgb), 0.8);
-  --color-on-inverse-a75: rgba(var(--paper-000-rgb), 0.75);
-  --color-on-inverse-a65: rgba(var(--paper-000-rgb), 0.65);
-  --color-on-inverse-a60: rgba(var(--paper-000-rgb), 0.6);
-  --color-on-inverse-a50: rgba(var(--paper-000-rgb), 0.5);
-  --color-on-inverse-a40: rgba(var(--paper-000-rgb), 0.4);
-  --color-on-inverse-a38: rgba(var(--paper-000-rgb), 0.38);
-  --color-on-inverse-a35: rgba(var(--paper-000-rgb), 0.35);
-  --color-on-inverse-a28: rgba(var(--paper-000-rgb), 0.28);
-  --color-on-inverse-a20: rgba(var(--paper-000-rgb), 0.2);
-  --color-on-inverse-a15: rgba(var(--paper-000-rgb), 0.15);
-  --color-on-inverse-a08: rgba(var(--paper-000-rgb), 0.08);
+  --color-on-inverse-a90: var(--color-paper-a90);
+  --color-on-inverse-a85: var(--color-paper-a85);
+  --color-on-inverse-a80: var(--color-paper-a80);
+  --color-on-inverse-a75: var(--color-paper-a75);
+  --color-on-inverse-a65: var(--color-paper-a65);
+  --color-on-inverse-a60: var(--color-paper-a60);
+  --color-on-inverse-a50: var(--color-paper-a50);
+  --color-on-inverse-a40: var(--color-paper-a40);
+  --color-on-inverse-a38: var(--color-paper-a38);
+  --color-on-inverse-a35: var(--color-paper-a35);
+  --color-on-inverse-a28: var(--color-paper-a28);
+  --color-on-inverse-a20: var(--color-paper-a20);
+  --color-on-inverse-a15: var(--color-paper-a15);
+  --color-on-inverse-a08: var(--color-paper-a08);
 
   /* Ink at an alpha.
      The mirror of the white-at-alpha ramp above, and the reason it
@@ -178,6 +233,15 @@
   --color-shadow-a38: rgba(var(--ink-000-rgb), 0.38);
   --color-shadow-a40: rgba(var(--ink-000-rgb), 0.4);
   --color-shadow-a45: rgba(var(--ink-000-rgb), 0.45);
+
+  /* Glass chrome on the paper side. The cookie banner is the only
+     thing on the site that tints a *paper* tone rather than white, and
+     it does it three times: a banner border, a settings-row background,
+     a stronger border on that row. Named rather than rung-ified because
+     three occurrences of two primitives do not make a ramp. */
+  --surface-glass: rgba(var(--paper-100-rgb), 0.7);
+  --border-glass: rgba(var(--paper-200-rgb), 0.7);
+  --border-glass-strong: rgba(var(--paper-200-rgb), 0.8);
 
   /* Rules */
   --border-default: var(--paper-200);

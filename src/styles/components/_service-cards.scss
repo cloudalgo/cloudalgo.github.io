@@ -50,7 +50,7 @@
 }
 .product-card-dark:hover {
   transform: translateY(-6px);
-  background: rgba(var(--paper-000-rgb), 0.09) !important;
-  border-color: rgba(var(--paper-000-rgb), 0.25) !important;
+  background: var(--color-paper-a09) !important;
+  border-color: var(--color-paper-a25) !important;
   box-shadow: 0 20px 40px var(--color-shadow-a40);
 }
