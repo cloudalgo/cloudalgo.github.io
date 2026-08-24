@@ -5,15 +5,15 @@
   display: block;
   width: 100%;
   padding: 0.75rem 1rem;
-  border: 1.5px solid var(--border-default);
-  border-radius: 8px;
+  border: 1.5px solid var(--input-border);
+  border-radius: var(--input-radius);
   font-size: 1rem;
   font-family: var(--font-body);
   transition: border-color 0.2s;
-  background: var(--surface-card);
+  background: var(--input-bg);
   color: var(--color-heading);
 }
-.form-control:focus { border-color: var(--border-strong); }
+.form-control:focus { border-color: var(--input-border-focus); }
 .form-control:focus:not(:focus-visible) { outline: none; }
 textarea.form-control { resize: vertical; min-height: 140px; }
 .form-group { margin-bottom: 0; }

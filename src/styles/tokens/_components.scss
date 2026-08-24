@@ -7,8 +7,8 @@
   /* Header */
   --header-h: 4.375rem;              /* 38px logo + 2 x 1rem padding */
   --header-bg: var(--surface-card);
-  --header-scrolled-bg: rgba(var(--paper-000-rgb), 0.6);
-  --header-scrolled-border: rgba(var(--paper-000-rgb), 0.4);
+  --header-scrolled-bg: var(--color-paper-a60);
+  --header-scrolled-border: var(--color-paper-a40);
 
   /* Buttons */
   --btn-radius: var(--radius-pill);
@@ -147,10 +147,25 @@
   --code-titlebar: var(--code-bar);
   --code-border: var(--code-rule);
   --code-line-number: var(--code-gutter);
+  /* UNWIRED, deliberately. Astro's markdown pipeline hands code blocks
+     to Shiki, which emits `class="astro-code github-dark"` plus an
+     INLINE style="background-color:#24292e;color:#e1e4e8" and a
+     per-token inline colour on every span. Inline wins, so painting
+     `color: var(--code-text)` from a stylesheet would change nothing.
+     Ten GitHub-dark hexes ship in the HTML of 12 posts and no theme
+     can reach them; two of them (comments at 3.05:1, and the inline-
+     code crimson that leaks onto unhighlighted blocks at 2.66:1) are
+     under AA. The fix is to configure Shiki to emit CSS variables --
+     a markdown-pipeline change, not a stylesheet one. */
   --code-text: var(--code-fg);
   --code-inline-fg: var(--code-literal);
 
   /* Form validation */
+  /* UNWIRED, deliberately. ContactForm marks a bad field with
+     aria-invalid and prints .error-line beneath it, but nothing paints
+     the border. Wiring `.form-control[aria-invalid="true"]` to this
+     would be the right fix and a real a11y gain -- and it would change
+     what the site renders, which is not this refactor's job. Phase 7. */
   --input-border-invalid: var(--color-danger);
   --input-message-invalid: var(--color-danger);
 

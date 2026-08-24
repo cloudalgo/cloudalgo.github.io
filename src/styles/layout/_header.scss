@@ -12,15 +12,15 @@ main[id] {
   left: 0;
   right: 0;
   z-index: 999;
-  background-color: var(--surface-card);
+  background-color: var(--header-bg);
   border-bottom: 1px solid transparent;
   transition: background-color 0.35s ease, border-color 0.35s ease, backdrop-filter 0.35s ease;
 }
 .header.scrolled {
-  background-color: var(--color-paper-a60);
+  background-color: var(--header-scrolled-bg);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border-bottom-color: var(--color-paper-a40);
+  border-bottom-color: var(--header-scrolled-border);
 }
 
 #scroll-progress-bar {
@@ -46,7 +46,7 @@ main[id] {
   align-items: center;
   justify-content: space-between;
   padding: 1rem 1.5rem;
-  max-width: 1278px;
+  max-width: var(--container-max);
   margin: 0 auto;
 }
 
