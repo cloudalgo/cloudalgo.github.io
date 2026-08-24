@@ -42,16 +42,16 @@ public class TicketProcessor {
         String result = '';
 
         switch on stage {
-            when TicketStage.OPEN {
+            when OPEN {
                 result = 'Ticket is currently in the Open stage.';
             }
-            when TicketStage.IN_PROGRESS {
+            when IN_PROGRESS {
                 result = 'Ticket is currently In Progress.';
             }
-            when TicketStage.RESOLVED {
+            when RESOLVED {
                 result = 'Ticket has been Resolved.';
             }
-            when TicketStage.CLOSED {
+            when CLOSED {
                 result = 'Ticket is Closed.';
             }
             when else {
@@ -64,6 +64,8 @@ public class TicketProcessor {
 }
 
 ```
+
+The `when` labels are the bare constant names, not `TicketStage.OPEN` — Apex already knows the type from the switch expression.
 
 Keep the `when else` branch even once every stage is covered. It is what catches a null stage, and it is what runs when someone adds a fifth constant to the enum and forgets this class exists — a wrong-but-visible message rather than a silent fall-through.
 
