@@ -1,5 +1,6 @@
 ---
 import { getBlogIllustration } from '../../data/blog-illustrations';
+import Badge from '@/components/ui/Badge.astro';
 
 export interface Props {
   title: string;
@@ -202,7 +203,7 @@ const illustrationSvg = contentIllustration || illustrations[category] || illust
 
   <div class="blog-card-body">
     <div class="blog-card-top">
-      <span class="blog-cat-tag">{category}</span>
+      <Badge tone="outline" context="card-category">{category}</Badge>
       <span class="blog-read-time">{readTime} min read</span>
     </div>
 
@@ -298,19 +299,7 @@ const illustrationSvg = contentIllustration || illustrations[category] || illust
   display: flex;
   align-items: center;
   justify-content: space-between;
-}
-.blog-cat-tag {
-  font-size: 0.6875rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--color-text);
-  background: var(--surface-page);
-  border: 1px solid var(--border-default);
-  border-radius: 100px;
-  padding: 0.2rem 0.625rem;
-}
-.blog-read-time {
+}.blog-read-time {
   font-size: 0.75rem;
   color: var(--color-text-faint);
   font-weight: 500;

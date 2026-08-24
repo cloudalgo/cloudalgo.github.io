@@ -1,0 +1,137 @@
+/* ─── Badge ───────────────────────────────────────────────
+   The small pill label: a category, a tag, a facet, a state.
+
+   Before this file there were seven of these, one per page that
+   needed one, and no two agreed:
+
+     class                  size    wt   tracking  pad
+     blog-badges            .6875  700   --        .2   / .625
+     blog-cat-tag           .6875  700   .08em     .2   / .625
+     ca-badge               .6875  700   .04em     .1875/ .5625
+     cs-tag                 .7     600   --        .2   / .625
+     csd-pill               .7     700   .07em     .2   / .75
+     csd-tag                .8     600   --        .35  / .875
+     blog-featured-badge    .625   700   .1em      .25  / .625
+
+   Four font sizes, five tracking values and four paddings is drift,
+   not intent -- but converging them would change how the site
+   renders, and this phase may not. So every value above is
+   preserved exactly. What changes is where it lives: one element,
+   one base rule reading component knobs, three tones carrying all
+   the colour, and a short per-context class setting only the knobs
+   that differ. Converging the family later is deleting lines from
+   this file, not hunting through six others.
+
+   `.badge` itself declares no literal appearance -- restyling the
+   whole family is editing --badge-* in tokens/_components.scss. */
+
+.badge {
+  font-size: var(--badge-size);
+  font-weight: var(--badge-weight);
+  letter-spacing: var(--badge-tracking);
+  text-transform: var(--badge-transform);
+  color: var(--badge-fg);
+  background: var(--badge-bg);
+  border: var(--badge-border-width) solid var(--badge-border-color);
+  border-radius: var(--badge-radius);
+  padding: var(--badge-pad-y) var(--badge-pad-x);
+}
+
+/* ── Tones ──
+   Colour only. Nothing here touches metrics, so a tone is safe to
+   swap on any badge -- which is what the consent badge does at
+   runtime when the analytics checkbox is toggled. */
+
+.badge--solid {
+  --badge-bg: var(--surface-inverse);
+  --badge-fg: var(--color-on-inverse);
+  --badge-border-color: var(--surface-inverse);
+}
+
+.badge--outline {
+  --badge-bg: var(--surface-card);
+  --badge-fg: var(--color-text);
+  --badge-border-color: var(--border-default);
+}
+
+/* Filled but borderless -- reads as a chip rather than an outline. */
+.badge--plain {
+  --badge-bg: var(--surface-card);
+  --badge-fg: var(--color-heading);
+  --badge-border-width: 0;
+}
+
+/* ── Per-context metrics ──
+   Each sets only what it does not inherit from the defaults. */
+
+/* Category on a blog post header. The only badge with a hover
+   state: it inverts. It is a <span>, so text-decoration is
+   inherited-underline insurance carried over from the original
+   rule rather than something the element needs on its own. */
+.badge-post-category {
+  --badge-tracking: normal;
+  display: inline-block;
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s;
+}
+/* Direct properties, not the knobs: a transition on a value that
+   comes through var() depends on custom-property propagation, and
+   this hover predates the token system. Keep it literal. */
+.badge-post-category:hover {
+  background: transparent;
+  color: var(--color-heading);
+}
+
+/* Category on a blog card. Sits on a white card, so it takes the
+   page grey rather than the card white to stay visible. */
+.badge-card-category {
+  --badge-bg: var(--surface-page);
+}
+
+/* Industry / service facet in a case-study header. Transparent so
+   the header's own background reads through it. */
+.badge-facet {
+  --badge-size: 0.7rem;
+  --badge-tracking: 0.07em;
+  --badge-pad-x: 0.75rem;
+  --badge-bg: transparent;
+}
+
+/* Case-study tag, index listing. */
+.badge-tag {
+  --badge-size: 0.7rem;
+  --badge-weight: var(--weight-semibold);
+  --badge-tracking: normal;
+  --badge-transform: none;
+}
+
+/* Case-study tag, detail page -- the same tag, drawn larger. */
+.badge-tag-lg {
+  --badge-size: 0.8rem;
+  --badge-weight: var(--weight-semibold);
+  --badge-tracking: normal;
+  --badge-transform: none;
+  --badge-fg: var(--color-heading);
+  --badge-border-width: 1.5px;
+  --badge-pad-y: 0.35rem;
+  --badge-pad-x: 0.875rem;
+}
+
+/* "Featured" flag on the lead blog post. */
+.badge-featured {
+  --badge-size: 0.625rem;
+  --badge-tracking: 0.1em;
+  --badge-pad-y: 0.25rem;
+}
+
+/* Consent state in the cookie banner. Lives in a flex row beside
+   the toggle, hence the shrink guard; nowrap keeps "Always on" on
+   one line, which the original rule also did. */
+.badge-consent {
+  --badge-tracking: 0.04em;
+  --badge-border-width: 1.5px;
+  --badge-pad-y: 0.1875rem;
+  --badge-pad-x: 0.5625rem;
+  flex-shrink: 0;
+  white-space: nowrap;
+}

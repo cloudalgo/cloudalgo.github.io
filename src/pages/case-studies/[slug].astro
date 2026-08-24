@@ -3,6 +3,7 @@ import Page from '../../layouts/Page.astro';
 import { caseStudies } from '../../data/case-studies';
 import PageHeader from '@/components/ui/PageHeader.astro';
 import SectionLabel from '../../components/ui/SectionLabel.astro';
+import Badge from '@/components/ui/Badge.astro';
 
 export function getStaticPaths() {
   return caseStudies.map(cs => ({ params: { slug: cs.id }, props: { cs } }));
@@ -53,8 +54,8 @@ const schema = {
         <div class="csd-hero-text">
           <div class="csd-hero-meta">
             <span class="csd-index">{cs.index}</span>
-            <span class="csd-pill">{cs.industry}</span>
-            <span class="csd-pill">{cs.service}</span>
+            <Badge tone="outline" context="facet">{cs.industry}</Badge>
+            <Badge tone="outline" context="facet">{cs.service}</Badge>
           </div>
           <h1 class="csd-hero-title">{cs.headline}</h1>
           <p class="csd-hero-sub">{cs.executiveSummary}</p>
@@ -554,7 +555,7 @@ const schema = {
       <div class="container">
         <SectionLabel style="margin-bottom:1rem;">Tech stack</SectionLabel>
         <div class="csd-tags">
-          {cs.tags.map(tag => <span class="csd-tag">{tag}</span>)}
+          {cs.tags.map(tag => <Badge tone="outline" context="tag-lg">{tag}</Badge>)}
         </div>
       </div>
     </section>
@@ -622,18 +623,7 @@ const schema = {
   letter-spacing: 0.1em;
   color: var(--color-text);
   font-family: 'Outfit', sans-serif;
-}
-.csd-pill {
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-  color: var(--color-text);
-  border: 1px solid var(--border-default);
-  border-radius: 100px;
-  padding: 0.2rem 0.75rem;
-}
-.csd-hero-title {
+}.csd-hero-title {
   font-size: clamp(1.875rem, 3.5vw, 3rem);
   font-weight: 900;
   letter-spacing: -0.03em;
@@ -1000,16 +990,6 @@ const schema = {
 
 /* ── Tags fallback ── */
 .csd-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-.csd-tag {
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--color-heading);
-  border: 1.5px solid var(--border-default);
-  border-radius: 100px;
-  padding: 0.35rem 0.875rem;
-  background: var(--surface-card);
-}
-
 /* ── Prev/Next nav ── */
 .csd-nav-section {
   background: var(--surface-page);

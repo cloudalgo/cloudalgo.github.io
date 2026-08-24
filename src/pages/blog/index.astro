@@ -5,6 +5,7 @@ import BlogCard from '../../components/ui/BlogCard.astro';
 import { getBlogIllustration } from '../../data/blog-illustrations';
 import PageHeader from '@/components/ui/PageHeader.astro';
 import Button from '../../components/ui/Button.astro';
+import Badge from '@/components/ui/Badge.astro';
 
 const allPublished = (await getCollection('blog', ({ data }) => data.published))
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
@@ -59,7 +60,7 @@ const formatDate = (d: Date) =>
           <div class="blog-featured-body">
 
             <div class="blog-featured-top">
-              <span class="blog-featured-badge">Featured</span>
+              <Badge tone="plain" context="featured">Featured</Badge>
               <span class="blog-featured-cat">{featuredPost.data.category}</span>
             </div>
 
@@ -262,18 +263,7 @@ const formatDate = (d: Date) =>
   align-items: center;
   gap: 0.625rem;
   margin-bottom: 0.25rem;
-}
-.blog-featured-badge {
-  background: var(--surface-card);
-  color: var(--color-heading);
-  font-size: 0.625rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  padding: 0.25rem 0.625rem;
-  border-radius: 100px;
-}
-.blog-featured-cat {
+}.blog-featured-cat {
   font-size: 0.6875rem;
   font-weight: 700;
   letter-spacing: 0.1em;

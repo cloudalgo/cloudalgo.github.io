@@ -1,5 +1,6 @@
 ---
 // Cookie consent — two-state non-blocking popup.
+import Badge from '@/components/ui/Badge.astro';
 ---
 
 <div
@@ -52,7 +53,7 @@
           <div class="ca-cb-group">
             <input type="checkbox" id="ca-analytics-cb" class="ca-cb-input" />
             <label for="ca-analytics-cb" class="ca-cb-toggle" aria-hidden="true"><span class="ca-cb-knob"></span></label>
-            <span id="ca-analytics-badge" class="ca-badge ca-badge-prohibited">Prohibited</span>
+            <Badge id="ca-analytics-badge" tone="outline" context="consent">Prohibited</Badge>
           </div>
         </div>
         <p class="ca-cat-desc">
@@ -67,7 +68,7 @@
       <div class="ca-cat-card">
         <div class="ca-cat-top">
           <span class="ca-cat-name">Essential Cookies</span>
-          <span class="ca-badge ca-badge-always">Always on</span>
+          <Badge tone="solid" context="consent">Always on</Badge>
         </div>
         <p class="ca-cat-desc">
           Required for page navigation, session continuity, form submissions, and stable
@@ -447,35 +448,6 @@
 }
 
 /* ── Badges ── */
-.ca-badge {
-  font-size: 0.6875rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  border-radius: 100px;
-  padding: 0.1875rem 0.5625rem;
-  flex-shrink: 0;
-  white-space: nowrap;
-}
-
-.ca-badge-prohibited {
-  background: var(--surface-card);
-  color: var(--color-text);
-  border: 1.5px solid var(--border-default);
-}
-
-.ca-badge-allowed {
-  background: var(--surface-inverse);
-  color: var(--color-on-inverse);
-  border: 1.5px solid var(--border-strong);
-}
-
-.ca-badge-always {
-  background: var(--surface-inverse);
-  color: var(--color-on-inverse);
-  border: 1.5px solid var(--border-strong);
-}
-
 /* ── Responsible line ── */
 .ca-responsible {
   font-size: 0.8125rem;
@@ -607,11 +579,11 @@
 
   cb?.addEventListener('change', () => {
     if (cb.checked) {
-      badge?.classList.replace('ca-badge-prohibited', 'ca-badge-allowed');
+      badge?.classList.replace('badge--outline', 'badge--solid');
       if (badge) badge.textContent = 'Allowed';
       card?.classList.add('ca-allowed');
     } else {
-      badge?.classList.replace('ca-badge-allowed', 'ca-badge-prohibited');
+      badge?.classList.replace('badge--solid', 'badge--outline');
       if (badge) badge.textContent = 'Prohibited';
       card?.classList.remove('ca-allowed');
     }

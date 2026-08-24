@@ -1,0 +1,38 @@
+---
+/**
+ * The small pill label -- a category, a tag, a facet, a state.
+ *
+ * Always a <span>: all seven badges this replaced were spans, and
+ * none was interactive (the one hover state belongs to a decorative
+ * inversion, not a link).
+ *
+ * `tone` carries colour and `context` carries metrics, because the
+ * two vary independently -- the consent badge swaps tone at runtime
+ * while keeping its metrics. Appearance lives entirely in
+ * styles/components/_badge.scss.
+ */
+import type { HTMLAttributes } from 'astro/types';
+
+export type BadgeTone = 'solid' | 'outline' | 'plain';
+
+/** Named for where the badge is used, not what it looks like. */
+export type BadgeContext =
+  | 'post-category'
+  | 'card-category'
+  | 'facet'
+  | 'tag'
+  | 'tag-lg'
+  | 'featured'
+  | 'consent';
+
+type Props = HTMLAttributes<'span'> & {
+  tone?: BadgeTone;
+  context?: BadgeContext;
+};
+
+const { tone, context, class: className, ...rest } = Astro.props as Props;
+
+const classes = ['badge', tone && `badge--${tone}`, context && `badge-${context}`, className];
+---
+
+<span class:list={classes} {...rest}><slot /></span>

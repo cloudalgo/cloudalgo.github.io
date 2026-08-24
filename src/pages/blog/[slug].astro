@@ -3,6 +3,7 @@ import { getCollection, render } from 'astro:content';
 import Page from '../../layouts/Page.astro';
 import { getBlogIllustration } from '../../data/blog-illustrations';
 import PageHeader from '@/components/ui/PageHeader.astro';
+import Badge from '@/components/ui/Badge.astro';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog', ({ data }) => data.published);
@@ -60,7 +61,7 @@ const schema = {
     style="padding-bottom:2.5rem;"
     crumbs={[{ label: '\u2190 All articles', href: '/blog' }]}
   >
-      <span class="blog-badges" style="margin-bottom:1rem;display:inline-block;">{post.data.category}</span>
+      <Badge tone="solid" context="post-category" style="margin-bottom:1rem;">{post.data.category}</Badge>
       <h1 class="post-title" style="font-size:clamp(1.875rem,4vw,3rem);line-height:1.15;margin-bottom:1.5rem;">{post.data.title}</h1>
       <div style="display:flex;align-items:center;gap:0.875rem;flex-wrap:wrap;">
         {authorPhoto && (

@@ -25,11 +25,23 @@
   --card-border-hover: var(--border-strong);
   --card-shadow-hover: 0 16px 32px rgba(var(--ink-900-rgb), 0.08);
 
-  /* Badges / tags */
+  /* Badges / tags.
+     The full knob set, because every badge on the site is one
+     `.badge` reading these; a variant overrides only the knobs it
+     changes. The defaults below are the modal values across the
+     seven badges that existed before the atom -- see
+     components/_badge.scss for the drift table. */
   --badge-radius: var(--radius-pill);
   --badge-bg: var(--surface-inverse);
   --badge-fg: var(--color-on-inverse);
   --badge-size: 0.6875rem;
+  --badge-weight: var(--weight-bold);
+  --badge-tracking: 0.08em;
+  --badge-transform: uppercase;
+  --badge-border-width: 1px;
+  --badge-border-color: transparent;
+  --badge-pad-y: 0.2rem;
+  --badge-pad-x: 0.625rem;
 
   /* Inputs */
   --input-radius: var(--radius-md);

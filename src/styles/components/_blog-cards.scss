@@ -71,21 +71,6 @@
 .blog-grid-card .meta { margin-top: auto; margin-bottom: 0; }
 .blog-grid-card .meta small { color: var(--ca-secondary-black); font-size: 0.8125rem; }
 
-.blog-badges {
-  background-color: var(--ca-black);
-  display: inline-block;
-  padding: 0.2rem 0.625rem;
-  font-size: 0.6875rem;
-  font-weight: 700;
-  color: var(--color-on-inverse);
-  border: 1px solid var(--ca-black);
-  text-transform: uppercase;
-  text-decoration: none;
-  border-radius: 100px;
-  transition: background 0.2s, color 0.2s;
-}
-.blog-badges:hover { background-color: transparent; color: var(--ca-black); }
-
 /* Blog detail */
 .blog-detail-section {
   background: var(--ca-grey2);

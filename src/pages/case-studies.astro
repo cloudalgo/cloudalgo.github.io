@@ -3,6 +3,7 @@ import Page from '../layouts/Page.astro';
 import { caseStudies } from '../data/case-studies';
 import Breadcrumb from '@/components/ui/Breadcrumb.astro';
 import SectionLabel from '../components/ui/SectionLabel.astro';
+import Badge from '@/components/ui/Badge.astro';
 
 ---
 
@@ -226,7 +227,7 @@ import SectionLabel from '../components/ui/SectionLabel.astro';
               </div>
               <div class="cs-card-tags">
                 {cs.tags.slice(0, 5).map(tag => (
-                  <span class="cs-tag">{tag}</span>
+                  <Badge tone="outline" context="tag">{tag}</Badge>
                 ))}
               </div>
               <a href={`/case-studies/${cs.id}`} class="cs-card-link">
@@ -424,17 +425,7 @@ import SectionLabel from '../components/ui/SectionLabel.astro';
   border-radius: 100px;
   flex-shrink: 0;
 }
-.cs-card-tags { display: flex; flex-wrap: wrap; gap: 0.375rem; }
-.cs-tag {
-  font-size: 0.7rem;
-  font-weight: 600;
-  color: var(--color-text);
-  background: var(--surface-card);
-  border: 1px solid var(--border-default);
-  border-radius: 100px;
-  padding: 0.2rem 0.625rem;
-}
-.cs-card-link {
+.cs-card-tags { display: flex; flex-wrap: wrap; gap: 0.375rem; }.cs-card-link {
   display: inline-flex;
   align-items: center;
   margin-top: 1rem;
