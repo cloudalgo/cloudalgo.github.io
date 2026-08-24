@@ -181,7 +181,7 @@
   border-radius: 5px;
   font-size: 0.875em;
   color: var(--code-inline-fg);
-  font-family: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+  font-family: var(--font-mono-code);
 }
 
 /* Code block wrapper */
@@ -225,7 +225,7 @@
   overflow-x: auto;
   font-size: 0.8rem;
   line-height: 1;
-  font-family: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+  font-family: var(--font-mono-code);
   scrollbar-width: thin;
   scrollbar-color: var(--code-line-number) transparent;
 }

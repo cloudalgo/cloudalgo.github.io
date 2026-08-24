@@ -81,6 +81,17 @@
   --family-sans: Outfit, system-ui, sans-serif;
   --family-mono: ui-monospace, 'SF Mono', 'Menlo', monospace;
 
+  /* The four stacks below are drift, not design. Nothing on the site
+     needs five different monospace fallback chains or a second sans —
+     these are simply what the call sites were spelling, preserved
+     verbatim so moving them into this layer renders nothing new.
+     Phase 7 picks one mono and deletes the rest. */
+  --family-system: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --family-mono-jetbrains: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+  --family-mono-sf: 'SF Mono', 'Fira Code', ui-monospace, monospace;
+  --family-mono-sf-bare: 'SF Mono', 'Fira Code', monospace;
+  --family-mono-courier: 'Courier New', monospace;
+
   /* Type scale */
   --size-h1: 5.5rem;
   --size-h2: 3.5rem;

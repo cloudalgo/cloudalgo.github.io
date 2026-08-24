@@ -114,7 +114,7 @@
   --input-border-focus: var(--border-strong);
 
   /* Inline illustrations.
-     Every SVG in the site paints from these five. They are their
+     Every SVG in the site paints from these six. They are their
      own knobs rather than reads of the text tokens, so a theme can
      restyle the artwork without touching body copy — and a brand
      swap reaches the illustrations instead of leaving them black. */
@@ -124,6 +124,20 @@
   --illus-surface: var(--surface-card);
   --illus-sunk: var(--surface-page);
   --illus-hardware: var(--hardware-800);
+
+  /* Type inside the artwork. 581 <text> nodes asked for the sans face
+     across three different spellings (`Outfit,sans-serif`,
+     `Outfit,system-ui,sans-serif` and — on 146 of them —
+     `Outfit,monospace`); all three render Outfit, so all three read
+     --illus-font now and the fallback chain stops disagreeing with
+     itself. Worth noting for Phase 7 that those 146 asked for a mono
+     fallback at all: someone wanted tabular figures there and did not
+     get them, because Outfit is listed first.
+
+     --illus-font-code is the exception, and it is a real one: eight
+     diff-gutter labels are set in Courier and do render mono. */
+  --illus-font: var(--font-body);
+  --illus-font-code: var(--font-mono-typewriter);
 
   /* Code blocks & terminal chrome.
      Anchored on the fixed --code-* primitives, not on the surface

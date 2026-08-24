@@ -272,4 +272,19 @@
   --font-heading: var(--family-sans);
   --font-body: var(--family-sans);
   --font-mono: var(--family-mono);
+
+  /* The cookie banner sets its own type deliberately: it paints before
+     consent, ahead of anything that depends on the webfont, so it asks
+     for whatever the OS already has rather than waiting on Outfit. */
+  --font-system: var(--family-system);
+
+  /* Four more monospace roles, one per stack that is actually shipping.
+     None of them is --font-mono and none of them agrees with the
+     others, which is the whole point of naming them here: the
+     disagreement is now four lines in one file instead of eight
+     declarations in four. */
+  --font-mono-code: var(--family-mono-jetbrains);       /* blog code blocks */
+  --font-mono-spec: var(--family-mono-sf);              /* product spec rows */
+  --font-mono-spec-bare: var(--family-mono-sf-bare);    /* one spec row that lost ui-monospace */
+  --font-mono-typewriter: var(--family-mono-courier);   /* diff gutters in blog art */
 }
