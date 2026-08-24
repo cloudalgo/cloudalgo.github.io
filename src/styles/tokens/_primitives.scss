@@ -97,6 +97,22 @@
   --weight-extrabold: 800;
   --weight-black: 900;
 
+  /* Display sizes.
+     The fluid steps the section headings are drawn at. There are
+     eight because nineteen headings were written one at a time as
+     inline styles and drifted, not because a ladder needed eight
+     rungs -- but they do order cleanly by ceiling, 3.5rem down to
+     2rem, so they are named for where they sit on it. Converging
+     them is deleting rungs from the middle. */
+  --display-3xl: clamp(2rem, 4vw, 3.5rem);
+  --display-2xl: clamp(2rem, 3.5vw, 3rem);
+  --display-xl: clamp(2rem, 3.5vw, 2.75rem);
+  --display-lg: clamp(2rem, 3vw, 2.75rem);
+  --display-md: clamp(1.75rem, 3vw, 2.5rem);
+  --display-sm: clamp(1.75rem, 3vw, 2.25rem);
+  --display-xs: clamp(1.75rem, 2.5vw, 2.25rem);
+  --display-2xs: clamp(1.5rem, 3vw, 2rem);
+
   /* Radii */
   --radius-sm: 6px;
   --radius-md: 8px;

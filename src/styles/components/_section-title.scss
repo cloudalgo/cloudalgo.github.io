@@ -1,0 +1,82 @@
+/* ─── Section title ───────────────────────────────────────
+   The h2 that opens a section, under its eyebrow.
+
+   Nineteen of them existed, every one an inline `style=` written
+   at the call site, and between them they used eleven different
+   type combinations:
+
+     size                          wt   tracking  where
+     clamp(2rem,  4vw,   3.5rem)   800  -0.02     Services
+     clamp(2rem,  3.5vw, 3rem)     800  -0.02     BlogPreview,
+                                                  Testimonials, WhyUs
+     clamp(2rem,  3.5vw, 3rem)     800  -0.025    services CTA band
+     clamp(2rem,  3.5vw, 3rem)     900  -0.03     services closer
+     clamp(2rem,  3.5vw, 2.75rem)  800  -0.025    ProductsSection
+     clamp(2rem,  3vw,   2.75rem)  800  -0.02     about x4
+     clamp(1.75rem,3vw,  2.5rem)   800  -0.025    services intro
+     clamp(1.75rem,3vw,  2.25rem)  800  -0.02     product page x4
+     clamp(1.75rem,2.5vw,2.25rem)  800  -0.02     about intro,
+                                                  case-study sections
+     clamp(1.75rem,2.5vw,2.25rem)  800  -0.025    services band
+     clamp(1.5rem, 3vw,  2rem)     900  -0.025    product CTA
+
+   Eleven combinations for one role is drift, not intent -- but
+   converging them would change how the site renders, and this phase
+   may not. So every value above is preserved exactly. What changes
+   is that they are no longer inline: a heading now carries `.section-
+   title` plus a modifier per axis it departs on, and the site's
+   heading type can be restyled from --section-title-* rather than by
+   editing nineteen `style=` attributes.
+
+   Decomposed by axis rather than by page on purpose. Converging the
+   family in a later phase is deleting the modifier classes here and
+   the call-site references to them -- if they were named `--about`
+   and `--product-page` instead, nothing would tell you which ones
+   were the same size.
+
+   Margin and transition-delay stay at the call site: those are the
+   section's spacing and its entrance timing, not the heading's type.
+   Line-height stays with the base h1-h6 rule, which already sets
+   1.15; the two headings that wanted something else keep saying so.
+
+   `.section-title` declares no literal value -- restyling every
+   section heading is editing --section-title-* in
+   tokens/_components.scss. */
+
+.section-title {
+  font-size: var(--section-title-size);
+  font-weight: var(--section-title-weight);
+  letter-spacing: var(--section-title-tracking);
+  color: var(--section-title-color);
+}
+
+/* ── Size ──
+   Steps off the display scale. The default is `--display-2xl`, the
+   most common of the eleven; the rest name the rung they sit on. */
+
+.section-title--3xl { --section-title-size: var(--display-3xl); }
+.section-title--xl  { --section-title-size: var(--display-xl); }
+.section-title--lg  { --section-title-size: var(--display-lg); }
+.section-title--md  { --section-title-size: var(--display-md); }
+.section-title--sm  { --section-title-size: var(--display-sm); }
+.section-title--xs  { --section-title-size: var(--display-xs); }
+.section-title--2xs { --section-title-size: var(--display-2xs); }
+
+/* ── Tracking ──
+   Three values across nineteen headings, with no rule behind which
+   got which. The default is -0.02em. */
+
+.section-title--tight   { --section-title-tracking: -0.025em; }
+.section-title--tighter { --section-title-tracking: -0.03em; }
+
+/* ── Weight ──
+   Two headings are set heavier than the rest. */
+
+.section-title--heavy { --section-title-weight: var(--weight-black); }
+
+/* ── Tone ──
+   For the headings that sit on an inverse band. This one is not
+   drift: it is the only axis here that says something about where
+   the heading is rather than how it was typed. */
+
+.section-title--inverse { --section-title-color: var(--color-on-inverse); }

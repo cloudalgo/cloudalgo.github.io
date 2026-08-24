@@ -340,7 +340,7 @@ const schema = {
         <div class="csd-col-number" aria-hidden="true">01</div>
       </div>
       <div class="csd-col-content">
-        <h2 class="csd-section-title">What needed solving.</h2>
+        <h2 class="section-title section-title--xs csd-section-title">What needed solving.</h2>
         <p class="paragraph-large csd-body-text">{cs.challenge}</p>
         {cs.challengePoints && cs.challengePoints.length > 0 && (
           <ul class="csd-challenge-list">
@@ -366,7 +366,7 @@ const schema = {
             <div class="csd-col-number" aria-hidden="true">02</div>
           </div>
           <div class="csd-col-content">
-            <h2 class="csd-section-title">Why off-the-shelf wasn't enough.</h2>
+            <h2 class="section-title section-title--xs csd-section-title">Why off-the-shelf wasn't enough.</h2>
             <p class="paragraph-large csd-body-text">{cs.whyNotOffShelf}</p>
           </div>
         </div>
@@ -405,7 +405,7 @@ const schema = {
           <div class="csd-col-number" style="color:rgba(var(--paper-000-rgb), 0.08);" aria-hidden="true">{cs.toolComparison ? '03' : '02'}</div>
         </div>
         <div class="csd-col-content">
-          <h2 class="csd-section-title" style="color:var(--color-on-inverse);">What we built.</h2>
+          <h2 class="section-title section-title--xs section-title--inverse csd-section-title">What we built.</h2>
           <p class="paragraph-large csd-body-text" style="color:rgba(var(--paper-000-rgb), 0.6);">{cs.solution}</p>
         </div>
       </div>
@@ -433,7 +433,7 @@ const schema = {
             <div class="csd-col-number" aria-hidden="true">{cs.toolComparison ? '04' : '03'}</div>
           </div>
           <div class="csd-col-content">
-            <h2 class="csd-section-title">Technical highlights.</h2>
+            <h2 class="section-title section-title--xs csd-section-title">Technical highlights.</h2>
           </div>
         </div>
         <div class="csd-highlights">
@@ -458,7 +458,7 @@ const schema = {
           <div class="csd-col-number" aria-hidden="true">{cs.technicalHighlights ? (cs.toolComparison ? '05' : '04') : (cs.toolComparison ? '04' : '03')}</div>
         </div>
         <div class="csd-col-content">
-          <h2 class="csd-section-title">Measurable outcomes.</h2>
+          <h2 class="section-title section-title--xs csd-section-title">Measurable outcomes.</h2>
         </div>
       </div>
       <div class="csd-outcomes">
@@ -503,7 +503,7 @@ const schema = {
             <SectionLabel style="color:rgba(var(--paper-000-rgb), 0.4);">The CloudAlgo difference</SectionLabel>
           </div>
           <div class="csd-col-content">
-            <h2 class="csd-section-title" style="color:var(--color-on-inverse);">What this shows about how we work.</h2>
+            <h2 class="section-title section-title--xs section-title--inverse csd-section-title">What this shows about how we work.</h2>
           </div>
         </div>
         <div class="csd-demonstrates">
@@ -676,11 +676,9 @@ const schema = {
   margin-top: 0.5rem;
   user-select: none;
 }
+/* Type comes from `.section-title section-title--xs`; what stays here
+   is the section's spacing and this heading's own line-height. */
 .csd-section-title {
-  font-size: clamp(1.75rem, 2.5vw, 2.25rem);
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  color: var(--color-heading);
   margin-bottom: 1.25rem;
   line-height: 1.15;
 }

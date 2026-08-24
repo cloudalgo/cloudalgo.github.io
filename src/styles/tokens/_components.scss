@@ -36,6 +36,15 @@
   --card-shadow-lift: 0 12px 40px rgba(var(--ink-900-rgb), 0.1),
                       0 2px 8px rgba(var(--ink-900-rgb), 0.06);
 
+  /* Section titles -- the h2 that opens a section.
+     The defaults are the modal combination across the nineteen that
+     existed before the class; see components/_section-title.scss for
+     the drift table and which modifier each heading needs. */
+  --section-title-size: var(--display-2xl);
+  --section-title-weight: var(--weight-extrabold);
+  --section-title-tracking: -0.02em;
+  --section-title-color: var(--color-heading);
+
   /* Badges / tags.
      The full knob set, because every badge on the site is one
      `.badge` reading these; a variant overrides only the knobs it
