@@ -46,12 +46,20 @@
       "Skill(svg:*)",
       "WebSearch",
       "Skill(commit-commands:commit)",
-      "Skill(commit-commands:commit:*)"
+      "Skill(commit-commands:commit:*)",
+      "Read(//Volumes/WorkHD/rnd/algoScanner/docs/demo-screenshots/**)",
+      "Read(//Volumes/WorkHD/rnd/algoScanner/src/renderer/firebase/**)",
+      "Read(//Volumes/WorkHD/rnd/algoScanner/src/shared/**)",
+      "Read(//Volumes/WorkHD/rnd/algoScanner/src/renderer/lib/**)",
+      "Read(//Volumes/WorkHD/rnd/algoScanner/src/renderer/components/**)",
+      "Read(//Volumes/WorkHD/rnd/algoScanner/src/renderer/content/**)"
     ],
     "additionalDirectories": [
       "/Users/sandeepkumar/.claude",
       "/tmp",
-      "/private/tmp"
+      "/private/tmp",
+      "/Volumes/WorkHD/rnd/algoScanner/src/renderer/components",
+      "/Volumes/WorkHD/rnd/algoScanner/src/renderer/content"
     ]
   }
 }

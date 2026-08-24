@@ -1,5 +1,7 @@
 // src/content.config.ts
-import { defineCollection, z } from 'astro:content';
+import { defineCollection } from 'astro:content';
+// `z` from 'astro:content' is deprecated in Astro 7 and slated for removal.
+import { z } from 'astro/zod';
 import { glob } from 'astro/loaders';
 
 const blog = defineCollection({
@@ -47,8 +49,8 @@ const products = defineCollection({
     tagline:        z.string(),
     excerpt:        z.string(),
     icon:           z.string(),
-    externalUrl:    z.string().url().optional(),
-    issuesUrl:      z.string().url().optional(),
+    externalUrl:    z.url().optional(),
+    issuesUrl:      z.url().optional(),
     guideUrl:       z.string().optional(),
     seoTitle:       z.string().optional(),
     version:        z.string().optional(),
