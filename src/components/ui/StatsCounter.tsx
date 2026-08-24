@@ -1,10 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
+// Durations are staggered so the four figures do not all land on the same
+// frame, but stay inside a couple of seconds: a counter that is still climbing
+// after the reader has moved on is just a distraction.
 const STATS = [
-  { end: 1,   suffix: ' Day', label: 'Avg. response time',       duration: 1 },
-  { end: 15,  suffix: '+',    label: 'Happy Clients',            duration: 7 },
-  { end: 70,  suffix: '+',    label: 'Projects Delivered',       duration: 10 },
-  { end: 12,  suffix: '+',    label: 'Years Combined Experience', duration: 3 },
+  { end: 1,   suffix: ' Day', label: 'Avg. response time',        duration: 1.2 },
+  { end: 15,  suffix: '+',    label: 'Happy Clients',             duration: 2 },
+  { end: 70,  suffix: '+',    label: 'Projects Delivered',        duration: 2.4 },
+  { end: 12,  suffix: '+',    label: 'Years Combined Experience', duration: 1.6 },
 ];
 
 // countup.js' default easing, kept verbatim so the numbers accelerate exactly
@@ -44,8 +47,9 @@ function Stat({ stat, run }: { stat: (typeof STATS)[number]; run: boolean }) {
   return (
     <div className="col-md-3 col-6">
       <div className="milestone-counter">
-        {/* Before hydration, render the final figure so the markup is never
-            wrong for no-JS readers or for a crawler. */}
+        {/* Until the counter starts, render the final figure so the markup is
+            never wrong for no-JS readers, for a crawler, or for anyone who
+            never scrolls this far. */}
         <div className="count-outer">{run ? value : stat.end}{stat.suffix}</div>
         <div className="milestone-details">{stat.label}</div>
       </div>
@@ -54,13 +58,32 @@ function Stat({ stat, run }: { stat: (typeof STATS)[number]; run: boolean }) {
 }
 
 export default function StatsCounter() {
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => { setMounted(true); }, []);
+  const rowRef = useRef<HTMLDivElement>(null);
+  const [run, setRun] = useState(false);
+
+  // The stats bar sits directly under the hero, so on hydration it is still
+  // below the fold — counting there would spend most of the animation unseen.
+  // The bottom margin starts it just before it scrolls in, which also keeps the
+  // reset from the server-rendered figure back to 0 off-screen.
+  useEffect(() => {
+    const el = rowRef.current;
+    if (!el) return;
+    if (typeof IntersectionObserver === 'undefined') { setRun(true); return; }
+
+    const observer = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) return;
+      setRun(true);
+      observer.disconnect();
+    }, { rootMargin: '0px 0px 120px 0px' });
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   return (
-    <div className="row">
+    <div className="row" ref={rowRef}>
       {STATS.map((stat) => (
-        <Stat key={stat.label} stat={stat} run={mounted} />
+        <Stat key={stat.label} stat={stat} run={run} />
       ))}
     </div>
   );

@@ -307,6 +307,24 @@
     50%      { transform: scale(1.5);   opacity: 0; }
   }
 
+  /* The loops above run for the whole visit. Once the illustration has
+     scrolled away there is nothing to see, so park them rather than keep
+     compositing off-screen frames. Only the idle loops are listed — the
+     entrance animations must be allowed to finish. */
+  #hero-illustration.h-idle .h-spokes,
+  #hero-illustration.h-idle .h-bob-db,
+  #hero-illustration.h-idle .h-bob-chart,
+  #hero-illustration.h-idle .h-bob-phone,
+  #hero-illustration.h-idle .h-bob-team,
+  #hero-illustration.h-idle .h-bob-check,
+  #hero-illustration.h-idle .h-bob-pill,
+  #hero-illustration.h-idle .h-gear,
+  #hero-illustration.h-idle .h-trend,
+  #hero-illustration.h-idle .h-pulse,
+  #hero-illustration.h-idle .h-ring {
+    animation-play-state: paused;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .h-in,
     .h-fade,
@@ -344,6 +362,16 @@
     ];
 
     [illustration, ...dots].forEach(el => { if (el) el.style.willChange = 'transform'; });
+
+    // Pause the idle loops while the illustration is off-screen. The observer
+    // starts with the class off, so a first callback that never fires (no
+    // IntersectionObserver) leaves the animations running as before.
+    if (illustration && typeof IntersectionObserver !== 'undefined') {
+      const idleObserver = new IntersectionObserver(([entry]) => {
+        illustration.classList.toggle('h-idle', !entry.isIntersecting);
+      }, { rootMargin: '100px 0px' });
+      idleObserver.observe(illustration);
+    }
 
     let rafId: number | null = null;
     let scrollY = 0;

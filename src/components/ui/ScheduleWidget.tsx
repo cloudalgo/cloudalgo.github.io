@@ -34,6 +34,9 @@ const LOCALE = typeof navigator !== 'undefined' ? navigator.language : undefined
 
 // Monday-first short weekday names, to match getFirstDayOffset(). 2024-01-01
 // was a Monday, so seven days from there cover the week in display order.
+// How many attention bounces the launcher gets before it settles for good.
+const MAX_BOUNCES = 3;
+
 const WEEKDAY_LABELS = (() => {
   const fmt = new Intl.DateTimeFormat(LOCALE, { weekday: 'short' });
   return Array.from({ length: 7 }, (_, i) => fmt.format(new Date(2024, 0, 1 + i)));
@@ -700,18 +703,38 @@ export default function ScheduleWidget() {
     return () => { document.body.style.overflow = ''; };
   }, [isOpen]);
 
-  // Random attention bounce — triggers every 6–14s while launcher is visible and modal is closed
+  // Attention bounce — a handful of nudges every 6–14s while the launcher is
+  // visible and the modal is closed, then it settles. Looping for the whole
+  // visit re-renders forever without adding any signal: a visitor who has
+  // ignored three bounces is not going to notice the fourth.
   useEffect(() => {
     if (!visible || isOpen) return;
-    let timer: ReturnType<typeof setTimeout>;
+    // Under reduced motion the CSS suppresses the animation anyway, so the
+    // state churn would buy nothing at all
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    let remaining = MAX_BOUNCES;
+    let nextTimer: ReturnType<typeof setTimeout>;
+    let resetTimer: ReturnType<typeof setTimeout>;
+
     const bounce = () => {
+      // A bounce in a backgrounded tab is spent unseen; wait for it to come back
+      if (document.hidden) {
+        nextTimer = setTimeout(bounce, 6000);
+        return;
+      }
       setBouncing(true);
-      setTimeout(() => setBouncing(false), 950);
-      timer = setTimeout(bounce, 6000 + Math.random() * 8000);
+      resetTimer = setTimeout(() => setBouncing(false), 950);
+      if (--remaining > 0) nextTimer = setTimeout(bounce, 6000 + Math.random() * 8000);
     };
     // First bounce 4–7s after widget appears
-    timer = setTimeout(bounce, 4000 + Math.random() * 3000);
-    return () => clearTimeout(timer);
+    nextTimer = setTimeout(bounce, 4000 + Math.random() * 3000);
+
+    return () => {
+      clearTimeout(nextTimer);
+      clearTimeout(resetTimer);
+      setBouncing(false);
+    };
   }, [visible, isOpen]);
 
   const abortRef = useRef<AbortController | null>(null);

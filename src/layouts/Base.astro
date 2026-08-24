@@ -192,15 +192,23 @@ const ogImage = image.startsWith('http') ? image : `${imageHost}${image}`;
       }
 
       // GA4: scroll depth (25 / 50 / 75 / 100%)
+      //
+      // gtag only exists once the visitor has accepted cookies, which may well
+      // be after they have already scrolled. So depth is tracked as a
+      // high-water mark and the milestones are only *consumed* when there is
+      // something to send them to — otherwise a pre-consent scroll would burn
+      // all four as no-ops and the visit would report no depth at all.
       const MILESTONES = [25, 50, 75, 100];
-      const scrollMilestones = new Set<number>();
-      const reportScrollDepth = () => {
-        if (scrollableHeight <= 0) return;
-        const pct = Math.round((window.scrollY / scrollableHeight) * 100);
+      const sentMilestones = new Set<number>();
+      let deepestPct = 0;
+
+      const flushScrollDepth = () => {
+        const gtag = (window as any).gtag;
+        if (!gtag) return;
         for (const milestone of MILESTONES) {
-          if (pct >= milestone && !scrollMilestones.has(milestone)) {
-            scrollMilestones.add(milestone);
-            (window as any).gtag?.('event', 'scroll_depth', {
+          if (deepestPct >= milestone && !sentMilestones.has(milestone)) {
+            sentMilestones.add(milestone);
+            gtag('event', 'scroll_depth', {
               event_category: 'Engagement',
               event_label: `${milestone}%`,
               value: milestone,
@@ -209,11 +217,19 @@ const ogImage = image.startsWith('http') ? image : `${imageHost}${image}`;
         }
         // Every milestone is reported at most once, so once they are all in
         // there is nothing left for this handler to do
-        if (scrollMilestones.size === MILESTONES.length) {
+        if (sentMilestones.size === MILESTONES.length) {
           window.removeEventListener('scroll', reportScrollDepth);
         }
       };
+
+      const reportScrollDepth = () => {
+        if (scrollableHeight <= 0) return;
+        deepestPct = Math.max(deepestPct, Math.round((window.scrollY / scrollableHeight) * 100));
+        flushScrollDepth();
+      };
       window.addEventListener('scroll', reportScrollDepth, { passive: true });
+      // Consent can land long after the scrolling did; catch up when it does
+      window.addEventListener('ca:trackers-ready', flushScrollDepth);
 
       // GA4: CTA button clicks
       document.addEventListener('click', (e) => {

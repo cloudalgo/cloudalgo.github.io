@@ -564,6 +564,10 @@
     ct.async = true;
     ct.src = 'https://www.clarity.ms/tag/wqcruv2yej';
     document.head.appendChild(ct);
+
+    // Analytics that ran before consent (scroll depth, for one) hold their
+    // measurements back until gtag exists. Tell them it now does.
+    window.dispatchEvent(new Event('ca:trackers-ready'));
   }
 
   function setConsent(value: 'accepted' | 'declined'): void {

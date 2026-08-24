@@ -429,6 +429,9 @@ main[id] {
   color: var(--ca-black);
   letter-spacing: -0.03em;
   font-family: 'Outfit', sans-serif;
+  /* Digits are the same width, so a counter ticking 8 -> 9 -> 10 does not
+     shuffle the label under it. */
+  font-variant-numeric: tabular-nums;
 }
 .milestone-details { font-size: 1rem; font-weight: 500; color: var(--ca-secondary-black); margin-top: 0.25rem; }
 @media (max-width: 991px) {

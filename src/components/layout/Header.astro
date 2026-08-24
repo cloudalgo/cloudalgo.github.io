@@ -107,20 +107,48 @@ const isActive = (href: string) =>
 }
 
 /* ── Mobile menu slide ─────────────────────────────────── */
+/* Hung below the fixed header rather than sat inside it, so opening it moves
+   nothing else and the slide can run on transform/opacity. The previous
+   max-height + padding pair relaid out the header on every frame, and the
+   480px cap would have silently clipped a longer nav. */
 .mobile-menu {
-  max-height: 0;
-  overflow: hidden;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
   background: #fff;
-  border-top: 1px solid transparent;
-  padding: 0 1.5rem;
-  transition: max-height 0.38s cubic-bezier(0.4, 0, 0.2, 1),
-              padding    0.38s cubic-bezier(0.4, 0, 0.2, 1),
-              border-color 0.2s ease;
+  border-top: 1px solid #E0E0DC;
+  padding: 1.25rem 1.5rem;
+  /* A static cap, so it costs no per-frame layout. A nav too long for the
+     screen scrolls instead of being cut off. */
+  max-height: 75dvh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  opacity: 0;
+  transform: translateY(-0.5rem);
+  visibility: hidden;
+  transition: opacity 0.28s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.28s cubic-bezier(0.4, 0, 0.2, 1),
+              visibility 0s linear 0.28s;
 }
 .mobile-menu.is-open {
-  max-height: 480px;
-  padding: 1.25rem 1.5rem;
-  border-top-color: #E0E0DC;
+  opacity: 1;
+  transform: translateY(0);
+  visibility: visible;
+  /* No delay on the way in, or the menu would stay invisible for the slide */
+  transition: opacity 0.28s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.28s cubic-bezier(0.4, 0, 0.2, 1),
+              visibility 0s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ham-top,
+  .ham-mid,
+  .ham-bot,
+  .mobile-menu,
+  .mobile-menu.is-open {
+    transition: none;
+  }
 }
 </style>
 
