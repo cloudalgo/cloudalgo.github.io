@@ -144,6 +144,41 @@
   --surface-ink-glass: var(--color-ink-a72);
   --shadow-ink: var(--color-ink-a07);
 
+  /* Shadow.
+     Twenty-seven declarations spelled `rgba(var(--ink-000-rgb), N)`
+     inline; twenty-six of them are the colour of a box-shadow. Pure
+     black, not --ink-900 -- which means the site casts shadows in two
+     different blacks: this one, and the --shadow-ink named just above
+     at ink-900/0.07. Both are preserved because both are shipping;
+     picking one is a redesign decision, not a refactor decision.
+
+     No role names here, unlike the ink ramp. A shadow's alpha *is* its
+     elevation, so the rung name already says what the token is for, and
+     inventing --shadow-soft/-medium/-deep over sixteen alphas would
+     invent a hierarchy the sheet does not actually have.
+
+     One exception worth flagging: .sticky-share-label in
+     pages/blog/[slug].astro reads --color-shadow-a40 as a *text*
+     colour. That is a real mistake, not drift -- it wants
+     --color-text-muted -- but repointing it changes a rendered value,
+     so it waits for the convergence pass. */
+  --color-shadow-a05: rgba(var(--ink-000-rgb), 0.05);
+  --color-shadow-a06: rgba(var(--ink-000-rgb), 0.06);
+  --color-shadow-a08: rgba(var(--ink-000-rgb), 0.08);
+  --color-shadow-a10: rgba(var(--ink-000-rgb), 0.1);
+  --color-shadow-a12: rgba(var(--ink-000-rgb), 0.12);
+  --color-shadow-a14: rgba(var(--ink-000-rgb), 0.14);
+  --color-shadow-a15: rgba(var(--ink-000-rgb), 0.15);
+  --color-shadow-a18: rgba(var(--ink-000-rgb), 0.18);
+  --color-shadow-a22: rgba(var(--ink-000-rgb), 0.22);
+  --color-shadow-a25: rgba(var(--ink-000-rgb), 0.25);
+  --color-shadow-a26: rgba(var(--ink-000-rgb), 0.26);
+  --color-shadow-a28: rgba(var(--ink-000-rgb), 0.28);
+  --color-shadow-a32: rgba(var(--ink-000-rgb), 0.32);
+  --color-shadow-a38: rgba(var(--ink-000-rgb), 0.38);
+  --color-shadow-a40: rgba(var(--ink-000-rgb), 0.4);
+  --color-shadow-a45: rgba(var(--ink-000-rgb), 0.45);
+
   /* Rules */
   --border-default: var(--paper-200);
   --border-strong: var(--ink-900);

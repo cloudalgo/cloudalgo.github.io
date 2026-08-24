@@ -52,5 +52,5 @@
   transform: translateY(-6px);
   background: rgba(var(--paper-000-rgb), 0.09) !important;
   border-color: rgba(var(--paper-000-rgb), 0.25) !important;
-  box-shadow: 0 20px 40px rgba(var(--ink-000-rgb), 0.4);
+  box-shadow: 0 20px 40px var(--color-shadow-a40);
 }

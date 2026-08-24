@@ -24,7 +24,7 @@
   -webkit-backdrop-filter: blur(16px) saturate(1.8);
   border: 1px solid rgba(var(--paper-000-rgb), 0.15);
   border-left: 3px solid rgba(var(--paper-000-rgb), 0.5);
-  box-shadow: 0 6px 28px rgba(var(--ink-000-rgb), 0.28), inset 0 1px 0 rgba(var(--paper-000-rgb), 0.08);
+  box-shadow: 0 6px 28px var(--color-shadow-a28), inset 0 1px 0 rgba(var(--paper-000-rgb), 0.08);
   border-radius: 8px;
   padding: 12px 36px 12px 14px;
   width: 220px;
@@ -77,21 +77,21 @@
   align-items: center;
   gap: 8px;
   white-space: nowrap;
-  box-shadow: 0 4px 24px rgba(var(--ink-000-rgb), 0.32), 0 1px 6px rgba(var(--ink-000-rgb), 0.18), inset 0 1px 0 rgba(var(--paper-000-rgb), 0.12);
+  box-shadow: 0 4px 24px var(--color-shadow-a32), 0 1px 6px var(--color-shadow-a18), inset 0 1px 0 rgba(var(--paper-000-rgb), 0.12);
   transition: transform 160ms cubic-bezier(0.34,1.56,0.64,1), box-shadow 160ms ease, background 160ms ease;
 }
 .sw-launcher-btn:hover {
   background: var(--color-ink-a88);
   transform: scale(1.05) translateY(-2px);
-  box-shadow: 0 8px 32px rgba(var(--ink-000-rgb), 0.38), 0 2px 8px rgba(var(--ink-000-rgb), 0.22), inset 0 1px 0 rgba(var(--paper-000-rgb), 0.15);
+  box-shadow: 0 8px 32px var(--color-shadow-a38), 0 2px 8px var(--color-shadow-a22), inset 0 1px 0 rgba(var(--paper-000-rgb), 0.15);
 }
 .sw-launcher-btn svg { font-size: 18px; flex-shrink: 0; }
 
 @keyframes swLauncherAttention {
-  0%   { transform: scale(1);    box-shadow: 0 4px 24px rgba(var(--ink-000-rgb), 0.22), 0 0 0 0px  rgba(var(--paper-000-rgb), 0.7); }
-  35%  { transform: scale(1.06); box-shadow: 0 6px 28px rgba(var(--ink-000-rgb), 0.26), 0 0 0 12px rgba(var(--paper-000-rgb), 0); }
+  0%   { transform: scale(1);    box-shadow: 0 4px 24px var(--color-shadow-a22), 0 0 0 0px  rgba(var(--paper-000-rgb), 0.7); }
+  35%  { transform: scale(1.06); box-shadow: 0 6px 28px var(--color-shadow-a26), 0 0 0 12px rgba(var(--paper-000-rgb), 0); }
   70%  { transform: scale(0.98); }
-  100% { transform: scale(1);    box-shadow: 0 4px 24px rgba(var(--ink-000-rgb), 0.22), 0 0 0 0px  rgba(var(--paper-000-rgb), 0); }
+  100% { transform: scale(1);    box-shadow: 0 4px 24px var(--color-shadow-a22), 0 0 0 0px  rgba(var(--paper-000-rgb), 0); }
 }
 
 .sw-launcher-btn--bounce {
@@ -135,7 +135,7 @@
 .sw-modal {
   background: var(--surface-card);
   border-radius: 12px;
-  box-shadow: 0 20px 60px rgba(var(--ink-000-rgb), 0.15);
+  box-shadow: 0 20px 60px var(--color-shadow-a15);
   width: 100%;
   max-width: 680px;
   max-height: 90vh;
