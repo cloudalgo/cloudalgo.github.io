@@ -34,6 +34,14 @@ const headingVariants: Variants = {
   show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } },
 };
 
+// Ports WhyUs.astro's `transition-delay: 0.05s` on the h2. The delay must live inside the
+// variant's own transition — a `transition` prop on the element is ignored whenever the
+// target variant defines one.
+const headingDelayedVariants: Variants = {
+  hidden: { opacity: 0, y: 24 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut', delay: 0.05 } },
+};
+
 const gridVariants: Variants = {
   hidden: {},
   show: { transition: { staggerChildren: 0.08, delayChildren: 0.1 } },
@@ -78,8 +86,7 @@ export default function WhyUs() {
               initial={reduceMotion ? undefined : 'hidden'}
               whileInView={reduceMotion ? undefined : 'show'}
               viewport={{ once: true, amount: 0.4 }}
-              variants={headingVariants}
-              transition={{ delay: 0.05 }}
+              variants={headingDelayedVariants}
               style={{ fontSize: 'clamp(2rem,3.5vw,3rem)', fontWeight: 800, letterSpacing: '-0.02em', marginBottom: '1.25rem' }}
             >
               Why teams choose CloudAlgo
