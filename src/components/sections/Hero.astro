@@ -11,103 +11,325 @@
     <div class="row align-items-center" style="gap:2rem 0;">
 
       <!-- Left column: text -->
-      <div class="col-lg-6 anim-fade-up">
-        <p class="section-label" style="transition-delay:0.05s;">Salesforce &amp; Heroku Consulting</p>
+      <div class="col-lg-6">
+        <p class="section-label anim-fade-up" style="transition-delay:0.05s;">Salesforce &amp; Heroku Consulting</p>
 
-        <h1 style="font-size:clamp(2.5rem,5.5vw,5rem);font-weight:900;letter-spacing:-0.03em;line-height:1.05;color:#0A0A0A;margin-bottom:1.5rem;transition-delay:0.1s;">
-          We make Salesforce<br/>
-          actually work for<br/>
-          your business.
+        <h1 style="font-size:clamp(2.5rem,5.5vw,5rem);font-weight:900;letter-spacing:-0.03em;line-height:1.05;color:#0A0A0A;margin-bottom:1.5rem;">
+          <span class="hero-line anim-fade-up" style="transition-delay:0.1s;">We make Salesforce</span><br/>
+          <span class="hero-line anim-fade-up" style="transition-delay:0.18s;">actually work for</span><br/>
+          <span class="hero-line anim-fade-up" style="transition-delay:0.26s;">your business.</span>
         </h1>
 
-        <p class="paragraph-large" style="max-width:520px;margin-bottom:2.25rem;color:#5A5A5A;transition-delay:0.2s;">
+        <p class="paragraph-large anim-fade-up" style="max-width:520px;margin-bottom:2.25rem;color:#5A5A5A;transition-delay:0.34s;">
           CloudAlgo is a certified team of Salesforce architects and developers.
           70+ projects delivered, 12 years of combined experience.
         </p>
 
-        <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;transition-delay:0.3s;" class="anim-fade-up">
+        <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;transition-delay:0.42s;" class="anim-fade-up">
           <a href="/contact" class="btn btn-primary">Book a Consultation &rarr;</a>
-          <a href="/services" class="btn btn-outline">See our work</a>
+          <a href="/case-studies" class="btn btn-outline">See our work</a>
         </div>
       </div>
 
       <!-- Right column: illustration -->
-      <div id="hero-illustration" class="col-lg-6" style="display:flex;justify-content:center;align-items:center;padding-top:2rem;" aria-hidden="true">
-        <svg viewBox="0 0 520 440" fill="none" xmlns="http://www.w3.org/2000/svg"
-             style="width:100%;max-width:520px;height:auto;">
-          <!-- Cloud shape -->
-          <path d="M160 240 C100 240 60 200 60 160 C60 124 88 96 124 92 C126 52 158 20 198 20 C232 20 261 42 272 73 C282 68 294 65 307 65 C348 65 382 99 382 140 C382 181 348 215 307 215 L160 240Z"
-                stroke="#0A0A0A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.9"/>
+      <div id="hero-illustration" class="col-lg-6" aria-hidden="true">
+        <!-- viewBox is cropped to the artwork's real bounds (content runs
+             x 88-712, y 42-551) rather than the nominal 800x600 the artwork
+             was authored in. That dead margin was costing ~22% of the width
+             on narrow screens, where the max-width cap never binds and the
+             container is the only limit. -->
+        <svg class="hero-illus" viewBox="80 34 640 526" fill="none" xmlns="http://www.w3.org/2000/svg">
 
-          <!-- Cloud inner lines -->
-          <path d="M140 185 L320 185" stroke="#0A0A0A" stroke-width="1.5" opacity="0.2"/>
-          <path d="M120 165 L340 165" stroke="#0A0A0A" stroke-width="1.5" opacity="0.15"/>
+          <defs>
+            <!-- The Salesforce cloud mark, verbatim, in its native 24x24 space.
+                 Placed via <use> under a transform so the outline stays the
+                 real thing rather than an approximation of it. -->
+            <path id="ca-sf-cloud" d="M9.01 20.5a4.642 4.642 0 0 1-4.191-2.632 5.136 5.136 0 0 1-.48.019C1.946 17.887 0 15.932 0 13.529c0-1.4.685-2.721 1.812-3.538a4.861 4.861 0 0 1-.259-1.563c0-2.717 2.224-4.928 4.956-4.928 1.374 0 2.665.547 3.613 1.516a4.555 4.555 0 0 1 2.886-1.031c1.48 0 2.875.748 3.733 1.978a5.41 5.41 0 0 1 1.815-.306c3.002 0 5.443 2.455 5.443 5.472 0 3.018-2.449 5.472-5.46 5.472a5.33 5.33 0 0 1-.727-.053 4.132 4.132 0 0 1-4.749 1.587A4.634 4.634 0 0 1 9.01 20.5z"/>
+          </defs>
 
-          <!-- Data flow lines going down -->
-          <path d="M200 240 L200 310" stroke="#0A0A0A" stroke-width="2" stroke-dasharray="6 5"/>
-          <path d="M250 240 L250 330" stroke="#0A0A0A" stroke-width="2" stroke-dasharray="6 5"/>
-          <path d="M300 240 L300 310" stroke="#0A0A0A" stroke-width="2" stroke-dasharray="6 5"/>
+          <!-- Subtle decorative background accents -->
+          <g stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.15">
+            <circle cx="120" cy="100" r="2" fill="#0A0A0A" stroke="none"/>
+            <path d="M680,95 v10 M675,100 h10"/>
+            <circle cx="150" cy="520" r="2" fill="#0A0A0A" stroke="none"/>
+            <path d="M650,475 v10 M645,480 h10"/>
+            <circle cx="710" cy="320" r="2" fill="#0A0A0A" stroke="none"/>
+            <circle cx="90" cy="350" r="2" fill="#0A0A0A" stroke="none"/>
+            <path d="M110,215 v10 M105,220 h10"/>
+          </g>
 
-          <!-- Server / database box -->
-          <rect x="140" y="310" width="220" height="90" rx="8"
-                stroke="#0A0A0A" stroke-width="2.5" fill="none"/>
-          <path d="M140 338 L360 338" stroke="#0A0A0A" stroke-width="1.5"/>
-          <path d="M140 360 L360 360" stroke="#0A0A0A" stroke-width="1.5"/>
-          <!-- Server dots -->
-          <circle cx="164" cy="324" r="4" fill="#0A0A0A" opacity="0.8"/>
-          <circle cx="180" cy="324" r="4" fill="#0A0A0A" opacity="0.4"/>
-          <circle cx="196" cy="324" r="4" fill="#0A0A0A" opacity="0.2"/>
-          <!-- Server bar lines -->
-          <path d="M215 374 L320 374" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" opacity="0.3"/>
-          <path d="M215 386 L290 386" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" opacity="0.2"/>
+          <g stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none">
 
-          <!-- Small chart / analytics panel -->
-          <rect x="30" y="300" width="90" height="75" rx="6"
-                stroke="#0A0A0A" stroke-width="2" fill="none" opacity="0.7"/>
-          <polyline points="42,355 55,335 68,345 81,320 94,330 107,310"
-                    stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.8"/>
-          <path d="M42 365 L107 365" stroke="#0A0A0A" stroke-width="1.5" opacity="0.3"/>
+            <!-- Radiating spokes. Drawn first so they vanish behind each icon's blocker. -->
+            <g class="h-fade" style="animation-delay:0.1s;">
+              <g class="h-spokes" stroke-dasharray="6 8" opacity="0.25">
+                <line x1="400" y1="290" x2="200" y2="150"/>
+                <line x1="400" y1="290" x2="400" y2="100"/>
+                <line x1="400" y1="290" x2="600" y2="150"/>
+                <line x1="400" y1="290" x2="230" y2="450"/>
+                <line x1="400" y1="290" x2="570" y2="450"/>
+              </g>
+            </g>
 
-          <!-- Connection line from server to chart -->
-          <path d="M140 350 L120 350" stroke="#0A0A0A" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.5"/>
+            <!-- DATA -->
+            <g class="h-bob-db">
+              <g class="h-in" style="animation-delay:0.55s;transform-origin:200px 156px;">
+                <path d="M175,130 V170 C175,182 225,182 225,170 V130 Z" fill="#F5F5F2" stroke="none"/>
+                <ellipse cx="200" cy="130" rx="25" ry="10" fill="#F5F5F2" stroke="none"/>
+                <path d="M175,150 V170 C175,182 225,182 225,170 V150 C225,158 175,158 175,150 Z" fill="#0A0A0A" fill-opacity="0.1" stroke="none"/>
+                <ellipse cx="200" cy="130" rx="25" ry="10" fill="#0A0A0A" fill-opacity="0.04" stroke="none"/>
+                <path d="M175,130 V170 C175,182 225,182 225,170 V130"/>
+                <path d="M175,150 C175,162 225,162 225,150"/>
+                <ellipse cx="200" cy="130" rx="25" ry="10"/>
+                <text x="200" y="205" text-anchor="middle" font-family="Outfit,sans-serif" font-size="12" font-weight="700" letter-spacing="0.06em" fill="#0A0A0A" opacity="0.55" stroke="none">DATA</text>
+              </g>
+            </g>
 
-          <!-- Right panel: CRM records -->
-          <rect x="390" y="290" width="105" height="110" rx="6"
-                stroke="#0A0A0A" stroke-width="2" fill="none" opacity="0.7"/>
-          <path d="M404 316 L480 316" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
-          <path d="M404 332 L466 332" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" opacity="0.3"/>
-          <path d="M404 348 L474 348" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
-          <path d="M404 364 L460 364" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" opacity="0.3"/>
-          <path d="M404 380 L472 380" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
-          <circle cx="408" cy="305" r="5" stroke="#0A0A0A" stroke-width="1.5" fill="none" opacity="0.7"/>
-          <path d="M406 303 L410 307 M406 307 L410 303" stroke="#0A0A0A" stroke-width="1.5" opacity="0.7"/>
+            <!-- AUTOMATION. One closed 8-tooth outline (root r14, tip r22,
+                 20-degree tips on straight flanks) rather than the eight
+                 free-floating trapezoids this replaces — those never met the
+                 body, which is what made the gear read as broken. -->
+            <g class="h-in" style="animation-delay:0.7s;transform-origin:400px 100px;">
+              <circle cx="400" cy="100" r="25" fill="#F5F5F2" stroke="none"/>
+              <g class="h-gear">
+                <path d="M413.3,95.7 L421.7,96.2 A22,22 0 0 1 421.7,103.8 L413.3,104.3 A14,14 0 0 1 412.5,106.4 L418.0,112.6 A22,22 0 0 1 412.6,118.0 L406.4,112.5 A14,14 0 0 1 404.3,113.3 L403.8,121.7 A22,22 0 0 1 396.2,121.7 L395.7,113.3 A14,14 0 0 1 393.6,112.5 L387.4,118.0 A22,22 0 0 1 382.0,112.6 L387.5,106.4 A14,14 0 0 1 386.7,104.3 L378.3,103.8 A22,22 0 0 1 378.3,96.2 L386.7,95.7 A14,14 0 0 1 387.5,93.6 L382.0,87.4 A22,22 0 0 1 387.4,82.0 L393.6,87.5 A14,14 0 0 1 395.7,86.7 L396.2,78.3 A22,22 0 0 1 403.8,78.3 L404.3,86.7 A14,14 0 0 1 406.4,87.5 L412.6,82.0 A22,22 0 0 1 418.0,87.4 L412.5,93.6 A14,14 0 0 1 413.3,95.7 Z" fill="#F5F5F2"/>
+                <circle cx="400" cy="100" r="14" fill="#0A0A0A" fill-opacity="0.07" stroke="none"/>
+                <circle cx="400" cy="100" r="6.5" fill="#F5F5F2"/>
+              </g>
+              <text x="400" y="54" text-anchor="middle" font-family="Outfit,sans-serif" font-size="12" font-weight="700" letter-spacing="0.06em" fill="#0A0A0A" opacity="0.55" stroke="none">AUTOMATION</text>
+            </g>
 
-          <!-- Connection from server to right panel -->
-          <path d="M360 350 L390 340" stroke="#0A0A0A" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.5"/>
+            <!-- INSIGHTS -->
+            <g class="h-bob-chart">
+              <g class="h-in" style="animation-delay:0.85s;transform-origin:595px 128px;">
+                <rect x="545" y="70" width="100" height="120" fill="#F5F5F2" stroke="none"/>
+                <path d="M555,100 V180 H635" stroke-opacity="0.8"/>
+                <rect x="565" y="150" width="14" height="30" fill="#0A0A0A" fill-opacity="0.05"/>
+                <rect x="587" y="130" width="14" height="50" fill="#0A0A0A" fill-opacity="0.1"/>
+                <rect x="609" y="105" width="14" height="75" fill="#0A0A0A" fill-opacity="0.15"/>
+                <path class="h-trend" d="M572,135 L594,110 L616,80 L635,75" stroke-dasharray="120" stroke-dashoffset="120"/>
+                <circle cx="572" cy="135" r="3" fill="#F5F5F2"/>
+                <circle cx="594" cy="110" r="3" fill="#F5F5F2"/>
+                <circle cx="616" cy="80" r="3" fill="#F5F5F2"/>
+                <text x="595" y="208" text-anchor="middle" font-family="Outfit,sans-serif" font-size="12" font-weight="700" letter-spacing="0.06em" fill="#0A0A0A" opacity="0.55" stroke="none">INSIGHTS</text>
+              </g>
+            </g>
 
-          <!-- Floating checkmark badge -->
-          <circle cx="390" cy="180" r="26" stroke="#0A0A0A" stroke-width="2" fill="none" opacity="0.6"/>
-          <polyline points="378,180 386,188 402,172"
-                    stroke="#0A0A0A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.8"/>
+            <!-- APPS -->
+            <g class="h-bob-phone">
+              <g class="h-in" style="animation-delay:1s;transform-origin:230px 450px;">
+                <rect x="195" y="395" width="70" height="110" rx="10" fill="#F5F5F2" stroke="none"/>
+                <rect x="200" y="400" width="60" height="100" rx="8" fill="#F5F5F2"/>
+                <rect x="208" y="416" width="44" height="68" rx="3" fill="#0A0A0A" fill-opacity="0.06"/>
+                <line x1="220" y1="408" x2="240" y2="408"/>
+                <line x1="220" y1="492" x2="240" y2="492"/>
+                <rect x="215" y="426" width="30" height="10" rx="2" fill="#0A0A0A" fill-opacity="0.15" stroke="none"/>
+                <line x1="215" y1="446" x2="245" y2="446"/>
+                <line x1="215" y1="456" x2="235" y2="456"/>
+                <circle cx="222" cy="471" r="4" fill="#0A0A0A" fill-opacity="0.1"/>
+                <line x1="233" y1="468" x2="245" y2="468"/>
+                <line x1="233" y1="474" x2="240" y2="474"/>
+                <text x="230" y="525" text-anchor="middle" font-family="Outfit,sans-serif" font-size="12" font-weight="700" letter-spacing="0.06em" fill="#0A0A0A" opacity="0.55" stroke="none">APPS</text>
+              </g>
+            </g>
 
-          <!-- Floating number badge -->
-          <rect x="78" y="130" width="48" height="32" rx="16"
-                stroke="#0A0A0A" stroke-width="2" fill="none" opacity="0.5"/>
-          <text x="102" y="151" text-anchor="middle" font-family="Outfit,sans-serif" font-size="13" font-weight="800" fill="#0A0A0A" opacity="0.7">70+</text>
+            <!-- YOUR TEAM -->
+            <g class="h-bob-team">
+              <g class="h-in" style="animation-delay:1.15s;transform-origin:575px 450px;">
+                <circle cx="575" cy="450" r="45" fill="#F5F5F2" stroke="none"/>
+                <circle cx="590" cy="425" r="10" fill="#F5F5F2"/>
+                <path d="M570,470 C570,450 575,445 590,445 C605,445 610,450 610,470 Z" fill="#0A0A0A" fill-opacity="0.05"/>
+                <circle cx="560" cy="440" r="13" fill="#F5F5F2" stroke="none"/>
+                <path d="M535,490 C535,465 545,458 560,458 C575,458 585,465 585,490 Z" fill="#F5F5F2" stroke="none"/>
+                <circle cx="560" cy="440" r="13" fill="#0A0A0A" fill-opacity="0.12"/>
+                <path d="M535,490 C535,465 545,458 560,458 C575,458 585,465 585,490 Z" fill="#F5F5F2"/>
+                <text x="572" y="518" text-anchor="middle" font-family="Outfit,sans-serif" font-size="12" font-weight="700" letter-spacing="0.06em" fill="#0A0A0A" opacity="0.55" stroke="none">YOUR TEAM</text>
+              </g>
+            </g>
 
-          <!-- Small gear icon -->
-          <circle cx="440" cy="230" r="14" stroke="#0A0A0A" stroke-width="2" fill="none" opacity="0.5"/>
-          <circle cx="440" cy="230" r="5" stroke="#0A0A0A" stroke-width="1.5" fill="none" opacity="0.5"/>
-          <line x1="440" y1="212" x2="440" y2="217" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
-          <line x1="440" y1="243" x2="440" y2="248" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
-          <line x1="422" y1="230" x2="427" y2="230" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
-          <line x1="453" y1="230" x2="458" y2="230" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+            <!-- Centre: the Salesforce cloud. The 24x24 mark is scaled x7.9167
+                 into a 190-wide box centred on (400,250); stroke-width is
+                 pre-divided by that factor so it still renders at 2 units like
+                 every other icon here. -->
+            <g class="h-in" style="animation-delay:0.3s;transform-origin:400px 250px;">
+              <g transform="translate(305,155) scale(7.9167)" stroke-width="0.2526">
+                <use href="#ca-sf-cloud" fill="#F5F5F2" stroke="none"/>
+                <use href="#ca-sf-cloud" fill="#0A0A0A" fill-opacity="0.03"/>
+              </g>
+              <g stroke-width="1.5">
+                <path d="M400,248 L372,276"/>
+                <path d="M400,248 L428,276"/>
+                <path d="M400,248 L400,284"/>
+                <circle cx="372" cy="276" r="3" fill="#0A0A0A" stroke="none"/>
+                <circle cx="428" cy="276" r="3" fill="#0A0A0A" stroke="none"/>
+                <circle cx="400" cy="284" r="3" fill="#0A0A0A" stroke="none"/>
+                <circle class="h-pulse" cx="400" cy="248" r="5" fill="#0A0A0A" stroke="none" style="transform-origin:400px 248px;"/>
+                <circle class="h-ring" cx="400" cy="248" r="8" fill="none" stroke-opacity="0.3" style="transform-origin:400px 248px;"/>
+              </g>
+            </g>
+
+            <!-- Checkmark badge -->
+            <g class="h-bob-check">
+              <g class="h-in" style="animation-delay:1.3s;transform-origin:478px 212px;">
+                <circle cx="478" cy="212" r="16" fill="#F5F5F2" stroke="none"/>
+                <circle cx="478" cy="212" r="16" fill="#0A0A0A" fill-opacity="0.08"/>
+                <path d="M472,213 l4,4 l8,-8" fill="none"/>
+              </g>
+            </g>
+
+            <!-- "70+" pill -->
+            <g class="h-bob-pill">
+              <g class="h-in" style="animation-delay:1.55s;transform-origin:400px 537px;">
+                <rect x="360" y="520" width="80" height="34" rx="17" fill="#F5F5F2"/>
+                <rect x="360" y="520" width="80" height="34" rx="17" fill="#0A0A0A" fill-opacity="0.05" stroke="none"/>
+                <text x="400" y="543" font-family="Outfit,sans-serif" font-size="16" font-weight="800" fill="#0A0A0A" text-anchor="middle" letter-spacing="0.5" stroke="none">70+</text>
+              </g>
+            </g>
+
+          </g>
         </svg>
       </div>
 
     </div>
   </div>
 </section>
+
+<style>
+  #hero-illustration {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 2rem;
+  }
+  /* 600px is what the col-lg-6 actually offers at >=1280px (621px wide minus
+     its 12px gutters), so the illustration fills its column instead of
+     floating in the middle of it. At 600 wide it stands 493 tall — still
+     shorter than the 577px copy column, so it never drives section height. */
+  .hero-illus { width: 100%; max-width: 600px; height: auto; }
+
+  @media (max-width: 767px) {
+    /* Stacked under the copy, the illustration is the only thing on its row,
+       so let it span the full viewport instead of sitting inside the
+       container's 1.5rem gutters. */
+    #hero-illustration { padding-top: 0.5rem; }
+    .hero-illus {
+      max-width: none;
+      width: calc(100% + 3rem);
+      margin-inline: -1.5rem;
+    }
+  }
+
+  /* Hero illustration animation.
+     Two independent layers per node: an outer group carries the perpetual idle
+     loop, an inner group carries the one-shot entrance. Keeping them on separate
+     elements stops a repeating transform from fighting a one-shot one.
+     Everything is CSS (no SMIL, no animated `r`) so the reduced-motion block at
+     the bottom can switch all of it off, and so Safari — which does not animate
+     SVG geometry properties — behaves like every other browser. */
+
+  /* --- entrance, plays once --- */
+  .h-in {
+    transform-box: view-box;
+    animation: heroNodeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) both;
+  }
+  .h-fade { animation: heroFadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) both; }
+
+  @keyframes heroNodeIn {
+    from { opacity: 0; transform: scale(0.85); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+  @keyframes heroFadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  /* --- idle loops, perpetual. Durations are deliberately mismatched so the
+         nodes never bob in lockstep. --- */
+  .h-spokes { animation: heroSpokeFlow 1.5s linear infinite; }
+  @keyframes heroSpokeFlow {
+    from { stroke-dashoffset: 14; }
+    to   { stroke-dashoffset: 0; }
+  }
+
+  .h-bob-db,
+  .h-bob-chart,
+  .h-bob-phone,
+  .h-bob-team,
+  .h-bob-check,
+  .h-bob-pill { transform-box: view-box; }
+
+  .h-bob-db    { animation: heroBob3   4.5s ease-in-out infinite; }
+  .h-bob-chart { animation: heroBob4   5s   ease-in-out infinite; }
+  .h-bob-phone { animation: heroBob3   4s   ease-in-out infinite; }
+  .h-bob-team  { animation: heroBob35  5.5s ease-in-out infinite; }
+  .h-bob-check { animation: heroBob5   3.5s ease-in-out infinite; }
+  .h-bob-pill  { animation: heroBob3   4.2s ease-in-out infinite; }
+
+  @keyframes heroBob3  { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+  @keyframes heroBob35 { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3.5px); } }
+  @keyframes heroBob4  { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+  @keyframes heroBob5  { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+
+  .h-gear {
+    transform-box: view-box;
+    transform-origin: 400px 100px;
+    animation: heroGearSpin 24s linear infinite;
+  }
+  @keyframes heroGearSpin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+
+  .h-trend { animation: heroTrendDraw 6s linear infinite; }
+  @keyframes heroTrendDraw {
+    0%   { stroke-dashoffset: 120; }
+    70%  { stroke-dashoffset: 0; }
+    100% { stroke-dashoffset: 120; }
+  }
+
+  /* Expressed as scale + opacity rather than the `r` geometry property, which
+     Safari refuses to animate. Base r is 5 and 8 respectively. */
+  .h-pulse {
+    transform-box: view-box;
+    animation: heroNodePulse 3s ease-in-out infinite;
+  }
+  @keyframes heroNodePulse {
+    0%, 100% { transform: scale(1);   opacity: 1; }
+    50%      { transform: scale(1.3); opacity: 0.6; }
+  }
+
+  .h-ring {
+    transform-box: view-box;
+    animation: heroNodeRing 3s ease-in-out infinite;
+  }
+  @keyframes heroNodeRing {
+    0%, 100% { transform: scale(0.625); opacity: 1; }
+    50%      { transform: scale(1.5);   opacity: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .h-in,
+    .h-fade,
+    .h-spokes,
+    .h-bob-db,
+    .h-bob-chart,
+    .h-bob-phone,
+    .h-bob-team,
+    .h-bob-check,
+    .h-bob-pill,
+    .h-gear,
+    .h-trend,
+    .h-pulse,
+    .h-ring {
+      animation: none;
+    }
+    /* The entrance keyframes never run, so pin the final visible state. */
+    .h-in,
+    .h-fade { opacity: 1; transform: none; }
+    /* Drawn with dashoffset 120 (fully hidden); without the loop it must sit drawn. */
+    .h-trend { stroke-dashoffset: 0; }
+  }
+</style>
 
 <script>
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
