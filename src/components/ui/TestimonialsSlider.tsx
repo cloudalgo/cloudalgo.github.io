@@ -1,5 +1,6 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Autoplay, A11y } from 'swiper/modules';
+import { motion } from 'framer-motion';
 import 'swiper/css';
 import 'swiper/css/navigation';
 
@@ -25,10 +26,38 @@ export default function TestimonialsSlider() {
       {TESTIMONIALS.map((t, i) => (
         <SwiperSlide key={i}>
           <div style={{ maxWidth: '680px' }}>
-            <div className="testimonial-card">
-              <span className="testimonial-quote-mark">"</span>
-              <p className="slider-caption">{t.quote}</p>
-              <div className="blockquote-footer">
+            <motion.div
+              className="testimonial-card"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.4 }}
+              transition={{ duration: 0.5, ease: 'easeOut' }}
+            >
+              <motion.span
+                className="testimonial-quote-mark"
+                initial={{ opacity: 0, scale: 0.5 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true, amount: 0.4 }}
+                transition={{ duration: 0.4, ease: 'easeOut', delay: 0.1 }}
+              >
+                "
+              </motion.span>
+              <motion.p
+                className="slider-caption"
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.4 }}
+                transition={{ duration: 0.5, ease: 'easeOut', delay: 0.2 }}
+              >
+                {t.quote}
+              </motion.p>
+              <motion.div
+                className="blockquote-footer"
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.4 }}
+                transition={{ duration: 0.5, ease: 'easeOut', delay: 0.3 }}
+              >
                 {t.photo && (
                   <div className="user-photo">
                     <img src={t.photo} alt={t.author} />
@@ -38,8 +67,8 @@ export default function TestimonialsSlider() {
                   <strong style={{ display: 'block', fontSize: '0.9375rem' }}>{t.author}</strong>
                   <cite>{t.company}</cite>
                 </div>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
           </div>
         </SwiperSlide>
       ))}

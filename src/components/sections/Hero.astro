@@ -11,21 +11,21 @@
     <div class="row align-items-center" style="gap:2rem 0;">
 
       <!-- Left column: text -->
-      <div class="col-lg-6 anim-fade-up">
-        <p class="section-label" style="transition-delay:0.05s;">Salesforce &amp; Heroku Consulting</p>
+      <div class="col-lg-6">
+        <p class="section-label anim-fade-up" style="transition-delay:0.05s;">Salesforce &amp; Heroku Consulting</p>
 
-        <h1 style="font-size:clamp(2.5rem,5.5vw,5rem);font-weight:900;letter-spacing:-0.03em;line-height:1.05;color:#0A0A0A;margin-bottom:1.5rem;transition-delay:0.1s;">
-          We make Salesforce<br/>
-          actually work for<br/>
-          your business.
+        <h1 style="font-size:clamp(2.5rem,5.5vw,5rem);font-weight:900;letter-spacing:-0.03em;line-height:1.05;color:#0A0A0A;margin-bottom:1.5rem;">
+          <span class="hero-line anim-fade-up" style="transition-delay:0.1s;">We make Salesforce</span><br/>
+          <span class="hero-line anim-fade-up" style="transition-delay:0.18s;">actually work for</span><br/>
+          <span class="hero-line anim-fade-up" style="transition-delay:0.26s;">your business.</span>
         </h1>
 
-        <p class="paragraph-large" style="max-width:520px;margin-bottom:2.25rem;color:#5A5A5A;transition-delay:0.2s;">
+        <p class="paragraph-large anim-fade-up" style="max-width:520px;margin-bottom:2.25rem;color:#5A5A5A;transition-delay:0.34s;">
           CloudAlgo is a certified team of Salesforce architects and developers.
           70+ projects delivered, 12 years of combined experience.
         </p>
 
-        <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;transition-delay:0.3s;" class="anim-fade-up">
+        <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;transition-delay:0.42s;" class="anim-fade-up">
           <a href="/contact" class="btn btn-primary">Book a Consultation &rarr;</a>
           <a href="/services" class="btn btn-outline">See our work</a>
         </div>
@@ -35,79 +35,102 @@
       <div id="hero-illustration" class="col-lg-6" style="display:flex;justify-content:center;align-items:center;padding-top:2rem;" aria-hidden="true">
         <svg viewBox="0 0 520 440" fill="none" xmlns="http://www.w3.org/2000/svg"
              style="width:100%;max-width:520px;height:auto;">
-          <!-- Cloud shape -->
-          <path d="M160 240 C100 240 60 200 60 160 C60 124 88 96 124 92 C126 52 158 20 198 20 C232 20 261 42 272 73 C282 68 294 65 307 65 C348 65 382 99 382 140 C382 181 348 215 307 215 L160 240Z"
-                stroke="#0A0A0A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.9"/>
 
-          <!-- Cloud inner lines -->
-          <path d="M140 185 L320 185" stroke="#0A0A0A" stroke-width="1.5" opacity="0.2"/>
-          <path d="M120 165 L340 165" stroke="#0A0A0A" stroke-width="1.5" opacity="0.15"/>
+          <!-- Platform orbit ring -->
+          <ellipse class="draw-stroke" style="animation-delay:0.1s;" cx="255" cy="150" rx="180" ry="140"
+                    stroke="#0A0A0A" stroke-width="1.5" stroke-dasharray="3 6" opacity="0.22"/>
 
-          <!-- Data flow lines going down -->
-          <path d="M200 240 L200 310" stroke="#0A0A0A" stroke-width="2" stroke-dasharray="6 5"/>
-          <path d="M250 240 L250 330" stroke="#0A0A0A" stroke-width="2" stroke-dasharray="6 5"/>
-          <path d="M300 240 L300 310" stroke="#0A0A0A" stroke-width="2" stroke-dasharray="6 5"/>
+          <!-- Spokes: hub to each node -->
+          <path d="M255 150 L110 320" stroke="#0A0A0A" stroke-width="1.5" stroke-dasharray="5 5" opacity="0.4"/>
+          <path d="M255 150 L400 330" stroke="#0A0A0A" stroke-width="1.5" stroke-dasharray="5 5" opacity="0.4"/>
+          <path d="M255 150 L441 110" stroke="#0A0A0A" stroke-width="1.5" stroke-dasharray="5 5" opacity="0.4"/>
+          <path d="M255 150 L73 107" stroke="#0A0A0A" stroke-width="1.5" stroke-dasharray="5 5" opacity="0.4"/>
+          <path d="M255 150 L255 380" stroke="#0A0A0A" stroke-width="1.5" stroke-dasharray="5 5" opacity="0.4"/>
 
-          <!-- Server / database box -->
-          <rect x="140" y="310" width="220" height="90" rx="8"
-                stroke="#0A0A0A" stroke-width="2.5" fill="none"/>
-          <path d="M140 338 L360 338" stroke="#0A0A0A" stroke-width="1.5"/>
-          <path d="M140 360 L360 360" stroke="#0A0A0A" stroke-width="1.5"/>
-          <!-- Server dots -->
-          <circle cx="164" cy="324" r="4" fill="#0A0A0A" opacity="0.8"/>
-          <circle cx="180" cy="324" r="4" fill="#0A0A0A" opacity="0.4"/>
-          <circle cx="196" cy="324" r="4" fill="#0A0A0A" opacity="0.2"/>
-          <!-- Server bar lines -->
-          <path d="M215 374 L320 374" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" opacity="0.3"/>
-          <path d="M215 386 L290 386" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" opacity="0.2"/>
+          <!-- Central hub: Salesforce cloud -->
+          <path class="draw-stroke" style="animation-delay:0.3s;" d="M195 205 C145 205 108 172 108 138 C108 106 132 81 163 77 C166 43 194 16 228 16 C258 16 284 35 293 62 C302 58 312 56 323 56 C358 56 387 85 387 120 C387 155 358 184 323 184 L195 205Z"
+                stroke="#0A0A0A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.95"/>
+          <path d="M175 155 L330 155" stroke="#0A0A0A" stroke-width="1.5" opacity="0.2"/>
+          <path d="M155 135 L350 135" stroke="#0A0A0A" stroke-width="1.5" opacity="0.15"/>
+          <circle cx="255" cy="120" r="5" fill="#0A0A0A" opacity="0.8"/>
+          <circle cx="255" cy="120" r="12" stroke="#0A0A0A" stroke-width="1.2" fill="none" opacity="0.3"/>
 
-          <!-- Small chart / analytics panel -->
-          <rect x="30" y="300" width="90" height="75" rx="6"
-                stroke="#0A0A0A" stroke-width="2" fill="none" opacity="0.7"/>
-          <polyline points="42,355 55,335 68,345 81,320 94,330 107,310"
-                    stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.8"/>
-          <path d="M42 365 L107 365" stroke="#0A0A0A" stroke-width="1.5" opacity="0.3"/>
+          <!-- Node: Data -->
+          <g class="draw-stroke" style="animation-delay:0.55s;" stroke="#0A0A0A" stroke-width="2" fill="none" opacity="0.75">
+            <ellipse cx="90" cy="300" rx="38" ry="12"/>
+            <path d="M52 300 L52 340 C52 347 69 353 90 353 C111 353 128 347 128 340 L128 300"/>
+            <path d="M52 320 C52 327 69 333 90 333 C111 333 128 327 128 320" opacity="0.5"/>
+          </g>
+          <text x="90" y="372" text-anchor="middle" font-family="Outfit,sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#0A0A0A" opacity="0.55">DATA</text>
 
-          <!-- Connection line from server to chart -->
-          <path d="M140 350 L120 350" stroke="#0A0A0A" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.5"/>
+          <!-- Node: Automation -->
+          <g class="draw-stroke" style="animation-delay:0.7s;" stroke="#0A0A0A" stroke-width="2" fill="none" opacity="0.75">
+            <circle cx="400" cy="345" r="30"/>
+            <circle cx="400" cy="345" r="10"/>
+            <line x1="400" y1="309" x2="400" y2="317"/>
+            <line x1="400" y1="373" x2="400" y2="381"/>
+            <line x1="364" y1="345" x2="372" y2="345"/>
+            <line x1="428" y1="345" x2="436" y2="345"/>
+            <line x1="375" y1="320" x2="381" y2="326"/>
+            <line x1="419" y1="364" x2="425" y2="370"/>
+            <line x1="425" y1="320" x2="419" y2="326"/>
+            <line x1="381" y1="364" x2="375" y2="370"/>
+          </g>
+          <text x="400" y="392" text-anchor="middle" font-family="Outfit,sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#0A0A0A" opacity="0.55">AUTOMATION</text>
 
-          <!-- Right panel: CRM records -->
-          <rect x="390" y="290" width="105" height="110" rx="6"
-                stroke="#0A0A0A" stroke-width="2" fill="none" opacity="0.7"/>
-          <path d="M404 316 L480 316" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
-          <path d="M404 332 L466 332" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" opacity="0.3"/>
-          <path d="M404 348 L474 348" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
-          <path d="M404 364 L460 364" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" opacity="0.3"/>
-          <path d="M404 380 L472 380" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
-          <circle cx="408" cy="305" r="5" stroke="#0A0A0A" stroke-width="1.5" fill="none" opacity="0.7"/>
-          <path d="M406 303 L410 307 M406 307 L410 303" stroke="#0A0A0A" stroke-width="1.5" opacity="0.7"/>
+          <!-- Node: Insights -->
+          <rect class="draw-stroke" style="animation-delay:0.85s;" x="392" y="70" width="98" height="80" rx="8" stroke="#0A0A0A" stroke-width="2" fill="none" opacity="0.75"/>
+          <polyline class="draw-stroke" style="animation-delay:1.05s;" points="406,128 424,104 442,116 460,88 478,100"
+                    stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.85"/>
+          <path d="M406 138 L478 138" stroke="#0A0A0A" stroke-width="1.5" opacity="0.3"/>
+          <text x="441" y="163" text-anchor="middle" font-family="Outfit,sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#0A0A0A" opacity="0.55">INSIGHTS</text>
 
-          <!-- Connection from server to right panel -->
-          <path d="M360 350 L390 340" stroke="#0A0A0A" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.5"/>
+          <!-- Node: Apps -->
+          <rect class="draw-stroke" style="animation-delay:1s;" x="42" y="58" width="62" height="98" rx="10" stroke="#0A0A0A" stroke-width="2" fill="none" opacity="0.75"/>
+          <line x1="42" y1="78" x2="104" y2="78" stroke="#0A0A0A" stroke-width="1.5" opacity="0.3"/>
+          <line x1="42" y1="136" x2="104" y2="136" stroke="#0A0A0A" stroke-width="1.5" opacity="0.3"/>
+          <rect x="54" y="88" width="18" height="18" rx="4" stroke="#0A0A0A" stroke-width="1.5" fill="none" opacity="0.5"/>
+          <rect x="78" y="88" width="18" height="18" rx="4" stroke="#0A0A0A" stroke-width="1.5" fill="none" opacity="0.35"/>
+          <line x1="66" y1="146" x2="80" y2="146" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
+          <text x="73" y="177" text-anchor="middle" font-family="Outfit,sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#0A0A0A" opacity="0.55">APPS</text>
+
+          <!-- Node: Team -->
+          <g class="draw-stroke" style="animation-delay:1.15s;" stroke="#0A0A0A" stroke-width="2" fill="none" opacity="0.75">
+            <circle cx="235" cy="382" r="11"/>
+            <path d="M213 415 C213 400 222 393 235 393 C248 393 257 400 257 415"/>
+            <circle cx="275" cy="388" r="9" opacity="0.6"/>
+            <path d="M258 415 C258 403 265 397 275 397 C285 397 292 403 292 415" opacity="0.6"/>
+          </g>
+          <text x="252" y="432" text-anchor="middle" font-family="Outfit,sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#0A0A0A" opacity="0.55">YOUR TEAM</text>
 
           <!-- Floating checkmark badge -->
-          <circle cx="390" cy="180" r="26" stroke="#0A0A0A" stroke-width="2" fill="none" opacity="0.6"/>
-          <polyline points="378,180 386,188 402,172"
-                    stroke="#0A0A0A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.8"/>
+          <circle class="draw-stroke" style="animation-delay:1.3s;" cx="440" cy="225" r="22" stroke="#0A0A0A" stroke-width="2" fill="#F5F5F2" opacity="0.9"/>
+          <polyline class="draw-stroke" style="animation-delay:1.45s;" points="430,225 437,232 451,217"
+                    stroke="#0A0A0A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.9"/>
 
-          <!-- Floating number badge -->
-          <rect x="78" y="130" width="48" height="32" rx="16"
-                stroke="#0A0A0A" stroke-width="2" fill="none" opacity="0.5"/>
-          <text x="102" y="151" text-anchor="middle" font-family="Outfit,sans-serif" font-size="13" font-weight="800" fill="#0A0A0A" opacity="0.7">70+</text>
-
-          <!-- Small gear icon -->
-          <circle cx="440" cy="230" r="14" stroke="#0A0A0A" stroke-width="2" fill="none" opacity="0.5"/>
-          <circle cx="440" cy="230" r="5" stroke="#0A0A0A" stroke-width="1.5" fill="none" opacity="0.5"/>
-          <line x1="440" y1="212" x2="440" y2="217" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
-          <line x1="440" y1="243" x2="440" y2="248" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
-          <line x1="422" y1="230" x2="427" y2="230" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
-          <line x1="453" y1="230" x2="458" y2="230" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+          <!-- Floating "70+" badge -->
+          <rect x="34" y="213" width="56" height="34" rx="17" stroke="#0A0A0A" stroke-width="2" fill="#F5F5F2" opacity="0.55"/>
+          <text x="62" y="236" text-anchor="middle" font-family="Outfit,sans-serif" font-size="14" font-weight="800" fill="#0A0A0A" opacity="0.75">70+</text>
         </svg>
       </div>
 
     </div>
   </div>
 </section>
+
+<style>
+  .draw-stroke {
+    stroke-dasharray: 1400;
+    stroke-dashoffset: 1400;
+    animation: heroDrawIn 1.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+  @keyframes heroDrawIn {
+    to { stroke-dashoffset: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .draw-stroke { animation: none; stroke-dashoffset: 0; }
+  }
+</style>
 
 <script>
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
