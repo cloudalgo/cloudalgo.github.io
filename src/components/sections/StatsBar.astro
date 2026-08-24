@@ -2,7 +2,10 @@
 import StatsCounter from '../ui/StatsCounter.tsx';
 ---
 <div class="counts">
-  <div class="container">
+  {/* The entrance animation lives here, outside the island: adding `anim-fade-up`
+      inside the React tree lets Base.astro's observer write `in-view` onto a node
+      React is about to hydrate. */}
+  <div class="container anim-fade-up">
     <StatsCounter client:load />
   </div>
 </div>

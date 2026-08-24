@@ -2,10 +2,10 @@ import CountUp from 'react-countup';
 import { useState, useEffect } from 'react';
 
 const STATS = [
-  { end: 92,  suffix: '%', label: 'Success Rate',       duration: 2 },
-  { end: 15,  suffix: '+', label: 'Happy Customers',    duration: 7 },
-  { end: 70,  suffix: '+', label: 'Projects Finished',  duration: 10 },
-  { end: 12,  suffix: '+', label: 'Years of Experience',duration: 3 },
+  { end: 1,   suffix: ' Day', label: 'Avg. response time',       duration: 1 },
+  { end: 15,  suffix: '+',    label: 'Happy Clients',            duration: 7 },
+  { end: 70,  suffix: '+',    label: 'Projects Delivered',       duration: 10 },
+  { end: 12,  suffix: '+',    label: 'Years Combined Experience', duration: 3 },
 ];
 
 export default function StatsCounter() {
