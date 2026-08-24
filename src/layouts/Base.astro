@@ -44,6 +44,16 @@ const ogImage = image.startsWith('http') ? image : `${imageHost}${image}`;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Fonts. Linked here rather than @import-ed from global.css so the
+         preload scanner can start the request without first parsing the CSS,
+         and so the connection to the font host opens in parallel. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap"
+    />
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="canonical" href={canonicalURL} />
 
@@ -84,16 +94,35 @@ const ogImage = image.startsWith('http') ? image : `${imageHost}${image}`;
     <div id="scroll-progress-bar" aria-hidden="true"></div>
     <slot />
     <script>
+      // Scrollable page height, measured once and refreshed when the layout
+      // actually changes. Reading scrollHeight inside a scroll handler forces a
+      // synchronous layout on every event, which is the expensive part.
+      let scrollableHeight = 0;
+      const measureScrollable = () => {
+        scrollableHeight = document.body.scrollHeight - window.innerHeight;
+      };
+      measureScrollable();
+      window.addEventListener('resize', measureScrollable, { passive: true });
+      // Lazy images and the font swap change page height after first paint
+      if (typeof ResizeObserver !== 'undefined') {
+        new ResizeObserver(measureScrollable).observe(document.body);
+      }
+
       // Scroll progress bar
       const progressBar = document.getElementById('scroll-progress-bar');
       if (progressBar) {
-        const updateProgress = () => {
-          const scrollable = document.body.scrollHeight - window.innerHeight;
-          const pct = scrollable > 0 ? (window.scrollY / scrollable) * 100 : 0;
-          progressBar.style.width = `${pct}%`;
+        let barRafId: number | null = null;
+        const paintProgress = () => {
+          barRafId = null;
+          const pct = scrollableHeight > 0 ? window.scrollY / scrollableHeight : 0;
+          // scaleX composites; animating width relayouts the page every frame
+          progressBar.style.transform = `scaleX(${Math.min(Math.max(pct, 0), 1)})`;
         };
-        window.addEventListener('scroll', updateProgress, { passive: true });
-        updateProgress();
+        window.addEventListener('scroll', () => {
+          if (barRafId === null) barRafId = requestAnimationFrame(paintProgress);
+        }, { passive: true });
+        window.addEventListener('resize', paintProgress, { passive: true });
+        paintProgress();
       }
 
       // Scroll animations
@@ -118,31 +147,57 @@ const ogImage = image.startsWith('http') ? image : `${imageHost}${image}`;
           const items = parallaxEls.map(el => {
             const rect = el.getBoundingClientRect();
             const naturalCenter = rect.top + rect.height / 2 + window.scrollY;
-            el.style.willChange = 'transform';
-            return { el, naturalCenter, speed: parseFloat(el.dataset.parallax ?? '0.1') };
+            return {
+              el,
+              naturalCenter,
+              speed: parseFloat(el.dataset.parallax ?? '0.1'),
+              visible: false,
+            };
           });
+
           let pRafId: number | null = null;
           const updateParallax = () => {
             pRafId = null;
-            items.forEach(({ el, naturalCenter, speed }) => {
-              const fromCenter = naturalCenter - window.scrollY - window.innerHeight * 0.5;
-              el.style.transform = `translateY(${fromCenter * speed}px)`;
-            });
+            for (const item of items) {
+              if (!item.visible) continue;
+              const fromCenter = item.naturalCenter - window.scrollY - window.innerHeight * 0.5;
+              item.el.style.transform = `translateY(${fromCenter * item.speed}px)`;
+            }
           };
-          window.addEventListener('scroll', () => {
-            if (!pRafId) pRafId = requestAnimationFrame(updateParallax);
-          }, { passive: true });
-          requestAnimationFrame(updateParallax);
+          const requestParallax = () => {
+            if (pRafId === null) pRafId = requestAnimationFrame(updateParallax);
+          };
+
+          // will-change pins a compositor layer for as long as it is set, so it
+          // is granted only while an element is near the viewport. Off-screen
+          // elements are skipped entirely rather than transformed unseen.
+          // The observer repaints on every change, because its first entries
+          // arrive after the initial frame — without that, an element already
+          // on screen at load would sit untransformed until the first scroll.
+          const byEl = new Map(items.map(item => [item.el, item]));
+          const nearViewport = new IntersectionObserver(entries => {
+            for (const entry of entries) {
+              const item = byEl.get(entry.target as HTMLElement);
+              if (!item) continue;
+              item.visible = entry.isIntersecting;
+              item.el.style.willChange = entry.isIntersecting ? 'transform' : '';
+            }
+            requestParallax();
+          }, { rootMargin: '200px 0px' });
+          items.forEach(item => nearViewport.observe(item.el));
+
+          window.addEventListener('scroll', requestParallax, { passive: true });
+          requestParallax();
         }
       }
 
       // GA4: scroll depth (25 / 50 / 75 / 100%)
+      const MILESTONES = [25, 50, 75, 100];
       const scrollMilestones = new Set<number>();
-      window.addEventListener('scroll', () => {
-        const pct = Math.round(
-          (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100
-        );
-        for (const milestone of [25, 50, 75, 100]) {
+      const reportScrollDepth = () => {
+        if (scrollableHeight <= 0) return;
+        const pct = Math.round((window.scrollY / scrollableHeight) * 100);
+        for (const milestone of MILESTONES) {
           if (pct >= milestone && !scrollMilestones.has(milestone)) {
             scrollMilestones.add(milestone);
             (window as any).gtag?.('event', 'scroll_depth', {
@@ -152,7 +207,13 @@ const ogImage = image.startsWith('http') ? image : `${imageHost}${image}`;
             });
           }
         }
-      }, { passive: true });
+        // Every milestone is reported at most once, so once they are all in
+        // there is nothing left for this handler to do
+        if (scrollMilestones.size === MILESTONES.length) {
+          window.removeEventListener('scroll', reportScrollDepth);
+        }
+      };
+      window.addEventListener('scroll', reportScrollDepth, { passive: true });
 
       // GA4: CTA button clicks
       document.addEventListener('click', (e) => {
