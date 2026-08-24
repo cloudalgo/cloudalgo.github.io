@@ -1,5 +1,6 @@
 ---
 import Page from '../../layouts/Page.astro';
+import PageHeader from '@/components/ui/PageHeader.astro';
 
 const services = [
   {
@@ -466,18 +467,14 @@ const steps = [
 >
 
   <!-- Page header -->
-  <div class="page-header" style="padding-bottom:4rem;">
-    <div class="container">
-      <nav class="breadcrumb">
-        <a href="/">Home</a>
-        <span>&rarr;</span>
-        <span>Services</span>
-      </nav>
-      <h1 style="max-width:680px;line-height:1.05;">Expert services for the Salesforce ecosystem.</h1>
-      <p style="max-width:560px;margin-top:1.25rem;">
-        From CRM implementation to AppExchange products, MuleSoft integrations, AWS pipelines,
-        and ongoing managed support — we cover the full stack, end to end.
-      </p>
+  <PageHeader
+    style="padding-bottom:4rem;"
+    crumbs={[{ label: 'Home', href: '/' }, { label: 'Services' }]}
+    title="Expert services for the Salesforce ecosystem."
+    titleStyle="max-width:680px;line-height:1.05;"
+    lead="From CRM implementation to AppExchange products, MuleSoft integrations, AWS pipelines, and ongoing managed support — we cover the full stack, end to end."
+    leadStyle="max-width:560px;margin-top:1.25rem;"
+  >
       <!-- Quick stats row -->
       <div style="display:flex;gap:2.5rem;margin-top:2.5rem;flex-wrap:wrap;">
         {[['5', 'Service areas'],['70+','Projects delivered'],['12+','Years combined experience'],['1 day','Response time']].map(([num, label]) => (
@@ -487,8 +484,7 @@ const steps = [
           </div>
         ))}
       </div>
-    </div>
-  </div>
+  </PageHeader>
 
   <!-- Service sections -->
   {services.map((svc, i) => {

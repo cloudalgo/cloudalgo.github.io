@@ -2,6 +2,7 @@
 // src/pages/products/orgvitals/guide.astro
 // OrgVitals User Guide — long-form documentation page with sticky TOC + 8 GIFs.
 import Page from '../../../layouts/Page.astro';
+import PageHeader from '@/components/ui/PageHeader.astro';
 
 const sections = [
   { id: 'how-orgvitals-works',        num: 1,  label: 'How OrgVitals works' },
@@ -29,17 +30,15 @@ const releasesUrl = 'https://github.com/cloudalgo/orgvitals-releases/releases';
 >
 
   <!-- Header band -->
-  <div class="page-header ug-header">
-    <div class="container">
-      <nav class="breadcrumb" aria-label="Breadcrumb">
-        <a href="/">Home</a>
-        <span>&rarr;</span>
-        <a href="/products">Products</a>
-        <span>&rarr;</span>
-        <a href="/products/orgvitals">OrgVitals</a>
-        <span>&rarr;</span>
-        <span aria-current="page">User Guide</span>
-      </nav>
+  <PageHeader
+    class="ug-header"
+    crumbs={[
+      { label: 'Home', href: '/' },
+      { label: 'Products', href: '/products' },
+      { label: 'OrgVitals', href: '/products/orgvitals' },
+      { label: 'User Guide' },
+    ]}
+  >
 
       <p class="section-label">Guide</p>
       <h1>OrgVitals User Guide</h1>
@@ -50,8 +49,7 @@ const releasesUrl = 'https://github.com/cloudalgo/orgvitals-releases/releases';
         <a href={releasesUrl} target="_blank" rel="noopener noreferrer" class="btn btn-primary">Download OrgVitals ↗</a>
         <a href="/products/orgvitals" class="btn btn-outline">Product overview</a>
       </div>
-    </div>
-  </div>
+  </PageHeader>
 
   <!-- Body -->
   <div class="ug-body-section">

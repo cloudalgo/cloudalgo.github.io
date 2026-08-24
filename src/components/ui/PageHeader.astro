@@ -1,0 +1,51 @@
+---
+/**
+ * The standard inner-page masthead: breadcrumb, h1, optional standfirst.
+ *
+ * Nine pages hand-rolled this same four-element block. Anything extra a
+ * page needs (a category badge, a filter row, an author byline, a hero
+ * illustration beside the title) goes in the default slot, which renders
+ * below the standfirst inside the container.
+ *
+ * Styling stays in styles/sections/_hero.scss under `.page-header` — this
+ * component owns the structure, not the appearance.
+ */
+import Container from './Container.astro';
+import Breadcrumb from './Breadcrumb.astro';
+import type { Crumb } from './Breadcrumb.astro';
+
+interface Props {
+  /** Rendered with set:html — several titles carry a <br/>. */
+  title?: string;
+  /** Small uppercase kicker above the title (`.section-label`). */
+  eyebrow?: string;
+  /** Standfirst under the title. Capped at 600px by the stylesheet. */
+  lead?: string;
+  crumbs?: Crumb[];
+  separator?: string;
+  /** Per-page padding override, e.g. "padding-bottom:2.5rem;". */
+  style?: string;
+  class?: string;
+  /**
+   * Inline overrides carried over verbatim from the pages this component
+   * replaced. They are a migration affordance, not the intended API — as
+   * each becomes a real variant, delete the prop from the call site.
+   */
+  titleStyle?: string;
+  leadStyle?: string;
+}
+const {
+  title, eyebrow, lead, crumbs, separator, style,
+  class: className, titleStyle, leadStyle,
+} = Astro.props;
+---
+
+<div class:list={['page-header', className]} style={style}>
+  <Container>
+    {crumbs && crumbs.length > 0 && <Breadcrumb items={crumbs} separator={separator} />}
+    {eyebrow && <p class="section-label">{eyebrow}</p>}
+    {title && <h1 style={titleStyle} set:html={title} />}
+    {lead && <p style={leadStyle}>{lead}</p>}
+    <slot />
+  </Container>
+</div>

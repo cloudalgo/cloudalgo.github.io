@@ -1,0 +1,22 @@
+---
+/**
+ * The site's single width constraint: 1278px at >=1277px, fluid below.
+ * The `.container` rules live in styles/layout/_container.scss — this
+ * component exists so pages stop hand-writing <div class="container">
+ * (61 occurrences before it existed) and so the max-width can change
+ * in one place.
+ *
+ * Extra classes compose rather than replace: <Container class="ug-grid">
+ * emits `class="container ug-grid"`, matching the existing call sites.
+ */
+import type { HTMLAttributes } from 'astro/types';
+
+/** Element to render as. Use "section"/"header" where it carries meaning. */
+type Props = HTMLAttributes<'div'> & { as?: string };
+
+const { as: Tag = 'div', class: className, ...rest } = Astro.props as Props;
+---
+
+<Tag class:list={['container', className]} {...rest}>
+  <slot />
+</Tag>

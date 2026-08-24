@@ -1,5 +1,6 @@
 ---
 import Page from '../../layouts/Page.astro';
+import PageHeader from '@/components/ui/PageHeader.astro';
 const lastUpdated = 'May 2026';
 ---
 <Page
@@ -7,15 +8,11 @@ const lastUpdated = 'May 2026';
   description="Disclaimer for CloudAlgo's website and consulting services."
 >
 
-  <div class="page-header">
-    <div class="container">
-      <nav class="breadcrumb">
-        <a href="/">Home</a><span>&rarr;</span><span>Disclaimer</span>
-      </nav>
-      <h1>Disclaimer</h1>
-      <p>Last updated: {lastUpdated}</p>
-    </div>
-  </div>
+  <PageHeader
+    crumbs={[{ label: 'Home', href: '/' }, { label: 'Disclaimer' }]}
+    title="Disclaimer"
+    lead={`Last updated: ${lastUpdated}`}
+  />
 
   <section class="legal-body">
     <div class="container legal-container">

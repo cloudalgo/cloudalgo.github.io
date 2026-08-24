@@ -1,0 +1,38 @@
+---
+/**
+ * Breadcrumb trail.
+ *
+ * The DOM is deliberately flat (nav > a/span, no ol/li): `.breadcrumb`
+ * is `display: flex; gap: 0.5rem`, and the separators are flex items in
+ * their own right, so the gap lands on BOTH sides of each arrow. Wrapping
+ * the crumbs in list items would collapse one of those gaps.
+ *
+ * Two things this fixes over the markup it replaces: the separators are
+ * aria-hidden (a screen reader was reading "rightwards arrow" between
+ * every crumb), and the final crumb carries aria-current="page", which
+ * only two of the fifteen hand-written trails had.
+ */
+export interface Crumb {
+  label: string;
+  /** Omit on the final crumb — the current page is not a link. */
+  href?: string;
+}
+interface Props {
+  items: Crumb[];
+  /** Separator glyph. "←" reads better on a single back-link trail. */
+  separator?: string;
+  class?: string;
+}
+const { items, separator = '→', class: className } = Astro.props;
+---
+
+<nav class:list={['breadcrumb', className]} aria-label="Breadcrumb">
+  {items.map((item, i) => (
+    <>
+      {i > 0 && <span aria-hidden="true">{separator}</span>}
+      {item.href
+        ? <a href={item.href}>{item.label}</a>
+        : <span aria-current="page">{item.label}</span>}
+    </>
+  ))}
+</nav>

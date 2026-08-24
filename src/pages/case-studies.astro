@@ -1,6 +1,7 @@
 ---
 import Page from '../layouts/Page.astro';
 import { caseStudies } from '../data/case-studies';
+import Breadcrumb from '@/components/ui/Breadcrumb.astro';
 
 ---
 
@@ -14,11 +15,7 @@ import { caseStudies } from '../data/case-studies';
     <div class="container">
       <div class="cs-hero-split">
         <div class="cs-hero-text">
-          <nav class="breadcrumb">
-            <a href="/">Home</a>
-            <span>&rarr;</span>
-            <span>Case Studies</span>
-          </nav>
+          <Breadcrumb items={[{ label: 'Home', href: '/' }, { label: 'Case Studies' }]} />
           <p class="section-label">Results that speak</p>
           <h1 class="cs-hero-title">What we've built.<br/>What it delivered.</h1>
           <p class="cs-hero-sub">Real engagements, real constraints, and the numbers they moved.</p>

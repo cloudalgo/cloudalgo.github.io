@@ -1,6 +1,7 @@
 ---
 import Page from '../layouts/Page.astro';
 import ContactForm from '../components/ui/ContactForm.tsx';
+import Breadcrumb from '@/components/ui/Breadcrumb.astro';
 ---
 <Page
   title="Contact CloudAlgo — Salesforce & Heroku Consulting"
@@ -14,9 +15,7 @@ import ContactForm from '../components/ui/ContactForm.tsx';
 
         <!-- Left: heading + meta -->
         <div class="contact-hero-text">
-          <nav class="breadcrumb">
-            <a href="/">Home</a><span>&rarr;</span><span>Contact</span>
-          </nav>
+          <Breadcrumb items={[{ label: 'Home', href: '/' }, { label: 'Contact' }]} />
           <h1 class="contact-hero-title">Start a<br/>conversation.</h1>
           <p class="contact-hero-sub">
             Tell us about your Salesforce project, integration challenge,

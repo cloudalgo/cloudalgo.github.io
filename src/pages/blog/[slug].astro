@@ -2,6 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import Page from '../../layouts/Page.astro';
 import { getBlogIllustration } from '../../data/blog-illustrations';
+import PageHeader from '@/components/ui/PageHeader.astro';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog', ({ data }) => data.published);
@@ -55,11 +56,10 @@ const schema = {
 >
 
   <!-- ── Page header — white, matches site style ── -->
-  <div class="page-header" style="padding-bottom:2.5rem;">
-    <div class="container">
-      <nav class="breadcrumb">
-        <a href="/blog">&larr; All articles</a>
-      </nav>
+  <PageHeader
+    style="padding-bottom:2.5rem;"
+    crumbs={[{ label: '\u2190 All articles', href: '/blog' }]}
+  >
       <span class="blog-badges" style="margin-bottom:1rem;display:inline-block;">{post.data.category}</span>
       <h1 class="post-title" style="font-size:clamp(1.875rem,4vw,3rem);line-height:1.15;margin-bottom:1.5rem;">{post.data.title}</h1>
       <div style="display:flex;align-items:center;gap:0.875rem;flex-wrap:wrap;">
@@ -76,8 +76,7 @@ const schema = {
           </div>
         </div>
       </div>
-    </div>
-  </div>
+  </PageHeader>
 
   <!-- ── Illustration hero — dark strip ── -->
   <div class="post-hero-illus">
@@ -368,12 +367,6 @@ const schema = {
   border-top: 1px solid var(--ca-border);
   margin: 3.5rem auto;
   width: min(100%, 920px);
-}
-
-/* Captions were #999 on white — below AA contrast. */
-:global(.blog-post-details .blog-content figcaption) {
-  color: var(--color-text);
-  font-size: 0.875rem;
 }
 
 /* ── Article title measure ──────────────────────── */

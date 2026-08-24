@@ -1,5 +1,6 @@
 ---
 import Page from '../../layouts/Page.astro';
+import PageHeader from '@/components/ui/PageHeader.astro';
 const lastUpdated = 'May 2026';
 ---
 <Page
@@ -7,15 +8,11 @@ const lastUpdated = 'May 2026';
   description="How CloudAlgo collects, uses, and protects your personal information."
 >
 
-  <div class="page-header">
-    <div class="container">
-      <nav class="breadcrumb">
-        <a href="/">Home</a><span>&rarr;</span><span>Privacy Policy</span>
-      </nav>
-      <h1>Privacy Policy</h1>
-      <p>Last updated: {lastUpdated}</p>
-    </div>
-  </div>
+  <PageHeader
+    crumbs={[{ label: 'Home', href: '/' }, { label: 'Privacy Policy' }]}
+    title="Privacy Policy"
+    lead={`Last updated: ${lastUpdated}`}
+  />
 
   <section class="legal-body">
     <div class="container legal-container">

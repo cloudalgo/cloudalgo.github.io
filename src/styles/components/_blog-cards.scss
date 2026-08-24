@@ -294,7 +294,10 @@
   margin: 0 auto 0.75rem;
 }
 .blog-post-details .blog-content figcaption {
-  font-size: 0.8125rem;
-  color: var(--color-text-faint);
+  /* Not --color-text-faint: #999 on white is ~2.8:1, under the AA floor.
+     blog/[slug].astro used to patch this with a :global() override, but the
+     override lost on stylesheet order and never actually applied. */
+  font-size: 0.875rem;
+  color: var(--color-text);
   font-style: italic;
 }

@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import Page from '../../layouts/Page.astro';
 import ProductCard from '../../components/ui/ProductCard.astro';
+import PageHeader from '@/components/ui/PageHeader.astro';
 
 const allProducts = await getCollection('products', ({ data }) => data.published);
 const products = allProducts.sort((a, b) => a.data.order - b.data.order);
@@ -29,20 +30,13 @@ const catalogSchema = {
 >
 
   <!-- Page header -->
-  <div class="page-header">
-    <div class="container">
-      <nav class="breadcrumb">
-        <a href="/">Home</a>
-        <span>&rarr;</span>
-        <span>Products</span>
-      </nav>
-      <p class="section-label">Our Products</p>
-      <h1>Built for Salesforce teams.</h1>
-      <p style="max-width:540px;margin-top:1rem;font-size:1.0625rem;color:var(--color-text);line-height:1.7;">
-        Purpose-built apps and connectors that extend what Salesforce can do — from production-ready to early access.
-      </p>
-    </div>
-  </div>
+  <PageHeader
+    crumbs={[{ label: 'Home', href: '/' }, { label: 'Products' }]}
+    eyebrow="Our Products"
+    title="Built for Salesforce teams."
+    lead="Purpose-built apps and connectors that extend what Salesforce can do — from production-ready to early access."
+    leadStyle="max-width:540px;margin-top:1rem;font-size:1.0625rem;color:var(--color-text);line-height:1.7;"
+  />
 
   <!-- Product cards -->
   <section style="background:var(--surface-page);padding:4rem 0;border-bottom:1px solid var(--border-default);">

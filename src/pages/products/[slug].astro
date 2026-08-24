@@ -2,6 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import Page from '../../layouts/Page.astro';
 import VideoPlayer from '../../components/ui/VideoPlayer.astro';
+import PageHeader from '@/components/ui/PageHeader.astro';
 
 export async function getStaticPaths() {
   const products = await getCollection('products', ({ data }) => data.published);
@@ -329,15 +330,14 @@ const hasPricingOrReqs = (data.pricing && data.pricing.length > 0) ||
 >
 
   <!-- ① Hero — white bg, matches .page-header -->
-  <div class="page-header" style="padding-bottom:3rem;">
-    <div class="container">
-      <nav class="breadcrumb">
-        <a href="/">Home</a>
-        <span>&rarr;</span>
-        <a href="/products">Products</a>
-        <span>&rarr;</span>
-        <span aria-current="page">{data.title}</span>
-      </nav>
+  <PageHeader
+    style="padding-bottom:3rem;"
+    crumbs={[
+      { label: 'Home', href: '/' },
+      { label: 'Products', href: '/products' },
+      { label: data.title },
+    ]}
+  >
       <div style="display:grid;grid-template-columns:1fr auto;gap:3rem;align-items:center;margin-top:1.5rem;" class="prod-hero-grid">
         <div>
           <p class="section-label">{typeLabel(data.type)}</p>
@@ -385,8 +385,7 @@ const hasPricingOrReqs = (data.pricing && data.pricing.length > 0) ||
           <div style="width:460px;flex-shrink:0;" aria-hidden="true" set:html={illustration} class="prod-hero-illo" />
         )}
       </div>
-    </div>
-  </div>
+  </PageHeader>
 
   <!-- ② Key features — grey bg -->
   <section style="background:var(--surface-page);padding:5rem 0;border-bottom:1px solid var(--border-default);">

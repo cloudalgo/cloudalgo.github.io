@@ -1,6 +1,7 @@
 ---
 import Page from '../layouts/Page.astro';
 import StatsBar from '../components/sections/StatsBar.astro';
+import PageHeader from '@/components/ui/PageHeader.astro';
 ---
 <Page
   title="About Us — CloudAlgo | Certified Salesforce Consulting Partner"
@@ -8,16 +9,10 @@ import StatsBar from '../components/sections/StatsBar.astro';
 >
 
   <!-- Page header -->
-  <div class="page-header">
-    <div class="container">
-      <nav class="breadcrumb">
-        <a href="/">Home</a>
-        <span>&rarr;</span>
-        <span>About Us</span>
-      </nav>
-      <h1>We're a small, focused team<br/>of Salesforce architects.</h1>
-    </div>
-  </div>
+  <PageHeader
+    crumbs={[{ label: 'Home', href: '/' }, { label: 'About Us' }]}
+    title="We're a small, focused team<br/>of Salesforce architects."
+  />
 
   <!-- About content -->
   <section style="background:var(--surface-card);padding:5rem 0;border-bottom:1px solid var(--border-default);">

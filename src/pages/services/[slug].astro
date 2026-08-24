@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import Page from '../../layouts/Page.astro';
+import PageHeader from '@/components/ui/PageHeader.astro';
 
 export async function getStaticPaths() {
   const services = await getCollection('services');
@@ -43,15 +44,11 @@ const serviceSchema: object[] = [
 >
 
   <!-- Page header -->
-  <div class="page-header">
-    <div class="container">
-      <nav class="breadcrumb">
-        <a href="/services">&larr; Services</a>
-      </nav>
-      <h1>{service.data.title}</h1>
-      <p>{service.data.excerpt}</p>
-    </div>
-  </div>
+  <PageHeader
+    crumbs={[{ label: '\u2190 Services', href: '/services' }]}
+    title={service.data.title}
+    lead={service.data.excerpt}
+  />
 
   <!-- Content -->
   <section style="background:var(--surface-card);padding:5rem 0;">

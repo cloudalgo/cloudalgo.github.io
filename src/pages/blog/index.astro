@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import Page from '../../layouts/Page.astro';
 import BlogCard from '../../components/ui/BlogCard.astro';
 import { getBlogIllustration } from '../../data/blog-illustrations';
+import PageHeader from '@/components/ui/PageHeader.astro';
 
 const allPublished = (await getCollection('blog', ({ data }) => data.published))
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
@@ -23,13 +24,11 @@ const formatDate = (d: Date) =>
 >
 
   <!-- Page header — matches rest of site -->
-  <div class="page-header">
-    <div class="container">
-      <nav class="breadcrumb">
-        <a href="/">Home</a><span>&rarr;</span><span>Blog</span>
-      </nav>
-      <h1>From the team</h1>
-      <p>Technical deep-dives on Salesforce, Heroku, MuleSoft, Airflow, and AWS from engineers who build with them every day.</p>
+  <PageHeader
+    crumbs={[{ label: 'Home', href: '/' }, { label: 'Blog' }]}
+    title="From the team"
+    lead="Technical deep-dives on Salesforce, Heroku, MuleSoft, Airflow, and AWS from engineers who build with them every day."
+  >
 
       <!-- Category filter — lives inside the header, below the title -->
       <div class="blog-filter-row" role="tablist" aria-label="Filter by category">
@@ -46,8 +45,7 @@ const formatDate = (d: Date) =>
         ))}
         <span class="blog-filter-count" id="visible-count">{allPublished.length} articles</span>
       </div>
-    </div>
-  </div>
+  </PageHeader>
 
   <!-- Featured post — full-width editorial card -->
   {featuredPost && (

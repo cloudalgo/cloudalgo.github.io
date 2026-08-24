@@ -1,6 +1,7 @@
 ---
 import Page from '../../layouts/Page.astro';
 import { caseStudies } from '../../data/case-studies';
+import PageHeader from '@/components/ui/PageHeader.astro';
 
 export function getStaticPaths() {
   return caseStudies.map(cs => ({ params: { slug: cs.id }, props: { cs } }));
@@ -39,15 +40,14 @@ const schema = {
 >
 
   <!-- ── Hero ── -->
-  <div class="page-header csd-hero-wrap">
-    <div class="container">
-      <nav class="breadcrumb">
-        <a href="/">Home</a>
-        <span>&rarr;</span>
-        <a href="/case-studies">Case Studies</a>
-        <span>&rarr;</span>
-        <span>{cs.company}</span>
-      </nav>
+  <PageHeader
+    class="csd-hero-wrap"
+    crumbs={[
+      { label: 'Home', href: '/' },
+      { label: 'Case Studies', href: '/case-studies' },
+      { label: cs.company },
+    ]}
+  >
       <div class="csd-hero-inner">
         <div class="csd-hero-text">
           <div class="csd-hero-meta">
@@ -328,8 +328,7 @@ const schema = {
           )}
         </div>
       </div>
-    </div>
-  </div>
+  </PageHeader>
 
   <!-- ── Challenge ── -->
   <section class="csd-section csd-section--white">
