@@ -1,4 +1,5 @@
----
+---import SectionLabel from '../ui/SectionLabel.astro';
+
 // Static pull-quote(s). This was a Swiper carousel, but with a single testimonial
 // the autoplay and nav arrows went nowhere. Add entries to TESTIMONIALS and the
 // grid widens on its own — no JS, no hydration.
@@ -17,7 +18,7 @@ const heading = TESTIMONIALS.length > 1 ? 'In our clients\u2019 words' : 'In a c
 <section id="testimonial-slider" style="padding:6rem 0;border-top:1px solid var(--ca-border);">
   <div style="max-width:1278px;margin:0 auto;padding:0 1.5rem;">
     <div style="margin-bottom:3rem;">
-      <p class="section-label anim-fade-up">Client stories</p>
+      <SectionLabel class="anim-fade-up">Client stories</SectionLabel>
       <h2 class="anim-fade-up" style="font-size:clamp(2rem,3.5vw,3rem);font-weight:800;letter-spacing:-0.02em;margin:0;transition-delay:0.05s;">
         {heading}
       </h2>

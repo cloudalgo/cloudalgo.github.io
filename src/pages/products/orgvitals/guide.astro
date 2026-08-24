@@ -4,6 +4,7 @@
 import Page from '../../../layouts/Page.astro';
 import PageHeader from '@/components/ui/PageHeader.astro';
 import Button from '../../../components/ui/Button.astro';
+import SectionLabel from '../../../components/ui/SectionLabel.astro';
 
 const sections = [
   { id: 'how-orgvitals-works',        num: 1,  label: 'How OrgVitals works' },
@@ -41,7 +42,7 @@ const releasesUrl = 'https://github.com/cloudalgo/orgvitals-releases/releases';
     ]}
   >
 
-      <p class="section-label">Guide</p>
+      <SectionLabel>Guide</SectionLabel>
       <h1>OrgVitals User Guide</h1>
       <p class="ug-meta">
         Everything you can do in OrgVitals &nbsp;&middot;&nbsp; Desktop app (macOS · Windows · Linux) &nbsp;&middot;&nbsp; Read-only &amp; local-first
@@ -87,7 +88,7 @@ const releasesUrl = 'https://github.com/cloudalgo/orgvitals-releases/releases';
 
         <!-- Walkthrough video -->
         <div class="ug-video-block">
-          <p class="section-label">&#9654; Full walkthrough</p>
+          <SectionLabel>&#9654; Full walkthrough</SectionLabel>
           <p class="ug-video-sub">A ~60-second tour of every feature.</p>
           <video class="ug-video" src="/products/orgvitals/guide/walkthrough.mp4" controls preload="metadata" playsinline></video>
         </div>

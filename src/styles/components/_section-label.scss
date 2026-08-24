@@ -1,0 +1,18 @@
+/* ─── Section label ───────────────────────────────────────
+   The small uppercase eyebrow above a section heading. Lived in
+   sections/_about.scss, which was never its home -- it is used on 33
+   headings across the site, not just the about page.
+
+   It is the only rule at this specificity anywhere in the sheet (the one
+   other match, .ug-video-block .section-label in the guide page, is a
+   scoped descendant), so lifting it out does not move it in the cascade.
+   It is @use'd from main.scss in the slot _about.scss used to occupy. */
+.section-label {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ca-secondary-black);
+  margin-bottom: 1rem;
+}

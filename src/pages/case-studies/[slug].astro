@@ -2,6 +2,7 @@
 import Page from '../../layouts/Page.astro';
 import { caseStudies } from '../../data/case-studies';
 import PageHeader from '@/components/ui/PageHeader.astro';
+import SectionLabel from '../../components/ui/SectionLabel.astro';
 
 export function getStaticPaths() {
   return caseStudies.map(cs => ({ params: { slug: cs.id }, props: { cs } }));
@@ -334,7 +335,7 @@ const schema = {
   <section class="csd-section csd-section--white">
     <div class="container csd-two-col">
       <div class="csd-col-label-block">
-        <p class="section-label">The challenge</p>
+        <SectionLabel>The challenge</SectionLabel>
         <div class="csd-col-number" aria-hidden="true">01</div>
       </div>
       <div class="csd-col-content">
@@ -360,7 +361,7 @@ const schema = {
       <div class="container">
         <div class="csd-two-col" style="margin-bottom:2.5rem;">
           <div class="csd-col-label-block">
-            <p class="section-label">Why standard tools failed</p>
+            <SectionLabel>Why standard tools failed</SectionLabel>
             <div class="csd-col-number" aria-hidden="true">02</div>
           </div>
           <div class="csd-col-content">
@@ -399,7 +400,7 @@ const schema = {
     <div class="container">
       <div class="csd-two-col">
         <div class="csd-col-label-block">
-          <p class="section-label" style="color:rgba(255,255,255,0.4);">The solution</p>
+          <SectionLabel style="color:rgba(255,255,255,0.4);">The solution</SectionLabel>
           <div class="csd-col-number" style="color:rgba(255,255,255,0.08);" aria-hidden="true">{cs.toolComparison ? '03' : '02'}</div>
         </div>
         <div class="csd-col-content">
@@ -427,7 +428,7 @@ const schema = {
       <div class="container">
         <div class="csd-two-col" style="margin-bottom:2.5rem;">
           <div class="csd-col-label-block">
-            <p class="section-label">Engineering depth</p>
+            <SectionLabel>Engineering depth</SectionLabel>
             <div class="csd-col-number" aria-hidden="true">{cs.toolComparison ? '04' : '03'}</div>
           </div>
           <div class="csd-col-content">
@@ -452,7 +453,7 @@ const schema = {
     <div class="container">
       <div class="csd-two-col" style="margin-bottom:3rem;">
         <div class="csd-col-label-block">
-          <p class="section-label">The results</p>
+          <SectionLabel>The results</SectionLabel>
           <div class="csd-col-number" aria-hidden="true">{cs.technicalHighlights ? (cs.toolComparison ? '05' : '04') : (cs.toolComparison ? '04' : '03')}</div>
         </div>
         <div class="csd-col-content">
@@ -498,7 +499,7 @@ const schema = {
       <div class="container">
         <div class="csd-two-col" style="margin-bottom:2.5rem;">
           <div class="csd-col-label-block">
-            <p class="section-label" style="color:rgba(255,255,255,0.4);">The CloudAlgo difference</p>
+            <SectionLabel style="color:rgba(255,255,255,0.4);">The CloudAlgo difference</SectionLabel>
           </div>
           <div class="csd-col-content">
             <h2 class="csd-section-title" style="color:var(--color-on-inverse);">What this shows about how we work.</h2>
@@ -537,7 +538,7 @@ const schema = {
   {cs.techStack && cs.techStack.length > 0 ? (
     <section class="csd-section csd-section--white" style="padding-top:3.5rem;padding-bottom:3.5rem;">
       <div class="container">
-        <p class="section-label" style="margin-bottom:1.5rem;">Technology stack</p>
+        <SectionLabel style="margin-bottom:1.5rem;">Technology stack</SectionLabel>
         <div class="csd-stack-grid">
           {cs.techStack.map(row => (
             <div class="csd-stack-row">
@@ -551,7 +552,7 @@ const schema = {
   ) : (
     <section class="csd-section csd-section--offwhite" style="padding-top:3rem;padding-bottom:3rem;">
       <div class="container">
-        <p class="section-label" style="margin-bottom:1rem;">Tech stack</p>
+        <SectionLabel style="margin-bottom:1rem;">Tech stack</SectionLabel>
         <div class="csd-tags">
           {cs.tags.map(tag => <span class="csd-tag">{tag}</span>)}
         </div>

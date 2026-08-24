@@ -13,6 +13,7 @@
 import Container from './Container.astro';
 import Breadcrumb from './Breadcrumb.astro';
 import type { Crumb } from './Breadcrumb.astro';
+import SectionLabel from './SectionLabel.astro';
 
 interface Props {
   /** Rendered with set:html — several titles carry a <br/>. */
@@ -43,7 +44,7 @@ const {
 <div class:list={['page-header', className]} style={style}>
   <Container>
     {crumbs && crumbs.length > 0 && <Breadcrumb items={crumbs} separator={separator} />}
-    {eyebrow && <p class="section-label">{eyebrow}</p>}
+    {eyebrow && <SectionLabel>{eyebrow}</SectionLabel>}
     {title && <h1 style={titleStyle} set:html={title} />}
     {lead && <p style={leadStyle}>{lead}</p>}
     <slot />

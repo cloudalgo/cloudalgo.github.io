@@ -26,6 +26,7 @@
 // ── Page sections ─────────────────────────────────────────
 @use 'sections/hero';
 @use 'sections/about';
+@use 'components/section-label';
 
 @use 'components/feature-cards';
 @use 'components/service-cards';

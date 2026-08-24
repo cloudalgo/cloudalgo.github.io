@@ -4,6 +4,7 @@ import Page from '../../layouts/Page.astro';
 import VideoPlayer from '../../components/ui/VideoPlayer.astro';
 import PageHeader from '@/components/ui/PageHeader.astro';
 import Button from '../../components/ui/Button.astro';
+import SectionLabel from '../../components/ui/SectionLabel.astro';
 
 export async function getStaticPaths() {
   const products = await getCollection('products', ({ data }) => data.published);
@@ -341,7 +342,7 @@ const hasPricingOrReqs = (data.pricing && data.pricing.length > 0) ||
   >
       <div style="display:grid;grid-template-columns:1fr auto;gap:3rem;align-items:center;margin-top:1.5rem;" class="prod-hero-grid">
         <div>
-          <p class="section-label">{typeLabel(data.type)}</p>
+          <SectionLabel>{typeLabel(data.type)}</SectionLabel>
           <div style="display:flex;align-items:center;gap:0.625rem;margin-bottom:0.75rem;flex-wrap:wrap;">
             {data.status === 'ga' ? (
               <span style="background:var(--surface-inverse);color:var(--color-on-inverse);font-size:0.65rem;font-weight:700;padding:3px 10px;border-radius:100px;text-transform:uppercase;letter-spacing:0.06em;">
@@ -391,7 +392,7 @@ const hasPricingOrReqs = (data.pricing && data.pricing.length > 0) ||
   <!-- ② Key features — grey bg -->
   <section style="background:var(--surface-page);padding:5rem 0;border-bottom:1px solid var(--border-default);">
     <div class="container">
-      <p class="section-label anim-fade-up">What it does</p>
+      <SectionLabel class="anim-fade-up">What it does</SectionLabel>
       <h2 class="feat-heading anim-fade-up">Key Features</h2>
       <div class="feat-grid">
         {data.features.map((f, i) => (
@@ -414,7 +415,7 @@ const hasPricingOrReqs = (data.pricing && data.pricing.length > 0) ||
   {data.video && (
     <section style="background:var(--surface-inverse);padding:5rem 0;border-bottom:1px solid var(--border-strong);">
       <div class="container">
-        <p class="section-label anim-fade-up" style="color:rgba(255,255,255,0.55);">See it in action</p>
+        <SectionLabel class="anim-fade-up" style="color:rgba(255,255,255,0.55);">See it in action</SectionLabel>
         <h2 class="anim-fade-up" style="font-size:clamp(1.75rem,3vw,2.25rem);font-weight:800;letter-spacing:-0.02em;color:var(--color-on-inverse);margin-bottom:2rem;transition-delay:0.05s;">
           {data.video.heading ?? `${data.title} in motion`}
         </h2>
@@ -438,7 +439,7 @@ const hasPricingOrReqs = (data.pricing && data.pricing.length > 0) ||
       <div class="container">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start;" class="overview-grid">
           <div>
-            <p class="section-label anim-fade-up">Deep Dive</p>
+            <SectionLabel class="anim-fade-up">Deep Dive</SectionLabel>
             <h2 class="anim-fade-up" style="font-size:clamp(1.75rem,3vw,2.25rem);font-weight:800;letter-spacing:-0.02em;margin-bottom:1.5rem;transition-delay:0.05s;">
               About {data.title}
             </h2>
@@ -482,7 +483,7 @@ const hasPricingOrReqs = (data.pricing && data.pricing.length > 0) ||
   {data.techStack && data.techStack.length > 0 && (
     <section style="background:var(--surface-page);padding:4rem 0;border-bottom:1px solid var(--border-default);">
       <div class="container">
-        <p class="section-label anim-fade-up">Under the Hood</p>
+        <SectionLabel class="anim-fade-up">Under the Hood</SectionLabel>
         <h2 class="anim-fade-up" style="font-size:clamp(1.75rem,3vw,2.25rem);font-weight:800;letter-spacing:-0.02em;margin-bottom:2rem;transition-delay:0.05s;">
           Tech Stack
         </h2>
@@ -502,7 +503,7 @@ const hasPricingOrReqs = (data.pricing && data.pricing.length > 0) ||
   {data.screenshots && data.screenshots.length > 0 && (
     <section class="ss-section">
       <div class="container">
-        <p class="section-label">See it in action</p>
+        <SectionLabel>See it in action</SectionLabel>
         <h2 class="ss-heading">Screenshots</h2>
       </div>
 
@@ -550,7 +551,7 @@ const hasPricingOrReqs = (data.pricing && data.pricing.length > 0) ||
   {data.roadmap && data.roadmap.length > 0 && (
     <section style="background:var(--surface-card);padding:4rem 0;border-bottom:1px solid var(--border-default);">
       <div class="container">
-        <p class="section-label anim-fade-up">What's Coming</p>
+        <SectionLabel class="anim-fade-up">What's Coming</SectionLabel>
         <h2 class="anim-fade-up" style="font-size:clamp(1.75rem,3vw,2.25rem);font-weight:800;letter-spacing:-0.02em;margin-bottom:2.5rem;transition-delay:0.05s;">
           Roadmap
         </h2>
@@ -579,7 +580,7 @@ const hasPricingOrReqs = (data.pricing && data.pricing.length > 0) ||
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:3rem;">
           {data.pricing && data.pricing.length > 0 && (
             <div>
-              <p class="section-label">Licensing</p>
+              <SectionLabel>Licensing</SectionLabel>
               <h3 style="font-size:1.125rem;font-weight:700;color:var(--color-heading);margin-bottom:1rem;">Pricing</h3>
               <table style="width:100%;border-collapse:collapse;border:1px solid var(--border-default);border-radius:12px;overflow:hidden;background:var(--surface-card);">
                 <tbody>
@@ -595,7 +596,7 @@ const hasPricingOrReqs = (data.pricing && data.pricing.length > 0) ||
           )}
           {data.requirements && data.requirements.length > 0 && (
             <div>
-              <p class="section-label">Before you install</p>
+              <SectionLabel>Before you install</SectionLabel>
               <h3 style="font-size:1.125rem;font-weight:700;color:var(--color-heading);margin-bottom:1rem;">Requirements</h3>
               <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:0.75rem;">
                 {data.requirements.map(req => (
@@ -616,7 +617,7 @@ const hasPricingOrReqs = (data.pricing && data.pricing.length > 0) ||
   {data.legal && data.legal.length > 0 && (
     <section style="background:var(--surface-card);padding:3rem 0;border-bottom:1px solid var(--border-default);">
       <div class="container">
-        <p class="section-label">Legal &amp; Privacy</p>
+        <SectionLabel>Legal &amp; Privacy</SectionLabel>
         <div style="display:flex;flex-wrap:wrap;gap:0.75rem;margin-top:1rem;">
           {data.legal.map(l => (
             <a href={l.href} class="legal-link" style="display:inline-flex;align-items:center;gap:0.4rem;font-size:0.875rem;font-weight:600;color:var(--color-heading);border:1px solid var(--border-default);border-radius:100px;padding:0.5rem 1.1rem;text-decoration:none;">

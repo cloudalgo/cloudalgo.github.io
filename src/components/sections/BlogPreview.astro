@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import BlogCard from '../ui/BlogCard.astro';
 import Button from '../ui/Button.astro';
+import SectionLabel from '../ui/SectionLabel.astro';
 
 const allPosts = await getCollection('blog', ({ data }) => data.published);
 const posts = allPosts
@@ -16,7 +17,7 @@ const posts = allPosts
   <div style="max-width:1278px;margin:0 auto;padding:0 1.5rem;">
     <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:3rem;gap:1rem;flex-wrap:wrap;">
       <div>
-        <p class="section-label anim-fade-up">Writing</p>
+        <SectionLabel class="anim-fade-up">Writing</SectionLabel>
         <h2 class="anim-fade-up" style="font-size:clamp(2rem,3.5vw,3rem);font-weight:800;letter-spacing:-0.02em;margin:0;transition-delay:0.05s;">
           From the team
         </h2>

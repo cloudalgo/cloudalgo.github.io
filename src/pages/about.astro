@@ -3,6 +3,7 @@ import Page from '../layouts/Page.astro';
 import StatsBar from '../components/sections/StatsBar.astro';
 import PageHeader from '@/components/ui/PageHeader.astro';
 import Button from '../components/ui/Button.astro';
+import SectionLabel from '../components/ui/SectionLabel.astro';
 ---
 <Page
   title="About Us — CloudAlgo | Certified Salesforce Consulting Partner"
@@ -36,7 +37,7 @@ import Button from '../components/ui/Button.astro';
           </div>
         </div>
         <div class="col-lg-7">
-          <p class="section-label">Our story</p>
+          <SectionLabel>Our story</SectionLabel>
           <h2 style="font-size:clamp(1.75rem,2.5vw,2.25rem);font-weight:800;letter-spacing:-0.02em;margin-bottom:1.5rem;line-height:1.2;">
             We help businesses get more out of their Salesforce investment.
           </h2>
@@ -65,7 +66,7 @@ import Button from '../components/ui/Button.astro';
   <!-- Industries -->
   <section style="background:var(--surface-page);padding:5rem 0;border-bottom:1px solid var(--border-default);">
     <div class="container">
-      <p class="section-label anim-fade-up">Expertise</p>
+      <SectionLabel class="anim-fade-up">Expertise</SectionLabel>
       <h2 class="anim-fade-up" style="font-size:clamp(2rem,3vw,2.75rem);font-weight:800;letter-spacing:-0.02em;margin-bottom:3rem;transition-delay:0.05s;">
         Industries we serve
       </h2>
@@ -150,7 +151,7 @@ import Button from '../components/ui/Button.astro';
   <!-- Core Values -->
   <section style="background:var(--surface-card);padding:5rem 0;border-bottom:1px solid var(--border-default);">
     <div class="container">
-      <p class="section-label anim-fade-up">How we work</p>
+      <SectionLabel class="anim-fade-up">How we work</SectionLabel>
       <h2 class="anim-fade-up" style="font-size:clamp(2rem,3vw,2.75rem);font-weight:800;letter-spacing:-0.02em;margin-bottom:3rem;transition-delay:0.05s;">
         Built on three core principles.
       </h2>
@@ -197,7 +198,7 @@ import Button from '../components/ui/Button.astro';
   <!-- How We Work -->
   <section style="background:var(--surface-page);padding:5rem 0;border-bottom:1px solid var(--border-default);">
     <div class="container">
-      <p class="section-label anim-fade-up">Engagement model</p>
+      <SectionLabel class="anim-fade-up">Engagement model</SectionLabel>
       <h2 class="anim-fade-up" style="font-size:clamp(2rem,3vw,2.75rem);font-weight:800;letter-spacing:-0.02em;margin-bottom:3rem;transition-delay:0.05s;">
         How a project with us actually runs.
       </h2>
@@ -259,7 +260,7 @@ import Button from '../components/ui/Button.astro';
   <!-- Certifications & Tech Stack -->
   <section style="background:var(--surface-card);padding:5rem 0;border-bottom:1px solid var(--border-default);">
     <div class="container">
-      <p class="section-label anim-fade-up">Credentials</p>
+      <SectionLabel class="anim-fade-up">Credentials</SectionLabel>
       <h2 class="anim-fade-up" style="font-size:clamp(2rem,3vw,2.75rem);font-weight:800;letter-spacing:-0.02em;margin-bottom:2.5rem;transition-delay:0.05s;">
         Certified across the Salesforce ecosystem.
       </h2>
@@ -287,7 +288,7 @@ import Button from '../components/ui/Button.astro';
 
       <hr style="border:none;border-top:1px solid var(--border-default);margin:2.5rem 0;" />
 
-      <p class="section-label anim-fade-up">Tech stack</p>
+      <SectionLabel class="anim-fade-up">Tech stack</SectionLabel>
       <div style="display:flex;flex-wrap:wrap;gap:0.625rem;margin-top:1rem;">
         {['Salesforce', 'Heroku', 'MuleSoft', 'Apex', 'LWC', 'SOQL', 'REST / SOAP APIs', 'Node.js', 'PostgreSQL', 'AWS'].map((tech, i) => (
           <span class="anim-fade-up" style={`border:1.5px solid var(--border-default);border-radius:100px;padding:0.4rem 1rem;font-size:0.8rem;font-weight:600;color:var(--color-heading);background:var(--surface-card);transition-delay:${i * 0.03}s;`}>
