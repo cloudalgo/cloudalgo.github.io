@@ -1,0 +1,142 @@
+// ─── Theme: monochrome ────────────────────────────────────
+// The palette the site ships today: near-black ink, warm
+// off-white paper, no accent hue. Values lifted verbatim from
+// the former tokens/_primitives.scss, which lifted them from
+// the former global.css.
+//
+// This is the file a rebrand replaces. Nothing outside
+// tokens/ reads these names directly — components read the
+// semantic layer, the semantic layer reads this — so swapping
+// the `@use` in main.scss for another theme restyles every
+// surface, rule and glyph on the site in one line.
+//
+// Every key in themes/_contract.scss must appear below, and
+// nothing else may. The build enforces both.
+
+@use 'contract';
+
+$theme: (
+  /* Ink — near-black neutral ramp, warm-leaning */
+  'ink-900': #0A0A0A,  /* headings, filled buttons, hover borders */
+  'ink-880': #111111,  /* cards raised off an ink-900 section */
+  'ink-870': #222222,  /* hairline rules on an ink-900 section */
+  'ink-860': #1F1F1F,  /* long-form prose — darker than UI body copy */
+  'ink-840': #3A3A3A,  /* long-form standfirst / secondary prose */
+  'ink-800': #2A2A2A,  /* footer CTA surface */
+  'ink-600': #555555,  /* link hover */
+  'ink-500': #5A5A5A,  /* body copy, nav links, metadata */
+  'ink-400': #8A8A8A,  /* captions */
+  'ink-300': #999999,  /* card meta, least-emphasis text */
+  'ink-000': #000000,  /* true black — pressed states only */
+
+  /* Paper — warm off-white ramp */
+  'paper-000': #FFFFFF,  /* cards, modals, header */
+  'paper-025': #F2F2F0,  /* softened light text on an inverse surface */
+  'paper-050': #F8F8F5,  /* faintest wash — table-row hover */
+  'paper-100': #F5F5F2,  /* page background, alternate sections */
+  'paper-150': #F0F0EC,  /* tinted wash — callouts, inline code, chips */
+  'paper-200': #E0E0DC,  /* borders, dividers, inputs */
+  'paper-250': #CCCCCC,  /* disabled control text */
+  'paper-300': #CFCFCA,  /* toggle tracks, bullet dots, ghost numerals */
+  'paper-400': #B4B4B0,  /* faintest metadata text */
+
+  /* Accent ramp.
+     The brand is monochrome today, so the accent resolves to ink.
+     A theme file redefines these three and the accent appears
+     everywhere at once — no component file is touched. */
+  'accent-400': #2A2A2A,
+  'accent-500': #0A0A0A,
+  'accent-600': #000000,
+
+  /* Status. The only hues in the palette — everything else is
+     neutral. Reserved for form validation and state messaging. */
+  'danger-500': #DC2626,
+  'danger-400': #E53E3E,
+
+  /* Code-block chrome. A deliberately fixed dark ramp: a syntax
+     surface should NOT invert with the page theme, or code becomes
+     unreadable the moment someone swaps the palette. */
+  'code-bg': #0D0D0D,
+  'code-bar': #1A1A1A,
+  'code-rule': #252525,
+  'code-gutter': #333333,
+  'code-fg': #CCCCCC,
+  'code-literal': #C7254E,
+  'code-dot-red': #FF5F57,
+  'code-dot-amber': #FEBC2E,
+  'code-dot-green': #28C840,
+
+  /* Device / hardware chrome inside product mockups. Distinct from
+     --ink-900 so a mockup bezel keeps its own value under a theme. */
+  'hardware-800': #1A1A1A,
+
+  /* Type families. `Outfit` is deliberately unquoted: a custom property
+     value is preserved verbatim by the minifier, so quoting it here would
+     leak `"Outfit"` into every rule that reads the token. */
+  'family-sans': 'Outfit, system-ui, sans-serif',
+  'family-mono': 'ui-monospace, "SF Mono", "Menlo", monospace',
+
+  /* The four stacks below are drift, not design. Nothing on the site
+     needs five different monospace fallback chains or a second sans —
+     these are simply what the call sites were spelling, preserved
+     verbatim so moving them into this layer renders nothing new.
+     Phase 7 picks one mono and deletes the rest. */
+  'family-system': '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif',
+  'family-mono-jetbrains': '"JetBrains Mono", "Fira Code", ui-monospace, monospace',
+  'family-mono-sf': '"SF Mono", "Fira Code", ui-monospace, monospace',
+  'family-mono-sf-bare': '"SF Mono", "Fira Code", monospace',
+  'family-mono-courier': '"Courier New", monospace',
+
+  /* Type scale */
+  'size-h1': 5.5rem,
+  'size-h2': 3.5rem,
+  'size-h3': 1.375rem,
+  'size-h4': calc(1.275rem + 0.3vw),
+  'size-h5': 1.25rem,
+  'size-h6': 1rem,
+  'size-body': 1rem,
+  'size-body-lg': 1.125rem,
+  'size-body-sm': 0.875rem,
+  'size-label': 0.75rem,
+
+  'weight-regular': 400,
+  'weight-medium': 500,
+  'weight-semibold': 600,
+  'weight-bold': 700,
+  'weight-extrabold': 800,
+  'weight-black': 900,
+
+  /* Display sizes.
+     The fluid steps the section headings are drawn at. There are
+     eight because nineteen headings were written one at a time as
+     inline styles and drifted, not because a ladder needed eight
+     rungs -- but they do order cleanly by ceiling, 3.5rem down to
+     2rem, so they are named for where they sit on it. Converging
+     them is deleting rungs from the middle. */
+  'display-3xl': clamp(2rem, 4vw, 3.5rem),
+  'display-2xl': clamp(2rem, 3.5vw, 3rem),
+  'display-xl': clamp(2rem, 3.5vw, 2.75rem),
+  'display-lg': clamp(2rem, 3vw, 2.75rem),
+  'display-md': clamp(1.75rem, 3vw, 2.5rem),
+  'display-sm': clamp(1.75rem, 3vw, 2.25rem),
+  'display-xs': clamp(1.75rem, 2.5vw, 2.25rem),
+  'display-2xs': clamp(1.5rem, 3vw, 2rem),
+
+  /* Radii */
+  'radius-sm': 6px,
+  'radius-md': 8px,
+  'radius-lg': 12px,
+  /* 14 and 16 exist because the cards drifted, not because the scale
+     needed them. When the card radii converge these go with them. */
+  'radius-xl': 14px,
+  'radius-2xl': 16px,
+  'radius-pill': 100px,
+
+  /* Motion */
+  'ease-out': cubic-bezier(0.16, 1, 0.3, 1),
+  'duration-fast': 0.2s,
+  'duration-base': 0.3s,
+  'duration-slow': 0.6s,
+);
+
+@include contract.emit($theme, 'monochrome');

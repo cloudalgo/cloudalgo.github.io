@@ -1,0 +1,133 @@
+// ─── The theme contract ───────────────────────────────────
+// A theme is a flat map of primitive values — the raw palette,
+// type stacks, scale, radii and motion the whole site is drawn
+// from. `emit()` is the only thing that writes them into :root.
+//
+// Two reasons this is a mixin over a hand-written :root block.
+//
+// 1. A missing token fails the BUILD, not the page. Every key
+//    below is required. Drop one from a theme and sass stops
+//    with the name of what is missing, instead of shipping a
+//    stylesheet where some rule silently resolves to nothing.
+//
+// 2. The rgba() channel triplets are DERIVED. Every colour in
+//    the map also emits `--<name>-rgb: r, g, b`, so a theme
+//    author cannot get a triplet out of step with its hex —
+//    which was previously a comment asking them not to.
+//
+// Adding a token to the palette means adding it here first;
+// that is the point. The list is the contract.
+
+@use 'sass:map';
+@use 'sass:meta';
+@use 'sass:list';
+@use 'sass:color';
+
+$required: (
+  'ink-900',
+  'ink-880',
+  'ink-870',
+  'ink-860',
+  'ink-840',
+  'ink-800',
+  'ink-600',
+  'ink-500',
+  'ink-400',
+  'ink-300',
+  'ink-000',
+  'paper-000',
+  'paper-025',
+  'paper-050',
+  'paper-100',
+  'paper-150',
+  'paper-200',
+  'paper-250',
+  'paper-300',
+  'paper-400',
+  'accent-400',
+  'accent-500',
+  'accent-600',
+  'danger-500',
+  'danger-400',
+  'code-bg',
+  'code-bar',
+  'code-rule',
+  'code-gutter',
+  'code-fg',
+  'code-literal',
+  'code-dot-red',
+  'code-dot-amber',
+  'code-dot-green',
+  'hardware-800',
+  'family-sans',
+  'family-mono',
+  'family-system',
+  'family-mono-jetbrains',
+  'family-mono-sf',
+  'family-mono-sf-bare',
+  'family-mono-courier',
+  'size-h1',
+  'size-h2',
+  'size-h3',
+  'size-h4',
+  'size-h5',
+  'size-h6',
+  'size-body',
+  'size-body-lg',
+  'size-body-sm',
+  'size-label',
+  'weight-regular',
+  'weight-medium',
+  'weight-semibold',
+  'weight-bold',
+  'weight-extrabold',
+  'weight-black',
+  'display-3xl',
+  'display-2xl',
+  'display-xl',
+  'display-lg',
+  'display-md',
+  'display-sm',
+  'display-xs',
+  'display-2xs',
+  'radius-sm',
+  'radius-md',
+  'radius-lg',
+  'radius-xl',
+  'radius-2xl',
+  'radius-pill',
+  'ease-out',
+  'duration-fast',
+  'duration-base',
+  'duration-slow',
+);
+
+@mixin emit($theme, $name: 'unnamed') {
+  @each $key in $required {
+    @if not map.has-key($theme, $key) {
+      @error 'Theme "#{$name}" is missing the required token --#{$key}. '
+           + 'Every key in $required (themes/_contract.scss) must be defined.';
+    }
+  }
+  @each $key, $value in $theme {
+    @if not list.index($required, $key) {
+      @error 'Theme "#{$name}" defines --#{$key}, which is not in the theme '
+           + 'contract. Add it to $required in themes/_contract.scss first.';
+    }
+  }
+
+  :root {
+    @each $key, $value in $theme {
+      --#{$key}: #{$value};
+
+      /* Channel triplet for the same value, in the form rgba() needs.
+         A colour used at partial alpha is still a palette colour: the
+         alpha ramps in tokens/_semantic.scss read these, so without
+         them every scrim, hairline and shadow would hardcode the ink
+         and survive a theme swap unchanged. */
+      @if meta.type-of($value) == 'color' {
+        --#{$key}-rgb: #{color.channel($value, 'red', $space: rgb)}, #{color.channel($value, 'green', $space: rgb)}, #{color.channel($value, 'blue', $space: rgb)};
+      }
+    }
+  }
+}
