@@ -141,9 +141,17 @@ export default function ProductsSection({ products }: Props) {
           >
             Built in-house,<br />for Salesforce teams.
           </motion.h2>
-          <a href="/products" className="products-view-all" style={{ fontSize: '0.9375rem', fontWeight: 700, color: 'rgba(255,255,255,0.6)', whiteSpace: 'nowrap', transition: 'color 0.2s' }}>
+          <motion.a
+            href="/products"
+            className="products-view-all"
+            initial={reduceMotion ? undefined : 'hidden'}
+            whileInView={reduceMotion ? undefined : 'show'}
+            viewport={{ once: true, amount: 0.4 }}
+            variants={headingVariants}
+            style={{ fontSize: '0.9375rem', fontWeight: 700, color: 'rgba(255,255,255,0.6)', whiteSpace: 'nowrap', transition: 'color 0.2s' }}
+          >
             View all products &rarr;
-          </a>
+          </motion.a>
         </div>
 
         <motion.div
