@@ -1,5 +1,11 @@
-import CountUp from 'react-countup';
+import CountUpImport from 'react-countup';
 import { useState, useEffect } from 'react';
+
+// react-countup is CommonJS. Rolldown (Astro 7's bundler) emits its CJS interop
+// in node mode, which leaves the default import pointing at `module.exports`
+// rather than the component — React then throws "element type is invalid".
+// Unwrap defensively so this works under either interop.
+const CountUp = ((CountUpImport as any).default ?? CountUpImport) as typeof CountUpImport;
 
 const STATS = [
   { end: 1,   suffix: ' Day', label: 'Avg. response time',       duration: 1 },
