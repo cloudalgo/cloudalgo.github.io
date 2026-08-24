@@ -1,0 +1,147 @@
+// ─── Theme: press-room ────────────────────────────────────
+// Paper and Ember. Warm off-white stock, neutral near-black
+// ink, and the logo's #F75A41 carrying the accent.
+//
+// This file exists to prove the contract: it is the ONLY file
+// that changes to reskin the site. Swap the `@use` in
+// main.scss and every surface, rule, border, shadow, scrim and
+// SVG glyph follows, because nothing outside tokens/ names a
+// colour any more.
+//
+// Two notes on what is deliberately NOT here.
+//
+// Type is unchanged from monochrome. The families are real
+// tokens and a theme may set them, but the webfont is linked in
+// Base.astro -- so changing `family-sans` without changing that
+// link renders the fallback, and the flip would prove less than
+// it looks. Fonts move when the <head> does.
+//
+// The code-block ramp is copied, not re-toned. A syntax surface
+// that inverts with the page theme becomes unreadable the moment
+// someone swaps the palette; that reasoning holds under every
+// theme, so the values hold too.
+//
+// Every ratio below is measured against the background the token
+// actually paints on, not against white. Four roles sit under
+// 4.5:1 -- muted, faint and faintest text, and the hairline rule.
+// They are under it in monochrome too, and this theme raises all
+// four; fixing them properly is a semantic-layer change (those
+// roles need to stop being that light), not a palette change,
+// so it is not smuggled in here.
+
+@use 'contract';
+
+$theme: (
+  /* Ink — neutral near-black. The warmth in this theme comes from
+     the paper and the ember; warming the ink as well collapses the
+     whole palette into one brown note. */
+  'ink-900': #0E0E0E,  /* headings, filled buttons, hover borders — 17.2:1 on page */
+  'ink-880': #171717,  /* cards raised off an ink-900 section */
+  'ink-870': #282828,  /* hairline rules on an ink-900 section */
+  'ink-860': #1E1E1E,  /* long-form prose — 16.7:1 on card */
+  'ink-840': #3B3B3B,  /* long-form standfirst — 11.2:1 on card */
+  'ink-800': #2B2B2B,  /* footer CTA surface — carries white at 14.2:1 */
+  'ink-600': #545454,  /* link hover — 6.8:1 on page */
+  'ink-500': #585858,  /* body copy — 6.4:1 on page, 7.1:1 on card */
+  'ink-400': #7C7C7C,  /* captions — 3.7:1, up from 3.2:1 */
+  'ink-300': #8C8C8C,  /* card meta — 3.4:1, up from 2.9:1 */
+  'ink-000': #000000,  /* true black — pressed states only */
+
+  /* Paper — warm off-white. Pulled off cream on purpose: a yellower
+     stock under an orange accent reads as one hue at two strengths
+     rather than as paper and ink. */
+  'paper-000': #FFFFFF,  /* cards, modals, header */
+  'paper-025': #F1EFEB,  /* softened light text on an inverse surface */
+  'paper-050': #FAF9F6,  /* faintest wash — table-row hover */
+  'paper-100': #F3F2EE,  /* page background, alternate sections */
+  'paper-150': #ECEAE4,  /* tinted wash — callouts, inline code, chips */
+  'paper-200': #DCD8D0,  /* borders, dividers, inputs */
+  'paper-250': #C3BEB6,  /* disabled control text */
+  'paper-300': #CBC6BD,  /* toggle tracks, bullet dots, ghost numerals */
+  'paper-400': #A8A29A,  /* faintest metadata text */
+
+  /* Ember — the logo mark's #F75A41, and the reason `accent-on` is a
+     theme key. White on #F75A41 is 3.2:1 and fails AA at button text
+     size; no amount of naming fixes that. Darkening the ember until
+     white passes lands on #DD3824, which is visibly not the brand.
+     So the accent keeps the brand value and the label goes dark. */
+  'accent-400': #FF7A63,  /* lighter ember — accent on an inverse surface */
+  'accent-500': #F75A41,  /* brand ember — fills, band, borders */
+  'accent-600': #EF4E39,  /* hover — one step deeper, ink still 5.4:1 */
+  'accent-on':  #0E0E0E,  /* ink on ember: 6.0:1 rest, 5.4:1 hover */
+
+  /* Status. Deepened from monochrome so danger clears AA on a card
+     (5.6:1, was 4.8:1) and stays distinguishable beside the ember —
+     a red accent and a red error state are the failure mode here. */
+  'danger-500': #C62828,
+  'danger-400': #E04B3C,
+
+  /* Code-block chrome — fixed across themes. See the header. */
+  'code-bg': #0D0D0D,
+  'code-bar': #1A1A1A,
+  'code-rule': #252525,
+  'code-gutter': #333333,
+  'code-fg': #CCCCCC,
+  'code-literal': #C7254E,
+  'code-dot-red': #FF5F57,
+  'code-dot-amber': #FEBC2E,
+  'code-dot-green': #28C840,
+
+  /* Device chrome inside product mockups. */
+  'hardware-800': #1A1A1A,
+
+  /* Type — unchanged. See the header for why. */
+  'family-sans': 'Outfit, system-ui, sans-serif',
+  'family-mono': 'ui-monospace, "SF Mono", "Menlo", monospace',
+  'family-system': '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif',
+  'family-mono-jetbrains': '"JetBrains Mono", "Fira Code", ui-monospace, monospace',
+  'family-mono-sf': '"SF Mono", "Fira Code", ui-monospace, monospace',
+  'family-mono-sf-bare': '"SF Mono", "Fira Code", monospace',
+  'family-mono-courier': '"Courier New", monospace',
+
+  /* Type scale — unchanged. */
+  'size-h1': 5.5rem,
+  'size-h2': 3.5rem,
+  'size-h3': 1.375rem,
+  'size-h4': calc(1.275rem + 0.3vw),
+  'size-h5': 1.25rem,
+  'size-h6': 1rem,
+  'size-body': 1rem,
+  'size-body-lg': 1.125rem,
+  'size-body-sm': 0.875rem,
+  'size-label': 0.75rem,
+
+  'weight-regular': 400,
+  'weight-medium': 500,
+  'weight-semibold': 600,
+  'weight-bold': 700,
+  'weight-extrabold': 800,
+  'weight-black': 900,
+
+  'display-3xl': clamp(2rem, 4vw, 3.5rem),
+  'display-2xl': clamp(2rem, 3.5vw, 3rem),
+  'display-xl': clamp(2rem, 3.5vw, 2.75rem),
+  'display-lg': clamp(2rem, 3vw, 2.75rem),
+  'display-md': clamp(1.75rem, 3vw, 2.5rem),
+  'display-sm': clamp(1.75rem, 3vw, 2.25rem),
+  'display-xs': clamp(1.75rem, 2.5vw, 2.25rem),
+  'display-2xs': clamp(1.5rem, 3vw, 2rem),
+
+  /* Radii — the press-room edge. Sharper than monochrome across the
+     board; the pill survives because a pill button is a shape
+     decision, not a radius-scale rung. */
+  'radius-sm': 2px,
+  'radius-md': 3px,
+  'radius-lg': 4px,
+  'radius-xl': 4px,
+  'radius-2xl': 6px,
+  'radius-pill': 100px,
+
+  /* Motion — a touch quicker and flatter than monochrome's long ease. */
+  'ease-out': cubic-bezier(0.2, 0.8, 0.2, 1),
+  'duration-fast': 0.15s,
+  'duration-base': 0.25s,
+  'duration-slow': 0.45s,
+);
+
+@include contract.emit($theme, 'press-room');

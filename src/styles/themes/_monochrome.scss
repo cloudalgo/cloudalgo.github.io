@@ -47,6 +47,11 @@ $theme: (
   'accent-400': #2A2A2A,
   'accent-500': #0A0A0A,
   'accent-600': #000000,
+  /* What sits ON the accent. White here because the accent is ink.
+     A theme with a mid-tone accent cannot use white and pass AA, and
+     the semantic layer is shared across themes -- so the foreground
+     has to be a theme value, not a fixed mapping. */
+  'accent-on': #FFFFFF,
 
   /* Status. The only hues in the palette — everything else is
      neutral. Reserved for form validation and state messaging. */
