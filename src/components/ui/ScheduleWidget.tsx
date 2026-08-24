@@ -24,6 +24,10 @@ if (typeof window !== 'undefined' && !API_URL) {
 }
 const SLOT_DURATION_MIN = 30;
 
+const FOCUSABLE_SELECTOR =
+  'a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), ' +
+  'select:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
 type Step = 'date' | 'details' | 'confirmed';
 
 // ── Utilities ──────────────────────────────────────────────────────────────
@@ -433,6 +437,8 @@ function StepDetails({
     setEmailInput('');
   };
 
+  const emailInputRef = useRef<HTMLInputElement>(null);
+
   const handleEmailKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (['Enter', ',', 'Tab'].includes(e.key)) {
       e.preventDefault();
@@ -506,7 +512,17 @@ function StepDetails({
           </div>
           <div className="sw-field">
             <label htmlFor="sw-email">Email <span aria-hidden="true">*</span></label>
-            <div className="sw-email-pills" onClick={() => document.getElementById('sw-email')?.focus()}>
+            <div
+              className="sw-email-pills"
+              onMouseDown={e => {
+                // Pointer convenience only — clicking the padding focuses the
+                // input. Ignore clicks that land on a pill's remove button, and
+                // preventDefault so focus lands where we put it.
+                if (e.target !== e.currentTarget) return;
+                e.preventDefault();
+                emailInputRef.current?.focus();
+              }}
+            >
               {emails.map(em => (
                 <span key={em} className="sw-email-pill">
                   {em}
@@ -514,6 +530,7 @@ function StepDetails({
                 </span>
               ))}
               <input
+                ref={emailInputRef}
                 id="sw-email"
                 type="email"
                 value={emailInput}
@@ -537,7 +554,7 @@ function StepDetails({
               onChange={e => setNotes(e.target.value)}
             />
           </div>
-          {errorMsg && <p className="sw-error-msg">{errorMsg}</p>}
+          {errorMsg && <p className="sw-error-msg" role="alert">{errorMsg}</p>}
           <button
             type="submit"
             className="sw-submit-btn"
@@ -608,6 +625,8 @@ export default function ScheduleWidget() {
   const [bouncing, setBouncing] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
+  const lastFocusedRef = useRef<HTMLElement | null>(null);
   const [currentMonth, setCurrentMonth] = useState(() =>
     new Date(defaultDate.getFullYear(), defaultDate.getMonth(), 1)
   );
@@ -735,6 +754,55 @@ export default function ScheduleWidget() {
     return () => document.removeEventListener('keydown', onKey);
   }, [isOpen, handleClose]);
 
+  // Remember what had focus before the dialog opened, and hand it back on close
+  useEffect(() => {
+    if (isOpen) {
+      lastFocusedRef.current = document.activeElement as HTMLElement | null;
+      return;
+    }
+    const previous = lastFocusedRef.current;
+    lastFocusedRef.current = null;
+    if (previous && document.contains(previous)) previous.focus();
+  }, [isOpen]);
+
+  // Move focus into the dialog and keep Tab inside it. Re-runs per step so each
+  // screen lands focus on its own first control.
+  useEffect(() => {
+    if (!isOpen) return;
+    const node = modalRef.current;
+    if (!node) return;
+
+    const focusable = () =>
+      Array.from(node.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR))
+        .filter(el => el.offsetWidth > 0 || el.offsetHeight > 0 || el === document.activeElement);
+
+    (focusable()[0] ?? node).focus();
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== 'Tab') return;
+      const items = focusable();
+      if (items.length === 0) {
+        e.preventDefault();
+        node.focus();
+        return;
+      }
+      const first = items[0];
+      const last = items[items.length - 1];
+      const active = document.activeElement as HTMLElement | null;
+      const outside = !active || !node.contains(active);
+      if (e.shiftKey && (outside || active === first)) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && (outside || active === last)) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
+  }, [isOpen, step]);
+
   useEffect(() => () => { if (closeTimerRef.current) clearTimeout(closeTimerRef.current); }, []);
 
   const handleOpen = () => {
@@ -773,6 +841,8 @@ export default function ScheduleWidget() {
       {(isOpen || isClosing) && (
         <div className={`sw-overlay ${isClosing ? 'sw-overlay--exit' : 'sw-overlay--enter'}`}>
           <div
+            ref={modalRef}
+            tabIndex={-1}
             className={`sw-modal ${isClosing ? 'sw-modal--exit' : 'sw-modal--enter'}`}
             onClick={e => e.stopPropagation()}
             role="dialog"

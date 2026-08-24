@@ -110,6 +110,16 @@ h6 { font-size: 1rem; font-weight: 700; }
 .surface-bg { background-color: var(--ca-surface); }
 
 /* ─── Header ─────────────────────────────────────────── */
+/* 38px logo + 2 x 1rem navbar padding */
+:root { --ca-header-h: 4.375rem; }
+
+/* Anchor targets must clear the fixed header when jumped to */
+:target,
+[id]:target,
+main[id] {
+  scroll-margin-top: calc(var(--ca-header-h) + 1.5rem);
+}
+
 .header {
   position: fixed;
   top: 0;
@@ -953,7 +963,8 @@ ul.arrow li::before { content: '→'; position: absolute; left: 0; color: var(--
   background: #fff;
   color: var(--ca-black);
 }
-.form-control:focus { outline: none; border-color: var(--ca-black); }
+.form-control:focus { border-color: var(--ca-black); }
+.form-control:focus:not(:focus-visible) { outline: none; }
 textarea.form-control { resize: vertical; min-height: 140px; }
 .form-group { margin-bottom: 0; }
 .error-line { color: #dc2626; font-size: 0.8rem; display: block; margin-top: 0.25rem; }
@@ -1025,7 +1036,7 @@ textarea.form-control { resize: vertical; min-height: 140px; }
   position: fixed;
   bottom: 0;
   right: 16px;
-  padding-bottom: 16px;
+  padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
   width: 276px;
   z-index: 999;
   display: flex;
@@ -1162,6 +1173,7 @@ textarea.form-control { resize: vertical; min-height: 140px; }
   max-width: 680px;
   max-height: 90vh;
   overflow-y: auto;
+  overscroll-behavior: contain;
   position: relative;
   font-family: 'Outfit', system-ui, sans-serif;
 }
@@ -1177,7 +1189,10 @@ textarea.form-control { resize: vertical; min-height: 140px; }
   .sw-modal--enter, .sw-modal--exit,
   .sw-modal--enter .sw-step-left,
   .sw-modal--enter .sw-step-right,
-  .sw-modal--enter .sw-step--confirmed { animation: none; }
+  .sw-modal--enter .sw-step--confirmed,
+  .sw-launcher-btn--bounce { animation: none; }
+  /* swFadeIn carries `both`, so it must resolve to the visible end state */
+  .sw-launcher { animation: none; opacity: 1; transform: none; }
 }
 
 .sw-step {
@@ -1361,9 +1376,10 @@ textarea.form-control { resize: vertical; min-height: 140px; }
   font-family: 'Outfit', system-ui, sans-serif;
   color: var(--ca-black);
   transition: border-color 150ms;
-  outline: none;
   resize: vertical;
 }
+.sw-field input:focus:not(:focus-visible),
+.sw-field textarea:focus:not(:focus-visible) { outline: none; }
 .sw-field input:not(.sw-email-pills input):focus,
 .sw-field textarea:focus { border-color: var(--ca-black); }
 
@@ -1382,7 +1398,12 @@ textarea.form-control { resize: vertical; min-height: 140px; }
   background: #fff;
   transition: border-color 150ms;
 }
-.sw-email-pills:focus-within { border-color: var(--ca-black); }
+.sw-email-pills:focus-within {
+  border-color: var(--ca-black);
+  outline: 2px solid var(--ca-black);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px #fff;
+}
 .sw-email-pills input {
   border: none !important;
   outline: none !important;
@@ -1515,3 +1536,64 @@ textarea.form-control { resize: vertical; min-height: 140px; }
 @media (max-width: 991px) {
   .page-links { flex-direction: column; gap: 0; }
 }
+
+/* ─── Focus visibility ────────────────────────────────────
+   Dual ring: a white halo hugs the element and a black ring
+   sits outside it, so the indicator stays visible on the
+   light page background and on black/near-black surfaces.
+   Appended last so it wins over any earlier `outline: none`. */
+:focus-visible {
+  outline: 2px solid var(--ca-black);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px #fff;
+}
+
+/* Pill buttons: match the ring to the shape */
+.btn:focus-visible,
+.join-us:focus-visible,
+.btn-load-more:focus-visible {
+  border-radius: 100px;
+}
+
+/* Inputs keep their 8px corners */
+.form-control:focus-visible,
+.sw-field input:focus-visible,
+.sw-field textarea:focus-visible {
+  outline: 2px solid var(--ca-black);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px #fff;
+}
+
+/* Never remove the indicator without replacing it */
+@media (forced-colors: active) {
+  :focus-visible { outline: 2px solid CanvasText; box-shadow: none; }
+}
+
+/* ─── Skip link ───────────────────────────────────────────
+   First focusable element on every page. Off-screen until
+   focused, then pinned above the fixed header. */
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 1002;
+  transform: translateY(calc(-100% - 1.5rem));
+  background: var(--ca-black);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.9375rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 100px;
+  text-decoration: none;
+  transition: transform 0.2s ease;
+}
+.skip-link:focus-visible {
+  transform: translateY(0);
+  color: #fff;
+}
+@media (prefers-reduced-motion: reduce) {
+  .skip-link { transition: none; }
+}
+
+/* The skip target is programmatically focused; no ring needed there */
+main[tabindex="-1"]:focus { outline: none; }
