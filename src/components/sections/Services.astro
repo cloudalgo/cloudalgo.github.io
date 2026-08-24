@@ -1,4 +1,5 @@
----
+---import Button from '../ui/Button.astro';
+
 const services = [
   {
     icon: `<svg class="svc-icon" width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg"><path d="M20.42 14.71H13.62a5.6 5.6 0 1 1 5.37-7.2h1.43a3.6 3.6 0 1 1 0 7.2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M16 14.71V23.5M5 23.5V20a1.5 1.5 0 0 1 1.5-1.5h19A1.5 1.5 0 0 1 27 20v3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle class="svc-node" cx="5" cy="26" r="2.5" fill="currentColor"/><circle class="svc-node" cx="16" cy="26" r="2.5" fill="currentColor"/><circle class="svc-node" cx="27" cy="26" r="2.5" fill="currentColor"/></svg>`,
@@ -42,9 +43,9 @@ const services = [
             <div class="card-icon" set:html={s.icon} />
             <h3 class="card-text" style="font-size:1.25rem;">{s.title}</h3>
             <p>{s.body}</p>
-            <a href={s.href} class="btn btn-outline" style="align-self:flex-start;font-size:0.9375rem;padding:0.625rem 1.5rem;">
+            <Button href={s.href} variant="outline" size="sm" style="align-self:flex-start;">
               Learn more &rarr;
-            </a>
+            </Button>
           </div>
         </div>
       ))}

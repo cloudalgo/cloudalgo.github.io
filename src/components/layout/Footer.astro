@@ -1,4 +1,5 @@
----
+---import Button from '../ui/Button.astro';
+
 const year = new Date().getFullYear()
 ---
 
@@ -6,9 +7,9 @@ const year = new Date().getFullYear()
 <section class="footer-cta">
   <div class="container">
     <h2>Let’s build something<br/>together.</h2>
-    <a href="/contact" class="btn btn-light" style="font-size:1rem;">
+    <Button href="/contact" variant="light">
       Start a project &rarr;
-    </a>
+    </Button>
   </div>
 </section>
 

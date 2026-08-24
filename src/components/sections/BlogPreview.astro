@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import BlogCard from '../ui/BlogCard.astro';
+import Button from '../ui/Button.astro';
 
 const allPosts = await getCollection('blog', ({ data }) => data.published);
 const posts = allPosts
@@ -20,9 +21,9 @@ const posts = allPosts
           From the team
         </h2>
       </div>
-      <a href="/blog" class="btn btn-outline" style="font-size:0.9375rem;padding:0.625rem 1.5rem;">
+      <Button href="/blog" variant="outline" size="sm">
         View all posts &rarr;
-      </a>
+      </Button>
     </div>
     <div class="row">
       {posts.map((post) => (

@@ -1,0 +1,64 @@
+---
+/**
+ * The site's pill button.
+ *
+ * Renders an <a> when `href` is set and a <button> otherwise -- 27 of the
+ * 28 original call sites were links (the lone exception is the blog
+ * load-more), so `href` is the common case and the element choice follows
+ * from it rather than from a separate prop.
+ *
+ * `size` replaces what used to be inline `style`: four buttons carried
+ * `font-size:0.9375rem;padding:0.625rem 1.5rem` verbatim and three carried
+ * `font-size:0.8125rem;padding:0.5rem 1.25rem`. Those are now "sm" and "xs"
+ * in styles/components/_buttons.scss. Genuinely one-off inline styles
+ * (a margin-top, an align-self) still pass through via `style`.
+ *
+ * Appearance lives entirely in the stylesheet; this component owns which
+ * classes go on, not what they mean.
+ */
+import type { HTMLAttributes } from 'astro/types';
+
+export type ButtonVariant =
+  | 'primary'
+  | 'secondary'
+  | 'outline'
+  | 'light'
+  /** Transparent + light hairline, for use on the near-black CTA bands. */
+  | 'ghost-inverse';
+
+export type ButtonSize = 'md' | 'sm' | 'xs';
+
+type Props = HTMLAttributes<'a'> & HTMLAttributes<'button'> & {
+  href?: string;
+  /** Omit for the base pill; every other value adds one class. */
+  variant?: ButtonVariant;
+  /** "md" is the base `.btn` padding and needs no extra class. */
+  size?: ButtonSize;
+  /** Adds target="_blank" + rel="noopener noreferrer". Links only. */
+  external?: boolean;
+};
+
+const {
+  href,
+  variant,
+  size = 'md',
+  external = false,
+  class: className,
+  ...rest
+} = Astro.props as Props;
+
+const classes = [
+  'btn',
+  variant && `btn-${variant}`,
+  size !== 'md' && `btn-${size}`,
+  className,
+];
+
+const linkAttrs = external
+  ? { target: '_blank', rel: 'noopener noreferrer' }
+  : {};
+---
+
+{href
+  ? <a href={href} class:list={classes} {...linkAttrs} {...rest}><slot /></a>
+  : <button class:list={classes} {...rest}><slot /></button>}

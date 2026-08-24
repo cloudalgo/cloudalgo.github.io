@@ -4,6 +4,7 @@ import Page from '../../layouts/Page.astro';
 import BlogCard from '../../components/ui/BlogCard.astro';
 import { getBlogIllustration } from '../../data/blog-illustrations';
 import PageHeader from '@/components/ui/PageHeader.astro';
+import Button from '../../components/ui/Button.astro';
 
 const allPublished = (await getCollection('blog', ({ data }) => data.published))
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
@@ -126,9 +127,9 @@ const formatDate = (d: Date) =>
           </div>
           {otherPosts.length > 9 && (
             <div style="text-align:center;margin-top:3rem;">
-              <button id="load-more-btn" class="btn btn-outline" type="button">
+              <Button id="load-more-btn" variant="outline" type="button">
                 Load more articles
-              </button>
+              </Button>
             </div>
           )}
         </>

@@ -1,6 +1,7 @@
 ---
 import Page from '../../layouts/Page.astro';
 import PageHeader from '@/components/ui/PageHeader.astro';
+import Button from '../../components/ui/Button.astro';
 
 const services = [
   {
@@ -522,9 +523,9 @@ const steps = [
                 ))}
               </ul>
               {svc.id && (
-                <a href={`/services/${svc.id}`} class="btn btn-outline" style="font-size:0.9375rem;padding:0.625rem 1.5rem;">
+                <Button href={`/services/${svc.id}`} variant="outline" size="sm">
                   Learn more &rarr;
-                </a>
+                </Button>
               )}
             </div>
 
@@ -605,8 +606,8 @@ const steps = [
         Tell us about your project. We'll scope it, price it transparently, and get back to you within one business day.
       </p>
       <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
-        <a href="/contact" class="btn btn-primary">Book a free consultation &rarr;</a>
-        <a href="mailto:sales@cloudalgo.com" class="btn btn-outline">Email us directly</a>
+        <Button href="/contact" variant="primary">Book a free consultation &rarr;</Button>
+        <Button href="mailto:sales@cloudalgo.com" variant="outline">Email us directly</Button>
       </div>
     </div>
   </section>

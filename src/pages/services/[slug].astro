@@ -2,6 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import Page from '../../layouts/Page.astro';
 import PageHeader from '@/components/ui/PageHeader.astro';
+import Button from '../../components/ui/Button.astro';
 
 export async function getStaticPaths() {
   const services = await getCollection('services');
@@ -61,7 +62,7 @@ const serviceSchema: object[] = [
           Ready to work together?
         </h3>
         <p style="color:var(--color-text);margin-bottom:1.5rem;">Let's discuss how we can help your team.</p>
-        <a href="/contact" class="btn btn-primary">Book a consultation &rarr;</a>
+        <Button href="/contact" variant="primary">Book a consultation &rarr;</Button>
       </div>
     </div>
   </section>

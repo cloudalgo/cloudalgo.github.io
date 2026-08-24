@@ -3,6 +3,7 @@ import { getCollection, render } from 'astro:content';
 import Page from '../../layouts/Page.astro';
 import VideoPlayer from '../../components/ui/VideoPlayer.astro';
 import PageHeader from '@/components/ui/PageHeader.astro';
+import Button from '../../components/ui/Button.astro';
 
 export async function getStaticPaths() {
   const products = await getCollection('products', ({ data }) => data.published);
@@ -364,20 +365,20 @@ const hasPricingOrReqs = (data.pricing && data.pricing.length > 0) ||
           </p>
           <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
             {data.externalUrl ? (
-              <a href={data.externalUrl} target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+              <Button href={data.externalUrl} variant="primary" external>
                 {data.type === 'mobile-app' ? 'Get the App ↗' : data.type === 'desktop-app' ? 'Download ↗' : 'Get started ↗'}
-              </a>
+              </Button>
             ) : (
-              <a href="/contact" class="btn btn-primary">Join waitlist &rarr;</a>
+              <Button href="/contact" variant="primary">Join waitlist &rarr;</Button>
             )}
             {data.type === 'mobile-app' ? (
-              <a href={`/apps/insurealgo/privacy`} class="btn btn-outline">Privacy Policy</a>
+              <Button href={`/apps/insurealgo/privacy`} variant="outline">Privacy Policy</Button>
             ) : data.guideUrl ? (
-              <a href={data.guideUrl} class="btn btn-outline">User Guide &rarr;</a>
+              <Button href={data.guideUrl} variant="outline">User Guide &rarr;</Button>
             ) : data.issuesUrl ? (
-              <a href={data.issuesUrl} target="_blank" rel="noopener noreferrer" class="btn btn-outline">Log an issue ↗</a>
+              <Button href={data.issuesUrl} variant="outline" external>Log an issue ↗</Button>
             ) : (
-              <a href="/contact" class="btn btn-outline">Book a demo</a>
+              <Button href="/contact" variant="outline">Book a demo</Button>
             )}
           </div>
         </div>
@@ -641,20 +642,20 @@ const hasPricingOrReqs = (data.pricing && data.pricing.length > 0) ||
         </div>
         <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
           {data.externalUrl ? (
-            <a href={data.externalUrl} target="_blank" rel="noopener noreferrer" class="btn btn-light">
+            <Button href={data.externalUrl} variant="light" external>
               {data.type === 'mobile-app' ? 'Get the App ↗' : data.type === 'desktop-app' ? 'Download ↗' : 'Get started ↗'}
-            </a>
+            </Button>
           ) : (
-            <a href="/contact" class="btn btn-light">Join waitlist →</a>
+            <Button href="/contact" variant="light">Join waitlist →</Button>
           )}
           {data.type === 'mobile-app' ? (
-            <a href={`/apps/insurealgo/privacy`} class="btn" style="background:transparent;color:var(--color-on-inverse);border-color:rgba(255,255,255,0.3);">
+            <Button href={`/apps/insurealgo/privacy`} variant="ghost-inverse">
               Privacy Policy
-            </a>
+            </Button>
           ) : (
-            <a href="/contact" class="btn" style="background:transparent;color:var(--color-on-inverse);border-color:rgba(255,255,255,0.3);">
+            <Button href="/contact" variant="ghost-inverse">
               Contact us
-            </a>
+            </Button>
           )}
         </div>
       </div>

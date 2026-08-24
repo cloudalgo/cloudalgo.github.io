@@ -1,4 +1,5 @@
----
+---import Button from '../ui/Button.astro';
+
 ---
 <section id="hero-section" class="hero-section" style="background:var(--surface-page);padding-top:8rem;padding-bottom:5rem;overflow:hidden;position:relative;">
 
@@ -26,8 +27,8 @@
         </p>
 
         <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;transition-delay:0.42s;" class="anim-fade-up">
-          <a href="/contact" class="btn btn-primary">Book a Consultation &rarr;</a>
-          <a href="/case-studies" class="btn btn-outline">See our work</a>
+          <Button href="/contact" variant="primary">Book a Consultation &rarr;</Button>
+          <Button href="/case-studies" variant="outline">See our work</Button>
         </div>
       </div>
 

@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import Button from './Button.astro';
 
 interface Props {
   product: CollectionEntry<'products'>;
@@ -125,17 +126,17 @@ const iconSvg = productIcons[slug] ?? productIcons['cloudalgo-flow-audit'];
         ))}
       </ul>
       <div class="prod-card-ctas">
-        <a href={`/products/${slug}`} class="btn btn-primary" style="font-size:0.8125rem;padding:0.5rem 1.25rem;">
+        <Button href={`/products/${slug}`} variant="primary" size="xs">
           Learn more &rarr;
-        </a>
+        </Button>
         {data.externalUrl ? (
-          <a href={data.externalUrl} target="_blank" rel="noopener noreferrer" class="btn btn-outline" style="font-size:0.8125rem;padding:0.5rem 1.25rem;">
+          <Button href={data.externalUrl} variant="outline" size="xs" external>
             {data.type === 'desktop-app' ? 'Download ↗' : 'Get started ↗'}
-          </a>
+          </Button>
         ) : (
-          <a href="/contact" class="btn btn-outline" style="font-size:0.8125rem;padding:0.5rem 1.25rem;">
+          <Button href="/contact" variant="outline" size="xs">
             Join waitlist
-          </a>
+          </Button>
         )}
       </div>
     </div>

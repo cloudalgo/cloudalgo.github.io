@@ -37,3 +37,18 @@
   border-color: var(--ca-black);
 }
 .btn-light:hover { background-color: var(--ca-black); color: var(--color-on-inverse); }
+
+/* Ghost button for use on a near-black CTA band. Transparent fill, light
+   text, and a hairline that reads against the dark surface. */
+.btn-ghost-inverse {
+  background-color: transparent;
+  color: var(--color-on-inverse);
+  border-color: rgba(255,255,255,0.3);
+}
+
+/* Size variants. Both were inline `style` on the call sites before the
+   Button component existed -- four buttons carried the -sm pair verbatim
+   and three carried the -xs pair. Declared after `.btn` so they win at
+   equal specificity, exactly as the inline styles used to. */
+.btn-sm { font-size: 0.9375rem; padding: 0.625rem 1.5rem; }
+.btn-xs { font-size: 0.8125rem; padding: 0.5rem 1.25rem; }
