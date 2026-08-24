@@ -11,7 +11,7 @@
   cursor: pointer;
   border: 1.5px solid transparent;
   text-decoration: none;
-  font-family: 'Outfit', system-ui, sans-serif;
+  font-family: var(--font-body);
 }
 .btn-primary {
   background-color: var(--ca-black);

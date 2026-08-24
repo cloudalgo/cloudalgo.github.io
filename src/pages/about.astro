@@ -30,7 +30,7 @@ import SectionLabel from '../components/ui/SectionLabel.astro';
               { number: '2019', label: 'Year founded' },
             ].map(stat => (
               <div style="background:var(--surface-page);border:1px solid var(--border-default);border-radius:12px;padding:1.5rem;">
-                <div style="font-size:2.5rem;font-weight:900;color:var(--color-heading);letter-spacing:-0.03em;font-family:'Outfit',sans-serif;">{stat.number}</div>
+                <div style="font-size:2.5rem;font-weight:900;color:var(--color-heading);letter-spacing:-0.03em;font-family:var(--font-heading);">{stat.number}</div>
                 <div style="font-size:0.875rem;color:var(--color-text);font-weight:500;margin-top:0.25rem;">{stat.label}</div>
               </div>
             ))}
@@ -214,7 +214,7 @@ import SectionLabel from '../components/ui/SectionLabel.astro';
               { num: '04', title: 'Handover & support', body: 'Full documentation, team training, and optional ongoing support post-launch.' },
             ].map((step, i) => (
               <div class="anim-fade-up" style={`display:flex;gap:1rem;align-items:flex-start;transition-delay:${i * 0.07}s;`}>
-                <div style="width:36px;height:36px;background:var(--surface-inverse);color:var(--color-on-inverse);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0;font-family:'Outfit',sans-serif;">
+                <div style="width:36px;height:36px;background:var(--surface-inverse);color:var(--color-on-inverse);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0;font-family:var(--font-heading);">
                   {step.num}
                 </div>
                 <div>

@@ -29,7 +29,7 @@
   padding: 12px 36px 12px 14px;
   width: 220px;
   margin-bottom: 10px;
-  font-family: 'Outfit', system-ui, sans-serif;
+  font-family: var(--font-body);
 }
 
 .sw-tooltip-text {
@@ -70,7 +70,7 @@
   padding: 0 20px 0 14px;
   font-size: 13.5px;
   font-weight: 700;
-  font-family: 'Outfit', system-ui, sans-serif;
+  font-family: var(--font-body);
   letter-spacing: 0.01em;
   cursor: pointer;
   display: flex;
@@ -142,7 +142,7 @@
   overflow-y: auto;
   overscroll-behavior: contain;
   position: relative;
-  font-family: 'Outfit', system-ui, sans-serif;
+  font-family: var(--font-body);
 }
 .sw-modal--enter { animation: swModalIn 0.44s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 .sw-modal--exit  { animation: swModalOut 0.28s cubic-bezier(0.4, 0, 1, 1) forwards; }
@@ -246,7 +246,7 @@
   border-radius: 50%;
   cursor: pointer;
   font-size: 13px;
-  font-family: 'Outfit', system-ui, sans-serif;
+  font-family: var(--font-body);
   color: var(--ca-black);
   display: flex;
   align-items: center;
@@ -290,7 +290,7 @@
   color: var(--ca-black);
   font-size: 15px;
   font-weight: 600;
-  font-family: 'Outfit', system-ui, sans-serif;
+  font-family: var(--font-body);
   cursor: pointer;
   transition: background 150ms, color 150ms;
 }
@@ -342,7 +342,7 @@
   border-radius: 8px;
   padding: 10px 12px;
   font-size: 14px;
-  font-family: 'Outfit', system-ui, sans-serif;
+  font-family: var(--font-body);
   color: var(--ca-black);
   transition: border-color 150ms;
   resize: vertical;
@@ -418,7 +418,7 @@
   padding: 12px 24px;
   font-size: 15px;
   font-weight: 700;
-  font-family: 'Outfit', system-ui, sans-serif;
+  font-family: var(--font-body);
   cursor: pointer;
   transition: opacity 150ms;
   width: 100%;
@@ -444,7 +444,7 @@
 .sw-confirmed-email { font-size: 14px; color: var(--ca-secondary-black); margin-bottom: 28px; }
 
 /* Mobile slots */
-.sw-mobile-panel { display: flex; flex-direction: column; min-height: 100vh; font-family: 'Outfit', system-ui, sans-serif; }
+.sw-mobile-panel { display: flex; flex-direction: column; min-height: 100vh; font-family: var(--font-body); }
 .sw-mobile-panel-header { display: flex; align-items: flex-start; justify-content: space-between; padding: 20px 16px 12px; gap: 12px; }
 .sw-mobile-back-circle {
   flex-shrink: 0; width: 40px; height: 40px; border-radius: 50%;
@@ -469,12 +469,12 @@
 .sw-mobile-slot-selected {
   padding: 14px; border-radius: 8px;
   background: var(--ca-black); color: var(--color-on-inverse); border: none;
-  font-size: 15px; font-weight: 600; font-family: 'Outfit', system-ui, sans-serif; cursor: pointer;
+  font-size: 15px; font-weight: 600; font-family: var(--font-body); cursor: pointer;
 }
 .sw-mobile-slot-next {
   padding: 14px; border-radius: 8px;
   background: var(--ca-black); color: var(--color-on-inverse); border: none;
-  font-size: 15px; font-weight: 600; font-family: 'Outfit', system-ui, sans-serif;
+  font-size: 15px; font-weight: 600; font-family: var(--font-body);
   cursor: pointer; transition: opacity 150ms;
 }
 .sw-mobile-slot-next:hover { opacity: 0.8; }
@@ -492,7 +492,7 @@
     display: inline-flex; align-items: center; gap: 6px;
     background: none; border: 1.5px solid var(--ca-border);
     border-radius: 100px; padding: 6px 14px; font-size: 13px;
-    font-family: 'Outfit', system-ui, sans-serif;
+    font-family: var(--font-body);
     color: var(--ca-secondary-black); cursor: pointer; margin-bottom: 16px;
     transition: border-color 150ms;
   }

@@ -8,7 +8,7 @@
   border: 1.5px solid var(--ca-border);
   border-radius: 8px;
   font-size: 1rem;
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-body);
   transition: border-color 0.2s;
   background: var(--surface-card);
   color: var(--ca-black);

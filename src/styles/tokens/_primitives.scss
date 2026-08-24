@@ -75,8 +75,10 @@
      --ink-900 so a mockup bezel keeps its own value under a theme. */
   --hardware-800: #1A1A1A;
 
-  /* Type families */
-  --family-sans: 'Outfit', system-ui, sans-serif;
+  /* Type families. `Outfit` is deliberately unquoted: a custom property
+     value is preserved verbatim by the minifier, so quoting it here would
+     leak `"Outfit"` into every rule that reads the token. */
+  --family-sans: Outfit, system-ui, sans-serif;
   --family-mono: ui-monospace, 'SF Mono', 'Menlo', monospace;
 
   /* Type scale */

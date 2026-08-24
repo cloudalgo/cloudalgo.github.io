@@ -11,7 +11,7 @@
   font-weight: 900;
   color: var(--ca-black);
   letter-spacing: -0.03em;
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-heading);
   /* Digits are the same width, so a counter ticking 8 -> 9 -> 10 does not
      shuffle the label under it. */
   font-variant-numeric: tabular-nums;

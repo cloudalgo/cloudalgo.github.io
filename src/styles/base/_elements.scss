@@ -1,7 +1,7 @@
 html { scroll-behavior: smooth; }
 
 body {
-  font-family: 'Outfit', system-ui, sans-serif;
+  font-family: var(--font-body);
   font-size: 1rem;
   color: var(--ca-secondary-black);
   background-color: var(--ca-grey2);
@@ -19,7 +19,7 @@ a {
 a:hover { color: var(--color-link-hover); }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Outfit', system-ui, sans-serif;
+  font-family: var(--font-heading);
   color: var(--ca-black);
   line-height: 1.15;
 }
