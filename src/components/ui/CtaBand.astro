@@ -1,0 +1,30 @@
+---
+/**
+ * The full-bleed ember band -- the site's one edge-to-edge surface.
+ *
+ * A shell and nothing else: it paints the ember across the viewport and
+ * re-establishes the container inside, so the band bleeds while its type
+ * stays on the same measure as every fold above it. What goes in the
+ * band is the caller's, because the two that exist say different things
+ * -- the home page pairs an ask with the client quote that backs it,
+ * the catalogue pairs an ask with the way out of it.
+ *
+ * Slotted children are DIRECT grid children of the inner container. Two
+ * of them get the 1.5fr/1fr split; more than two will need a rule.
+ *
+ * The ink on this ground is size-conditional. Read the argument in
+ * styles/sections/_band-press.scss before adding copy here: the white
+ * is legal only as large bold text, and everything else takes the ink.
+ */
+interface Props {
+  /** id of the heading inside the band, so the section is named by it. */
+  labelledby?: string;
+  class?: string;
+}
+const { labelledby, class: className } = Astro.props;
+---
+<section class:list={['band-press', className]} aria-labelledby={labelledby}>
+  <div class="band-press__inner">
+    <slot />
+  </div>
+</section>

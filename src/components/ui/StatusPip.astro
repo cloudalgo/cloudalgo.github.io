@@ -1,0 +1,34 @@
+---
+/**
+ * Ship-status pip -- the mark and the word beside it.
+ *
+ * State is carried by SHAPE, not hue: GA fills the mark, anything
+ * pre-release leaves it hollow. That survives a monochrome theme and a
+ * reader who cannot separate the ember from the ink, which a
+ * colour-only pip does not. The rule was set on the home page's
+ * product rows; this is that pip, extracted so the catalogue, the
+ * contents bar and the entry headers all say it the same way.
+ *
+ * `--on-ink` is the variant for the entry header bar, where the pip
+ * stands on the ink fill rather than on paper.
+ */
+import { STATUS_LABEL } from '@/data/product-labels';
+
+interface Props {
+  /** Raw collection value: 'ga' | 'preview' | 'beta'. */
+  status: string;
+  /** Override the word. Defaults to the shared STATUS_LABEL map. */
+  label?: string;
+  /** Set on the ink header bar so the pip inverts with it. */
+  onInk?: boolean;
+  class?: string;
+}
+const { status, label, onInk = false, class: className } = Astro.props;
+---
+<span
+  class:list={['pip', { 'pip--ga': status === 'ga', 'pip--on-ink': onInk }, className]}
+>
+  <b class="pip__dot" aria-hidden="true"></b>
+  {label ?? STATUS_LABEL[status] ?? status}
+  <slot />
+</span>

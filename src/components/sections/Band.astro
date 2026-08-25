@@ -11,19 +11,22 @@
 // Static by design, and staying that way: this quote was a Swiper
 // carousel once, which is a control with nothing to control when there
 // is one slide. Do not reintroduce one.
+//
+// The band's shell -- the full-bleed ember and the container inside it
+// -- is CtaBand, shared with the catalogue page. What is left here is
+// this fold's own contents.
+import CtaBand from '@/components/ui/CtaBand.astro';
 ---
-<section class="band-press anim-fade-up" aria-labelledby="band-ask">
-  <div class="band-press__inner">
-    <h2 id="band-ask" class="band-press__ask">
-      Most orgs do not need more Salesforce. They need <em>less of the wrong Salesforce.</em>
-    </h2>
+<CtaBand class="anim-fade-up" labelledby="band-ask">
+  <h2 id="band-ask" class="band-press__ask">
+    Most orgs do not need more Salesforce. They need <em>less of the wrong Salesforce.</em>
+  </h2>
 
-    <figure class="band-press__quote">
-      <blockquote>
-        <p>Their expertise, dedication, collaboration, and innovative solutions have consistently exceeded our expectations.</p>
-      </blockquote>
-      <figcaption class="band-press__cite">Jessica Lillquist, Minlopro Partners</figcaption>
-      <a class="btn btn-secondary btn-sm" href="/contact/">Book an org review &rarr;</a>
-    </figure>
-  </div>
-</section>
+  <figure class="band-press__quote">
+    <blockquote>
+      <p>Their expertise, dedication, collaboration, and innovative solutions have consistently exceeded our expectations.</p>
+    </blockquote>
+    <figcaption class="band-press__cite">Jessica Lillquist, Minlopro Partners</figcaption>
+    <a class="btn btn-secondary btn-sm" href="/contact/">Book an org review &rarr;</a>
+  </figure>
+</CtaBand>

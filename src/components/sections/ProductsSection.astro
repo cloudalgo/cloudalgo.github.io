@@ -4,30 +4,21 @@
 // scoring weights, then the other three as rows.
 //
 // The collection already carries `status`, `type` and `version`, so the
-// live dot, the type label and the version in the status line are read
-// rather than typed. What is NOT in the collection is the home page's own
+// ship pip, the type label and the version in the status line are read
+// rather than typed. The pip itself is StatusPip, shared with the
+// catalogue page -- it started here and moved out when a second page
+// needed it. What is NOT in the collection is the home page's own
 // copy -- the one-line row blurbs and the ship notes are written for this
 // fold and are shorter than any product-page field. They live in HOME
 // below, keyed by id, and every product falls back to its tagline, so a
 // fifth product still renders the day it is added.
 import { getCollection } from 'astro:content';
+import StatusPip from '@/components/ui/StatusPip.astro';
+import { TYPE_LABEL } from '@/data/product-labels';
 
 const products = (await getCollection('products', ({ data }) => data.published))
   .sort((a, b) => a.data.order - b.data.order);
 const [featured, ...rest] = products;
-
-const TYPE_LABEL: Record<string, string> = {
-  'salesforce-app': 'Salesforce app',
-  'integration':    'Integration',
-  'mobile-app':     'Mobile app',
-  'desktop-app':    'Desktop app',
-};
-
-const STATUS_LABEL: Record<string, string> = {
-  ga:      'Generally available',
-  preview: 'Preview',
-  beta:    'Beta',
-};
 
 type HomeCopy = {
   blurb: string;
@@ -100,11 +91,10 @@ const showScoring = featured.id === 'orgvitals';
 
   <article class="products-press__feature">
     <div class="products-press__featl">
-      <span class:list={['products-press__status', { 'products-press__status--ga': featured.data.status === 'ga' }]}>
-        <b class="products-press__dot" aria-hidden="true"></b>
-        {STATUS_LABEL[featured.data.status]}{featured.data.version && ` v${featured.data.version}`}
+      <StatusPip status={featured.data.status}>
+        {featured.data.version && ` v${featured.data.version}`}
         {' '}&middot; {TYPE_LABEL[featured.data.type]}
-      </span>
+      </StatusPip>
       <h3 class="products-press__name">{featured.data.title}</h3>
       <p class="products-press__lede">{featuredCopy?.blurb ?? featured.data.tagline}</p>
 
@@ -160,12 +150,9 @@ const showScoring = featured.id === 'orgvitals';
       <div class="products-press__row">
         <span class="section-press__type">{TYPE_LABEL[p.data.type]}</span>
         <div>
-          <h3 class="products-press__rname"><a href={`/products/${p.id}/`}>{p.data.title}</a></h3>
+          <h3 class="products-press__rname"><a class="link-draw" href={`/products/${p.id}/`}>{p.data.title}</a></h3>
           <p class="products-press__rmeta">
-            <span class:list={['products-press__status', { 'products-press__status--ga': p.data.status === 'ga' }]}>
-              <b class="products-press__dot" aria-hidden="true"></b>
-              {STATUS_LABEL[p.data.status]}
-            </span>
+            <StatusPip status={p.data.status} />
           </p>
         </div>
         <p class="products-press__rdesc">{HOME[p.id]?.blurb ?? p.data.tagline}</p>

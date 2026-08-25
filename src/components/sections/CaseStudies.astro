@@ -5,12 +5,17 @@ import { caseStudies } from '../../data/case-studies';
 // figures. Every number rendered here is quoted verbatim from
 // case-studies.ts, so a corrected figure is corrected in one place.
 //
-// The mock leads each card with a 16:9 photograph. There is no
-// photography for these engagements: the mock's two shots are generic
-// stock of unknown provenance, and a stock desk scene captioned as a
-// client engagement is decoration dressed as evidence. The slot is left
-// out rather than filled with a placeholder. Real engagement
-// photography, or licensed stock, drops back in above the chip.
+// Each column opens on the 16:9 shot the approved mock leads with, both
+// carried over from docs/superpowers/specs/assets/. Neither is
+// photography of these engagements -- they are generic stock, and the
+// alt text says only what is in the frame rather than captioning a
+// desk scene as a client meeting.
+//
+// UNRESOLVED BEFORE MERGE: neither file has a licence on record. They
+// entered the repo in a96c497 as vendored mock assets and the spec says
+// nothing about where they came from. Confirm the licence or swap both
+// files at public/case-studies/<slug>.jpg -- the markup is keyed on the
+// slug, so replacing the two files is the whole change.
 
 const featured = caseStudies.slice(0, 2);
 
@@ -31,6 +36,9 @@ type HomeCopy = {
   headline: string;
   blurb: string;
   figures: Array<readonly [metric: string, label: string]>;
+  // Optional: a case with no shot on file renders the column without
+  // one rather than reserving an empty box.
+  shot?: { src: string; alt: string };
 };
 
 const HOME: Record<string, HomeCopy> = {
@@ -44,6 +52,10 @@ const HOME: Record<string, HomeCopy> = {
       ['82%', 'SSR payload reduction'],
       ['6',   'Systems integrated'],
     ],
+    shot: {
+      src: '/case-studies/nonprofit-web-platform.jpg',
+      alt: 'Two people at a desk marking up a printed data model beside two open laptops.',
+    },
   },
   // The mock closes this row with a "75-90%" index-tuning gain and a "3 layer"
   // count, neither of which appears in the record. Measured numbers beat
@@ -58,6 +70,10 @@ const HOME: Record<string, HomeCopy> = {
       ['<15 min', 'End-to-end data freshness'],
       ['90%',     'Faster account linkage query'],
     ],
+    shot: {
+      src: '/case-studies/enterprise-data-pipeline.jpg',
+      alt: 'Three colleagues talking at a floor-to-ceiling window above a city skyline.',
+    },
   },
 };
 
@@ -80,6 +96,11 @@ const shortLabel = (label: string) => label.split(/\s+[—(]/)[0].trim();
   <div class="cases-press">
     {featured.map((c) => (
       <article class="cases-press__case">
+        {HOME[c.id]?.shot && (
+          <figure class="cases-press__shot">
+            <img src={HOME[c.id]!.shot!.src} alt={HOME[c.id]!.shot!.alt} loading="lazy" decoding="async" />
+          </figure>
+        )}
         <span class="cases-press__ind">{c.industry}</span>
         <h3 class="cases-press__name">
           <a href={`/case-studies/${c.id}/`}>{HOME[c.id]?.headline ?? c.headline}</a>
