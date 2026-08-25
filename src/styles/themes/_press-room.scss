@@ -25,11 +25,20 @@
 // actually paints on, not against white. The ink and paper ramps
 // are the artifact's measured palette (see docs/superpowers/sdd/
 // 2026-08-25-homepage-press-room/task-2-brief.md): anchors copied
-// exactly, four in-between rungs interpolated along the ramp. Every
-// text role clears AA, including ink-400, ink-300 and paper-400,
-// which sat under it in BOTH themes before this repaint.
+// exactly, four in-between rungs interpolated along the ramp.
+//
 // docs/superpowers/specs/assets/contrast-check.py is the permanent
-// gate that proves it -- run it against this file after any edit.
+// gate -- run it against this file after any edit. It proves every
+// flat-hex text role clears AA (ink-400, ink-300 and paper-400
+// included, which sat under it in BOTH themes before this repaint),
+// plus the white-on-inverse text that is composited at a CSS alpha
+// rather than a flat hex -- except three pre-existing alpha rungs
+// (on-inverse-a35/a38/a40) that the harness allowlists BY NAME
+// because they are real shipped text under AA on pages not yet
+// redesigned; see the harness for the receipts. It does NOT cover
+// any other alpha rung, or WCAG 1.4.11's 3:1 floor for non-text UI
+// components -- `ink-870` as a hairline on an `ink-900` section is
+// 1.44:1 and unchecked.
 
 @use 'contract';
 
@@ -43,7 +52,7 @@ $theme: (
   'ink-870': #34302D,  /* hairline rules on an ink-900 section */
   'ink-860': #231F1D,  /* long-form prose — 14.9:1 on page, 16.3:1 on card */
   'ink-840': #34302D,  /* long-form standfirst — 11.9:1 on page, 13.1:1 on card */
-  'ink-800': #231F1D,  /* footer CTA surface — carries white at 15.0:1 */
+  'ink-800': #231F1D,  /* footer CTA surface — carries white at 16.34:1 */
   'ink-600': #34302D,  /* link hover — one step deeper than body */
   'ink-500': #494440,  /* body copy — 8.78:1 on page, 9.61:1 on card */
   'ink-400': #57504B,  /* captions — 7.22:1 on page, up from 3.7:1 */
@@ -80,10 +89,16 @@ $theme: (
   'accent-on':  #110605,  /* ink on ember: 6.17:1 rest, 5.54:1 hover */
 
   /* Status. Deepened from monochrome so danger clears AA on a card
-     (5.6:1, was 4.8:1) and stays distinguishable beside the ember —
-     a red accent and a red error state are the failure mode here. */
+     (5.62:1, was 4.8:1) and stays distinguishable beside the ember —
+     a red accent and a red error state are the failure mode here.
+     danger-400 is the form error message (.sw-error-msg) and is real
+     text, not decoration, so it has to clear AA on its own: the
+     original #E04B3C measured 4.01:1 and failed. Darkened along the
+     same hue/saturation (no hue shift, still recognizably warm red)
+     to #CC4437 at 4.72:1, and kept lighter than danger-500 (5.62:1)
+     so the two stay visually distinct. */
   'danger-500': #C62828,
-  'danger-400': #E04B3C,
+  'danger-400': #CC4437,  /* form error text — 4.72:1 on card, up from 4.01:1 */
 
   /* Code-block chrome — fixed across themes. See the header. */
   'code-bg': #0D0D0D,
