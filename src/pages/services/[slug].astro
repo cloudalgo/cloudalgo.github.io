@@ -1,8 +1,34 @@
 ---
-import { getCollection, render } from 'astro:content';
-import Page from '../../layouts/Page.astro';
-import PageHeader from '@/components/ui/PageHeader.astro';
-import Button from '../../components/ui/Button.astro';
+/**
+ * One engagement, in full: the ask, the shape of the time, the whole
+ * scope, what you are left holding, and the two engagements either side.
+ *
+ * /services/ answers "which of the seven is mine?" -- this page answers
+ * "what am I actually signing up for?", so it is built out of the same
+ * devices at one zoom level in. The index's schedule figure becomes this
+ * page's SPINE, with a row per stage instead of a row per engagement;
+ * the index's spread becomes the scope document; the index's closing
+ * manifest is scoped to this engagement's own handover.
+ *
+ * Structure comes from `@/data/engagements` and prose comes from the
+ * content collection: the stages, their geometry and the manifest are
+ * typed data shared with the index, and the five-or-so scope sections
+ * are the service's own markdown, rendered flat and numbered by CSS.
+ * The rail is built from the rendered headings, so adding a section to
+ * a markdown file adds it to the rail and to the count without anyone
+ * remembering to.
+ */
+import { getCollection, getEntry, render } from 'astro:content';
+import Page from '@/layouts/Page.astro';
+import Button from '@/components/ui/Button.astro';
+import PageMasthead from '@/components/ui/PageMasthead.astro';
+import ServiceSchedule from '@/components/ui/ServiceSchedule.astro';
+import SlaWindows from '@/components/ui/SlaWindows.astro';
+import CompareTable from '@/components/ui/CompareTable.astro';
+import ScopeDoc from '@/components/sections/ScopeDoc.astro';
+import ClosingManifest from '@/components/sections/ClosingManifest.astro';
+import EngagementPager from '@/components/sections/EngagementPager.astro';
+import { ENGAGEMENTS, BY_SLUG, WINDOWS, TIERS } from '@/data/engagements';
 
 export async function getStaticPaths() {
   const services = await getCollection('services');
@@ -10,7 +36,55 @@ export async function getStaticPaths() {
 }
 
 const { service } = Astro.props;
-const { Content } = await render(service);
+const { Content, headings } = await render(service);
+
+const engagement = BY_SLUG.get(service.id);
+/* Every service file is one of the seven. If that stops being true the
+   page has no spine, no manifest and no place in the run -- so it fails
+   the build rather than rendering a detail page with the middle out. */
+if (!engagement) {
+  throw new Error(
+    `services/[slug].astro: no engagement data for "${service.id}". ` +
+    `Add it to src/data/engagements.ts, or remove the content file.`,
+  );
+}
+const { detail } = engagement;
+
+/* The same proof stamp /services/ prints beside this engagement in the
+   routing table, from the same field: a product it shipped, or a counted
+   figure. Three of the seven have neither yet and print five terms. */
+const product = service.data.proves ? await getEntry(service.data.proves) : undefined;
+const proof = product ? product.data.title : service.data.provenBy;
+const facts = [
+  ...engagement.terms.map((t) => ({ term: t.term, detail: t.detail })),
+  ...(proof ? [{ term: 'Proven by', detail: proof }] : []),
+];
+
+const index = ENGAGEMENTS.indexOf(engagement);
+const prev = ENGAGEMENTS[index - 1];
+const next = ENGAGEMENTS[index + 1];
+
+/* The scope rail, in reading order: the retainer's response windows sit
+   before its prose and its tier table after, and both are numbered in
+   the same run as the markdown between them. */
+const before = detail.scope.before ?? [];
+const after = detail.scope.after ?? [];
+const sections = headings.filter((h) => h.depth === 3);
+const rail = [
+  ...before.map((d) => ({ id: d.id, text: d.title })),
+  ...sections.map((h) => ({ id: h.slug, text: h.text })),
+  ...after.map((d) => ({ id: d.id, text: d.title })),
+];
+
+/* Counted rather than written down, so a section added to the markdown
+   cannot leave the note in the section head claiming the old number. */
+const WORDS = ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
+const count = WORDS[rail.length] ?? String(rail.length);
+const areas = `${count[0].toUpperCase()}${count.slice(1)} area${rail.length === 1 ? '' : 's'}`;
+
+/* The three tiers, named here because the table is the only thing that
+   compares them; the rows themselves are shared with the index's data. */
+const TIER_COLUMNS = ['Essentials', 'Growth', 'Enterprise'];
 
 const siteBase = 'https://cloudalgo.com';
 
@@ -22,11 +96,7 @@ const serviceSchema: object[] = [
     serviceType:   service.data.title,
     areaServed:    'Worldwide',
     url:           `${siteBase}/services/${service.id}`,
-    provider: {
-      '@type': 'Organization',
-      name:    'CloudAlgo',
-      url:     siteBase,
-    },
+    provider: { '@type': 'Organization', name: 'CloudAlgo', url: siteBase },
   },
   {
     '@type': 'BreadcrumbList',
@@ -39,32 +109,139 @@ const serviceSchema: object[] = [
 ];
 ---
 <Page
-  title={`${service.data.title} — Salesforce Services | CloudAlgo`}
+  title={`${service.data.title} — ${engagement.shape} | CloudAlgo`}
   description={service.data.excerpt}
   schema={serviceSchema}
 >
+  <PageMasthead
+    crumbs={[
+      { label: 'Home', href: '/' },
+      { label: 'Services', href: '/services/' },
+      { label: service.data.title },
+    ]}
+    facts={facts}
+  >
+    <Fragment slot="title" set:html={detail.title} />
+    <Fragment slot="lede">{detail.lede}</Fragment>
+    <Fragment slot="actions">
+      <Button href="/contact/" variant="primary" size="sm">{engagement.cta} &rarr;</Button>
+      <Button href="/services/" variant="outline" size="sm">All seven engagements</Button>
+    </Fragment>
+  </PageMasthead>
 
-  <!-- Page header -->
-  <PageHeader
-    crumbs={[{ label: '\u2190 Services', href: '/services' }]}
-    title={service.data.title}
-    lead={service.data.excerpt}
-  />
+  {/* The page's structural claim: what you are buying is this shape of
+      time. Sunk, because the prose either side is the argument and this
+      is the thing being argued about. */}
+  <section class="spine" aria-labelledby="spine-heading">
+    <div class="spine__inner">
+      <div class="section-press__head anim-fade-up">
+        <h2 id="spine-heading" class="section-title section-title--xs section-title--tighter section-press__title">
+          {detail.spine.title}
+        </h2>
+        <span class="section-press__note">{detail.spine.note}</span>
+      </div>
 
-  <!-- Content -->
-  <section style="background:var(--surface-card);padding:5rem 0;">
-    <div class="container" style="max-width:780px;">
-      <div class="blog-post-details" style="padding:0;background:transparent;">
-        <Content />
-      </div>
-      <div style="margin-top:3.5rem;padding-top:2rem;border-top:1px solid var(--border-default);text-align:center;">
-        <h3 style="font-size:1.5rem;font-weight:800;margin-bottom:0.75rem;letter-spacing:-0.02em;">
-          Ready to work together?
-        </h3>
-        <p style="color:var(--color-text);margin-bottom:1.5rem;">Let's discuss how we can help your team.</p>
-        <Button href="/contact" variant="primary">Book a consultation &rarr;</Button>
-      </div>
+      <ServiceSchedule
+        class="anim-fade-up"
+        axis={detail.spine.axis}
+        cols={detail.spine.cols}
+        keys={detail.spine.legend}
+        interactive={false}
+        note
+        rows={engagement.track.map((step) => ({
+          n: step.n,
+          name: step.name,
+          shape: step.when ?? '',
+          detail: step.detail,
+          bar: step.bar,
+          bars: step.bars,
+          end: step.end,
+          roll: step.roll,
+        }))}
+        caption={detail.spine.caption}
+      />
     </div>
   </section>
 
+  <section class="section-press" aria-labelledby="scope-heading">
+    <div class="section-press__head anim-fade-up">
+      <h2 id="scope-heading" class="section-title section-title--xs section-title--tighter section-press__title">
+        {detail.scope.title}
+      </h2>
+      <span class="section-press__note">{areas}</span>
+    </div>
+
+    <ScopeDoc
+      class="anim-fade-up"
+      label="In this scope"
+      items={rail}
+      lede={detail.scope.lede}
+    >
+      {/* Two of the retainer's sections are a band of response windows
+          and a three-column table. They cannot live in markdown without
+          raw HTML in the content file, so they are typed data composed
+          as flat siblings of the prose -- same heading level, same
+          counter, same rail. Only engagement 07 has any.
+
+          The band's note is one long line on purpose: Astro trims the
+          whitespace at a markup boundary, so a line break before the
+          <b> would weld the sentence to the one after it. */}
+      {before.map((d) => (
+        <>
+          <h3 id={d.id}>{d.title}</h3>
+          <p>{d.intro}</p>
+          {d.device === 'windows' && (
+            <SlaWindows windows={WINDOWS}>Initial response, not resolution. <b>Unlimited P1 emergency response on every tier.</b></SlaWindows>
+          )}
+        </>
+      ))}
+
+      <Content />
+
+      {after.map((d) => (
+        <>
+          <h3 id={d.id}>{d.title}</h3>
+          <p>{d.intro}</p>
+          {d.device === 'tiers' && (
+            <CompareTable
+              corner="Tier"
+              columns={TIER_COLUMNS}
+              rows={TIERS}
+              caption="The three retainer tiers compared by monthly hours, response coverage, review cadence, release management and emergency response."
+            />
+          )}
+        </>
+      ))}
+    </ScopeDoc>
+  </section>
+
+  <ClosingManifest
+    class="anim-fade-up"
+    labelledby="manifest-heading"
+    kicker={detail.manifest.kicker}
+    items={detail.manifest.items}
+  >
+    <Fragment slot="title">{detail.manifest.title}</Fragment>
+    <Fragment slot="note">{detail.manifest.note}</Fragment>
+    {/* The ask is in the masthead, twice over. What this block is for is
+        the handover, and the reader who wants to know whether every
+        engagement ends this way should be sent to the seven, not to a
+        third copy of the same button. */}
+    <a class="btn btn-light btn-sm" slot="actions" href="/services/#manifest-heading">
+      See what every engagement ends with
+    </a>
+  </ClosingManifest>
+
+  {/* At either end of the run the neighbour is the index: 01 has nothing
+      before it and 07 nothing after, and a reader who has run out of
+      engagements in one direction wants the list, not a dead half-row. */}
+  <EngagementPager
+    class="anim-fade-up"
+    prev={prev
+      ? { href: `/services/${prev.slug}/`, n: prev.n, name: prev.name, shape: prev.shape }
+      : { href: '/services/', name: '\u2190 All seven engagements', shape: 'The index' }}
+    next={next
+      ? { href: `/services/${next.slug}/`, n: next.n, name: next.name, shape: next.shape }
+      : { href: '/services/', name: 'All seven engagements \u2192', shape: 'The index' }}
+  />
 </Page>
