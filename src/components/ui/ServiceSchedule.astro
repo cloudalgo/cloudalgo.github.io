@@ -1,7 +1,7 @@
 ---
 /**
- * Seven engagements drawn against a calendar: one row each, a bar for a
- * project and a run of monthly ticks for a retainer.
+ * Engagements drawn against a calendar: one row each, a bar for a span of
+ * work and a run of monthly ticks for something that does not end.
  *
  * This is the services index's answer to the catalogue's spec sheet, and
  * it exists because the two pages describe different kinds of thing. A
@@ -10,12 +10,21 @@
  * shape, a rhythm and an ending -- so the figure that describes it has
  * to be measured against a calendar, not listed.
  *
- * Every position is an index over `axis.length`, and that count is
- * handed to the stylesheet as --sched-cols rather than duplicated in it.
- * Draw a different span -- twelve months, four quarters -- by passing a
- * different axis, and the gridlines, the marks and the bars all move
- * together.
+ * The figure is drawn twice at two zoom levels. On /services/ each row is
+ * a whole engagement across a year, and clicking one jumps to its spread.
+ * On a detail page each row is one STAGE of a single engagement across
+ * its own length, and there is nothing to click -- so `interactive`
+ * switches the rows between anchors and plain elements rather than
+ * forking the component. Everything else is the same drawing.
+ *
+ * Every position is a number out of `cols`, and that count is handed to
+ * the stylesheet as --sched-cols rather than duplicated in it. Draw a
+ * different span -- twelve months, twenty-four weeks -- by passing a
+ * different `cols` and axis, and the gridlines, the marks and the bars
+ * all move together.
  */
+import type { Bar, LegendKey, AxisMark } from '@/data/engagements';
+
 export interface ScheduleRow {
   /** Printed as given ("01"), and the same numeral the spread carries. */
   n: string;
@@ -23,72 +32,101 @@ export interface ScheduleRow {
   /** How long it runs, not what it is for. The contents strip above
       carries the benefit; this line carries the shape. */
   shape: string;
-  /** In-page anchor to the spread for this engagement. */
-  href: string;
+  /** In-page anchor to the spread. Required when `interactive`. */
+  href?: string;
+  /** A sentence under the label, on the detail page's zoom level: what
+      happens during this stage. */
+  detail?: string;
   /**
-   * A project: `from` is where it starts, `typical` where it usually
-   * ends, `most` the far end of the range. The solid part runs to
-   * `typical` and the hatch on to `most`, so the range reads as a range.
-   * Omit for an engagement that is only ever a retainer.
+   * A span: `from` is where it starts, `typical` where it usually ends,
+   * `most` the far end of the range. The solid part runs to `typical`
+   * and the hatch on to `most`, so the range reads as a range.
    */
-  bar?: { from: number; typical: number; most: number };
-  /** Month the rolling ticks start at. Omit for a project that ends. */
+  bar?: Bar;
+  /** More than one span on one row: a stage that repeats. */
+  bars?: Bar[];
+  /** Draws the ember cap on this row's bar: it is the handover. */
+  end?: boolean;
+  /** Position the rolling ticks start at. Omit for something that ends. */
   roll?: number;
 }
 
 interface Props {
-  /** Axis marks, left to right. Its length IS the scale. */
-  axis: string[];
+  /** Axis marks and where they sit. Positions are out of `cols`. */
+  axis: AxisMark[];
+  /** The scale everything on the figure is measured against. */
+  cols: number;
   rows: ScheduleRow[];
-  /** The sentence after "Fig. NN". */
+  /** The sentence after "Fig. NN", or -- when `note` -- the whole note. */
   caption: string;
   /** The figure's number, printed as given. */
   n?: string;
+  /**
+   * Print the caption as a note rather than a numbered figure caption.
+   * A detail page carries one figure, so numbering it "Fig. 01" would be
+   * a scheme of one; the index carries several and needs the numeral.
+   */
+  note?: boolean;
+  /** Rows link to their spread. False on a detail page, where the rows
+      are stages of the engagement you are already reading. */
+  interactive?: boolean;
+  /** Names the marks this figure actually draws. Defaults to all four. */
+  keys?: LegendKey[];
   class?: string;
 }
-const { axis, rows, caption, n = '01', class: className } = Astro.props;
+const {
+  axis, cols, rows, caption, n = '01',
+  note = false, interactive = true, keys, class: className,
+} = Astro.props;
 
-/* The four marks the figure uses, named once here so the legend cannot
-   drift from what the bars actually draw. */
-const KEYS = [
+/* The four marks the figure can draw, named once here so the legend
+   cannot drift from what the bars actually draw. A caller that draws
+   only some of them passes its own subset. */
+const KEYS: LegendKey[] = keys ?? [
   { mod: 'min',   label: 'Typical' },
   { mod: 'range', label: 'Range' },
   { mod: 'cap',   label: 'Handover' },
   { mod: 'roll',  label: 'Rolling month' },
 ];
+
+const Row = interactive ? 'a' : 'div';
+
+/** One row's spans, however many it has. */
+const spans = (row: ScheduleRow): Bar[] => row.bars ?? (row.bar ? [row.bar] : []);
 ---
-<figure class:list={['schedule', className]} style={`--sched-cols:${axis.length}`}>
+<figure class:list={['schedule', className]} style={`--sched-cols:${cols}`}>
   <div class="schedule__scroll">
     <div class="schedule__plot">
       {/* Decorative to a screen reader: the axis is a ruler for the bars,
           and each row already states its own length in words. */}
       <div class="schedule__axis" aria-hidden="true">
-        {axis.map((mark, i) => <span style={`--at:${i}`}>{mark}</span>)}
+        {axis.map((mark) => <span style={`--at:${mark.at}`}>{mark.mark}</span>)}
       </div>
 
       {rows.map((row) => (
-        <a class="schedule__row" href={row.href}>
+        <Row class="schedule__row" href={interactive ? row.href : undefined}>
           <span class="schedule__label">
             <span class="schedule__n">{row.n}</span>
             <span>
               <span class="schedule__name">{row.name}</span>
               <span class="schedule__shape">{row.shape}</span>
+              {row.detail && <span class="schedule__detail">{row.detail}</span>}
             </span>
           </span>
           <span class="schedule__track">
-            {row.bar && (
+            {spans(row).map((bar) => (
               <span
-                class="schedule__bar"
-                style={`--a:${row.bar.from};--b:${row.bar.typical};--c:${row.bar.most}`}
+                class:list={['schedule__bar', row.end && 'schedule__bar--end']}
+                style={`--a:${bar.from};--b:${bar.typical};--c:${bar.most}`}
               >
                 <span class="schedule__min" />
               </span>
-            )}
+            ))}
             {row.roll !== undefined && (
               <span class="schedule__roll" style={`--from:${row.roll}`} />
             )}
           </span>
-        </a>
+        </Row>
       ))}
     </div>
   </div>
@@ -99,10 +137,14 @@ const KEYS = [
     ))}
   </div>
 
-  {/* The catalogue's caption class, deliberately: a figure is a figure on
-      both pages, and giving this one its own would be a second numbering
-      scheme saying the same thing. */}
-  <figcaption class="evidence__caption">
-    <b class="evidence__n">Fig. {n}</b> {caption}
-  </figcaption>
+  {note ? (
+    <figcaption class="spine__note" set:html={caption} />
+  ) : (
+    /* The catalogue's caption class, deliberately: a figure is a figure on
+       both pages, and giving this one its own would be a second numbering
+       scheme saying the same thing. */
+    <figcaption class="evidence__caption">
+      <b class="evidence__n">Fig. {n}</b> {caption}
+    </figcaption>
+  )}
 </figure>
