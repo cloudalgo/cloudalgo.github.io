@@ -2,8 +2,8 @@
 import { caseStudies } from '../../data/case-studies';
 
 // Fold 6. Two engagements, each led by its industry and closed by two
-// figures. Everything rendered here already lives in case-studies.ts --
-// nothing is restated, so a corrected number is corrected in one place.
+// figures. Every number rendered here is quoted verbatim from
+// case-studies.ts, so a corrected figure is corrected in one place.
 //
 // The mock leads each card with a 16:9 photograph. There is no
 // photography for these engagements: the mock's two shots are generic
@@ -13,6 +13,53 @@ import { caseStudies } from '../../data/case-studies';
 // photography, or licensed stock, drops back in above the chip.
 
 const featured = caseStudies.slice(0, 2);
+
+// Home-page copy, the same arrangement ProductsSection and Services use: the
+// record stays the source of truth for the detail page, and the mock's
+// approved wording sits in the section that has 30 words to spend.
+//
+// It exists because the record's own fields do not fit this shape. `headline`
+// is written to open a case study page and `result` to summarise one, so
+// rendering them as this row's title and description printed "legacy PHP
+// monolith" twice in three lines.
+//
+// `figures` is a selection, not a rewrite -- metrics are quoted from the
+// record and only the label is tightened to the width of the slot. The record
+// carries three outcomes and the row has room for two; taking the first two
+// led with "2+ yrs", a duration, ahead of both measured results.
+type HomeCopy = {
+  headline: string;
+  blurb: string;
+  figures: Array<readonly [metric: string, label: string]>;
+};
+
+const HOME: Record<string, HomeCopy> = {
+  'nonprofit-web-platform': {
+    headline: 'Six systems, one backend the team could actually own',
+    blurb:
+      'Course and event platform, authentication and identity, membership, ' +
+      'donations and CRM-connected analytics, rebuilt behind a single ' +
+      'abstraction layer with enforced conventions.',
+    figures: [
+      ['82%', 'SSR payload reduction'],
+      ['6',   'Systems integrated'],
+    ],
+  },
+  // The mock closes this row with a "75-90%" index-tuning gain and a "3 layer"
+  // count, neither of which appears in the record. Measured numbers beat
+  // numbers drawn for a mockup, so this row keeps its own two.
+  'enterprise-data-pipeline': {
+    headline: 'A pipeline that recovers without anyone being paged',
+    blurb:
+      'Bronze, silver and gold layers over intelligent ingestion, config ' +
+      'driven throughout, with standardised operational observability across ' +
+      'every stage.',
+    figures: [
+      ['<15 min', 'End-to-end data freshness'],
+      ['90%',     'Faster account linkage query'],
+    ],
+  },
+};
 
 // The outcome labels in the data file are written for the detail page,
 // where a full sentence has room: "SSR payload reduction on centers page
@@ -35,14 +82,16 @@ const shortLabel = (label: string) => label.split(/\s+[—(]/)[0].trim();
       <article class="cases-press__case">
         <span class="cases-press__ind">{c.industry}</span>
         <h3 class="cases-press__name">
-          <a href={`/case-studies/${c.id}/`}>{c.headline}</a>
+          <a href={`/case-studies/${c.id}/`}>{HOME[c.id]?.headline ?? c.headline}</a>
         </h3>
-        <p class="cases-press__summary">{c.result}</p>
+        <p class="cases-press__summary">{HOME[c.id]?.blurb ?? c.result}</p>
         <div class="cases-press__figs">
-          {c.outcomes.slice(0, 2).map((o) => (
+          {(HOME[c.id]?.figures
+            ?? c.outcomes.slice(0, 2).map((o) => [o.metric, shortLabel(o.label)] as const)
+          ).map(([metric, label]) => (
             <div class="cases-press__fig">
-              <b>{o.metric}</b>
-              <span>{shortLabel(o.label)}</span>
+              <b>{metric}</b>
+              <span>{label}</span>
             </div>
           ))}
         </div>

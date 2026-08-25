@@ -1,5 +1,6 @@
 ---
 title: "Support & Managed Services"
+shortTitle: "Support"
 order: 3
 icon: "🔧"
 excerpt: "Ongoing Salesforce support, maintenance, enhancements, org health reviews, and security recommendations."

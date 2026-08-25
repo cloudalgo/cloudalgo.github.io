@@ -17,13 +17,20 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[4]
 CONTENT = ROOT / "src" / "content"
 
-# (collection holding the field, field name, collection it points into)
-JOINS = [("services", "proves", "products")]
+# (collection holding the field, field name, collection it points into,
+#  alternative field that may stand in for it)
+#
+# `proves` is optional on a service because not every practice ships a
+# product -- consulting is proven by the work delivered. The schema requires
+# exactly one of `proves` and `provenBy`; this gate checks the same pair, so
+# a service with neither still fails here rather than rendering "Proven by"
+# followed by nothing.
+JOINS = [("services", "proves", "products", "provenBy")]
 
 failures = []
 checked = 0
 
-for source, field, target in JOINS:
+for source, field, target, alt in JOINS:
     src_dir, tgt_dir = CONTENT / source, CONTENT / target
     if not src_dir.is_dir():
         failures.append(f"missing collection directory: {src_dir}")
@@ -34,8 +41,17 @@ for source, field, target in JOINS:
             failures.append(f"{entry.relative_to(ROOT)}: no frontmatter fence")
             continue
         m = re.search(rf"^{field}:\s*(\S+)\s*$", head[1], re.MULTILINE)
+        has_alt = re.search(rf"^{alt}:\s*\S", head[1], re.MULTILINE) is not None
         if not m:
-            failures.append(f"{entry.relative_to(ROOT)}: no `{field}:` field")
+            if not has_alt:
+                failures.append(
+                    f"{entry.relative_to(ROOT)}: neither `{field}:` nor `{alt}:`"
+                )
+            continue
+        if has_alt:
+            failures.append(
+                f"{entry.relative_to(ROOT)}: both `{field}:` and `{alt}:` -- pick one"
+            )
             continue
         ref = m.group(1).strip("\"'")
         checked += 1

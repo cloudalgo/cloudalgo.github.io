@@ -21,20 +21,28 @@ const services = (await getCollection('services')).sort(
   (a, b) => a.data.order - b.data.order
 );
 
+// A service proves itself with a product it shipped or with a plain claim --
+// the schema guarantees exactly one. Resolve the reference where there is one
+// so the row can link to the product; otherwise carry the claim as text.
 const proofs = new Map(
   await Promise.all(
     services.map(async (s) => {
-      const product = await getEntry(s.data.proves);
+      const product = s.data.proves ? await getEntry(s.data.proves) : undefined;
       return [s.id, product] as const;
     })
   )
 );
 
-type HomeCopy = { type: string; blurb: string };
+// `name` overrides the collection title where the home row wants a shorter
+// one. Only consulting needs it: the section is already headed by products
+// we built on Salesforce, so "Salesforce Consulting & Implementation" spends
+// its first word restating that. The detail page keeps the full title.
+type HomeCopy = { type: string; name?: string; blurb: string };
 
 const HOME: Record<string, HomeCopy> = {
   'salesforce-consulting': {
     type: 'Consulting',
+    name: 'Consulting & Implementation',
     blurb:
       'The build, done so your admins can still change it. CRM configuration, ' +
       'Experience Cloud, custom Platform development, MuleSoft and Heroku.',
@@ -73,13 +81,13 @@ const HOME: Record<string, HomeCopy> = {
       return (
         <div class="services-press__row">
           <span class="section-press__type">{HOME[s.id]?.type}</span>
-          <h3 class="services-press__name"><a href={`/services/${s.id}/`}>{s.data.title}</a></h3>
+          <h3 class="services-press__name"><a href={`/services/${s.id}/`}>{HOME[s.id]?.name ?? s.data.title}</a></h3>
           <p class="services-press__desc">{HOME[s.id]?.blurb ?? s.data.excerpt}</p>
           <span class="services-press__proves">
             Proven by
-            {proof && (
-              <em><a href={`/products/${proof.id}/`}>{proof.data.title}</a></em>
-            )}
+            {proof
+              ? <em><a href={`/products/${proof.id}/`}>{proof.data.title}</a></em>
+              : <em>{s.data.provenBy}</em>}
           </span>
         </div>
       );

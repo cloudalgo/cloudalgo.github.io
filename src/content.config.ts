@@ -34,16 +34,34 @@ const services = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/services' }),
   schema: z.object({
     title:   z.string(),
+    // The name for a narrow slot -- the footer's quarter-width column, where
+    // the full title wraps to three lines. Declared rather than derived: the
+    // footer used to cut the title at its "&", which turned "Salesforce
+    // Consulting & Implementation" into "Salesforce Consulting" and left
+    // "Airflow Data Pipelines" at full length, because a rule that only knows
+    // about conjunctions cannot shorten a title that has none.
+    shortTitle: z.string(),
     order:   z.number(),
     icon:    z.string(),
     excerpt: z.string(),
-    // The product that demonstrates this service. Not prose and not a bare
-    // string: a reference into the products collection, so a service naming
-    // a product that does not exist fails the build rather than rendering a
-    // dead link. Required, because a service with nothing shipped behind it
-    // is a claim, and the design has nowhere to put a claim.
-    proves: reference('products'),
-  }),
+    // What demonstrates this service. Exactly one of these two, enforced
+    // below, because the design has one slot and it must not be empty.
+    //
+    // `proves` is a reference rather than a bare string, so a service naming
+    // a product that does not exist fails the build instead of rendering a
+    // dead link.
+    //
+    // `provenBy` exists because not every practice ships a product. Consulting
+    // is proven by the work delivered -- the mock's row reads "Proven by /
+    // 70+ projects" -- and when the schema demanded a product reference here,
+    // consulting was pointed at Pledgivo, a package it did not build. A field
+    // that forces a false answer gets a false answer.
+    proves:   reference('products').optional(),
+    provenBy: z.string().optional(),
+  }).refine(
+    (d) => Boolean(d.proves) !== Boolean(d.provenBy),
+    { message: 'A service needs exactly one of `proves` (a product it shipped) or `provenBy` (a plain claim).' }
+  ),
 });
 
 const products = defineCollection({

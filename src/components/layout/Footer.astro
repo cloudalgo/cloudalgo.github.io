@@ -28,11 +28,6 @@ const services = (await getCollection('services')).sort(
   (a, b) => a.data.order - b.data.order
 );
 
-// Collection titles are written for the services page, where a full
-// phrase has room: "Salesforce Consulting & Implementation". In a
-// quarter-width ruled column that wraps to three lines, so the label is
-// cut at the conjunction. The head of each title is already the name.
-const shortName = (title: string) => title.split(/\s+&\s+/)[0].trim();
 ---
 
 <!-- ── Fold 8: the ask ─────────────────────────────────────── -->
@@ -87,7 +82,7 @@ const shortName = (title: string) => title.split(/\s+&\s+/)[0].trim();
         <h3 class="ca-fcolhd">Services</h3>
         <ul class="ca-flinks">
           {services.map((s) => (
-            <li><a href={`/services/${s.id}/`}>{shortName(s.data.title)}</a></li>
+            <li><a href={`/services/${s.id}/`}>{s.data.shortTitle}</a></li>
           ))}
         </ul>
       </div>
@@ -107,11 +102,11 @@ const shortName = (title: string) => title.split(/\s+&\s+/)[0].trim();
         <ul class="ca-flinks">
           <li><a href="https://www.linkedin.com/company/cloudalgo" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
           <li><a href="https://github.com/cloudalgo" target="_blank" rel="noopener noreferrer">GitHub</a></li>
-          <li><a href="https://twitter.com/cloudalgo" target="_blank" rel="noopener noreferrer">Twitter</a></li>
           <li>
             <a href="https://appexchange.salesforce.com/appxConsultingListingDetail?listingId=a0N4V00000JdabDUAR&legacy=true"
                target="_blank" rel="noopener noreferrer">AppExchange</a>
           </li>
+          <li><a href="https://twitter.com/cloudalgo" target="_blank" rel="noopener noreferrer">Twitter</a></li>
         </ul>
 
         <h3 class="ca-fcolhd ca-fcolhd--spaced">Certified</h3>

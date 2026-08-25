@@ -1,9 +1,10 @@
 ---
 title: "Salesforce Consulting & Implementation"
+shortTitle: "Consulting"
 order: 1
 icon: "☁️"
 excerpt: "CRM customization, Experience Cloud, custom Salesforce Platform development, MuleSoft integrations, and Heroku solutions."
-proves: pledgivo
+provenBy: "70+ projects"
 ---
 
 ## Salesforce Consulting & Implementation

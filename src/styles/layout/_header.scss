@@ -14,12 +14,13 @@ main[id] {
   z-index: 999;
   background-color: var(--header-bg);
   border-bottom: 1px solid transparent;
-  transition: background-color 0.35s ease, border-color 0.35s ease, backdrop-filter 0.35s ease;
+  transition: background-color 0.35s ease, border-color 0.35s ease;
 }
+/* Scrolled state is the rule alone. The background was translucent paper
+   under a 16px blur; now that the header paints the page colour opaquely
+   there is nothing behind it to blur, so the filter was pure cost. */
 .header.scrolled {
   background-color: var(--header-scrolled-bg);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
   border-bottom-color: var(--header-scrolled-border);
 }
 
@@ -89,7 +90,10 @@ main[id] {
   left: 0.875rem;
   right: 0.875rem;
   height: 2px;
-  background: var(--surface-inverse);
+  /* The ember, not ink. The mock marks the current section with the one
+     accent the palette has (.hp__nav .on, home-mock.css:95); an ink bar
+     here reads as a generic underline and spends nothing on the brand. */
+  background: var(--color-accent);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.25s ease;
@@ -110,3 +114,29 @@ main[id] {
   border: none;
 }
 .join-us:hover { opacity: 0.8; color: var(--color-on-inverse) !important; }
+
+/* Mobile menu.
+   These three rules were inline `style=` attributes on the markup, which
+   put a literal `border-radius: 100px` and a hand-written button outside
+   the theme's reach -- the press-room skin squares every corner and could
+   not touch this one. The CTA is now just `.btn.btn-primary`, so it
+   inherits whatever the theme says a primary button is. */
+.mobile-menu__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.mobile-menu__link {
+  display: block;
+  padding: 0.5rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-heading);
+  border-bottom: 1px solid var(--border-default);
+}
+
+.mobile-menu__cta { margin-top: 0.75rem; }
