@@ -29,6 +29,11 @@
   --surface-card: var(--paper-000);
   --surface-sunk: var(--paper-100);
   --surface-wash: var(--paper-050);
+  /* The one ember-washed ground on the site, and the rule that runs
+     inside it. Named here rather than read as `var(--accent-050)` at
+     the call site: a component that names a primitive is a component
+     that has to be edited when the palette moves. */
+  --surface-wash-accent: var(--accent-050);
   --surface-tint: var(--paper-150);
   --surface-ghost: var(--paper-300);
   /* The flat tone a blog card shows while its image is missing or
@@ -251,6 +256,9 @@
 
   /* Rules */
   --border-default: var(--paper-200);
+  /* The hairline inside an ember-washed panel. --border-default
+     disappears against that ground, which is why this exists. */
+  --border-accent-soft: var(--accent-200);
   --border-strong: var(--ink-900);
   --border-on-inverse: var(--ink-870);
 

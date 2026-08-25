@@ -1,0 +1,261 @@
+/* ─── Fold 3: products ────────────────────────────────────
+   Ported from docs/superpowers/specs/assets/home-mock.css
+   (`.hp__feat`, `.hp__featl`, `.hp__featr`, `.hp__wt`, `.hp__rows`,
+   `.hp__row`). Geometry is the mock's; every colour is a token.
+
+   `.section-press`, `.section-press__head`, `.section-press__title`
+   and `.section-press__all` are NOT here -- four folds share them, so
+   they live in layout/_section-press.scss. A shared shell owned by one
+   section is how a system rots.
+
+   `.products-press__type` and `.products-press__status` are the two
+   atoms this fold shares with the services fold (Task 10); they stay
+   here only until that task needs them, at which point they move.
+
+   The featured panel is the one ember-washed surface on the page --
+   --surface-wash-accent for its ground, --border-accent-soft for the
+   rules inside it, both named in the semantic layer for this.
+
+   Every sub-12px value in the mock (9.5px status lines, 10px type
+   labels, 10.5px chips and ship notes, 11px figures) is raised to
+   --size-label. The root scales to 85% at 1200px, which would land
+   those near 8px on a laptop. */
+
+/* ── The featured product ── */
+
+.products-press__feature {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  background: var(--surface-wash-accent);
+  border: 1px solid var(--color-heading);
+}
+
+.products-press__featl { padding: 1.625rem 1.75rem; }
+
+.products-press__featr {
+  padding: 1.625rem 1.75rem;
+  border-left: 1px solid var(--color-heading);
+}
+
+.products-press__name {
+  font-family: var(--font-heading);
+  font-weight: var(--weight-bold);
+  font-size: 1.95rem;
+  letter-spacing: -0.018em;
+  line-height: 1.04;
+  margin: 0.6875rem 0 0;
+}
+
+.products-press__lede {
+  margin: 0.6875rem 0 0;
+  font-size: var(--size-body-sm);
+  color: var(--color-prose);
+  line-height: 1.6;
+  max-width: 44ch;
+}
+
+.products-press__chips {
+  margin-top: 1.0625rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4375rem;
+}
+
+.products-press__chip {
+  font-size: var(--size-label);
+  font-weight: var(--weight-semibold);
+  border: 1px solid var(--border-accent-soft);
+  padding: 0.3125rem 0.625rem;
+  color: var(--color-text-muted);
+}
+
+.products-press__feature .btn-row { margin-top: 1.3125rem; }
+
+/* ── The screenshot and the weights beside it ── */
+
+.products-press__shot { margin: 0; }
+
+.products-press__shot img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--border-accent-soft);
+}
+
+.products-press__caption,
+.products-press__wtlab {
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.products-press__caption { margin-top: 0.625rem; }
+
+.products-press__wtlab {
+  margin: 1.1875rem 0 0;
+  padding-top: 0.875rem;
+  border-top: 1px solid var(--border-accent-soft);
+}
+
+.products-press__wt { margin-top: 0.4375rem; }
+
+.products-press__wt div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.875rem;
+  padding: 0.375rem 0;
+}
+
+.products-press__wt dt {
+  font-size: var(--size-label);
+  color: var(--color-text-muted);
+}
+
+.products-press__wt dd {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+/* The track is the ember wash's own rule colour, the fill is ink: the
+   bar has to stay legible if the accent ever moves, so weight is
+   carried by the fill's length and its darkness, never by hue. */
+.products-press__wbar {
+  display: block;
+  width: 8.25rem;
+  height: 4px;
+  background: var(--border-accent-soft);
+}
+
+.products-press__wbar i {
+  display: block;
+  height: 100%;
+  background: var(--color-heading);
+}
+
+.products-press__wt dd b {
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  font-weight: var(--weight-medium);
+  color: var(--color-heading);
+  font-variant-numeric: tabular-nums;
+  min-width: 2.6em;
+  text-align: right;
+}
+
+.products-press__wtnote {
+  margin: 0.75rem 0 0;
+  font-size: var(--size-label);
+  line-height: 1.6;
+  color: var(--color-text-muted);
+}
+
+/* ── The three rows under it ── */
+
+.products-press__rows {
+  margin-top: 0.875rem;
+  border-top: 1px solid var(--border-default);
+}
+
+.products-press__row {
+  display: grid;
+  grid-template-columns: 6.5rem 12.5rem 1fr 10.75rem;
+  gap: 1.5rem;
+  align-items: baseline;
+  padding: 1.0625rem 0;
+}
+
+.products-press__row + .products-press__row {
+  border-top: 1px solid var(--border-default);
+}
+
+.products-press__type {
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.products-press__rname {
+  font-family: var(--font-heading);
+  font-weight: var(--weight-bold);
+  font-size: 1.3rem;
+  letter-spacing: -0.015em;
+  line-height: 1.15;
+  margin: 0;
+}
+
+.products-press__rname a { color: inherit; }
+.products-press__rname a:hover { color: var(--color-accent-hover); }
+
+.products-press__rmeta { margin: 0.375rem 0 0; }
+
+.products-press__rdesc {
+  margin: 0;
+  font-size: var(--size-body-sm);
+  color: var(--color-prose);
+  line-height: 1.55;
+}
+
+.products-press__ship {
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  line-height: 1.5;
+  color: var(--color-text-muted);
+  text-align: right;
+}
+
+.products-press__ship em {
+  font-style: normal;
+  display: block;
+  color: var(--color-heading);
+  margin-top: 0.1875rem;
+}
+
+/* ── Status ──
+   GA fills the mark, anything pre-release leaves it hollow. Shape, not
+   hue: the state has to survive a monochrome theme and a reader who
+   cannot separate the ember from the ink. */
+
+.products-press__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4375rem;
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.products-press__dot {
+  display: block;
+  width: 6px;
+  height: 6px;
+  border: 1px solid var(--color-accent);
+}
+
+.products-press__status--ga .products-press__dot {
+  background: var(--color-heading);
+  border-color: var(--color-heading);
+}
+
+@media (max-width: 860px) {
+  .products-press__feature { grid-template-columns: 1fr; }
+
+  .products-press__featr {
+    border-left: 0;
+    border-top: 1px solid var(--color-heading);
+  }
+
+  /* Type stays in its own column, everything else stacks beside it. */
+  .products-press__row { grid-template-columns: 6.5rem 1fr; }
+  .products-press__row > :nth-child(3),
+  .products-press__row > :nth-child(4) { grid-column: 2; }
+  .products-press__ship { text-align: left; }
+}

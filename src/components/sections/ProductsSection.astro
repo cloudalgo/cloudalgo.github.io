@@ -1,40 +1,178 @@
 ---
+// Fold 3. Structure follows docs/superpowers/specs/assets/home-mock.html
+// (the `03 products` block): one featured product with its screenshot and
+// scoring weights, then the other three as rows.
+//
+// The collection already carries `status`, `type` and `version`, so the
+// live dot, the type label and the version in the status line are read
+// rather than typed. What is NOT in the collection is the home page's own
+// copy -- the one-line row blurbs and the ship notes are written for this
+// fold and are shorter than any product-page field. They live in HOME
+// below, keyed by id, and every product falls back to its tagline, so a
+// fifth product still renders the day it is added.
 import { getCollection } from 'astro:content';
-import ProductCard from '../ui/ProductCard.astro';
-import SectionLabel from '../ui/SectionLabel.astro';
 
-const allProducts = await getCollection('products', ({ data }) => data.published);
-const products = allProducts.sort((a, b) => a.data.order - b.data.order);
+const products = (await getCollection('products', ({ data }) => data.published))
+  .sort((a, b) => a.data.order - b.data.order);
+const [featured, ...rest] = products;
+
+const TYPE_LABEL: Record<string, string> = {
+  'salesforce-app': 'Salesforce app',
+  'integration':    'Integration',
+  'mobile-app':     'Mobile app',
+  'desktop-app':    'Desktop app',
+};
+
+const STATUS_LABEL: Record<string, string> = {
+  ga:      'Generally available',
+  preview: 'Preview',
+  beta:    'Beta',
+};
+
+type HomeCopy = {
+  blurb: string;
+  chips?: string[];
+  cta?: string;
+  ship?: [string, string];
+};
+
+const HOME: Record<string, HomeCopy> = {
+  orgvitals: {
+    blurb:
+      'Find out what is wrong with your org before an audit does. 49 checks across ' +
+      'security, code quality, automation, tech debt and performance, graded A to F, ' +
+      'with the findings ranked so you know what to fix first. It runs on your ' +
+      'machine, reads only, and never writes anything back to the org.',
+    chips: ['Dependency graph', 'Cross-org compare', 'Historical trends'],
+    cta:   'Scan your org free',
+  },
+  algobridge: {
+    blurb:
+      'Your Salesforce data in Postgres, ten seconds behind. Changes flow both ways, ' +
+      'and every column edit is kept for 31 days.',
+    ship: ['Docker · AWS ECS', 'MIT, self-hosted'],
+  },
+  pledgivo: {
+    blurb:
+      'Take a donation without leaving Salesforce. The gift lands as a standard ' +
+      'Opportunity the moment it clears, so the reports and flows you already built ' +
+      'keep working.',
+    ship: ['AppExchange', 'Free to 200 gifts a year'],
+  },
+  insurealgo: {
+    blurb:
+      'Never miss a renewal. Countdowns and reminders at 10, 5 and 3 days, with every ' +
+      'policy document in one place. No account, no server, no tracking.',
+    ship: ['iOS · Android', 'Free'],
+  },
+};
+
+// The screenshot and the scoring weights belong to OrgVitals, not to
+// "whatever sorts first" -- the five weights are quoted from its own
+// feature copy. Guarded on the id so a reorder drops the panel rather
+// than captioning another product with OrgVitals' numbers.
+const SHOT = {
+  src: '/products/orgvitals/guide/03-dashboard.gif',
+  alt:
+    'The OrgVitals dashboard after scanning an org: an overall A-to-F grade with its ' +
+    'score, the trend across previous scans, the five category scores, and a ranked ' +
+    'list of what to fix first.',
+};
+
+const WEIGHTS: Array<[string, number]> = [
+  ['Security', 30],
+  ['Code quality', 20],
+  ['Automation', 20],
+  ['Tech debt', 20],
+  ['Performance', 10],
+];
+
+const featuredCopy = HOME[featured.id];
+const showScoring = featured.id === 'orgvitals';
 ---
+<section class="section-press anim-fade-up" aria-labelledby="products-heading">
+  <div class="section-press__head">
+    <h2 id="products-heading" class="section-title section-title--xs section-title--tighter section-press__title">
+      Software we built, and still run.
+    </h2>
+    <a class="section-press__all" href="/products/">All products &rarr;</a>
+  </div>
 
-<section style="background:var(--surface-inverse);padding:6rem 0;border-top:1px solid var(--border-on-inverse);position:relative;overflow:hidden;">
-  <!-- Parallax decorative shapes (white on dark) -->
-  <div data-parallax="0.08" style="position:absolute;top:-60px;left:-60px;width:210px;height:210px;border-radius:50%;border:1px solid var(--color-paper-a06);pointer-events:none;" aria-hidden="true"></div>
-  <div data-parallax="0.21" style="position:absolute;bottom:50px;right:7%;width:10px;height:10px;border-radius:50%;background:var(--color-paper-a10);pointer-events:none;" aria-hidden="true"></div>
-  <div data-parallax="0.14" style="position:absolute;top:40%;left:14%;width:6px;height:6px;border-radius:50%;background:var(--color-paper-a07);pointer-events:none;" aria-hidden="true"></div>
-  <div data-parallax="0.1" style="position:absolute;bottom:-40px;right:-30px;width:160px;height:160px;border-radius:50%;border:1px solid var(--color-paper-a04);pointer-events:none;" aria-hidden="true"></div>
-  <div class="container">
-    <SectionLabel class="section-label--block section-label--inverse anim-fade-up" style="margin-bottom:0.75rem;">
-      Our Products
-    </SectionLabel>
-    <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:2.5rem;">
-      <h2 class="section-title section-title--xl section-title--tight section-title--inverse anim-fade-up" style="margin:0;transition-delay:0.05s;">
-        Built in-house,<br/>for Salesforce teams.
-      </h2>
-      <a href="/products" style="font-size:0.9375rem;font-weight:700;color:var(--color-on-inverse-a60);white-space:nowrap;transition:color 0.2s;" class="anim-fade-up products-view-all">
-        View all products →
-      </a>
-    </div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1rem;">
-      {products.map((p, i) => (
-        <div class="anim-scale-pop" style={`transition-delay:${i * 0.1}s;display:flex;`}>
-          <ProductCard product={p} dark={true} />
+  <article class="products-press__feature">
+    <div class="products-press__featl">
+      <span class:list={['products-press__status', { 'products-press__status--ga': featured.data.status === 'ga' }]}>
+        <b class="products-press__dot" aria-hidden="true"></b>
+        {STATUS_LABEL[featured.data.status]}{featured.data.version && ` v${featured.data.version}`}
+        {' '}&middot; {TYPE_LABEL[featured.data.type]}
+      </span>
+      <h3 class="products-press__name">{featured.data.title}</h3>
+      <p class="products-press__lede">{featuredCopy?.blurb ?? featured.data.tagline}</p>
+
+      {featuredCopy?.chips && (
+        <div class="products-press__chips">
+          {featuredCopy.chips.map((chip) => <span class="products-press__chip">{chip}</span>)}
         </div>
-      ))}
+      )}
+
+      <div class="btn-row">
+        {featuredCopy?.cta && featured.data.externalUrl && (
+          <a class="btn btn-primary" href={featured.data.externalUrl} target="_blank" rel="noopener noreferrer">
+            {featuredCopy.cta} &rarr;
+          </a>
+        )}
+        <a class="btn btn-outline" href={`/products/${featured.id}/`}>See what it checks</a>
+      </div>
     </div>
+
+    <div class="products-press__featr">
+      <figure class="products-press__shot">
+        <img src={SHOT.src} alt={SHOT.alt} width="1000" height="627" loading="lazy" decoding="async" />
+        <figcaption class="products-press__caption">
+          Dashboard &middot; {featured.data.title} v{featured.data.version}
+        </figcaption>
+      </figure>
+
+      {showScoring && (
+        <>
+          <p class="products-press__wtlab">Category weight</p>
+          <dl class="products-press__wt">
+            {WEIGHTS.map(([label, pct]) => (
+              <div>
+                <dt>{label}</dt>
+                <dd>
+                  <span class="products-press__wbar" aria-hidden="true"><i style={`width:${pct}%`}></i></span>
+                  <b>{pct}%</b>
+                </dd>
+              </div>
+            ))}
+          </dl>
+          <p class="products-press__wtnote">
+            Each finding carries a severity and subtracts from its category base. The five
+            categories then roll up by these weights into the single grade.
+          </p>
+        </>
+      )}
+    </div>
+  </article>
+
+  <div class="products-press__rows">
+    {rest.map((p) => (
+      <div class="products-press__row">
+        <span class="products-press__type">{TYPE_LABEL[p.data.type]}</span>
+        <div>
+          <h3 class="products-press__rname"><a href={`/products/${p.id}/`}>{p.data.title}</a></h3>
+          <p class="products-press__rmeta">
+            <span class:list={['products-press__status', { 'products-press__status--ga': p.data.status === 'ga' }]}>
+              <b class="products-press__dot" aria-hidden="true"></b>
+              {STATUS_LABEL[p.data.status]}
+            </span>
+          </p>
+        </div>
+        <p class="products-press__rdesc">{HOME[p.id]?.blurb ?? p.data.tagline}</p>
+        {HOME[p.id]?.ship
+          ? <span class="products-press__ship">{HOME[p.id].ship![0]}<em>{HOME[p.id].ship![1]}</em></span>
+          : <span class="products-press__ship"></span>}
+      </div>
+    ))}
   </div>
 </section>
-
-<style>
-.products-view-all:hover { color: var(--color-on-inverse-a90); }
-</style>

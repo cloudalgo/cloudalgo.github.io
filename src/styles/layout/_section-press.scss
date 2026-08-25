@@ -14,7 +14,35 @@
   align-items: baseline;
   justify-content: space-between;
   gap: 1rem;
-  border-bottom: 1px solid var(--border-default);
-  padding-bottom: 0.75rem;
-  margin-bottom: 1.75rem;
+  /* The heavy rule, not the hairline: this one closes the heading, and
+     the mock draws it in ink for exactly that reason. --border-default
+     is the rule BETWEEN peers, which is a different job. */
+  border-bottom: 1px solid var(--color-heading);
+  padding-bottom: 0.875rem;
+  margin-bottom: 1.375rem;
 }
+
+/* The h2 in that row. Type comes from the .section-title atom; what is
+   here is the measure and the balance, which belong to the row rather
+   than to the heading's type. */
+.section-press__title {
+  margin: 0;
+  max-width: 20ch;
+  line-height: 1.05;
+  text-wrap: balance;
+}
+
+/* The "All products ->" link opposite it. The accent underline is the
+   only place the ember appears in a section head, which is what makes
+   it read as the way out of the section. */
+.section-press__all {
+  font-size: var(--size-body-sm);
+  font-weight: var(--weight-bold);
+  color: var(--color-heading);
+  white-space: nowrap;
+  border-bottom: 2px solid var(--color-accent);
+  padding-bottom: 1px;
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.section-press__all:hover { color: var(--color-accent-hover); }
