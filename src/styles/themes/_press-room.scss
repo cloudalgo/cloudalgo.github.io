@@ -22,55 +22,62 @@
 // theme, so the values hold too.
 //
 // Every ratio below is measured against the background the token
-// actually paints on, not against white. Four roles sit under
-// 4.5:1 -- muted, faint and faintest text, and the hairline rule.
-// They are under it in monochrome too, and this theme raises all
-// four; fixing them properly is a semantic-layer change (those
-// roles need to stop being that light), not a palette change,
-// so it is not smuggled in here.
+// actually paints on, not against white. The ink and paper ramps
+// are the artifact's measured palette (see docs/superpowers/sdd/
+// 2026-08-25-homepage-press-room/task-2-brief.md): anchors copied
+// exactly, four in-between rungs interpolated along the ramp. Every
+// text role clears AA, including ink-400, ink-300 and paper-400,
+// which sat under it in BOTH themes before this repaint.
+// docs/superpowers/specs/assets/contrast-check.py is the permanent
+// gate that proves it -- run it against this file after any edit.
 
 @use 'contract';
 
 $theme: (
-  /* Ink — neutral near-black. The warmth in this theme comes from
-     the paper and the ember; warming the ink as well collapses the
-     whole palette into one brown note. */
-  'ink-900': #0E0E0E,  /* headings, filled buttons, hover borders — 17.2:1 on page */
-  'ink-880': #171717,  /* cards raised off an ink-900 section */
-  'ink-870': #282828,  /* hairline rules on an ink-900 section */
-  'ink-860': #1E1E1E,  /* long-form prose — 16.7:1 on card */
-  'ink-840': #3B3B3B,  /* long-form standfirst — 11.2:1 on card */
-  'ink-800': #2B2B2B,  /* footer CTA surface — carries white at 14.2:1 */
-  'ink-600': #545454,  /* link hover — 6.8:1 on page */
-  'ink-500': #585858,  /* body copy — 6.4:1 on page, 7.1:1 on card */
-  'ink-400': #7C7C7C,  /* captions — 3.7:1, up from 3.2:1 */
-  'ink-300': #8C8C8C,  /* card meta — 3.4:1, up from 2.9:1 */
+  /* Ink — the artifact's dark ramp, warm-neutral rather than the old
+     pure grey. Anchors are copied exactly; `ink-300` is interpolated
+     along the ramp because the artifact's next light rung (#ADA299)
+     lands at 2.28:1 and is the grey the readability pass rejected. */
+  'ink-900': #131110,  /* headings, filled buttons, hover borders — 17.19:1 on page */
+  'ink-880': #1B1916,  /* cards raised off an ink-900 section */
+  'ink-870': #34302D,  /* hairline rules on an ink-900 section */
+  'ink-860': #231F1D,  /* long-form prose — 15.0:1 on card */
+  'ink-840': #34302D,  /* long-form standfirst — 12.0:1 on card */
+  'ink-800': #231F1D,  /* footer CTA surface — carries white at 15.0:1 */
+  'ink-600': #34302D,  /* link hover — one step deeper than body */
+  'ink-500': #494440,  /* body copy — 8.78:1 on page, 9.61:1 on card */
+  'ink-400': #57504B,  /* captions — 7.22:1 on page, up from 3.7:1 */
+  'ink-300': #6C645E,  /* card meta — 5.29:1 on page, up from 3.4:1 */
   'ink-000': #000000,  /* true black — pressed states only */
 
-  /* Paper — warm off-white. Pulled off cream on purpose: a yellower
-     stock under an orange accent reads as one hue at two strengths
-     rather than as paper and ink. */
+  /* Paper — the artifact's light ramp. `paper-400` is interpolated for
+     the same reason as ink-300: it carries the faintest TEXT role, so
+     it has to clear AA. The genuinely decorative rungs below it
+     (paper-300 tracks and ghost numerals, paper-250 disabled labels)
+     keep the artifact's pale anchors, because non-text is exempt. */
   'paper-000': #FFFFFF,  /* cards, modals, header */
-  'paper-025': #F1EFEB,  /* softened light text on an inverse surface */
-  'paper-050': #FAF9F6,  /* faintest wash — table-row hover */
-  'paper-100': #F3F2EE,  /* page background, alternate sections */
-  'paper-150': #ECEAE4,  /* tinted wash — callouts, inline code, chips */
-  'paper-200': #DCD8D0,  /* borders, dividers, inputs */
-  'paper-250': #C3BEB6,  /* disabled control text */
-  'paper-300': #CBC6BD,  /* toggle tracks, bullet dots, ghost numerals */
-  'paper-400': #A8A29A,  /* faintest metadata text */
+  'paper-025': #F2EEEB,  /* softened light text on an inverse surface */
+  'paper-050': #F2EEEB,  /* sunk wash — table-row hover, alternate bands */
+  'paper-100': #F7F4F2,  /* page background */
+  'paper-150': #EAE5E1,  /* tinted wash — callouts, inline code, chips */
+  'paper-200': #E0D9D4,  /* borders, dividers, inputs */
+  'paper-250': #ADA299,  /* disabled control text — exempt from AA */
+  'paper-300': #CAC1BA,  /* toggle tracks, bullet dots, ghost numerals */
+  'paper-400': #756D66,  /* faintest metadata text — 4.64:1 on page */
 
   /* Ember — the logo mark's #F75A41, and the reason `accent-on` is a
      theme key. White on #F75A41 is 3.2:1 and fails AA at button text
      size; no amount of naming fixes that. Darkening the ember until
-     white passes lands on #DD3824, which is visibly not the brand.
-     So the accent keeps the brand value and the label goes dark. */
+     white passes lands somewhere visibly not the brand. So the accent
+     keeps the brand value and the label goes dark: #110605 at 6.17:1.
+     accent-400 and accent-600 have no artifact anchor and are
+     interpolated along the flame ramp toward #EDC1BB and #110605. */
   'accent-050': #FDF1F0,  /* ember wash — panel and band backgrounds */
   'accent-200': #EDC1BB,  /* the rule inside an ember-washed panel */
-  'accent-400': #FF7A63,  /* lighter ember — accent on an inverse surface */
+  'accent-400': #F66953,  /* lighter ember — accent on an inverse surface, 6.33:1 */
   'accent-500': #F75A41,  /* brand ember — fills, band, borders */
-  'accent-600': #EF4E39,  /* hover — one step deeper, ink still 5.4:1 */
-  'accent-on':  #0E0E0E,  /* ink on ember: 6.0:1 rest, 5.4:1 hover */
+  'accent-600': #E9553D,  /* hover — one step deeper, ink still 5.54:1 */
+  'accent-on':  #110605,  /* ink on ember: 6.17:1 rest, 5.54:1 hover */
 
   /* Status. Deepened from monochrome so danger clears AA on a card
      (5.6:1, was 4.8:1) and stays distinguishable beside the ember —
