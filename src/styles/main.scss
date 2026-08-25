@@ -17,6 +17,7 @@
 
 // ── Layout ────────────────────────────────────────────────
 @use 'layout/container';
+@use 'layout/section-press';
 @use 'layout/header';
 
 // ── Components ────────────────────────────────────────────
@@ -24,6 +25,7 @@
 
 // ── Page sections ─────────────────────────────────────────
 @use 'sections/hero';
+@use 'sections/hero-press';
 @use 'sections/about';
 @use 'components/section-label';
 @use 'components/badge';

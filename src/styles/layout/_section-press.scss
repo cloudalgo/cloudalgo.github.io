@@ -1,0 +1,20 @@
+/* The frame every content fold sits in, and the rule-under-heading row
+   at its top. Shared by four sections -- it lives here rather than in
+   the first section that happened to need it, because a shared shell
+   owned by one section is how a design system rots. */
+
+.section-press {
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding: 3.5rem var(--container-pad);
+}
+
+.section-press__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid var(--border-default);
+  padding-bottom: 0.75rem;
+  margin-bottom: 1.75rem;
+}

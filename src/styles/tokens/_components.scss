@@ -173,6 +173,11 @@
   --section-padding-y: 6rem;
   --section-padding-y-sm: 3.75rem;
   --container-max: 1278px;
+
+  /* The page gutter, named because nine sections are about to read it.
+     It was a repeated literal in each layout partial; one name means the
+     page can breathe differently without editing nine files. */
+  --container-pad: 2rem;
 }
 
 @media (max-width: 991px) {

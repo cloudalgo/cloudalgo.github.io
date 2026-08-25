@@ -1,14 +1,3 @@
-/* ─── Hero ─────────────────────────────────────────────── */
-.hero-section {
-  background-color: var(--surface-page);
-  padding-top: 8rem;
-  padding-bottom: 5rem;
-  overflow: hidden;
-}
-@media (max-width: 991px) {
-  .hero-section { padding-top: 6rem; padding-bottom: 3rem; }
-}
-
 /* Remove old hero image background */
 .hero-img-bg { display: none; }
 .banner-caption { display: none; }

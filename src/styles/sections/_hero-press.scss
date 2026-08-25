@@ -1,0 +1,103 @@
+/* Fold 1. Ported from docs/superpowers/specs/assets/home-mock.css:107-120.
+   The mock's raw custom properties map onto the token layer as:
+   --display -> --font-heading, --acc -> --color-accent,
+   --ink2 -> --color-heading, --muted -> --color-text,
+   --mute2 -> --color-text-muted, --ash -> --border-default,
+   --mono -> --font-mono. */
+
+.hero-press {
+  padding: 3.5rem var(--container-pad) 2.125rem;
+  display: grid;
+  grid-template-columns: 1.55fr 1fr;
+  gap: 2.5rem;
+  align-items: end;
+  max-width: var(--container-max);
+  margin-inline: auto;
+}
+
+.hero-press__title {
+  font-family: var(--font-heading);
+  font-weight: var(--weight-bold);
+  font-size: clamp(2.2rem, 5.6vw, 3.6rem);
+  line-height: 1.02;
+  letter-spacing: -0.038em;
+  margin: 0;
+  max-width: 15ch;
+  text-wrap: balance;
+}
+
+/* The emphasised span is underlined by a gradient rather than
+   text-decoration, so the rule sits below the baseline at a
+   controlled height and survives a line wrap intact. */
+.hero-press__mark {
+  text-decoration: none;
+  color: var(--color-heading);
+  background: linear-gradient(
+    transparent 78%,
+    var(--color-accent) 78%,
+    var(--color-accent) 99%,
+    transparent 99%
+  );
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* Not hero-scoped: the products panel uses the same row. Named for what
+   it is, so a later section does not have to reach into a hero class to
+   get a row of buttons. */
+.btn-row {
+  display: flex;
+  gap: 0.625rem;
+  flex-wrap: wrap;
+}
+
+.hero-press .btn-row { margin-top: 1.625rem; }
+
+/* The rule is what makes this read as a second column rather than a
+   stray paragraph, which is why it is a border and not a margin. */
+.hero-press__standfirst {
+  border-left: 1px solid var(--color-heading);
+  padding-left: 1.25rem;
+}
+
+.hero-press__standfirst p {
+  font-size: var(--size-body);
+  line-height: 1.6;
+  color: var(--color-text);
+  max-width: 46ch;
+  margin: 0;
+}
+
+.hero-press__facts {
+  margin: 1rem 0 0;
+  display: grid;
+  gap: 0.4375rem;
+}
+
+/* The mock sets these rows at 11.5px/10.5px. Held at the label scale
+   instead: the root drops to 85% at 1200px, which would land the mock's
+   figures near 9px on the laptop widths most of this page is read at. */
+.hero-press__facts > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.875rem;
+  padding-bottom: 0.375rem;
+  border-bottom: 1px solid var(--border-default);
+  font-size: var(--size-label);
+}
+
+.hero-press__facts dt { color: var(--color-text-muted); }
+
+.hero-press__facts dd {
+  margin: 0;
+  font-family: var(--font-mono);
+  color: var(--color-heading);
+  text-align: right;
+}
+
+@media (max-width: 860px) {
+  .hero-press {
+    grid-template-columns: 1fr;
+    gap: 1.625rem;
+  }
+}
