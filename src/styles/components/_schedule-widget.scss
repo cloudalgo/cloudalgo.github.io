@@ -25,7 +25,7 @@
   border: 1px solid var(--color-paper-a15);
   border-left: 3px solid var(--color-paper-a50);
   box-shadow: 0 6px 28px var(--color-shadow-a28), inset 0 1px 0 var(--color-paper-a08);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   padding: 12px 36px 12px 14px;
   width: 220px;
   margin-bottom: 10px;
@@ -65,7 +65,7 @@
   -webkit-backdrop-filter: blur(16px) saturate(1.8);
   color: var(--color-on-inverse);
   border: 1px solid var(--color-paper-a18);
-  border-radius: 100px;
+  border-radius: var(--radius-pill);
   height: 50px;
   padding: 0 20px 0 14px;
   font-size: 13.5px;
@@ -134,7 +134,7 @@
 
 .sw-modal {
   background: var(--surface-card);
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   box-shadow: 0 20px 60px var(--color-shadow-a15);
   width: 100%;
   max-width: 680px;
@@ -216,7 +216,7 @@
   color: var(--color-text);
   line-height: 1;
   padding: 4px 10px;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   transition: background 150ms;
 }
 .sw-cal-nav:hover:not(:disabled) { background: var(--surface-page); }
@@ -243,7 +243,7 @@
 .sw-cal-day {
   border: none;
   background: none;
-  border-radius: 50%;
+  border-radius: var(--radius-pill);
   cursor: pointer;
   font-size: 13px;
   font-family: var(--font-body);
@@ -285,7 +285,7 @@
   padding: 12px;
   margin-bottom: 8px;
   border: 1.5px solid var(--border-strong);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   background: none;
   color: var(--color-heading);
   font-size: 15px;
@@ -301,7 +301,7 @@
   height: 28px;
   border: 3px solid var(--border-default);
   border-top-color: var(--border-strong);
-  border-radius: 50%;
+  border-radius: var(--radius-pill);
   animation: swSpin 0.7s linear infinite;
   margin: 24px auto;
 }
@@ -310,7 +310,7 @@
 .sw-back-btn {
   background: none;
   border: 1px solid var(--border-default);
-  border-radius: 50%;
+  border-radius: var(--radius-pill);
   width: 36px;
   height: 36px;
   display: flex;
@@ -339,7 +339,7 @@
 .sw-field textarea {
   width: 100%;
   border: 1.5px solid var(--border-default);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   padding: 10px 12px;
   font-size: 14px;
   font-family: var(--font-body);
@@ -360,7 +360,7 @@
   gap: 6px;
   align-items: center;
   border: 1.5px solid var(--border-default);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   padding: 6px 10px;
   cursor: text;
   min-height: 42px;
@@ -389,7 +389,7 @@
   gap: 4px;
   background: var(--surface-inverse);
   color: var(--color-on-inverse);
-  border-radius: 100px;
+  border-radius: var(--radius-pill);
   padding: 2px 10px 2px 10px;
   font-size: 13px;
   white-space: nowrap;
@@ -414,7 +414,7 @@
   background: var(--surface-inverse);
   color: var(--color-on-inverse);
   border: none;
-  border-radius: 100px;
+  border-radius: var(--radius-pill);
   padding: 12px 24px;
   font-size: 15px;
   font-weight: 700;
@@ -430,7 +430,7 @@
 .sw-confirmed-icon {
   width: 56px;
   height: 56px;
-  border-radius: 50%;
+  border-radius: var(--radius-pill);
   background: var(--surface-inverse);
   color: var(--color-on-inverse);
   display: flex;
@@ -447,7 +447,7 @@
 .sw-mobile-panel { display: flex; flex-direction: column; min-height: 100vh; font-family: var(--font-body); }
 .sw-mobile-panel-header { display: flex; align-items: flex-start; justify-content: space-between; padding: 20px 16px 12px; gap: 12px; }
 .sw-mobile-back-circle {
-  flex-shrink: 0; width: 40px; height: 40px; border-radius: 50%;
+  flex-shrink: 0; width: 40px; height: 40px; border-radius: var(--radius-pill);
   border: 1.5px solid var(--border-default); background: none; display: flex;
   align-items: center; justify-content: center; cursor: pointer;
   color: var(--color-text); transition: border-color 150ms;
@@ -467,12 +467,12 @@
 .sw-mobile-slots-empty { font-size: 14px; color: var(--color-text); text-align: center; padding: 24px 0; }
 .sw-mobile-slot-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
 .sw-mobile-slot-selected {
-  padding: 14px; border-radius: 8px;
+  padding: 14px; border-radius: var(--radius-md);
   background: var(--surface-inverse); color: var(--color-on-inverse); border: none;
   font-size: 15px; font-weight: 600; font-family: var(--font-body); cursor: pointer;
 }
 .sw-mobile-slot-next {
-  padding: 14px; border-radius: 8px;
+  padding: 14px; border-radius: var(--radius-md);
   background: var(--surface-inverse); color: var(--color-on-inverse); border: none;
   font-size: 15px; font-weight: 600; font-family: var(--font-body);
   cursor: pointer; transition: opacity 150ms;
@@ -491,7 +491,7 @@
   .sw-mobile-change-date {
     display: inline-flex; align-items: center; gap: 6px;
     background: none; border: 1.5px solid var(--border-default);
-    border-radius: 100px; padding: 6px 14px; font-size: 13px;
+    border-radius: var(--radius-pill); padding: 6px 14px; font-size: 13px;
     font-family: var(--font-body);
     color: var(--color-text); cursor: pointer; margin-bottom: 16px;
     transition: border-color 150ms;

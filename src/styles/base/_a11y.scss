@@ -9,14 +9,14 @@
   box-shadow: 0 0 0 2px var(--focus-halo);
 }
 
-/* Pill buttons: match the ring to the shape */
+/* Buttons: match the ring to whatever shape the theme gives them */
 .btn:focus-visible,
 .join-us:focus-visible,
 .btn-load-more:focus-visible {
-  border-radius: 100px;
+  border-radius: var(--radius-pill);
 }
 
-/* Inputs keep their 8px corners */
+/* Inputs keep their own corners */
 .form-control:focus-visible,
 .sw-field input:focus-visible,
 .sw-field textarea:focus-visible {
@@ -44,7 +44,7 @@
   font-weight: 700;
   font-size: 0.9375rem;
   padding: 0.75rem 1.5rem;
-  border-radius: 100px;
+  border-radius: var(--radius-pill);
   text-decoration: none;
   transition: transform 0.2s ease;
 }

@@ -15,7 +15,7 @@ that only pulls `'key': #HEX` pairs out of the Sass map can't see an
 alpha role at all, so it gets its own compositing path
 (composite_luminance, below) and its own table.
 
-Three ALPHA rungs (a35/a38/a40) are real, shipped text that measures
+Two ALPHA rungs (a35/a40) are real, shipped text that measures
 under AA. They are pre-existing -- this repaint did not cause them and
 does not fix them; see the ALLOWLIST comment above ALPHA_TEXT_ROLES.
 They print with a KNOWN marker and their real ratio -- never hidden,
@@ -110,13 +110,13 @@ TEXT_ROLES = [
 
 # ALLOWLIST -- white-over-inverse text under AA, tracked on purpose.
 #
-# `--color-on-inverse-a35/-a38/-a40` are real text at:
+# `--color-on-inverse-a35/-a40` are real text at:
 #   a35: src/pages/blog/[slug].astro:629, src/pages/case-studies/[slug].astro:975
-#   a38: src/components/layout/Footer.astro:130
 #   a40: src/pages/case-studies.astro:416,
+#        src/components/ui/ProductCard.astro:82,
 #        src/styles/tokens/_components.scss:50 (--section-label-color-inverse)
-# Composited over this theme's `ink-900` (#131110) they measure 3.21 / 3.57 /
-# 3.82 -- all under 4.5:1. This is NOT something the repaint introduced: the
+# Composited over this theme's `ink-900` (#131110) they measure 3.21 / 3.82 --
+# both under 4.5:1. This is NOT something the repaint introduced: the
 # old `ink-900` was #0A0A0A, darker, so every one of these ratios was even
 # lower before (e.g. a45 -- not a failure, see below -- was 4.50, is now
 # 4.53; #131110 is lighter than #0A0A0A, so compositing against it only ever
@@ -124,7 +124,7 @@ TEXT_ROLES = [
 # have not been redesigned yet, which is out of scope here; a later
 # "drift sweep" task retires the raw -aNN rungs in favour of the five named
 # on-inverse roles (body/strong/muted/faint/ghost) and is expected to fix
-# these three as a side effect. Until then they are allowlisted BY NAME, so
+# these two as a side effect. Until then they are allowlisted BY NAME, so
 # this gate still fails on any alpha rung -- new or existing -- that regresses
 # under AA without having been told about it first.
 #
@@ -132,10 +132,8 @@ TEXT_ROLES = [
 ALPHA_TEXT_ROLES = [
     ('on-inverse-a35 (--color-on-inverse-a35)', 0.35, 4.5,
      'KNOWN -- blog/[slug].astro:629, case-studies/[slug].astro:975'),
-    ('on-inverse-a38 (--color-on-inverse-a38)', 0.38, 4.5,
-     'KNOWN -- Footer.astro:130'),
     ('on-inverse-a40 (--color-on-inverse-a40)', 0.40, 4.5,
-     'KNOWN -- case-studies.astro:416, _components.scss:50 (--section-label-color-inverse)'),
+     'KNOWN -- case-studies.astro:416, ProductCard.astro:82, _components.scss:50'),
     ('on-inverse-faint / a45 (--color-on-inverse-faint)', 0.45, 4.5, None),
     ('on-inverse-muted / a55 (--color-on-inverse-muted)', 0.55, 4.5, None),
     ('on-inverse-strong / a70 (--color-on-inverse-strong)', 0.70, 4.5, None),
