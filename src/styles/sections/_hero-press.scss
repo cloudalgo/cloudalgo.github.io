@@ -47,6 +47,22 @@
   text-wrap: balance;
 }
 
+/* Phones get their own clamp, because the shared one gets it backwards
+   there. Its floor is a rem, the root drops to 85% at 1200px, and 5.6vw
+   of a 360px screen is only 20px -- so the floor wins and the smallest
+   screen renders the page's one load-bearing sentence at its smallest
+   size. Below the stack breakpoint the size comes off the viewport
+   instead: ~39px at 360px, growing with the screen until it meets the
+   desktop clamp near this breakpoint, so the two ranges join without a
+   step. The cap is what 15ch of Archivo can hold inside the container
+   at this width -- raise it and "Salesforce" starts running out of the
+   measure. */
+@media (max-width: 767px) {
+  .hero-press__title {
+    font-size: clamp(2.6rem, 10.8vw, 3.3rem);
+  }
+}
+
 /* Not hero-scoped: the products panel uses the same row. Named for what
    it is, so a later section does not have to reach into a hero class to
    get a row of buttons. */
