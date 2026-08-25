@@ -1,37 +1,29 @@
 ---
 // Fold 4. Structure follows docs/superpowers/specs/assets/home-mock.html
-// (the `04 services` block): four rows, same shape as the product rows
-// above them, so a buyer and a developer read the page the same way.
+// (the `04 services` block): one row per service, same shape as the
+// product rows above them, so a buyer and a developer read the page the
+// same way.
 //
 // The right-hand cell is the join. `proves` is a reference into the
-// products collection, so every service on this page points at
-// something shipped -- which is the whole reason the field is required.
-// This is also where "Why us" went: a section of claims with nothing
-// attached to them became one claim per row, each next to the thing
-// that earned it.
+// products collection, so a service that shipped one points at it by
+// name. This is also where "Why us" went: a section of claims with
+// nothing attached to them became one claim per row, each next to the
+// thing that earned it.
 //
 // Names and order come from the collection. The type label and the row
 // blurb do not -- both are written for this fold and are shorter than
-// any collection field -- so they live in HOME below, keyed by id, with
-// the excerpt as the fallback. A fifth service renders the day it is
-// added.
+// any collection field -- so they live in HOME below, keyed by id.
+//
+// EVERY SERVICE APPEARS. The fold was four rows for as long as four was
+// the whole practice; it is seven now because the practice is, and a
+// home page that shows a subset makes the reader guess which subset. So
+// HOME is a copy table, not a guest list -- and a service with no row
+// written for it would render undefined, which is why the loop below
+// throws instead. Adding an eighth service is a content edit AND a
+// four-line edit here, deliberately: the row blurb is home-page copy and
+// nobody else can write it. "All services ->" still carries the depth --
+// this fold names them, /services/ sells them.
 import { getCollection, getEntry } from 'astro:content';
-
-const services = (await getCollection('services')).sort(
-  (a, b) => a.data.order - b.data.order
-);
-
-// A service proves itself with a product it shipped or with a plain claim --
-// the schema guarantees exactly one. Resolve the reference where there is one
-// so the row can link to the product; otherwise carry the claim as text.
-const proofs = new Map(
-  await Promise.all(
-    services.map(async (s) => {
-      const product = s.data.proves ? await getEntry(s.data.proves) : undefined;
-      return [s.id, product] as const;
-    })
-  )
-);
 
 // `name` overrides the collection title where the home row wants a shorter
 // one. Only consulting needs it: the section is already headed by products
@@ -65,7 +57,58 @@ const HOME: Record<string, HomeCopy> = {
       'Move data between Salesforce and everything else, on a schedule that ' +
       'recovers itself. Airflow across ERP systems, databases and APIs.',
   },
+  'mulesoft-integration': {
+    type: 'Integration',
+    blurb:
+      'One reusable API layer instead of point-to-point links nobody can map. ' +
+      'API-led connectivity on Anypoint, documented so your team adds the next one.',
+  },
+  'mulesoft-rpa': {
+    type: 'Automation',
+    blurb:
+      'Drive the supplier portals, mainframe screens and PDFs that never got an ' +
+      'API. Bots on the same platform as your integrations, not a second tool.',
+  },
+  'aws-cloud-solutions': {
+    type: 'Cloud',
+    blurb:
+      'The workloads that do not belong inside Salesforce. VPC and IAM as code, ' +
+      'serverless processing and analytics, with cost work in the design.',
+  },
 };
+
+const services = (await getCollection('services')).sort(
+  (a, b) => a.data.order - b.data.order
+);
+
+// Fail the build rather than ship a row with `undefined` where its name and
+// description should be. The fold renders the whole collection now, so a new
+// service file is enough to put a row on the home page -- and the row needs
+// copy that only exists here.
+for (const s of services) {
+  if (!(s.id in HOME)) {
+    throw new Error(
+      `Services.astro: no home-page row copy for service "${s.id}". ` +
+        `Add a HOME entry (type + blurb) or the row renders empty.`
+    );
+  }
+}
+
+// A service proves itself with a product it shipped or with a plain claim --
+// the schema allows at most one, and permits neither. Resolve the reference
+// where there is one so the row can link to the product; otherwise carry the
+// claim as text, and where a practice has no proof yet print no line at all.
+// Four of the seven have proof; the other three leave the cell empty rather
+// than reach for a sentence, and an empty fourth cell in a fixed four-column
+// grid costs the row nothing but the whitespace.
+const proofs = new Map(
+  await Promise.all(
+    services.map(async (s) => {
+      const product = s.data.proves ? await getEntry(s.data.proves) : undefined;
+      return [s.id, product] as const;
+    })
+  )
+);
 ---
 <section class="section-press anim-fade-up" aria-labelledby="services-heading">
   <div class="section-press__head">
@@ -80,15 +123,17 @@ const HOME: Record<string, HomeCopy> = {
       const proof = proofs.get(s.id);
       return (
         <div class="services-press__row">
-          <span class="section-press__type">{HOME[s.id]?.type}</span>
-          <h3 class="services-press__name"><a href={`/services/${s.id}/`}>{HOME[s.id]?.name ?? s.data.title}</a></h3>
-          <p class="services-press__desc">{HOME[s.id]?.blurb ?? s.data.excerpt}</p>
-          <span class="services-press__proves">
-            Proven by
-            {proof
-              ? <em><a href={`/products/${proof.id}/`}>{proof.data.title}</a></em>
-              : <em>{s.data.provenBy}</em>}
-          </span>
+          <span class="section-press__type">{HOME[s.id].type}</span>
+          <h3 class="services-press__name"><a href={`/services/${s.id}/`}>{HOME[s.id].name ?? s.data.title}</a></h3>
+          <p class="services-press__desc">{HOME[s.id].blurb}</p>
+          {(proof || s.data.provenBy) && (
+            <span class="services-press__proves">
+              Proven by
+              {proof
+                ? <em><a href={`/products/${proof.id}/`}>{proof.data.title}</a></em>
+                : <em>{s.data.provenBy}</em>}
+            </span>
+          )}
         </div>
       );
     })}
