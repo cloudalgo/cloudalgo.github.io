@@ -1,0 +1,104 @@
+---
+/**
+ * One catalogue entry, printed as a specimen plate: a ruled header bar
+ * carrying the number, the name and the ship status; the copy on the
+ * left; the specification on the right; the evidence underneath.
+ *
+ * The copy is a prop rather than a slot because all four entries say
+ * the same four things in the same order -- tagline, description,
+ * capability chips, ways in -- and four slots per entry would let that
+ * order drift. The evidence is a slot because it is genuinely
+ * different every time: a GIF, a set of phone screens, a drawn
+ * diagram, or nothing at all.
+ */
+import StatusPip from '@/components/ui/StatusPip.astro';
+import SpecSheet from '@/components/ui/SpecSheet.astro';
+import Button from '@/components/ui/Button.astro';
+
+/** Mirrors SpecSheet's own SpecRow -- an .astro file's types are not
+    importable, so the shape is restated rather than reached for. */
+export interface SpecRow {
+  term: string;
+  detail: string;
+}
+
+export interface EntryAction {
+  label: string;
+  href: string;
+  /** The one way in that the entry is actually recommending. */
+  primary?: boolean;
+}
+
+interface Props {
+  /** Anchor target, so the contents strip can reach this entry. */
+  id: string;
+  /** The entry's number, printed as given ("01"). */
+  n: string;
+  title: string;
+  /** Raw collection value: 'ga' | 'preview' | 'beta'. */
+  status: string;
+  /** The mono line at the end of the header bar -- version, edition,
+      platform. Whatever identifies this build. */
+  meta: string;
+  /** The one-sentence claim, set larger than the description. */
+  tagline: string;
+  description: string;
+  /** Capability labels. Skimmed, not read -- keep each to a few words. */
+  chips: string[];
+  actions: EntryAction[];
+  spec: SpecRow[];
+  /** Label above the spec panel. */
+  specLabel?: string;
+  class?: string;
+}
+
+const {
+  id, n, title, status, meta,
+  tagline, description, chips, actions,
+  spec, specLabel = 'Specification',
+  class: className,
+} = Astro.props;
+
+/** An action pointing off-site opens in a new tab. Derived from the
+    href rather than declared per action, so a URL that changes from
+    a route to a domain cannot leave a stale flag behind. */
+const isExternal = (href: string) => /^https?:\/\//.test(href);
+---
+<article class:list={['entry', className]} id={id}>
+  <header class="entry__head">
+    <span class="entry__n">{n}</span>
+    <h3 class="entry__name">{title}</h3>
+    <StatusPip status={status} onInk class="entry__pip" />
+    <span class="entry__meta">{meta}</span>
+  </header>
+
+  <div class="entry__body">
+    <div class="entry__main">
+      <p class="entry__tag">{tagline}</p>
+      <p class="entry__desc">{description}</p>
+
+      <ul class="entry__chips">
+        {chips.map((chip) => <li class="entry__chip">{chip}</li>)}
+      </ul>
+
+      <div class="btn-row entry__actions">
+        {actions.map((action) => (
+          <Button
+            href={action.href}
+            variant={action.primary ? 'primary' : 'outline'}
+            size="sm"
+            external={isExternal(action.href)}
+          >
+            {action.label}
+          </Button>
+        ))}
+      </div>
+    </div>
+
+    <aside class="entry__side">
+      <SpecSheet rows={spec} label={specLabel} />
+    </aside>
+  </div>
+
+  <slot name="evidence" />
+</article>

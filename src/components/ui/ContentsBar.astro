@@ -1,0 +1,43 @@
+---
+/**
+ * The contents strip under an index page's masthead: one cell per
+ * entry, numbered, with the shortest true description of the thing and
+ * its ship status.
+ *
+ * It is a table of contents, so the numbers mean something -- they are
+ * the reading order of the entries below, and each cell is an anchor
+ * into one. Numbering a set that has no order would be decoration; this
+ * set has one, and the entries carry the same numerals.
+ */
+import StatusPip from '@/components/ui/StatusPip.astro';
+
+export interface ContentsItem {
+  /** The entry's number, printed as given ("01"), not derived. */
+  n: string;
+  title: string;
+  /** In-page anchor, e.g. "#orgvitals". */
+  href: string;
+  /** One line. It has to survive a quarter of the page width. */
+  blurb: string;
+  /** Raw collection value: 'ga' | 'preview' | 'beta'. */
+  status: string;
+}
+
+interface Props {
+  items: ContentsItem[];
+  /** Names the strip for screen readers -- "Products", "Services". */
+  label: string;
+  class?: string;
+}
+const { items, label, class: className } = Astro.props;
+---
+<nav class:list={['contents-bar', className]} aria-label={`${label} contents`}>
+  {items.map((item) => (
+    <a class="contents-bar__item" href={item.href}>
+      <span class="contents-bar__n">{item.n}</span>
+      <span class="contents-bar__title">{item.title}</span>
+      <span class="contents-bar__blurb">{item.blurb}</span>
+      <StatusPip status={item.status} class="contents-bar__pip" />
+    </a>
+  ))}
+</nav>

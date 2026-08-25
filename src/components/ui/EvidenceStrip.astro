@@ -1,0 +1,31 @@
+---
+/**
+ * The figure under a catalogue entry -- a screenshot, a row of them, or
+ * a drawn diagram -- with a numbered mono caption beneath it.
+ *
+ * The number and the caption are separate props because the number is
+ * printed emphatic and the sentence is not, and because a caption that
+ * carried its own "Fig. 02 — " prefix would put the numbering scheme in
+ * four places instead of one.
+ *
+ * The picture itself arrives through the default slot: a single <img>,
+ * a `.evidence__row` of them, or markup that is not an image at all.
+ * AlgoBridge has no interface to screenshot and its figure is a
+ * diagram, which is the reason this takes a slot rather than a src.
+ */
+interface Props {
+  /** The figure's number, printed as given ("01"). */
+  n: string;
+  /** The sentence after the number. Sentence case, no leading capital
+      needed -- "Fig. 01" is the start of the line. */
+  caption: string;
+  class?: string;
+}
+const { n, caption, class: className } = Astro.props;
+---
+<figure class:list={['evidence', className]}>
+  <slot />
+  <figcaption class="evidence__caption">
+    <b class="evidence__n">Fig. {n}</b> {caption}
+  </figcaption>
+</figure>

@@ -1,0 +1,67 @@
+---
+/**
+ * The all-of-them-at-once table: one column per subject, one row per
+ * question a reader actually asks.
+ *
+ * A real <table> with a real <caption>, <thead> and row <th>s. The
+ * shape is a grid of comparable answers, which is what a table means;
+ * building it out of divs would cost every assistive technology the
+ * ability to say "row 4, column 2" and buy nothing.
+ *
+ * The scroll box is the component's root rather than the caller's, so
+ * that the footnote below stays at page width: a five-column table has
+ * no honest small-screen form, and when it scrolls the line under it
+ * must not scroll out of the frame with it.
+ *
+ * A cell may be `{ text, muted: true }` to print an answer that is a
+ * negative ("None") in the faint ink -- the absence is the answer, and
+ * setting it at the same weight as the others makes the row scan as
+ * four equivalent facts.
+ */
+export type CompareCell = string | { text: string; muted?: boolean };
+
+export interface CompareRow {
+  /** The question, printed in the stub column. */
+  label: string;
+  /** One per column, in the same order as `columns`. */
+  cells: CompareCell[];
+}
+
+interface Props {
+  /** The stub head -- the cell above the row labels. */
+  corner: string;
+  /** The subjects being compared. */
+  columns: string[];
+  rows: CompareRow[];
+  /** Accessible name for the table. Not rendered visually; the
+      section head above it already says this in display type. */
+  caption: string;
+  class?: string;
+}
+const { corner, columns, rows, caption, class: className } = Astro.props;
+
+const cellText = (c: CompareCell) => (typeof c === 'string' ? c : c.text);
+const cellMuted = (c: CompareCell) => typeof c !== 'string' && c.muted === true;
+---
+<div class:list={['compare-scroll', className]}>
+  <table class="compare">
+    <caption class="sr-only">{caption}</caption>
+    <thead>
+      <tr>
+        <th scope="col" class="compare__corner">{corner}</th>
+        {columns.map((col) => <th scope="col">{col}</th>)}
+      </tr>
+    </thead>
+    <tbody>
+      {rows.map((row) => (
+        <tr>
+          <th scope="row">{row.label}</th>
+          {row.cells.map((cell) => (
+            <td class:list={[cellMuted(cell) && 'compare__none']}>{cellText(cell)}</td>
+          ))}
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+<slot name="footnote" />

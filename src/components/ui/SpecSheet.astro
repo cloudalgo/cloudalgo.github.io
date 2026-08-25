@@ -1,0 +1,34 @@
+---
+/**
+ * A term/detail sheet -- the panel beside a catalogue entry that answers
+ * "what does it run on, what does it touch, what does it cost".
+ *
+ * A <dl>, not a table: these are definitions of one subject, not a grid
+ * of comparable rows. The comparison grid is CompareTable, and the two
+ * are deliberately different components because they are different
+ * reading tasks.
+ */
+export interface SpecRow {
+  term: string;
+  detail: string;
+}
+
+interface Props {
+  rows: SpecRow[];
+  /** The panel's own label. Omit for an unlabelled sheet. */
+  label?: string;
+  class?: string;
+}
+const { rows, label, class: className } = Astro.props;
+---
+<div class:list={['spec-sheet', className]}>
+  {label && <p class="spec-sheet__label">{label}</p>}
+  <dl class="spec-sheet__list">
+    {rows.map((row) => (
+      <div>
+        <dt>{row.term}</dt>
+        <dd>{row.detail}</dd>
+      </div>
+    ))}
+  </dl>
+</div>

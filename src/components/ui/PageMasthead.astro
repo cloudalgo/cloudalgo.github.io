@@ -1,0 +1,64 @@
+---
+/**
+ * The masthead every index page opens on: trail, headline, standfirst,
+ * and a bordered fact list beside them.
+ *
+ * It is the home hero's arrangement (`.hero-press`) reduced to the part
+ * an interior page needs -- 1.55fr of headline against 1fr of standfirst,
+ * bottom-aligned -- so /products/, /services/, /case-studies/ and
+ * /blog/ all open on the same shape rather than four near-misses.
+ *
+ * Emphasis in the title is the site's one hero device: wrap the phrase
+ * in `<span class="mark mark--draw">`. The approved mock draws a crayon
+ * stroke under the phrase instead; the ember mark is what shipped on
+ * the home page and what the brief fixed for every page hero after it,
+ * so the mark is what the headline gets. Same words, same emphasis,
+ * one device site-wide.
+ */
+import Breadcrumb from '@/components/ui/Breadcrumb.astro';
+
+/** Mirrors Breadcrumb's own Crumb -- an .astro file's types are not
+    importable, so the shape is restated rather than reached for. */
+export interface Crumb {
+  label: string;
+  href?: string;
+}
+
+export interface Fact {
+  term: string;
+  detail: string;
+}
+
+interface Props {
+  crumbs: Crumb[];
+  /** The bordered dl beside the headline. Omit for a head with no facts. */
+  facts?: Fact[];
+  class?: string;
+}
+const { crumbs, facts = [], class: className } = Astro.props;
+---
+<header class:list={['page-head', className]}>
+  <Breadcrumb items={crumbs} separator="/" class="page-head__crumbs" />
+
+  <div class="page-head__grid">
+    <div>
+      <h1 class="page-head__title"><slot name="title" /></h1>
+      {Astro.slots.has('lede') && (
+        <p class="page-head__lede"><slot name="lede" /></p>
+      )}
+    </div>
+
+    {facts.length > 0 && (
+      <div class="page-head__stand">
+        <dl>
+          {facts.map((f) => (
+            <div>
+              <dt>{f.term}</dt>
+              <dd>{f.detail}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    )}
+  </div>
+</header>

@@ -1,13 +1,25 @@
 ---
 import { getCollection } from 'astro:content';
-import Page from '../../layouts/Page.astro';
-import ProductCard from '../../components/ui/ProductCard.astro';
-import PageHeader from '@/components/ui/PageHeader.astro';
+import Page from '@/layouts/Page.astro';
+import PageMasthead from '@/components/ui/PageMasthead.astro';
+import ContentsBar from '@/components/ui/ContentsBar.astro';
+import ProductEntry from '@/components/sections/ProductEntry.astro';
+import EvidenceStrip from '@/components/ui/EvidenceStrip.astro';
+import CompareTable from '@/components/ui/CompareTable.astro';
+import CtaBand from '@/components/ui/CtaBand.astro';
+
+// The catalogue. Four entries printed as specimen plates, a contents
+// strip that indexes them, one table that answers the questions people
+// actually ask, and two ways out.
+//
+// This replaces a PageHeader over a two-column ProductCard grid. The
+// cards said the same four things about four products that are not
+// alike -- a desktop scanner, a daemon, a managed package and a phone
+// app -- and left the reader to open all four to find out which was
+// theirs. The plate below carries the specification on the page.
 
 const allProducts = await getCollection('products', ({ data }) => data.published);
 const products = allProducts.sort((a, b) => a.data.order - b.data.order);
-const hero = products[0];
-const secondary = products.slice(1);
 
 const catalogSchema = {
   '@context': 'https://schema.org',
@@ -21,50 +33,337 @@ const catalogSchema = {
     url:      `https://cloudalgo.com/products/${p.id}`,
   })),
 };
+
+// Page copy, the arrangement CaseStudies and ProductsSection already
+// use: the content file stays the source of truth for the product page,
+// and the approved wording for THIS page sits in the page that renders
+// it. Name, number and ship status are still read from the collection
+// below, so a rename or a promotion to GA lands here without an edit.
+//
+// The spec rows are authored here rather than read from each file's
+// `techStack`. That field is written for the detail page -- ten rows
+// deep on Pledgivo, absent entirely on InsureAlgo -- and this panel is
+// the six answers a buyer needs before they download anything. Two
+// different jobs, so two different lists.
+type EntryCopy = {
+  /** One line for the contents strip. It has to survive a quarter width. */
+  contents: string;
+  /** The mono line closing the header bar. */
+  meta: string;
+  tagline: string;
+  description: string;
+  chips: string[];
+  actions: Array<{ label: string; href: string; primary?: boolean }>;
+  spec: Array<{ term: string; detail: string }>;
+};
+
+const COPY = {
+  orgvitals: {
+    contents: 'Health scanner for Salesforce orgs',
+    meta: 'v1.1.1 · Desktop',
+    tagline: 'A health scanner for Salesforce orgs that runs on your machine, not ours.',
+    description:
+      'Point it at any org you have already authenticated with the Salesforce CLI. It pulls a ' +
+      'read-only metadata snapshot and runs 49 scanners across Security, Code Quality, Automation, ' +
+      'Tech Debt and Performance, then grades the org A–F and ranks what to fix first. Nothing is ' +
+      'written back to Salesforce, and the snapshot never leaves your disk.',
+    chips: ['49 scanners', 'A–F grade', 'Findings triage', 'Dependency graph', 'Cross-org compare', 'Ask Vita'],
+    actions: [
+      { label: 'Download OrgVitals — free', href: 'https://github.com/cloudalgo/orgvitals-releases/releases', primary: true },
+      { label: 'Read the guide', href: '/products/orgvitals/guide' },
+    ],
+    spec: [
+      { term: 'Runs on',    detail: 'macOS · Windows · Linux (Electron)' },
+      { term: 'Org access', detail: 'Salesforce CLI — read-only, no write scopes' },
+      { term: 'Storage',    detail: 'Local SQLite snapshot, stays on device' },
+      { term: 'Scan time',  detail: 'A full org scans in minutes' },
+      { term: 'AI',         detail: 'Opt-in, your own Anthropic key' },
+      { term: 'Price',      detail: 'Free' },
+    ],
+  },
+  algobridge: {
+    contents: 'Salesforce ⇄ PostgreSQL sync engine',
+    meta: 'v1.0 · Self-hosted',
+    tagline: 'Your Salesforce data in PostgreSQL, ten seconds behind.',
+    description:
+      'A bidirectional sync engine with trigger-based change detection. Changes move in both ' +
+      'directions on a fixed ten-second batch — no polling, no queue to babysit — and every ' +
+      'column edit is kept for 31 days so you can answer who changed what. MIT-licensed, runs ' +
+      'on your own Docker or ECS, priced at nothing per record.',
+    chips: ['Bidirectional', '10-second batches', '31-day column diffs', 'Bulk API v2', 'MIT licence'],
+    // The copy pass fixed the secondary button to one name across all
+    // four entries, and AlgoBridge is the one product with no guide
+    // written: its href is the product page, which is the nearest true
+    // target. Point this at a real guide the day one exists.
+    actions: [
+      { label: 'Try the hosted demo →', href: 'https://bridge.cloudalgo.com/', primary: true },
+      { label: 'Read the guide', href: '/products/algobridge/' },
+    ],
+    spec: [
+      { term: 'Runs on',     detail: 'Docker Compose or AWS ECS' },
+      { term: 'Written in',  detail: 'Python 3, async I/O' },
+      { term: 'Database',    detail: 'PostgreSQL 14+ with hstore' },
+      { term: 'Org access',  detail: 'SOAP API + Bulk API v2, chosen per batch' },
+      { term: 'Audit',       detail: '31-day column-level diff log' },
+      { term: 'Price',       detail: 'Free — MIT. Support contracts on request' },
+    ],
+  },
+  pledgivo: {
+    contents: 'Fundraising, native to your org',
+    meta: '2GP managed package · API 67.0',
+    tagline: 'Fundraising that never leaves Salesforce.',
+    description:
+      'The donation form, the payment and the donor record all live in your org, so a gift is a ' +
+      'standard Opportunity the instant it is taken — no external platform, no nightly sync, no ' +
+      'second permission model to keep in step. Recurring giving, campaigns and ticketed events ' +
+      'run on standard objects, which means the reports and sharing rules you already have keep ' +
+      'working.',
+    chips: [
+      'Standard objects', 'Stripe Payment Element', 'Recurring & dunning',
+      'Events & ticketing', 'Passwordless donor portal', 'Multi-Stripe routing',
+    ],
+    // "2:54" is the runtime recorded on the content file, not a rounded
+    // one. The tour plays on the product page; there is no player here.
+    actions: [
+      { label: 'See a live donation form →', href: 'https://pledgivo.cloudalgo.com/', primary: true },
+      { label: 'Read the guide', href: 'https://pledgivo.cloudalgo.com/getting-started/installation/' },
+      { label: 'Watch the tour · 2:54', href: '/products/pledgivo/' },
+    ],
+    spec: [
+      { term: 'Runs in',     detail: 'Your Salesforce org — 2GP managed package' },
+      { term: 'Editions',    detail: 'Enterprise · Unlimited · Performance · Developer' },
+      { term: 'Donor pages', detail: 'Enhanced LWR Experience Cloud site, LWC only' },
+      { term: 'Payments',    detail: 'Stripe — card tokenised in the browser, never in Apex' },
+      { term: 'Coverage',    detail: '90% Apex, gated on every change' },
+      { term: 'Price',       detail: 'Free to 200 gifts/yr, then $299/mo · no cut of what you raise' },
+    ],
+  },
+  insurealgo: {
+    contents: 'Insurance policy tracker, iOS & Android',
+    meta: 'v1.0.0 · iOS & Android',
+    tagline: 'Every policy you hold, and the date each one lapses.',
+    description:
+      'Vehicle, health, life, home and anything else you want to name, with a countdown to each ' +
+      'renewal and reminders ten, five and three days out. There is no account to create and no ' +
+      'server to send anything to — policies live on the phone behind a biometric lock, and the ' +
+      'only copy that leaves is the one you choose to put in your own iCloud.',
+    chips: ['Offline by default', 'No account', 'Biometric lock', 'Document vault', 'One-tap renewal'],
+    // One store button, because one store URL is on file. Add the Play
+    // Store the day there is a link to put behind it, not before.
+    actions: [
+      { label: 'Get it on the App Store →', href: 'https://apps.apple.com/in/app/insurealgo/id6778015224', primary: true },
+    ],
+    spec: [
+      { term: 'Runs on',   detail: 'iOS 15+ · Android 8+ (Flutter)' },
+      { term: 'Account',   detail: 'None — nothing to sign up for' },
+      { term: 'Storage',   detail: 'Encrypted Hive store on device' },
+      { term: 'Backup',    detail: 'Optional, to your own iCloud' },
+      { term: 'Telemetry', detail: 'None. No tracking, no ads' },
+      { term: 'Price',     detail: 'Free, all features' },
+    ],
+  },
+} satisfies Record<string, EntryCopy>;
+
+const ORDER = ['orgvitals', 'algobridge', 'pledgivo', 'insurealgo'] as const;
+
+const byId = new Map(products.map((p) => [p.id, p]));
+
+/** The three things both the contents strip and the plate read off the
+    collection. A product that is unpublished or renamed fails the build
+    here rather than rendering a plate with holes in it. */
+function record(id: (typeof ORDER)[number]) {
+  const p = byId.get(id);
+  if (!p) throw new Error(`products/index.astro: no published product "${id}"`);
+  return {
+    id,
+    n: String(p.data.order).padStart(2, '0'),
+    title: p.data.title,
+    status: p.data.status,
+  };
+}
+
+/** The plates are rendered explicitly below rather than mapped, because
+    each one's figure is genuinely different -- a GIF, a drawn diagram,
+    a row of phone screens, nothing at all. `contents` is the one field
+    of the copy map the plate does not take: it is the strip's line, not
+    the entry's. */
+const entries = ORDER.map((id) => {
+  const { contents: _strip, ...plate } = COPY[id];
+  return { ...record(id), ...plate };
+});
+
+const contents = ORDER.map((id) => ({
+  ...record(id),
+  href: `#${id}`,
+  blurb: COPY[id].contents,
+}));
+
+// Seven rows, four columns, no adjectives. The eighth row the first
+// draft carried -- "does it send your data to us" -- said "no" four
+// times, which is not a comparison; it is the note under the table.
+const COMPARE_ROWS = [
+  { label: 'What it is',        cells: ['Desktop app', 'Sync service', 'Managed package', 'Mobile app'] },
+  { label: 'Where it runs',     cells: ['Your machine', 'Your server', 'Your Salesforce org', 'Your phone'] },
+  { label: 'Salesforce access', cells: ['Read-only, via sf CLI', 'Read and write, API', 'Native — it is the org', { text: 'None', muted: true }] },
+  { label: 'Who it is for',     cells: ['Architects & admins', 'Data & platform teams', 'Nonprofits', 'Anyone with a policy'] },
+  { label: 'Set-up',            cells: ['Install and authenticate', 'Docker Compose or ECS', 'Install package, connect Stripe', 'Download and open'] },
+  { label: 'Price',             cells: ['Free', 'Free — MIT', 'Free to 200 gifts/yr', 'Free'] },
+  { label: 'Status',            cells: ['Preview', 'Generally available', 'Preview', 'Generally available'] },
+];
 ---
 
 <Page
-  title="Salesforce Apps & AppExchange Products — CloudAlgo"
-  description="Purpose-built Salesforce apps and integration connectors from the CloudAlgo team — from production-ready to early access."
+  title="Products — four Salesforce tools we built and run | CloudAlgo"
+  description="OrgVitals, AlgoBridge, Pledgivo and InsureAlgo: what each one is, where it runs, what it touches in Salesforce and what it costs. Two generally available, two in preview."
   schema={catalogSchema}
 >
-
-  <!-- Page header -->
-  <PageHeader
+  <PageMasthead
     crumbs={[{ label: 'Home', href: '/' }, { label: 'Products' }]}
-    eyebrow="Our Products"
-    title="Built for Salesforce teams."
-    lead="Purpose-built apps and connectors that extend what Salesforce can do — from production-ready to early access."
-    leadStyle="max-width:540px;margin-top:1rem;font-size:1.0625rem;color:var(--color-text);line-height:1.7;"
-  />
+    facts={[
+      { term: 'Titles',              detail: '4' },
+      { term: 'Generally available', detail: 'AlgoBridge · InsureAlgo' },
+      { term: 'In preview',          detail: 'OrgVitals · Pledgivo' },
+      { term: 'Open source',         detail: 'AlgoBridge — MIT' },
+      { term: 'Support',             detail: 'contact@cloudalgo.com' },
+    ]}
+  >
+    <Fragment slot="title">
+      Four tools we needed, so we <span class="mark mark--draw">built them</span>.
+    </Fragment>
+    <Fragment slot="lede">
+      Three came out of client work — an org we had to audit before we could quote it, a sync no
+      connector covered, a fundraising stack that was not allowed to leave Salesforce. The fourth we
+      wrote for ourselves and gave away. Two are generally available; two are in preview and you can
+      use them today.
+    </Fragment>
+  </PageMasthead>
 
-  <!-- Product cards -->
-  <section style="background:var(--surface-page);padding:4rem 0;border-bottom:1px solid var(--border-default);">
-    <div class="container">
-      <div class="prod-grid">
-        {hero && (
-          <div class="anim-fade-up">
-            <ProductCard product={hero} featured={true} />
-          </div>
-        )}
-        {secondary.map((p, i) => (
-          <div class="anim-fade-up" style={`transition-delay:${(i + 1) * 0.08}s`}>
-            <ProductCard product={p} featured={false} />
-          </div>
-        ))}
-      </div>
+  <ContentsBar items={contents} label="Products" class="anim-fade-up" />
+
+  <section class="section-press" aria-labelledby="catalogue-heading">
+    <div class="section-press__head anim-fade-up">
+      <h2 id="catalogue-heading" class="section-title section-title--xs section-title--tighter section-press__title">
+        The catalogue, in order of depth.
+      </h2>
+      <span class="section-press__note">Specifications as of Aug 2026</span>
     </div>
+
+    <ProductEntry {...entries[0]} class="anim-fade-up">
+      <EvidenceStrip
+        slot="evidence"
+        n="01"
+        caption="the dashboard after a full scan. Grade, category breakdown, trend against every prior run."
+      >
+        {/* The GIF loops, so a reader who has asked for less motion gets
+            the still frame of the same view instead of a preference the
+            page ignores. Same source, same crop, one frame. */}
+        <picture>
+          <source
+            srcset="/products/orgvitals/guide/03-dashboard-still.webp"
+            media="(prefers-reduced-motion: reduce)"
+          />
+          <img
+            src="/products/orgvitals/guide/03-dashboard.gif"
+            alt="The OrgVitals dashboard: an overall health grade with per-category scores and a trend chart across previous scans."
+            width="1000"
+            height="627"
+            loading="lazy"
+            decoding="async"
+          />
+        </picture>
+      </EvidenceStrip>
+    </ProductEntry>
+
+    <ProductEntry {...entries[1]} class="anim-fade-up">
+      <EvidenceStrip
+        slot="evidence"
+        n="02"
+        caption="there is no screenshot because there is no interface. AlgoBridge is a daemon; this is the whole of it."
+      >
+        <div class="evidence__flow">
+          <div class="evidence__node">
+            <b>Salesforce</b>
+            <span>trigger fires on change</span>
+          </div>
+          <span class="evidence__arrow" aria-hidden="true">&rarr;</span>
+          <div class="evidence__node evidence__node--self">
+            <b>AlgoBridge</b>
+            <span>10s batch · SOAP / Bulk v2</span>
+          </div>
+          <span class="evidence__arrow" aria-hidden="true">&rarr;</span>
+          <div class="evidence__node">
+            <b>PostgreSQL 14+</b>
+            <span>hstore column diff, 31 days</span>
+          </div>
+          <span class="evidence__arrow" aria-hidden="true">&crarr;</span>
+          <div class="evidence__node">
+            <b>and back</b>
+            <span>writes replay to the org</span>
+          </div>
+        </div>
+      </EvidenceStrip>
+    </ProductEntry>
+
+    <ProductEntry {...entries[2]} class="anim-fade-up" />
+
+    <ProductEntry {...entries[3]} class="anim-fade-up">
+      <EvidenceStrip
+        slot="evidence"
+        n="03"
+        caption="dashboard, policy list, add a policy, settings. Four screens is the whole app."
+      >
+        <div class="evidence__row">
+          <img src="/products/insurealgo/02_dashboard.webp"  alt="InsureAlgo dashboard listing policies with days remaining until each renewal." width="1170" height="2532" loading="lazy" decoding="async" />
+          <img src="/products/insurealgo/03_policy_list.webp" alt="The full policy list, grouped by type." width="1170" height="2532" loading="lazy" decoding="async" />
+          <img src="/products/insurealgo/04_add_policy.webp"  alt="The add-a-policy form: type, provider, number, premium and renewal date." width="1170" height="2532" loading="lazy" decoding="async" />
+          <img src="/products/insurealgo/05_settings.webp"    alt="Settings: biometric lock, reminder schedule and iCloud backup." width="1170" height="2532" loading="lazy" decoding="async" />
+        </div>
+      </EvidenceStrip>
+    </ProductEntry>
   </section>
 
-</Page>
+  <section class="section-press" aria-labelledby="compare-heading">
+    <div class="section-press__head anim-fade-up">
+      <h2 id="compare-heading" class="section-title section-title--xs section-title--tighter section-press__title">
+        All four, side by side.
+      </h2>
+      <span class="section-press__note">The questions people actually ask</span>
+    </div>
 
-<style>
-.prod-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1.25rem;
-}
-@media (max-width: 767px) {
-  .prod-grid { grid-template-columns: 1fr; }
-}
-</style>
+    <CompareTable
+      class="anim-fade-up"
+      corner="Compare"
+      columns={entries.map((e) => e.title)}
+      rows={COMPARE_ROWS}
+      caption="The four CloudAlgo products compared by what they are, where they run, what they touch in Salesforce, who they are for, how they are set up, what they cost and their ship status."
+    >
+      <p class="compare-note anim-fade-up" slot="footnote">
+        Two answers are the same in every column: none of the four sends your data to us, and all
+        four are free to start. Three of them never ask for a card at all.
+      </p>
+    </CompareTable>
+  </section>
+
+  <CtaBand class="anim-fade-up" labelledby="band-which">
+    <div>
+      <h2 id="band-which" class="band-press__ask">
+        Not sure which one you need? <em>That is usually a services question.</em>
+      </h2>
+      <p class="band-press__note">
+        Some of what people come here looking for is not a download at all — it is a week of our
+        time. Tell us the org and the problem, and we will say plainly whether a product covers it.
+      </p>
+    </div>
+
+    <!-- Deliberately not a booking link. The site footer carries "Book a
+         consultation" on every page, so a second one here would be the same
+         ask twice inside one screen. The band asks a services question and
+         answers it with the services; the address is the lower-commitment
+         way out for someone with one question rather than a project. -->
+    <div class="band-press__actions">
+      <a class="btn btn-secondary btn-sm" href="/services/">See the services &rarr;</a>
+      <a class="btn btn-light btn-sm" href="mailto:contact@cloudalgo.com">Email contact@cloudalgo.com</a>
+    </div>
+  </CtaBand>
+
+</Page>
