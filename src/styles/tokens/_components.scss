@@ -208,6 +208,13 @@
      It was a repeated literal in each layout partial; one name means the
      page can breathe differently without editing nine files. */
   --container-pad: 2rem;
+
+  /* How far the hero standfirst's rule hangs into the gutter. It is the
+     mock's 20px gap plus its 1px rule, so the rule keeps the same
+     distance from the copy the mock gives it -- the copy is what moves,
+     out to the column edge. Must stay under --container-pad or the rule
+     leaves the viewport. */
+  --hero-rule-hang: 1.3125rem;
 }
 
 @media (max-width: 991px) {

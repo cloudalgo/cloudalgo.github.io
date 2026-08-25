@@ -63,12 +63,20 @@
 
 .hero-press .btn-row { margin-top: 1.625rem; }
 
-/* The rule is what keeps this reading as a deliberate block rather than
-   a stray paragraph under the buttons, which is why it is a border and
-   not a margin. */
+/* The rule keeps this reading as a deliberate block rather than a stray
+   paragraph under the buttons, which is why it is a border and not a
+   margin -- but it hangs in the gutter rather than pushing the copy in.
+   The mock indents the paragraph 20px past its rule, which was invisible
+   while the standfirst was a second column with nothing above it to line
+   up against. In one column the headline, the buttons and this paragraph
+   all share a left edge, and an indent on the last of the three reads as
+   a mistake. So the rule moves out and the copy stays put. */
 .hero-press__standfirst {
+  margin-left: calc(-1 * var(--hero-rule-hang));
+  /* Less the rule's own width, or the copy lands a pixel right of the
+     headline -- which is the whole defect, just smaller. */
+  padding-left: calc(var(--hero-rule-hang) - 1px);
   border-left: 1px solid var(--color-heading);
-  padding-left: 1.25rem;
 }
 
 .hero-press__standfirst p {
