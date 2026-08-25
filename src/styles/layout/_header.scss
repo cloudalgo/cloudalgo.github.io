@@ -13,16 +13,18 @@ main[id] {
   right: 0;
   z-index: 999;
   background-color: var(--header-bg);
-  /* No bottom rule, in either state. The header is the page continuing,
-     and a hairline across the top of every screen re-draws exactly the
-     seam that painting it --surface-page removed. Scrolled, the frost
-     below is what separates it from the content passing under. */
-  transition: background-color 0.35s ease, backdrop-filter 0.35s ease;
+  /* Transparent at rest so the header reads as the page continuing, and
+     reserved rather than added on scroll -- animating a border's colour
+     costs no layout, animating it into existence shifts the page by a
+     pixel. */
+  border-bottom: 1px solid transparent;
+  transition: background-color 0.35s ease, border-color 0.35s ease, backdrop-filter 0.35s ease;
 }
 /* Scrolled: frosted glass in the page's own colour. At rest the header IS
    the page and nothing separates them; once content starts passing under
    it, the surface goes translucent over a blur so the movement reads
-   through. The tint is --surface-page-glass, not the white glass ramp --
+   through, under a rule that fades in with it. The tint is
+   --surface-page-glass, not the white glass ramp --
    white here would put back the seam that painting the header
    --surface-page removed.
 
@@ -38,6 +40,7 @@ main[id] {
 .header.scrolled {
   background-color: var(--header-scrolled-bg);
   backdrop-filter: var(--header-scrolled-blur);
+  border-bottom-color: var(--header-scrolled-border);
 }
 /* No backdrop-filter support (or it is disabled): the translucent tint
    alone would let text show through the header. Fall back to opaque. */

@@ -10,12 +10,13 @@
      The mock's top bar (.hp__top) declares no background of its own and
      sits on the same paper as the fold below it, parted only by a rule.
      A white header on a #F7F4F2 page draws a seam across the top of
-     every screen, so both states read the page surface -- and there is
-     no bottom rule either, for the same reason. Scrolled, the surface
-     goes to frosted glass in the page's own colour; the blur is the
-     only thing that marks the boundary. */
+     every screen, so both states read the page surface. Scrolled, it
+     goes to frosted glass in the page's own colour and the rule fades
+     in -- the boundary is marked only once there is content behind the
+     header to mark it against. */
   --header-bg: var(--surface-page);
   --header-scrolled-bg: var(--surface-page-glass);
+  --header-scrolled-border: var(--border-default);
   --header-scrolled-blur: blur(18px) saturate(160%);
 
   /* Buttons */
