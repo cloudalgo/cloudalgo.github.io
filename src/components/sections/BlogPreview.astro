@@ -1,44 +1,60 @@
 ---
 import { getCollection } from 'astro:content';
-import BlogCard from '../ui/BlogCard.astro';
-import Button from '../ui/Button.astro';
-import SectionLabel from '../ui/SectionLabel.astro';
 
-const allPosts = await getCollection('blog', ({ data }) => data.published);
-const posts = allPosts
-  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+// Fold 7. One lead post with its excerpt, two more in a ruled rail
+// beside it -- the mock's shape, replacing three equal cards.
+//
+// Three tiles said "we have a blog". A lead with a rail says which post
+// to read first, which is the only thing this fold has room to say.
+//
+// Read time is in the schema and deliberately not rendered here: the
+// mock's row is category, title, date, and a fourth figure on a
+// three-item fold is noise.
+const posts = (await getCollection('blog', ({ data }) => data.published))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
   .slice(0, 3);
+
+const [lead, ...rest] = posts;
+
+const fmt = (d: Date) =>
+  d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
 ---
-<section style="background:var(--surface-card);padding:6rem 0;border-top:1px solid var(--border-default);position:relative;overflow:hidden;">
-  <!-- Parallax decorative shapes -->
-  <div data-parallax="0.08" style="position:absolute;top:20px;right:-70px;width:250px;height:250px;border-radius:50%;border:1.5px solid var(--border-strong);opacity:0.04;pointer-events:none;" aria-hidden="true"></div>
-  <div data-parallax="0.16" style="position:absolute;bottom:50px;left:4%;width:8px;height:8px;border-radius:50%;background:var(--surface-inverse);opacity:0.08;pointer-events:none;" aria-hidden="true"></div>
-  <div data-parallax="0.22" style="position:absolute;top:18%;left:28%;width:5px;height:5px;border-radius:50%;background:var(--surface-inverse);opacity:0.06;pointer-events:none;" aria-hidden="true"></div>
-  <div style="max-width:var(--container-max);margin:0 auto;padding:0 1.5rem;">
-    <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:3rem;gap:1rem;flex-wrap:wrap;">
-      <div>
-        <SectionLabel class="anim-fade-up">Writing</SectionLabel>
-        <h2 class="section-title anim-fade-up" style="margin:0;transition-delay:0.05s;">
-          From the team
-        </h2>
+<section class="section-press anim-fade-up" aria-labelledby="journal-heading">
+  <div class="section-press__head">
+    <h2 id="journal-heading" class="section-title section-title--xs section-title--tighter section-press__title">
+      From the journal.
+    </h2>
+    <a class="section-press__all" href="/blog/">All posts &rarr;</a>
+  </div>
+
+  <div class="journal-press">
+    {lead && (
+      <article class="journal-press__lead">
+        <span class="journal-press__cat">{lead.data.category}</span>
+        <h3 class="journal-press__title">
+          <a href={`/blog/${lead.id}/`}>{lead.data.title}</a>
+        </h3>
+        <p class="journal-press__excerpt">{lead.data.excerpt}</p>
+        <time class="journal-press__date" datetime={lead.data.date.toISOString()}>
+          {fmt(lead.data.date)}
+        </time>
+      </article>
+    )}
+
+    {rest.length > 0 && (
+      <div class="journal-press__side">
+        {rest.map((p) => (
+          <article>
+            <span class="journal-press__cat">{p.data.category}</span>
+            <h3 class="journal-press__title">
+              <a href={`/blog/${p.id}/`}>{p.data.title}</a>
+            </h3>
+            <time class="journal-press__date" datetime={p.data.date.toISOString()}>
+              {fmt(p.data.date)}
+            </time>
+          </article>
+        ))}
       </div>
-      <Button href="/blog" variant="outline" size="sm">
-        View all posts &rarr;
-      </Button>
-    </div>
-    <div class="row">
-      {posts.map((post) => (
-        <div class="col-lg-4 col-md-4" style="margin-bottom:1.5rem;display:flex;">
-          <BlogCard
-            title={post.data.title}
-            excerpt={post.data.excerpt}
-            category={post.data.category}
-            date={post.data.date}
-            readTime={post.data.readTime}
-            slug={post.id}
-          />
-        </div>
-      ))}
-    </div>
+    )}
   </div>
 </section>
