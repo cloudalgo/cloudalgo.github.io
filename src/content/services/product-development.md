@@ -3,6 +3,7 @@ title: "Product Development"
 order: 2
 icon: "📦"
 excerpt: "AppExchange product development with 1GP and 2GP managed packages, security review readiness, and ISV strategy."
+proves: insurealgo
 ---
 
 ## AppExchange Product Development

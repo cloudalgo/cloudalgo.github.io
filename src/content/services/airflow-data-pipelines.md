@@ -3,6 +3,7 @@ title: "Airflow Data Pipelines"
 order: 4
 icon: "⚡"
 excerpt: "Apache Airflow orchestration for enterprise data integration — connecting Salesforce, ERP systems, databases, and APIs at large scale."
+proves: algobridge
 ---
 
 ## Apache Airflow Data Integration

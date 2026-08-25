@@ -1,5 +1,5 @@
 // src/content.config.ts
-import { defineCollection } from 'astro:content';
+import { defineCollection, reference } from 'astro:content';
 // `z` from 'astro:content' is deprecated in Astro 7 and slated for removal.
 import { z } from 'astro/zod';
 import { glob } from 'astro/loaders';
@@ -37,6 +37,12 @@ const services = defineCollection({
     order:   z.number(),
     icon:    z.string(),
     excerpt: z.string(),
+    // The product that demonstrates this service. Not prose and not a bare
+    // string: a reference into the products collection, so a service naming
+    // a product that does not exist fails the build rather than rendering a
+    // dead link. Required, because a service with nothing shipped behind it
+    // is a claim, and the design has nowhere to put a claim.
+    proves: reference('products'),
   }),
 });
 
