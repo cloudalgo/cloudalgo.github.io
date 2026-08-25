@@ -1,0 +1,65 @@
+/* ─── Fold 2: proof strip ─────────────────────────────────
+   Four figures, no count-up. The mock has none, and an animated
+   number is a different claim from a stated one -- a figure that
+   climbs asks to be watched, and these are meant to be read once
+   on the way past.
+
+   Ported from docs/superpowers/specs/assets/home-mock.css
+   (`.hp__proof`). Token mapping, same as the hero:
+     --ink2  -> --color-heading      (the two rules that bound the strip)
+     --ash   -> --border-default     (the hairlines between cells)
+     --mute2 -> --color-text-muted   (the labels)
+     --mono  -> --font-mono          (the figures)
+
+   The strip is full-bleed inside the container: no padding on the
+   grid itself, so the top and bottom rules run the whole width and
+   the cells carry --container-pad to line their text up with the
+   hero above. */
+
+.proof-strip {
+  max-width: var(--container-max);
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-block: 1px solid var(--color-heading);
+}
+
+.proof-strip__cell {
+  padding: 1.125rem var(--container-pad);
+}
+
+/* Hairlines between, not around: the outer edges are the strip's own
+   rules, so only the gaps get a border. */
+.proof-strip__cell + .proof-strip__cell {
+  border-left: 1px solid var(--border-default);
+}
+
+.proof-strip__figure {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 1.6rem;
+  font-weight: var(--weight-medium);
+  line-height: 1;
+  color: var(--color-heading);
+  /* Same-width digits, so a two-figure column does not sit half a
+     glyph off from its neighbour. */
+  font-variant-numeric: tabular-nums;
+}
+
+.proof-strip__label {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: var(--size-label);
+  line-height: 1.4;
+  color: var(--color-text-muted);
+}
+
+@media (max-width: 760px) {
+  .proof-strip { grid-template-columns: repeat(2, 1fr); }
+
+  /* The `+ cell` rule above would leave cell 3 with no left border once
+     it wraps to a new row; restate the hairlines against the 2-up grid. */
+  .proof-strip__cell + .proof-strip__cell { border-left: 0; }
+  .proof-strip__cell:nth-child(2n) { border-left: 1px solid var(--border-default); }
+  .proof-strip__cell:nth-child(n + 3) { border-top: 1px solid var(--border-default); }
+}

@@ -1,0 +1,29 @@
+---
+// Fold 2. Static figures by design -- see the stylesheet header.
+//
+// Two of the four are counted rather than typed, for the same reason the
+// hero counts its products: "four products" and "four practices" are facts
+// about the collections, and a fact about a collection that is maintained
+// by hand goes stale the first time someone ships a fifth.
+import { getCollection } from 'astro:content';
+
+const products = await getCollection('products');
+const services = await getCollection('services');
+
+const pad = (n: number) => String(n).padStart(2, '0');
+
+const proof = [
+  { figure: '70+',                 label: 'Projects delivered' },
+  { figure: '12',                  label: 'Years combined experience' },
+  { figure: pad(products.length),  label: 'Products built and run' },
+  { figure: pad(services.length),  label: 'Practices, one team' },
+];
+---
+<section class="proof-strip anim-fade-up" aria-label="CloudAlgo by the numbers">
+  {proof.map((p) => (
+    <div class="proof-strip__cell">
+      <b class="proof-strip__figure">{p.figure}</b>
+      <span class="proof-strip__label">{p.label}</span>
+    </div>
+  ))}
+</section>
