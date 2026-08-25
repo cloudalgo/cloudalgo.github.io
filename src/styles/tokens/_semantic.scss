@@ -102,6 +102,15 @@
   --color-paper-a88: rgba(var(--paper-000-rgb), 0.88);
   --color-paper-a90: rgba(var(--paper-000-rgb), 0.9);
 
+  /* Page paper at an alpha -- frosted glass that is the PAGE colour, not
+     white. The ramp above is all paper-000, which is right for glass
+     floating over dark art or over a card, and wrong for a surface that
+     has to read as the page continuing underneath it. The scrolled
+     header is that surface: opaque it is the page, translucent it is the
+     page with the content sliding under it visible as a blur. One rung,
+     because one component needs it; add another when a second does. */
+  --surface-page-glass: rgba(var(--paper-100-rgb), 0.72);
+
   /* Text on an inverse surface.
      White at an alpha, because a solid ink tone would not sit on the
      near-black band the way a translucent one does. Fifty-two
