@@ -17,7 +17,6 @@
    | .cs-card-metric-num | 2.5rem                     | -0.04em  | 1       | heading          |
    | about :33           | 2.5rem                     | -0.03em  | (none)  | heading          |
    | .count-outer        | 3rem                       | -0.03em  | (none)  | heading          |
-   | .why-card-number *  | 3.5rem                     | -0.03em  | 1       | border-default   |
    | .csd-col-number     | 7rem                       | -0.05em  | 1       | ink @ 0.07       |
    | .cs-card-metric-bg  | 7rem                       | -0.05em  | 1       | heading @ 0.04   |
    | .csd-outcome-num    | clamp(2.5rem, 4vw, 3.5rem) | -0.04em  | 1       | heading          |
@@ -33,11 +32,11 @@
    inherited property, `inherit` and no declaration at all compute to the
    same value.
 
-   * `.why-card-number` is the one row with no live call site: WhyUs.astro
-   is still on disk but no page mounts it. Its two modifiers (`--2xl` and
-   `--rule`) are kept rather than swept, because they are the only record
-   of what that figure looked like -- deleting them would mean a later
-   page that re-mounts the section silently loses its size and colour.
+   The table listed a fourteenth figure, `.why-card-number` (3.5rem, in
+   `--border-default`). WhyUs.astro folded into the services standfirst
+   and was deleted, taking the only call site for `--2xl` and `--rule`
+   with it; both modifiers went with the row. Git history has the values
+   if that section is ever revived.
 
    Everything that is position, spacing or opacity -- `margin-*`,
    `user-select`, `opacity`, `width`, `flex-shrink`, `font-variant-numeric`,
@@ -59,7 +58,6 @@
 .stat-num--md    { --stat-num-size: 1.875rem; }
 .stat-num--lg    { --stat-num-size: 2.5rem; }
 .stat-num--xl    { --stat-num-size: 3rem; }
-.stat-num--2xl   { --stat-num-size: 3.5rem; }
 .stat-num--3xl   { --stat-num-size: 7rem; }
 .stat-num--fluid { --stat-num-size: clamp(2.5rem, 4vw, 3.5rem); }
 .stat-num--hero  { --stat-num-size: clamp(6rem, 15vw, 12rem); }
@@ -70,7 +68,6 @@
 .stat-num--leading-inherit { --stat-num-leading: inherit; }
 
 .stat-num--ghost     { --stat-num-color: var(--stat-num-color-ghost); }
-.stat-num--rule      { --stat-num-color: var(--stat-num-color-rule); }
 .stat-num--watermark { --stat-num-color: var(--stat-num-color-watermark); }
 .stat-num--on-inverse-ghost { --stat-num-color: var(--color-on-inverse-ghost); }
 

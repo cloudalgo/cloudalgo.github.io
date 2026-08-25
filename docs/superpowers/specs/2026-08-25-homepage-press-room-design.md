@@ -138,11 +138,29 @@ the proof that the services work.
 | 04 | Services     | `Services.astro`           | rewrite — four ruled rows, each naming its proof|
 | 05 | Band         | **new** `Band.astro`       | full-bleed ember; CTA with the quote as attribution |
 | 06 | Case studies | **new** `CaseStudies.astro`| two engagements, figures from `case-studies.ts` |
-| 07 | Journal      | `BlogPreview.astro`        | rewrite — a ruled list, not cards, three rows   |
-| 08 | Footer CTA   | `Footer.astro`             | rewrite — the consulting ask, stated once       |
+| 07 | Journal      | `BlogPreview.astro`        | rewrite — one lead post, two in a ruled rail    |
+| 08 | Footer CTA   | `Footer.astro`             | rewrite — the consulting ask, stated once, on paper |
 | 09 | Colophon     | `Footer.astro`             | rewrite — masthead mirrored, products get a column |
 | —  | `WhyUs.astro`       |                     | **delete** — folds into 04's standfirst         |
 | —  | `Testimonials.astro`|                     | **delete** — folds into 05                      |
+
+Two rows above record what shipped rather than what was first written,
+because the mock disagreed with the prose and the mock is the approved
+artifact:
+
+- **07** was specified as three equal ruled rows. `home-mock.css` draws a
+  `1.25fr 1fr` lead-plus-rail: one post carrying its excerpt, two more
+  stacked beside it. Three equal rows say "we have a blog"; a lead says
+  which post to read first, which is the only thing this fold has room
+  to say. A companion rail of category links was dropped with it —
+  `/blog/` reads no search params on a static build, so those links
+  would have landed on an unfiltered index.
+- **08 and 09** were expected to keep a filled dark surface. `.hp__foot`
+  and `.hp__colo` have no fill at all: rules on the page surface, with
+  the colophon described there as the masthead mirrored at the foot. A
+  dark colophon under a light masthead mirrors nothing, and a near-black
+  CTA above it would have given the page three inverted surfaces, which
+  costs the ember band the thing that makes it land.
 
 Both deletions are folds, not losses. `WhyUs`'s numbered points are
 claims about how the team works, and read stronger as the standfirst
