@@ -5,12 +5,22 @@
    --mute2 -> --color-text-muted, --ash -> --border-default,
    --mono -> --font-mono. */
 
+/* One column, at every width. The mock declares .hp__hero twice -- a
+   1.55fr/1fr grid on line 107 and then `grid-template-columns:1fr` on
+   line 108, unconditionally. The second wins everywhere, so the design
+   that was rendered and approved is a single stacked column: headline,
+   buttons, then the standfirst block full width beneath them. The first
+   port read line 108 as a mobile override and shipped the two-column
+   rule the mock never actually renders.
+
+   The top padding clears the fixed header. The mock's top bar is static
+   and needs no allowance; ours is `position: fixed`, and without this
+   the first line of the h1 sits underneath it. */
 .hero-press {
-  padding: 3.5rem var(--container-pad) 2.125rem;
+  padding: calc(var(--header-h) + 3.5rem) var(--container-pad) 2.125rem;
   display: grid;
-  grid-template-columns: 1.55fr 1fr;
-  gap: 2.5rem;
-  align-items: end;
+  grid-template-columns: 1fr;
+  gap: 1.625rem;
   max-width: var(--container-max);
   margin-inline: auto;
 }
@@ -53,8 +63,9 @@
 
 .hero-press .btn-row { margin-top: 1.625rem; }
 
-/* The rule is what makes this read as a second column rather than a
-   stray paragraph, which is why it is a border and not a margin. */
+/* The rule is what keeps this reading as a deliberate block rather than
+   a stray paragraph under the buttons, which is why it is a border and
+   not a margin. */
 .hero-press__standfirst {
   border-left: 1px solid var(--color-heading);
   padding-left: 1.25rem;
@@ -64,7 +75,6 @@
   font-size: var(--size-body);
   line-height: 1.6;
   color: var(--color-text);
-  max-width: 46ch;
   margin: 0;
 }
 
@@ -93,11 +103,4 @@
   font-family: var(--font-mono);
   color: var(--color-heading);
   text-align: right;
-}
-
-@media (max-width: 860px) {
-  .hero-press {
-    grid-template-columns: 1fr;
-    gap: 1.625rem;
-  }
 }

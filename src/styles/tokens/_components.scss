@@ -5,7 +5,21 @@
 
 :root {
   /* Header */
-  --header-h: 4.375rem;              /* 38px logo + 2 x 1rem padding */
+  /* Brand lockup. Sizes are the mock's 21px wordmark and 17px mark at a
+     16px root, held in rem so they follow the 85% root the layout drops
+     to at 1200px. The mark's fill is the accent rather than a literal
+     ember: a theme that moves the brand colour moves the logo with it. */
+  --brand-gap: 0.5625rem;
+  --brand-mark-size: 1.0625rem;
+  --brand-wordmark-size: 1.3125rem;
+  --brand-mark-fill: var(--color-accent);
+
+  /* Measured, not derived: the tallest thing in the bar is the CTA, not
+     the brand lockup, and it renders at 68.5px inside 2 x 1rem padding.
+     Rounded up to 70px so the offset this token buys -- the hero's top
+     padding and every anchor's scroll-margin -- clears rather than
+     grazes. */
+  --header-h: 4.375rem;
   /* The header is flush with the page, not a white card floating on it.
      The mock's top bar (.hp__top) declares no background of its own and
      sits on the same paper as the fold below it, parted only by a rule.
@@ -18,6 +32,14 @@
   --header-scrolled-bg: var(--surface-page-glass);
   --header-scrolled-border: var(--border-default);
   --header-scrolled-blur: blur(18px) saturate(160%);
+  /* The bar's CTA is ember, not ink -- the mock's top bar carries
+     `.btn--acc` (home-mock.css:99), the same fill as the hero's primary
+     button directly below it. Two ember buttons in the first fold is the
+     design: the accent marks the one action the page is asking for, and
+     marking it once in the bar and once in the hero is marking the same
+     action twice, not two competing ones. */
+  --header-cta-bg: var(--color-accent);
+  --header-cta-fg: var(--color-on-accent);
 
   /* Buttons */
   --btn-radius: var(--radius-pill);

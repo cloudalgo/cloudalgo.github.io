@@ -75,14 +75,38 @@ main[id] {
   margin: 0 auto;
 }
 
+/* The lockup the mock draws (.hp__wordmark): the ember mark set against
+   the wordmark in the display face, not a flat raster of both. Two
+   reasons it is inline SVG rather than an <img>. The mark's fill is a
+   token, so it follows a theme swap like everything else -- an image
+   file cannot. And the word is real text in --font-heading, so it reads
+   at the same weight and tracking as the headings below it instead of
+   being a picture of a different typeface. The <img> this replaced was
+   /email-logo-dark.svg, an asset built for email templates. */
 .navbar-brand {
   display: inline-flex;
   align-items: center;
+  gap: var(--brand-gap);
   text-decoration: none;
+  color: var(--color-heading);
   transition: opacity 0.2s;
 }
-.navbar-brand img { height: 38px; width: auto; }
 .navbar-brand:hover { opacity: 0.75; }
+
+.brand-mark {
+  height: var(--brand-mark-size);
+  width: auto;
+  flex: none;
+  fill: var(--brand-mark-fill);
+}
+
+.brand-wordmark {
+  font-family: var(--font-heading);
+  font-weight: var(--weight-extrabold);
+  font-size: var(--brand-wordmark-size);
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
 
 .nav-links {
   display: flex;
@@ -128,8 +152,8 @@ main[id] {
 }
 
 .join-us {
-  background-color: var(--surface-inverse) !important;
-  color: var(--color-on-inverse) !important;
+  background-color: var(--header-cta-bg) !important;
+  color: var(--header-cta-fg) !important;
   border-radius: var(--radius-pill);
   padding: 0.5rem 1.25rem !important;
   font-weight: 700;
@@ -137,7 +161,7 @@ main[id] {
   transition: opacity 0.2s;
   border: none;
 }
-.join-us:hover { opacity: 0.8; color: var(--color-on-inverse) !important; }
+.join-us:hover { opacity: 0.8; color: var(--header-cta-fg) !important; }
 
 /* Mobile menu.
    These three rules were inline `style=` attributes on the markup, which
