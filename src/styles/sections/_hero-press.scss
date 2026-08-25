@@ -49,18 +49,53 @@
 
 /* The emphasised span is underlined by a gradient rather than
    text-decoration, so the rule sits below the baseline at a
-   controlled height and survives a line wrap intact. */
+   controlled height and survives a line wrap intact.
+
+   Being a background is also what lets it draw itself: the stroke is
+   painted left-to-right by growing background-size on the x axis, which
+   text-decoration cannot animate. The y axis stays at 100% so the
+   gradient's stops keep placing the rule under the baseline at every
+   frame.
+
+   background-size is a PERCENTAGE of the span's own box, so the two
+   things that would otherwise break this are already handled -- a late
+   webfont swap that reflows the headline just rescales the stroke
+   mid-draw, and a wrap gives each fragment (box-decoration-break: clone)
+   its own correctly-sized stroke rather than one measured across both. */
 .hero-press__mark {
   text-decoration: none;
   color: var(--color-heading);
-  background: linear-gradient(
+  background-image: linear-gradient(
     transparent 78%,
     var(--color-accent) 78%,
     var(--color-accent) 99%,
     transparent 99%
   );
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
+
+  /* `both` matters: `forwards` alone would paint the finished underline
+     during the delay and then snap it away to draw it. Holding the 0%
+     start through the delay is the whole point of having one. */
+  animation: hero-mark-draw var(--hero-mark-draw-duration)
+    var(--hero-mark-draw-ease) var(--hero-mark-draw-delay) both;
+}
+
+@keyframes hero-mark-draw {
+  from { background-size: 0 100%; }
+  to   { background-size: 100% 100%; }
+}
+
+/* The underline is emphasis, not decoration -- it is the only thing
+   marking which words the sentence turns on. So reduced motion drops the
+   draw and keeps the mark, rather than dropping both. */
+@media (prefers-reduced-motion: reduce) {
+  .hero-press__mark {
+    animation: none;
+    background-size: 100% 100%;
+  }
 }
 
 /* Not hero-scoped: the products panel uses the same row. Named for what

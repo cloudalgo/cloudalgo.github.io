@@ -228,6 +228,17 @@
      mock's 20px, held in rem so it follows the 85% root the layout drops
      to at 1200px. */
   --hero-rule-gap: 1.25rem;
+
+  /* The hero's emphasis underline draws itself once on load. The delay
+     lets the headline paint and settle first, so the stroke reads as a
+     mark being made over finished text rather than as part of the page
+     arriving. Duration is longer than --duration-slow on purpose: this
+     is the one deliberate gesture on the fold, and at 0.45s it reads as
+     a glitch rather than a stroke. Easing is the theme's, so a theme
+     that changes the site's motion character changes this too. */
+  --hero-mark-draw-duration: 0.7s;
+  --hero-mark-draw-delay: 0.35s;
+  --hero-mark-draw-ease: var(--ease-out);
 }
 
 @media (max-width: 991px) {
