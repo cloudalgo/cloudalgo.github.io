@@ -36,20 +36,26 @@ const isActive = (href: string) =>
             </a>
           </li>
         ))}
-        <li>
-          <a href="#schedule" class="nav-link join-us" id="book-btn-desktop">Book a consultation</a>
-        </li>
       </ul>
     </nav>
 
-    <!-- Animated hamburger toggle -->
-    <button id="mobile-toggle" class="hamburger" aria-label="Toggle menu" aria-expanded="false" aria-controls="mobile-menu">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <line class="ham-top" x1="3" y1="6"  x2="21" y2="6"  stroke="var(--illus-ink)" stroke-width="2" stroke-linecap="round"/>
-        <line class="ham-mid" x1="3" y1="12" x2="21" y2="12" stroke="var(--illus-ink)" stroke-width="2" stroke-linecap="round"/>
-        <line class="ham-bot" x1="3" y1="18" x2="21" y2="18" stroke="var(--illus-ink)" stroke-width="2" stroke-linecap="round"/>
-      </svg>
-    </button>
+    <!-- The bar's right-hand slot. The CTA left the nav list when the menu
+         moved to the optical centre: with the button still inside it, the
+         links centred around the button rather than around themselves. The
+         hamburger shares the slot so the bar stays a three-column grid at
+         every width -- a fourth child would wrap to a second row. -->
+    <div class="navbar-actions">
+      <a href="#schedule" class="nav-link join-us" id="book-btn-desktop">Book a consultation</a>
+
+      <!-- Animated hamburger toggle -->
+      <button id="mobile-toggle" class="hamburger" aria-label="Toggle menu" aria-expanded="false" aria-controls="mobile-menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <line class="ham-top" x1="3" y1="6"  x2="21" y2="6"  stroke="var(--illus-ink)" stroke-width="2" stroke-linecap="round"/>
+          <line class="ham-mid" x1="3" y1="12" x2="21" y2="12" stroke="var(--illus-ink)" stroke-width="2" stroke-linecap="round"/>
+          <line class="ham-bot" x1="3" y1="18" x2="21" y2="18" stroke="var(--illus-ink)" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
   </div>
 
   <!-- Mobile menu (animated slide) -->
@@ -78,9 +84,13 @@ const isActive = (href: string) =>
 /* Single 1024px switch: exactly one of the two is ever displayed. */
 .nav-desktop { display: none; }
 .hamburger { display: flex; }
+/* The desktop CTA switches on the same 1024px breakpoint as the links it
+   used to sit beside; below it the mobile menu carries its own. */
+.navbar-actions .join-us { display: none; }
 @media (min-width: 1024px) {
   .nav-desktop { display: block; }
   .hamburger { display: none; }
+  .navbar-actions .join-us { display: inline-block; }
 }
 
 /* ── Hamburger button ──────────────────────────────────── */
