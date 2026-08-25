@@ -3,22 +3,196 @@
   border-top: 1px solid var(--border-default);
 }
 
-/* Footer CTA strip */
+/* ─── Fold 8: the ask ──────────────────────────────────────
+   Ported from docs/superpowers/specs/assets/home-mock.css
+   (`.hp__foot`). No fill: a rule, the sentence, and the button. The
+   ember band is the page's one inverted surface, and a near-black CTA
+   strip here would take that away from it. */
 .footer-cta {
-  background-color: var(--surface-inverse-soft);
-  padding: 5rem 0;
-  text-align: center;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding: 2.125rem var(--container-pad) 2.25rem;
+  margin-top: 2.875rem;
+  border-top: 1px solid var(--color-heading);
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
 }
 .footer-cta h2 {
-  color: var(--color-on-inverse);
-  font-size: 3.5rem;
-  font-weight: 900;
-  letter-spacing: -0.03em;
-  margin-bottom: 1.75rem;
+  margin: 0;
+  max-width: 19ch;
+  font-family: var(--font-heading);
+  font-weight: var(--weight-bold);
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  line-height: 1.08;
+  letter-spacing: -0.018em;
+  color: var(--color-heading);
 }
-@media (max-width: 767px) {
-  .footer-cta h2 { font-size: 2.25rem; }
-  .footer-cta { padding: 3.5rem 0; }
+.footer-cta p {
+  margin: 0.625rem 0 0;
+  max-width: 40ch;
+  font-size: var(--size-body-sm);
+  line-height: 1.6;
+  color: var(--color-prose);
+}
+
+/* ─── Fold 9: the colophon ─────────────────────────────────
+   Ported from `.hp__colo` and friends. The masthead mirrored at the
+   foot, which is why it is paper and not ink: a dark colophon under a
+   light masthead mirrors nothing.
+
+   Every list here is ruled rather than spaced. That is the press-room
+   move and it also does real work -- five columns of unruled links at
+   this size read as one grey block. */
+.ca-footer {
+  border-top: 2px solid var(--color-heading);
+  background: transparent;
+  color: var(--color-heading);
+}
+.ca-footer-inner {
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding: 1.875rem var(--container-pad) 0;
+}
+
+/* The two mono stamps that open the colophon, same pair as the mock. */
+.ca-footer-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1.25rem;
+  padding-bottom: 1.375rem;
+}
+.ca-ftype {
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.ca-footer-grid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1fr 1fr 1fr;
+  gap: 1.75rem;
+  border-top: 1px solid var(--border-default);
+  padding: 1.625rem 0 1.75rem;
+  align-items: start;
+}
+
+/* Imprint */
+.ca-fbrand-logo img { display: block; margin-bottom: 0.75rem; }
+.ca-fbrand-desc {
+  margin: 0;
+  max-width: 32ch;
+  font-size: var(--size-body-sm);
+  line-height: 1.6;
+  color: var(--color-prose);
+}
+
+/* The contact block is a definition list because that is what it is:
+   three labelled facts, not three links in a row. */
+.ca-fcontact { margin: 1rem 0 0; display: grid; gap: 0; }
+.ca-fcontact > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.4375rem 0;
+  border-bottom: 1px solid var(--border-default);
+}
+.ca-fcontact dt {
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+.ca-fcontact dd {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  color: var(--color-heading);
+}
+.ca-fcontact dd a { color: inherit; }
+.ca-fcontact dd a:hover { color: var(--color-accent-hover); }
+
+/* Column headings and their ruled lists */
+.ca-fcolhd {
+  margin: 0 0 0.75rem;
+  font-family: var(--font-mono);
+  font-weight: var(--weight-regular);
+  font-size: var(--size-label);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+.ca-fcolhd--spaced { margin-top: 1.25rem; }
+
+.ca-flinks {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.ca-flinks li {
+  padding: 0.375rem 0;
+  border-bottom: 1px solid var(--border-default);
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: var(--color-heading);
+}
+.ca-flinks li:first-child { border-top: 1px solid var(--border-default); }
+.ca-flinks a { color: inherit; }
+.ca-flinks a:hover { color: var(--color-accent-hover); }
+
+/* The GA / Preview stamp beside a product. Same two words the products
+   fold uses, at the size the rest of this column's metadata uses. */
+.ca-flinks em {
+  font-style: normal;
+  margin-left: 0.375rem;
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+/* The mock draws a bordered mono box reading "Salesforce Consulting
+   Partner". These are the actual partner marks, which are licensed
+   artwork and real proof; a box asserting the same thing in type is
+   weaker and unverifiable. They are the one place on the page that is
+   not on the palette, and they stay for that reason. */
+.ca-fbadges {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  flex-wrap: wrap;
+}
+.ca-fbadges img { height: 56px; width: auto; display: block; }
+
+/* Closing bar */
+.ca-footer-bar {
+  border-top: 1px solid var(--color-heading);
+  padding: 0.875rem 0 1.875rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 1.125rem;
+  flex-wrap: wrap;
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  color: var(--color-text-muted);
+}
+.ca-footer-copy { color: inherit; }
+.ca-footer-bar a { color: inherit; }
+.ca-footer-bar a:hover { color: var(--color-accent-hover); }
+
+@media (max-width: 991px) {
+  .ca-footer-grid { grid-template-columns: 1fr 1fr; gap: 1.5rem 1.75rem; }
+  .ca-fbrand { grid-column: 1 / -1; }
+}
+@media (max-width: 575px) {
+  .ca-footer-grid { grid-template-columns: 1fr; }
 }
 
 /* Footer nav */

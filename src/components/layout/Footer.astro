@@ -1,162 +1,144 @@
----import Button from '../ui/Button.astro';
+---
+import { getCollection } from 'astro:content';
 
-const year = new Date().getFullYear()
+// Folds 8 and 9: the consulting ask, then the colophon.
+//
+// Both are light. The mock draws them on the page surface with rules
+// rather than fills -- the colophon is described there as "the masthead,
+// mirrored at the foot", and the masthead is paper. The ember band is
+// the page's ONE full-bleed inverted surface; a near-black CTA plus a
+// near-black colophon would give it two more and cost the band the
+// thing that makes it land.
+//
+// This is the only section task that changes every page, so the two
+// legally-required links -- privacy policy and disclaimer -- were listed
+// before the edit and both still render, now in the closing bar where
+// they read as imprint rather than as navigation.
+//
+// Products and services come from their collections. A fifth of either
+// appears here without a footer edit.
+
+const year = new Date().getFullYear();
+
+const products = (await getCollection('products')).sort(
+  (a, b) => a.data.order - b.data.order
+);
+
+const services = (await getCollection('services')).sort(
+  (a, b) => a.data.order - b.data.order
+);
+
+// Collection titles are written for the services page, where a full
+// phrase has room: "Salesforce Consulting & Implementation". In a
+// quarter-width ruled column that wraps to three lines, so the label is
+// cut at the conjunction. The head of each title is already the name.
+const shortName = (title: string) => title.split(/\s+&\s+/)[0].trim();
 ---
 
-<!-- ── "Let's build" CTA strip ───────────────────────────── -->
+<!-- ── Fold 8: the ask ─────────────────────────────────────── -->
 <section class="footer-cta">
-  <div class="container">
-    <h2>Let’s build something<br/>together.</h2>
-    <Button href="/contact" variant="light">
-      Start a project &rarr;
-    </Button>
+  <div>
+    <h2>Tell us what your org is doing wrong.</h2>
+    <p>
+      We will tell you whether it needs a project, a retainer, one of our products,
+      or nothing at all. The call costs you half an hour.
+    </p>
   </div>
+  <a class="btn btn-primary" href="/contact/">Book a consultation &rarr;</a>
 </section>
 
-<!-- ── Main footer ───────────────────────────────────────── -->
+<!-- ── Fold 9: the colophon ────────────────────────────────── -->
 <footer class="ca-footer">
-
-  <!-- Content -->
   <div class="ca-footer-inner">
-    <div class="ca-footer-grid">
+    <div class="ca-footer-head">
+      <span class="ca-ftype">The colophon</span>
+      <span class="ca-ftype">Jaipur &middot; India</span>
+    </div>
 
-      <!-- Brand column -->
+    <div class="ca-footer-grid">
       <div class="ca-fbrand">
-        <!-- Original logo in white for dark footer -->
         <a href="/" class="ca-fbrand-logo" aria-label="CloudAlgo home">
-          <img src="/email-logo-white.svg" alt="CloudAlgo" width="174" height="32" style="display:block;margin-bottom:1.5rem;" />
+          <img src="/email-logo-dark.svg" alt="CloudAlgo" width="174" height="32" />
         </a>
-        <h2 class="ca-fbrand-talk">Let’s talk</h2>
-        <a href="mailto:sales@cloudalgo.com" class="ca-fbrand-email-cta">&rarr; sales@cloudalgo.com</a>
         <p class="ca-fbrand-desc">
-          CloudAlgo is a Salesforce Consulting Partner, founded in 2019. We build
-          Salesforce and Heroku solutions that hold up long after we hand them over.
+          A Salesforce Consulting Partner since 2019. We build on Salesforce and
+          Heroku, and we ship the four products listed here from the same bench.
         </p>
-        <div class="ca-fbrand-badges">
+        <dl class="ca-fcontact">
+          <div><dt>Sales</dt><dd><a href="mailto:sales@cloudalgo.com">sales@cloudalgo.com</a></dd></div>
+          <div><dt>Phone</dt><dd><a href="tel:+916377360659">+91 6377-360659</a></dd></div>
+          <div><dt>Studio</dt><dd>Jaipur, India</dd></div>
+        </dl>
+      </div>
+
+      <div>
+        <h3 class="ca-fcolhd">Products</h3>
+        <ul class="ca-flinks">
+          {products.map((p) => (
+            <li>
+              <a href={`/products/${p.id}/`}>{p.data.title}</a>
+              <em>{p.data.status === 'ga' ? 'GA' : 'Preview'}</em>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="ca-fcolhd">Services</h3>
+        <ul class="ca-flinks">
+          {services.map((s) => (
+            <li><a href={`/services/${s.id}/`}>{shortName(s.data.title)}</a></li>
+          ))}
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="ca-fcolhd">Company</h3>
+        <ul class="ca-flinks">
+          <li><a href="/about">About</a></li>
+          <li><a href="/case-studies">Case studies</a></li>
+          <li><a href="/blog">Journal</a></li>
+          <li><a href="/contact">Contact</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="ca-fcolhd">Elsewhere</h3>
+        <ul class="ca-flinks">
+          <li><a href="https://www.linkedin.com/company/cloudalgo" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+          <li><a href="https://github.com/cloudalgo" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+          <li><a href="https://twitter.com/cloudalgo" target="_blank" rel="noopener noreferrer">Twitter</a></li>
+          <li>
+            <a href="https://appexchange.salesforce.com/appxConsultingListingDetail?listingId=a0N4V00000JdabDUAR&legacy=true"
+               target="_blank" rel="noopener noreferrer">AppExchange</a>
+          </li>
+        </ul>
+
+        <h3 class="ca-fcolhd ca-fcolhd--spaced">Certified</h3>
+        <div class="ca-fbadges">
           <a href="https://appexchange.salesforce.com/appxConsultingListingDetail?listingId=a0N4V00000JdabDUAR&legacy=true"
              target="_blank" rel="noreferrer">
             <img src="/salesforce/Salesforce_Partner_Badge_RGB.webp"
                  alt="Certified Salesforce Partner"
-                 width="446" height="474" loading="lazy" decoding="async"
-                 style="height:72px;width:auto;" />
+                 width="446" height="474" loading="lazy" decoding="async" />
           </a>
           <a href="https://appexchange.salesforce.com/appxConsultingListingDetail?listingId=a0N4V00000JdabDUAR&legacy=true"
              target="_blank" rel="noreferrer">
             <img src="/salesforce/Available_On_Appexchange_Badge_RGB_Transparent.webp"
                  alt="Available on AppExchange"
-                 width="446" height="474" loading="lazy" decoding="async"
-                 style="height:72px;width:auto;" />
+                 width="446" height="474" loading="lazy" decoding="async" />
           </a>
         </div>
-        <p class="ca-footer-copy">{year} &copy; cloudalgo.com, All rights reserved.</p>
       </div>
+    </div>
 
-      <!-- Company links -->
-      <div>
-        <ul class="ca-flinks">
-          <li><a href="/about">About</a></li>
-          <li><a href="/services">Services</a></li>
-          <li><a href="/products">Products</a></li>
-          <li><a href="/blog">Blog</a></li>
-          <li><a href="/page/disclaimer">Disclaimer</a></li>
-        </ul>
-      </div>
-
-      <!-- Connect links -->
-      <div>
-        <ul class="ca-flinks">
-          <li><a href="https://www.linkedin.com/company/cloudalgo" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
-          <li><a href="https://github.com/cloudalgo" target="_blank" rel="noopener noreferrer">Github</a></li>
-          <li><a href="https://twitter.com/cloudalgo" target="_blank" rel="noopener noreferrer">Twitter</a></li>
-          <li><a href="/page/privacy-policy">Privacy Policy</a></li>
-        </ul>
-      </div>
-
+    <div class="ca-footer-bar">
+      <span class="ca-footer-copy">{year} &copy; cloudalgo.com. All rights reserved.</span>
+      <span>
+        <a href="/page/privacy-policy">Privacy policy</a>
+        &nbsp;&middot;&nbsp;
+        <a href="/page/disclaimer">Disclaimer</a>
+      </span>
     </div>
   </div>
 </footer>
-
-<style>
-/* ── CTA strip (reuses global .footer-cta styles) ────────── */
-
-/* ── Footer wrapper ──────────────────────────────────────── */
-.ca-footer {
-  background: var(--surface-inverse);
-  color: var(--color-on-inverse-muted);
-}
-
-/* ── Content wrapper ─────────────────────────────────────── */
-.ca-footer-inner {
-  position: relative;
-  z-index: 1;
-  max-width: var(--container-max);
-  margin: 0 auto;
-  padding: 0 1.5rem 2.5rem;
-}
-
-/* ── Three-col grid ──────────────────────────────────────── */
-.ca-footer-grid {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
-  gap: 3rem;
-  padding: 4.5rem 0 3rem;
-  align-items: start;
-}
-@media (max-width: 767px) {
-  .ca-footer-grid { grid-template-columns: 1fr; gap: 2rem; padding: 3rem 0 2rem; }
-}
-
-/* Brand */
-.ca-fbrand-talk {
-  font-size: clamp(2rem, 4vw, 3rem);
-  font-weight: 900;
-  color: var(--color-on-inverse);
-  letter-spacing: -0.04em;
-  line-height: 1.1;
-  margin-bottom: 0.5rem;
-}
-.ca-fbrand-email-cta {
-  display: inline-block;
-  color: var(--color-on-inverse-a60);
-  font-size: 0.9375rem;
-  text-decoration: none;
-  margin-bottom: 1.75rem;
-  transition: color 0.2s;
-}
-.ca-fbrand-email-cta:hover { color: var(--color-on-inverse); }
-.ca-fbrand-desc {
-  font-size: 0.875rem;
-  line-height: 1.8;
-  color: var(--color-on-inverse-a38);
-  margin-bottom: 1.25rem;
-  max-width: 320px;
-}
-.ca-fbrand-badges {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 1.5rem;
-}
-.ca-footer-copy {
-  font-size: 0.8rem;
-  color: var(--color-on-inverse-a28);
-}
-
-/* Link columns */
-.ca-flinks {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-  padding-top: 0.5rem;
-}
-.ca-flinks a {
-  color: var(--color-on-inverse-muted);
-  text-decoration: none;
-  font-size: 0.9375rem;
-  transition: color 0.2s;
-}
-.ca-flinks a:hover { color: var(--color-on-inverse); }
-</style>
