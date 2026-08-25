@@ -11,10 +11,10 @@
 // Two notes before the map.
 //
 // Type IS here -- Archivo and Geist -- but it is the one token
-// family the `@use` swap cannot carry alone: the webfont is
-// linked in Base.astro, so until the <head> moves with it these
-// three families render their fallbacks. That link lands in the
-// same commit as the flip.
+// family the `@use` swap cannot carry alone. The webfont link
+// lives in Base.astro, so a theme that changes these three
+// families is only half a change until the <head> moves with it.
+// Both halves landed together in the flip.
 //
 // The code-block ramp is copied, not re-toned. A syntax surface
 // that inverts with the page theme becomes unreadable the moment
@@ -114,11 +114,11 @@ $theme: (
   /* Device chrome inside product mockups. */
   'hardware-800': #1A1A1A,
 
-  /* Type — Archivo for display, Geist for everything else. The
-     webfont is linked in Base.astro, so this half of the change is
-     inert until the <head> moves with it (Task 5). That is deliberate:
-     fonts are the one token family that cannot be flipped from the
-     stylesheet alone, and pretending otherwise renders the fallback. */
+  /* Type — Archivo for display, Geist for everything else. These
+     three names are only half the change: the matching webfont link
+     lives in Base.astro, and a theme that sets a family the <head>
+     does not load renders the fallback. Fonts are the one token
+     family that cannot be flipped from the stylesheet alone. */
   'family-display': 'Archivo, system-ui, sans-serif',
   'family-sans': 'Geist, system-ui, -apple-system, sans-serif',
   'family-mono': '"Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace',

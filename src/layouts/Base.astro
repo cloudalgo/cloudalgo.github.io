@@ -47,12 +47,21 @@ const ogImage = image.startsWith('http') ? image : `${imageHost}${image}`;
 
     <!-- Fonts. Linked here rather than @import-ed from global.css so the
          preload scanner can start the request without first parsing the CSS,
-         and so the connection to the font host opens in parallel. -->
+         and so the connection to the font host opens in parallel.
+
+         Weights are ranges, not a discrete list, because all three faces are
+         variable: `wght@600..900` and `wght@600;700;800` fetch the BYTE-
+         IDENTICAL set of 14 gstatic files, but the range form declares every
+         weight in between as real. The discrete form was silently down-
+         matching -- the stylesheets ask for 900 in 18 rules and the artwork
+         asks for 800/900 in 86 SVG nodes, none of which the list covered.
+         It also cuts the served CSS from 15.8KB to 5.4KB, since the list
+         repeats an @font-face per weight per unicode subset. -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Archivo:wght@600..900&family=Geist:wght@400..900&family=Geist+Mono:wght@400..500&display=swap"
     />
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="canonical" href={canonicalURL} />
