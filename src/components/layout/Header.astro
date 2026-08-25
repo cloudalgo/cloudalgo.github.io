@@ -5,12 +5,18 @@ import BrandLockup from '@/components/ui/BrandLockup.astro';
 // docs/superpowers/specs/assets/home-mock.html): five destinations in
 // sentence case, products first. Home is the wordmark and Contact is the
 // button, so neither earns a second slot in the list.
+//
+// `cat` is the department each destination belongs to, and it appears only
+// in the mobile index (Option 01 of the menu mock), where the entries are
+// set large enough to carry a second line. The desktop bar has no room for
+// it and does not need it -- five words across a bar are self-evident; five
+// words down a phone screen are a list, and a list wants departments.
 const navLinks = [
-  { href: '/products',      label: 'Products' },
-  { href: '/services',      label: 'Services' },
-  { href: '/case-studies',  label: 'Case studies' },
-  { href: '/blog',          label: 'Journal' },
-  { href: '/about',         label: 'About' },
+  { href: '/products',      label: 'Products',     cat: 'Catalogue'   },
+  { href: '/services',      label: 'Services',     cat: 'Engagements' },
+  { href: '/case-studies',  label: 'Case studies', cat: 'Evidence'    },
+  { href: '/blog',          label: 'Journal',      cat: 'Writing'     },
+  { href: '/about',         label: 'About',        cat: 'The firm'    },
 ];
 const currentPath = Astro.url.pathname;
 const isActive = (href: string) =>
@@ -58,25 +64,43 @@ const isActive = (href: string) =>
     </div>
   </div>
 
-  <!-- Mobile menu (animated slide) -->
-  <div id="mobile-menu" class="mobile-menu" inert>
+  <!-- The mobile index. Styles live in styles/layout/_mobile-menu.scss;
+       the shape is the mock's Option 01: a ruled head, five numbered
+       entries with their department, and the way out at the foot.
+
+       `--i` carries each entry's place in the stagger. It is an index, not
+       a decoration, so it is set from the loop rather than hand-written. -->
+  <nav id="mobile-menu" class="mobile-menu" aria-label="Site index" inert>
+    <div class="mobile-menu__head">
+      <span>Contents</span>
+      <span>{navLinks.length} destinations</span>
+    </div>
+
     <ul class="mobile-menu__list">
-      {navLinks.map(link => (
-        <li>
-          <a href={link.href}
-             class="mobile-menu__link"
-             aria-current={isActive(link.href) ? 'page' : undefined}>
-            {link.label}
+      {navLinks.map((link, i) => (
+        <li class="mobile-menu__item" style={`--i:${i}`}>
+          <a
+            href={link.href}
+            class="mobile-menu__link"
+            aria-current={isActive(link.href) ? 'page' : undefined}
+          >
+            <span class="mobile-menu__n">{String(i + 1).padStart(2, '0')}</span>
+            <span>
+              <span class="mobile-menu__label">{link.label}</span>
+              <span class="mobile-menu__cat">{link.cat}</span>
+            </span>
           </a>
         </li>
       ))}
-      <li class="mobile-menu__cta">
-        <a href="#schedule" id="book-btn-mobile" class="btn btn-primary">
-          Book a consultation
-        </a>
-      </li>
     </ul>
-  </div>
+
+    <div class="mobile-menu__foot">
+      <span class="mobile-menu__skip">Or skip the index</span>
+      <a href="#schedule" id="book-btn-mobile" class="btn btn-primary">
+        Book a consultation
+      </a>
+    </div>
+  </nav>
 </header>
 
 <style>
@@ -101,6 +125,34 @@ const isActive = (href: string) =>
   padding: 0.4rem;
   align-items: center;
   justify-content: center;
+  position: relative;
+}
+
+/* The tap target, grown without growing the button.
+   The root drops to 85% below 1200px, so this button's 0.4rem padding
+   renders at 5.4px and the whole control measured 34.9px square -- the one
+   control on a phone page, under the WCAG 2.5.8 floor. Sizing the button
+   itself to 44px fixes the target and breaks the bar: it is the tallest
+   thing in the row, so the navbar went 62.1px -> 71.2px while --header-h
+   still said 4.625rem, and every offset measured off that token (the hero's
+   top padding, the index's, every scroll-margin) would have been wrong by
+   8px.
+
+   So the hit area is a pseudo-element instead: rendered, so it hit-tests
+   and passes the hit to the button; absolutely positioned, so it does not
+   participate in layout at all. The bar keeps its height, the icon keeps
+   its place, and the finger gets its 44px.
+
+   In px, not rem, deliberately: this is a measure of a fingertip, and a
+   fingertip does not get 15% smaller because the root font-size did. */
+.hamburger::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  width: 44px;
+  height: 44px;
 }
 
 .ham-top,
@@ -124,47 +176,10 @@ const isActive = (href: string) =>
   transform: translateY(-6px) rotate(-45deg);
 }
 
-/* ── Mobile menu slide ─────────────────────────────────── */
-/* Hung below the fixed header rather than sat inside it, so opening it moves
-   nothing else and the slide can run on transform/opacity. The previous
-   max-height + padding pair relaid out the header on every frame, and the
-   480px cap would have silently clipped a longer nav. */
-.mobile-menu {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  background: var(--surface-card);
-  border-top: 1px solid var(--border-default);
-  padding: 1.25rem 1.5rem;
-  /* A static cap, so it costs no per-frame layout. A nav too long for the
-     screen scrolls instead of being cut off. */
-  max-height: 75dvh;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  opacity: 0;
-  transform: translateY(-0.5rem);
-  visibility: hidden;
-  transition: opacity 0.28s cubic-bezier(0.4, 0, 0.2, 1),
-              transform 0.28s cubic-bezier(0.4, 0, 0.2, 1),
-              visibility 0s linear 0.28s;
-}
-.mobile-menu.is-open {
-  opacity: 1;
-  transform: translateY(0);
-  visibility: visible;
-  /* No delay on the way in, or the menu would stay invisible for the slide */
-  transition: opacity 0.28s cubic-bezier(0.4, 0, 0.2, 1),
-              transform 0.28s cubic-bezier(0.4, 0, 0.2, 1),
-              visibility 0s;
-}
-
 @media (prefers-reduced-motion: reduce) {
   .ham-top,
   .ham-mid,
-  .ham-bot,
-  .mobile-menu,
-  .mobile-menu.is-open {
+  .ham-bot {
     transition: none;
   }
 }
@@ -180,24 +195,79 @@ const isActive = (href: string) =>
     else header?.classList.remove('scrolled');
   }, { passive: true });
 
+  /* The index covers the screen while it is open, so the page behind it
+     must not scroll under the finger. `overscroll-behavior: contain` on the
+     panel stops the chain once the list is at its end; this stops the page
+     moving at all. Set on <html> rather than <body> because iOS Safari
+     honours it there and not always here. */
+  const scrollLock = document.documentElement;
+
   function setMenuOpen(open: boolean) {
     toggle?.classList.toggle('is-open', open);
     toggle?.setAttribute('aria-expanded', String(open));
     mobileMenu?.classList.toggle('is-open', open);
+    scrollLock.classList.toggle('menu-open', open);
     // `inert` keeps the collapsed menu out of the tab order and the a11y tree
     if (open) mobileMenu?.removeAttribute('inert');
     else mobileMenu?.setAttribute('inert', '');
   }
 
   toggle?.addEventListener('click', () => {
-    setMenuOpen(!toggle.classList.contains('is-open'));
+    const opening = !toggle.classList.contains('is-open');
+    setMenuOpen(opening);
+    // Move focus into the index on open. Without this, a keyboard user's
+    // next Tab lands on whatever follows the header in the document, and
+    // the menu they just opened is behind them.
+    if (opening) (mobileMenu?.querySelector('a') as HTMLElement | null)?.focus();
   });
 
-  document.getElementById('book-btn-mobile')?.addEventListener('click', () => setMenuOpen(false));
+  // Any link in the index closes it. Most navigate away and the state is
+  // moot, but `#schedule` is an on-page anchor -- leaving the panel open
+  // over the widget it just scrolled to is the bug this prevents.
+  mobileMenu?.addEventListener('click', (e) => {
+    if ((e.target as HTMLElement).closest('a')) setMenuOpen(false);
+  });
 
   document.addEventListener('keydown', (e) => {
-    if (e.key !== 'Escape' || !toggle?.classList.contains('is-open')) return;
-    setMenuOpen(false);
-    toggle.focus();
+    if (!toggle?.classList.contains('is-open')) return;
+
+    if (e.key === 'Escape') {
+      setMenuOpen(false);
+      toggle.focus();
+      return;
+    }
+
+    /* Focus trap. The open index is the whole screen, so Tab must not walk
+       out of it into a page the user cannot see. The cycle deliberately
+       includes the toggle: it is the close button while the menu is open,
+       and shutting the user out of it would leave Escape as the only way
+       back -- which is a keyboard trap, not a focus trap. */
+    if (e.key !== 'Tab' || !mobileMenu) return;
+
+    const focusable = [
+      toggle,
+      ...Array.from(mobileMenu.querySelectorAll<HTMLElement>('a[href], button:not([disabled])')),
+    ];
+    if (focusable.length < 2) return;
+
+    const first = focusable[0];
+    const last  = focusable[focusable.length - 1];
+    const active = document.activeElement;
+
+    if (e.shiftKey && active === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && active === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  });
+
+  /* Above the switch the desktop nav takes over and the panel is display:
+     none. A menu left open across that boundary would keep the scroll lock
+     on a page whose menu is no longer visible. */
+  const wide = window.matchMedia('(min-width: 1024px)');
+  wide.addEventListener('change', (e) => {
+    if (e.matches && toggle?.classList.contains('is-open')) setMenuOpen(false);
   });
 </script>

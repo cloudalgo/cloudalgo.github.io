@@ -73,6 +73,11 @@ main[id] {
    `justify-content: space-between` cannot do, and which a flex `margin:
    auto` pair only approximates while the two ends happen to match. */
 .navbar {
+  /* Its own stacking level, because the mobile index covers the whole
+     viewport -- bar included -- and is a later sibling. Without this the
+     panel would paint over the lockup and the button that closes it. */
+  position: relative;
+  z-index: 1;
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
@@ -88,6 +93,15 @@ main[id] {
    ever displayed (the 1024px switch is in Header.astro), so the gap is
    insurance rather than spacing that anything currently relies on. */
 .navbar-actions {
+  /* Pinned to the third track by name, not left to auto-placement.
+     `.nav-desktop` is `display: none` below 1024px, and a display:none grid
+     item is not laid out at all -- it occupies no track. So auto-placement
+     put the brand in column 1 and this in column 2, which is the AUTO
+     middle track: measured at 360px the hamburger sat at x=207 with 118px
+     of empty bar to its right, looking like it had been dropped next to the
+     wordmark. Naming the column makes the bar's geometry independent of
+     which of its children happen to be hidden. */
+  grid-column: 3;
   justify-self: end;
   display: flex;
   align-items: center;
@@ -200,29 +214,3 @@ main[id] {
   .join-us:hover,
   .join-us:active { transform: none; }
 }
-
-/* Mobile menu.
-   These three rules were inline `style=` attributes on the markup, which
-   put a literal `border-radius: 100px` and a hand-written button outside
-   the theme's reach -- the press-room skin squares every corner and could
-   not touch this one. The CTA is now just `.btn.btn-primary`, so it
-   inherits whatever the theme says a primary button is. */
-.mobile-menu__list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.mobile-menu__link {
-  display: block;
-  padding: 0.5rem 0;
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--color-heading);
-  border-bottom: 1px solid var(--border-default);
-}
-
-.mobile-menu__cta { margin-top: 0.75rem; }

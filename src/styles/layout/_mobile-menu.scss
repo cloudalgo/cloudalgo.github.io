@@ -1,0 +1,310 @@
+/* ─── The mobile menu: a broadsheet index ──────────────────
+   Ported from Option 01 of the approved mock
+   (<scratchpad>/mobile-menu-mock.html, `.m1`). Geometry is the
+   mock's; every colour, size and duration is a --menu-* knob
+   declared in tokens/_components.scss.
+
+   The idea, in one line: the phone's navigation is this
+   publication's table of contents, not a drawer of buttons. A
+   ruled head, five numbered entries with the department each one
+   belongs to, and the way out at the foot. It is the same
+   grammar as the contents bar and the spec sheets, which is why
+   it belongs to this site and not to any other.
+
+   The panel is REVEALED, not moved. `clip-path` wipes down from
+   the header's own bottom edge, so the head rule appears to be
+   drawn across the page rather than to slide in from off it, and
+   nothing about the closed panel's geometry differs from the
+   open one -- no transform to undo, no reflow at either end.
+
+   Loaded straight after layout/header because it is the header's
+   own second half: it reads --header-h and is positioned by the
+   `.header` that partial establishes.
+
+   NOTE ON `visibility`. The wipe alone would leave a
+   zero-height-but-present panel over the page: clipped content
+   still hit-tests in some engines, and the `inert` attribute the
+   script sets is the a11y guarantee, not the pointer one.
+   `visibility: hidden` closes both, stepped so it flips at the
+   END of the close and at the START of the open. */
+
+/* The scroll lock, set on <html> by the header script while the index is
+   open. The panel already refuses to chain its own scroll to the page
+   (`overscroll-behavior: contain` below); this stops the page moving
+   underneath at all, which is the difference between a menu and a layer
+   floating over a document that is still going somewhere. */
+html.menu-open {
+  overflow: hidden;
+}
+
+/* The schedule launcher is fixed to the bottom-right at z-index 999 and is
+   mounted at the end of <body>, so it wins the stacking contest against a
+   header at the same z-index and lands squarely on top of the index's own
+   CTA -- measured: a tap at the centre of "Book a consultation" hit the
+   launcher instead. Both open the same widget, so the answer is to show one
+   at a time rather than to fight over z-index. The index has the foot; the
+   launcher comes back the moment it closes. */
+html.menu-open .sw-launcher {
+  display: none;
+}
+
+.mobile-menu {
+  /* The whole screen, corner to corner -- fixed to the viewport
+     rather than hung under the header, so the paper runs behind
+     the bar as well as below it and no strip of the page shows
+     anywhere while the index is open.
+
+     The bar stays on top of it: `.navbar` is given its own
+     stacking level in layout/_header.scss for exactly this, and
+     the panel's top padding clears the bar's height so the first
+     entry lands under it rather than behind it. */
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  /* Height is stated, not inferred from `bottom: 0`. On iOS Safari a fixed
+     `inset: 0` resolves against the LARGE viewport -- the one you get with
+     the URL bar retracted -- so with the bar showing, the bottom of the
+     panel sits behind it and the foot CTA, the one thing at the bottom of
+     this column, is under browser chrome. `dvh` is the dynamic viewport:
+     it tracks the bar sliding in and out, which is exactly what "cover the
+     phone's height" has to mean on a phone. */
+  height: 100dvh;
+  padding: var(--menu-pad);
+  overflow-y: auto;
+  /* Scrolling the list must not chain to the page underneath. */
+  overscroll-behavior: contain;
+  background: var(--menu-surface);
+
+  /* Column, so the foot can be pushed to the bottom by margin
+     rather than positioned there. */
+  display: flex;
+  flex-direction: column;
+
+  clip-path: inset(0 0 100% 0);
+  visibility: hidden;
+  transition:
+    clip-path var(--menu-wipe) var(--menu-wipe-ease),
+    visibility 0s linear var(--menu-wipe);
+}
+
+.mobile-menu.is-open {
+  clip-path: inset(0 0 0 0);
+  visibility: visible;
+  transition:
+    clip-path var(--menu-wipe) var(--menu-wipe-ease),
+    visibility 0s linear 0s;
+}
+
+/* No dvh (Safari < 15.4, older Chromium): fall back to the static viewport.
+   That is the pre-fix behaviour, so nothing regresses -- the panel simply
+   stops tracking the URL bar on browsers that never told it about one. */
+@supports not (height: 100dvh) {
+  .mobile-menu { height: 100vh; }
+}
+
+/* ── The head ────────────────────────────────────────────
+   Two mono labels either side of an ink rule: what this is, and
+   how much of it there is. The rule is the masthead's, in ink
+   rather than the hairline the entries get -- it opens the
+   index, it does not divide it. */
+.mobile-menu__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid var(--menu-head-rule);
+  font-family: var(--font-mono);
+  font-size: var(--menu-cat-size);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--menu-meta-color);
+}
+
+.mobile-menu__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── The entries ─────────────────────────────────────────
+   Number, then title over department. The number is set on the
+   baseline of the title (`align-items: baseline`) and given a
+   fixed rail so the five titles start on one vertical line
+   whether the number is 01 or 05.
+
+   --menu-row-min is the tap target and is load-bearing; see the
+   note on the token. The rows render taller than it in practice
+   because the title and its department set two lines. */
+.mobile-menu__link {
+  display: flex;
+  align-items: baseline;
+  gap: var(--menu-row-gap);
+  min-height: var(--menu-row-min);
+  padding: 0.85rem 0;
+  border-bottom: 1px solid var(--menu-item-rule);
+  color: inherit;
+  text-decoration: none;
+}
+
+.mobile-menu__n {
+  flex: none;
+  width: var(--menu-num-width);
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.1em;
+  color: var(--menu-meta-color);
+}
+
+.mobile-menu__label {
+  /* inline-block so the current-page rule below can be measured
+     against the WORD, not against the column it sits in. */
+  display: inline-block;
+  position: relative;
+  font-family: var(--font-heading);
+  font-weight: var(--weight-extrabold);
+  font-size: var(--menu-label-size);
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  color: var(--color-heading);
+}
+
+.mobile-menu__cat {
+  display: block;
+  margin-top: 0.3rem;
+  font-family: var(--font-mono);
+  font-size: var(--menu-cat-size);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--menu-meta-color);
+}
+
+/* ── The current page ────────────────────────────────────
+   The same crayon the section heads and the drawn links use,
+   under the title of the page you are already on. Painted as a
+   MASK over --rule-crayon-color rather than as a background
+   image, for the reason components/_crayon.scss gives: a
+   background-image freezes the ember into a data URI and stops
+   following the theme.
+
+   Unprefixed mask-* only -- the bundler adds no prefixes and
+   keeps whichever spelling comes last. */
+.mobile-menu__link[aria-current] .mobile-menu__label {
+  padding-bottom: var(--menu-current-gap);
+}
+
+.mobile-menu__link[aria-current] .mobile-menu__label::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--menu-current-height);
+  background-color: var(--rule-crayon-color);
+  mask-image: var(--rule-crayon-art);
+  mask-repeat: no-repeat;
+  mask-size: 300% 100%;
+  mask-position: 0 0;
+  animation: crayon-boil var(--rule-crayon-boil) step-end infinite;
+}
+
+/* No mask support: the sprite would paint as nothing at all, so
+   take the marker back to a hairline that still marks the page. */
+@supports not (mask-image: linear-gradient(#000, #000)) {
+  .mobile-menu__link[aria-current] .mobile-menu__label::after {
+    height: 2px;
+  }
+}
+
+/* ── The foot ────────────────────────────────────────────
+   Pushed to the bottom of the column. "Or skip the index" is the
+   line that makes the CTA an alternative to reading the list
+   rather than a sixth entry in it. */
+.mobile-menu__foot {
+  margin-top: auto;
+  padding-top: 1.25rem;
+}
+
+.mobile-menu__skip {
+  display: block;
+  margin-bottom: 0.7rem;
+  font-family: var(--font-mono);
+  font-size: var(--menu-cat-size);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--menu-meta-color);
+}
+
+/* Full width: it is the foot of a column, and a pill floating in
+   the middle of one would read as a stray control. */
+.mobile-menu__foot .btn {
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+
+/* ── The stagger ─────────────────────────────────────────
+   Entries rise into place behind the wipe, one after another,
+   and the foot arrives once after the last of them.
+
+   The delays live ONLY in the `.is-open` rules. Put them in the
+   base rule and the close plays the stagger in reverse while the
+   panel is wiping shut -- five rows fading out under a closing
+   clip-path, which reads as a stutter. Closing, they simply go
+   with the panel. */
+.mobile-menu__item {
+  opacity: 0;
+  transform: translateY(var(--menu-item-shift));
+  transition:
+    opacity var(--menu-item-in) ease,
+    transform var(--menu-item-rise) var(--ease-out);
+}
+
+.mobile-menu.is-open .mobile-menu__item {
+  opacity: 1;
+  transform: none;
+  transition-delay: calc(var(--menu-stagger-base) + var(--i) * var(--menu-stagger));
+}
+
+.mobile-menu__foot {
+  opacity: 0;
+  transform: translateY(var(--menu-item-shift));
+  transition:
+    opacity var(--menu-item-in) ease,
+    transform var(--menu-item-rise) var(--ease-out);
+}
+
+.mobile-menu.is-open .mobile-menu__foot {
+  opacity: 1;
+  transform: none;
+  transition-delay: var(--menu-foot-delay);
+}
+
+/* Reduced motion: the panel still appears and disappears, it
+   just stops being an event. No wipe, no rise, no boil -- and
+   the crayon parked on its first frame rather than mid-cycle. */
+@media (prefers-reduced-motion: reduce) {
+  .mobile-menu,
+  .mobile-menu.is-open,
+  .mobile-menu__item,
+  .mobile-menu.is-open .mobile-menu__item,
+  .mobile-menu__foot,
+  .mobile-menu.is-open .mobile-menu__foot {
+    transition: none;
+  }
+
+  .mobile-menu__link[aria-current] .mobile-menu__label::after {
+    animation: none;
+    mask-position: 0 0;
+  }
+}
+
+/* The index is a phone layout only. Above the switch the desktop
+   nav is the navigation and this panel must not be reachable at
+   all -- the script leaves `inert` on it, and `display: none`
+   makes sure a stale `.is-open` class from a resize cannot paint
+   a full-height panel over a desktop page. */
+@media (min-width: 1024px) {
+  .mobile-menu { display: none; }
+}

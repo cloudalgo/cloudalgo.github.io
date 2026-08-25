@@ -20,6 +20,9 @@
 @use 'layout/section-press';
 @use 'layout/page-head';
 @use 'layout/header';
+// The header's second half -- it is positioned by `.header` and measures
+// itself off --header-h, so it loads directly after it.
+@use 'layout/mobile-menu';
 
 // ── Components ────────────────────────────────────────────
 @use 'components/buttons';
