@@ -21,10 +21,17 @@ CONTENT = ROOT / "src" / "content"
 #  alternative field that may stand in for it)
 #
 # `proves` is optional on a service because not every practice ships a
-# product -- consulting is proven by the work delivered. The schema requires
-# exactly one of `proves` and `provenBy`; this gate checks the same pair, so
-# a service with neither still fails here rather than rendering "Proven by"
-# followed by nothing.
+# product -- consulting is proven by the work delivered. The schema allows AT
+# MOST one of `proves` and `provenBy`, and this gate checks the same pair.
+#
+# A service with NEITHER is legal and is not a failure here. That was the rule
+# once, and demanding proof from all seven produced exactly what a forced field
+# always produces: three practices carrying invented claims nobody had counted.
+# Proof is optional because proof is optional; every consumer omits the line
+# rather than printing "Proven by" with a blank after it, and the guards that
+# do so are in Services.astro and services/index.astro. What this gate still
+# catches is the two failures that are real -- both fields set at once, and a
+# `proves` pointing at a product that does not exist.
 JOINS = [("services", "proves", "products", "provenBy")]
 
 failures = []
@@ -43,10 +50,6 @@ for source, field, target, alt in JOINS:
         m = re.search(rf"^{field}:\s*(\S+)\s*$", head[1], re.MULTILINE)
         has_alt = re.search(rf"^{alt}:\s*\S", head[1], re.MULTILINE) is not None
         if not m:
-            if not has_alt:
-                failures.append(
-                    f"{entry.relative_to(ROOT)}: neither `{field}:` nor `{alt}:`"
-                )
             continue
         if has_alt:
             failures.append(

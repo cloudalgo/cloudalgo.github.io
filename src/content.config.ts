@@ -44,23 +44,33 @@ const services = defineCollection({
     order:   z.number(),
     icon:    z.string(),
     excerpt: z.string(),
-    // What demonstrates this service. Exactly one of these two, enforced
-    // below, because the design has one slot and it must not be empty.
+    // What demonstrates this service. At most one of these two, enforced
+    // below. The slot is optional because proof is: four of the seven
+    // practices have a product or a counted figure behind them, and three
+    // -- MuleSoft integration, RPA, AWS -- have neither yet.
     //
     // `proves` is a reference rather than a bare string, so a service naming
     // a product that does not exist fails the build instead of rendering a
     // dead link.
     //
     // `provenBy` exists because not every practice ships a product. Consulting
-    // is proven by the work delivered -- the mock's row reads "Proven by /
+    // is proven by the work delivered -- the home row reads "Proven by /
     // 70+ projects" -- and when the schema demanded a product reference here,
     // consulting was pointed at Pledgivo, a package it did not build. A field
     // that forces a false answer gets a false answer.
+    //
+    // Which is also why neither is required. Demanding proof from all seven
+    // produced exactly what the paragraph above describes, a second time:
+    // three services carrying invented claims ("API-led integrations
+    // delivered") that nobody had counted. A practice with no product and no
+    // figure states nothing, and every consumer omits the line rather than
+    // printing "Proven by" with a blank after it. When a client name or a
+    // real count exists, add it here and it appears everywhere at once.
     proves:   reference('products').optional(),
     provenBy: z.string().optional(),
   }).refine(
-    (d) => Boolean(d.proves) !== Boolean(d.provenBy),
-    { message: 'A service needs exactly one of `proves` (a product it shipped) or `provenBy` (a plain claim).' }
+    (d) => !(d.proves && d.provenBy),
+    { message: 'A service has at most one of `proves` (a product it shipped) or `provenBy` (a plain claim) -- not both.' }
   ),
 });
 
