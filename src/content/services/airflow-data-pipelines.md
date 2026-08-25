@@ -7,13 +7,7 @@ excerpt: "Apache Airflow orchestration for enterprise data integration — conne
 proves: algobridge
 ---
 
-## Apache Airflow Data Integration
-
-Enterprise clients move large volumes of data between Salesforce and the systems surrounding it — ERP, data warehouses, databases, REST APIs, and flat files. Airflow gives you a programmatic, observable, retry-capable orchestration layer. We design and build the DAGs that make it work reliably at scale.
-
----
-
-### Why Airflow for Salesforce Integration
+### Why Airflow for Salesforce integration
 
 Salesforce's API limits make naive sync approaches brittle at volume. Airflow solves the key challenges:
 
@@ -23,9 +17,7 @@ Salesforce's API limits make naive sync approaches brittle at volume. Airflow so
 - **Full audit trail** — Every task run, input record count, error, and duration logged and visible in the Airflow web UI
 - **Idempotent design** — DAGs designed to re-run safely — no duplicate records, no orphaned data on retry
 
----
-
-### Medallion Architecture for Salesforce Data
+### Medallion architecture for Salesforce data
 
 We implement the Bronze → Silver → Gold data model to give you clean, query-ready Salesforce data:
 
@@ -35,9 +27,7 @@ We implement the Bronze → Silver → Gold data model to give you clean, query-
 
 **Gold layer** — Business-ready aggregations: opportunity pipeline by account, case resolution metrics, lead conversion funnels, custom KPIs. Loaded into Snowflake or Redshift for BI tools.
 
----
-
-### Integration Patterns We Build
+### Integration patterns we build
 
 **Salesforce → Data Warehouse (One-way sync)**
 Full + incremental loads from Salesforce objects (Account, Contact, Opportunity, Case, custom objects) into Snowflake/Redshift, scheduled daily or hourly.
@@ -54,9 +44,7 @@ Pull from multiple REST endpoints (marketing platforms, payment processors, logi
 **Event-driven triggers**
 Airflow sensors that watch S3 prefix drops, Salesforce Platform Event queues, or database table watermarks before kicking off downstream tasks.
 
----
-
-### Deployment Options
+### Deployment options
 
 **Heroku** — Airflow on Heroku with a PostgreSQL metadata database and worker dynos. Quick to deploy, scales horizontally, close to Heroku Connect workflows.
 
@@ -64,9 +52,7 @@ Airflow sensors that watch S3 prefix drops, Salesforce Platform Event queues, or
 
 **Self-hosted** — Docker Compose or Kubernetes-based Airflow for teams with existing infrastructure. We handle the CeleryExecutor or KubernetesExecutor setup.
 
----
-
-### What You Get
+### What you get
 
 - DAG codebase in Git with CI/CD pipeline for testing and deployment
 - Airflow web UI configured with RBAC for your team
@@ -74,9 +60,7 @@ Airflow sensors that watch S3 prefix drops, Salesforce Platform Event queues, or
 - Runbook documentation covering common failure scenarios
 - Handoff training so your team can extend and maintain the pipelines
 
----
-
-### Typical Scale
+### Typical scale
 
 We've built pipelines handling:
 

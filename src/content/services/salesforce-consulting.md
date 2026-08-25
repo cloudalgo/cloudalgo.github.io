@@ -7,61 +7,47 @@ excerpt: "CRM customization, Experience Cloud, custom Salesforce Platform develo
 provenBy: "70+ projects"
 ---
 
-## Salesforce Consulting & Implementation
+### CRM customisation
 
-We build Salesforce orgs that work the way your business works — not the other way around. Every engagement starts with understanding your actual workflows before we touch a single field or flow.
+Sales Cloud, Service Cloud and Experience Cloud configured for your processes rather than for a demo org.
 
----
+- **Objects & fields** — custom objects, field-level security, picklist standardisation, and layout optimisation per profile
+- **Validation rules & formulas** — business rules enforced at the point of entry, so bad data does not get in
+- **Lightning App Builder** — page layouts and dynamic forms that surface the right information for each user
+- **Process automation** — record-triggered flows, screen flows and scheduled automation that replace manual steps
 
-### CRM Customization
+### Salesforce integrations
 
-Configure Sales Cloud, Service Cloud, and Experience Cloud for your specific processes:
+The right connector for each job, and a written reason for the choice.
 
-- **Objects & fields** — Custom objects, field-level security, picklist standardization, and layout optimization per profile
-- **Validation rules & formulas** — Business rule enforcement that prevents bad data at the point of entry
-- **Lightning App Builder** — Custom page layouts and dynamic forms that surface the right information for each user
-- **Process automation** — Record-triggered flows, screen flows, and scheduled automation that replace manual steps
+- **REST & SOAP callouts** — named credentials, connected apps, OAuth 2.0
+- **Platform Events & Change Data Capture** — event-driven patterns for real-time downstream updates
+- **External Services** — declarative integration with OpenAPI endpoints, callable from Flow
+- **Heroku Connect** — bi-directional PostgreSQL ↔ Salesforce sync, with field mapping that survives a schema change
 
----
+### Lightning Web Components
 
-### Salesforce Integrations
-
-Connect Salesforce to the rest of your stack using the right tool for each job:
-
-- **REST & SOAP callouts** — Named credentials, connected apps, and OAuth 2.0 authentication
-- **Platform Events & Change Data Capture** — Event-driven patterns for real-time downstream system updates
-- **External Services** — Declarative integration with OpenAPI-spec external endpoints, callable from Flow
-- **Heroku Connect** — Bi-directional PostgreSQL ↔ Salesforce sync with field mapping best practices
-
----
-
-### Lightning Web Components (LWC)
-
-When declarative tools hit their limits, we build custom LWC:
+When declarative tools hit their limit, we write the component — and we write it so the next person can read it.
 
 - Complex data tables with inline editing and bulk actions
 - Third-party library integrations (Stripe, maps, charts) via static resources
 - Experience Cloud components with community-aware data access
 - Security-review-ready patterns for AppExchange submissions
 
----
+### AppExchange development
 
-### AppExchange Development
+End-to-end managed package delivery. If this is the whole engagement rather than part of it, [02 — Product development](/services/product-development/) is the shape you want.
 
-End-to-end managed package delivery for the Salesforce marketplace:
-
-- **1GP packages** — Namespace management, patch releases, push upgrades
-- **2GP packages** — Unlocked package architecture and scratch org CI/CD
-- **Security Review** — PMD static analysis, manual code audit, and submission support
+- **1GP packages** — namespace management, patch releases, push upgrades
+- **2GP packages** — unlocked package architecture and scratch-org CI/CD
+- **Security Review** — PMD static analysis, manual code audit, submission support
 - **Subscriber management** — LMA integration, trial management, upgrade handling
 
----
+### Data migration & rollouts
 
-### Data Migration & Rollouts
+Moving data into or within Salesforce without losing a weekend to it.
 
-Moving data into or within Salesforce without losing sleep:
-
-- Bulk insert/update/upsert with full audit trail and rollback capability
-- External ID strategy for idempotent, re-runnable migrations
+- Bulk insert / update / upsert with a full audit trail and rollback
+- **External ID strategy** — so a migration can be re-run instead of unpicked
 - Pre-migration deduplication and post-migration duplicate rules
-- Change set reviews, deployment runbooks, and post-deploy smoke tests
+- Change-set reviews, deployment runbooks, post-deploy smoke tests

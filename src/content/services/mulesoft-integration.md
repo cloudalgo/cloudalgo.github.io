@@ -6,13 +6,7 @@ icon: "🔗"
 excerpt: "API-led connectivity on Anypoint Platform — one reusable API layer between Salesforce, ERP and everything else, instead of point-to-point links nobody can map."
 ---
 
-## MuleSoft Integration
-
-Point-to-point integrations are cheap to build and expensive to own. Every system you add multiplies the connections, and after the third one nobody can say what breaks when a single endpoint goes down. API-led connectivity puts three named layers between your systems, so a change lands in one place instead of six.
-
----
-
-### The Three Layers
+### The three layers
 
 We design, build and document all three, so your team can add the fourth API without calling us.
 
@@ -22,9 +16,7 @@ We design, build and document all three, so your team can add the fourth API wit
 | Process APIs | Order-to-cash, lead-to-quote, the business logic | Composed from the system layer rather than wired to it |
 | Experience APIs | Shaped per consumer — mobile app, partner portal, the org | A consumer's needs change without touching the system below |
 
----
-
-### The Connection Audit
+### The connection audit
 
 Every engagement opens with one, and it is usually the first honest map anyone has had:
 
@@ -33,18 +25,14 @@ Every engagement opens with one, and it is usually the first honest map anyone h
 - **What each one actually moves** — objects, volume, direction, and how fresh it has to be
 - **What breaks when it stops** — the dependency nobody documented
 
----
-
-### Salesforce-Specific Patterns
+### Salesforce-specific patterns
 
 - **Platform Events** — publish-subscribe between the org and Anypoint, so integrations stop polling
 - **Change Data Capture** — the org tells the integration layer what changed, rather than being asked
 - **Bulk API 2.0** — for volume, with governor limits respected by design rather than discovered
 - **External Objects** — reading a system of record without copying it into Salesforce at all
 
----
-
-### Operations and Handover
+### Operations and handover
 
 An integration layer nobody can operate is a liability, so the last phase is the one that makes it yours:
 

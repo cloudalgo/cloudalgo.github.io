@@ -7,13 +7,7 @@ excerpt: "AppExchange product development with 1GP and 2GP managed packages, sec
 proves: pledgivo
 ---
 
-## AppExchange Product Development
-
-Building for the AppExchange is fundamentally different from building internal org solutions. Security Review, multi-org compatibility, namespace constraints, and subscriber lifecycle all demand specialized expertise. We've shipped managed packages and know the pitfalls.
-
----
-
-### Packaging Architecture
+### Packaging architecture
 
 Choosing the right packaging strategy before writing code saves months of painful refactoring:
 
@@ -22,9 +16,7 @@ Choosing the right packaging strategy before writing code saves months of painfu
 - **Namespace strategy** — Selecting, registering, and using a namespace that works across all packaging tiers
 - **Package splitting** — Separating core, UI, and optional modules into independent packages for faster iteration
 
----
-
-### Security Review Preparation
+### Security review preparation
 
 Salesforce's Security Review is a known bottleneck. We prepare you thoroughly:
 
@@ -34,9 +26,7 @@ Salesforce's Security Review is a known bottleneck. We prepare you thoroughly:
 - **XSS & SOQL injection** — Identifying and remediating vulnerabilities in Visualforce, LWC, and Apex
 - **Submission support** — Filling out the submission form, responding to Salesforce reviewer feedback, and resubmission coordination
 
----
-
-### ISV Licensing & Entitlements
+### ISV licensing & entitlements
 
 Monetizing your product through the marketplace requires LMA integration:
 
@@ -45,9 +35,7 @@ Monetizing your product through the marketplace requires LMA integration:
 - **Seat-based licensing** — Per-user license enforcement patterns that don't break during renewals
 - **Pricing tiers** — Multiple edition architectures (Starter, Professional, Enterprise) with feature gating
 
----
-
-### AppExchange Listing & Go-to-Market
+### AppExchange listing & go-to-market
 
 A great product with a weak listing won't convert:
 
@@ -56,9 +44,7 @@ A great product with a weak listing won't convert:
 - **Partner portal setup** — Trailhead Partner Community, Environment Hub, and partner agreement navigation
 - **Post-listing support** — Subscriber onboarding flows, in-app guided setup, and support ticketing process
 
----
-
-### Ongoing Product Maintenance
+### Ongoing product maintenance
 
 AppExchange products require ongoing investment after launch:
 
