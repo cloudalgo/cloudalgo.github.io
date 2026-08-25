@@ -229,16 +229,24 @@
      to at 1200px. */
   --hero-rule-gap: 1.25rem;
 
-  /* The hero's emphasis underline draws itself once on load. The delay
-     lets the headline paint and settle first, so the stroke reads as a
-     mark being made over finished text rather than as part of the page
-     arriving. Duration is longer than --duration-slow on purpose: this
-     is the one deliberate gesture on the fold, and at 0.45s it reads as
-     a glitch rather than a stroke. Easing is the theme's, so a theme
-     that changes the site's motion character changes this too. */
-  --hero-mark-draw-duration: 0.7s;
-  --hero-mark-draw-delay: 0.35s;
-  --hero-mark-draw-ease: var(--ease-out);
+  /* Emphasis mark (.mark) -- the ember rule under the words a headline
+     turns on. Geometry first: the two stops are percentages of the line
+     box, so the rule's thickness and how far it sits below the baseline
+     are one edit each rather than a gradient rewrite. */
+  --mark-color: var(--color-accent);
+  --mark-top: 78%;
+  --mark-bottom: 99%;
+
+  /* .mark--draw strokes itself once on load. The delay lets the headline
+     paint and settle first, so it reads as a mark being made over
+     finished text rather than as part of the page arriving. Duration is
+     longer than --duration-slow on purpose: this is the one deliberate
+     gesture on a fold, and at 0.45s a stroke this long reads as a glitch.
+     Easing is the theme's, so a theme that changes the site's motion
+     character changes this too. */
+  --mark-draw-duration: 0.7s;
+  --mark-draw-delay: 0.35s;
+  --mark-draw-ease: var(--ease-out);
 }
 
 @media (max-width: 991px) {

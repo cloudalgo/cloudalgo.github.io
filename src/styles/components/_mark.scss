@@ -1,0 +1,70 @@
+/* Emphasis mark — the ember rule under the words a headline turns on.
+ *
+ * Two classes, deliberately split. `.mark` is the rule; `.mark--draw`
+ * makes it stroke itself once on load. A hero that wants the emphasis
+ * without the gesture takes the first only, and nothing has to be
+ * un-animated to get there.
+ *
+ * Every page's hero uses this. It lives in components/ rather than in a
+ * section partial for that reason: the home fold was the first consumer,
+ * not the owner. Page heroes are otherwise bespoke (cs-hero, contact-hero,
+ * csd-hero, prod-hero...), so this is the piece they share.
+ */
+
+.mark {
+  text-decoration: none;
+  color: var(--color-heading);
+
+  /* A background gradient, not text-decoration. Three reasons, and the
+     third is the one that matters most here: the rule sits at a
+     controlled height rather than wherever the font's underline metric
+     puts it; it survives a line wrap intact; and background-size can be
+     animated, which text-decoration cannot. */
+  background-image: linear-gradient(
+    transparent var(--mark-top),
+    var(--mark-color) var(--mark-top),
+    var(--mark-color) var(--mark-bottom),
+    transparent var(--mark-bottom)
+  );
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+
+  /* Each line of a wrapped mark gets its own rule rather than one box
+     stretched across both. Also what makes --draw size its stroke per
+     fragment. */
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* The stroke is painted left to right by growing background-size on the
+   x axis only; the y axis stays at 100% so the gradient's stops keep
+   placing the rule under the baseline at every frame.
+ 
+   background-size is a PERCENTAGE of the span's own box, which handles
+   the two things that would otherwise break this: a late webfont swap
+   reflows the headline and simply rescales the stroke mid-draw, and a
+   wrap gives each fragment its own correctly-sized stroke.
+
+   `both`, not `forwards`: with `forwards` the finished rule paints
+   during the delay and then snaps away to draw. Holding the 0% start
+   through the delay is the entire point of having one. */
+.mark--draw {
+  animation: mark-draw var(--mark-draw-duration) var(--mark-draw-ease)
+    var(--mark-draw-delay) both;
+}
+
+@keyframes mark-draw {
+  from { background-size: 0 100%; }
+  to   { background-size: 100% 100%; }
+}
+
+/* Reduced motion drops the draw and keeps the mark. The rule is
+   emphasis, not decoration -- it is the only thing marking which words
+   the sentence turns on, so removing it would remove meaning rather than
+   motion. */
+@media (prefers-reduced-motion: reduce) {
+  .mark--draw {
+    animation: none;
+    background-size: 100% 100%;
+  }
+}
