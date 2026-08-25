@@ -114,12 +114,14 @@ $theme: (
   /* Device chrome inside product mockups. */
   'hardware-800': #1A1A1A,
 
-  /* Type — unchanged. See the header for why. */
-  /* Except this one: an interim value so the contract has all 80 keys
-     and the build stays green. Task 3 replaces it with Archivo. */
-  'family-display': 'Outfit, system-ui, sans-serif',
-  'family-sans': 'Outfit, system-ui, sans-serif',
-  'family-mono': 'ui-monospace, "SF Mono", "Menlo", monospace',
+  /* Type — Archivo for display, Geist for everything else. The
+     webfont is linked in Base.astro, so this half of the change is
+     inert until the <head> moves with it (Task 5). That is deliberate:
+     fonts are the one token family that cannot be flipped from the
+     stylesheet alone, and pretending otherwise renders the fallback. */
+  'family-display': 'Archivo, "Archivo Fallback", system-ui, sans-serif',
+  'family-sans': 'Geist, "Geist Fallback", system-ui, -apple-system, sans-serif',
+  'family-mono': '"Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace',
   'family-system': '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif',
   'family-mono-jetbrains': '"JetBrains Mono", "Fira Code", ui-monospace, monospace',
   'family-mono-sf': '"SF Mono", "Fira Code", ui-monospace, monospace',
@@ -154,15 +156,18 @@ $theme: (
   'display-xs': clamp(1.75rem, 2.5vw, 2.25rem),
   'display-2xs': clamp(1.5rem, 3vw, 2rem),
 
-  /* Radii — the press-room edge. Sharper than monochrome across the
-     board; the pill survives because a pill button is a shape
-     decision, not a radius-scale rung. */
-  'radius-sm': 2px,
-  'radius-md': 3px,
-  'radius-lg': 4px,
-  'radius-xl': 4px,
-  'radius-2xl': 6px,
-  'radius-pill': 100px,
+  /* Radii — the press-room edge, stated by the mock as a single rule:
+     `.hp * { border-radius: 0 }`. Every rung goes to zero, the pill
+     included; a pill button in this design is not a softer rung, it is
+     the wrong shape. The family keeps its six names because renaming
+     it while it happens to be uniform would cost a later theme the
+     ability to be round again. */
+  'radius-sm': 0,
+  'radius-md': 0,
+  'radius-lg': 0,
+  'radius-xl': 0,
+  'radius-2xl': 0,
+  'radius-pill': 0,
 
   /* Motion — a touch quicker and flatter than monochrome's long ease. */
   'ease-out': cubic-bezier(0.2, 0.8, 0.2, 1),
