@@ -1,0 +1,29 @@
+---
+// Fold 5. The one full-bleed surface on the page: the consulting ask,
+// with a client quote beside it as the attribution for that ask.
+//
+// This replaces Testimonials.astro. The quote and the name below are
+// that component's, carried across verbatim rather than reinvented --
+// the sentence is trimmed to the clause the mock quotes, but not a word
+// of it is new. Jessica Lillquist is a real client; do not paraphrase
+// her or swap in a generic title.
+//
+// Static by design, and staying that way: this quote was a Swiper
+// carousel once, which is a control with nothing to control when there
+// is one slide. Do not reintroduce one.
+---
+<section class="band-press anim-fade-up" aria-labelledby="band-ask">
+  <div class="band-press__inner">
+    <h2 id="band-ask" class="band-press__ask">
+      Most orgs do not need more Salesforce. They need <em>less of the wrong Salesforce.</em>
+    </h2>
+
+    <figure class="band-press__quote">
+      <blockquote>
+        <p>Their expertise, dedication, collaboration, and innovative solutions have consistently exceeded our expectations.</p>
+      </blockquote>
+      <figcaption class="band-press__cite">Jessica Lillquist, Minlopro Partners</figcaption>
+      <a class="btn btn-secondary btn-sm" href="/contact/">Book an org review &rarr;</a>
+    </figure>
+  </div>
+</section>

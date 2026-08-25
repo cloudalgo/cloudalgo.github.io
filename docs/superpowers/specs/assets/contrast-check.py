@@ -90,6 +90,22 @@ TEXT_ROLES = [
     ('accent-400', 'ink-900',  4.5),   # ember on an inverse surface
     ('danger-500', 'paper-000', 4.5),  # --color-danger on card
     ('danger-400', 'paper-000', 4.5),  # --color-danger-soft on card (.sw-error-msg)
+
+    # The ember band (fold 5). Its quote plate is an accent-050 surface --
+    # a THIRD background, lighter than both page and card, so these rungs
+    # are not covered by any row above.
+    ('ink-860',   'accent-050', 4.5),  # --color-prose on the band's quote plate
+    ('ink-400',   'accent-050', 4.5),  # --color-text-muted on the band's cite
+    ('accent-050', 'ink-900',   4.5),  # the band CTA's pale label on its ink fill
+
+    # The ONE role in the palette held to WCAG's large-text floor rather
+    # than 4.5. White on ember measures ~3.2:1 and is legal only as large
+    # text; --color-on-accent-display exists to name that and its comment
+    # in _semantic.scss carries the conditions. The band's headline is the
+    # sole consumer: bold, with a clamp floor of 1.5rem, which is 20.4px
+    # even after the root drops to 85% at 1200px -- clear of the 18.66px
+    # bold threshold. If a second consumer appears, re-derive this row.
+    ('paper-000', 'accent-500', 3.0),  # --color-on-accent-display, large text only
 ]
 
 # ALLOWLIST -- white-over-inverse text under AA, tracked on purpose.

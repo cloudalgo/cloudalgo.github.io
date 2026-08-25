@@ -36,7 +36,6 @@
 @use 'components/service-cards';
 @use 'components/stats';
 @use 'components/proof-strip';
-@use 'components/testimonials';
 
 @use 'sections/blog-featured';
 @use 'components/blog-cards';
@@ -49,6 +48,7 @@
 @use 'sections/products-press';
 @use 'sections/services';
 @use 'sections/services-press';
+@use 'sections/band-press';
 @use 'sections/industries';
 @use 'components/forms';
 

@@ -266,6 +266,17 @@
   --color-accent: var(--accent-500);
   --color-accent-hover: var(--accent-600);
   --color-on-accent: var(--accent-on);
+  /* The SECOND ink on ember, and the only one that is size-conditional.
+     `--color-on-accent` is near-black at 6.17:1 and safe anywhere; this
+     one is white at 3.2:1, which clears WCAG's 3:1 floor for large text
+     and nothing else. Read it ONLY from a rule that also sets a bold
+     weight and a size that cannot fall below 18.66px -- remember the
+     root drops to 85% at 1200px, so a 1.35rem clamp floor lands at
+     18.36px and would put this under the line. The band's headline is
+     the one consumer and pins its clamp floor at 1.5rem for exactly
+     that reason. For body copy, buttons or captions on ember, use
+     --color-on-accent. */
+  --color-on-accent-display: var(--paper-000);
 
   /* Focus. The halo sits between the element and the ring so the
      indicator stays visible on both paper and inverse surfaces. */

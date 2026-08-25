@@ -1,0 +1,96 @@
+/* ─── Fold 5: the ember band ───────────────────────────────
+   Ported from docs/superpowers/specs/assets/home-mock.css
+   (`.hp__band`, `.hp__quote`). Geometry is the mock's; every colour
+   is a token.
+
+   Filed under sections/ as `band-press`, not components/ as `band`:
+   it is one page fold with one instance, exactly like hero-press,
+   products-press and services-press, and it belongs beside them.
+
+   The one full-bleed surface on the page. `.band-press` paints ember
+   edge to edge and `.band-press__inner` re-establishes the container,
+   so the band bleeds while its type stays on the same measure as
+   every fold above it.
+
+   Two inks land on the ember here, and the difference is not
+   cosmetic. The highlighted words and the caption take
+   --color-on-accent (near-black, 6.17:1, safe at any size). The
+   headline takes --color-on-accent-display (white, 3.2:1), which is
+   legal ONLY as large text -- hence the bold weight and the 1.5rem
+   clamp floor below, which survives the 85% root at 1200px with room
+   to spare. Do not lower that floor, and do not reach for the white
+   anywhere else on this band. */
+
+.band-press {
+  margin-top: 2.875rem;
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  padding: 2rem var(--container-pad);
+}
+
+.band-press__inner {
+  max-width: var(--container-max);
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 2rem;
+  align-items: center;
+}
+
+/* The ask. White on ember, with the turn of the sentence set back in
+   ink so the contrast carries the emphasis rather than a rule or a
+   weight change. */
+.band-press__ask {
+  margin: 0;
+  max-width: 24ch;
+  font-family: var(--font-heading);
+  font-weight: var(--weight-bold);
+  font-size: clamp(1.5rem, 3vw, 1.95rem);
+  line-height: 1.14;
+  letter-spacing: -0.015em;
+  color: var(--color-on-accent-display);
+  text-wrap: balance;
+}
+
+.band-press__ask em {
+  font-style: normal;
+  color: var(--color-on-accent);
+}
+
+/* The quote is the attribution for the ask, not a standalone
+   testimonial: it sits beside the sentence it is evidence for. The
+   pale plate lifts it off the ember so the quote reads as a citation
+   rather than as more band copy. */
+.band-press__quote {
+  margin: 0;
+  background: var(--surface-wash-accent);
+  border-left: 4px solid var(--color-accent);
+  padding: 1.25rem 1.375rem;
+}
+
+.band-press__quote p {
+  margin: 0;
+  font-size: var(--size-body-sm);
+  line-height: 1.55;
+  color: var(--color-prose);
+}
+
+.band-press__cite {
+  display: block;
+  margin-top: 0.625rem;
+  font-style: normal;
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.band-press__quote .btn { margin-top: 1rem; }
+
+@media (max-width: 860px) {
+  .band-press__inner {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+}
