@@ -1032,6 +1032,7 @@ Fold 3. One featured product with chips and buttons, then three rows. The produc
 - Modify: `src/components/sections/ProductsSection.astro` (full rewrite)
 - Create: `src/styles/sections/_products-press.scss`
 - Modify: `src/styles/main.scss`
+- Modify: `src/pages/index.astro` (move the mount up — see Step 3)
 
 **Interfaces:**
 - Consumes: the `products` collection — `title`, `status` (`'ga' | 'preview' | 'beta'`), `type`, `tagline`, `excerpt`, `externalUrl?`, `order`.
@@ -1174,7 +1175,26 @@ const TYPE_LABEL: Record<string, string> = {
 
 Note `p.id`, not `p.slug` — the Astro content-layer change this repo already hit.
 
-- [ ] **Step 3: Register and verify**
+- [ ] **Step 3: Move the mount above Services**
+
+The spec puts products before services -- the products are the proof the
+services work, so they argue first. In the current `index.astro` the mount
+sits fifth, below `Testimonials`. Move it to directly under `ProofStrip`:
+
+```bash
+sed -i '' '/^  <ProductsSection \/>$/d' src/pages/index.astro
+sed -i '' 's|^  <ProofStrip />|  <ProofStrip />\n  <ProductsSection />|' src/pages/index.astro
+grep -n "<[A-Z]" src/pages/index.astro
+```
+
+Expected, in order: `Hero`, `ProofStrip`, `ProductsSection`, `Services`,
+`WhyUs`, `Testimonials`, `BlogPreview`. The last three are still the old
+sections -- Tasks 10, 11 and 12 replace them in place, which is why moving
+products now is what lands the final order Task 15 asserts.
+
+Leave the `import` lines alone; only the mount order renders.
+
+- [ ] **Step 4: Register and verify**
 
 ```bash
 sed -i '' "s|^@use 'sections/services';|@use 'sections/products-press';\n@use 'sections/services';|" src/styles/main.scss
@@ -1185,10 +1205,10 @@ npm run preview
 
 Open `/`. Confirm: the featured panel is ember-washed with a visible inner rule, three rows follow with a filled dot on GA and a hollow ring otherwise, and every product link resolves (click each one — a broken `p.id` route shows up as a 404, not a build error).
 
-- [ ] **Step 4: Commit**
+- [ ] **Step 5: Commit**
 
 ```bash
-git add src/components/sections/ProductsSection.astro src/styles/sections/_products-press.scss src/styles/main.scss
+git add src/components/sections/ProductsSection.astro src/styles/sections/_products-press.scss src/styles/main.scss src/pages/index.astro
 git commit -m "feat(home): products as one featured panel and three rows
 
 status and type were already in the collection schema, so the live dot
