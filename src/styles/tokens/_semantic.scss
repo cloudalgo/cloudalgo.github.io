@@ -269,7 +269,11 @@
   --color-danger-soft: var(--danger-400);
 
   /* Type roles */
-  --font-heading: var(--family-sans);
+  /* The heading role reads the DISPLAY slot, not the sans one. A theme
+     that wants one typeface sets family-display equal to family-sans
+     and nothing here changes; a theme that wants two gets them without
+     a single component learning a second font name. */
+  --font-heading: var(--family-display);
   --font-body: var(--family-sans);
   --font-mono: var(--family-mono);
 
