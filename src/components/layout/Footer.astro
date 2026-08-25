@@ -1,5 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
+import BrandLockup from '@/components/ui/BrandLockup.astro';
 
 // Folds 8 and 9: the consulting ask, then the colophon.
 //
@@ -53,7 +54,7 @@ const services = (await getCollection('services')).sort(
     <div class="ca-footer-grid">
       <div class="ca-fbrand">
         <a href="/" class="ca-fbrand-logo" aria-label="CloudAlgo home">
-          <img src="/email-logo-dark.svg" alt="CloudAlgo" width="174" height="32" />
+          <BrandLockup class="brand-lockup--footer" />
         </a>
         <p class="ca-fbrand-desc">
           A Salesforce Consulting Partner since 2019. We build on Salesforce and

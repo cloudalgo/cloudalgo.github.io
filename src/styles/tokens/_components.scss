@@ -5,21 +5,36 @@
 
 :root {
   /* Header */
-  /* Brand lockup. Sizes are the mock's 21px wordmark and 17px mark at a
-     16px root, held in rem so they follow the 85% root the layout drops
-     to at 1200px. The mark's fill is the accent rather than a literal
-     ember: a theme that moves the brand colour moves the logo with it. */
-  --brand-gap: 0.5625rem;
-  --brand-mark-size: 1.0625rem;
-  --brand-wordmark-size: 1.3125rem;
-  --brand-mark-fill: var(--color-accent);
+  /* Brand lockup. One height drives it; the 291:53 artwork supplies the
+     width. 40px at a 16px root, held in rem so it follows the 85% root
+     the layout drops to at 1200px. The lockup is now the tallest thing
+     in the bar -- taller than the 35.5px nav row it used to sit inside --
+     so it, not the CTA, is what --header-h is measured against. An
+     earlier 28px floated inside that row and read as a small mark set in
+     a large header.
 
-  /* Measured, not derived: the tallest thing in the bar is the CTA, not
-     the brand lockup, and it renders at 68.5px inside 2 x 1rem padding.
-     Rounded up to 70px so the offset this token buys -- the hero's top
-     padding and every anchor's scroll-margin -- clears rather than
-     grazes. */
-  --header-h: 4.375rem;
+     The four fills are the artwork's own values, not theme roles, and
+     that is deliberate: a logo is the one mark on the page that must NOT
+     drift when the palette does. They are tokens anyway so an inverse
+     surface has somewhere to reach -- --logo-word is near-black and would
+     disappear on a dark ground, and a theme that needs it light overrides
+     this one knob rather than shipping a second SVG. The ember happens to
+     equal --color-accent under press-room; that is the theme matching the
+     brand, not the logo following the theme. */
+  --brand-lockup-height: 2.5rem;
+  --logo-ember: #F75A41;
+  --logo-slate: #4D4D4D;
+  --logo-spark: #F1F1F1;
+  --logo-word: #000000;
+
+  /* Measured, not derived: the tallest thing in the bar is the brand
+     lockup at --brand-lockup-height, and the bar renders at 73px inside
+     2 x 1rem padding. Rounded up to 74px so the offset this token buys --
+     the hero's top padding and every anchor's scroll-margin -- clears
+     rather than grazes. Re-measure it whenever the lockup height moves;
+     it took over from the CTA (68.5px) when the lockup grew past the nav
+     row. */
+  --header-h: 4.625rem;
   /* The header is flush with the page, not a white card floating on it.
      The mock's top bar (.hp__top) declares no background of its own and
      sits on the same paper as the fold below it, parted only by a rule.

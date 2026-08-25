@@ -1,4 +1,6 @@
 ---
+import BrandLockup from '@/components/ui/BrandLockup.astro';
+
 // Nav set and labels follow the approved mock (.hp__nav in
 // docs/superpowers/specs/assets/home-mock.html): five destinations in
 // sentence case, products first. Home is the wordmark and Contact is the
@@ -18,10 +20,7 @@ const isActive = (href: string) =>
 <header class="header" id="site-header">
   <div class="navbar">
     <a href="/" class="navbar-brand" aria-label="CloudAlgo home">
-      <svg class="brand-mark" viewBox="105 0 145 100" aria-hidden="true" focusable="false">
-        <path d="M133.92 25.975h64.037v64.551H133.92zM189.213 40.891h33.69v33.69h-33.69zM115.66 40.891h30.862v30.861H115.66z" />
-      </svg>
-      <span class="brand-wordmark">CloudAlgo</span>
+      <BrandLockup />
     </a>
 
     <nav class="nav-desktop">

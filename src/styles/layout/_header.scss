@@ -75,37 +75,34 @@ main[id] {
   margin: 0 auto;
 }
 
-/* The lockup the mock draws (.hp__wordmark): the ember mark set against
-   the wordmark in the display face, not a flat raster of both. Two
-   reasons it is inline SVG rather than an <img>. The mark's fill is a
-   token, so it follows a theme swap like everything else -- an image
-   file cannot. And the word is real text in --font-heading, so it reads
-   at the same weight and tracking as the headings below it instead of
-   being a picture of a different typeface. The <img> this replaced was
-   /email-logo-dark.svg, an asset built for email templates. */
+/* The real brand lockup, one artwork carrying both the mark and the word.
+   An earlier pass drew a stand-in mark beside the word set in
+   --font-heading; that let the wordmark follow a type swap, but the
+   wordmark is drawn lettering, not Archivo, so it was never the brand's
+   word. The component (BrandLockup.astro) inlines the SVG so its four
+   fills stay addressable as tokens -- an <img> is an isolated document
+   and would freeze them at their fallbacks. */
 .navbar-brand {
   display: inline-flex;
   align-items: center;
-  gap: var(--brand-gap);
   text-decoration: none;
-  color: var(--color-heading);
   transition: opacity 0.2s;
 }
 .navbar-brand:hover { opacity: 0.75; }
 
-.brand-mark {
-  height: var(--brand-mark-size);
-  width: auto;
+/* The wrapper is inline-flex so it collapses onto the SVG exactly -- an
+   inline span would leave a descender's worth of line-box under the mark
+   and push the lockup off the bar's optical centre. Height drives it and
+   width follows the 291:53 viewBox. */
+.brand-lockup {
+  display: inline-flex;
   flex: none;
-  fill: var(--brand-mark-fill);
 }
 
-.brand-wordmark {
-  font-family: var(--font-heading);
-  font-weight: var(--weight-extrabold);
-  font-size: var(--brand-wordmark-size);
-  letter-spacing: -0.03em;
-  line-height: 1;
+.brand-lockup svg {
+  height: var(--brand-lockup-height);
+  width: auto;
+  display: block;
 }
 
 .nav-links {

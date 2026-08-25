@@ -1,0 +1,24 @@
+---
+/* The CloudAlgo lockup, inlined rather than <img>-linked so its fills
+   resolve against the page's custom properties -- an <img> is an isolated
+   document and would freeze the mark at its fallback colours, which is the
+   whole reason the four --logo-* knobs exist.
+
+   The SVG file is the single source of truth: it is imported raw, never
+   transcribed here. Its source is the brand's 291x53 lockup (the same
+   artwork public/email-logo-dark.svg carries for mail clients), reduced
+   from 41 paths to the 17 that are actually visible -- the export stacked
+   the ember group over an identical hidden group and repeated the grey and
+   light groups four and two times over. Verified by canvas pixel diff
+   against the untouched export: 6 differing pixels at 1164px wide, all
+   anti-alias edges left by that overpaint. */
+import lockup from '@/assets/brand/logo-lockup.svg?raw';
+
+interface Props {
+  /** Extra classes for the wrapper, e.g. a size variant. */
+  class?: string;
+}
+const { class: className } = Astro.props;
+---
+
+<span class:list={['brand-lockup', className]} set:html={lockup} />

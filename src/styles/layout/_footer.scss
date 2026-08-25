@@ -78,7 +78,12 @@
 }
 
 /* Imprint */
-.ca-fbrand-logo img { display: block; margin-bottom: 0.75rem; }
+/* The same lockup component the header uses, one rung larger -- the
+   colophon has the room and the mark is the block's only image. It sits
+   on the paper surface here, not an inverse one, so the near-black
+   wordmark keeps its contrast and needs no --logo-word override. */
+.ca-fbrand-logo { display: inline-block; margin-bottom: 0.75rem; }
+.brand-lockup--footer svg { height: 2rem; }
 .ca-fbrand-desc {
   margin: 0;
   max-width: 32ch;
