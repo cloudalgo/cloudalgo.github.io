@@ -8,9 +8,9 @@
    they live in layout/_section-press.scss. A shared shell owned by one
    section is how a system rots.
 
-   `.products-press__type` and `.products-press__status` are the two
-   atoms this fold shares with the services fold (Task 10); they stay
-   here only until that task needs them, at which point they move.
+   The row eyebrow moved out when the services fold needed it: it is
+   `.section-press__type` now, in layout/_section-press.scss.
+   `.products-press__status` stays -- a service row has no status.
 
    The featured panel is the one ember-washed surface on the page --
    --surface-wash-accent for its ground, --border-accent-soft for the
@@ -171,14 +171,6 @@
 
 .products-press__row + .products-press__row {
   border-top: 1px solid var(--border-default);
-}
-
-.products-press__type {
-  font-family: var(--font-mono);
-  font-size: var(--size-label);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--color-text-muted);
 }
 
 .products-press__rname {

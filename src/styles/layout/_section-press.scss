@@ -46,3 +46,15 @@
 }
 
 .section-press__all:hover { color: var(--color-accent-hover); }
+
+/* The row eyebrow -- the first cell of a product row and of a service
+   row. Two folds render the same mono label ("Integration", "Support"),
+   so it sits with the shell rather than in whichever section happened
+   to be built first. */
+.section-press__type {
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}

@@ -1,55 +1,88 @@
----import Button from '../ui/Button.astro';
-import SectionLabel from '../ui/SectionLabel.astro';
-
-const services = [
-  {
-    icon: `<svg class="svc-icon" width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg"><path d="M20.42 14.71H13.62a5.6 5.6 0 1 1 5.37-7.2h1.43a3.6 3.6 0 1 1 0 7.2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M16 14.71V23.5M5 23.5V20a1.5 1.5 0 0 1 1.5-1.5h19A1.5 1.5 0 0 1 27 20v3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle class="svc-node" cx="5" cy="26" r="2.5" fill="currentColor"/><circle class="svc-node" cx="16" cy="26" r="2.5" fill="currentColor"/><circle class="svc-node" cx="27" cy="26" r="2.5" fill="currentColor"/></svg>`,
-    title: 'Salesforce Consulting',
-    body: 'CRM customization, Experience Cloud, custom Salesforce Platform development, MuleSoft integrations, and Heroku solutions.',
-    href: '/services/salesforce-consulting',
-  },
-  {
-    icon: `<svg class="svc-icon" width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg"><g class="svc-cube"><path d="M28 21.33V10.67a2.67 2.67 0 0 0-1.33-2.31l-9.34-5.33a2.67 2.67 0 0 0-2.66 0L5.33 8.36A2.67 2.67 0 0 0 4 10.67v10.66a2.67 2.67 0 0 0 1.33 2.31l9.34 5.33a2.67 2.67 0 0 0 2.66 0l9.34-5.33A2.67 2.67 0 0 0 28 21.33Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="m4.39 9.33 11.61 6.67 11.61-6.67M16 29.33V16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="m22.07 12.55-12-6.88" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></g></svg>`,
-    title: 'Product Development',
-    body: 'AppExchange product development with 1GP and 2GP managed packages, security review readiness, and ISV strategy.',
-    href: '/services/product-development',
-  },
-  {
-    icon: `<svg class="svc-icon" width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg"><g class="svc-ring"><circle cx="16" cy="16" r="13.33" stroke="currentColor" stroke-width="2"/><circle cx="16" cy="16" r="5.33" stroke="currentColor" stroke-width="2"/><path d="m6.57 6.57 5.66 5.66m7.54 0 5.66-5.66m-5.66 13.2 5.66 5.66m-13.2-5.66-5.66 5.66" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></g></svg>`,
-    title: 'Support & Managed Services',
-    body: 'Ongoing support, maintenance, enhancements, org health reviews, and security recommendations for your Salesforce environment.',
-    href: '/services/support-and-managed-services',
-  },
-];
 ---
-<section style="background:var(--surface-page);padding:6rem 0;position:relative;overflow:hidden;">
-  <!-- Parallax decorative shapes -->
-  <div data-parallax="0.09" style="position:absolute;top:-60px;right:-50px;width:220px;height:220px;border-radius:50%;border:1.5px solid var(--border-strong);opacity:0.05;pointer-events:none;" aria-hidden="true"></div>
-  <div data-parallax="0.17" style="position:absolute;bottom:40px;left:5%;width:9px;height:9px;border-radius:50%;background:var(--surface-inverse);opacity:0.1;pointer-events:none;" aria-hidden="true"></div>
-  <div data-parallax="0.12" style="position:absolute;top:35%;right:9%;width:6px;height:6px;border-radius:50%;background:var(--surface-inverse);opacity:0.07;pointer-events:none;" aria-hidden="true"></div>
-  <div style="max-width:var(--container-max);margin:0 auto;padding:0 1.5rem;">
-    <SectionLabel class="anim-fade-up">What we do</SectionLabel>
-    <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:3rem;gap:1rem;flex-wrap:wrap;">
-      <h2 class="section-title section-title--3xl anim-fade-up" style="margin:0;max-width:500px;transition-delay:0.05s;">
-        Expert services,<br/>end to end.
-      </h2>
-      <p style="max-width:380px;color:var(--color-text);font-size:1rem;line-height:1.7;margin:0;">
-        Specialized Salesforce and Heroku consulting for teams that want clean, scalable implementations.
-      </p>
-    </div>
-    <div class="row">
-      {services.map((s, i) => (
-        <div class="col-lg-4 col-md-4" style="margin-bottom:1.5rem;display:flex;">
-          <div class="card-bg anim-scale-pop" style={`transition-delay:${i * 0.1}s`}>
-            <div class="card-icon" set:html={s.icon} />
-            <h3 class="card-text" style="font-size:1.25rem;">{s.title}</h3>
-            <p>{s.body}</p>
-            <Button href={s.href} variant="outline" size="sm" style="align-self:flex-start;">
-              Learn more &rarr;
-            </Button>
-          </div>
+// Fold 4. Structure follows docs/superpowers/specs/assets/home-mock.html
+// (the `04 services` block): four rows, same shape as the product rows
+// above them, so a buyer and a developer read the page the same way.
+//
+// The right-hand cell is the join. `proves` is a reference into the
+// products collection, so every service on this page points at
+// something shipped -- which is the whole reason the field is required.
+// This is also where "Why us" went: a section of claims with nothing
+// attached to them became one claim per row, each next to the thing
+// that earned it.
+//
+// Names and order come from the collection. The type label and the row
+// blurb do not -- both are written for this fold and are shorter than
+// any collection field -- so they live in HOME below, keyed by id, with
+// the excerpt as the fallback. A fifth service renders the day it is
+// added.
+import { getCollection, getEntry } from 'astro:content';
+
+const services = (await getCollection('services')).sort(
+  (a, b) => a.data.order - b.data.order
+);
+
+const proofs = new Map(
+  await Promise.all(
+    services.map(async (s) => {
+      const product = await getEntry(s.data.proves);
+      return [s.id, product] as const;
+    })
+  )
+);
+
+type HomeCopy = { type: string; blurb: string };
+
+const HOME: Record<string, HomeCopy> = {
+  'salesforce-consulting': {
+    type: 'Consulting',
+    blurb:
+      'The build, done so your admins can still change it. CRM configuration, ' +
+      'Experience Cloud, custom Platform development, MuleSoft and Heroku.',
+  },
+  'product-development': {
+    type: 'Product',
+    blurb:
+      'Get through security review the first time. 1GP and 2GP managed packages, ' +
+      'and the ISV decisions that are expensive to reverse later.',
+  },
+  'support-and-managed-services': {
+    type: 'Support',
+    blurb:
+      'Keep the org healthy between projects. Enhancements, health reviews and ' +
+      'security fixes on a retainer, not an emergency call.',
+  },
+  'airflow-data-pipelines': {
+    type: 'Data',
+    blurb:
+      'Move data between Salesforce and everything else, on a schedule that ' +
+      'recovers itself. Airflow across ERP systems, databases and APIs.',
+  },
+};
+---
+<section class="section-press anim-fade-up" aria-labelledby="services-heading">
+  <div class="section-press__head">
+    <h2 id="services-heading" class="section-title section-title--xs section-title--tighter section-press__title">
+      And the team that builds them.
+    </h2>
+    <a class="section-press__all" href="/services/">All services &rarr;</a>
+  </div>
+
+  <div class="services-press">
+    {services.map((s) => {
+      const proof = proofs.get(s.id);
+      return (
+        <div class="services-press__row">
+          <span class="section-press__type">{HOME[s.id]?.type}</span>
+          <h3 class="services-press__name"><a href={`/services/${s.id}/`}>{s.data.title}</a></h3>
+          <p class="services-press__desc">{HOME[s.id]?.blurb ?? s.data.excerpt}</p>
+          <span class="services-press__proves">
+            Proven by
+            {proof && (
+              <em><a href={`/products/${proof.id}/`}>{proof.data.title}</a></em>
+            )}
+          </span>
         </div>
-      ))}
-    </div>
+      );
+    })}
   </div>
 </section>

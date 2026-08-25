@@ -1,0 +1,79 @@
+/* ─── Fold 4: services ────────────────────────────────────
+   Ported from docs/superpowers/specs/assets/home-mock.css
+   (`.hp__svc`, `.hp__svcrow`, `.hp__proves`). Geometry is the mock's;
+   every colour is a token.
+
+   The same four-column row as the products fold, one column narrower
+   on the right -- a proof cell holds two short lines, a ship note holds
+   two long ones. Both read `.section-press__type` for their first cell.
+
+   `.section-press` and its head atoms are NOT here; four folds share
+   them, from layout/_section-press.scss.
+
+   The mock's 11px proof cell is raised to --size-label for the same
+   reason as the products fold: the root scales to 85% at 1200px. */
+
+.services-press {
+  margin-top: 1rem;
+  border-top: 1px solid var(--border-default);
+}
+
+.services-press__row {
+  display: grid;
+  grid-template-columns: 6.5rem 12.5rem 1fr 8.25rem;
+  gap: 1.5rem;
+  align-items: baseline;
+  padding: 1.125rem 0;
+}
+
+.services-press__row + .services-press__row {
+  border-top: 1px solid var(--border-default);
+}
+
+.services-press__name {
+  font-family: var(--font-heading);
+  font-weight: var(--weight-bold);
+  font-size: 1.25rem;
+  letter-spacing: -0.015em;
+  line-height: 1.18;
+  margin: 0;
+}
+
+.services-press__name a { color: inherit; }
+.services-press__name a:hover { color: var(--color-accent-hover); }
+
+.services-press__desc {
+  margin: 0;
+  font-size: var(--size-body-sm);
+  color: var(--color-prose);
+  line-height: 1.55;
+}
+
+/* The join, rendered. "Proven by" is the label; the product beneath it
+   is the claim, so it carries the weight and the ink -- and it is a
+   link, because the thing that proves the service is a page away. */
+.services-press__proves {
+  font-size: var(--size-label);
+  line-height: 1.5;
+  color: var(--color-text-muted);
+  text-align: right;
+}
+
+.services-press__proves em {
+  font-style: normal;
+  display: block;
+  font-weight: var(--weight-bold);
+  color: var(--color-heading);
+  margin-top: 0.1875rem;
+}
+
+.services-press__proves a { color: inherit; }
+.services-press__proves a:hover { color: var(--color-accent-hover); }
+
+@media (max-width: 860px) {
+  /* Type stays in its own column, everything else stacks beside it. */
+  .services-press__row { grid-template-columns: 6.5rem 1fr; }
+  .services-press__row > :nth-child(3),
+  .services-press__row > :nth-child(4) { grid-column: 2; }
+  .services-press__proves { text-align: left; }
+}

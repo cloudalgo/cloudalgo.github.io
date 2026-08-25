@@ -4,7 +4,4 @@
 .anim-fade-up.in-view, .anim-scale-pop.in-view { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) {
   .anim-fade-up, .anim-scale-pop { opacity: 1; transform: none; transition: none; }
-  .svc-node, .svc-cube, .svc-ring { transition: none; }
-  .card-bg:hover .svc-node, .card-bg:hover .svc-cube, .card-bg:hover .svc-ring { transform: none; }
-  .card-bg.in-view .svc-node, .card-bg.in-view .svc-cube, .card-bg.in-view .svc-ring { animation: none; }
 }

@@ -158,7 +158,7 @@ const showScoring = featured.id === 'orgvitals';
   <div class="products-press__rows">
     {rest.map((p) => (
       <div class="products-press__row">
-        <span class="products-press__type">{TYPE_LABEL[p.data.type]}</span>
+        <span class="section-press__type">{TYPE_LABEL[p.data.type]}</span>
         <div>
           <h3 class="products-press__rname"><a href={`/products/${p.id}/`}>{p.data.title}</a></h3>
           <p class="products-press__rmeta">
