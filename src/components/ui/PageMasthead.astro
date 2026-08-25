@@ -46,6 +46,13 @@ const { crumbs, facts = [], class: className } = Astro.props;
       {Astro.slots.has('lede') && (
         <p class="page-head__lede"><slot name="lede" /></p>
       )}
+      {/* An index page is a place to choose from, so it ends in a list
+          and needs no buttons up here. A detail page is one thing, and
+          the ask belongs beside the headline rather than at the foot of
+          the page a reader may never reach. */}
+      {Astro.slots.has('actions') && (
+        <div class="btn-row page-head__actions"><slot name="actions" /></div>
+      )}
     </div>
 
     {facts.length > 0 && (

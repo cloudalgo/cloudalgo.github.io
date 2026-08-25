@@ -1,0 +1,50 @@
+---
+/**
+ * Where a detail page ends: the two engagements either side of this one.
+ *
+ * The catalogue's closing block asks "ready to work together?", which on
+ * a page about ONE engagement is the wrong question -- the reader has
+ * already been asked, twice, in the masthead. A reader who got to the
+ * foot of this page and did not book a call is not undecided about
+ * CloudAlgo; they are on the wrong engagement. So the foot of the page
+ * hands them the next one instead of repeating the ask.
+ */
+
+export interface PagerLink {
+  href: string;
+  /** The engagement's numeral, printed as given. Omitted at either end
+      of the run, where the link back to the index has no number. */
+  n?: string;
+  name: string;
+  /** What you are buying -- the same stamp the index prints. */
+  shape: string;
+}
+
+interface Props {
+  /* Both are always filled: at either end of the run the missing
+     neighbour is the index itself, which is where a reader who has run
+     out of engagements in that direction wants to go. */
+  prev?: PagerLink;
+  next?: PagerLink;
+  class?: string;
+}
+const { prev, next, class: className } = Astro.props;
+---
+<nav class:list={['pager', className]} aria-label="Engagements">
+  <div class="pager__grid">
+    {prev && (
+      <a class="pager__link pager__link--prev" href={prev.href}>
+        <span class="pager__dir">Previous</span>
+        <span class="pager__name">{prev.n && <span class="pager__n">{prev.n}</span>}{prev.name}</span>
+        <span class="pager__shape">{prev.shape}</span>
+      </a>
+    )}
+    {next && (
+      <a class="pager__link pager__link--next" href={next.href}>
+        <span class="pager__dir">Next</span>
+        <span class="pager__name">{next.n && <span class="pager__n">{next.n}</span>}{next.name}</span>
+        <span class="pager__shape">{next.shape}</span>
+      </a>
+    )}
+  </div>
+</nav>

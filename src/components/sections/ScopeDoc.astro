@@ -1,0 +1,92 @@
+---
+/**
+ * The engagement's scope, set as a document: a sticky rail of what the
+ * engagement covers, and the prose itself at a reading measure.
+ *
+ * The body is a slot rather than a prop because most of it is the
+ * service's own markdown, rendered by the content layer. That means the
+ * sections arrive FLAT -- an h3 followed by paragraphs and lists, no
+ * wrapper per section -- so the stylesheet numbers and rules them off
+ * with a counter and `h3:not(:first-child)` instead of a class the
+ * markdown cannot carry.
+ *
+ * The rail is built by the caller, not read from the DOM, because two of
+ * the sections on the retainer are typed devices rather than prose and
+ * only the caller knows the order they were composed in.
+ */
+
+export interface ScopeItem {
+  /** The section's anchor. For markdown sections this is Astro's own
+      auto-generated heading slug. */
+  id: string;
+  text: string;
+}
+
+interface Props {
+  /** Labels the rail: what this list IS, not "Contents". */
+  label: string;
+  items: ScopeItem[];
+  /** The one line that says what the whole scope amounts to. */
+  lede: string;
+  class?: string;
+}
+const { label, items, lede, class: className } = Astro.props;
+---
+<div class:list={['scope', className]}>
+  <nav class="scope__rail" aria-label={label}>
+    <p class="scope__rail-label">{label}</p>
+    <ol>
+      {items.map((item) => (
+        <li><a href={`#${item.id}`}>{item.text}</a></li>
+      ))}
+    </ol>
+  </nav>
+
+  <div class="scope__doc">
+    <p class="scope__lede">{lede}</p>
+    <slot />
+  </div>
+</div>
+
+{/* Marks the rail entry for whatever section you are reading. Nothing
+    here is load-bearing: without it the rail is still a working list of
+    in-page links, which is why it is a progressive enhancement rather
+    than something the markup depends on. */}
+<script>
+  const rail = document.querySelector<HTMLElement>('.scope__rail');
+  const doc = document.querySelector<HTMLElement>('.scope__doc');
+
+  if (rail && doc) {
+    const links = new Map<string, HTMLAnchorElement>();
+    rail.querySelectorAll<HTMLAnchorElement>('a[href^="#"]').forEach((a) => {
+      links.set(decodeURIComponent(a.hash.slice(1)), a);
+    });
+
+    const headings = [...doc.querySelectorAll<HTMLElement>('h3[id]')]
+      .filter((h) => links.has(h.id));
+
+    const mark = (id: string) => {
+      links.forEach((a, key) => {
+        if (key === id) a.setAttribute('aria-current', 'true');
+        else a.removeAttribute('aria-current');
+      });
+    };
+
+    /* The topmost heading that has already passed the header. Reading
+       position, not intersection: a section taller than the viewport
+       would otherwise leave nothing marked at all. */
+    const sync = () => {
+      const line = 140;
+      let current = headings[0];
+      for (const h of headings) {
+        if (h.getBoundingClientRect().top <= line) current = h;
+      }
+      if (current) mark(current.id);
+    };
+
+    if (headings.length) {
+      sync();
+      addEventListener('scroll', () => requestAnimationFrame(sync), { passive: true });
+    }
+  }
+</script>

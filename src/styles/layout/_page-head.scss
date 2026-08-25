@@ -91,6 +91,10 @@
   text-align: right;
 }
 
+/* Only the detail pages fill this slot. The row itself is .btn-row, so
+   all this adds is the gap between the copy and the ask. */
+.page-head__actions { margin-top: 1.875rem; }
+
 @media (max-width: 900px) {
   .page-head__grid {
     grid-template-columns: 1fr;

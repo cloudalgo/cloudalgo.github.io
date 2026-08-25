@@ -1,0 +1,91 @@
+/* The two engagements either side of this one, at the foot of a detail
+   page. Two links on a ruled row -- deliberately not a card, not a
+   band, and not a repeat of the ask: the page has already asked twice,
+   and what is left to offer a reader who did not take it is the next
+   engagement along. */
+
+.pager {
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding: 0 var(--container-pad) 3.5rem;
+}
+
+.pager__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-top: 1px solid var(--color-heading);
+}
+
+.pager__link {
+  display: block;
+  padding: 1.25rem 1.5rem 1.25rem 0;
+  text-decoration: none;
+}
+
+/* Placed by column rather than by order, so the ends of the run -- 01
+   with no previous, 07 with no next -- still sit on the correct side. */
+.pager__link--prev { grid-column: 1; }
+
+.pager__link--next {
+  grid-column: 2;
+  padding: 1.25rem 0 1.25rem 1.5rem;
+  border-left: 1px solid var(--border-default);
+  text-align: right;
+}
+
+.pager__dir {
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-faint);
+}
+
+.pager__name {
+  display: block;
+  margin-top: 0.4rem;
+  font-family: var(--font-heading);
+  font-weight: var(--weight-bold);
+  font-size: var(--size-body-lg);
+  letter-spacing: -0.02em;
+  color: var(--color-heading);
+}
+
+.pager__n {
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  color: var(--color-accent);
+  margin-right: 0.5rem;
+}
+
+.pager__shape {
+  display: block;
+  margin-top: 0.25rem;
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+/* The name is the link; the direction and the shape are labels on it. */
+.pager__link:hover .pager__name {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.22em;
+  text-decoration-color: var(--color-accent);
+}
+
+@media (max-width: 900px) {
+  .pager__grid { grid-template-columns: 1fr; }
+
+  .pager__link,
+  .pager__link--next {
+    grid-column: 1;
+    padding: 1.125rem 0;
+    border-left: 0;
+    text-align: left;
+  }
+
+  .pager__link--next { border-top: 1px solid var(--border-default); }
+}

@@ -1,0 +1,187 @@
+/* The scope document: a sticky rail of what the engagement covers, and
+   the engagement's own prose beside it at a reading measure.
+
+   The prose is markdown from the content collection, so the sections
+   arrive FLAT -- `h3` then paragraphs then a list, with no element
+   wrapping each section. Everything a section-wrapper would have carried
+   is therefore hung off the heading: the rule between sections is
+   `h3:not(:first-child)`, and the numerals come from a counter on the
+   document rather than a span the author would have to type.
+
+   That is also why the two typed devices on the retainer (the response
+   windows, the tier table) are composed as flat siblings by the page:
+   they have to sit in the same counter as the markdown around them. */
+
+.scope {
+  display: grid;
+  grid-template-columns: 13.5rem minmax(0, 1fr);
+  gap: 3.5rem;
+  align-items: start;
+}
+
+.scope__rail {
+  position: sticky;
+  top: calc(var(--header-h) + 1.5rem);
+  align-self: start;
+}
+
+.scope__rail-label {
+  margin: 0 0 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--color-heading);
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-faint);
+}
+
+.scope__rail ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  counter-reset: sc;
+}
+
+.scope__rail li {
+  counter-increment: sc;
+  border-bottom: 1px solid var(--border-default);
+}
+
+.scope__rail a {
+  display: grid;
+  grid-template-columns: 1.875rem 1fr;
+  gap: 0.25rem;
+  padding: 0.6rem 0 0.6rem 0.75rem;
+  /* The mark for the section you are reading. A 2px ember rule, not the
+     crayon stroke the links elsewhere carry: the crayon is the site's
+     device for a link you might follow, and this is a position
+     indicator for one you already have. */
+  border-left: 2px solid transparent;
+  font-size: var(--size-body-sm);
+  line-height: 1.35;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  transition:
+    color var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out);
+}
+
+.scope__rail a::before {
+  content: counter(sc, decimal-leading-zero);
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  color: var(--color-text-faintest);
+}
+
+.scope__rail a:hover { color: var(--color-heading); }
+
+.scope__rail a[aria-current='true'] {
+  color: var(--color-heading);
+  border-left-color: var(--color-accent);
+}
+
+.scope__rail a[aria-current='true']::before { color: var(--color-accent); }
+
+/* The column is wide; the measure is not. Held on the elements rather
+   than the column so a table or a device can still use the full width. */
+.scope__doc { counter-reset: sd; }
+.scope__doc p,
+.scope__doc ul { max-width: 66ch; }
+
+.scope__lede {
+  margin: 0 0 2.25rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--color-heading);
+  font-size: var(--size-body-lg);
+  line-height: 1.6;
+  color: var(--color-heading);
+}
+
+.scope__doc h3 {
+  counter-increment: sd;
+  display: grid;
+  grid-template-columns: 2.75rem 1fr;
+  margin: 0 0 0.875rem;
+  font-family: var(--font-heading);
+  font-weight: var(--weight-extrabold);
+  font-size: var(--size-h4);
+  letter-spacing: -0.022em;
+  line-height: 1.15;
+  color: var(--color-heading);
+  /* Cleared for the fixed header when the rail jumps to it. */
+  scroll-margin-top: calc(var(--header-h) + 1.75rem);
+}
+
+.scope__doc h3::before {
+  content: counter(sd, decimal-leading-zero);
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  color: var(--color-accent);
+  padding-top: 0.4rem;
+}
+
+/* The separator between sections, hung off the heading because markdown
+   gives the section no element of its own. */
+.scope__doc h3:not(:first-child) {
+  margin-top: 2.5rem;
+  padding-top: 2.5rem;
+  border-top: 1px solid var(--border-default);
+}
+
+.scope__doc p {
+  margin: 0 0 1rem;
+  font-size: var(--size-body);
+  line-height: 1.7;
+  color: var(--color-text);
+}
+
+.scope__doc ul {
+  list-style: none;
+  margin: 1.125rem 0 0;
+  padding: 0;
+}
+
+.scope__doc li {
+  position: relative;
+  padding: 0.5rem 0 0.5rem 1.5rem;
+  border-top: 1px solid var(--border-default);
+  font-size: var(--size-body-sm);
+  line-height: 1.55;
+  color: var(--color-text);
+}
+
+.scope__doc li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 1.05rem;
+  width: 0.75rem;
+  height: 2px;
+  background: var(--color-accent);
+}
+
+.scope__doc li strong {
+  font-family: var(--font-heading);
+  font-weight: var(--weight-bold);
+  color: var(--color-heading);
+}
+
+/* The markdown files separate their sections with `---`. The rule off
+   the heading does that job here, so the author's separator is kept in
+   the source and dropped from the page. */
+.scope__doc hr { display: none; }
+
+/* The retainer's two typed devices are siblings of the prose, so they
+   need the gap a paragraph would have given them. */
+.scope__doc .windows,
+.scope__doc .compare-scroll { margin-top: 1.125rem; }
+
+@media (max-width: 900px) {
+  .scope {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2rem;
+  }
+
+  .scope__rail { position: static; }
+}
