@@ -1,24 +1,33 @@
 /* The crayon: the keyframes shared by everything on the page that is drawn
    rather than ruled.
 
-   Two things read them -- the rule under a section head's "All products ->"
-   (layout/_section-press.scss) and the stroke a content title draws under
-   itself on hover (components/_link-draw.scss). Keyframes are global in CSS
-   regardless of where they are declared, so this file exists for the reader,
-   not the cascade: one place to change what "boil" and "redraw" mean, and one
-   place that explains why the technique is what it is.
+   Three things read them: the rule under a section head's "All products ->"
+   (layout/_section-press.scss), the stroke a content title draws under itself
+   on hover (components/_link-draw.scss) and the phone index's current-page
+   mark (layout/_mobile-menu.scss).
+   Keyframes are global in CSS regardless of where they are declared, so this
+   file exists for the reader, not the cascade: one place to change what "boil"
+   and "redraw" mean, and one place that explains why the technique is what it
+   is.
 
    THE SPRITE. --rule-crayon-art is a MASK, never a background image, and that
    is the whole reason the ember survives a theme swap: the stroke is painted
    by a token through the mask's alpha, where a data-URI background image would
    bake the hex in where no token could reach it.
 
-   The artwork is one 600-unit viewBox holding the same stroke roughened by
+   The artwork is one 360-unit viewBox holding the same stroke roughened by
    three different feTurbulence seeds, side by side. mask-size: 300% shows one
-   200-unit cell; the boil steps mask-position between them. So the line is
+   120-unit cell; the boil steps mask-position between them. So the line is
    redrawn frame by frame at the cost of one image and one background-position
    repaint -- and SMIL inside the SVG could not have done it, because a CSS
    image renders in a static, non-animated context.
+
+   That 120x8 cell is sized to the boxes these consumers actually render at,
+   and tokens/_components.scss explains at length why it has to be: the
+   displacement filter runs in user units BEFORE preserveAspectRatio stretches
+   the cell, so a cell whose aspect is far from its box turns the roughness
+   into noise. Read that note before adding a consumer at a very different
+   width.
 
    Unprefixed mask-* only, everywhere: the bundler adds no prefixes, and when
    both spellings are declared it keeps whichever comes LAST and drops the

@@ -292,13 +292,29 @@
      background-image would bake the ember's hex into a data URI where no
      token could reach it.
 
-     The artwork is a THREE-CELL SPRITE: one 600-unit viewBox holding the
+     The artwork is a THREE-CELL SPRITE: one 360-unit viewBox holding the
      same stroke roughened by three different --feTurbulence seeds, side
-     by side. mask-size: 300% shows one 200-unit cell at a time, and the
+     by side. mask-size: 300% shows one 120-unit cell at a time, and the
      boil steps the mask-position between them -- so the line appears
      hand-redrawn frame by frame, at the cost of exactly one mask image
      and zero repaints of anything but a background position. Swapping
      the art for a different roughness (or a straight rule) is one token.
+
+     THE CELL'S ASPECT IS LOAD-BEARING, and getting it wrong is what the
+     first sprite got wrong. `preserveAspectRatio='none'` stretches a cell
+     to whatever box it lands in, but feDisplacementMap runs in USER units
+     BEFORE that stretch. The first cell was 200x10 landing in ~97x7 (the
+     menu marker) and ~100x9 ("All products ->"): 0.49x horizontally, so
+     the noise arrived at double frequency, and scale='8.0' threw the
+     stroke +/-8u -- 80% of the box's own height. The result was not a
+     rough line, it was a broken one: dashes at 7px, a near-solid smear at
+     9px. The cell is now 120x8, close enough to the real render box that
+     the stretch is near 1:1, with the displacement at 1.7 and the
+     turbulence stretched long (baseFrequency 0.05 0.11). That reads as a
+     hand-drawn stroke at both sizes, which is what the mock has.
+
+     So: if a new consumer wants a much wider or much taller crayon, check
+     what its box does to this aspect before assuming the token fits.
 
      The boil is slow on purpose. At 0.75s across three frames it reads
      as a line that will not sit still; anything faster reads as a
@@ -310,7 +326,7 @@
   --rule-crayon-boil-hover: 0.3s;
   --rule-crayon-redraw: 0.55s;
   --rule-crayon-redraw-ease: var(--ease-out);
-  --rule-crayon-art: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20600%2010%27%20preserveAspectRatio%3D%27none%27%3E%3Cfilter%20id%3D%27f7%27%20x%3D%27-10%25%27%20y%3D%27-70%25%27%20width%3D%27120%25%27%20height%3D%27240%25%27%3E%3CfeTurbulence%20type%3D%27fractalNoise%27%20baseFrequency%3D%271.3%201.9%27%20numOctaves%3D%273%27%20seed%3D%277%27%20result%3D%27n%27%2F%3E%3CfeDisplacementMap%20in%3D%27SourceGraphic%27%20in2%3D%27n%27%20scale%3D%278.0%27%20xChannelSelector%3D%27R%27%20yChannelSelector%3D%27G%27%2F%3E%3C%2Ffilter%3E%3Cg%20filter%3D%27url%28%23f7%29%27%20transform%3D%27translate%280%200%29%27%3E%3Cpath%20d%3D%27M2%206%20C30%204%2056%207.4%2082%205.6%20C110%203.7%20136%207.6%20162%205.4%20C176%204.2%20190%206.4%20198%205%27%20fill%3D%27none%27%20stroke%3D%27%23fff%27%20stroke-width%3D%275.2%27%20stroke-linecap%3D%27round%27%2F%3E%3C%2Fg%3E%3Cfilter%20id%3D%27f21%27%20x%3D%27-10%25%27%20y%3D%27-70%25%27%20width%3D%27120%25%27%20height%3D%27240%25%27%3E%3CfeTurbulence%20type%3D%27fractalNoise%27%20baseFrequency%3D%271.3%201.9%27%20numOctaves%3D%273%27%20seed%3D%2721%27%20result%3D%27n%27%2F%3E%3CfeDisplacementMap%20in%3D%27SourceGraphic%27%20in2%3D%27n%27%20scale%3D%278.0%27%20xChannelSelector%3D%27R%27%20yChannelSelector%3D%27G%27%2F%3E%3C%2Ffilter%3E%3Cg%20filter%3D%27url%28%23f21%29%27%20transform%3D%27translate%28200%200%29%27%3E%3Cpath%20d%3D%27M2%206%20C30%204%2056%207.4%2082%205.6%20C110%203.7%20136%207.6%20162%205.4%20C176%204.2%20190%206.4%20198%205%27%20fill%3D%27none%27%20stroke%3D%27%23fff%27%20stroke-width%3D%275.2%27%20stroke-linecap%3D%27round%27%2F%3E%3C%2Fg%3E%3Cfilter%20id%3D%27f34%27%20x%3D%27-10%25%27%20y%3D%27-70%25%27%20width%3D%27120%25%27%20height%3D%27240%25%27%3E%3CfeTurbulence%20type%3D%27fractalNoise%27%20baseFrequency%3D%271.3%201.9%27%20numOctaves%3D%273%27%20seed%3D%2734%27%20result%3D%27n%27%2F%3E%3CfeDisplacementMap%20in%3D%27SourceGraphic%27%20in2%3D%27n%27%20scale%3D%278.0%27%20xChannelSelector%3D%27R%27%20yChannelSelector%3D%27G%27%2F%3E%3C%2Ffilter%3E%3Cg%20filter%3D%27url%28%23f34%29%27%20transform%3D%27translate%28400%200%29%27%3E%3Cpath%20d%3D%27M2%206%20C30%204%2056%207.4%2082%205.6%20C110%203.7%20136%207.6%20162%205.4%20C176%204.2%20190%206.4%20198%205%27%20fill%3D%27none%27%20stroke%3D%27%23fff%27%20stroke-width%3D%275.2%27%20stroke-linecap%3D%27round%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  --rule-crayon-art: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20360%208%27%20preserveAspectRatio%3D%27none%27%3E%3Cfilter%20id%3D%27f7%27%20x%3D%27-6%25%27%20y%3D%27-60%25%27%20width%3D%27112%25%27%20height%3D%27220%25%27%3E%3CfeTurbulence%20type%3D%27fractalNoise%27%20baseFrequency%3D%270.05%200.11%27%20numOctaves%3D%272%27%20seed%3D%277%27%20result%3D%27n%27%2F%3E%3CfeDisplacementMap%20in%3D%27SourceGraphic%27%20in2%3D%27n%27%20scale%3D%271.7%27%20xChannelSelector%3D%27R%27%20yChannelSelector%3D%27G%27%2F%3E%3C%2Ffilter%3E%3Cg%20filter%3D%27url%28%23f7%29%27%20transform%3D%27translate%280%200%29%27%3E%3Cpath%20d%3D%27M2%205.1C16%203.2%2032%205.9%2048%204.3s28-2.4%2041-.7%2022%202.1%2029%20.6%27%20fill%3D%27none%27%20stroke%3D%27%23fff%27%20stroke-width%3D%273.4%27%20stroke-linecap%3D%27round%27%2F%3E%3C%2Fg%3E%3Cfilter%20id%3D%27f21%27%20x%3D%27-6%25%27%20y%3D%27-60%25%27%20width%3D%27112%25%27%20height%3D%27220%25%27%3E%3CfeTurbulence%20type%3D%27fractalNoise%27%20baseFrequency%3D%270.05%200.11%27%20numOctaves%3D%272%27%20seed%3D%2721%27%20result%3D%27n%27%2F%3E%3CfeDisplacementMap%20in%3D%27SourceGraphic%27%20in2%3D%27n%27%20scale%3D%271.7%27%20xChannelSelector%3D%27R%27%20yChannelSelector%3D%27G%27%2F%3E%3C%2Ffilter%3E%3Cg%20filter%3D%27url%28%23f21%29%27%20transform%3D%27translate%28120%200%29%27%3E%3Cpath%20d%3D%27M2%205.1C16%203.2%2032%205.9%2048%204.3s28-2.4%2041-.7%2022%202.1%2029%20.6%27%20fill%3D%27none%27%20stroke%3D%27%23fff%27%20stroke-width%3D%273.4%27%20stroke-linecap%3D%27round%27%2F%3E%3C%2Fg%3E%3Cfilter%20id%3D%27f34%27%20x%3D%27-6%25%27%20y%3D%27-60%25%27%20width%3D%27112%25%27%20height%3D%27220%25%27%3E%3CfeTurbulence%20type%3D%27fractalNoise%27%20baseFrequency%3D%270.05%200.11%27%20numOctaves%3D%272%27%20seed%3D%2734%27%20result%3D%27n%27%2F%3E%3CfeDisplacementMap%20in%3D%27SourceGraphic%27%20in2%3D%27n%27%20scale%3D%271.7%27%20xChannelSelector%3D%27R%27%20yChannelSelector%3D%27G%27%2F%3E%3C%2Ffilter%3E%3Cg%20filter%3D%27url%28%23f34%29%27%20transform%3D%27translate%28240%200%29%27%3E%3Cpath%20d%3D%27M2%205.1C16%203.2%2032%205.9%2048%204.3s28-2.4%2041-.7%2022%202.1%2029%20.6%27%20fill%3D%27none%27%20stroke%3D%27%23fff%27%20stroke-width%3D%273.4%27%20stroke-linecap%3D%27round%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
   /* .link-draw -- the stroke a content title draws under itself on hover
      (components/_link-draw.scss). Same crayon art as the rule above: one
      sprite serves both, so a change to how a drawn line looks reaches every
