@@ -1,0 +1,136 @@
+---
+/**
+ * One engagement, printed as a spread: a ruled head carrying the numeral,
+ * the name and the commitment stamp; then the claim, the argument, the
+ * sequence it runs in, the stack it is built on, its terms, and the two
+ * ways in.
+ *
+ * The catalogue's ProductEntry is the same idea for the other kind of
+ * thing, and the difference between them is the point. A product entry
+ * ends in a SPEC SHEET -- what the object is. A spread ends in a TRACK
+ * and a TERMS list -- what order the time runs in and what you are
+ * committing to. Every device here encodes duration or commitment.
+ *
+ * The track's last step is drawn differently by the stylesheet, and
+ * `ending` says which way: 'handover' caps it with the solid ember rule
+ * six of the seven engagements finish on, 'rolling' draws the dashed
+ * loop that means the retainer starts over. That is a fact about the
+ * contract, so it is a prop rather than a class the caller remembers.
+ */
+import Button from '@/components/ui/Button.astro';
+
+export interface TrackStep {
+  /** Printed as given ("01"). */
+  n: string;
+  name: string;
+  detail: string;
+}
+
+export interface Term {
+  term: string;
+  detail: string;
+}
+
+export interface SpreadAction {
+  label: string;
+  href: string;
+  /** The first step this engagement is actually asking for. */
+  primary?: boolean;
+}
+
+interface Props {
+  /** Anchor target, so the contents strip and the schedule can reach it. */
+  id: string;
+  /** The entry's number, printed as given, and the same one the schedule
+      row and the routing table use. */
+  n: string;
+  name: string;
+  /** What you are buying -- "Fixed-scope project", "Monthly retainer". */
+  shape: string;
+  /**
+   * The second line under the shape: the practice's proof where it has one,
+   * a statement of scope where it does not. Optional, and omitted rather
+   * than filled, because a stamp reading "Proven by" with nothing after it
+   * is worse than a stamp of one line.
+   */
+  proof?: string;
+  /** The one-sentence claim, set larger than the argument. */
+  tagline: string;
+  lead: string;
+  track: TrackStep[];
+  /** How the last step is drawn: an ending, or a month that repeats. */
+  ending?: 'handover' | 'rolling';
+  /** The honest caveat, if this engagement has one worth printing. */
+  caveat?: string;
+  /** Label on the stack line -- "Stack" for six of them, "Tiers" for the
+      retainer, which is bought by tier rather than by technology. */
+  stackLabel?: string;
+  stack: string;
+  terms: Term[];
+  actions: SpreadAction[];
+  class?: string;
+}
+
+const {
+  id, n, name, shape, proof,
+  tagline, lead, track, ending = 'handover',
+  caveat, stackLabel = 'Stack', stack, terms, actions,
+  class: className,
+} = Astro.props;
+---
+<article class:list={['spread', className]} id={id}>
+  <header class="spread__head">
+    <span class="spread__n">{n}</span>
+    <h3 class="spread__name">{name}</h3>
+    <span class="spread__stamp">{shape}{proof && <b>{proof}</b>}</span>
+  </header>
+
+  <div class="spread__body">
+    <p class="spread__tag">{tagline}</p>
+    <p class="spread__lead">{lead}</p>
+
+    {/* An ordered list because the order is the product: these steps
+        happen in this sequence, and a reader who starts at step three is
+        buying something else. */}
+    <ol class="track">
+      {track.map((step, i) => (
+        <li
+          class:list={[
+            'track__step',
+            i === track.length - 1 && 'track__step--end',
+            i === track.length - 1 && ending === 'rolling' && 'track__step--loop',
+          ]}
+        >
+          <span class="track__n">{step.n}</span>
+          <span class="track__name">{step.name}</span>
+          <span class="track__detail">{step.detail}</span>
+        </li>
+      ))}
+    </ol>
+
+    {caveat && <p class="spread__caveat">{caveat}</p>}
+
+    {/* Whatever this one engagement carries and the other six do not --
+        the retainer's response windows are the only case today. */}
+    <slot name="detail" />
+
+    <p class="spread__stack"><b>{stackLabel}</b>{stack}</p>
+
+    <dl class="terms">
+      {terms.map((t) => (
+        <div>
+          <dt>{t.term}</dt>
+          <dd>{t.detail}</dd>
+        </div>
+      ))}
+    </dl>
+
+    <div class="btn-row spread__actions">
+      {actions.map((a) => (
+        <Button href={a.href} variant={a.primary ? 'primary' : 'outline'} size="sm">
+          {a.label}
+        </Button>
+      ))}
+    </div>
+  </div>
+</article>

@@ -61,6 +61,24 @@
 
 .contents-bar__pip { margin-top: 0.5rem; }
 
+/* ── .contents-bar--8 ────────────────────────────────────────
+   Seven engagements do not divide into four columns. Rather than leave the
+   second row three-quarters empty, the eighth cell carries the one thing a
+   reader who cannot place themselves among the seven actually needs -- so
+   the grid is full and the index gained a way out.
+
+   The base rule draws a left rule on every item after the first, which
+   puts one on the leading edge of row two; the column-1 items give it up
+   and the second row takes a top rule instead. Scoped above the two-column
+   breakpoint because below it the rules underneath own the dividers, and
+   this variant must not fight them. */
+@media (min-width: 901px) {
+  .contents-bar--8 .contents-bar__item:nth-child(4n + 1) { border-left: 0; }
+  .contents-bar--8 .contents-bar__item:nth-child(n + 5) {
+    border-top: 1px solid var(--border-default);
+  }
+}
+
 /* Two-up before one-up: at four across the blurb wraps to four lines
    long before the cell is genuinely too narrow, and a 2x2 contents
    block still reads as a contents block. A single column does not. */

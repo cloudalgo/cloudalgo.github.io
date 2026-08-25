@@ -1,0 +1,222 @@
+/* The schedule: the services index and the page's thesis in one figure.
+
+   The catalogue page is right to give a product a spec sheet -- a product
+   is an OBJECT with attributes, so a version, a status pip and a table of
+   properties describe it completely. An engagement is not an object. It is
+   a PERIOD OF TIME with a shape, a rhythm and an ending, and none of the
+   catalogue's devices can say that. So this figure draws seven engagements
+   against six months of calendar: six of them end, and the ember cap is
+   that ending; the seventh does not, and runs off the right edge.
+
+   Everything here is positioned from a --at/--a/--b/--c index divided by
+   --sched-cols, so the axis, the gridlines and the bars are all measured
+   off ONE number. The component sets that number from the axis it renders,
+   which is what keeps a scale change from needing an edit in two files. */
+
+/* --sched-label is the width of the name column, and it is a token of this
+   component rather than a magic number in three places: the axis is pushed
+   right by it, the row grid opens with it, and the phone breakpoint below
+   narrows it once. */
+.schedule {
+  --sched-label: 17rem;
+  /* Gridline columns. Overridden inline by ServiceSchedule.astro from the
+     length of the axis it was given; the fallback is the seven the services
+     index draws, so the figure is still correct with no inline style. */
+  --sched-cols: 7;
+  margin: 0;
+}
+
+/* Seven months of calendar do not compress. Below the plot's minimum the
+   figure scrolls inside its own box and the page does not -- the same
+   bargain the comparison table strikes in _compare-table.scss. */
+.schedule__scroll { overflow-x: auto; }
+.schedule__plot   { min-width: 44rem; }
+
+.schedule__axis {
+  position: relative;
+  height: 1.15rem;
+  /* Cleared past the name column so month 0 sits over the start of the
+     track, not over the labels. */
+  margin-left: var(--sched-label);
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-faint);
+}
+.schedule__axis span {
+  position: absolute;
+  left: calc(var(--at) / var(--sched-cols) * 100%);
+  translate: -50% 0;
+  white-space: nowrap;
+}
+/* The first mark is the only one that would hang off the left edge if it
+   were centred on its gridline, so it starts at it instead. */
+.schedule__axis span:first-child { translate: 0 0; }
+
+.schedule__row {
+  display: grid;
+  grid-template-columns: var(--sched-label) 1fr;
+  align-items: center;
+  text-decoration: none;
+  border-top: 1px solid var(--border-default);
+  transition: background-color var(--duration-fast) var(--ease-out);
+}
+/* Ink at the top and foot, hairline between: the figure is bounded like a
+   printed table, and the rows inside it are divisions of one object rather
+   than seven stacked boxes. */
+.schedule__row:first-of-type { border-top: 1px solid var(--color-heading); }
+.schedule__row:last-of-type  { border-bottom: 1px solid var(--color-heading); }
+.schedule__row:hover         { background: var(--surface-wash-accent); }
+
+.schedule__label {
+  padding: 0.8rem 1.25rem 0.8rem 0;
+  display: grid;
+  grid-template-columns: 2.5rem 1fr;
+  column-gap: 0.5rem;
+}
+
+.schedule__n {
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  color: var(--color-accent);
+  padding-top: 0.15rem;
+}
+
+.schedule__name {
+  font-family: var(--font-heading);
+  font-weight: var(--weight-bold);
+  font-size: var(--size-body);
+  letter-spacing: -0.015em;
+  color: var(--color-heading);
+}
+/* The row is the link, so the underline is drawn on hover of the whole row
+   rather than of the name alone. It cannot be .link-draw: these names wrap
+   at narrow widths and the crayon mask is a single-line device. */
+.schedule__row:hover .schedule__name {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.22em;
+  text-decoration-color: var(--color-accent);
+}
+
+/* The shape, not the benefit. The contents bar above carries what the
+   engagement is FOR; this line carries how long it runs. Different facts,
+   which is why the repetition of the name between them is not duplication. */
+.schedule__shape {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin-top: 0.2rem;
+}
+
+/* Gridlines every month, so a bar can be READ off the axis rather than
+   believed. A bar drawn on empty ground is a picture of a duration; a bar
+   drawn on a ruled ground is a measurement. */
+.schedule__track {
+  position: relative;
+  height: 3.1rem;
+  background-image: repeating-linear-gradient(
+    90deg,
+    var(--border-default) 0 1px,
+    transparent 1px calc(100% / var(--sched-cols))
+  );
+}
+
+/* A project. Solid to the typical MINIMUM (--b), hatched on to the maximum
+   (--c). The hatch is the honest part: the range is a range, and drawing
+   the whole bar solid would be a promise nobody made. The right edge is
+   4px of ember -- that cap is the handover, and it is the same mark the
+   legend and the figure caption name. */
+.schedule__bar {
+  position: absolute;
+  top: 50%;
+  translate: 0 -50%;
+  height: 13px;
+  left: calc(var(--a) / var(--sched-cols) * 100%);
+  width: calc((var(--c) - var(--a)) / var(--sched-cols) * 100%);
+  border: 1px solid var(--color-heading);
+  border-right: 4px solid var(--color-accent);
+  background-image: repeating-linear-gradient(
+    45deg,
+    var(--color-ink-a18) 0 2px,
+    transparent 2px 6px
+  );
+}
+/* Measured against its parent, not the axis: the solid part is a fraction
+   of the bar it sits in, so the two stay locked when the range changes. */
+.schedule__min {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: calc((var(--b) - var(--a)) / (var(--c) - var(--a)) * 100%);
+  background: var(--color-heading);
+}
+
+/* A retainer. Monthly ticks, no cap, and faded out at the right edge
+   rather than stopped -- the drawing has to be unable to say when it ends,
+   because the contract cannot either. */
+.schedule__roll {
+  position: absolute;
+  top: 50%;
+  translate: 0 -50%;
+  height: 13px;
+  left: calc(var(--from, 0) / var(--sched-cols) * 100%);
+  right: 0;
+  background-image: repeating-linear-gradient(
+    90deg,
+    var(--color-heading) 0 3px,
+    transparent 3px 15px
+  );
+  /* Unprefixed only -- see components/_crayon.scss for why declaring both
+     spellings ships the -webkit- one alone. */
+  mask-image: linear-gradient(90deg, #000 62%, transparent);
+}
+
+.schedule__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.5rem;
+  margin-top: 0.9rem;
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+/* Each key is the real mark at a smaller size, not an approximation of it
+   -- the fills below are the same declarations the bars use. */
+.schedule__key {
+  display: inline-block;
+  width: 1.75rem;
+  height: 9px;
+  vertical-align: middle;
+  margin-right: 0.45rem;
+  border: 1px solid var(--color-heading);
+}
+.schedule__key--min   { background: var(--color-heading); }
+.schedule__key--range {
+  background-image: repeating-linear-gradient(
+    45deg,
+    var(--color-ink-a18) 0 2px,
+    transparent 2px 6px
+  );
+}
+.schedule__key--cap  { width: 5px; border: 0; background: var(--color-accent); }
+.schedule__key--roll {
+  border: 0;
+  background-image: repeating-linear-gradient(
+    90deg,
+    var(--color-heading) 0 3px,
+    transparent 3px 15px
+  );
+}
+
+/* On a phone the name column takes more than half the plot and the bars
+   become unreadable slivers. Narrowing the one token narrows the axis
+   offset and every row with it. */
+@media (max-width: 760px) {
+  .schedule { --sched-label: 11rem; }
+}

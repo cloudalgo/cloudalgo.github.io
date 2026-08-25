@@ -101,3 +101,31 @@
 }
 
 .compare-scroll .compare { min-width: 44rem; }
+
+/* ── .compare--route ─────────────────────────────────────────
+   The same table, asked to do a different job. The catalogue's version
+   compares four subjects across a row; this one is a routing table -- one
+   symptom, one destination -- so the answer cell holds a link and a line
+   of reasoning rather than a value.
+
+   Which is why the mono default is overridden here: a cell that argues is
+   prose, and setting prose in mono would make the reader parse it as data. */
+.compare--route td span {
+  display: block;
+  font-size: var(--size-label);
+  color: var(--color-text);
+  margin-top: 0.3rem;
+}
+.compare--route td a {
+  font-weight: var(--weight-bold);
+  color: var(--color-heading);
+}
+/* The stub is a sentence somebody said on a call, not a field name, so it
+   loses the uppercase mono treatment tbody th carries in the catalogue. */
+.compare--route th[scope='row'] { font-weight: var(--weight-semibold); }
+
+/* The row that sends the reader somewhere other than an engagement.
+   Washed, so it reads as the exception it is -- and washed rather than
+   ruled off, because it still belongs in the table it answers. */
+.compare__out td,
+.compare__out th { background: var(--surface-wash-accent); }

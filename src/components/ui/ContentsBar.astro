@@ -2,7 +2,7 @@
 /**
  * The contents strip under an index page's masthead: one cell per
  * entry, numbered, with the shortest true description of the thing and
- * its ship status.
+ * -- where the entry has one -- its ship status.
  *
  * It is a table of contents, so the numbers mean something -- they are
  * the reading order of the entries below, and each cell is an anchor
@@ -19,8 +19,13 @@ export interface ContentsItem {
   href: string;
   /** One line. It has to survive a quarter of the page width. */
   blurb: string;
-  /** Raw collection value: 'ga' | 'preview' | 'beta'. */
-  status: string;
+  /**
+   * Raw collection value: 'ga' | 'preview' | 'beta'. Optional, and absent
+   * on the services index: a product ships and so has a ship status, but
+   * an engagement is a period of time and has nothing to be GA about.
+   * Omitted rather than faked, so the pip never appears empty.
+   */
+  status?: string;
 }
 
 interface Props {
@@ -37,7 +42,7 @@ const { items, label, class: className } = Astro.props;
       <span class="contents-bar__n">{item.n}</span>
       <span class="contents-bar__title">{item.title}</span>
       <span class="contents-bar__blurb">{item.blurb}</span>
-      <StatusPip status={item.status} class="contents-bar__pip" />
+      {item.status && <StatusPip status={item.status} class="contents-bar__pip" />}
     </a>
   ))}
 </nav>

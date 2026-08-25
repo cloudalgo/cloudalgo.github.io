@@ -1,0 +1,68 @@
+/* The response windows: four SLA tiers as one ruled band.
+
+   Boxing this would have made it a specimen -- something the page is
+   showing you. It is a term of the contract, so it sits in the run of the
+   text, ruled like the tables around it and bounded in ink.
+
+   Used once, inside the retainer's spread. It lives in its own partial
+   anyway because it is the shape any future engagement with named response
+   times would reach for, and folding it into _spread.scss would bury it. */
+
+.windows {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border: 1px solid var(--color-heading);
+  margin-top: 1.5rem;
+}
+.windows > div { padding: 0.875rem 1rem; }
+.windows > div + div { border-left: 1px solid var(--border-default); }
+
+/* The priority, in ember: it is the label a reader matches their own
+   incident against, so it is the first thing found in the cell. */
+.windows__p {
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+/* The window itself is the number that gets quoted back at us, so it is
+   set as display type rather than as body copy. */
+.windows__t {
+  display: block;
+  font-family: var(--font-heading);
+  font-weight: var(--weight-extrabold);
+  font-size: 1.375rem;
+  letter-spacing: -0.025em;
+  color: var(--color-heading);
+  margin-top: 0.25rem;
+}
+.windows__d {
+  display: block;
+  font-size: var(--size-body-sm);
+  line-height: 1.45;
+  color: var(--color-text);
+  margin-top: 0.3rem;
+}
+
+.windows__note {
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin: 0.6875rem 0 0;
+  line-height: 1.5;
+}
+.windows__note b {
+  font-weight: var(--weight-regular);
+  color: var(--color-heading);
+}
+
+/* Two-up, with the dividers rebuilt for the new grid -- the `+ div` rule
+   above would put a left rule on the leading edge of the second row. */
+@media (max-width: 980px) {
+  .windows { grid-template-columns: repeat(2, 1fr); }
+  .windows > div:nth-child(2n + 1) { border-left: 0; }
+  .windows > div:nth-child(n + 3)  { border-top: 1px solid var(--border-default); }
+}

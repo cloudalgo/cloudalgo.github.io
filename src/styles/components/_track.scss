@@ -1,0 +1,125 @@
+/* The track: an engagement's stages, laid out along the same axis the
+   schedule uses. Left to right, one tick per stage, so a reader who has
+   just read the figure above reads this the same way without being told.
+
+   The last tick is drawn the full width of its cell in ember. That segment
+   IS the handover -- it is the only place on the page where a rule is
+   filled rather than hairline, and it means the same thing as the ember
+   cap on a schedule bar. */
+
+.track {
+  list-style: none;
+  margin: 1.5rem 0 0;
+  padding: 0;
+  /* Auto columns rather than repeat(n): a track has four steps or five
+     depending on the engagement, and the markup should not have to tell
+     the stylesheet which. */
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  border-top: 1px solid var(--color-heading);
+}
+
+.track__step { position: relative; padding: 1rem 1.25rem 0 0; }
+.track__step + .track__step {
+  border-left: 1px solid var(--border-default);
+  padding-left: 1.25rem;
+}
+
+/* The tick. Sat ON the rule (top: -2px) rather than under it, so it reads
+   as a mark made on the line, not a second line below it. */
+.track__step::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: 0;
+  width: 1.75rem;
+  height: 3px;
+  background: var(--color-accent);
+}
+.track__step + .track__step::before { left: 1.25rem; }
+
+/* The ending. Full width, and reset to the cell's own left edge -- the
+   rule above would otherwise start it at the padding like every other tick
+   and leave a gap where the handover is supposed to be continuous. */
+.track__step--end::before { width: 100%; left: 0; }
+.track__step + .track__step.track__step--end::before { left: 0; }
+
+/* A retainer does not end, it repeats. Its closing tick is drawn as the
+   same dashed ember the schedule uses for a rolling month, not the solid
+   bar that means "this is where the engagement stops". The distinction is
+   the whole argument of the page, so it is drawn, not just written. */
+.track__step--loop::before {
+  width: 100%;
+  left: 0;
+  background: none;
+  background-image: repeating-linear-gradient(
+    90deg,
+    var(--color-accent) 0 3px,
+    transparent 3px 12px
+  );
+}
+.track__step + .track__step.track__step--loop::before { left: 0; }
+
+.track__n {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  color: var(--color-text-faint);
+  margin-bottom: 0.3rem;
+}
+.track__name {
+  display: block;
+  font-family: var(--font-heading);
+  font-weight: var(--weight-bold);
+  font-size: var(--size-body-sm);
+  letter-spacing: -0.012em;
+  color: var(--color-heading);
+}
+.track__detail {
+  display: block;
+  font-size: var(--size-body-sm);
+  line-height: 1.5;
+  color: var(--color-text);
+  margin-top: 0.25rem;
+}
+
+/* Five columns of prose do not survive a tablet. The sequence turns
+   vertical and every mark turns with it: the ticks become 3px verticals on
+   the left edge, and the handover's full-width bar becomes a full-HEIGHT
+   one, so the ending still reads as an ending after the axis rotates. */
+@media (max-width: 980px) {
+  .track { grid-auto-flow: row; }
+  .track__step,
+  .track__step + .track__step {
+    padding: 0.875rem 0 0.875rem 1.25rem;
+    border-left: 1px solid var(--border-default);
+  }
+  .track__step + .track__step { border-top: 1px solid var(--border-default); }
+  .track__step::before,
+  .track__step + .track__step::before {
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 1.75rem;
+  }
+  .track__step--end::before,
+  .track__step + .track__step.track__step--end::before {
+    width: 3px;
+    height: 100%;
+  }
+  /* The retainer's tick turns too, and its dashes have to turn with it --
+     a 90deg gradient in a 3px-wide box paints one flat colour, which would
+     silently make the loop look exactly like the ending it is drawn to
+     differ from. */
+  .track__step--loop::before,
+  .track__step + .track__step.track__step--loop::before {
+    width: 3px;
+    height: 100%;
+    background-image: repeating-linear-gradient(
+      180deg,
+      var(--color-accent) 0 3px,
+      transparent 3px 12px
+    );
+  }
+}

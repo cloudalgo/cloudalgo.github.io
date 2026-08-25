@@ -67,7 +67,19 @@
 @use 'components/compare-table';
 @use 'components/closing-cta';
 @use 'sections/product-entry';
-@use 'sections/services';
+
+// ── The services page ─────────────────────────────────────
+// Its own structural language: a product is an OBJECT with attributes and
+// gets a spec sheet; an engagement is a PERIOD OF TIME with a shape, a
+// rhythm and an ending, so every device here encodes duration or
+// commitment. `_spread` after `_track` and `_windows` because the spread
+// owns the margins around both.
+@use 'components/schedule';
+@use 'components/track';
+@use 'components/windows';
+@use 'components/spread';
+@use 'sections/manifest';
+
 @use 'sections/services-press';
 @use 'sections/band-press';
 @use 'sections/cases-press';

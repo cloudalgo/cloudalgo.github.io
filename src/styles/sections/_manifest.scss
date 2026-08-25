@@ -1,0 +1,111 @@
+/* The manifest: the ink close of the services page.
+
+   Not a fourth call to action. The /products/ review found three stacked
+   CTA blocks at the foot of that page and cut them to one for exactly this
+   reason -- a page that asks three times reads as a page with nothing left
+   to say. This band is the page's thesis instead, itemised: the masthead
+   claims you end up owning it, and this is the list of what "it" is.
+
+   Full-bleed ink, so it closes the page the way the band closes the home
+   page. Its own partial rather than a variant of that band because the two
+   share a colour and nothing else: this one is a two-column argument with
+   a numbered list, not a headline and a button. */
+
+.manifest {
+  background: var(--surface-inverse);
+  color: var(--color-on-inverse-body);
+  /* Padded to the container's own gutter, so the inner grid lines up with
+     every ruled section above it while the ink runs edge to edge. */
+  padding: 3.25rem var(--container-pad);
+  margin-top: 3rem;
+}
+
+.manifest__inner {
+  max-width: var(--container-max);
+  margin-inline: auto;
+  /* The list is the substance, so it takes the wider track. */
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  gap: 2.75rem;
+}
+
+.manifest__kicker {
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin: 0;
+}
+.manifest__title {
+  font-family: var(--font-heading);
+  font-weight: var(--weight-extrabold);
+  font-size: var(--display-2xs);
+  letter-spacing: -0.028em;
+  line-height: 1.08;
+  color: var(--color-on-inverse);
+  text-wrap: balance;
+  max-width: 18ch;
+  margin: 0.75rem 0 0;
+}
+.manifest__note {
+  font-size: var(--size-body-sm);
+  line-height: 1.6;
+  color: var(--color-on-inverse-body);
+  max-width: 46ch;
+  margin: 1rem 0 0;
+}
+.manifest__actions { margin-top: 1.5rem; }
+
+/* Numbered because the content IS a sequence -- these are the four things
+   handed over in the closing week, in the order they are handed over.
+   counter() rather than markup numbers so the list cannot fall out of step
+   with itself when an item is added. */
+.manifest__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  counter-reset: man;
+  border-top: 1px solid var(--border-on-inverse);
+}
+.manifest__list li {
+  counter-increment: man;
+  position: relative;
+  padding: 0.875rem 0 0.9rem 3rem;
+  border-bottom: 1px solid var(--border-on-inverse);
+}
+.manifest__list li::before {
+  content: counter(man, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  top: 1.05rem;
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  color: var(--color-accent);
+}
+.manifest__list b {
+  display: block;
+  font-family: var(--font-heading);
+  font-weight: var(--weight-bold);
+  font-size: var(--size-body);
+  letter-spacing: -0.015em;
+  color: var(--color-on-inverse);
+}
+.manifest__list span {
+  display: block;
+  font-size: var(--size-body-sm);
+  line-height: 1.55;
+  color: var(--color-on-inverse-body);
+  margin-top: 0.2rem;
+}
+
+/* The light button's press shadow is ink by default, which is invisible on
+   an ink ground. Ember is the only shadow that reads here. */
+.manifest .btn-light { --btn-press-color: var(--color-accent); }
+
+@media (max-width: 980px) {
+  .manifest__inner {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}

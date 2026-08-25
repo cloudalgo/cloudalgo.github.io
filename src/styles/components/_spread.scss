@@ -1,0 +1,178 @@
+/* The spread: one engagement, set the way a printed entry is set.
+
+   Not a box. A rule, a number hanging in the margin, and everything else
+   aligned to a single left edge. The catalogue boxes its entries because a
+   catalogue is a grid of objects a reader picks from; a spread is read in
+   order, and boxing it would invite the reader to skip.
+
+   .terms lives here rather than in its own partial because it is the foot
+   of a spread and nothing else has one. */
+
+.spread {
+  border-top: 2px solid var(--color-heading);
+  padding-top: 1.375rem;
+  margin-top: 3.25rem;
+}
+.spread:first-of-type { margin-top: 0; }
+
+.spread__head {
+  display: grid;
+  grid-template-columns: 3.25rem 1fr auto;
+  /* Baseline, not centre: the number, the name and the stamp are three
+     different sizes, and aligning their boxes would leave the number
+     floating above the name it labels. */
+  align-items: baseline;
+  gap: 0.25rem 0.5rem;
+}
+.spread__n {
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.06em;
+  color: var(--color-accent);
+}
+.spread__name {
+  font-family: var(--font-heading);
+  font-weight: var(--weight-extrabold);
+  font-size: var(--display-2xs);
+  letter-spacing: -0.028em;
+  line-height: 1.05;
+  color: var(--color-heading);
+  margin: 0;
+}
+/* The masthead stamp: shape on top, proof underneath. Right-aligned so it
+   reads as an annotation on the entry rather than a third heading. */
+.spread__stamp {
+  text-align: right;
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+.spread__stamp b {
+  display: block;
+  font-weight: var(--weight-regular);
+  color: var(--color-heading);
+}
+
+/* Everything under the head is indented past the number's column, so the
+   number hangs in the margin the way a figure number does. */
+.spread__body { padding-left: 3.25rem; }
+
+.spread__tag {
+  font-family: var(--font-heading);
+  font-weight: var(--weight-bold);
+  font-size: var(--size-body-lg);
+  letter-spacing: -0.015em;
+  color: var(--color-heading);
+  max-width: 44ch;
+  margin: 0.75rem 0 0;
+}
+.spread__lead {
+  font-size: var(--size-body);
+  line-height: 1.65;
+  color: var(--color-prose);
+  max-width: 62ch;
+  margin: 0.5rem 0 0;
+}
+
+.spread__stack {
+  margin: 1.25rem 0 0;
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+  line-height: 1.85;
+}
+.spread__stack b {
+  font-weight: var(--weight-regular);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-heading);
+  margin-right: 0.6rem;
+}
+
+/* A caveat, and it has to be unable to read as a feature. Ruled off with
+   the ember bar rather than folded into the lede, where the eye would take
+   it for one more thing the engagement does. */
+.spread__caveat {
+  margin: 1.25rem 0 0;
+  padding-left: 0.875rem;
+  border-left: 3px solid var(--color-accent);
+  font-size: var(--size-body-sm);
+  color: var(--color-text);
+  max-width: 62ch;
+  line-height: 1.6;
+}
+
+.spread__actions { margin-top: 1.375rem; }
+
+/* ── .terms ──────────────────────────────────────────────────
+   The small print, set across the foot of the spread rather than boxed
+   down its right-hand side. Reading it as a STRIP is the point: these are
+   the same five things every engagement is measured on, in the same five
+   places every time, so a reader comparing two spreads compares like with
+   like without hunting. The strip is scanned vertically, which is why row
+   two carries one unit -- "Typical length" on every project, "Notice" on
+   the one retainer -- and why an engagement quoting neither would read as
+   evasion rather than as an omission. */
+.terms {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  margin: 1.5rem 0 0;
+  border-top: 1px solid var(--color-heading);
+  border-bottom: 1px solid var(--border-default);
+}
+.terms > div { padding: 0.75rem 1rem 0.8rem 0; }
+.terms > div + div {
+  border-left: 1px solid var(--border-default);
+  padding-left: 1rem;
+}
+.terms dt {
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+.terms dd {
+  margin: 0.35rem 0 0;
+  font-size: var(--size-body-sm);
+  line-height: 1.45;
+  color: var(--color-heading);
+  font-weight: var(--weight-semibold);
+}
+
+/* Five columns of small print stop being scannable well before they stop
+   fitting. Two columns keep the pairing; the dividers are rebuilt for the
+   new grid, because the `+ div` rule above would draw one down the leading
+   edge of every second row. */
+@media (max-width: 980px) {
+  .terms { grid-template-columns: repeat(2, 1fr); }
+  .terms > div {
+    border-left: 0;
+    padding-left: 0;
+    border-top: 1px solid var(--border-default);
+  }
+  .terms > div:nth-child(odd) { padding-right: 1rem; }
+  .terms > div:nth-child(2n) {
+    border-left: 1px solid var(--border-default);
+    padding-left: 1rem;
+  }
+  .terms > div:first-child,
+  .terms > div:nth-child(2) { border-top: 0; }
+}
+
+/* On a phone the hanging number's column is a third of the measure. The
+   head drops to two columns, the stamp moves under the name, and the body
+   gives up its indent -- the entry stays an entry, it just stops hanging. */
+@media (max-width: 760px) {
+  .spread__head { grid-template-columns: 3.25rem 1fr; }
+  .spread__stamp {
+    grid-column: 2;
+    text-align: left;
+    margin-top: 0.35rem;
+  }
+  .spread__body { padding-left: 0; }
+}

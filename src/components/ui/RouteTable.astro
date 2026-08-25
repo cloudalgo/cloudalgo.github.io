@@ -1,0 +1,64 @@
+---
+/**
+ * The routing table: one row per thing people actually say on the first
+ * call, and where that sentence goes.
+ *
+ * The catalogue's CompareTable is the other shape of the same instinct,
+ * and it does not fit here. That table compares four subjects against
+ * each other on one attribute per row; this one has a single column,
+ * because a symptom does not have an answer per engagement -- it has one
+ * answer, plus a line explaining why that is the one.
+ *
+ * A row may point OUT of the page entirely. "We do not know what shape
+ * the org is in" is not an engagement, it is a scan, and sending that
+ * reader to a free download instead of a sales call is the whole reason
+ * the row exists. `out` marks it so the stylesheet can wash it.
+ */
+export interface RouteRow {
+  /** The sentence, in the words a buyer would use. */
+  symptom: string;
+  /** Where it goes -- usually "#anchor", sometimes off the page. */
+  href: string;
+  /** The destination's name, numbered to match the spread. */
+  label: string;
+  /** Why that is the answer. One line. */
+  gloss: string;
+  /** True for a row whose answer is not one of the engagements. */
+  out?: boolean;
+}
+
+interface Props {
+  /** The stub head -- the cell above the symptoms. */
+  corner: string;
+  /** The head of the answer column. */
+  destination: string;
+  rows: RouteRow[];
+  /** Accessible name. Not rendered; the section head says this already. */
+  caption: string;
+  class?: string;
+}
+const { corner, destination, rows, caption, class: className } = Astro.props;
+---
+<div class:list={['compare-scroll', className]}>
+  <table class="compare compare--route">
+    <caption class="sr-only">{caption}</caption>
+    <thead>
+      <tr>
+        <th scope="col" class="compare__corner">{corner}</th>
+        <th scope="col">{destination}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {rows.map((row) => (
+        <tr class:list={[row.out && 'compare__out']}>
+          <th scope="row">{row.symptom}</th>
+          <td>
+            <a href={row.href}>{row.label}</a>
+            <span>{row.gloss}</span>
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+<slot name="footnote" />

@@ -1,0 +1,49 @@
+---
+/**
+ * The ink band the services index closes on: what you are left holding
+ * when the engagement ends, numbered.
+ *
+ * It is not the site's CtaBand and should not become one. CtaBand asks
+ * for something; this band answers the question the whole page is built
+ * around -- what does "you end up owning it" actually mean -- and the
+ * one link in it goes to the evidence rather than to a booking form.
+ * The page already asks fourteen times above.
+ *
+ * The list is an <ol> and the numerals are drawn by a CSS counter: the
+ * four items are the closing week in order, and hand-numbering them
+ * would put the sequence in the copy where an edit could break it.
+ */
+export interface ManifestItem {
+  title: string;
+  detail: string;
+}
+
+interface Props {
+  /** id of the heading, so the section is named by it. */
+  labelledby: string;
+  /** The line above the title. */
+  kicker: string;
+  items: ManifestItem[];
+  class?: string;
+}
+const { labelledby, kicker, items, class: className } = Astro.props;
+---
+<section class:list={['manifest', className]} aria-labelledby={labelledby}>
+  <div class="manifest__inner">
+    <div>
+      <p class="manifest__kicker">{kicker}</p>
+      <h2 id={labelledby} class="manifest__title"><slot name="title" /></h2>
+      <p class="manifest__note"><slot name="note" /></p>
+      <div class="btn-row manifest__actions"><slot name="actions" /></div>
+    </div>
+
+    <ol class="manifest__list">
+      {items.map((item) => (
+        <li>
+          <b>{item.title}</b>
+          <span>{item.detail}</span>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>

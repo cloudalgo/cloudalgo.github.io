@@ -1,616 +1,827 @@
 ---
-import Page from '../../layouts/Page.astro';
-import PageHeader from '@/components/ui/PageHeader.astro';
-import Button from '../../components/ui/Button.astro';
-import SectionLabel from '../../components/ui/SectionLabel.astro';
+import { getCollection, getEntry } from 'astro:content';
+import Page from '@/layouts/Page.astro';
+import PageMasthead from '@/components/ui/PageMasthead.astro';
+import ContentsBar from '@/components/ui/ContentsBar.astro';
+import ServiceSchedule from '@/components/ui/ServiceSchedule.astro';
+import ServiceSpread from '@/components/sections/ServiceSpread.astro';
+import SlaWindows from '@/components/ui/SlaWindows.astro';
+import RouteTable from '@/components/ui/RouteTable.astro';
+import ClosingManifest from '@/components/sections/ClosingManifest.astro';
 
-const services = [
+// Seven engagements: a figure that draws them all against a calendar, a
+// spread each, a table that routes a symptom to one of them, and the
+// checklist every one of them ends on.
+//
+// The catalogue page next door is deliberately NOT the model here. A
+// product is an object with attributes, so /products/ gives each one a
+// spec sheet and a status pip. An engagement is a period of time with a
+// shape, a rhythm and an ending -- so every device on this page encodes
+// duration or commitment instead: the schedule draws length, the track
+// draws sequence, the terms list states what you are committing to, and
+// the closing band says what you are left holding. The two pages share
+// the design system and share almost no structure, on purpose.
+//
+// The pricing MECHANISMS ("fixed scope, or time & materials", "per process
+// automated") are true as written. There is no money on this page, and none
+// should be invented here.
+
+const services = await getCollection('services');
+const bySlug = new Map(services.map((s) => [s.id, s]));
+
+// The proof stamp is the collection's, not this page's. Four practices have
+// proof -- a product they shipped, or a counted figure -- and the schema is
+// the one place that records which. Printing it from there means a service
+// that ships a product, or finally counts its projects, changes one file and
+// the stamp follows; a hardcoded copy here would have been a second truth to
+// keep in sync, and the kind that goes stale silently because nothing checks
+// a string against a string. The three practices with no proof yet resolve to
+// undefined, and fall back to the descriptive `stamp.note` below.
+const proofStamp = new Map(
+  await Promise.all(
+    services.map(async (s) => {
+      const product = s.data.proves ? await getEntry(s.data.proves) : undefined;
+      const claim = product ? product.data.title : s.data.provenBy;
+      return [s.id, claim ? `Proven by ${claim}` : undefined] as const;
+    })
+  )
+);
+
+// Typical lengths, in one table because each one is printed twice -- once in
+// the schedule's row label, once in the spread's terms -- and two copies of a
+// number are two chances to correct only one of them.
+//
+// NONE OF THESE SIX IS SOURCED. They are the delivery team's estimates, not
+// figures taken from a contract or measured across delivered projects, which
+// is why the figure caption says "typical, not contractual". Correct them here
+// and both printings follow.
+//
+// NO PRICE BELONGS ON THIS PAGE. That is a decided policy, not a gap waiting
+// to be filled: rates are quoted after the first call, once there is a scope
+// to put a number against, and the routing table's footnote says so in as many
+// words. The `Priced` terms row on each engagement gives the MECHANISM -- fixed
+// scope, per phase, per process, by tier -- which is what a buyer needs to
+// compare shapes. A figure here would be a rate card nobody agreed to.
+const TYPICAL: Record<string, { range: string; qualifier?: string }> = {
+  'salesforce-consulting':  { range: '6–12 weeks' },
+  'product-development':    { range: '12–24 weeks' },
+  'mulesoft-integration':   { range: '8–16 weeks' },
+  'mulesoft-rpa':           { range: '4–8 weeks', qualifier: 'per process' },
+  'aws-cloud-solutions':    { range: '4–12 weeks' },
+  'airflow-data-pipelines': { range: '6–10 weeks' },
+};
+
+/** The schedule's row label, under the name: "Project · 6–12 weeks". */
+const runs = (slug: string) => `Project · ${TYPICAL[slug].range}`;
+
+/** The terms row. Carries the qualifier the schedule label has no room for --
+    RPA is priced and scheduled per process, and the figure is meaningless
+    without that word. */
+const lengthOf = (slug: string) =>
+  [TYPICAL[slug].range, TYPICAL[slug].qualifier].filter(Boolean).join(' ');
+
+type Engagement = {
+  /** Content-collection id. Also the "read the full scope" target. */
+  slug: string;
+  /** Printed as given, and the same numeral on every device below. */
+  n: string;
+  /** In-page anchor. Short, because it is read in a URL bar. */
+  id: string;
+  /** The name this page uses. Shorter than the collection title where
+      the collection's spends its first word restating "Salesforce". */
+  name: string;
+  /** The contents strip: what the engagement is FOR. */
+  contents: string;
+  /** The schedule: how long it RUNS. Different fact, same row. */
+  shape: string;
+  /** Months. Solid to `typical`, hatched on to `most`. */
+  bar?: { from: number; typical: number; most: number };
+  /** Month the rolling ticks start. */
+  roll?: number;
+  /**
+   * The spread's stamp. `shape` is what you are buying. The second line is
+   * the practice's proof, taken from the collection -- and where a practice
+   * has none, `note` stands in its place with a true statement of scope
+   * instead. A descriptive stamp is not a weaker proof, it is a different
+   * kind of sentence, and printing it as one would be the invented claim
+   * this page went out of its way to remove.
+   */
+  stamp: { shape: string; note?: string };
+  tagline: string;
+  lead: string;
+  track: Array<{ n: string; name: string; detail: string }>;
+  ending?: 'handover' | 'rolling';
+  caveat?: string;
+  stackLabel?: string;
+  stack: string;
+  terms: Array<{ term: string; detail: string }>;
+  /** The first step THIS engagement asks for. Seven engagements had
+      seven identical "Book a consultation" buttons in an early draft,
+      which is the same ask printed seven times rather than seven
+      different first meetings. */
+  cta: string;
+};
+
+const ENGAGEMENTS: Engagement[] = [
   {
-    id: 'salesforce-consulting',
-    number: '01',
-    title: 'Salesforce Consulting & Implementation',
-    tagline: 'Build a Salesforce org your team actually wants to use.',
-    description: 'We design and implement Salesforce solutions that align with how your business actually operates — not just how the platform works out of the box. Whether you\'re starting from scratch, migrating from a legacy CRM, or untangling an over-customized org, we bring a clean-architecture mindset to every engagement.',
-    features: [
-      { label: 'CRM Setup & Customization', desc: 'Sales Cloud, Service Cloud, and Experience Cloud configured to your workflows — fields, layouts, validation rules, and automation that make sense.' },
-      { label: 'Lightning Web Components', desc: 'Custom LWC development for complex UI requirements that declarative tools can\'t handle. Performance-first, security-review ready.' },
-      { label: 'Salesforce Flows & Automation', desc: 'Record-triggered flows, screen flows, and scheduled automation built to replace bloated Apex triggers with maintainable declarative logic.' },
-      { label: 'AppExchange Development', desc: '1GP and 2GP managed package development with full security review preparation. We\'ve shipped products to the AppExchange marketplace.' },
-      { label: 'Data Migration & Rollouts', desc: 'Bulk data migrations using Dataloader, SFDX, and custom ETL pipelines — with rollback plans and zero-downtime deployment strategies.' },
-      { label: 'Integrations', desc: 'Native Salesforce APIs, REST/SOAP callouts, platform events, and change data capture to connect your CRM to the broader stack.' },
+    slug: 'salesforce-consulting',
+    n: '01',
+    id: 'consulting',
+    name: 'Consulting & implementation',
+    contents: 'Build or untangle the org itself',
+    shape: runs('salesforce-consulting'),
+    bar: { from: 0, typical: 1.5, most: 3 },
+    stamp: { shape: 'Fixed-scope project' },
+    tagline: 'The build, done so your admins can still change it.',
+    lead:
+      'Every engagement starts by watching the process before we touch a field. Then we build it ' +
+      '— objects, flows, Lightning Web Components, integrations, migrations — in a shape your ' +
+      'team can read six months later. Over-customised orgs are the other half of this work: we ' +
+      'untangle trigger conflicts and redundant automation as readily as we add to them.',
+    track: [
+      {
+        n: '01',
+        name: 'Workshop',
+        detail:
+          'We sit with the people doing the work and map what actually happens, not what the ' +
+          'process document says.',
+      },
+      {
+        n: '02',
+        name: 'Architecture note',
+        detail:
+          'What we will build, what we will not, and what it costs to change our minds later. ' +
+          'You approve this before any code.',
+      },
+      {
+        n: '03',
+        name: 'Two-week increments',
+        detail: 'You see it working in a sandbox at the end of each one. No six-week silences.',
+      },
+      {
+        n: '04',
+        name: 'Handover',
+        detail:
+          'Repository, deployment runbook, and a working session with your admins on the parts ' +
+          'they will own.',
+      },
     ],
-    svg: `<svg viewBox="0 0 460 380" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:460px;height:auto;">
-      <!-- CRM dashboard frame -->
-      <rect x="40" y="30" width="380" height="280" rx="10" stroke="var(--illus-ink)" stroke-width="2.5"/>
-      <!-- Title bar -->
-      <rect x="40" y="30" width="380" height="44" rx="10" stroke="var(--illus-ink)" stroke-width="2.5" fill="none"/>
-      <path d="M40 74 L420 74" stroke="var(--illus-ink)" stroke-width="1.5"/>
-      <!-- Window dots -->
-      <circle cx="66" cy="52" r="5" stroke="var(--illus-ink)" stroke-width="1.5"/>
-      <circle cx="84" cy="52" r="5" stroke="var(--illus-ink)" stroke-width="1.5"/>
-      <circle cx="102" cy="52" r="5" stroke="var(--illus-ink)" stroke-width="1.5"/>
-      <!-- Tab label -->
-      <rect x="130" y="40" width="100" height="24" rx="4" stroke="var(--illus-ink)" stroke-width="1.5"/>
-      <path d="M143 56 L217 56" stroke="var(--illus-ink)" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
-
-      <!-- Left sidebar -->
-      <path d="M40 74 L40 310 M100 74 L100 310" stroke="var(--illus-ink)" stroke-width="1.5"/>
-      <!-- Sidebar icons -->
-      <circle cx="70" cy="106" r="8" stroke="var(--illus-ink)" stroke-width="1.5"/>
-      <rect x="58" y="126" width="24" height="3" rx="1.5" fill="var(--illus-ink)" opacity="0.3"/>
-      <circle cx="70" cy="152" r="8" stroke="var(--illus-ink)" stroke-width="1.5"/>
-      <rect x="58" y="172" width="24" height="3" rx="1.5" fill="var(--illus-ink)" opacity="0.3"/>
-      <circle cx="70" cy="200" r="8" stroke="var(--illus-ink)" stroke-width="1.5"/>
-      <rect x="58" y="220" width="24" height="3" rx="1.5" fill="var(--illus-ink)" opacity="0.3"/>
-
-      <!-- Main content area: KPI cards row -->
-      <rect x="116" y="92" width="88" height="68" rx="6" stroke="var(--illus-ink)" stroke-width="1.5"/>
-      <text x="130" y="118" font-family="var(--illus-font)" font-size="20" font-weight="900" fill="var(--illus-ink)">1 Day</text>
-      <text x="126" y="140" font-family="var(--illus-font)" font-size="9" fill="var(--illus-ink-soft)">Response time</text>
-      <rect x="214" y="92" width="88" height="68" rx="6" stroke="var(--illus-ink)" stroke-width="1.5"/>
-      <text x="224" y="118" font-family="var(--illus-font)" font-size="22" font-weight="900" fill="var(--illus-ink)">70+</text>
-      <text x="224" y="140" font-family="var(--illus-font)" font-size="9" fill="var(--illus-ink-soft)">Projects</text>
-      <rect x="312" y="92" width="88" height="68" rx="6" stroke="var(--illus-ink)" stroke-width="1.5"/>
-      <text x="322" y="118" font-family="var(--illus-font)" font-size="22" font-weight="900" fill="var(--illus-ink)">12+</text>
-      <text x="322" y="140" font-family="var(--illus-font)" font-size="9" fill="var(--illus-ink-soft)">Yrs combined</text>
-
-      <!-- Pipeline / list rows -->
-      <rect x="116" y="174" width="284" height="32" rx="5" stroke="var(--illus-ink)" stroke-width="1.5"/>
-      <circle cx="136" cy="190" r="7" stroke="var(--illus-ink)" stroke-width="1.5"/>
-      <path d="M152 188 L260 188" stroke="var(--illus-ink)" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
-      <path d="M152 194 L220 194" stroke="var(--illus-ink)" stroke-width="1.5" stroke-linecap="round" opacity="0.3"/>
-      <rect x="280" y="182" width="52" height="16" rx="8" stroke="var(--illus-ink)" stroke-width="1.5"/>
-      <path d="M294 190 L318 190" stroke="var(--illus-ink)" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
-
-      <rect x="116" y="216" width="284" height="32" rx="5" stroke="var(--illus-ink)" stroke-width="1.5"/>
-      <circle cx="136" cy="232" r="7" stroke="var(--illus-ink)" stroke-width="1.5"/>
-      <path d="M152 230 L280 230" stroke="var(--illus-ink)" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
-      <path d="M152 236 L240 236" stroke="var(--illus-ink)" stroke-width="1.5" stroke-linecap="round" opacity="0.3"/>
-      <rect x="280" y="224" width="52" height="16" rx="8" stroke="var(--illus-ink)" stroke-width="1.5" fill="var(--illus-ink)"/>
-      <path d="M294 232 L318 232" stroke="var(--illus-surface)" stroke-width="1.5" stroke-linecap="round" opacity="0.8"/>
-
-      <rect x="116" y="258" width="284" height="32" rx="5" stroke="var(--illus-ink)" stroke-width="1.5"/>
-      <circle cx="136" cy="274" r="7" stroke="var(--illus-ink)" stroke-width="1.5"/>
-      <path d="M152 272 L250 272" stroke="var(--illus-ink)" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
-      <path d="M152 278 L210 278" stroke="var(--illus-ink)" stroke-width="1.5" stroke-linecap="round" opacity="0.3"/>
-      <rect x="280" y="266" width="52" height="16" rx="8" stroke="var(--illus-ink)" stroke-width="1.5"/>
-
-      <!-- Cloud badge -->
-      <path d="M320 340 C308 340 300 334 300 326 C300 319 306 313 314 313 C316 306 323 300 332 300 C341 300 349 307 349 316 C355 317 360 322 360 328 C360 335 353 340 344 340 Z" stroke="var(--illus-ink)" stroke-width="2" fill="none" opacity="0.6"/>
-      <!-- Lightning bolt in cloud -->
-      <path d="M334 314 L328 325 L333 325 L329 337 L340 322 L335 322 Z" stroke="var(--illus-ink)" stroke-width="1.5" fill="none" opacity="0.6"/>
-
-      <!-- Connecting arrow from cloud to dashboard -->
-      <path d="M320 328 L420 280" stroke="var(--illus-ink)" stroke-width="1.5" stroke-dasharray="5 4" opacity="0.35"/>
-    </svg>`,
+    stack:
+      'CRM customisation · Flows & automation · Lightning Web Components · ' +
+      'REST / SOAP / Platform Events · Heroku Connect · Data migration',
+    terms: [
+      { term: 'Shape',          detail: 'Fixed-scope project' },
+      { term: 'Typical length', detail: lengthOf('salesforce-consulting') },
+      { term: 'Priced',         detail: 'Fixed scope, or time & materials' },
+      { term: 'Starts with',    detail: 'A workshop, not a proposal' },
+      { term: 'You keep',       detail: 'Repository, runbook, admin training' },
+    ],
+    cta: 'Book the workshop',
   },
   {
-    id: 'product-development',
-    number: '02',
-    title: 'AppExchange Product Development',
-    tagline: 'From concept to listed app — we know the marketplace inside out.',
-    description: 'Building for the AppExchange requires a different mindset than internal org work. Security Review, packaging architecture, multi-org compatibility, and licensing models all demand specialized expertise. We\'ve navigated these requirements end-to-end and can guide your product from its first line of code to a published listing.',
-    features: [
-      { label: '1GP & 2GP Managed Packages', desc: 'Architecture advice and hands-on implementation for both first-generation and second-generation packaging strategies — each with distinct trade-offs.' },
-      { label: 'Security Review Preparation', desc: 'Static analysis, manual code reviews, and remediation support to meet Salesforce\'s AppExchange Security Review requirements without costly delays.' },
-      { label: 'Multi-Org Compatibility', desc: 'Design patterns that work across Professional, Enterprise, and Unlimited editions — handling field limits, permission sets, and namespace considerations.' },
-      { label: 'Licensing & Entitlements', desc: 'LMA (License Management App) integration, seat-based licensing logic, and trial experiences that convert prospects into paying customers.' },
-      { label: 'ISV Go-to-Market Strategy', desc: 'Partner agreements, AppExchange listing copy and screenshots, Trailhead partner portal setup, and guidance on pricing and packaging.' },
-      { label: 'Post-Listing Support', desc: 'Upgrade management, version compatibility, subscriber issue resolution, and ongoing feature development for your listed product.' },
+    slug: 'product-development',
+    n: '02',
+    id: 'product',
+    name: 'Product development',
+    contents: 'Managed packages through Security Review',
+    shape: 'Project, then retainer',
+    bar: { from: 0, typical: 3, most: 6 },
+    roll: 6,
+    stamp: { shape: 'Project, then retainer' },
+    tagline: 'Get through Security Review the first time.',
+    lead:
+      'Building for the AppExchange is not org work with a namespace on it. Packaging tier, ' +
+      'namespace, edition compatibility and subscriber lifecycle are decisions that are expensive ' +
+      'to reverse, and Security Review is where the unprepared lose a quarter. We have shipped ' +
+      'managed packages and know which of those decisions bite.',
+    track: [
+      {
+        n: '01',
+        name: 'Packaging decision',
+        detail:
+          '1GP or 2GP, namespace registration, and how the package splits — settled before the ' +
+          'first commit.',
+      },
+      {
+        n: '02',
+        name: 'Build',
+        detail:
+          'Multi-edition patterns, CRUD/FLS on every query and DML, scratch-org CI from day one.',
+      },
+      {
+        n: '03',
+        name: 'Review preparation',
+        detail:
+          'PMD static analysis on an AppExchange-tuned ruleset, then a manual pass for XSS and ' +
+          'SOQL injection.',
+      },
+      {
+        n: '04',
+        name: 'Submission',
+        detail:
+          'We fill out the form, answer the reviewer, and coordinate resubmission if it comes back.',
+      },
+      {
+        n: '05',
+        name: 'Listing & licensing',
+        detail:
+          'LMA, trials that expire gracefully, seat enforcement, and the listing copy buyers ' +
+          'respond to.',
+      },
     ],
-    svg: `<svg viewBox="0 0 460 380" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:460px;height:auto;">
-      <!-- Package box 3D -->
-      <path d="M230 60 L340 120 L340 240 L230 300 L120 240 L120 120 Z" stroke="var(--illus-ink)" stroke-width="2.5" stroke-linejoin="round"/>
-      <path d="M230 60 L230 180 L340 120" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.5"/>
-      <path d="M230 180 L120 120" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.5"/>
-      <path d="M230 180 L230 300" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.4"/>
-      <!-- Package tape lines -->
-      <path d="M175 90 L285 90 M175 270 L285 270" stroke="var(--illus-ink)" stroke-width="2" opacity="0.3"/>
-      <path d="M230 60 L230 300" stroke="var(--illus-ink)" stroke-width="2" opacity="0.25"/>
-      <!-- Shield on box face -->
-      <path d="M200 155 C200 145 215 135 230 133 C245 135 260 145 260 155 L260 188 C260 200 245 210 230 214 C215 210 200 200 200 188 Z" stroke="var(--illus-ink)" stroke-width="2" fill="none"/>
-      <!-- Checkmark in shield -->
-      <path d="M218 172 L226 180 L244 162" stroke="var(--illus-ink)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-
-      <!-- Floating version tags -->
-      <rect x="50" y="60" width="58" height="26" rx="13" stroke="var(--illus-ink)" stroke-width="1.5"/>
-      <text x="79" y="78" text-anchor="middle" font-family="var(--illus-font)" font-size="11" font-weight="700" fill="var(--illus-ink)">v2.1.0</text>
-
-      <rect x="50" y="100" width="58" height="26" rx="13" stroke="var(--illus-ink)" stroke-width="1.5" fill="var(--illus-ink)"/>
-      <text x="79" y="118" text-anchor="middle" font-family="var(--illus-font)" font-size="11" font-weight="700" fill="var(--illus-surface)">2GP</text>
-
-      <!-- Code snippet floating -->
-      <rect x="340" y="70" width="100" height="80" rx="6" stroke="var(--illus-ink)" stroke-width="1.5"/>
-      <path d="M354 94 L360 100 L354 106" stroke="var(--illus-ink)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"/>
-      <path d="M376 94 L370 100 L376 106" stroke="var(--illus-ink)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"/>
-      <path d="M358 86 L420 86" stroke="var(--illus-ink)" stroke-width="1.5" stroke-linecap="round" opacity="0.3"/>
-      <path d="M358 116 L405 116" stroke="var(--illus-ink)" stroke-width="1.5" stroke-linecap="round" opacity="0.25"/>
-      <path d="M358 128 L415 128" stroke="var(--illus-ink)" stroke-width="1.5" stroke-linecap="round" opacity="0.2"/>
-      <path d="M358 140 L395 140" stroke="var(--illus-ink)" stroke-width="1.5" stroke-linecap="round" opacity="0.2"/>
-
-      <!-- AppExchange star -->
-      <polygon points="80,280 86,300 108,300 92,312 98,332 80,320 62,332 68,312 52,300 74,300"
-               stroke="var(--illus-ink)" stroke-width="1.5" fill="none" opacity="0.6"/>
-
-      <!-- Arrows showing flow to marketplace -->
-      <path d="M340 180 L380 180" stroke="var(--illus-ink)" stroke-width="1.5" stroke-dasharray="5 4" opacity="0.4"/>
-      <path d="M380 180 L380 290 L150 320" stroke="var(--illus-ink)" stroke-width="1.5" stroke-dasharray="5 4" opacity="0.3"/>
-      <!-- Arrowhead -->
-      <path d="M147 316 L150 320 L154 316" stroke="var(--illus-ink)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.4"/>
-    </svg>`,
+    stack:
+      '1GP & 2GP · Namespace strategy · PMD + manual audit · LMA & entitlements · ' +
+      'Scratch-org CI/CD · Release readiness',
+    terms: [
+      { term: 'Shape',          detail: 'Project, then retainer at launch' },
+      { term: 'Typical length', detail: lengthOf('product-development') },
+      { term: 'Priced',         detail: 'Per phase' },
+      { term: 'Starts with',    detail: 'A packaging decision' },
+      { term: 'You keep',       detail: 'Package, CI pipeline, submission record' },
+    ],
+    cta: 'Book a packaging call',
   },
   {
-    id: null,
-    number: '03',
-    title: 'MuleSoft Integration Services',
-    tagline: 'Every system in your stack, talking to every other.',
-    description: 'Enterprises accumulate systems faster than they connect them. MuleSoft gives you an API-led approach to integration that scales — but only when implemented correctly. We design and build integration layers that are reliable, observable, and easy for your team to maintain long after we\'re gone.',
-    features: [
-      { label: 'API-Led Connectivity', desc: 'System APIs, process APIs, and experience APIs — architected in layers so individual system changes don\'t cascade across your entire integration fabric.' },
-      { label: 'Salesforce Connectivity', desc: 'Bi-directional sync between Salesforce and ERP, marketing platforms, custom apps, and data warehouses using Salesforce Connector and Change Data Capture.' },
-      { label: 'Enterprise Workflow Automation', desc: 'Replace manual handoffs and email-driven processes with automated flows across your CRM, ERP, HCM, and custom applications.' },
-      { label: 'Real-Time & Event-Driven', desc: 'Anypoint Platform event-driven patterns using Anypoint MQ and Salesforce Platform Events for real-time data propagation.' },
-      { label: 'Monitoring & Error Handling', desc: 'Proactive error notifications, dead-letter queue management, and Anypoint Monitoring dashboards so issues surface before customers notice.' },
-      { label: 'API Governance', desc: 'Exchange portal setup, RAML/OAS spec-first design, API policies (rate limiting, OAuth), and versioning strategies for production APIs.' },
+    slug: 'mulesoft-integration',
+    n: '03',
+    id: 'mulesoft',
+    name: 'MuleSoft integration',
+    contents: 'One API layer instead of six point-to-point links',
+    shape: runs('mulesoft-integration'),
+    bar: { from: 0, typical: 2, most: 4 },
+    stamp: { shape: 'Fixed-scope project', note: 'Anypoint Platform' },
+    tagline: 'One API layer, so your systems stop talking point-to-point.',
+    lead:
+      'Point-to-point integrations are cheap to build and expensive to own: every system you add ' +
+      'multiplies the connections, and nobody can say what breaks when one goes down. API-led ' +
+      'connectivity puts three named layers between your systems, so a change lands in one place ' +
+      'instead of six. We design the layers, build them, and document the Exchange portal well ' +
+      'enough that your team adds the next API without calling us.',
+    track: [
+      {
+        n: '01',
+        name: 'Connection audit',
+        detail:
+          'Every system, every integration that already exists, and what each one actually moves. ' +
+          'Usually the first honest map anyone has had.',
+      },
+      {
+        n: '02',
+        name: 'System APIs',
+        detail:
+          'One per source of record — Salesforce, ERP, HCM. Nothing business-specific, so they ' +
+          'outlive the processes built on top of them.',
+      },
+      {
+        n: '03',
+        name: 'Process APIs',
+        detail:
+          'Where the business logic lives. Order-to-cash, lead-to-quote, composed from the system ' +
+          'layer rather than wired to it.',
+      },
+      {
+        n: '04',
+        name: 'Experience APIs',
+        detail:
+          'Shaped for whoever consumes them: the mobile app, the partner portal, the Salesforce org.',
+      },
+      {
+        n: '05',
+        name: 'Handover',
+        detail:
+          'Exchange portal with specs and examples, API policies applied, Anypoint Monitoring ' +
+          'dashboards and dead-letter queues wired, runbook written.',
+      },
     ],
-    svg: `<svg viewBox="0 0 460 380" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:460px;height:auto;">
-      <!-- Central hub -->
-      <circle cx="230" cy="190" r="42" stroke="var(--illus-ink)" stroke-width="2.5"/>
-      <circle cx="230" cy="190" r="26" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.4"/>
-      <text x="230" y="186" text-anchor="middle" font-family="var(--illus-font)" font-size="10" font-weight="700" fill="var(--illus-ink)">MULE</text>
-      <text x="230" y="200" text-anchor="middle" font-family="var(--illus-font)" font-size="10" font-weight="700" fill="var(--illus-ink)">SOFT</text>
-
-      <!-- System nodes -->
-      <!-- Salesforce (top) -->
-      <rect x="185" y="30" width="90" height="50" rx="8" stroke="var(--illus-ink)" stroke-width="2"/>
-      <text x="230" y="52" text-anchor="middle" font-family="var(--illus-font)" font-size="10" font-weight="700" fill="var(--illus-ink)">Salesforce</text>
-      <text x="230" y="66" text-anchor="middle" font-family="var(--illus-font)" font-size="9" fill="var(--illus-ink-soft)">CRM</text>
-      <!-- Connection line -->
-      <path d="M230 80 L230 148" stroke="var(--illus-ink)" stroke-width="1.5" stroke-dasharray="5 3"/>
-      <path d="M226 84 L230 80 L234 84" stroke="var(--illus-ink)" stroke-width="1.5" stroke-linecap="round"/>
-
-      <!-- ERP (bottom) -->
-      <rect x="185" y="300" width="90" height="50" rx="8" stroke="var(--illus-ink)" stroke-width="2"/>
-      <text x="230" y="322" text-anchor="middle" font-family="var(--illus-font)" font-size="10" font-weight="700" fill="var(--illus-ink)">ERP</text>
-      <text x="230" y="336" text-anchor="middle" font-family="var(--illus-font)" font-size="9" fill="var(--illus-ink-soft)">SAP / NetSuite</text>
-      <path d="M230 300 L230 232" stroke="var(--illus-ink)" stroke-width="1.5" stroke-dasharray="5 3"/>
-      <path d="M226 296 L230 300 L234 296" stroke="var(--illus-ink)" stroke-width="1.5" stroke-linecap="round"/>
-
-      <!-- AWS (right) -->
-      <rect x="360" y="165" width="85" height="50" rx="8" stroke="var(--illus-ink)" stroke-width="2"/>
-      <text x="402" y="187" text-anchor="middle" font-family="var(--illus-font)" font-size="10" font-weight="700" fill="var(--illus-ink)">AWS</text>
-      <text x="402" y="201" text-anchor="middle" font-family="var(--illus-font)" font-size="9" fill="var(--illus-ink-soft)">Cloud</text>
-      <path d="M360 190 L272 190" stroke="var(--illus-ink)" stroke-width="1.5" stroke-dasharray="5 3"/>
-      <path d="M364 186 L360 190 L364 194" stroke="var(--illus-ink)" stroke-width="1.5" stroke-linecap="round"/>
-
-      <!-- Custom App (left) -->
-      <rect x="15" y="165" width="85" height="50" rx="8" stroke="var(--illus-ink)" stroke-width="2"/>
-      <text x="57" y="187" text-anchor="middle" font-family="var(--illus-font)" font-size="10" font-weight="700" fill="var(--illus-ink)">Custom</text>
-      <text x="57" y="201" text-anchor="middle" font-family="var(--illus-font)" font-size="9" fill="var(--illus-ink-soft)">App API</text>
-      <path d="M100 190 L188 190" stroke="var(--illus-ink)" stroke-width="1.5" stroke-dasharray="5 3"/>
-      <path d="M96 186 L100 190 L96 194" stroke="var(--illus-ink)" stroke-width="1.5" stroke-linecap="round"/>
-
-      <!-- DB (top-right) -->
-      <ellipse cx="360" cy="78" rx="40" ry="26" stroke="var(--illus-ink)" stroke-width="1.5"/>
-      <path d="M320 78 L320 104 Q340 116 360 116 Q380 116 400 104 L400 78" stroke="var(--illus-ink)" stroke-width="1.5"/>
-      <text x="360" y="82" text-anchor="middle" font-family="var(--illus-font)" font-size="9" fill="var(--illus-ink)" font-weight="700">Snowflake</text>
-      <path d="M320 130 L272 170" stroke="var(--illus-ink)" stroke-width="1.5" stroke-dasharray="5 3" opacity="0.6"/>
-
-      <!-- Marketing (top-left) -->
-      <rect x="34" y="55" width="80" height="46" rx="8" stroke="var(--illus-ink)" stroke-width="1.5"/>
-      <text x="74" y="75" text-anchor="middle" font-family="var(--illus-font)" font-size="9" font-weight="700" fill="var(--illus-ink)">Marketing</text>
-      <text x="74" y="89" text-anchor="middle" font-family="var(--illus-font)" font-size="9" fill="var(--illus-ink-soft)">Platform</text>
-      <path d="M114 100 L190 162" stroke="var(--illus-ink)" stroke-width="1.5" stroke-dasharray="5 3" opacity="0.6"/>
-
-      <!-- Pulse dots on lines -->
-      <circle cx="230" cy="114" r="4" fill="var(--illus-ink)" opacity="0.5"/>
-      <circle cx="230" cy="266" r="4" fill="var(--illus-ink)" opacity="0.5"/>
-      <circle cx="316" cy="190" r="4" fill="var(--illus-ink)" opacity="0.5"/>
-      <circle cx="144" cy="190" r="4" fill="var(--illus-ink)" opacity="0.5"/>
-    </svg>`,
+    stack:
+      'API-led connectivity · Anypoint Platform · Anypoint MQ · Platform Events · ' +
+      'Change Data Capture · RAML / OAS · Exchange',
+    terms: [
+      { term: 'Shape',          detail: 'Fixed-scope project' },
+      { term: 'Typical length', detail: lengthOf('mulesoft-integration') },
+      { term: 'Priced',         detail: 'Per layer, scoped from the audit' },
+      { term: 'Starts with',    detail: 'A connection audit' },
+      { term: 'You keep',       detail: 'Anypoint repo, API specs, policies, dashboards, runbook' },
+    ],
+    cta: 'Book a connection audit',
   },
   {
-    id: null,
-    number: '04',
-    title: 'AWS Cloud Solutions',
-    tagline: 'Scalable, cost-efficient infrastructure alongside your Salesforce stack.',
-    description: 'AWS and Salesforce aren\'t competitors — they\'re complements. We help you leverage AWS for workloads that don\'t belong in Salesforce: data pipelines, heavy compute, long-term storage, and analytics. Our solutions are architected for reliability from day one, with cost optimization built in rather than bolted on.',
-    features: [
-      { label: 'Cloud Architecture Design', desc: 'VPC design, multi-AZ deployments, IAM strategy, and AWS Well-Architected review. Infrastructure-as-code with Terraform or CDK.' },
-      { label: 'Heroku + AWS Pipelines', desc: 'Data pipelines using Apache Airflow on Heroku or AWS MWAA, processing Salesforce data through bronze/silver/gold medallion layers into Snowflake or Redshift.' },
-      { label: 'Serverless & Lambda', desc: 'Event-driven processing of Salesforce Platform Events using Lambda functions — lightweight, no-server, billed per-execution.' },
-      { label: 'Data Migration', desc: 'Legacy system migrations to AWS with DMS, Glue, and S3 as the landing zone. Full validation and rollback planning.' },
-      { label: 'Analytics & Business Intelligence', desc: 'Amazon QuickSight, Snowflake, or Athena on top of your Salesforce + operational data for cross-system reporting.' },
-      { label: 'Cost Optimization', desc: 'Right-sizing, Reserved Instance analysis, S3 lifecycle policies, and spend alerting so AWS bills stay predictable as you scale.' },
+    slug: 'mulesoft-rpa',
+    n: '04',
+    id: 'rpa',
+    name: 'MuleSoft RPA',
+    contents: 'Bots for the systems that never got an API',
+    shape: runs('mulesoft-rpa'),
+    bar: { from: 0, typical: 1, most: 2 },
+    stamp: { shape: 'Fixed-scope project', note: 'Per process automated' },
+    tagline: 'Automate the systems that never got an API.',
+    lead:
+      'Some systems cannot be integrated, only operated: a supplier portal with no API, a ' +
+      'mainframe screen, a PDF somebody rekeys into Salesforce every morning. RPA drives those ' +
+      'the way a person does, except at 3am and without transcription errors. We build the bots ' +
+      'in MuleSoft RPA so they run on the same Anypoint platform as your integrations — one place ' +
+      'to monitor, one place to alert — instead of becoming a second automation tool nobody governs.',
+    track: [
+      {
+        n: '01',
+        name: 'Process capture',
+        detail:
+          'We sit with whoever does the work today and record it. What looks like one process is ' +
+          'usually three, and one of them should not exist at all.',
+      },
+      {
+        n: '02',
+        name: 'Bot build',
+        detail:
+          'We record it in RPA Builder and write the exception paths deliberately, instead of ' +
+          'discovering them in production.',
+      },
+      {
+        n: '03',
+        name: 'Attended or unattended',
+        detail:
+          'Attended runs beside a person for the judgement calls; unattended runs on a schedule. ' +
+          'Most processes want one of each, split at the decision point.',
+      },
+      {
+        n: '04',
+        name: 'Wired into Anypoint',
+        detail:
+          'Bots triggered by, and reporting into, the same integration layer — so a bot failure ' +
+          'raises the same alert everything else does.',
+      },
+      {
+        n: '05',
+        name: 'Handover',
+        detail:
+          'Bot definitions in your own tenancy, an exception runbook, and the process ' +
+          'documentation the capture produced.',
+      },
     ],
-    svg: `<svg viewBox="0 0 460 380" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:460px;height:auto;">
-      <!-- Cloud shape -->
-      <path d="M148 200 C100 200 70 172 70 144 C70 120 90 100 116 96 C118 64 146 42 180 42 C210 42 236 60 248 87 C258 82 270 80 284 80 C320 80 350 108 350 146 C350 184 320 212 284 212 L148 200Z"
-            stroke="var(--illus-ink)" stroke-width="2.5" fill="none" opacity="0.85"/>
-
-      <!-- Servers inside cloud region -->
-      <rect x="130" y="116" width="50" height="38" rx="5" stroke="var(--illus-ink)" stroke-width="1.5"/>
-      <path d="M130 130 L180 130" stroke="var(--illus-ink)" stroke-width="1" opacity="0.5"/>
-      <path d="M130 142 L180 142" stroke="var(--illus-ink)" stroke-width="1" opacity="0.5"/>
-      <circle cx="140" cy="123" r="2.5" fill="var(--illus-ink)" opacity="0.6"/>
-      <circle cx="140" cy="136" r="2.5" fill="var(--illus-ink)" opacity="0.6"/>
-      <circle cx="140" cy="149" r="2.5" fill="var(--illus-ink)" opacity="0.6"/>
-
-      <rect x="200" y="116" width="50" height="38" rx="5" stroke="var(--illus-ink)" stroke-width="1.5"/>
-      <path d="M200 130 L250 130" stroke="var(--illus-ink)" stroke-width="1" opacity="0.5"/>
-      <path d="M200 142 L250 142" stroke="var(--illus-ink)" stroke-width="1" opacity="0.5"/>
-      <circle cx="210" cy="123" r="2.5" fill="var(--illus-ink)" opacity="0.6"/>
-      <circle cx="210" cy="136" r="2.5" fill="var(--illus-ink)" opacity="0.6"/>
-      <circle cx="210" cy="149" r="2.5" fill="var(--illus-ink)" opacity="0.6"/>
-
-      <rect x="270" y="116" width="50" height="38" rx="5" stroke="var(--illus-ink)" stroke-width="1.5"/>
-      <path d="M270 130 L320 130" stroke="var(--illus-ink)" stroke-width="1" opacity="0.5"/>
-      <path d="M270 142 L320 142" stroke="var(--illus-ink)" stroke-width="1" opacity="0.5"/>
-      <circle cx="280" cy="123" r="2.5" fill="var(--illus-ink)" opacity="0.6"/>
-      <circle cx="280" cy="136" r="2.5" fill="var(--illus-ink)" opacity="0.6"/>
-      <circle cx="280" cy="149" r="2.5" fill="var(--illus-ink)" opacity="0.6"/>
-
-      <!-- AZ badges -->
-      <rect x="130" y="162" width="50" height="18" rx="9" stroke="var(--illus-ink)" stroke-width="1.5" fill="var(--illus-ink)"/>
-      <text x="155" y="175" text-anchor="middle" font-family="var(--illus-font)" font-size="9" font-weight="700" fill="var(--illus-surface)">AZ-1</text>
-      <rect x="200" y="162" width="50" height="18" rx="9" stroke="var(--illus-ink)" stroke-width="1.5"/>
-      <text x="225" y="175" text-anchor="middle" font-family="var(--illus-font)" font-size="9" font-weight="700" fill="var(--illus-ink)">AZ-2</text>
-      <rect x="270" y="162" width="50" height="18" rx="9" stroke="var(--illus-ink)" stroke-width="1.5"/>
-      <text x="295" y="175" text-anchor="middle" font-family="var(--illus-font)" font-size="9" font-weight="700" fill="var(--illus-ink)">AZ-3</text>
-
-      <!-- Load balancer above -->
-      <rect x="188" y="68" width="84" height="28" rx="6" stroke="var(--illus-ink)" stroke-width="1.5"/>
-      <text x="230" y="87" text-anchor="middle" font-family="var(--illus-font)" font-size="10" font-weight="700" fill="var(--illus-ink)">Load Balancer</text>
-      <!-- Lines from LB to servers -->
-      <path d="M210 96 L155 116" stroke="var(--illus-ink)" stroke-width="1" opacity="0.4"/>
-      <path d="M230 96 L225 116" stroke="var(--illus-ink)" stroke-width="1" opacity="0.4"/>
-      <path d="M250 96 L295 116" stroke="var(--illus-ink)" stroke-width="1" opacity="0.4"/>
-
-      <!-- Data flow arrows going down -->
-      <path d="M155 200 L155 240" stroke="var(--illus-ink)" stroke-width="1.5" stroke-dasharray="5 4"/>
-      <path d="M225 212 L225 240" stroke="var(--illus-ink)" stroke-width="1.5" stroke-dasharray="5 4"/>
-      <path d="M295 200 L295 240" stroke="var(--illus-ink)" stroke-width="1.5" stroke-dasharray="5 4"/>
-
-      <!-- Database / storage tier -->
-      <rect x="80" y="240" width="290" height="50" rx="8" stroke="var(--illus-ink)" stroke-width="2"/>
-      <text x="225" y="262" text-anchor="middle" font-family="var(--illus-font)" font-size="11" font-weight="700" fill="var(--illus-ink)">S3 / Snowflake / RDS</text>
-      <text x="225" y="278" text-anchor="middle" font-family="var(--illus-font)" font-size="9" fill="var(--illus-ink-soft)">Data Lake &amp; Analytics</text>
-
-      <!-- IaC tag -->
-      <rect x="340" y="300" width="90" height="32" rx="6" stroke="var(--illus-ink)" stroke-width="1.5"/>
-      <text x="385" y="320" text-anchor="middle" font-family="var(--illus-font)" font-size="10" font-weight="700" fill="var(--illus-ink)">Terraform / CDK</text>
-
-      <!-- Cost tag -->
-      <rect x="30" y="300" width="80" height="32" rx="6" stroke="var(--illus-ink)" stroke-width="1.5"/>
-      <text x="70" y="312" text-anchor="middle" font-family="var(--illus-font)" font-size="9" font-weight="700" fill="var(--illus-ink)">Cost</text>
-      <text x="70" y="326" text-anchor="middle" font-family="var(--illus-font)" font-size="9" fill="var(--illus-ink-soft)">Optimized</text>
-    </svg>`,
+    caveat:
+      'A bot breaks when somebody changes the screen it drives. That maintenance is real and it ' +
+      'is ongoing — it belongs in the retainer below, not hidden inside this project’s price.',
+    stack:
+      'MuleSoft RPA Builder · RPA Manager · Attended & unattended bots · ' +
+      'Document processing · Anypoint triggers',
+    terms: [
+      { term: 'Shape',          detail: 'Fixed-scope project' },
+      { term: 'Typical length', detail: lengthOf('mulesoft-rpa') },
+      { term: 'Priced',         detail: 'Per process automated' },
+      { term: 'Starts with',    detail: 'A process capture' },
+      { term: 'You keep',       detail: 'Bot definitions, exception runbook, process docs' },
+    ],
+    cta: 'Book a process capture',
   },
   {
-    id: 'support-and-managed-services',
-    number: '05',
-    title: 'Support & Managed Services',
-    tagline: 'Your Salesforce org, always running at its best.',
-    description: 'Salesforce never really finishes — it evolves with your business. Our managed services keep your org healthy, your team unblocked, and your roadmap moving. We work as an extension of your team on a flexible retainer, handling everything from critical bugs to new feature development and proactive health monitoring.',
-    features: [
-      { label: 'Bug Fixes & Enhancements', desc: 'Defined SLA response times for P1 through P4 issues. No tickets that fall into a void — every request is triaged, estimated, and resolved transparently.' },
-      { label: 'New Feature Development', desc: 'Retainer hours can be used for new development as well as maintenance. Roadmap planning and sprint-style delivery on a monthly cadence.' },
-      { label: 'Org Health Reviews', desc: 'Quarterly security audits, field & object utilization reports, automation debt analysis, and a written action plan with prioritized recommendations.' },
-      { label: 'User & Permission Management', desc: 'Profile and permission set cleanup, user provisioning, SSO configuration, and license optimization to reduce spend and security risk.' },
-      { label: 'Proactive Monitoring', desc: 'Scheduled Apex job health checks, governor limit monitoring, integration error alerts, and API usage trending to surface issues before they become incidents.' },
-      { label: 'Release Management', desc: 'Sandbox strategy, change set reviews, deployment scheduling around your go-live windows, and post-deploy smoke tests to catch regressions early.' },
+    slug: 'aws-cloud-solutions',
+    n: '05',
+    id: 'aws',
+    name: 'AWS cloud solutions',
+    contents: 'The workloads that do not belong in Salesforce',
+    shape: runs('aws-cloud-solutions'),
+    bar: { from: 0, typical: 1, most: 3 },
+    stamp: { shape: 'Fixed-scope project', note: 'Cost work included' },
+    tagline: 'The workloads that do not belong inside Salesforce.',
+    lead:
+      'Heavy compute, long-term storage, cross-system analytics, and anything that would eat your ' +
+      'API limits belongs next to Salesforce rather than inside it. We architect that side ' +
+      'properly the first time — VPC, IAM, infrastructure as code — so the account is auditable ' +
+      'and the bill does not surprise you in month four. Cost work is part of the design here, ' +
+      'not a clean-up engagement we sell you afterwards.',
+    track: [
+      {
+        n: '01',
+        name: 'Architecture review',
+        detail:
+          'What you run now, what it costs, and which parts of it Salesforce should stop doing.',
+      },
+      {
+        n: '02',
+        name: 'Foundation',
+        detail:
+          'VPC, subnets, IAM roles and guardrails, written as Terraform or CDK so the account can ' +
+          'be rebuilt from the repository.',
+      },
+      {
+        n: '03',
+        name: 'Workloads',
+        detail:
+          'Serverless processing of Platform Events, a migration off a legacy system, or the ' +
+          'analytics layer — whichever the review picked.',
+      },
+      {
+        n: '04',
+        name: 'Reporting layer',
+        detail:
+          'QuickSight, Athena or Snowflake, reading the cross-system view Salesforce alone cannot ' +
+          'give you.',
+      },
+      {
+        n: '05',
+        name: 'Handover',
+        detail:
+          'Infrastructure repository, budgets and cost alerts set, access model documented, ' +
+          'runbook written.',
+      },
     ],
-    svg: `<svg viewBox="0 0 460 380" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:460px;height:auto;">
-      <!-- Shield -->
-      <path d="M230 30 C195 30 148 46 130 60 L130 190 C130 250 175 300 230 320 C285 300 330 250 330 190 L330 60 C312 46 265 30 230 30 Z"
-            stroke="var(--illus-ink)" stroke-width="2.5" fill="none"/>
-      <!-- Inner shield ring -->
-      <path d="M230 55 C205 55 170 67 155 78 L155 188 C155 232 188 272 230 288 C272 272 305 232 305 188 L305 78 C290 67 255 55 230 55 Z"
-            stroke="var(--illus-ink)" stroke-width="1.5" fill="none" opacity="0.35"/>
-
-      <!-- Checkmark inside shield -->
-      <path d="M200 172 L220 194 L265 148" stroke="var(--illus-ink)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-
-      <!-- Ticket/task cards floating around -->
-      <!-- Top right card -->
-      <rect x="340" y="50" width="108" height="72" rx="8" stroke="var(--illus-ink)" stroke-width="1.5"/>
-      <rect x="340" y="50" width="108" height="24" rx="8" stroke="none" fill="none"/>
-      <path d="M340 74 L448 74" stroke="var(--illus-ink)" stroke-width="1"/>
-      <circle cx="356" cy="62" r="4" fill="var(--illus-ink)" opacity="0.8"/>
-      <path d="M368 60 L430 60" stroke="var(--illus-ink)" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
-      <path d="M352 84 L420 84" stroke="var(--illus-ink)" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
-      <path d="M352 96 L436 96" stroke="var(--illus-ink)" stroke-width="1.5" stroke-linecap="round" opacity="0.3"/>
-      <path d="M352 108 L410 108" stroke="var(--illus-ink)" stroke-width="1.5" stroke-linecap="round" opacity="0.25"/>
-
-      <!-- SLA badge top-left -->
-      <rect x="12" y="60" width="94" height="36" rx="18" stroke="var(--illus-ink)" stroke-width="1.5"/>
-      <text x="59" y="74" text-anchor="middle" font-family="var(--illus-font)" font-size="9" font-weight="700" fill="var(--illus-ink)">P1 Response</text>
-      <text x="59" y="88" text-anchor="middle" font-family="var(--illus-font)" font-size="9" fill="var(--illus-ink-soft)">&lt; 1 hour</text>
-
-      <!-- Clock icon bottom-right -->
-      <circle cx="390" cy="220" r="36" stroke="var(--illus-ink)" stroke-width="2"/>
-      <path d="M390 196 L390 220 L410 220" stroke="var(--illus-ink)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-      <circle cx="390" cy="220" r="3" fill="var(--illus-ink)"/>
-
-      <!-- Health bar bottom-left -->
-      <rect x="20" y="230" width="94" height="10" rx="5" stroke="var(--illus-ink)" stroke-width="1.5"/>
-      <rect x="20" y="230" width="78" height="10" rx="5" fill="var(--illus-ink)" opacity="0.85"/>
-      <text x="67" y="256" text-anchor="middle" font-family="var(--illus-font)" font-size="9" font-weight="700" fill="var(--illus-ink)">Org Health: 84%</text>
-
-      <!-- Pulse line -->
-      <path d="M30 300 L60 300 L80 270 L100 330 L120 300 L150 300 L165 285 L180 315 L195 300 L220 300"
-            stroke="var(--illus-ink)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.5"/>
-
-      <!-- Monthly report -->
-      <rect x="340" y="280" width="108" height="72" rx="8" stroke="var(--illus-ink)" stroke-width="1.5"/>
-      <path d="M354 304 L430 304" stroke="var(--illus-ink)" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
-      <path d="M354 316 L420 316" stroke="var(--illus-ink)" stroke-width="1.5" stroke-linecap="round" opacity="0.35"/>
-      <path d="M354 328 L435 328" stroke="var(--illus-ink)" stroke-width="1.5" stroke-linecap="round" opacity="0.3"/>
-      <path d="M354 340 L415 340" stroke="var(--illus-ink)" stroke-width="1.5" stroke-linecap="round" opacity="0.25"/>
-      <text x="394" y="298" text-anchor="middle" font-family="var(--illus-font)" font-size="9" font-weight="700" fill="var(--illus-ink)">Monthly Report</text>
-    </svg>`,
+    stack:
+      'VPC & IAM · Terraform / CDK · Lambda · Platform Events · S3 lifecycle · ' +
+      'QuickSight / Athena / Snowflake · Cost alerts',
+    terms: [
+      { term: 'Shape',          detail: 'Fixed-scope project' },
+      { term: 'Typical length', detail: lengthOf('aws-cloud-solutions') },
+      { term: 'Priced',         detail: 'Scoped from the architecture review' },
+      { term: 'Starts with',    detail: 'An architecture review' },
+      { term: 'You keep',       detail: 'Infrastructure repo, cost alerts, access model, runbook' },
+    ],
+    cta: 'Book an architecture review',
   },
   {
-    id: 'airflow-data-pipelines',
-    number: '06',
-    title: 'Airflow Data Pipeline Integration',
-    tagline: 'Move 50M+ records between Salesforce and every system in your stack — reliably.',
-    description: 'Enterprise clients accumulate data across ERP systems, databases, REST APIs, and flat files that all need to sync with Salesforce. We design and build Apache Airflow DAGs that orchestrate these data flows with Salesforce Bulk API 2.0, automatic retry logic, full observability, and a medallion architecture that gives you clean, query-ready data at every layer.',
-    features: [
-      { label: 'Salesforce Bulk API 2.0', desc: 'Asynchronous batch jobs that process millions of records per run without triggering REST API governor limits. Designed for Account, Contact, Opportunity, Case, and custom objects at any volume.' },
-      { label: 'DAG-Orchestrated Pipelines', desc: 'Parallel extraction from multiple source systems — ERP, databases, REST APIs, S3 — converged into a single validated, transformed load with dependency management between tasks.' },
-      { label: 'Medallion Architecture', desc: 'Bronze (raw extracted data) → Silver (cleansed, deduped, typed) → Gold (business-ready aggregations in Snowflake or Redshift) — each layer independently queryable and replayable.' },
-      { label: 'Bi-directional & ERP Sync', desc: 'Two-way sync between Salesforce and SAP, NetSuite, or Oracle with conflict resolution, External ID upsert, and last-writer-wins or Salesforce-master merge strategies.' },
-      { label: 'Heroku or AWS MWAA Deployment', desc: 'Deploy Airflow on Heroku for fast iteration alongside Heroku Connect workflows, or on AWS MWAA for teams already in AWS — both options with CI/CD, Git-backed DAGs, and RBAC.' },
-      { label: 'Monitoring & Alerting', desc: 'SLA miss alerts, task failure notifications, queue backlog dashboards, and a full audit trail of every run — record count in, records loaded, errors, and duration logged automatically.' },
+    slug: 'airflow-data-pipelines',
+    n: '06',
+    id: 'pipelines',
+    name: 'Airflow data pipelines',
+    contents: 'Bulk movement between Salesforce and the warehouse',
+    shape: runs('airflow-data-pipelines'),
+    bar: { from: 0, typical: 1.5, most: 2.5 },
+    stamp: { shape: 'Fixed-scope project' },
+    tagline:
+      'Move data between Salesforce and everything else, on a schedule that recovers itself.',
+    lead:
+      'Salesforce API limits make naive syncs brittle the moment volume arrives. Airflow gives the ' +
+      'job a dependency graph, automatic retry with backoff, and an audit trail of every run. We ' +
+      'write the DAGs, hand you the repository with its CI, and train your team to extend them. We ' +
+      'build them idempotent, so a re-run is always safe, and to carry 50M+ records a day with ' +
+      'sub-30-minute incrementals.',
+    track: [
+      {
+        n: '01',
+        name: 'Source audit',
+        detail:
+          'Which systems, which objects, what volume, and how fresh the data actually has to be.',
+      },
+      {
+        n: '02',
+        name: 'Bronze — raw extract',
+        detail:
+          'Bulk API 2.0 into S3 or PostgreSQL. No transformation, full fidelity, timestamped for ' +
+          'point-in-time replay.',
+      },
+      {
+        n: '03',
+        name: 'Silver — cleansed',
+        detail:
+          'Deduped and typed. Salesforce IDs resolved to business keys, picklists normalised, ' +
+          'field validation applied.',
+      },
+      {
+        n: '04',
+        name: 'Gold — business-ready',
+        detail:
+          'Pipeline by account, case resolution, conversion funnels — loaded into Snowflake or ' +
+          'Redshift for the BI tools you already have.',
+      },
+      {
+        n: '05',
+        name: 'Handover',
+        detail: 'DAG repository with CI/CD, RBAC configured, failure and SLA alerts wired, runbook written.',
+      },
     ],
-    svg: `<svg viewBox="0 0 460 380" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:460px;height:auto;">
-      <!-- DAG container frame -->
-      <rect x="14" y="18" width="432" height="290" rx="10" stroke="var(--illus-ink)" stroke-width="2"/>
-      <!-- Header bar -->
-      <rect x="14" y="18" width="432" height="38" rx="10" stroke="var(--illus-ink)" stroke-width="2"/>
-      <path d="M14 56 L446 56" stroke="var(--illus-ink)" stroke-width="1.5"/>
-      <text x="34" y="42" font-family="var(--illus-font)" font-size="11" font-weight="700" fill="var(--illus-ink)">salesforce_enterprise_etl_dag</text>
-      <rect x="370" y="27" width="62" height="20" rx="10" stroke="var(--illus-ink)" stroke-width="1.5" fill="var(--illus-ink)"/>
-      <text x="401" y="41" text-anchor="middle" font-family="var(--illus-font)" font-size="9" font-weight="700" fill="var(--illus-surface)">@daily</text>
-
-      <!-- Source task group label -->
-      <rect x="28" y="68" width="106" height="18" rx="4" stroke="var(--illus-ink)" stroke-width="1" opacity="0.4"/>
-      <text x="81" y="80" text-anchor="middle" font-family="var(--illus-font)" font-size="8" fill="var(--illus-ink-soft)" font-weight="600">EXTRACT</text>
-
-      <!-- Source task nodes (left column) -->
-      <rect x="28" y="94" width="106" height="32" rx="6" stroke="var(--illus-ink)" stroke-width="1.5" fill="var(--illus-ink)"/>
-      <text x="81" y="108" text-anchor="middle" font-family="var(--illus-font)" font-size="9" font-weight="700" fill="var(--illus-surface)">extract_salesforce</text>
-      <text x="81" y="120" text-anchor="middle" font-family="var(--illus-font)" font-size="8" fill="var(--color-paper-a60)">Bulk API 2.0</text>
-
-      <rect x="28" y="146" width="106" height="32" rx="6" stroke="var(--illus-ink)" stroke-width="1.5"/>
-      <text x="81" y="160" text-anchor="middle" font-family="var(--illus-font)" font-size="9" font-weight="700" fill="var(--illus-ink)">extract_erp</text>
-      <text x="81" y="172" text-anchor="middle" font-family="var(--illus-font)" font-size="8" fill="var(--illus-ink-soft)">SAP / NetSuite</text>
-
-      <rect x="28" y="198" width="106" height="32" rx="6" stroke="var(--illus-ink)" stroke-width="1.5"/>
-      <text x="81" y="212" text-anchor="middle" font-family="var(--illus-font)" font-size="9" font-weight="700" fill="var(--illus-ink)">extract_api</text>
-      <text x="81" y="224" text-anchor="middle" font-family="var(--illus-font)" font-size="8" fill="var(--illus-ink-soft)">REST endpoints</text>
-
-      <rect x="28" y="250" width="106" height="32" rx="6" stroke="var(--illus-ink)" stroke-width="1.5"/>
-      <text x="81" y="264" text-anchor="middle" font-family="var(--illus-font)" font-size="9" font-weight="700" fill="var(--illus-ink)">extract_files</text>
-      <text x="81" y="276" text-anchor="middle" font-family="var(--illus-font)" font-size="8" fill="var(--illus-ink-soft)">S3 / SFTP</text>
-
-      <!-- Arrows: sources → validate -->
-      <path d="M134 110 L178 192" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.5"/>
-      <path d="M134 162 L178 194" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.5"/>
-      <path d="M134 214 L178 196" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.5"/>
-      <path d="M134 266 L178 198" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.5"/>
-
-      <!-- Validate node -->
-      <rect x="178" y="174" width="86" height="36" rx="6" stroke="var(--illus-ink)" stroke-width="1.5"/>
-      <text x="221" y="190" text-anchor="middle" font-family="var(--illus-font)" font-size="9" font-weight="700" fill="var(--illus-ink)">validate</text>
-      <text x="221" y="202" text-anchor="middle" font-family="var(--illus-font)" font-size="8" fill="var(--illus-ink-soft)">schema + dedup</text>
-      <!-- Arrow validate → transform -->
-      <path d="M264 192 L284 192" stroke="var(--illus-ink)" stroke-width="1.5"/>
-      <path d="M280 188 L284 192 L280 196" stroke="var(--illus-ink)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-
-      <!-- Transform node -->
-      <rect x="284" y="174" width="86" height="36" rx="6" stroke="var(--illus-ink)" stroke-width="1.5"/>
-      <text x="327" y="190" text-anchor="middle" font-family="var(--illus-font)" font-size="9" font-weight="700" fill="var(--illus-ink)">transform</text>
-      <text x="327" y="202" text-anchor="middle" font-family="var(--illus-font)" font-size="8" fill="var(--illus-ink-soft)">Bronze→Gold</text>
-
-      <!-- Arrows transform → load targets -->
-      <path d="M370 184 L394 130" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.6"/>
-      <path d="M370 200 L394 258" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.6"/>
-
-      <!-- Load Salesforce node -->
-      <rect x="394" y="108" width="40" height="38" rx="6" stroke="var(--illus-ink)" stroke-width="1.5" fill="var(--illus-ink)"/>
-      <text x="414" y="124" text-anchor="middle" font-family="var(--illus-font)" font-size="8" font-weight="700" fill="var(--illus-surface)">load</text>
-      <text x="414" y="136" text-anchor="middle" font-family="var(--illus-font)" font-size="8" fill="var(--color-paper-a70)">SF</text>
-
-      <!-- Load Snowflake node -->
-      <rect x="394" y="240" width="40" height="38" rx="6" stroke="var(--illus-ink)" stroke-width="1.5"/>
-      <text x="414" y="256" text-anchor="middle" font-family="var(--illus-font)" font-size="8" font-weight="700" fill="var(--illus-ink)">load</text>
-      <text x="414" y="268" text-anchor="middle" font-family="var(--illus-font)" font-size="8" fill="var(--illus-ink-soft)">❄︎ DW</text>
-
-      <!-- Medallion layer labels underneath -->
-      <path d="M28 316 L446 316" stroke="var(--illus-ink)" stroke-width="1" opacity="0.15"/>
-
-      <!-- Bronze -->
-      <rect x="28" y="326" width="80" height="24" rx="12" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.5"/>
-      <text x="68" y="342" text-anchor="middle" font-family="var(--illus-font)" font-size="9" font-weight="700" fill="var(--illus-ink)" opacity="0.7">🥉 Bronze</text>
-
-      <!-- Silver -->
-      <rect x="190" y="326" width="80" height="24" rx="12" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.6"/>
-      <text x="230" y="342" text-anchor="middle" font-family="var(--illus-font)" font-size="9" font-weight="700" fill="var(--illus-ink)" opacity="0.8">🥈 Silver</text>
-
-      <!-- Gold -->
-      <rect x="352" y="326" width="80" height="24" rx="12" stroke="var(--illus-ink)" stroke-width="1.5"/>
-      <text x="392" y="342" text-anchor="middle" font-family="var(--illus-font)" font-size="9" font-weight="700" fill="var(--illus-ink)">🥇 Gold</text>
-
-      <!-- Arrow between medallion labels -->
-      <path d="M108 338 L190 338" stroke="var(--illus-ink)" stroke-width="1" stroke-dasharray="4 3" opacity="0.3"/>
-      <path d="M270 338 L352 338" stroke="var(--illus-ink)" stroke-width="1" stroke-dasharray="4 3" opacity="0.3"/>
-
-      <!-- Volume badge (outside frame, top right) -->
-      <rect x="300" y="0" width="132" height="16" rx="8" fill="var(--illus-ink)" opacity="0.85"/>
-      <text x="366" y="12" text-anchor="middle" font-family="var(--illus-font)" font-size="9" font-weight="700" fill="var(--illus-surface)">50M+ records / run</text>
-    </svg>`,
+    stack:
+      'Bulk API 2.0 · Bi-directional sync · Heroku · AWS MWAA · Self-hosted K8s · Snowflake / Redshift',
+    terms: [
+      { term: 'Shape',          detail: 'Fixed-scope project' },
+      { term: 'Typical length', detail: lengthOf('airflow-data-pipelines') },
+      { term: 'Priced',         detail: 'Fixed scope, per pipeline' },
+      { term: 'Starts with',    detail: 'A source audit' },
+      { term: 'You keep',       detail: 'DAG repository, CI/CD, alerts, runbook' },
+    ],
+    cta: 'Book a source audit',
+  },
+  {
+    slug: 'support-and-managed-services',
+    n: '07',
+    id: 'support',
+    name: 'Support & managed services',
+    contents: 'A retainer with named response times',
+    shape: 'Retainer · rolling month',
+    roll: 0,
+    stamp: { shape: 'Monthly retainer' },
+    tagline: 'Keep the org healthy between projects.',
+    lead:
+      'Salesforce ships three releases a year, your business changes more often than that, and ' +
+      'integrations rot quietly. A retainer buys named response times, hours that flex between ' +
+      'fixing and building, and a quarterly review that tells you what is accumulating before it ' +
+      'breaks. Bugs come back with a written root cause, not just a patch.',
+    track: [
+      {
+        n: '01',
+        name: 'Org health review',
+        detail:
+          'We read the org first: profiles, sharing, automation debt, governor-limit trends. You ' +
+          'get the report whether or not you continue.',
+      },
+      {
+        n: '02',
+        name: 'Triage & response',
+        detail:
+          'Every ticket priced against the windows below. P1 emergency response is unlimited on ' +
+          'every tier.',
+      },
+      {
+        n: '03',
+        name: 'Enhancements',
+        detail:
+          'Retainer hours flex — the same hours cover a broken flow this week and a new report ' +
+          'next week.',
+      },
+      {
+        n: '04',
+        name: 'Release testing',
+        detail:
+          'Sandbox testing ahead of each Salesforce release, so Spring does not surprise you in ' +
+          'production. Then it repeats.',
+      },
+    ],
+    ending: 'rolling',
+    stackLabel: 'Tiers',
+    stack:
+      'Essentials, 10 hrs/mo · Growth, 20 hrs/mo · Enterprise, 40+ hrs/mo · ' +
+      'Quarterly health review · Release management',
+    terms: [
+      { term: 'Shape',       detail: 'Monthly retainer' },
+      { term: 'Term',        detail: 'Rolling month' },
+      { term: 'Priced',      detail: 'By tier, hours flex within it' },
+      { term: 'Starts with', detail: 'An org health review' },
+      { term: 'You keep',    detail: 'Health reports, ticket history, runbooks' },
+    ],
+    cta: 'Book an org health review',
   },
 ];
 
-const steps = [
-  { num: '01', label: 'Discovery', desc: 'We map your current state, integrations, and pain points before writing a line of code.' },
-  { num: '02', label: 'Define', desc: 'Requirements, constraints, and success criteria documented and signed off.' },
-  { num: '03', label: 'Architect', desc: 'Technical design review and architecture decisions made with your team.' },
-  { num: '04', label: 'Develop & Test', desc: 'Sprint-based delivery with daily standups and sandbox demos.' },
-  { num: '05', label: 'Deploy', desc: 'Coordinated go-live with rollback plan, post-deploy validation, and documentation.' },
-  { num: '06', label: 'Support', desc: 'Hypercare period, knowledge transfer, and optional managed services handoff.' },
+// Fail the build rather than ship a dead "read the full scope" link: the
+// spread's secondary button is generated from `slug`, and a rename in the
+// collection would otherwise 404 silently in production.
+for (const e of ENGAGEMENTS) {
+  if (!bySlug.has(e.slug)) {
+    throw new Error(`services/index.astro: no service content file for "${e.slug}"`);
+  }
+}
+
+// The retainer's promise, and the only engagement that has one. Sourced
+// from support-and-managed-services.md, which states the same four
+// windows and the unlimited-P1 line.
+const WINDOWS = [
+  { priority: 'P1 — Critical', time: '< 1 hour',        detail: 'Production down, data loss risk' },
+  { priority: 'P2 — High',     time: '< 4 hours',       detail: 'Key process broken, workaround exists' },
+  { priority: 'P3 — Medium',   time: '1 business day',  detail: 'Non-blocking bug or enhancement' },
+  { priority: 'P4 — Low',      time: '3 business days', detail: 'Cosmetic issue, long-term request' },
 ];
+
+// The routing table is written in the buyer's words, not ours: every stub
+// is a sentence somebody has actually said on a first call. The last row
+// points off the page on purpose -- "we do not know what shape the org is
+// in" is answered by a free scanner, not by an engagement.
+const ROUTES = [
+  {
+    symptom: 'Nobody can change a flow safely',
+    href: '#consulting',
+    label: '01 — Consulting & implementation',
+    gloss: 'Automation debt is a build problem. It gets untangled, not patched.',
+  },
+  {
+    symptom: 'A product, and a Security Review date',
+    href: '#product',
+    label: '02 — Product development',
+    gloss: 'Bring the packaging decision too, even if you think it is settled.',
+  },
+  {
+    symptom: 'Six systems, and none of them agree',
+    href: '#mulesoft',
+    label: '03 — MuleSoft integration',
+    gloss: 'Point-to-point integration is not a bug count, it is an architecture bill.',
+  },
+  {
+    symptom: 'Somebody rekeys a portal into Salesforce every morning',
+    href: '#rpa',
+    label: '04 — MuleSoft RPA',
+    gloss: 'If that system has an API you want 03. If it never will, you want this.',
+  },
+  {
+    symptom: 'The AWS bill grew and nobody can say why',
+    href: '#aws',
+    label: '05 — AWS cloud solutions',
+    gloss: 'Starts with a review, so the first answer is what to switch off.',
+  },
+  {
+    symptom: 'The warehouse is a day behind',
+    href: '#pipelines',
+    label: '06 — Airflow data pipelines',
+    gloss: 'Usually an API-limit problem wearing a scheduling costume.',
+  },
+  {
+    symptom: 'Tickets pile up, nobody owns the org',
+    href: '#support',
+    label: '07 — Support & managed services',
+    gloss: 'Starts with a health review, so the first month is diagnosis.',
+  },
+  {
+    symptom: 'We do not know what shape the org is in',
+    href: '/products/#orgvitals',
+    label: 'Run OrgVitals first — free',
+    gloss: 'It is a scanner, not a sales call. Bring us the grade if you still want to talk.',
+    out: true,
+  },
+];
+
+const MANIFEST = [
+  {
+    title: 'The repository',
+    detail:
+      'Every line of Apex, LWC, Flow metadata and DAG, in your git, under your account. No vendor ' +
+      'repo, no licence to keep paying.',
+  },
+  {
+    title: 'The runbook',
+    detail:
+      'How it deploys, what breaks first, and what to check at 2am. Written during the build, not ' +
+      'reconstructed at the end.',
+  },
+  {
+    title: 'A working session with your admins',
+    detail:
+      'Live, on the parts they will own, with their questions. Not a recorded walkthrough nobody ' +
+      'watches twice.',
+  },
+  {
+    title: 'The written record',
+    detail:
+      'Architecture note, health report, submission record, ticket history — whichever of them ' +
+      'your engagement produced.',
+  },
+];
+
+// Seven service cells and one that is not a service. The eighth fills the
+// second row of a four-across grid, which a seven-item set would otherwise
+// leave ragged, and it earns the space: the commonest state a reader
+// arrives in is not knowing which of the seven is theirs.
+const contents = [
+  ...ENGAGEMENTS.map((e) => ({
+    n: e.n,
+    title: e.name,
+    href: `#${e.id}`,
+    blurb: e.contents,
+  })),
+  {
+    n: '→',
+    title: 'Not sure which?',
+    href: '#route-heading',
+    blurb: 'Say the problem out loud — the table below has a row for it',
+  },
+];
+
+const servicesSchema = {
+  '@context': 'https://schema.org',
+  '@type':    'ItemList',
+  name:       'CloudAlgo Services',
+  url:        'https://cloudalgo.com/services',
+  itemListElement: ENGAGEMENTS.map((e, i) => ({
+    '@type':  'ListItem',
+    position: i + 1,
+    name:     bySlug.get(e.slug)!.data.title,
+    url:      `https://cloudalgo.com/services/${e.slug}`,
+  })),
+};
 ---
 <Page
-  title="Salesforce Consulting Services — CloudAlgo"
-  description="End-to-end Salesforce consulting: CRM implementation, AppExchange product development, MuleSoft integration, and managed services. Certified partner with 70+ projects delivered."
+  title="Services — seven engagements, and what each one ends with | CloudAlgo"
+  description="Salesforce consulting, AppExchange product development, MuleSoft integration and RPA, AWS architecture, Airflow pipelines and a support retainer. How long each runs, what it involves, and what you keep."
+  schema={servicesSchema}
 >
-
-  <!-- Page header -->
-  <PageHeader
-    style="padding-bottom:4rem;"
+  <PageMasthead
     crumbs={[{ label: 'Home', href: '/' }, { label: 'Services' }]}
-    title="Expert services for the Salesforce ecosystem."
-    titleStyle="max-width:680px;line-height:1.05;"
-    lead="From CRM implementation to AppExchange products, MuleSoft integrations, AWS pipelines, and ongoing managed support — we cover the full stack, end to end."
-    leadStyle="max-width:560px;margin-top:1.25rem;"
+    facts={[
+      { term: 'Engagements', detail: '7' },
+      { term: 'Platforms',   detail: 'Salesforce · MuleSoft · AWS' },
+      { term: 'Delivered',   detail: '70+ projects' },
+      { term: 'Smallest',    detail: '10 hrs / month' },
+      { term: 'Emergency',   detail: 'Unlimited P1, every tier' },
+      { term: 'Proven by',   detail: 'OrgVitals · Pledgivo · AlgoBridge' },
+      { term: 'Enquiries',   detail: 'contact@cloudalgo.com' },
+    ]}
   >
-      <!-- Quick stats row -->
-      <div style="display:flex;gap:2.5rem;margin-top:2.5rem;flex-wrap:wrap;">
-        {[['5', 'Service areas'],['70+','Projects delivered'],['12+','Years combined experience'],['1 day','Response time']].map(([num, label]) => (
-          <div>
-            <div class="stat-num stat-num--sm stat-num--leading-inherit">{num}</div>
-            <div class="stat-label" style="margin-top:0.1rem;">{label}</div>
-          </div>
-        ))}
-      </div>
-  </PageHeader>
+    <Fragment slot="title">
+      Seven engagements. You end up <span class="mark mark--draw">owning it</span>, every time.
+    </Fragment>
+    <Fragment slot="lede">
+      Six of the seven end with the repository, the runbook and a session with your admins. The
+      seventh is a retainer you can stop the month it stops earning its place. Either way, nothing
+      we leave behind needs us on call to keep running.
+    </Fragment>
+  </PageMasthead>
 
-  <!-- Service sections -->
-  {services.map((svc, i) => {
-    const isEven = i % 2 === 0;
-    return (
-      <section style={`background:${isEven ? 'var(--surface-card)' : 'var(--surface-page)'};padding:5.5rem 0;border-top:1px solid var(--border-default);`}>
-        <div class="container">
-          <div class="row align-items-center" style="gap:3rem 0;">
+  <ContentsBar items={contents} label="Services" class="contents-bar--8 anim-fade-up" />
 
-            <!-- Text column — alternates side -->
-            <div class={`col-lg-6 ${isEven ? '' : 'order-lg-2'} anim-fade-up`}>
-              <SectionLabel class="section-label--block" style="margin-bottom:0.75rem;">
-                {svc.number}
-              </SectionLabel>
-              <h2 class="section-title section-title--md section-title--tight" style="margin-bottom:0.875rem;line-height:1.15;">
-                {svc.title}
-              </h2>
-              <p style="font-size:1rem;font-weight:600;color:var(--color-heading);margin-bottom:1rem;line-height:1.5;">
-                {svc.tagline}
-              </p>
-              <p class="paragraph-large" style="margin-bottom:2rem;color:var(--color-text);">
-                {svc.description}
-              </p>
-              <ul style="list-style:none;padding:0;margin:0 0 2rem;display:flex;flex-direction:column;gap:0.875rem;">
-                {svc.features.map(f => (
-                  <li style="display:flex;gap:0.875rem;align-items:flex-start;">
-                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" style="flex-shrink:0;margin-top:0.175rem;">
-                      <rect x="0.75" y="0.75" width="16.5" height="16.5" rx="4.25" stroke="var(--illus-ink)" stroke-width="1.5"/>
-                      <path d="M5.5 9L7.8 11.5L12.5 6.5" stroke="var(--illus-ink)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    <span style="font-size:0.9375rem;color:var(--color-text);line-height:1.65;">
-                      <strong style="color:var(--color-heading);">{f.label} — </strong>{f.desc}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-              {svc.id && (
-                <Button href={`/services/${svc.id}`} variant="outline" size="sm">
-                  Learn more &rarr;
-                </Button>
-              )}
-            </div>
-
-            <!-- Illustration column -->
-            <div class={`col-lg-6 ${isEven ? '' : 'order-lg-1'} anim-scale-pop`}
-                 style="display:flex;justify-content:center;align-items:center;padding:1.5rem 0;"
-                 aria-hidden="true"
-                 set:html={svc.svg}
-            />
-
-          </div>
-        </div>
-      </section>
-    );
-  })}
-
-  <!-- Process -->
-  <section style="background:var(--surface-inverse);padding:6rem 0;border-top:1px solid var(--border-on-inverse);">
-    <div class="container">
-      <SectionLabel class="section-label--block" style="color:var(--color-on-inverse-faint);margin-bottom:0.75rem;">
-        How we work
-      </SectionLabel>
-      <h2 class="section-title section-title--tight section-title--inverse anim-fade-up" style="margin-bottom:3.5rem;">
-        Our delivery process
+  <section class="section-press" aria-labelledby="shapes-heading">
+    <div class="section-press__head anim-fade-up">
+      <h2 id="shapes-heading" class="section-title section-title--xs section-title--tighter section-press__title">
+        Seven shapes, drawn to scale.
       </h2>
-      <div class="row" style="gap:1.5rem 0;">
-        {steps.map((step, i) => (
-          <div class="col-lg-4 col-md-6 anim-fade-up" style={`transition-delay:${i * 0.07}s`}>
-            <div style="padding:1.75rem;border:1px solid var(--color-paper-a12);border-radius:12px;height:100%;">
-              <div class="stat-num stat-num--on-inverse-ghost stat-num--leading-inherit" style="margin-bottom:0.75rem;">{step.num}</div>
-              <div style="font-size:1rem;font-weight:700;color:var(--color-on-inverse);margin-bottom:0.5rem;">{step.label}</div>
-              <div style="font-size:0.9rem;color:var(--color-on-inverse-muted);line-height:1.65;">{step.desc}</div>
-            </div>
-          </div>
-        ))}
-      </div>
+      <span class="section-press__note">Six months, left to right</span>
     </div>
+
+    <ServiceSchedule
+      class="anim-fade-up"
+      axis={['Month 0', '01', '02', '03', '04', '05', '06']}
+      rows={ENGAGEMENTS.map((e) => ({
+        n: e.n,
+        name: e.name,
+        shape: e.shape,
+        href: `#${e.id}`,
+        bar: e.bar,
+        roll: e.roll,
+      }))}
+      caption="six of the seven end, and the ember mark is that ending — repository, runbook, admin session. The seventh is a retainer, and runs until you stop it. Lengths are typical, not contractual."
+    />
   </section>
 
-  <!-- Trust signals -->
-  <section style="background:var(--surface-page);padding:4rem 0;border-top:1px solid var(--border-default);">
-    <div class="container">
-      <div class="row align-items-center" style="gap:2rem 0;">
-        <div class="col-lg-5">
-          <h2 class="section-title section-title--xs section-title--tight" style="margin-bottom:1rem;">
-            Certified. Experienced. Responsive.
-          </h2>
-          <p style="color:var(--color-text);font-size:1rem;line-height:1.7;">
-            Every engagement is led by certified Salesforce architects. We don't hand off to junior developers once the deal is signed.
-          </p>
-        </div>
-        <div class="col-lg-7">
-          <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;">
-            {[
-              { label: 'Salesforce Certified Architects', sub: 'Admin, Dev, Architect tracks' },
-              { label: 'Salesforce Partner', sub: 'Authorized consulting partner' },
-              { label: '< 1 Business Day', sub: 'Response time for all enquiries' },
-              { label: 'Fixed-scope or retainer', sub: 'Flexible engagement models' },
-            ].map(item => (
-              <div style="background:var(--surface-card);border:1px solid var(--border-default);border-radius:12px;padding:1.25rem 1.5rem;">
-                <div style="font-size:0.9375rem;font-weight:700;color:var(--color-heading);margin-bottom:0.25rem;">{item.label}</div>
-                <div style="font-size:0.8125rem;color:var(--color-text);">{item.sub}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
+  <section class="section-press" aria-labelledby="engagements-heading">
+    <div class="section-press__head anim-fade-up">
+      <h2 id="engagements-heading" class="section-title section-title--xs section-title--tighter section-press__title">
+        What each one actually involves.
+      </h2>
+      <span class="section-press__note">Scope, sequence and terms</span>
     </div>
+
+    {ENGAGEMENTS.map((e) => (
+      <ServiceSpread
+        class="anim-fade-up"
+        id={e.id}
+        n={e.n}
+        name={e.name}
+        shape={e.stamp.shape}
+        proof={proofStamp.get(e.slug) ?? e.stamp.note}
+        tagline={e.tagline}
+        lead={e.lead}
+        track={e.track}
+        ending={e.ending}
+        caveat={e.caveat}
+        stackLabel={e.stackLabel}
+        stack={e.stack}
+        terms={e.terms}
+        actions={[
+          { label: `${e.cta} →`, href: '/contact/', primary: true },
+          { label: 'Read the full scope', href: `/services/${e.slug}/` },
+        ]}
+      >
+        {e.id === 'support' && (
+          <SlaWindows slot="detail" windows={WINDOWS}>
+            <b>Initial response, written into the contract</b> — not the sales deck. Unlimited P1
+            on Essentials, Growth and Enterprise alike.
+          </SlaWindows>
+        )}
+      </ServiceSpread>
+    ))}
   </section>
 
-  <!-- CTA -->
-  <section style="background:var(--surface-card);padding:6rem 0;border-top:1px solid var(--border-default);text-align:center;">
-    <div class="container">
-      <h2 class="section-title section-title--heavy section-title--tighter" style="margin-bottom:1.25rem;">
-        Ready to get started?
+  <section class="section-press" aria-labelledby="route-heading">
+    <div class="section-press__head anim-fade-up">
+      <h2 id="route-heading" class="section-title section-title--xs section-title--tighter section-press__title">
+        Start here if this is you.
       </h2>
-      <p style="color:var(--color-text);font-size:1.0625rem;margin-bottom:2.5rem;max-width:480px;margin-left:auto;margin-right:auto;line-height:1.7;">
-        Tell us about your project. We'll scope it, price it transparently, and get back to you within one business day.
+      <span class="section-press__note">Eight symptoms, one row each</span>
+    </div>
+
+    <RouteTable
+      class="anim-fade-up"
+      corner="On the call"
+      destination="Where that goes"
+      rows={ROUTES}
+      caption="Common problems and which engagement handles each one."
+    >
+      <p class="compare-note anim-fade-up" slot="footnote">
+        One answer is the same in every row: the first call is about your org, not our engagement
+        types. We do not publish rates — the number comes after that call, once there is a scope to
+        put one against. If none of the seven fits, we will say so and point you at whoever does it
+        properly.
       </p>
-      <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
-        <Button href="/contact" variant="primary">Book a free consultation &rarr;</Button>
-        <Button href="mailto:sales@cloudalgo.com" variant="outline">Email us directly</Button>
-      </div>
-    </div>
+    </RouteTable>
   </section>
+
+  <ClosingManifest
+    class="anim-fade-up"
+    labelledby="manifest-heading"
+    kicker="The last week of every engagement"
+    items={MANIFEST}
+  >
+    <Fragment slot="title">Owning it is a checklist, not a promise.</Fragment>
+    <Fragment slot="note">
+      Seven shapes, one ending. Whichever of them you buy, the closing week is the same four items,
+      and none of them needs us on call afterwards. That is the test we build against — and the
+      reason three of the seven are proven by software we run ourselves.
+    </Fragment>
+    <a class="btn btn-light btn-sm" slot="actions" href="/case-studies/">Read the case studies &rarr;</a>
+  </ClosingManifest>
 
 </Page>

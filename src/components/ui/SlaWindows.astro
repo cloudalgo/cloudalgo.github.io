@@ -1,0 +1,35 @@
+---
+/**
+ * The four response windows, printed as a bordered band of cells.
+ *
+ * It belongs to the retainer and nothing else on the site: a project is
+ * bought by its ending, a retainer is bought by how fast somebody picks
+ * up the phone, and these four numbers are that promise. They are set as
+ * a band rather than rows of a terms list because the reader compares
+ * them against each other, not against the rest of the engagement.
+ */
+export interface Window {
+  /** Priority label -- "P1 — Critical". */
+  priority: string;
+  /** The window itself, set large. */
+  time: string;
+  /** What qualifies for it. */
+  detail: string;
+}
+
+interface Props {
+  windows: Window[];
+  class?: string;
+}
+const { windows, class: className } = Astro.props;
+---
+<div class:list={['windows', className]}>
+  {windows.map((w) => (
+    <div>
+      <span class="windows__p">{w.priority}</span>
+      <b class="windows__t">{w.time}</b>
+      <span class="windows__d">{w.detail}</span>
+    </div>
+  ))}
+</div>
+<p class="windows__note"><slot /></p>
