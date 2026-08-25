@@ -93,6 +93,8 @@ $theme: (
   'hardware-800': #1A1A1A,
 
   /* Type — unchanged. See the header for why. */
+  /* Except this one: an interim value so the contract has all 80 keys
+     and the build stays green. Task 3 replaces it with Archivo. */
   'family-display': 'Outfit, system-ui, sans-serif',
   'family-sans': 'Outfit, system-ui, sans-serif',
   'family-mono': 'ui-monospace, "SF Mono", "Menlo", monospace',
