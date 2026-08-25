@@ -1,0 +1,92 @@
+/* ─── Fold 6: case studies ─────────────────────────────────
+   Ported from docs/superpowers/specs/assets/home-mock.css
+   (`.hp__cases`, `.hp__case`, `.hp__caseind`, `.hp__casefig`).
+   Geometry is the mock's; every colour is a token.
+
+   Two ruled columns on the page ground -- no card fill, no hover
+   wash. That is the same idiom as the product and service rows above:
+   on this page a rule does the work a border and a surface would do
+   elsewhere, and a card here would be the only one on the fold.
+
+   The ember lands on the industry chip, not on the figures. The
+   figures are ink and mono, like every other number on the page; the
+   band directly above is already a full-bleed ember mass, and two
+   3rem ember numerals under it would read as a second band rather
+   than as data. */
+
+.cases-press {
+  margin-top: 1.125rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.875rem;
+}
+
+.cases-press__case {
+  border-top: 1px solid var(--border-strong);
+  padding-top: 1rem;
+}
+
+/* The one ember mark on the fold. Reads as a stamp on the column, so
+   it keeps the mock's tight padding rather than a pill's. */
+.cases-press__ind {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-on-accent);
+  background: var(--color-accent);
+  padding: 0.1875rem 0.4375rem;
+}
+
+.cases-press__name {
+  margin: 0.5625rem 0 0;
+  font-family: var(--font-heading);
+  font-weight: var(--weight-bold);
+  font-size: 1.25rem;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+}
+
+.cases-press__name a { color: inherit; }
+.cases-press__name a:hover { color: var(--color-accent-hover); }
+
+.cases-press__summary {
+  margin: 0.5625rem 0 0;
+  font-size: var(--size-body-sm);
+  color: var(--color-prose);
+  line-height: 1.6;
+}
+
+/* The outcome pair, ruled off from the prose above it. */
+.cases-press__figs {
+  margin-top: 0.9375rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border-default);
+  display: flex;
+  gap: 1.625rem;
+}
+
+.cases-press__fig b {
+  display: block;
+  font-family: var(--font-mono);
+  font-weight: var(--weight-medium);
+  font-size: 1.05rem;
+  color: var(--color-heading);
+  font-variant-numeric: tabular-nums;
+}
+
+.cases-press__fig span {
+  display: block;
+  margin-top: 0.1875rem;
+  font-size: var(--size-label);
+  color: var(--color-text-muted);
+  line-height: 1.4;
+}
+
+@media (max-width: 860px) {
+  .cases-press {
+    grid-template-columns: 1fr;
+    gap: 1.375rem;
+  }
+}

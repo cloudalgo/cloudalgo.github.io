@@ -1,0 +1,52 @@
+---
+import { caseStudies } from '../../data/case-studies';
+
+// Fold 6. Two engagements, each led by its industry and closed by two
+// figures. Everything rendered here already lives in case-studies.ts --
+// nothing is restated, so a corrected number is corrected in one place.
+//
+// The mock leads each card with a 16:9 photograph. There is no
+// photography for these engagements: the mock's two shots are generic
+// stock of unknown provenance, and a stock desk scene captioned as a
+// client engagement is decoration dressed as evidence. The slot is left
+// out rather than filled with a placeholder. Real engagement
+// photography, or licensed stock, drops back in above the chip.
+
+const featured = caseStudies.slice(0, 2);
+
+// The outcome labels in the data file are written for the detail page,
+// where a full sentence has room: "SSR payload reduction on centers page
+// (228 kB -> 42 kB)". In a two-across figure row that wraps to four
+// lines, so the label is cut at the first parenthetical or em-dash
+// aside. The head of every one of these labels is already the noun
+// phrase; the tail is the elaboration the detail page wants.
+const shortLabel = (label: string) => label.split(/\s+[—(]/)[0].trim();
+---
+<section class="section-press anim-fade-up" aria-labelledby="cases-heading">
+  <div class="section-press__head">
+    <h2 id="cases-heading" class="section-title section-title--xs section-title--tighter section-press__title">
+      Two engagements, in full.
+    </h2>
+    <a class="section-press__all" href="/case-studies/">All case studies &rarr;</a>
+  </div>
+
+  <div class="cases-press">
+    {featured.map((c) => (
+      <article class="cases-press__case">
+        <span class="cases-press__ind">{c.industry}</span>
+        <h3 class="cases-press__name">
+          <a href={`/case-studies/${c.id}/`}>{c.headline}</a>
+        </h3>
+        <p class="cases-press__summary">{c.result}</p>
+        <div class="cases-press__figs">
+          {c.outcomes.slice(0, 2).map((o) => (
+            <div class="cases-press__fig">
+              <b>{o.metric}</b>
+              <span>{shortLabel(o.label)}</span>
+            </div>
+          ))}
+        </div>
+      </article>
+    ))}
+  </div>
+</section>
