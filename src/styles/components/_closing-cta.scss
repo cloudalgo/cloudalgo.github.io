@@ -1,0 +1,43 @@
+/* The page's last word. A rule, a line, two ways out -- and nothing
+   else: no panel, no fill, no second ember. The band above it is
+   already the page's loud moment, and two shouts in a row is one. */
+
+.closing-cta {
+  max-width: var(--container-max);
+  margin-inline: auto;
+  border-top: 1px solid var(--closing-border);
+  padding: var(--closing-pad);
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--closing-gap);
+}
+
+/* The rule is the container's, but the padding is not: the border has
+   to run the full measure while the copy keeps the page gutter. */
+.closing-cta__copy { max-width: 46ch; }
+
+.closing-cta__title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-weight: var(--weight-bold);
+  font-size: clamp(1.25rem, 2.4vw, 1.6rem);
+  line-height: 1.12;
+  letter-spacing: -0.025em;
+  color: var(--color-heading);
+  text-wrap: balance;
+}
+
+.closing-cta__note {
+  margin: 0.5rem 0 0;
+  font-size: var(--size-body-sm);
+  line-height: 1.6;
+  color: var(--color-text);
+}
+
+.closing-cta__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.625rem;
+}

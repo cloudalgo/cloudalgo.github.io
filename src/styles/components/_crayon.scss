@@ -1,0 +1,48 @@
+/* The crayon: the keyframes shared by everything on the page that is drawn
+   rather than ruled.
+
+   Two things read them -- the rule under a section head's "All products ->"
+   (layout/_section-press.scss) and the stroke a content title draws under
+   itself on hover (components/_link-draw.scss). Keyframes are global in CSS
+   regardless of where they are declared, so this file exists for the reader,
+   not the cascade: one place to change what "boil" and "redraw" mean, and one
+   place that explains why the technique is what it is.
+
+   THE SPRITE. --rule-crayon-art is a MASK, never a background image, and that
+   is the whole reason the ember survives a theme swap: the stroke is painted
+   by a token through the mask's alpha, where a data-URI background image would
+   bake the hex in where no token could reach it.
+
+   The artwork is one 600-unit viewBox holding the same stroke roughened by
+   three different feTurbulence seeds, side by side. mask-size: 300% shows one
+   200-unit cell; the boil steps mask-position between them. So the line is
+   redrawn frame by frame at the cost of one image and one background-position
+   repaint -- and SMIL inside the SVG could not have done it, because a CSS
+   image renders in a static, non-animated context.
+
+   Unprefixed mask-* only, everywhere: the bundler adds no prefixes, and when
+   both spellings are declared it keeps whichever comes LAST and drops the
+   other -- the trap layout/_header.scss documents for backdrop-filter. */
+
+/* step-end, so each cell HOLDS for its third of the cycle. With the default
+   easing the mask interpolates between cells and the line reads as sliding
+   sideways rather than being redrawn. */
+@keyframes crayon-boil {
+  0%   { mask-position: 0 0; }
+  33%  { mask-position: 50% 0; }
+  66%  { mask-position: 100% 0; }
+}
+
+/* Erase left to right, then draw back the same way -- the direction
+   .mark--draw strokes a hero mark in, so every line on a page agrees about
+   which way a line is made.
+
+   clip-path rather than a second mask: mask-position is already carrying the
+   boil, and box-shadow taught this codebase what happens when two effects want
+   the same property. */
+@keyframes crayon-redraw {
+  0%   { clip-path: inset(0 0 0 0); }
+  35%  { clip-path: inset(0 0 0 100%); }
+  36%  { clip-path: inset(0 100% 0 0); }
+  100% { clip-path: inset(0 0 0 0); }
+}

@@ -1,0 +1,607 @@
+<title>Ember Button Hovers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
+
+<style>
+/* ── Page chrome tokens ──────────────────────────────────────
+   The chrome follows the viewer's theme. The SPECIMEN surface
+   below does not: it is showing the real site, which is paper,
+   and a dark specimen would be a lie about the product. */
+:root {
+  --ground:  #F2EEEB;
+  --panel:   #FFFFFF;
+  --rule:    #E0D9D4;
+  --rule-soft: #EDE8E4;
+  --tx:      #231F1D;
+  --tx-dim:  #6C645E;
+  --tx-head: #131110;
+  --code-bg: #F7F4F2;
+  --tag-bg:  #EAE5E1;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ground:  #16130F;
+    --panel:   #1D1A16;
+    --rule:    #35302B;
+    --rule-soft: #26221E;
+    --tx:      #D6CEC7;
+    --tx-dim:  #948B83;
+    --tx-head: #F4EFEA;
+    --code-bg: #131009;
+    --tag-bg:  #2A251F;
+  }
+}
+:root[data-theme="dark"] {
+  --ground:  #16130F;
+  --panel:   #1D1A16;
+  --rule:    #35302B;
+  --rule-soft: #26221E;
+  --tx:      #D6CEC7;
+  --tx-dim:  #948B83;
+  --tx-head: #F4EFEA;
+  --code-bg: #131009;
+  --tag-bg:  #2A251F;
+}
+
+/* ── The real press-room tokens. Fixed, not theme-following. ── */
+.spec {
+  --paper:      #F7F4F2;
+  --ink:        #131110;
+  --ink-000:    #000000;
+  --ember:      #F75A41;
+  --ember-deep: #E9553D;
+  --ember-on:   #110605;
+  --border:     #E0D9D4;
+  --on-inverse: #FFFFFF;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--tx);
+  font-family: Geist, system-ui, -apple-system, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap {
+  max-width: 940px;
+  margin-inline: auto;
+  padding: 3.5rem 1.5rem 6rem;
+}
+
+/* ── Masthead ───────────────────────────────────────────── */
+.mast { border-bottom: 2px solid var(--tx-head); padding-bottom: 1.25rem; }
+
+.kicker {
+  font-family: "Geist Mono", ui-monospace, monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--tx-dim);
+  margin: 0 0 0.75rem;
+}
+
+h1 {
+  font-family: Archivo, system-ui, sans-serif;
+  font-weight: 800;
+  font-size: clamp(2rem, 5vw, 3.1rem);
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+  color: var(--tx-head);
+  margin: 0;
+  text-wrap: balance;
+  max-width: 18ch;
+}
+
+.standfirst {
+  margin: 1.25rem 0 0;
+  max-width: 62ch;
+  color: var(--tx);
+}
+.standfirst b { color: var(--tx-head); font-weight: 600; }
+
+/* ── Controls ───────────────────────────────────────────── */
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.25rem;
+  margin: 1.75rem 0 0;
+  padding: 0.875rem 1rem;
+  background: var(--panel);
+  border: 1px solid var(--rule);
+}
+
+.controls p {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--tx-dim);
+  flex: 1 1 16rem;
+}
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: "Geist Mono", ui-monospace, monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--tx-head);
+  cursor: pointer;
+  user-select: none;
+}
+.toggle input { width: 1rem; height: 1rem; accent-color: #F75A41; cursor: pointer; }
+
+/* ── Option rows ────────────────────────────────────────── */
+.opt {
+  display: grid;
+  grid-template-columns: 3.5rem 1fr;
+  gap: 0 1.5rem;
+  padding: 2.75rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.ord {
+  font-family: "Geist Mono", ui-monospace, monospace;
+  font-size: 0.8125rem;
+  color: #F75A41;
+  padding-top: 0.35rem;
+  font-variant-numeric: tabular-nums;
+}
+
+h2 {
+  font-family: Archivo, system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 1.5rem;
+  letter-spacing: -0.02em;
+  color: var(--tx-head);
+  margin: 0;
+}
+
+.thesis {
+  margin: 0.4rem 0 0;
+  max-width: 60ch;
+  color: var(--tx);
+}
+
+/* ── Specimen strip — always the real paper surface ─────── */
+.spec {
+  margin-top: 1.5rem;
+  padding: 2.25rem 2rem;
+  background: var(--paper);
+  border: 1px solid var(--border);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+/* The site's .btn, transcribed from src/styles/components/_buttons.scss
+   so what you hover here is what ships. */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: Geist, system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  line-height: 1.2;
+  padding: 0.75rem 1.75rem;
+  border-radius: 0;
+  border: 1.5px solid transparent;
+  text-decoration: none;
+  cursor: pointer;
+  background: none;
+  position: relative;
+}
+.btn:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+
+.btn-primary { background-color: var(--ember); color: var(--ember-on); border-color: var(--ember); }
+.btn-outline { background-color: transparent; color: var(--ink); border-color: var(--ink); }
+.btn-outline:hover { background-color: var(--ink); color: var(--on-inverse); }
+.btn-outline { transition: background-color 0.2s, color 0.2s; }
+
+/* ── Meta table ─────────────────────────────────────────── */
+.meta {
+  margin: 1.25rem 0 0;
+  display: grid;
+  grid-template-columns: 8.5rem 1fr;
+  gap: 0.35rem 1rem;
+  font-size: 0.8125rem;
+}
+.meta dt {
+  font-family: "Geist Mono", ui-monospace, monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--tx-dim);
+  padding-top: 0.18rem;
+}
+.meta dd { margin: 0; color: var(--tx); }
+
+.tag {
+  display: inline-block;
+  font-family: "Geist Mono", ui-monospace, monospace;
+  font-size: 0.625rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.14rem 0.5rem;
+  background: var(--tag-bg);
+  color: var(--tx-head);
+}
+.tag--cost { background: #F75A41; color: #110605; }
+
+pre {
+  margin: 1.25rem 0 0;
+  padding: 1rem 1.125rem;
+  background: var(--code-bg);
+  border: 1px solid var(--rule-soft);
+  overflow-x: auto;
+  font-family: "Geist Mono", ui-monospace, monospace;
+  font-size: 0.75rem;
+  line-height: 1.65;
+  color: var(--tx);
+}
+pre b { color: var(--tx-head); font-weight: 500; }
+
+/* ══ 01 · Ink wipe ═══════════════════════════════════════ */
+/* inset: -1.5px, not 0 -- the overlay has to cover the button's own
+   1.5px ember border or the ink arrives inside a red rim. No
+   overflow: hidden here: clip-path already clips the layer, and
+   overflow would crop it back to the padding box. */
+.h-wipe .lyr {
+  position: absolute;
+  inset: -1.5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  background: var(--ink);
+  color: var(--on-inverse);
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.h-wipe:hover .lyr,
+.h-wipe:focus-visible .lyr { clip-path: inset(0 0 0 0); }
+.h-wipe:active { transform: translateY(1px); }
+
+/* ══ 02 · Press block ════════════════════════════════════ */
+.h-press {
+  transition: transform 0.16s cubic-bezier(0.2, 0.8, 0.2, 1),
+              box-shadow 0.16s cubic-bezier(0.2, 0.8, 0.2, 1);
+  box-shadow: 0 0 0 var(--ink);
+}
+.h-press:hover,
+.h-press:focus-visible {
+  transform: translate(-3px, -3px);
+  box-shadow: 5px 5px 0 var(--ink);
+}
+.h-press:active {
+  transform: translate(0, 0);
+  box-shadow: 0 0 0 var(--ink);
+  transition-duration: 0.06s;
+}
+
+/* ══ 03 · Rule draw ══════════════════════════════════════ */
+.h-rule::after {
+  content: "";
+  position: absolute;
+  left: 1.75rem;
+  right: 1.75rem;
+  bottom: 0.55rem;
+  height: 2px;
+  background: var(--ember-on);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.h-rule:hover::after,
+.h-rule:focus-visible::after { transform: scaleX(1); }
+.h-rule:active { transform: translateY(1px); }
+
+/* ══ 04 · Split-flap ═════════════════════════════════════ */
+/* .roll is the mask, one row tall -- NOT the button. overflow: hidden
+   on the button clips at its padding box, so the second copy would sit
+   visible in the bottom padding instead of being hidden. */
+.h-flap .roll { display: block; height: 1.2em; overflow: hidden; }
+.h-flap .roll span {
+  display: block;
+  height: 1.2em;
+  line-height: 1.2em;
+  transition: transform 0.32s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.h-flap:hover .roll span,
+.h-flap:focus-visible .roll span { transform: translateY(-1.2em); }
+.h-flap:active { transform: translateY(1px); }
+
+/* ══ 05 · Invert out ═════════════════════════════════════ */
+.h-invert {
+  transition: background-color 0.22s ease, color 0.22s ease, border-color 0.22s ease;
+}
+.h-invert:hover,
+.h-invert:focus-visible {
+  background-color: transparent;
+  border-color: var(--ink);
+  color: var(--ink);
+}
+.h-invert:active { background-color: var(--border); }
+
+/* ══ 06 · Ember deepen ═══════════════════════════════════ */
+.h-deep {
+  transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.h-deep:hover,
+.h-deep:focus-visible {
+  background-color: var(--ember-deep);
+  border-color: var(--ember-deep);
+  box-shadow: inset 0 0 0 1.5px rgba(247, 244, 242, 0.9);
+}
+.h-deep:active { background-color: var(--ink-000); border-color: var(--ink-000); color: #FFFFFF; }
+
+/* ── Reduced motion: the real fallback each option lands on.
+   Declared once and driven by BOTH the OS setting and the demo
+   toggle, so the switch above shows exactly what a reduced-motion
+   visitor gets — not an approximation of it. ── */
+body[data-rm="on"] .h-wipe .lyr,
+body[data-rm="on"] .h-press,
+body[data-rm="on"] .h-rule::after,
+body[data-rm="on"] .h-flap .roll span,
+body[data-rm="on"] .h-invert,
+body[data-rm="on"] .h-deep { transition: none; }
+body[data-rm="on"] .h-press:hover { transform: none; box-shadow: 5px 5px 0 var(--ink); }
+body[data-rm="on"] .h-press:active { transform: none; }
+body[data-rm="on"] .h-flap:hover .roll span { transform: translateY(-1.2em); }
+body[data-rm="on"] .btn:active { transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .h-wipe .lyr, .h-press, .h-rule::after, .h-flap .roll span, .h-invert, .h-deep { transition: none; }
+  .h-press:hover { transform: none; box-shadow: 5px 5px 0 var(--ink); }
+  .h-press:active, .btn:active { transform: none; }
+}
+
+/* ── Closing note ───────────────────────────────────────── */
+.close { padding-top: 2.75rem; }
+.close h2 { margin-bottom: 0.75rem; }
+.close p { max-width: 64ch; }
+.close ol { max-width: 64ch; padding-left: 1.1rem; }
+.close li { margin-bottom: 0.5rem; }
+.close b { color: var(--tx-head); }
+
+@media (max-width: 640px) {
+  .opt { grid-template-columns: 1fr; gap: 0.5rem; }
+  .ord { padding-top: 0; }
+  .meta { grid-template-columns: 1fr; gap: 0.1rem 0; }
+  .meta dd { margin-bottom: 0.5rem; }
+  .spec { padding: 1.5rem 1.25rem; }
+}
+</style>
+
+<div class="wrap">
+
+  <header class="mast">
+    <p class="kicker">CloudAlgo · design review · button interaction</p>
+    <h1>Six ways the ember button can answer a cursor.</h1>
+    <p class="standfirst">
+      The button itself does not change — same ember fill, same square corner, same
+      <b>#110605</b> label at 6.17:1. What changes is the half-second after the pointer
+      lands on it. Every option below is live: <b>hover each pair</b>, and press them to
+      feel the active state. The outline button beside each one is there to check the
+      pairing, since both share <b>.btn</b>.
+    </p>
+  </header>
+
+  <div class="controls">
+    <p>Each option also has to answer a visitor who has asked their machine for less motion. Flip this to see the fallback each one lands on.</p>
+    <label class="toggle">
+      <input type="checkbox" id="rm"> Simulate reduced motion
+    </label>
+  </div>
+
+  <!-- 01 -->
+  <section class="opt">
+    <div class="ord">01</div>
+    <div>
+      <h2>Ink wipe</h2>
+      <p class="thesis">Ink strokes across the fill from left to right and the label goes to paper behind it. The same gesture the hero underline already makes when the page loads, moved onto the thing you click.</p>
+
+      <div class="spec">
+        <a class="btn btn-primary h-wipe" href="#01">Book a consultation &rarr;<span class="lyr" aria-hidden="true">Book a consultation &rarr;</span></a>
+        <a class="btn btn-outline" href="#01">See the four products</a>
+      </div>
+
+      <dl class="meta">
+        <dt>Cost</dt><dd><span class="tag tag--cost">Markup change</span> a second label copy inside the button, so <b>Button.astro</b> gains one span</dd>
+        <dt>Contrast</dt><dd>Every pixel is ink-on-ember (6.17:1) or paper-on-ink (17.2:1). Nothing passes through an unreadable in-between, which is why it clips two finished layers rather than fading one.</dd>
+        <dt>Reduced motion</dt><dd>Wipe becomes an instant swap to the ink state.</dd>
+        <dt>Generalises</dt><dd>Yes — outline and light buttons take the same layer with their own two colours.</dd>
+      </dl>
+
+<pre>.btn-primary { <b>position: relative;</b> }
+.btn-primary .lyr {
+  position: absolute; <b>inset: -1.5px;</b>  /* cover the border, not just the fill */
+  display: flex; align-items: center; justify-content: center; gap: .4rem;
+  background: var(--surface-inverse); color: var(--color-on-inverse);
+  <b>clip-path: inset(0 100% 0 0);</b>
+  transition: clip-path var(--btn-hover-duration) var(--ease-out);
+}
+.btn-primary:hover .lyr { <b>clip-path: inset(0 0 0 0);</b> }</pre>
+    </div>
+  </section>
+
+  <!-- 02 -->
+  <section class="opt">
+    <div class="ord">02</div>
+    <div>
+      <h2>Press block</h2>
+      <p class="thesis">The button lifts off the page and a hard ink block appears underneath it — no blur, no softness, a shape rather than a shadow. Pressing drops it flat again in 60ms. Square corners are what make this read as a printing block instead of a floating card.</p>
+
+      <div class="spec">
+        <a class="btn btn-primary h-press" href="#02">Book a consultation &rarr;</a>
+        <a class="btn btn-outline" href="#02">See the four products</a>
+      </div>
+
+      <dl class="meta">
+        <dt>Cost</dt><dd><span class="tag">CSS only</span> six lines, no markup touched</dd>
+        <dt>Contrast</dt><dd>Unchanged — the fill and label never move off their measured pair.</dd>
+        <dt>Reduced motion</dt><dd>Block appears, button does not travel.</dd>
+        <dt>Generalises</dt><dd>Yes, and it is the only option here that also answers the missing <b>:active</b> feedback across all four button classes.</dd>
+      </dl>
+
+<pre>.btn {
+  box-shadow: 0 0 0 var(--color-heading);
+  transition: transform var(--duration-fast) var(--ease-out),
+              box-shadow var(--duration-fast) var(--ease-out);
+}
+.btn:hover  { <b>transform: translate(-3px, -3px); box-shadow: 5px 5px 0 var(--color-heading);</b> }
+.btn:active { <b>transform: translate(0, 0);</b> box-shadow: 0 0 0 var(--color-heading); }</pre>
+    </div>
+  </section>
+
+  <!-- 03 -->
+  <section class="opt">
+    <div class="ord">03</div>
+    <div>
+      <h2>Rule draw</h2>
+      <p class="thesis">A hairline strokes itself under the label, in the label's own ink. The quietest option on the board, and the most literally on-system: it is <b>.mark--draw</b> from the hero, shrunk to a button and triggered by a cursor instead of a page load.</p>
+
+      <div class="spec">
+        <a class="btn btn-primary h-rule" href="#03">Book a consultation &rarr;</a>
+        <a class="btn btn-outline" href="#03">See the four products</a>
+      </div>
+
+      <dl class="meta">
+        <dt>Cost</dt><dd><span class="tag">CSS only</span> one pseudo-element</dd>
+        <dt>Contrast</dt><dd>Unchanged. The rule is decoration, not a state signal carried by colour alone.</dd>
+        <dt>Reduced motion</dt><dd>Rule appears at full width instead of drawing.</dd>
+        <dt>Generalises</dt><dd>Yes, but it is faint on the outline button, where there is no fill for the rule to sit against.</dd>
+      </dl>
+
+<pre>.btn-primary::after {
+  content: ''; position: absolute;
+  left: 1.75rem; right: 1.75rem; bottom: .55rem; height: 2px;
+  background: currentColor;
+  <b>transform: scaleX(0); transform-origin: left;</b>
+  transition: transform var(--duration-base) var(--ease-out);
+}
+.btn-primary:hover::after { <b>transform: scaleX(1);</b> }</pre>
+    </div>
+  </section>
+
+  <!-- 04 -->
+  <section class="opt">
+    <div class="ord">04</div>
+    <div>
+      <h2>Split-flap</h2>
+      <p class="thesis">The label rolls up and a second copy rolls in behind it, the way a departure board turns over. Mechanical rather than atmospheric — it suits a site whose whole visual argument is print and paper.</p>
+
+      <div class="spec">
+        <a class="btn btn-primary h-flap" href="#04"><span class="roll"><span>Book a consultation &rarr;</span><span aria-hidden="true">Book a consultation &rarr;</span></span></a>
+        <a class="btn btn-outline" href="#04">See the four products</a>
+      </div>
+
+      <dl class="meta">
+        <dt>Cost</dt><dd><span class="tag tag--cost">Markup change</span> the label is nested twice, so <b>Button.astro</b> gains two spans</dd>
+        <dt>Contrast</dt><dd>Unchanged — both copies are the same ink on the same ember.</dd>
+        <dt>Reduced motion</dt><dd>Roll happens instantly; visually a no-op, which is the honest answer here.</dd>
+        <dt>Generalises</dt><dd>Yes, though the effect is nearly invisible unless the label is short. Ours is not.</dd>
+      </dl>
+
+<pre>.btn-primary .roll { display: block; <b>height: 1.2em; overflow: hidden;</b> }
+.btn-primary .roll span {
+  display: block; height: 1.2em; line-height: 1.2em;
+  transition: transform var(--duration-base) var(--ease-out);
+}
+.btn-primary:hover .roll span { <b>transform: translateY(-1.2em);</b> }</pre>
+    </div>
+  </section>
+
+  <!-- 05 -->
+  <section class="opt">
+    <div class="ord">05</div>
+    <div>
+      <h2>Invert out</h2>
+      <p class="thesis">The fill drains away and leaves an ink outline behind — the primary button briefly becomes the secondary one. Reads as the button stepping back rather than leaning in, which is either restraint or the wrong signal, depending on your taste.</p>
+
+      <div class="spec">
+        <a class="btn btn-primary h-invert" href="#05">Book a consultation &rarr;</a>
+        <a class="btn btn-outline" href="#05">See the four products</a>
+      </div>
+
+      <dl class="meta">
+        <dt>Cost</dt><dd><span class="tag">CSS only</span> three properties</dd>
+        <dt>Contrast</dt><dd>Ink on paper, 17.2:1. Safe, but the accent leaves the fold for as long as the cursor is there.</dd>
+        <dt>Reduced motion</dt><dd>Instant swap. Nothing lost.</dd>
+        <dt>Generalises</dt><dd>Poorly. <b>.btn-outline</b> already inverts <em>into</em> ink, so the two would move in opposite directions side by side — visible in the pair above.</dd>
+      </dl>
+
+<pre>.btn-primary {
+  transition: background-color var(--duration-base) ease,
+              color var(--duration-base) ease,
+              border-color var(--duration-base) ease;
+}
+.btn-primary:hover {
+  <b>background-color: transparent;</b>
+  border-color: var(--color-heading);
+  color: var(--color-heading);
+}</pre>
+    </div>
+  </section>
+
+  <!-- 06 -->
+  <section class="opt">
+    <div class="ord">06</div>
+    <div>
+      <h2>Ember deepen</h2>
+      <p class="thesis">The fill drops one rung to <b>accent-600</b> and a paper hairline appears inside the border, so the button gains an edge rather than a colour. The conservative answer — it is what today's <b>opacity: 0.8</b> was reaching for, done with the palette instead of transparency.</p>
+
+      <div class="spec">
+        <a class="btn btn-primary h-deep" href="#06">Book a consultation &rarr;</a>
+        <a class="btn btn-outline" href="#06">See the four products</a>
+      </div>
+
+      <dl class="meta">
+        <dt>Cost</dt><dd><span class="tag">CSS only</span> and it deletes the <b>opacity</b> hack while it is there</dd>
+        <dt>Contrast</dt><dd>Improves. Ink on <b>#E9553D</b> is 5.54:1; today's 80% opacity washes the fill toward the page and drops the label under AA.</dd>
+        <dt>Reduced motion</dt><dd>Instant. Nothing lost.</dd>
+        <dt>Generalises</dt><dd>No — only the ember button has an accent ramp to step down. The other three need their own answer.</dd>
+      </dl>
+
+<pre>.btn-primary {
+  transition: background-color var(--duration-base) ease,
+              border-color var(--duration-base) ease,
+              box-shadow var(--duration-base) ease;
+}
+.btn-primary:hover {
+  <b>background-color: var(--accent-600);</b>
+  border-color: var(--accent-600);
+  <b>box-shadow: inset 0 0 0 1.5px var(--color-paper-a90);</b>
+}</pre>
+    </div>
+  </section>
+
+  <section class="close">
+    <h2>What I would ship</h2>
+    <p><b>02 Press block, with 06 Ember deepen underneath it.</b> They are not rivals — one is movement and one is colour, and together they cost eight lines and no markup.</p>
+    <ol>
+      <li><b>Press block</b> is the only option that is about the button being a physical thing. Square corners, hard ink, no blur: it is the press-room argument applied to an interaction instead of a border. It also fixes something that is currently missing site-wide — nothing on this site has a pressed state, so every button feels like an image until it navigates.</li>
+      <li><b>Ember deepen</b> retires <b>opacity: 0.8</b>, which is the actual defect in today's hover: fading the fill toward the paper drops the label's contrast below AA for as long as the pointer is on it. Stepping to <b>accent-600</b> keeps it at 5.54:1.</li>
+      <li><b>Ink wipe</b> is the one to pick instead if you want the fold to have a signature move rather than a well-behaved one. It costs a markup change and it is the boldest thing on the page — which is an argument for it and against it.</li>
+    </ol>
+    <p>Whichever you pick, the timings go in <b>tokens/_components.scss</b> as <b>--btn-hover-*</b> knobs beside the <b>--mark-draw-*</b> ones, so a future theme can slow the whole site's motion in one edit.</p>
+    <p class="kicker" style="margin-top:2rem">Tell me a number and I will wire it in.</p>
+  </section>
+
+</div>
+
+<script>
+  var rm = document.getElementById('rm');
+  rm.addEventListener('change', function () {
+    document.body.dataset.rm = rm.checked ? 'on' : 'off';
+  });
+</script>

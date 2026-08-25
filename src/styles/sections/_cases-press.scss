@@ -8,6 +8,10 @@
    on this page a rule does the work a border and a surface would do
    elsewhere, and a card here would be the only one on the fold.
 
+   Each column opens on a 16:9 photograph, graded to match the rest
+   of the page -- see the --case-shot-* block in tokens/_components.scss
+   for why the ratio and the grading are knobs.
+
    The ember lands on the industry chip, not on the figures. The
    figures are ink and mono, like every other number on the page; the
    band directly above is already a full-bleed ember mass, and two
@@ -24,6 +28,29 @@
 .cases-press__case {
   border-top: 1px solid var(--border-strong);
   padding-top: 1rem;
+}
+
+/* The shot sits under the column rule and above the chip, so the rule
+   still reads as the top of the column rather than as a caption line
+   under a picture.
+
+   aspect-ratio holds the box before the file arrives, which is what
+   stops the two columns from jumping past each other as they load --
+   the images are different native ratios (1.28:1 and 3.47:1) and both
+   are cropped to this one. */
+.cases-press__shot {
+  margin: 0 0 var(--case-shot-gap);
+  aspect-ratio: var(--case-shot-ratio);
+  overflow: hidden;
+  background: var(--case-shot-bg);
+}
+
+.cases-press__shot img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: var(--case-shot-filter);
 }
 
 /* The one ember mark on the fold. Reads as a stamp on the column, so

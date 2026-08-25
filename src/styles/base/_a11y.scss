@@ -9,11 +9,17 @@
   box-shadow: 0 0 0 2px var(--focus-halo);
 }
 
-/* Buttons: match the ring to whatever shape the theme gives them */
+/* Buttons: match the ring to whatever shape the theme gives them, and
+   restate the halo. The buttons paint their hover press block with
+   `box-shadow` at this same specificity; a button that is hovered AND
+   keyboard-focused would otherwise take the block and lose the halo,
+   because that rule reaches the element too. Declared here, last, so the
+   focus indicator wins the tie and the block simply steps aside. */
 .btn:focus-visible,
 .join-us:focus-visible,
 .btn-load-more:focus-visible {
   border-radius: var(--radius-pill);
+  box-shadow: 0 0 0 2px var(--focus-halo);
 }
 
 /* Inputs keep their own corners */

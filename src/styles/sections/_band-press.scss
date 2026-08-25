@@ -86,6 +86,13 @@
   color: var(--color-text-muted);
 }
 
+/* The band is the page's one ember surface, so the ink button standing on
+   it needs a paper block behind it -- the ember block the ink buttons
+   carry everywhere else would be the same colour as the ground here and
+   simply would not be there. Set on the button rather than the section
+   because .btn-secondary declares the knob on itself, and an inherited
+   value loses to a value the element sets. */
+.band-press .btn { --btn-press-color: var(--color-on-inverse); }
 .band-press__quote .btn { margin-top: 1rem; }
 
 @media (max-width: 860px) {
@@ -94,3 +101,38 @@
     gap: 1.25rem;
   }
 }
+
+/* ── The catalogue's variant ──────────────────────────────
+   Same band, different contents: an ask on the left with a line of
+   qualification under it, and the two ways out on the right.
+
+   The note takes --color-on-accent at full strength. The mock sets it
+   in the ember's darkest rung at 82% opacity, which lands under 4.5:1
+   against the ember and is not a legal body ink here -- the softening
+   the mock wanted is bought with size instead. */
+.band-press__note {
+  margin: 0.75rem 0 0;
+  max-width: 52ch;
+  font-size: var(--size-body-sm);
+  line-height: 1.6;
+  color: var(--color-on-accent);
+}
+
+/* Right-aligned on the wide grid so the two buttons close the band at
+   its outer edge, opposite the ask. They fall back to the reading edge
+   once the grid stacks and there is no opposite left. */
+.band-press__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.625rem;
+  justify-content: flex-end;
+}
+
+@media (max-width: 860px) {
+  .band-press__actions { justify-content: flex-start; }
+}
+
+/* ...and the paper button on the band needs the mirror image: an ink
+   block, because a paper block behind a paper button is the same
+   non-event the ember block would be behind the ink one. */
+.band-press .btn-light { --btn-press-color: var(--color-heading); }

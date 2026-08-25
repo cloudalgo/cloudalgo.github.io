@@ -1,0 +1,84 @@
+/* .link-draw -- a title that draws its own underline when you point at it.
+
+   A content item's name, linking to that item: a product row's name, a
+   service, and any other place a heading IS the link. Four folds carried the
+   same element with the same one-line hover rule copied into each of their
+   section files; the effect is a component now so there is one place to change
+   what pointing at a title does.
+
+   Same crayon as the section head's rule -- --rule-crayon-art is the mask both
+   read -- but drawn ON HOVER rather than always. The head's rule is a
+   permanent mark saying where the section leads; this one is the pointer's own
+   stroke, and it costs nothing when nobody is pointing. That is also a
+   legibility argument: four names a fold across four folds, all boiling at
+   once, is a page nobody can read.
+
+   The stroke enters left to right, the direction .mark--draw and the head's
+   redraw both stroke in.
+
+   ONE LINE ONLY, and that is a hard limit. The stroke is one absolutely
+   positioned box across the bottom of the link, so a title that WRAPS gets a
+   single rule under the whole block -- full width, under the last line only --
+   instead of one stroke per line. CSS has no per-line hook that would fix it:
+   the wrap-safe technique is a background-image with box-decoration-break, and
+   a background-image would bake the ember's hex in where no token can reach
+   it, which is the one thing the crayon exists to avoid.
+
+   So this goes on titles that hold a line. The product row names do
+   (AlgoBridge, Pledgivo, InsureAlgo). The service names, case-study headlines
+   and journal titles all wrap at desktop width and deliberately do NOT carry
+   it -- they still take their colour hover, and they need an effect that
+   survives a line break. */
+.link-draw {
+  position: relative;
+  color: inherit;
+  text-decoration: none;
+  /* The stroke sits below the baseline, so the box has to be able to hold it.
+     inline-block also stops the ::after from being measured against a line box
+     taller than the word. */
+  display: inline-block;
+}
+
+.link-draw::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: var(--link-draw-offset);
+  height: var(--link-draw-height);
+  background-color: var(--link-draw-color);
+  mask-image: var(--link-draw-art);
+  mask-repeat: no-repeat;
+  /* One cell of the three-cell sprite -- see components/_crayon.scss. */
+  mask-size: 300% 100%;
+  mask-position: 0 0;
+  /* Absent at rest: clipped away from the right, so the stroke enters
+     left-first and leaves the same way it came. */
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path var(--link-draw-out) var(--link-draw-ease);
+}
+
+.link-draw:hover::after,
+.link-draw:focus-visible::after {
+  clip-path: inset(0 0 0 0);
+  /* Slower going on than coming off: a stroke is made deliberately and lifted
+     quickly. */
+  transition-duration: var(--link-draw-in);
+  animation: crayon-boil var(--link-draw-boil) step-end infinite;
+}
+
+/* Where mask is unsupported the mask declarations are dropped and the ::after
+   would paint as a solid bar the crayon's full height. Take it back to a
+   hairline, which is what an underline means without the crayon. */
+@supports not (mask-image: linear-gradient(#000, #000)) {
+  .link-draw::after { height: var(--link-draw-fallback-height); }
+}
+
+/* Reduced motion: the stroke still appears, because it is the affordance --
+   it just arrives rather than being drawn, and does not boil once it is
+   there. The same trade .mark--draw makes. */
+@media (prefers-reduced-motion: reduce) {
+  .link-draw::after { transition: none; }
+  .link-draw:hover::after,
+  .link-draw:focus-visible::after { animation: none; }
+}

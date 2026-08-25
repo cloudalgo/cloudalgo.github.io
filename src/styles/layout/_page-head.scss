@@ -1,0 +1,99 @@
+/* The interior-page masthead. Ported from the approved /products/ mock
+   (`.pp__crumbs`, `.pp__head`, `.pp__h1`, `.pp__lede`, `.pp__stand`),
+   which is the home hero's grid with a trail above it.
+
+   Filed under layout/, not sections/: four index pages open on this, so
+   it is a shell like .section-press rather than one page's fold.
+
+   The top padding clears the fixed header, the same allowance
+   .hero-press makes and for the same reason -- our bar is
+   `position: fixed` and the mock's is not. */
+
+.page-head {
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding: calc(var(--header-h) + 1.75rem) var(--container-pad) 2.125rem;
+}
+
+/* The trail is set in mono here, not in the body face .breadcrumb
+   defaults to: on this page it is a locator, in the same voice as the
+   fact list and the fig. captions, and the default sits too close in
+   size to the lede under it. */
+.page-head__crumbs {
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-faint);
+  margin-bottom: 1.375rem;
+}
+
+.page-head__crumbs a { color: var(--color-text-faint); }
+.page-head__crumbs a:hover { color: var(--color-heading); }
+.page-head__crumbs [aria-current='page'] { color: var(--color-heading); }
+
+.page-head__grid {
+  display: grid;
+  grid-template-columns: 1.55fr 1fr;
+  gap: 2.75rem;
+  align-items: end;
+}
+
+.page-head__title {
+  font-family: var(--font-heading);
+  font-weight: var(--weight-bold);
+  font-size: clamp(2rem, 5vw, 3.15rem);
+  line-height: 1.03;
+  letter-spacing: -0.038em;
+  margin: 0;
+  max-width: 17ch;
+  text-wrap: balance;
+}
+
+.page-head__lede {
+  margin: 1.375rem 0 0;
+  font-size: var(--size-body-lg);
+  line-height: 1.62;
+  color: var(--color-text);
+  max-width: 56ch;
+}
+
+/* Same rule-on-the-left as .hero-press__standfirst, and the same rows as
+   .hero-press__facts. Held at --size-label rather than the mock's
+   11.5px/10.5px pair: the root drops to 85% at 1200px, which would land
+   those near 9px on the widths this page is read at. */
+.page-head__stand {
+  padding-left: var(--hero-rule-gap);
+  border-left: 1px solid var(--color-heading);
+}
+
+.page-head__stand dl {
+  margin: 0;
+  display: grid;
+  gap: 0;
+}
+
+.page-head__stand div {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.875rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border-default);
+  font-size: var(--size-label);
+}
+
+.page-head__stand dt { color: var(--color-text-muted); }
+
+.page-head__stand dd {
+  margin: 0;
+  font-family: var(--font-mono);
+  color: var(--color-heading);
+  text-align: right;
+}
+
+@media (max-width: 900px) {
+  .page-head__grid {
+    grid-template-columns: 1fr;
+    gap: 1.625rem;
+  }
+}

@@ -1,0 +1,45 @@
+/* Ship-status pip.
+   Was `.products-press__status` / `__dot`, owned by the home fold. The
+   catalogue page renders it in three places, so it moved out to a
+   component of its own -- a shared atom owned by one section is how a
+   system rots.
+
+   Shape over hue, deliberately: --pip-dot-border is the ember and
+   --pip-dot-fill-ga is the ink, so GA is a filled mark and preview is
+   an outline. Strip the colour out entirely and the two states are
+   still distinguishable. */
+
+.pip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--pip-gap);
+  font-family: var(--font-mono);
+  font-size: var(--pip-size);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--pip-color);
+}
+
+.pip__dot {
+  display: block;
+  flex: none;
+  width: var(--pip-dot-size);
+  height: var(--pip-dot-size);
+  border: 1px solid var(--pip-dot-border);
+}
+
+.pip--ga .pip__dot {
+  background: var(--pip-dot-fill-ga);
+  border-color: var(--pip-dot-fill-ga);
+}
+
+/* On the entry header's ink bar. The word lifts to a paper tint and the
+   GA mark fills with paper -- an ink mark on an ink fill is not there. */
+.pip--on-ink {
+  color: var(--pip-color-on-ink);
+}
+
+.pip--on-ink.pip--ga .pip__dot {
+  background: var(--pip-dot-fill-ga-on-ink);
+  border-color: var(--pip-dot-fill-ga-on-ink);
+}

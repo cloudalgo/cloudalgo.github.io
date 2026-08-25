@@ -1,0 +1,83 @@
+/* The contents strip. Four cells ruled off each other, the whole strip
+   ruled top and bottom in ink so it reads as a band across the page
+   rather than four buttons.
+
+   Hover tints the cell with the ember wash instead of moving it: the
+   press-block lift the buttons use is for something you press, and this
+   is a line in a contents list you follow. */
+
+/* Constrained to the container, but with the padding on the cells
+   rather than the strip: the two ink rules run to the container's edge
+   while the first cell's text lands on the same measure as the
+   masthead above it and the entry plates below. */
+.contents-bar {
+  max-width: var(--container-max);
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-top: 1px solid var(--color-heading);
+  border-bottom: 1px solid var(--color-heading);
+}
+
+.contents-bar__item {
+  display: block;
+  padding: 1rem var(--container-pad);
+  color: inherit;
+  transition: background var(--duration-fast) var(--ease-out);
+}
+
+/* The rule BETWEEN cells only -- the strip's own ends are already
+   closed by the top and bottom borders. */
+.contents-bar__item + .contents-bar__item {
+  border-left: 1px solid var(--border-default);
+}
+
+.contents-bar__item:hover { background: var(--surface-wash-accent); }
+
+.contents-bar__n {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  color: var(--color-text-faint);
+}
+
+.contents-bar__title {
+  display: block;
+  margin-top: 0.4375rem;
+  font-family: var(--font-heading);
+  font-weight: var(--weight-bold);
+  font-size: var(--size-body-lg);
+  letter-spacing: -0.02em;
+  color: var(--color-heading);
+}
+
+.contents-bar__blurb {
+  display: block;
+  margin-top: 0.3125rem;
+  font-size: var(--size-body-sm);
+  line-height: 1.45;
+  color: var(--color-text);
+}
+
+.contents-bar__pip { margin-top: 0.5rem; }
+
+/* Two-up before one-up: at four across the blurb wraps to four lines
+   long before the cell is genuinely too narrow, and a 2x2 contents
+   block still reads as a contents block. A single column does not. */
+@media (max-width: 900px) {
+  .contents-bar { grid-template-columns: repeat(2, 1fr); }
+
+  /* Re-rule for the new grid: the third cell starts a second row, so
+     it loses its left rule and gains a top one. */
+  .contents-bar__item:nth-child(2n + 1) { border-left: 0; }
+  .contents-bar__item:nth-child(n + 3) { border-top: 1px solid var(--border-default); }
+}
+
+@media (max-width: 560px) {
+  .contents-bar { grid-template-columns: 1fr; }
+
+  .contents-bar__item + .contents-bar__item {
+    border-left: 0;
+    border-top: 1px solid var(--border-default);
+  }
+}

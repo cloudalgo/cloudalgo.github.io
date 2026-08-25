@@ -34,18 +34,70 @@
 
 /* The "All products ->" link opposite it. The accent underline is the
    only place the ember appears in a section head, which is what makes
-   it read as the way out of the section. */
+   it read as the way out of the section.
+
+   The rule is a masked pseudo-element rather than a border-bottom
+   because it is drawn, not ruled -- see the --rule-crayon-* block in
+   tokens/_components.scss for the sprite and why the colour still lives
+   in a token. Four folds render this link, so all four get the stroke. */
 .section-press__all {
   font-size: var(--size-body-sm);
   font-weight: var(--weight-bold);
   color: var(--color-heading);
   white-space: nowrap;
-  border-bottom: 2px solid var(--color-accent);
-  padding-bottom: 1px;
+  position: relative;
+  padding-bottom: var(--rule-crayon-gap);
   transition: color var(--duration-fast) var(--ease-out);
 }
 
-.section-press__all:hover { color: var(--color-accent-hover); }
+.section-press__all::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--rule-crayon-height);
+  background-color: var(--rule-crayon-color);
+  mask-image: var(--rule-crayon-art);
+  mask-repeat: no-repeat;
+  /* One cell of the three-cell sprite. */
+  mask-size: 300% 100%;
+  mask-position: 0 0;
+  animation: crayon-boil var(--rule-crayon-boil) step-end infinite;
+}
+
+/* Where mask is unsupported the declarations are dropped and the ::after
+   paints as a solid block, so this takes it back to the hairline rule the
+   crayon replaced. (Unprefixed mask-* only, deliberately -- see
+   components/_crayon.scss.) */
+@supports not (mask-image: linear-gradient(#000, #000)) {
+  .section-press__all::after { height: 2px; }
+}
+
+/* Hover: the boil doubles its rate under the pointer, and the stroke is
+   redrawn once on top of it -- which is what makes the redraw land on a
+   line that is already moving. Both keyframes live in
+   components/_crayon.scss, with the argument for how they work. */
+.section-press__all:hover {
+  color: var(--color-accent-hover);
+}
+
+.section-press__all:hover::after {
+  animation: crayon-boil var(--rule-crayon-boil-hover) step-end infinite,
+             crayon-redraw var(--rule-crayon-redraw) var(--rule-crayon-redraw-ease);
+}
+
+/* Reduced motion keeps the drawn line and drops both animations, the
+   same trade .mark--draw makes: the rule is what marks the way out of
+   the section, so removing it would remove meaning rather than motion.
+   One cell, held. */
+@media (prefers-reduced-motion: reduce) {
+  .section-press__all::after,
+  .section-press__all:hover::after {
+    animation: none;
+    mask-position: 0 0;
+  }
+}
 
 /* The row eyebrow -- the first cell of a product row and of a service
    row. Two folds render the same mono label ("Integration", "Support"),
@@ -57,4 +109,21 @@
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--color-text-muted);
+}
+
+/* The other thing that sits opposite a section title: a standing note
+   rather than a way out. Same mono label as the row eyebrow above, and
+   deliberately not `.section-press__all` -- there is no crayon rule and
+   no hover, because there is nowhere to go. It states when the figures
+   below were true, or what the block underneath is answering. */
+.section-press__note {
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  /* No nowrap, unlike the link opposite: this note is a sentence
+     fragment and the head row does not wrap, so a long one has to be
+     allowed to break rather than push the row past the container. */
+  text-align: right;
 }

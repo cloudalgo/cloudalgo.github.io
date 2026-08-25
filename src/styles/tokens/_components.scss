@@ -64,6 +64,38 @@
   --btn-fg: var(--color-on-accent);
   --btn-border: var(--color-accent);
 
+  /* The hover, in two layers picked together: a hard block that slides
+     out from behind the face (the movement) and, on the filled button, a
+     deepened accent under a hairline (the colour). Neither is a shadow in
+     the soft sense -- zero blur, zero radius, one flat plane behind
+     another. That is the same printing logic the rest of the page is set
+     in, and it is why the press-room theme's `radius: 0` does not have to
+     be argued with here.
+
+     Lift and offset are separate knobs because they are separate
+     gestures: the face travels UP-LEFT by --btn-press-lift while the
+     block extends DOWN-RIGHT by --btn-press-offset, so the gap that opens
+     between them is the sum of the two and either can be tuned alone.
+     :active returns both to zero on --btn-press-return, which is shorter
+     than the outward move on purpose -- a press has to land, not ease.
+
+     --btn-press-color is ink by default and ember on any button whose
+     hover face is ink; a block the same colour as the face in front of it
+     is not a block. See components/_buttons.scss for the overrides.
+
+     The block replaces the old `opacity: 0.8` hover outright, which is a
+     contrast fix as much as a design one: opacity faded the whole button,
+     label included, taking the #110605 label on ember from 6.17:1 to
+     4.4:1 and under AA for as long as the pointer was on it. Nothing
+     about the fill changes now. */
+  --btn-press-lift: 3px;
+  --btn-press-offset: 5px;
+  --btn-press-color: var(--color-heading);
+  --btn-press-duration: var(--duration-fast);
+  --btn-press-return: 0.06s;
+  --btn-press-ease: var(--ease-out);
+
+
   /* Cards.
      `--card-radius` is the one every card would use if the radii had
      never drifted; the -xl and -2xl entries below exist only so the
@@ -247,6 +279,180 @@
   --mark-draw-duration: 0.7s;
   --mark-draw-delay: 0.35s;
   --mark-draw-ease: var(--ease-out);
+
+  /* The "All products ->" rule in a section head (.section-press__all).
+     A crayon stroke, not a border. The ember is the only accent a
+     section head spends, and this is the one place on the page where the
+     press-room's printed geometry gives way to something made by hand --
+     which is the argument for it being rough rather than 2px and true.
+
+     --rule-crayon-art is a MASK, not an image, and that distinction is
+     the whole reason the colour survives a theme swap: the stroke is
+     painted by --rule-crayon-color through the mask's alpha. A
+     background-image would bake the ember's hex into a data URI where no
+     token could reach it.
+
+     The artwork is a THREE-CELL SPRITE: one 600-unit viewBox holding the
+     same stroke roughened by three different --feTurbulence seeds, side
+     by side. mask-size: 300% shows one 200-unit cell at a time, and the
+     boil steps the mask-position between them -- so the line appears
+     hand-redrawn frame by frame, at the cost of exactly one mask image
+     and zero repaints of anything but a background position. Swapping
+     the art for a different roughness (or a straight rule) is one token.
+
+     The boil is slow on purpose. At 0.75s across three frames it reads
+     as a line that will not sit still; anything faster reads as a
+     rendering fault, and four of these run on the home page at once. */
+  --rule-crayon-color: var(--color-accent);
+  --rule-crayon-height: 9px;
+  --rule-crayon-gap: 7px;
+  --rule-crayon-boil: 0.75s;
+  --rule-crayon-boil-hover: 0.3s;
+  --rule-crayon-redraw: 0.55s;
+  --rule-crayon-redraw-ease: var(--ease-out);
+  --rule-crayon-art: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20600%2010%27%20preserveAspectRatio%3D%27none%27%3E%3Cfilter%20id%3D%27f7%27%20x%3D%27-10%25%27%20y%3D%27-70%25%27%20width%3D%27120%25%27%20height%3D%27240%25%27%3E%3CfeTurbulence%20type%3D%27fractalNoise%27%20baseFrequency%3D%271.3%201.9%27%20numOctaves%3D%273%27%20seed%3D%277%27%20result%3D%27n%27%2F%3E%3CfeDisplacementMap%20in%3D%27SourceGraphic%27%20in2%3D%27n%27%20scale%3D%278.0%27%20xChannelSelector%3D%27R%27%20yChannelSelector%3D%27G%27%2F%3E%3C%2Ffilter%3E%3Cg%20filter%3D%27url%28%23f7%29%27%20transform%3D%27translate%280%200%29%27%3E%3Cpath%20d%3D%27M2%206%20C30%204%2056%207.4%2082%205.6%20C110%203.7%20136%207.6%20162%205.4%20C176%204.2%20190%206.4%20198%205%27%20fill%3D%27none%27%20stroke%3D%27%23fff%27%20stroke-width%3D%275.2%27%20stroke-linecap%3D%27round%27%2F%3E%3C%2Fg%3E%3Cfilter%20id%3D%27f21%27%20x%3D%27-10%25%27%20y%3D%27-70%25%27%20width%3D%27120%25%27%20height%3D%27240%25%27%3E%3CfeTurbulence%20type%3D%27fractalNoise%27%20baseFrequency%3D%271.3%201.9%27%20numOctaves%3D%273%27%20seed%3D%2721%27%20result%3D%27n%27%2F%3E%3CfeDisplacementMap%20in%3D%27SourceGraphic%27%20in2%3D%27n%27%20scale%3D%278.0%27%20xChannelSelector%3D%27R%27%20yChannelSelector%3D%27G%27%2F%3E%3C%2Ffilter%3E%3Cg%20filter%3D%27url%28%23f21%29%27%20transform%3D%27translate%28200%200%29%27%3E%3Cpath%20d%3D%27M2%206%20C30%204%2056%207.4%2082%205.6%20C110%203.7%20136%207.6%20162%205.4%20C176%204.2%20190%206.4%20198%205%27%20fill%3D%27none%27%20stroke%3D%27%23fff%27%20stroke-width%3D%275.2%27%20stroke-linecap%3D%27round%27%2F%3E%3C%2Fg%3E%3Cfilter%20id%3D%27f34%27%20x%3D%27-10%25%27%20y%3D%27-70%25%27%20width%3D%27120%25%27%20height%3D%27240%25%27%3E%3CfeTurbulence%20type%3D%27fractalNoise%27%20baseFrequency%3D%271.3%201.9%27%20numOctaves%3D%273%27%20seed%3D%2734%27%20result%3D%27n%27%2F%3E%3CfeDisplacementMap%20in%3D%27SourceGraphic%27%20in2%3D%27n%27%20scale%3D%278.0%27%20xChannelSelector%3D%27R%27%20yChannelSelector%3D%27G%27%2F%3E%3C%2Ffilter%3E%3Cg%20filter%3D%27url%28%23f34%29%27%20transform%3D%27translate%28400%200%29%27%3E%3Cpath%20d%3D%27M2%206%20C30%204%2056%207.4%2082%205.6%20C110%203.7%20136%207.6%20162%205.4%20C176%204.2%20190%206.4%20198%205%27%20fill%3D%27none%27%20stroke%3D%27%23fff%27%20stroke-width%3D%275.2%27%20stroke-linecap%3D%27round%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  /* .link-draw -- the stroke a content title draws under itself on hover
+     (components/_link-draw.scss). Same crayon art as the rule above: one
+     sprite serves both, so a change to how a drawn line looks reaches every
+     drawn line on the page.
+
+     It is thinner and it is not permanent. The rule under a section head is a
+     mark that stays; this is the pointer's own stroke, so it costs nothing
+     until somebody points -- and a page with a boiling line under every title
+     at once would be unreadable.
+
+     The offset is in em, not px: the stroke has to clear a descender at
+     whatever size the title is set, and four folds set their titles
+     differently. */
+  --link-draw-color: var(--color-accent);
+  --link-draw-height: 6px;
+  --link-draw-offset: -0.16em;
+  --link-draw-fallback-height: 2px;
+  --link-draw-in: 0.28s;
+  --link-draw-out: 0.16s;
+  --link-draw-ease: var(--ease-out);
+  --link-draw-boil: 0.28s;
+  --link-draw-art: var(--rule-crayon-art);
+
+  /* ── Case-study shot ──────────────────────────────────────
+     The photograph that opens each engagement column on the home
+     page. Ratio, gap and grading are knobs rather than literals for
+     the same reason every other surface here is: press-room runs its
+     photography monochrome, and a skin that wanted it in colour sets
+     --case-shot-filter to `none` instead of editing the fold.
+
+     The ground under the image is --surface-placeholder, so the
+     column holds its height and reads as a reserved slot rather than
+     a hole while the file is still arriving. */
+  --case-shot-ratio: 16 / 9;
+  --case-shot-gap: 0.875rem;
+  --case-shot-bg: var(--surface-placeholder);
+  --case-shot-filter: grayscale(1) contrast(1.05);
+
+  /* ── Ship-status pip (.pip) ───────────────────────────────
+     Extracted from the home page's product rows, where it was
+     `.products-press__status`. Values are that rule's, unchanged, so
+     the home fold renders byte-identically after the swap.
+
+     The two states differ by SHAPE first: --pip-dot-border draws the
+     outline every pip gets, and --pip-dot-fill-ga fills only the
+     shipped one. Set both to the same value and the states collapse,
+     which is the tell that a theme has broken the distinction rather
+     than restyled it. */
+  --pip-gap: 0.4375rem;
+  --pip-size: var(--size-label);
+  --pip-color: var(--color-text-muted);
+  --pip-dot-size: 6px;
+  --pip-dot-border: var(--color-accent);
+  --pip-dot-fill-ga: var(--color-heading);
+  /* On the entry header's ink bar. Paper-at-alpha for the word and
+     solid paper for the mark -- an ink mark on ink is not there. */
+  --pip-color-on-ink: var(--color-on-inverse-muted);
+  --pip-dot-fill-ga-on-ink: var(--color-on-inverse);
+
+  /* ── Catalogue entry (.entry) ─────────────────────────────
+     One product, printed as a specimen: a ruled header bar, copy on
+     the left, a specification on the right, evidence underneath.
+
+     The header is the only reversed strip on the page and it is what
+     makes the entry read as a plate rather than a card, so its ground
+     is a knob of its own rather than a reach for --surface-inverse:
+     a skin that wants the plate ruled instead of filled sets
+     --entry-head-bg to transparent and --entry-head-fg to the ink,
+     and nothing else in the sheet has to move. */
+  --entry-border: var(--color-heading);
+  --entry-head-bg: var(--surface-inverse);
+  --entry-head-fg: var(--color-on-inverse);
+  --entry-head-pad: 0.875rem 1.625rem;
+  --entry-gap: 1.375rem;
+  --entry-pad: 1.625rem 1.75rem 1.75rem;
+  /* The counter in the header bar. Ember on ink is the one accent the
+     plate spends -- accent-500 itself sits at 2.6:1 there, so this
+     reads the lighter rung the inverse ramp is measured against. */
+  --entry-n-color: var(--accent-200);
+  --entry-meta-color: var(--color-on-inverse-faint);
+  /* The chip row under the description. An outline, not a badge: these
+     are capability labels a reader skims, and eight filled pills would
+     out-shout the tagline above them. */
+  --entry-chip-border: var(--border-default);
+  --entry-chip-color: var(--color-text);
+  --entry-chip-pad: 0.3125rem 0.625rem;
+
+  /* ── Specification sheet (.spec-sheet) ────────────────────
+     The ember-washed panel beside the entry copy. It is the same pair
+     the home page's featured product uses -- --surface-wash-accent on
+     the ground, --border-accent-soft for the hairlines inside it --
+     because a second washed surface with its own tint would read as a
+     different kind of thing rather than the same thing again.
+
+     --spec-term-width is a ch measure, so the two columns stay aligned
+     as the type scales and the longest term ("Org access") still
+     clears its gutter. */
+  --spec-bg: var(--surface-wash-accent);
+  --spec-border: var(--color-heading);
+  --spec-rule: var(--border-accent-soft);
+  --spec-pad: 1.375rem 1.625rem 1.5rem;
+  --spec-term-width: 9.5ch;
+  --spec-gap: 0.875rem;
+  --spec-row-pad: 0.5rem;
+
+  /* ── Evidence strip (.evidence) ───────────────────────────
+     The figure under an entry: a screenshot, a set of them, or a
+     drawn diagram, with a mono caption that numbers it. Sunk rather
+     than washed, so the picture reads as mounted on the plate and not
+     as another panel of copy. */
+  --evidence-bg: var(--surface-sunk);
+  --evidence-border: var(--color-heading);
+  --evidence-pad: 1.375rem 1.75rem 1.5rem;
+  --evidence-shot-border: var(--border-default);
+  --evidence-gap: 0.875rem;
+  --evidence-caption-color: var(--color-text-muted);
+
+  /* ── Comparison table (.compare) ──────────────────────────
+     Four products against seven questions. The head is the entry
+     plate's reversed bar again, deliberately: same device, same
+     meaning -- this is a plate too, it just holds all four.
+
+     Row hover tints the whole row with the ember wash. It is the only
+     hover on a static table, and it exists because the reading task
+     here is "follow one row across four columns", which is exactly
+     what a full-row tint helps with. */
+  --compare-border: var(--color-heading);
+  --compare-rule: var(--border-default);
+  --compare-head-bg: var(--surface-inverse);
+  --compare-head-fg: var(--color-on-inverse);
+  --compare-corner-fg: var(--accent-200);
+  --compare-cell-pad: 0.75rem 1rem;
+  --compare-row-hover: var(--surface-wash-accent);
+  --compare-label-width: 19%;
+
+  /* ── Closing note (.closing-cta) ──────────────────────────
+     The last thing on an index page: one line, one qualification, two
+     ways out. Ruled off the content above rather than boxed, because
+     it is the end of the page and not another section of it. */
+  --closing-border: var(--color-heading);
+  --closing-pad: 2rem var(--container-pad) 2.25rem;
+  --closing-gap: 1.5rem;
 }
 
 @media (max-width: 991px) {

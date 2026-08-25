@@ -8,3 +8,22 @@
 @media (min-width: 992px) { .ps-lg-5 { padding-left: 3rem; } }
 .text-md-end { text-align: left; }
 @media (min-width: 768px) { .text-md-end { text-align: right; } }
+
+/* Visible to assistive technology, not to the eye. For the label a
+   control or a table needs but the design already states in display
+   type above it -- the alternative is duplicating that heading
+   on-screen, or shipping an unnamed table.
+
+   The 1px-clip pattern rather than `display: none`, because a hidden
+   element is not announced at all. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}

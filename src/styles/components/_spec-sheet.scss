@@ -1,0 +1,58 @@
+/* The specification panel. Ember-washed ground, hairlines in the ember's
+   own 200 rung -- the same pair the home page's featured product uses,
+   so the two washed surfaces on the site read as one device.
+
+   The term column is a ch measure rather than a fraction: these are
+   short fixed labels, and a fractional column would re-wrap them every
+   time the panel changed width. */
+
+.spec-sheet {
+  background: var(--spec-bg);
+  padding: var(--spec-pad);
+}
+
+.spec-sheet__label {
+  margin: 0 0 0.25rem;
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.spec-sheet__list { margin: 0; }
+
+.spec-sheet__list > div {
+  display: grid;
+  grid-template-columns: var(--spec-term-width) 1fr;
+  gap: var(--spec-gap);
+  align-items: baseline;
+  padding: var(--spec-row-pad) 0;
+  border-bottom: 1px solid var(--spec-rule);
+}
+
+/* The last row closes on the panel's own edge, so its rule would be a
+   line with nothing under it. */
+.spec-sheet__list > div:last-child { border-bottom: 0; }
+
+.spec-sheet__list dt {
+  font-size: var(--size-label);
+  color: var(--color-text-muted);
+}
+
+.spec-sheet__list dd {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  line-height: 1.5;
+  color: var(--color-heading);
+}
+
+/* Below the two-column split the panel is full width, and a 9.5ch term
+   column against it leaves the details stranded far right. */
+@media (max-width: 560px) {
+  .spec-sheet__list > div {
+    grid-template-columns: 1fr;
+    gap: 0.1875rem;
+  }
+}

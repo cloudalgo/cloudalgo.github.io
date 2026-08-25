@@ -7,42 +7,73 @@
   font-size: 1rem;
   padding: var(--btn-padding);
   border-radius: var(--btn-radius);
-  transition: opacity 0.2s, background 0.2s, color 0.2s;
   cursor: pointer;
   border: 1.5px solid transparent;
   text-decoration: none;
   font-family: var(--font-body);
+  /* The press block, declared at rest as a zero-offset block rather than
+     `none` so the hover has something to transition FROM -- a shadow that
+     appears out of `none` pops into place instead of sliding out. Every
+     variant gets it: it is the whole hover now, and it is the only
+     :active feedback any button on this site has ever had. */
+  box-shadow: 0 0 0 var(--btn-press-color);
+  transition: transform var(--btn-press-duration) var(--btn-press-ease),
+              box-shadow var(--btn-press-duration) var(--btn-press-ease),
+              background-color var(--duration-base) ease,
+              color var(--duration-base) ease;
+}
+/* Hover only, never :focus-visible. base/_a11y.scss draws the focus
+   indicator's halo with `box-shadow` and loads last; a press block on
+   :focus-visible would be the higher-specificity selector and would eat
+   that halo. The keyboard ring is the contract, so the block yields. */
+.btn:hover {
+  transform: translate(calc(-1 * var(--btn-press-lift)), calc(-1 * var(--btn-press-lift)));
+  box-shadow: var(--btn-press-offset) var(--btn-press-offset) 0 var(--btn-press-color);
+}
+/* Pressed: the face lands back down on its block, faster than it left. */
+.btn:active {
+  transform: translate(0, 0);
+  box-shadow: 0 0 0 var(--btn-press-color);
+  transition-duration: var(--btn-press-return);
 }
 /* The filled button is the one the accent is FOR: it reads the --btn-*
    knobs, which resolve through --color-accent. Under a monochrome
    palette the accent is ink, so this is the same black fill it always
    was; under a themed palette the primary button is where the brand
-   colour lands first. */
+   colour lands first.
+   The fill does not move on hover -- the block is the hover. The `color`
+   pin stays only to stop a generic `a:hover` rule from reaching the
+   label; it was never the effect. */
 .btn-primary {
   background-color: var(--btn-bg);
   color: var(--btn-fg);
   border-color: var(--btn-border);
 }
-.btn-primary:hover { opacity: 0.8; color: var(--btn-fg); }
+.btn-primary:hover { color: var(--btn-fg); }
 /* Identical to .btn-primary today -- both were written as "black fill,
-   white text" and never diverged. Left on the inverse surface rather
-   than pointed at the accent so that a themed palette gets one filled
-   button in the brand colour and one in ink, which is the distinction
-   the two class names were always claiming. Phase 7 confirms or
-   collapses them. */
+   white text" and never diverged. Phase 7 confirms or collapses the pair.
+   Its block is ember because its own face is ink: a block the colour of
+   the face in front of it is not a block. */
 .btn-secondary {
+  --btn-press-color: var(--color-accent);
   background-color: var(--surface-inverse);
   color: var(--color-on-inverse);
   border-color: var(--border-strong);
 }
-.btn-secondary:hover { opacity: 0.8; color: var(--color-on-inverse); }
+.btn-secondary:hover { color: var(--color-on-inverse); }
+/* Inverts to an ink face on hover, so it takes the ember block for the
+   same reason. Beside a primary button -- an ember face on an ink block --
+   the two mirror on hover, which is the argument for giving the block a
+   knob rather than a fixed colour. */
 .btn-outline {
+  --btn-press-color: var(--color-accent);
   background-color: transparent;
   color: var(--color-heading);
   border-color: var(--border-strong);
 }
 .btn-outline:hover { background-color: var(--surface-inverse); color: var(--color-on-inverse); }
 .btn-light {
+  --btn-press-color: var(--color-accent);
   background-color: var(--surface-card);
   color: var(--color-heading);
   border-color: var(--border-strong);
@@ -50,8 +81,10 @@
 .btn-light:hover { background-color: var(--surface-inverse); color: var(--color-on-inverse); }
 
 /* Ghost button for use on a near-black CTA band. Transparent fill, light
-   text, and a hairline that reads against the dark surface. */
+   text, and a hairline that reads against the dark surface. Its block is
+   paper: an ink block on an ink surface is not there. */
 .btn-ghost-inverse {
+  --btn-press-color: var(--color-on-inverse);
   background-color: transparent;
   color: var(--color-on-inverse);
   border-color: var(--color-paper-a30);
@@ -63,3 +96,13 @@
    equal specificity, exactly as the inline styles used to. */
 .btn-sm { font-size: 0.9375rem; padding: 0.625rem 1.5rem; }
 .btn-xs { font-size: 0.8125rem; padding: 0.5rem 1.25rem; }
+
+/* Reduced motion keeps the STATE and drops the travel: the block still
+   appears on hover, instantly, so the affordance survives -- it is the
+   3px journey that is the motion, not the block. Same shape as the
+   .mark--draw fallback, which paints its rule rather than stroking it. */
+@media (prefers-reduced-motion: reduce) {
+  .btn { transition: none; }
+  .btn:hover,
+  .btn:active { transform: none; }
+}

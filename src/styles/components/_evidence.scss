@@ -1,0 +1,109 @@
+/* The figure strip under an entry. Sunk ground and an ink rule along
+   the top, so the picture reads as mounted onto the plate rather than
+   as one more panel of copy.
+
+   Images take a hairline border of their own: a screenshot of a light
+   UI on a light ground has no edge without one, and the crop would look
+   like a bleed rather than a plate. */
+
+.evidence {
+  margin: 0;
+  border-top: 1px solid var(--evidence-border);
+  padding: var(--evidence-pad);
+  background: var(--evidence-bg);
+}
+
+.evidence img,
+.evidence picture img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--evidence-shot-border);
+}
+
+/* A set of shots read as one figure -- four phone screens, three states
+   of a page. Wide enough to scroll rather than crush below the
+   breakpoint, since four 4:9 screens at a third of a phone's width are
+   not readable at any grid. */
+.evidence__row {
+  display: grid;
+  grid-template-columns: repeat(var(--evidence-row-cols, 4), 1fr);
+  gap: var(--evidence-gap);
+}
+
+.evidence__caption {
+  margin-top: 0.6875rem;
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1.5;
+  color: var(--evidence-caption-color);
+}
+
+.evidence__n {
+  font-weight: var(--weight-regular);
+  color: var(--color-heading);
+}
+
+/* The dash after the number belongs to the numbering scheme, not to the
+   sentence, so it is drawn here rather than typed into every caption --
+   the same argument that keeps "Fig." out of the caption prop. */
+.evidence__n::after { content: ' \2014'; }
+
+@media (max-width: 620px) {
+  .evidence__row { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ── The drawn figure ─────────────────────────────────────
+   A boxed node, an ember arrow, the next node. It lives here rather
+   than in a component of its own because it is a figure's contents --
+   the same slot a screenshot fills -- and there is exactly one of them
+   on the site. Extract it when a second page draws a second diagram;
+   a component with one call site is a file, not an abstraction. */
+
+.evidence__flow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  font-family: var(--font-mono);
+  color: var(--color-heading);
+}
+
+.evidence__node {
+  border: 1px solid var(--color-heading);
+  padding: 0.625rem 1rem;
+  background: var(--surface-card);
+}
+
+/* The node the diagram is about. An ember rule is the whole emphasis;
+   filling it would make the other two look inert. */
+.evidence__node--self { border-color: var(--color-accent); }
+
+.evidence__node b {
+  display: block;
+  font-size: var(--size-body-sm);
+  font-weight: var(--weight-medium);
+}
+
+.evidence__node span {
+  display: block;
+  margin-top: 0.1875rem;
+  font-size: var(--size-label);
+  color: var(--color-text);
+}
+
+.evidence__arrow {
+  padding: 0 0.875rem;
+  color: var(--color-accent);
+  font-size: var(--size-body);
+}
+
+/* The arrows are the diagram's only content that is pure direction --
+   a reader on a screen reader gets the nodes in order and nothing
+   useful from the glyphs, so they are hidden and the caption carries
+   the sentence. */
+@media (max-width: 620px) {
+  .evidence__flow { gap: 0.5rem 0; }
+  .evidence__arrow { padding: 0 0.5rem; }
+}

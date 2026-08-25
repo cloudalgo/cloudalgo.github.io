@@ -9,8 +9,9 @@
    section is how a system rots.
 
    The row eyebrow moved out when the services fold needed it: it is
-   `.section-press__type` now, in layout/_section-press.scss.
-   `.products-press__status` stays -- a service row has no status.
+   `.section-press__type` now, in layout/_section-press.scss, and the
+   ship pip followed it to components/_pip.scss when the catalogue page
+   needed one. What is left here is this fold's own geometry.
 
    The featured panel is the one ember-washed surface on the page --
    --surface-wash-accent for its ground, --border-accent-soft for the
@@ -214,28 +215,10 @@
    hue: the state has to survive a monochrome theme and a reader who
    cannot separate the ember from the ink. */
 
-.products-press__status {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4375rem;
-  font-family: var(--font-mono);
-  font-size: var(--size-label);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--color-text-muted);
-}
-
-.products-press__dot {
-  display: block;
-  width: 6px;
-  height: 6px;
-  border: 1px solid var(--color-accent);
-}
-
-.products-press__status--ga .products-press__dot {
-  background: var(--color-heading);
-  border-color: var(--color-heading);
-}
+/* The ship pip that used to live here is components/_pip.scss now --
+   the catalogue page renders it three more times, and a shared atom
+   owned by one fold is how a system rots. Its knobs carry these exact
+   values forward, so this fold renders unchanged. */
 
 @media (max-width: 860px) {
   .products-press__feature { grid-template-columns: 1fr; }

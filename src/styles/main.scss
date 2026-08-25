@@ -18,10 +18,15 @@
 // ── Layout ────────────────────────────────────────────────
 @use 'layout/container';
 @use 'layout/section-press';
+@use 'layout/page-head';
 @use 'layout/header';
 
 // ── Components ────────────────────────────────────────────
 @use 'components/buttons';
+// The crayon keyframes first: section-press and link-draw both stroke
+// their lines with them.
+@use 'components/crayon';
+@use 'components/link-draw';
 
 // ── Page sections ─────────────────────────────────────────
 @use 'sections/hero';
@@ -30,6 +35,7 @@
 @use 'components/mark';
 @use 'components/section-label';
 @use 'components/badge';
+@use 'components/pip';
 @use 'components/card';
 @use 'components/section-title';
 @use 'components/numerals';
@@ -47,6 +53,17 @@
 @use 'layout/footer';
 
 @use 'sections/products-press';
+
+// ── The catalogue page ────────────────────────────────────
+// Its atoms first, then the plate that arranges them. `_evidence` is
+// loaded before `_product-entry` because the entry sets the plate's
+// own rules around the figure and has to win the tie.
+@use 'components/contents-bar';
+@use 'components/spec-sheet';
+@use 'components/evidence';
+@use 'components/compare-table';
+@use 'components/closing-cta';
+@use 'sections/product-entry';
 @use 'sections/services';
 @use 'sections/services-press';
 @use 'sections/band-press';

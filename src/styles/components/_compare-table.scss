@@ -1,0 +1,103 @@
+/* The comparison table. The head is the entry plate's reversed bar
+   again -- same device, same meaning: this is a plate too, it just
+   holds every subject at once.
+
+   Answers are set in mono. They are values, not prose, and the mono
+   column is what lets a reader run down one column and compare like
+   with like without reading each cell as a sentence. */
+
+.compare {
+  width: 100%;
+  margin-top: 1.5rem;
+  border-collapse: collapse;
+  border: 1px solid var(--compare-border);
+}
+
+.compare th,
+.compare td {
+  text-align: left;
+  padding: var(--compare-cell-pad);
+  vertical-align: top;
+  border-bottom: 1px solid var(--compare-rule);
+}
+
+.compare thead th {
+  background: var(--compare-head-bg);
+  color: var(--compare-head-fg);
+  font-family: var(--font-heading);
+  font-weight: var(--weight-bold);
+  font-size: var(--size-body-sm);
+  letter-spacing: -0.01em;
+  border-bottom: 0;
+}
+
+/* The stub head is a label for the column of questions, not a fifth
+   subject, so it is set as one -- mono, small, ember, not display. */
+.compare thead th.compare__corner {
+  font-family: var(--font-mono);
+  font-weight: var(--weight-regular);
+  font-size: var(--size-label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--compare-corner-fg);
+}
+
+.compare tbody th {
+  width: var(--compare-label-width);
+  font-family: var(--font-mono);
+  font-weight: var(--weight-regular);
+  font-size: var(--size-label);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.compare tbody td {
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  line-height: 1.5;
+  color: var(--color-heading);
+}
+
+/* An answer that is an absence. Faint, so the row still scans as four
+   facts rather than three facts and a gap. */
+.compare tbody td.compare__none { color: var(--color-text-faint); }
+
+/* The reading task is "follow one row across every column", so the
+   whole row tints -- the stub included, which is what keeps the eye on
+   the line once it has left the label. */
+.compare tbody tr:hover th,
+.compare tbody tr:hover td {
+  background: var(--compare-row-hover);
+}
+
+.compare tbody tr:last-child th,
+.compare tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+/* The line under the table. Boxed to the table's own edge and washed,
+   so it reads as the table's last word rather than a new paragraph. */
+.compare-note {
+  margin: 0;
+  border: 1px solid var(--compare-border);
+  border-top: 0;
+  background: var(--surface-wash-accent);
+  padding: 0.875rem 1rem;
+  font-weight: var(--weight-semibold);
+  font-size: var(--size-body-sm);
+  letter-spacing: -0.01em;
+  color: var(--color-heading);
+}
+
+/* A five-column table has no honest small-screen form: dropping columns
+   drops products, and stacking them destroys the comparison that is the
+   whole point. It scrolls, inside its own box, and the page does not.
+   The box wraps the table alone -- the note underneath is outside it, so
+   the line does not scroll away with the columns. */
+.compare-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.compare-scroll .compare { min-width: 44rem; }
