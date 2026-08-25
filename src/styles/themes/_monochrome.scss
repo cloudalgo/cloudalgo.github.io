@@ -44,6 +44,8 @@ $theme: (
      The brand is monochrome today, so the accent resolves to ink.
      A theme file redefines these three and the accent appears
      everywhere at once — no component file is touched. */
+  'accent-050': #F7F7F5,
+  'accent-200': #E4E4E0,
   'accent-400': #2A2A2A,
   'accent-500': #0A0A0A,
   'accent-600': #000000,
@@ -78,6 +80,9 @@ $theme: (
   /* Type families. `Outfit` is deliberately unquoted: a custom property
      value is preserved verbatim by the minifier, so quoting it here would
      leak `"Outfit"` into every rule that reads the token. */
+  /* Monochrome has one typeface. The display slot exists so a theme
+     CAN split headings from body; this one declines to. */
+  'family-display': 'Outfit, system-ui, sans-serif',
   'family-sans': 'Outfit, system-ui, sans-serif',
   'family-mono': 'ui-monospace, "SF Mono", "Menlo", monospace',
 

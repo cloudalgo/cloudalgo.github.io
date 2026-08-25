@@ -65,6 +65,8 @@ $theme: (
      size; no amount of naming fixes that. Darkening the ember until
      white passes lands on #DD3824, which is visibly not the brand.
      So the accent keeps the brand value and the label goes dark. */
+  'accent-050': #FDF1F0,  /* ember wash — panel and band backgrounds */
+  'accent-200': #EDC1BB,  /* the rule inside an ember-washed panel */
   'accent-400': #FF7A63,  /* lighter ember — accent on an inverse surface */
   'accent-500': #F75A41,  /* brand ember — fills, band, borders */
   'accent-600': #EF4E39,  /* hover — one step deeper, ink still 5.4:1 */
@@ -91,6 +93,7 @@ $theme: (
   'hardware-800': #1A1A1A,
 
   /* Type — unchanged. See the header for why. */
+  'family-display': 'Outfit, system-ui, sans-serif',
   'family-sans': 'Outfit, system-ui, sans-serif',
   'family-mono': 'ui-monospace, "SF Mono", "Menlo", monospace',
   'family-system': '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif',
