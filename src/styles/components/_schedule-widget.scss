@@ -219,7 +219,7 @@
   border-radius: var(--radius-sm);
   transition: background 150ms;
 }
-.sw-cal-nav:hover:not(:disabled) { background: var(--surface-page); }
+.sw-cal-nav:hover:not(:disabled) { background: var(--surface-sunk); }
 .sw-cal-nav:disabled { opacity: 0.3; cursor: default; }
 
 .sw-cal-grid {
@@ -257,7 +257,7 @@
   width: 100%;
 }
 .sw-cal-day:hover:not(:disabled):not(.sw-cal-day--empty):not(.sw-cal-day--selected) {
-  background: var(--surface-page);
+  background: var(--surface-sunk);
 }
 .sw-cal-day--empty { cursor: default; visibility: hidden; }
 .sw-cal-day--disabled { color: var(--color-text-disabled); cursor: default; }

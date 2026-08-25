@@ -25,8 +25,25 @@
   --color-link-hover: var(--ink-600);
 
   /* Surfaces */
-  --surface-page: var(--paper-100);
+  /* TRIAL -- white page. The approved home mock sets --bg and --surface
+     to the SAME white inside `.hp`: the Press Room ground is white
+     paper, and the hairline rules do the structural work a tonal step
+     would do elsewhere. The site shipped the warm rung instead, so a
+     card was a shade lighter than its page; on white they are one
+     tone and only the rule separates them. Flip this line back to
+     --paper-100 to undo, and take the two glass rungs below with it. */
+  --surface-page: var(--paper-000);
   --surface-card: var(--paper-000);
+  /* Now genuinely a step DOWN from the page rather than the same tone
+     as it, which is what the name always claimed -- and with that, the
+     one rung the site has for a RECESSED tint: a chip, a table header,
+     an icon plate, a row hover, a pull-quote plate, an active TOC item.
+     Twenty-seven of those read `--surface-page` before the white flip,
+     and every one of them was relying on an accident -- they wanted a
+     warm tone recessed from the surface they sat on, and the page
+     happened to be that tone. It is not any more. If you need a tint
+     that is not the page, it is this token; reach for --surface-page
+     only when you mean the page itself. */
   --surface-sunk: var(--paper-100);
   --surface-wash: var(--paper-050);
   /* The one ember-washed ground on the site, and the rule that runs
@@ -102,14 +119,16 @@
   --color-paper-a88: rgba(var(--paper-000-rgb), 0.88);
   --color-paper-a90: rgba(var(--paper-000-rgb), 0.9);
 
-  /* Page paper at an alpha -- frosted glass that is the PAGE colour, not
-     white. The ramp above is all paper-000, which is right for glass
-     floating over dark art or over a card, and wrong for a surface that
-     has to read as the page continuing underneath it. The scrolled
-     header is that surface: opaque it is the page, translucent it is the
-     page with the content sliding under it visible as a blur. One rung,
-     because one component needs it; add another when a second does. */
-  --surface-page-glass: rgba(var(--paper-100-rgb), 0.72);
+  /* Page paper at an alpha -- frosted glass that is the PAGE colour.
+     The ramp above is paper-000 as WHITE, a material that floats over
+     dark art or over a card; this rung is paper-000 as the PAGE, a
+     surface that has to read as the page continuing underneath it. The
+     two happen to share a value while the page is white -- they are not
+     the same token, and this one moves with --surface-page above. The
+     scrolled header is the surface in question: opaque it is the page,
+     translucent it is the page with the content sliding under it
+     visible as a blur. */
+  --surface-page-glass: rgba(var(--paper-000-rgb), 0.72);
 
   /* Text on an inverse surface.
      White at an alpha, because a solid ink tone would not sit on the
@@ -252,12 +271,12 @@
   --color-shadow-a40: rgba(var(--ink-000-rgb), 0.4);
   --color-shadow-a45: rgba(var(--ink-000-rgb), 0.45);
 
-  /* Glass chrome on the paper side. The cookie banner is the only
-     thing on the site that tints a *paper* tone rather than white, and
-     it does it three times: a banner border, a settings-row background,
-     a stronger border on that row. Named rather than rung-ified because
-     three occurrences of two primitives do not make a ramp. */
-  --surface-glass: rgba(var(--paper-100-rgb), 0.7);
+  /* Glass chrome on the paper side: a banner background and two
+     borders on the cookie panel, which floats over the page and so
+     tints the page tone, not the card tone. Named rather than
+     rung-ified because three occurrences of two primitives do not make
+     a ramp. Moves with --surface-page. */
+  --surface-glass: rgba(var(--paper-000-rgb), 0.7);
   --border-glass: rgba(var(--paper-200-rgb), 0.7);
   --border-glass-strong: rgba(var(--paper-200-rgb), 0.8);
 
