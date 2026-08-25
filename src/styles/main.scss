@@ -7,7 +7,7 @@
 
 // ── Tokens (primitive -> semantic -> component) ───────────
 // Order matters: each layer resolves against the one above it.
-@use 'themes/monochrome';
+@use 'themes/press-room';
 @use 'tokens/semantic';
 @use 'tokens/components';
 

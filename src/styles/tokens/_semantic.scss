@@ -279,7 +279,9 @@
 
   /* The cookie banner sets its own type deliberately: it paints before
      consent, ahead of anything that depends on the webfont, so it asks
-     for whatever the OS already has rather than waiting on Outfit. */
+     for whatever the OS already has rather than waiting on the
+     Google Fonts request -- Outfit under monochrome, or Archivo/Geist
+     under press-room. */
   --font-system: var(--family-system);
 
   /* Four more monospace roles, one per stack that is actually shipping.
