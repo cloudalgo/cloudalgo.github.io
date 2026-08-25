@@ -8,13 +8,13 @@
 // SVG glyph follows, because nothing outside tokens/ names a
 // colour any more.
 //
-// Two notes on what is deliberately NOT here.
+// Two notes before the map.
 //
-// Type is unchanged from monochrome. The families are real
-// tokens and a theme may set them, but the webfont is linked in
-// Base.astro -- so changing `family-sans` without changing that
-// link renders the fallback, and the flip would prove less than
-// it looks. Fonts move when the <head> does.
+// Type IS here -- Archivo and Geist -- but it is the one token
+// family the `@use` swap cannot carry alone: the webfont is
+// linked in Base.astro, so until the <head> moves with it these
+// three families render their fallbacks. That link lands in the
+// same commit as the flip.
 //
 // The code-block ramp is copied, not re-toned. A syntax surface
 // that inverts with the page theme becomes unreadable the moment
@@ -119,8 +119,8 @@ $theme: (
      inert until the <head> moves with it (Task 5). That is deliberate:
      fonts are the one token family that cannot be flipped from the
      stylesheet alone, and pretending otherwise renders the fallback. */
-  'family-display': 'Archivo, "Archivo Fallback", system-ui, sans-serif',
-  'family-sans': 'Geist, "Geist Fallback", system-ui, -apple-system, sans-serif',
+  'family-display': 'Archivo, system-ui, sans-serif',
+  'family-sans': 'Geist, system-ui, -apple-system, sans-serif',
   'family-mono': '"Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace',
   'family-system': '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif',
   'family-mono-jetbrains': '"JetBrains Mono", "Fira Code", ui-monospace, monospace',
