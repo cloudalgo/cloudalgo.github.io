@@ -462,14 +462,6 @@
   --compare-row-hover: var(--surface-wash-accent);
   --compare-label-width: 19%;
 
-  /* ── Closing note (.closing-cta) ──────────────────────────
-     The last thing on an index page: one line, one qualification, two
-     ways out. Ruled off the content above rather than boxed, because
-     it is the end of the page and not another section of it. */
-  --closing-border: var(--color-heading);
-  --closing-pad: 2rem var(--container-pad) 2.25rem;
-  --closing-gap: 1.5rem;
-
   /* ── Mobile menu (.mobile-menu) ───────────────────────────
      The phone's navigation, set as the publication's table of
      contents: a ruled head, five numbered entries, the way out
