@@ -1,0 +1,44 @@
+// The specification readout. /products/[slug], fold four.
+//
+// Ten rows on Pledgivo, seven on OrgVitals, none at all on InsureAlgo.
+// A full-width ruled row per line would be ten stripes; two columns of
+// stacked term/value reads as an instrument panel instead.
+
+.readout {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 2.5rem;
+  row-gap: 0;
+  border-top: 1px solid var(--color-heading);
+}
+
+.readout__cell {
+  padding: 0.9375rem 0;
+  border-bottom: 1px solid var(--border-default);
+}
+
+.readout__cell dt {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-text-faint);
+  margin-bottom: 0.3125rem;
+}
+
+.readout__cell dd {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--color-heading);
+  font-weight: 500;
+}
+
+@media (max-width: 767px) {
+  .readout {
+    grid-template-columns: 1fr;
+    column-gap: 0;
+  }
+}

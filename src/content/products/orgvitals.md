@@ -57,20 +57,39 @@ roadmap:
     theme: "Team & Continuous"
     description: "Scheduled and CI-triggered scans plus shareable team dashboards, so org health is tracked continuously rather than one run at a time."
 requirements:
-  - "macOS, Windows, or Linux desktop"
-  - "Salesforce CLI (sf) installed with at least one authenticated org"
-  - "Read access to the org's metadata — no write permissions required"
-  - "An Anthropic API key to use Ask Vita (optional)"
+  - need: "macOS, Windows, or Linux desktop"
+  - need: "Salesforce CLI (sf) installed with at least one authenticated org"
+  - need: "Read access to the org's metadata — no write permissions required"
+  - need: "An Anthropic API key, only if you want Ask Vita"
+    optional: true
 pricing:
   - tier: "OrgVitals Desktop"
     price: "Free"
 screenshots:
-  - "/products/orgvitals/guide/02-run-scan.gif"
-  - "/products/orgvitals/guide/03-dashboard.gif"
-  - "/products/orgvitals/guide/04-findings.gif"
-  - "/products/orgvitals/guide/05-insights.gif"
-  - "/products/orgvitals/guide/07-org-family.gif"
-  - "/products/orgvitals/guide/08-vita.gif"
+  - src: "/products/orgvitals/guide/02-run-scan.gif"
+    step: "Run a scan"
+    alt: "Choosing an org and a set of scanners, then the scan waves running to completion."
+    cap: "Pick an org and a set of scanners, then watch the waves run. A full org takes minutes, not a morning."
+  - src: "/products/orgvitals/guide/03-dashboard.gif"
+    step: "Dashboard"
+    alt: "The org dashboard with the overall grade and the five category scores."
+    cap: "One grade, five categories underneath it. This is the screen you screenshot for the person who asked."
+  - src: "/products/orgvitals/guide/04-findings.gif"
+    step: "Findings"
+    alt: "The findings list being filtered, sorted and dismissed."
+    cap: "Every finding, filterable by scanner, severity and object. Dismiss what you have decided to live with."
+  - src: "/products/orgvitals/guide/05-insights.gif"
+    step: "Insights"
+    alt: "An insight opened, showing the affected metadata and the reasoning behind the finding."
+    cap: "Each finding says what it found, where, and why it counts against the grade."
+  - src: "/products/orgvitals/guide/07-org-family.gif"
+    step: "Org families"
+    alt: "Two orgs compared side by side with their scores rolled up."
+    cap: "Group sandboxes under the production org they came from and compare the scores across the family."
+  - src: "/products/orgvitals/guide/08-vita.gif"
+    step: "Ask Vita"
+    alt: "A question typed to Ask Vita and the answer returned from the local scan database."
+    cap: "Ask a question in English. Vita answers from the local database, not from the org."
 legal:
   - label: "Privacy Policy"
     href: "/products/orgvitals/legal/privacy"
@@ -85,7 +104,7 @@ published: true
 
 OrgVitals is a desktop app that gives Salesforce architects and admins one place to see how healthy an org really is. You pick an org you've already authenticated with the `sf` CLI; OrgVitals fetches a **read-only** snapshot of its metadata — Apex, Flows, profiles, permission sets, objects, fields, reports, dashboards, limits, health-check score, and test coverage — stores it in a local SQLite database, and runs the selected scanners across a worker pool.
 
-**Nothing is written back to Salesforce, and your metadata and scan results stay on your device.** The snapshot and all scan history live in a local database on your machine. OrgVitals uses a Google sign-in (your account profile is stored via Firebase), sends crash diagnostics by default (you can opt out), and offers opt-in product analytics. Ask Vita is opt-in and off by default — it's the only feature that sends org data off the device; if you enable it with your own Anthropic API key, your questions and the metadata it reads go to Anthropic's Claude API, never to CloudAlgo. Full details are in the [Privacy Policy](/products/orgvitals/legal/privacy) and [Data Processing](/products/orgvitals/legal/data-processing) pages.
+The snapshot and all scan history live in a local database on your machine. OrgVitals uses a Google sign-in (your account profile is stored via Firebase), sends crash diagnostics by default (you can opt out), and offers opt-in product analytics. Ask Vita is opt-in and off by default — it's the only feature that sends org data off the device; if you enable it with your own Anthropic API key, your questions and the metadata it reads go to Anthropic's Claude API, never to CloudAlgo. Full details are in the [Privacy Policy](/products/orgvitals/legal/privacy) and [Data Processing](/products/orgvitals/legal/data-processing) pages.
 
 **How the grade works.** Each finding has a severity that subtracts a penalty from its category's 100-point base. The five categories roll up by fixed weight into a single overall grade from **A to F**, and a trend chart tracks that grade across every scan so you can see whether the org is getting healthier over time.
 

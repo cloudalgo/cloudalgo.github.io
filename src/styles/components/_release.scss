@@ -1,0 +1,10 @@
+// The release block in a product masthead's stand.
+//
+// Not the catalogue's six buyer answers -- this is release metadata:
+// the handful of facts that change when a build ships, under the
+// status pip that says whether it has. `.pip` and `.page-head__stand`
+// own everything else; this file is only the seam between them.
+
+.release__pip {
+  margin-bottom: 1rem;
+}

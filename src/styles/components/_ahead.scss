@@ -1,0 +1,85 @@
+// The roadmap. /products/[slug], fold six.
+//
+// Only OrgVitals has one, so the fold is gated on the data rather than
+// filled with a placeholder. Shipped is a filled chip; everything after
+// it is outlined, because an outline is a promise nobody has made yet.
+
+.ahead {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.ahead__row {
+  display: grid;
+  grid-template-columns: 6rem 7rem minmax(0, 1fr);
+  gap: 0 1.5rem;
+  align-items: start;
+  padding: 1.25rem 0;
+  border-bottom: 1px solid var(--border-default);
+}
+
+.ahead__row:first-child {
+  border-top: 1px solid var(--color-heading);
+}
+
+.ahead__v {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--color-heading);
+}
+
+.ahead__state {
+  justify-self: start;
+  font-family: var(--font-mono);
+  font-size: 0.5625rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.1875rem 0.5rem;
+  border-radius: 100px;
+  border: 1px solid var(--color-text-faint);
+  color: var(--color-text-muted);
+}
+
+.ahead__row.is-shipped .ahead__state {
+  background: var(--color-heading);
+  border-color: var(--color-heading);
+  color: var(--color-on-inverse);
+}
+
+.ahead__theme {
+  grid-column: 3;
+  grid-row: 1;
+  margin: 0 0 0.375rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-heading);
+}
+
+.ahead__what {
+  grid-column: 3;
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--color-text);
+}
+
+@media (max-width: 767px) {
+  .ahead__row {
+    grid-template-columns: 5rem minmax(0, 1fr);
+  }
+
+  .ahead__theme,
+  .ahead__what {
+    grid-column: 2;
+  }
+
+  .ahead__state {
+    grid-column: 1;
+    grid-row: 2;
+    margin-top: 0.375rem;
+  }
+}

@@ -1,0 +1,49 @@
+// The colophon. /products/[slug], the last fold.
+//
+// The imprint at the foot of the document: every link this product
+// actually has, read off the collection rather than listed by hand. A
+// product with no legal pages simply prints two columns.
+
+.colophon {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 2rem;
+  padding-top: 0.25rem;
+}
+
+.colophon__label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-text-faint);
+  padding-bottom: 0.625rem;
+  margin-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border-default);
+}
+
+.colophon ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.colophon li {
+  margin-bottom: 0.5rem;
+  font-size: 0.9375rem;
+  line-height: 1.4;
+}
+
+.colophon a {
+  color: var(--color-heading);
+  font-weight: 500;
+}
+
+@media (max-width: 767px) {
+  .colophon {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}

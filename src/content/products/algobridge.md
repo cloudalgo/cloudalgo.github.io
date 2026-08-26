@@ -46,9 +46,9 @@ pricing:
   - tier: "Enterprise Support"
     price: "Contact us"
 requirements:
-  - "PostgreSQL 14+ with hstore extension enabled"
-  - "Salesforce Professional, Enterprise, or Unlimited edition with API access"
-  - "Docker Compose or AWS ECS for deployment"
+  - need: "PostgreSQL 14+ with hstore extension enabled"
+  - need: "Salesforce Professional, Enterprise, or Unlimited edition with API access"
+  - need: "Docker Compose or AWS ECS for deployment"
 published: true
 ---
 

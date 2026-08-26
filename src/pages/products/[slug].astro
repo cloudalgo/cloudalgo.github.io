@@ -1,10 +1,39 @@
 ---
+/**
+ * One product, in full.
+ *
+ * The catalogue at /products/ already prints every product's tagline,
+ * chips, six-row spec panel and actions. This page is deliberately built
+ * out of what the catalogue WITHHELD -- the capabilities, the whole
+ * techStack, the prerequisites, the roadmap, the recordings, the price
+ * and the body prose -- because a detail page that restates its index is
+ * a second index with a longer URL.
+ *
+ * It opens on `.transit` rather than on a description. Every product
+ * here moves data along a path and makes one claim about a boundary it
+ * never crosses: OrgVitals never writes back to the org, Pledgivo never
+ * lets a card number reach Apex, AlgoBridge never runs a record through
+ * our infrastructure, InsureAlgo never leaves the handset. That claim is
+ * the reason a buyer reads past the first screen, and it used to be
+ * buried in paragraph three.
+ *
+ * FACTS come from the collection file, the ARGUMENT from
+ * src/data/product-pages.ts. Neither file has to be touched to edit the
+ * other, and a fifth product fails this page's build with a named error
+ * rather than rendering a headline-shaped hole.
+ *
+ * Three folds are gated on their data and simply do not render without
+ * it. AlgoBridge is a daemon with no interface, so it has no viewer;
+ * InsureAlgo has no techStack, so it has no readout; only OrgVitals has
+ * a roadmap. An absent fold is the honest answer -- a placeholder that
+ * says "coming soon" is not.
+ */
 import { getCollection, render } from 'astro:content';
-import Page from '../../layouts/Page.astro';
-import VideoPlayer from '../../components/ui/VideoPlayer.astro';
-import PageHeader from '@/components/ui/PageHeader.astro';
-import Button from '../../components/ui/Button.astro';
-import SectionLabel from '../../components/ui/SectionLabel.astro';
+import Page from '@/layouts/Page.astro';
+import PageMasthead from '@/components/ui/PageMasthead.astro';
+import CtaBand from '@/components/ui/CtaBand.astro';
+import { TYPE_LABEL, STATUS_LABEL } from '@/data/product-labels';
+import { productPages } from '@/data/product-pages';
 
 export async function getStaticPaths() {
   const products = await getCollection('products', ({ data }) => data.published);
@@ -12,13 +41,101 @@ export async function getStaticPaths() {
 }
 
 const { slug } = Astro.params;
-const products = await getCollection('products');
-const product = products.find(p => p.id === slug);
-if (!product) return Astro.redirect('/404');
+
+const all = (await getCollection('products', ({ data }) => data.published))
+  .sort((a, b) => a.data.order - b.data.order);
+
+const product = all.find(p => p.id === slug);
+if (!product) throw new Error(`products/[slug].astro: no published product with id "${slug}".`);
 
 const { data } = product;
 const { Content } = await render(product);
-const hasBody = (product.body?.trim().length ?? 0) > 30;
+
+const page = productPages[product.id];
+if (!page) {
+  throw new Error(
+    `products/[slug].astro: "${product.id}" has no entry in src/data/product-pages.ts. ` +
+    'A product file without page copy would render a headline-shaped hole, so it fails here instead.',
+  );
+}
+
+/* The hero mark. `mark` is a verbatim substring of `headline`; if an
+   edit breaks that, the build fails rather than shipping a headline
+   with no emphasis and no explanation why. Same guard as
+   case-studies/[slug].astro, for the same reason. */
+if (!page.headline.includes(page.mark)) {
+  throw new Error(
+    `products/[slug].astro: mark "${page.mark}" is not in headline "${page.headline}" (${product.id}).`,
+  );
+}
+const at = page.headline.indexOf(page.mark);
+const markedTitle =
+  page.headline.slice(0, at) +
+  `<span class="mark mark--draw">${page.mark}</span>` +
+  page.headline.slice(at + page.mark.length);
+
+/* `lastUpdated` is a free string in the schema and two products use it
+   as one: three are ISO dates, Pledgivo's is "August 2026". Only an
+   unambiguous date is reformatted -- anything else is printed as the
+   author wrote it rather than run through a parser that would invent a
+   first-of-the-month. */
+const isoDay = /^\d{4}-\d{2}-\d{2}$/;
+const released = !data.lastUpdated
+  ? null
+  : isoDay.test(data.lastUpdated)
+    ? new Date(`${data.lastUpdated}T00:00:00Z`).toLocaleDateString('en-GB', {
+        day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC',
+      })
+    : data.lastUpdated;
+
+const facts = [
+  ...(data.version ? [{ term: 'Version', detail: data.version }] : []),
+  ...(released ? [{ term: 'Released', detail: released }] : []),
+  ...page.facts,
+];
+
+const shots = data.screenshots ?? [];
+const video = data.video;
+/** Two figures, so the counter in the viewer bar does not jump width. */
+const pad = (n: number) => String(n).padStart(2, '0');
+
+const tiers = data.pricing ?? [];
+
+interface Link { href: string; label: string; external?: boolean }
+const isExternal = (href: string) => /^https?:/.test(href);
+
+const getIt: Link[] = [];
+if (data.externalUrl) {
+  getIt.push({ href: data.externalUrl, label: page.links.external, external: true });
+}
+if (data.guideUrl) {
+  getIt.push({
+    href: data.guideUrl,
+    label: page.links.guide ?? 'The guide',
+    external: isExternal(data.guideUrl),
+  });
+}
+if (data.issuesUrl) {
+  getIt.push({ href: data.issuesUrl, label: 'Report an issue', external: true });
+}
+
+const legal: Link[] = (data.legal ?? []).map(l => ({ href: l.href, label: l.label }));
+
+/* The rest of the catalogue, read off the collection rather than listed
+   here -- a fifth product should appear on the other four pages without
+   anyone remembering to add it. */
+const elsewhere: Link[] = all
+  .filter(p => p.id !== product.id)
+  .map(p => ({
+    href: `/products/${p.id}/`,
+    label: `${p.data.title} — ${productPages[p.id]?.short ?? p.data.title}`,
+  }));
+
+const columns = [
+  { label: 'Get it', links: getIt },
+  { label: 'Legal', links: legal },
+  { label: 'The rest of the catalogue', links: elsewhere },
+].filter(c => c.links.length > 0);
 
 const siteBase = 'https://cloudalgo.com';
 
@@ -36,1138 +153,436 @@ const softwareApp: Record<string, unknown> = {
   applicationCategory: 'BusinessApplication',
   operatingSystem:     osMap[data.type] ?? 'Web',
   url:                 `${siteBase}/products/${slug}`,
-  provider: {
-    '@type': 'Organization',
-    name:    'CloudAlgo',
-    url:     siteBase,
-  },
+  provider: { '@type': 'Organization', name: 'CloudAlgo', url: siteBase },
 };
-
 if (data.externalUrl) softwareApp.downloadUrl = data.externalUrl;
 if (data.status === 'ga') {
   softwareApp.offers = { '@type': 'Offer', price: '0', priceCurrency: 'USD' };
 }
 
-const productSchema: object[] = [
+const schema: object[] = [
   softwareApp,
   {
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home',     item: `${siteBase}/` },
-      { '@type': 'ListItem', position: 2, name: 'Products', item: `${siteBase}/products` },
-      { '@type': 'ListItem', position: 3, name: data.title, item: `${siteBase}/products/${slug}` },
+      { '@type': 'ListItem', position: 1, name: 'Home',      item: `${siteBase}/` },
+      { '@type': 'ListItem', position: 2, name: 'Products',  item: `${siteBase}/products/` },
+      { '@type': 'ListItem', position: 3, name: data.title,  item: `${siteBase}/products/${slug}/` },
     ],
   },
 ];
-
-const statusLabel = (s: string) =>
-  s === 'ga' ? 'Generally Available' : s === 'preview' ? 'Preview' : 'Beta';
-const typeLabel = (t: string) =>
-  t === 'salesforce-app' ? 'Salesforce App' : t === 'mobile-app' ? 'Flutter App · iOS & Android' : t === 'desktop-app' ? 'Desktop App · Salesforce' : 'Integration Connector';
-
-const illustrations: Record<string, string> = {
-  'algobridge': `<svg viewBox="0 0 460 380" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:460px;height:auto;">
-    <!-- Left: Salesforce -->
-    <rect x="20" y="90" width="140" height="200" rx="10" stroke="var(--illus-ink)" stroke-width="2.5"/>
-    <rect x="20" y="90" width="140" height="44" rx="10" stroke="var(--illus-ink)" stroke-width="2.5" fill="none"/>
-    <path d="M20 134 L160 134" stroke="var(--illus-ink)" stroke-width="1.5"/>
-    <text x="90" y="117" text-anchor="middle" font-family="var(--illus-font)" font-size="13" font-weight="700" fill="var(--illus-ink)">Salesforce</text>
-    <rect x="36" y="148" width="108" height="22" rx="4" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.4"/>
-    <text x="90" y="163" text-anchor="middle" font-family="var(--illus-font)" font-size="10" fill="var(--illus-ink)" opacity="0.7">Account</text>
-    <rect x="36" y="178" width="108" height="22" rx="4" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.4"/>
-    <text x="90" y="193" text-anchor="middle" font-family="var(--illus-font)" font-size="10" fill="var(--illus-ink)" opacity="0.7">Contact</text>
-    <rect x="36" y="208" width="108" height="22" rx="4" fill="var(--illus-ink)" fill-opacity="0.06" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.5"/>
-    <text x="90" y="223" text-anchor="middle" font-family="var(--illus-font)" font-size="10" fill="var(--illus-ink)" opacity="0.7">Opportunity</text>
-    <rect x="36" y="238" width="108" height="22" rx="4" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.3"/>
-    <text x="90" y="253" text-anchor="middle" font-family="var(--illus-font)" font-size="10" fill="var(--illus-ink)" opacity="0.55">Custom Object</text>
-    <!-- Center: AlgoBridge engine -->
-    <rect x="180" y="160" width="100" height="60" rx="8" fill="var(--illus-ink)"/>
-    <text x="230" y="185" text-anchor="middle" font-family="var(--illus-font)" font-size="11" font-weight="700" fill="var(--illus-surface)">AlgoBridge</text>
-    <text x="230" y="202" text-anchor="middle" font-family="var(--illus-font)" font-size="9" fill="var(--color-paper-a60)">10s intervals</text>
-    <!-- Right arrows -->
-    <path d="M160 178 L180 178" stroke="var(--illus-ink)" stroke-width="1.5" stroke-linecap="round"/>
-    <path d="M176 173 L180 178 L176 183" stroke="var(--illus-ink)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M280 192 L300 192" stroke="var(--illus-ink)" stroke-width="1.5" stroke-linecap="round"/>
-    <path d="M296 187 L300 192 L296 197" stroke="var(--illus-ink)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M180 200 L160 200" stroke="var(--illus-ink)" stroke-width="1.5" stroke-linecap="round"/>
-    <path d="M164 195 L160 200 L164 205" stroke="var(--illus-ink)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M300 210 L280 210" stroke="var(--illus-ink)" stroke-width="1.5" stroke-linecap="round"/>
-    <path d="M284 205 L280 210 L284 215" stroke="var(--illus-ink)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-    <!-- Right: PostgreSQL -->
-    <rect x="300" y="90" width="140" height="200" rx="10" stroke="var(--illus-ink)" stroke-width="2.5"/>
-    <rect x="300" y="90" width="140" height="44" rx="10" stroke="var(--illus-ink)" stroke-width="2.5" fill="none"/>
-    <path d="M300 134 L440 134" stroke="var(--illus-ink)" stroke-width="1.5"/>
-    <text x="370" y="117" text-anchor="middle" font-family="var(--illus-font)" font-size="13" font-weight="700" fill="var(--illus-ink)">PostgreSQL</text>
-    <rect x="316" y="148" width="108" height="22" rx="4" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.4"/>
-    <text x="370" y="163" text-anchor="middle" font-family="var(--illus-font)" font-size="10" fill="var(--illus-ink)" opacity="0.7">accounts</text>
-    <rect x="316" y="178" width="108" height="22" rx="4" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.4"/>
-    <text x="370" y="193" text-anchor="middle" font-family="var(--illus-font)" font-size="10" fill="var(--illus-ink)" opacity="0.7">contacts</text>
-    <rect x="316" y="208" width="108" height="22" rx="4" fill="var(--illus-ink)" fill-opacity="0.06" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.5"/>
-    <text x="370" y="223" text-anchor="middle" font-family="var(--illus-font)" font-size="10" fill="var(--illus-ink)" opacity="0.7">opportunities</text>
-    <rect x="316" y="238" width="108" height="22" rx="4" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.3"/>
-    <text x="370" y="253" text-anchor="middle" font-family="var(--illus-font)" font-size="10" fill="var(--illus-ink)" opacity="0.55">custom_table</text>
-    <!-- Stat badges -->
-    <rect x="150" y="318" width="88" height="26" rx="6" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.4"/>
-    <text x="194" y="335" text-anchor="middle" font-family="var(--illus-font)" font-size="10" font-weight="700" fill="var(--illus-ink)" opacity="0.65">31-day audit log</text>
-    <rect x="250" y="318" width="60" height="26" rx="6" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.4"/>
-    <text x="280" y="335" text-anchor="middle" font-family="var(--illus-font)" font-size="10" font-weight="700" fill="var(--illus-ink)" opacity="0.65">MIT OSS</text>
-    <!-- 10s pulse clock -->
-    <circle cx="230" cy="54" r="30" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.35"/>
-    <path d="M230 32 L230 54 L246 54" stroke="var(--illus-ink)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.7"/>
-    <circle cx="230" cy="54" r="3" fill="var(--illus-ink)" opacity="0.7"/>
-    <text x="230" y="98" text-anchor="middle" font-family="var(--illus-font)" font-size="9" fill="var(--illus-ink-soft)" opacity="0.7">Every 10 seconds</text>
-  </svg>`,
-  'insurealgo': `<svg viewBox="0 0 460 380" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:460px;height:auto;">
-    <!-- Phone frame -->
-    <rect x="140" y="20" width="180" height="340" rx="22" stroke="var(--illus-ink)" stroke-width="2.5"/>
-    <rect x="148" y="28" width="164" height="324" rx="16" fill="var(--illus-ink)" fill-opacity="0.03"/>
-    <!-- Notch -->
-    <rect x="190" y="20" width="80" height="18" rx="9" fill="var(--illus-sunk)" stroke="var(--illus-ink)" stroke-width="2.5"/>
-    <!-- Status bar dots -->
-    <circle cx="215" cy="29" r="2.5" fill="var(--illus-ink)" fill-opacity="0.3"/>
-    <circle cx="230" cy="29" r="2.5" fill="var(--illus-ink)" fill-opacity="0.5"/>
-    <circle cx="245" cy="29" r="2.5" fill="var(--illus-ink)" fill-opacity="0.3"/>
-    <!-- App icon + header -->
-    <image href="/products/insurealgo/app-icon.webp" x="212" y="44" width="36" height="36" rx="8" clip-path="inset(0 round 8px)" preserveAspectRatio="xMidYMid slice"/>
-    <text x="255" y="68" font-family="var(--illus-font)" font-size="12" font-weight="800" fill="var(--illus-ink)">InsureAlgo</text>
-    <!-- Policy card 1 — expiring soon -->
-    <rect x="158" y="82" width="144" height="60" rx="10" fill="var(--illus-ink)"/>
-    <text x="172" y="102" font-family="var(--illus-font)" font-size="9" font-weight="700" fill="var(--color-paper-a50)" letter-spacing="0.06em">VEHICLE · 4-WHEELER</text>
-    <text x="172" y="118" font-family="var(--illus-font)" font-size="11" font-weight="700" fill="var(--illus-surface)">Maruti Swift 2024</text>
-    <text x="172" y="132" font-family="var(--illus-font)" font-size="9" fill="var(--color-paper-a55)">Expires in</text>
-    <text x="258" y="132" text-anchor="end" font-family="var(--illus-font)" font-size="11" font-weight="800" fill="var(--color-paper-a90)">3 days</text>
-    <!-- Policy card 2 -->
-    <rect x="158" y="150" width="144" height="56" rx="10" stroke="var(--illus-ink)" stroke-width="1.5" fill="var(--illus-surface)"/>
-    <text x="172" y="168" font-family="var(--illus-font)" font-size="9" font-weight="700" fill="var(--illus-ink-soft)" letter-spacing="0.05em">HEALTH INSURANCE</text>
-    <text x="172" y="183" font-family="var(--illus-font)" font-size="11" font-weight="700" fill="var(--illus-ink)">Star Health — Family</text>
-    <text x="172" y="197" font-family="var(--illus-font)" font-size="9" fill="var(--illus-ink-faint)">Expires in</text>
-    <text x="293" y="197" text-anchor="end" font-family="var(--illus-font)" font-size="10" font-weight="700" fill="var(--illus-ink)">47 days</text>
-    <!-- Policy card 3 -->
-    <rect x="158" y="214" width="144" height="56" rx="10" stroke="var(--illus-ink)" stroke-width="1.5" fill="var(--illus-surface)" opacity="0.7"/>
-    <text x="172" y="232" font-family="var(--illus-font)" font-size="9" font-weight="700" fill="var(--illus-ink-soft)" letter-spacing="0.05em">TERM LIFE</text>
-    <text x="172" y="247" font-family="var(--illus-font)" font-size="11" font-weight="700" fill="var(--illus-ink)" opacity="0.7">LIC Tech Term</text>
-    <text x="172" y="261" font-family="var(--illus-font)" font-size="9" fill="var(--illus-ink-faint)" opacity="0.7">Expires in</text>
-    <text x="293" y="261" text-anchor="end" font-family="var(--illus-font)" font-size="10" font-weight="700" fill="var(--illus-ink)" opacity="0.7">218 days</text>
-    <!-- Bottom nav bar -->
-    <rect x="148" y="316" width="164" height="36" rx="0" fill="var(--illus-surface)" fill-opacity="0.8"/>
-    <path d="M148 316 L312 316" stroke="var(--illus-ink)" stroke-width="1" opacity="0.1"/>
-    <!-- Nav icons -->
-    <circle cx="187" cy="334" r="4" fill="var(--illus-ink)"/>
-    <rect x="214" y="328" width="14" height="12" rx="2" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.4"/>
-    <path d="M246 328 L246 340 M242 334 L250 334" stroke="var(--illus-ink)" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
-    <circle cx="279" cy="334" r="4" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.4"/>
-    <!-- Home indicator -->
-    <rect x="200" y="352" width="60" height="4" rx="2" fill="var(--illus-ink)" opacity="0.2"/>
-    <!-- Floating badges left -->
-    <rect x="20" y="100" width="110" height="32" rx="8" fill="var(--illus-surface)" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.7"/>
-    <text x="75" y="121" text-anchor="middle" font-family="var(--illus-font)" font-size="10" font-weight="700" fill="var(--illus-ink)" opacity="0.8">100% Offline</text>
-    <rect x="20" y="142" width="110" height="32" rx="8" fill="var(--illus-surface)" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.7"/>
-    <text x="75" y="163" text-anchor="middle" font-family="var(--illus-font)" font-size="10" font-weight="700" fill="var(--illus-ink)" opacity="0.8">Zero Tracking</text>
-    <rect x="20" y="184" width="110" height="32" rx="8" fill="var(--illus-surface)" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.7"/>
-    <text x="75" y="205" text-anchor="middle" font-family="var(--illus-font)" font-size="10" font-weight="700" fill="var(--illus-ink)" opacity="0.8">Free Forever</text>
-    <!-- Connector lines from badges to phone -->
-    <path d="M130 116 L140 116" stroke="var(--illus-ink)" stroke-width="1" opacity="0.2" stroke-dasharray="3 2"/>
-    <path d="M130 158 L140 158" stroke="var(--illus-ink)" stroke-width="1" opacity="0.2" stroke-dasharray="3 2"/>
-    <path d="M130 200 L140 200" stroke="var(--illus-ink)" stroke-width="1" opacity="0.2" stroke-dasharray="3 2"/>
-    <!-- Floating badges right -->
-    <rect x="330" y="100" width="110" height="32" rx="8" fill="var(--illus-ink)" opacity="0.85"/>
-    <text x="385" y="121" text-anchor="middle" font-family="var(--illus-font)" font-size="10" font-weight="700" fill="var(--illus-surface)">Smart Reminders</text>
-    <rect x="330" y="142" width="110" height="32" rx="8" fill="var(--illus-surface)" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.7"/>
-    <text x="385" y="163" text-anchor="middle" font-family="var(--illus-font)" font-size="10" font-weight="700" fill="var(--illus-ink)" opacity="0.8">Doc Vault</text>
-    <rect x="330" y="184" width="110" height="32" rx="8" fill="var(--illus-surface)" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.7"/>
-    <text x="385" y="205" text-anchor="middle" font-family="var(--illus-font)" font-size="10" font-weight="700" fill="var(--illus-ink)" opacity="0.8">iCloud Backup</text>
-    <!-- Connector lines from phone to right badges -->
-    <path d="M320 116 L330 116" stroke="var(--illus-ink)" stroke-width="1" opacity="0.2" stroke-dasharray="3 2"/>
-    <path d="M320 158 L330 158" stroke="var(--illus-ink)" stroke-width="1" opacity="0.2" stroke-dasharray="3 2"/>
-    <path d="M320 200 L330 200" stroke="var(--illus-ink)" stroke-width="1" opacity="0.2" stroke-dasharray="3 2"/>
-    <!-- Platform badge bottom -->
-    <rect x="148" y="278" width="164" height="30" rx="8" fill="var(--illus-ink)" fill-opacity="0.06" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.5"/>
-    <text x="230" y="298" text-anchor="middle" font-family="var(--illus-font)" font-size="10" font-weight="700" fill="var(--illus-ink)" opacity="0.7">iOS &amp; Android · Built with Flutter</text>
-  </svg>`,
-  'pledgivo': `<svg viewBox="0 0 460 380" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:460px;height:auto;">
-    <!-- Center: Donor campaign card mockup -->
-    <rect x="148" y="60" width="164" height="250" rx="12" stroke="var(--illus-ink)" stroke-width="2"/>
-    <!-- Card header -->
-    <rect x="148" y="60" width="164" height="48" rx="12" fill="var(--illus-ink)" fill-opacity="0.06"/>
-    <path d="M148 108 L312 108" stroke="var(--illus-ink)" stroke-width="1" opacity="0.2"/>
-    <text x="230" y="80" text-anchor="middle" font-family="var(--illus-font)" font-size="8" font-weight="700" fill="var(--illus-ink-soft)" letter-spacing="0.07em">CROWDFUNDING</text>
-    <text x="230" y="98" text-anchor="middle" font-family="var(--illus-font)" font-size="11" font-weight="700" fill="var(--illus-ink)">Annual Fund Drive</text>
-    <!-- Progress bar -->
-    <rect x="164" y="118" width="132" height="10" rx="5" fill="var(--illus-ink)" fill-opacity="0.08"/>
-    <rect x="164" y="118" width="90" height="10" rx="5" fill="var(--illus-ink)" fill-opacity="0.65"/>
-    <text x="230" y="142" text-anchor="middle" font-family="var(--illus-font)" font-size="8" fill="var(--illus-ink)" opacity="0.55">$18,500 of $25,000 raised</text>
-    <!-- Amount buttons -->
-    <rect x="162" y="152" width="36" height="22" rx="100" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.4"/>
-    <text x="180" y="167" text-anchor="middle" font-family="var(--illus-font)" font-size="9" fill="var(--illus-ink)" opacity="0.6">$25</text>
-    <rect x="206" y="152" width="36" height="22" rx="100" fill="var(--illus-ink)" opacity="0.85"/>
-    <text x="224" y="167" text-anchor="middle" font-family="var(--illus-font)" font-size="9" font-weight="700" fill="var(--illus-surface)">$50</text>
-    <rect x="250" y="152" width="44" height="22" rx="100" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.4"/>
-    <text x="272" y="167" text-anchor="middle" font-family="var(--illus-font)" font-size="9" fill="var(--illus-ink)" opacity="0.6">$100</text>
-    <!-- Monthly toggle -->
-    <rect x="162" y="184" width="132" height="20" rx="4" fill="var(--illus-ink)" fill-opacity="0.04" stroke="var(--illus-ink)" stroke-width="1" opacity="0.3"/>
-    <text x="220" y="198" text-anchor="middle" font-family="var(--illus-font)" font-size="8" fill="var(--illus-ink)" opacity="0.5">Make it monthly</text>
-    <circle cx="278" cy="194" r="7" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.3"/>
-    <circle cx="278" cy="194" r="4" fill="var(--illus-ink)" opacity="0.2"/>
-    <!-- Name field -->
-    <rect x="162" y="214" width="132" height="20" rx="4" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.3"/>
-    <text x="172" y="228" font-family="var(--illus-font)" font-size="8" fill="var(--illus-ink)" opacity="0.4">Donor name</text>
-    <!-- Donate CTA -->
-    <rect x="162" y="244" width="132" height="26" rx="100" fill="var(--illus-ink)"/>
-    <text x="228" y="261" text-anchor="middle" font-family="var(--illus-font)" font-size="10" font-weight="700" fill="var(--illus-surface)">Donate Now</text>
-    <!-- Bottom indicator -->
-    <rect x="196" y="294" width="68" height="4" rx="2" fill="var(--illus-ink)" opacity="0.12"/>
-    <!-- Left floating badges: Standard SF objects -->
-    <rect x="12" y="96" width="116" height="28" rx="8" fill="var(--illus-surface)" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.7"/>
-    <text x="70" y="115" text-anchor="middle" font-family="var(--illus-font)" font-size="10" font-weight="700" fill="var(--illus-ink)" opacity="0.8">Opportunity</text>
-    <rect x="12" y="136" width="116" height="28" rx="8" fill="var(--illus-surface)" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.7"/>
-    <text x="70" y="155" text-anchor="middle" font-family="var(--illus-font)" font-size="10" font-weight="700" fill="var(--illus-ink)" opacity="0.8">Campaign</text>
-    <rect x="12" y="176" width="116" height="28" rx="8" fill="var(--illus-ink)" opacity="0.85"/>
-    <text x="70" y="195" text-anchor="middle" font-family="var(--illus-font)" font-size="10" font-weight="700" fill="var(--illus-surface)">Contact / Account</text>
-    <rect x="12" y="216" width="116" height="28" rx="8" fill="var(--illus-surface)" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.7"/>
-    <text x="70" y="235" text-anchor="middle" font-family="var(--illus-font)" font-size="10" font-weight="700" fill="var(--illus-ink)" opacity="0.8">Product2</text>
-    <!-- Connector lines left → card -->
-    <path d="M128 110 L148 140" stroke="var(--illus-ink)" stroke-width="1" opacity="0.12" stroke-dasharray="3 2"/>
-    <path d="M128 150 L148 168" stroke="var(--illus-ink)" stroke-width="1" opacity="0.12" stroke-dasharray="3 2"/>
-    <path d="M128 190 L148 190" stroke="var(--illus-ink)" stroke-width="1" opacity="0.12" stroke-dasharray="3 2"/>
-    <path d="M128 230 L148 220" stroke="var(--illus-ink)" stroke-width="1" opacity="0.12" stroke-dasharray="3 2"/>
-    <!-- Right floating badges: Features -->
-    <rect x="332" y="96" width="116" height="28" rx="8" fill="var(--illus-ink)" opacity="0.85"/>
-    <text x="390" y="115" text-anchor="middle" font-family="var(--illus-font)" font-size="10" font-weight="700" fill="var(--illus-surface)">Experience Cloud</text>
-    <rect x="332" y="136" width="116" height="28" rx="8" fill="var(--illus-surface)" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.7"/>
-    <text x="390" y="155" text-anchor="middle" font-family="var(--illus-font)" font-size="10" font-weight="700" fill="var(--illus-ink)" opacity="0.8">Stripe Payments</text>
-    <rect x="332" y="176" width="116" height="28" rx="8" fill="var(--illus-surface)" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.7"/>
-    <text x="390" y="195" text-anchor="middle" font-family="var(--illus-font)" font-size="10" font-weight="700" fill="var(--illus-ink)" opacity="0.8">Recurring Gifts</text>
-    <rect x="332" y="216" width="116" height="28" rx="8" fill="var(--illus-surface)" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.7"/>
-    <text x="390" y="235" text-anchor="middle" font-family="var(--illus-font)" font-size="10" font-weight="700" fill="var(--illus-ink)" opacity="0.8">PDF Receipts</text>
-    <!-- Connector lines card → right -->
-    <path d="M312 140 L332 110" stroke="var(--illus-ink)" stroke-width="1" opacity="0.12" stroke-dasharray="3 2"/>
-    <path d="M312 168 L332 150" stroke="var(--illus-ink)" stroke-width="1" opacity="0.12" stroke-dasharray="3 2"/>
-    <path d="M312 190 L332 190" stroke="var(--illus-ink)" stroke-width="1" opacity="0.12" stroke-dasharray="3 2"/>
-    <path d="M312 220 L332 230" stroke="var(--illus-ink)" stroke-width="1" opacity="0.12" stroke-dasharray="3 2"/>
-    <!-- Bottom badge -->
-    <rect x="78" y="314" width="304" height="28" rx="8" fill="var(--illus-ink)" fill-opacity="0.05" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.45"/>
-    <text x="230" y="332" text-anchor="middle" font-family="var(--illus-font)" font-size="10" font-weight="700" fill="var(--illus-ink)" opacity="0.65">NPSP Optional · Person Account Ready</text>
-  </svg>`,
-  'orgvitals': `<svg viewBox="0 0 460 380" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:460px;height:auto;">
-    <!-- Desktop app window -->
-    <rect x="70" y="54" width="320" height="228" rx="12" stroke="var(--illus-ink)" stroke-width="2.5"/>
-    <rect x="70" y="54" width="320" height="36" rx="12" fill="var(--illus-ink)" fill-opacity="0.05"/>
-    <path d="M70 90 L390 90" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.25"/>
-    <!-- Title bar -->
-    <circle cx="90" cy="72" r="4" fill="var(--illus-ink)" opacity="0.25"/>
-    <circle cx="104" cy="72" r="4" fill="var(--illus-ink)" opacity="0.4"/>
-    <circle cx="118" cy="72" r="4" fill="var(--illus-ink)" opacity="0.55"/>
-    <text x="150" y="77" font-family="var(--illus-font)" font-size="13" font-weight="800" fill="var(--illus-ink)">OrgVitals</text>
-    <text x="374" y="77" text-anchor="end" font-family="var(--illus-font)" font-size="9" fill="var(--illus-ink)" opacity="0.5" letter-spacing="0.06em">HEALTH REPORT</text>
-    <!-- Left: grade dial -->
-    <text x="142" y="118" text-anchor="middle" font-family="var(--illus-font)" font-size="8" font-weight="700" fill="var(--illus-ink)" opacity="0.5" letter-spacing="0.1em">OVERALL GRADE</text>
-    <circle cx="142" cy="180" r="46" stroke="var(--illus-ink)" stroke-width="6" fill="none" opacity="0.1"/>
-    <circle cx="142" cy="180" r="46" stroke="var(--illus-ink)" stroke-width="6" fill="none" stroke-dasharray="225 289" stroke-linecap="round" transform="rotate(-90 142 180)" opacity="0.7"/>
-    <text x="142" y="196" text-anchor="middle" font-family="var(--illus-font)" font-size="46" font-weight="900" fill="var(--illus-ink)">B</text>
-    <text x="142" y="250" text-anchor="middle" font-family="var(--illus-font)" font-size="12" font-weight="700" fill="var(--illus-ink)" opacity="0.6">78 / 100</text>
-    <!-- Right: category score bars -->
-    <text x="210" y="118" font-family="var(--illus-font)" font-size="8" font-weight="700" fill="var(--illus-ink)" opacity="0.55" letter-spacing="0.05em">SECURITY</text>
-    <rect x="210" y="124" width="168" height="8" rx="4" fill="var(--illus-ink)" opacity="0.08"/>
-    <rect x="210" y="124" width="100" height="8" rx="4" fill="var(--illus-ink)" opacity="0.6"/>
-    <text x="210" y="150" font-family="var(--illus-font)" font-size="8" font-weight="700" fill="var(--illus-ink)" opacity="0.55" letter-spacing="0.05em">CODE QUALITY</text>
-    <rect x="210" y="156" width="168" height="8" rx="4" fill="var(--illus-ink)" opacity="0.08"/>
-    <rect x="210" y="156" width="132" height="8" rx="4" fill="var(--illus-ink)" opacity="0.6"/>
-    <text x="210" y="182" font-family="var(--illus-font)" font-size="8" font-weight="700" fill="var(--illus-ink)" opacity="0.55" letter-spacing="0.05em">AUTOMATION</text>
-    <rect x="210" y="188" width="168" height="8" rx="4" fill="var(--illus-ink)" opacity="0.08"/>
-    <rect x="210" y="188" width="150" height="8" rx="4" fill="var(--illus-ink)" opacity="0.6"/>
-    <text x="210" y="214" font-family="var(--illus-font)" font-size="8" font-weight="700" fill="var(--illus-ink)" opacity="0.55" letter-spacing="0.05em">TECH DEBT</text>
-    <rect x="210" y="220" width="168" height="8" rx="4" fill="var(--illus-ink)" opacity="0.08"/>
-    <rect x="210" y="220" width="112" height="8" rx="4" fill="var(--illus-ink)" opacity="0.6"/>
-    <text x="210" y="246" font-family="var(--illus-font)" font-size="8" font-weight="700" fill="var(--illus-ink)" opacity="0.55" letter-spacing="0.05em">PERFORMANCE</text>
-    <rect x="210" y="252" width="168" height="8" rx="4" fill="var(--illus-ink)" opacity="0.08"/>
-    <rect x="210" y="252" width="160" height="8" rx="4" fill="var(--illus-ink)" opacity="0.6"/>
-    <!-- In-window footer -->
-    <text x="230" y="274" text-anchor="middle" font-family="var(--illus-font)" font-size="9" font-weight="600" fill="var(--illus-ink)" opacity="0.4">49 scanners · read-only · runs locally</text>
-    <!-- Floating badges -->
-    <rect x="76" y="302" width="106" height="28" rx="100" fill="var(--illus-surface)" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.75"/>
-    <text x="129" y="320" text-anchor="middle" font-family="var(--illus-font)" font-size="10" font-weight="700" fill="var(--illus-ink)" opacity="0.85">49 Scanners</text>
-    <rect x="190" y="302" width="86" height="28" rx="100" fill="var(--illus-ink)" opacity="0.85"/>
-    <text x="233" y="320" text-anchor="middle" font-family="var(--illus-font)" font-size="10" font-weight="700" fill="var(--illus-surface)">Read-only</text>
-    <rect x="284" y="302" width="100" height="28" rx="100" fill="var(--illus-surface)" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.75"/>
-    <text x="334" y="320" text-anchor="middle" font-family="var(--illus-font)" font-size="10" font-weight="700" fill="var(--illus-ink)" opacity="0.85">Local-first</text>
-  </svg>`,
-};
-const illustration = illustrations[slug] ?? '';
-
-// Distinct monochrome line icons per feature (keyed by the `icon` field).
-// Inner SVG markup only; rendered inside a 24×24 <svg> using currentColor.
-const featureIcons: Record<string, string> = {
-  scan:     `<circle cx="10.5" cy="10.5" r="6.5" stroke="currentColor" stroke-width="1.6"/><path d="M15.3 15.3 L20.5 20.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M7.5 10.5 H13.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>`,
-  grade:    `<path d="M4.5 16.5 A7.5 7.5 0 0 1 19.5 16.5" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M12 16.5 L16 10.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="12" cy="16.5" r="1.4" fill="currentColor"/>`,
-  triage:   `<path d="M4 5.5 H20 L13.8 12.5 V19 L10.2 17 V12.5 Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" fill="none"/>`,
-  graph:    `<circle cx="6" cy="7" r="2.3" stroke="currentColor" stroke-width="1.6"/><circle cx="18" cy="9" r="2.3" stroke="currentColor" stroke-width="1.6"/><circle cx="11" cy="18" r="2.3" stroke="currentColor" stroke-width="1.6"/><path d="M8.2 7.6 L15.8 8.7 M7 8.9 L10 15.9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>`,
-  compare:  `<rect x="3.5" y="5" width="7" height="14" rx="1.6" stroke="currentColor" stroke-width="1.6"/><rect x="13.5" y="5" width="7" height="14" rx="1.6" stroke="currentColor" stroke-width="1.6"/>`,
-  ai:       `<path d="M12 4 L13.5 9 L18.5 10.5 L13.5 12 L12 17 L10.5 12 L5.5 10.5 L10.5 9 Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" fill="none"/><path d="M17.5 15 L18.2 17.3 L20.5 18 L18.2 18.7 L17.5 21 L16.8 18.7 L14.5 18 L16.8 17.3 Z" fill="currentColor"/>`,
-  audit:    `<rect x="5" y="4.5" width="14" height="16" rx="2" stroke="currentColor" stroke-width="1.6"/><rect x="9" y="3" width="6" height="3.4" rx="1.1" stroke="currentColor" stroke-width="1.6"/><path d="M8.5 12.5 L11 15 L15.5 10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>`,
-  bell:     `<path d="M6 16.5 H18 L16.3 14 V10 A4.3 4.3 0 0 0 7.7 10 V14 Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M10 19.5 A2 2 0 0 0 14 19.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>`,
-  camera:   `<rect x="3.5" y="7" width="17" height="12.5" rx="2.5" stroke="currentColor" stroke-width="1.6"/><path d="M8.5 7 L10 4.5 H14 L15.5 7" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="12" cy="13.2" r="3.2" stroke="currentColor" stroke-width="1.6"/>`,
-  campaign: `<path d="M4 10 V14 L15 18 V6 Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M15 8.5 A3.5 3.5 0 0 1 15 15.5" stroke="currentColor" stroke-width="1.6"/><path d="M6.5 14.7 V18 A1.6 1.6 0 0 0 9.7 18 V15.8" stroke="currentColor" stroke-width="1.6"/>`,
-  clock:    `<circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.6"/><path d="M12 7.5 V12 L15 14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>`,
-  cloud:    `<path d="M8 17.5 H16.5 A3.5 3.5 0 0 0 16.8 10.5 A5 5 0 0 0 7.2 11 A3.5 3.5 0 0 0 8 17.5 Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>`,
-  lock:     `<rect x="5.5" y="10.5" width="13" height="9.5" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M8.5 10.5 V8 A3.5 3.5 0 0 1 15.5 8 V10.5" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="15" r="1.3" fill="currentColor"/>`,
-  objects:  `<path d="M12 4 L20 8 L12 12 L4 8 Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M4 12 L12 16 L20 12" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M4 16 L12 20 L20 16" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>`,
-  oss:      `<path d="M9 7.5 L4.5 12 L9 16.5 M15 7.5 L19.5 12 L15 16.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>`,
-  portal:   `<rect x="4" y="5" width="16" height="14" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M4 9 H20" stroke="currentColor" stroke-width="1.6"/><circle cx="6.7" cy="7" r="0.7" fill="currentColor"/><circle cx="8.9" cy="7" r="0.7" fill="currentColor"/>`,
-  refresh:  `<path d="M19 12 A7 7 0 1 1 16.4 6.6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"/><path d="M16.4 3.5 V7 H12.9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>`,
-  shield:   `<path d="M12 3.5 L19 6 V11 C19 15.5 16 19 12 20.5 C8 19 5 15.5 5 11 V6 Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 11.5 L11.3 13.8 L15.5 9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>`,
-  stripe:   `<rect x="3.5" y="6" width="17" height="12" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M3.5 10 H20.5" stroke="currentColor" stroke-width="1.6"/><path d="M7 14.5 H11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>`,
-  sync:     `<path d="M5 10 A7 7 0 0 1 16.8 6.7 L18.5 8.5 M18.5 5 V8.5 H15" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M19 14 A7 7 0 0 1 7.2 17.3 L5.5 15.5 M5.5 19 V15.5 H9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>`,
-};
-const DEFAULT_FEAT_ICON = `<rect x="3" y="3" width="18" height="18" rx="4.5" stroke="currentColor" stroke-width="1.6"/><path d="M8 12 L11 15 L16.5 8.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>`;
-const featIcon = (name: string) => featureIcons[name] ?? DEFAULT_FEAT_ICON;
-
-const hasPricingOrReqs = (data.pricing && data.pricing.length > 0) ||
-  (data.requirements && data.requirements.length > 0);
 ---
-
 <Page
-  title={data.seoTitle ?? `${data.title} — CloudAlgo Products`}
-  description={data.tagline}
-  schema={productSchema}
+  title={data.seoTitle ?? `${data.title} — ${TYPE_LABEL[data.type] ?? 'Product'} — CloudAlgo`}
+  description={data.excerpt}
+  canonicalURL={`${siteBase}/products/${slug}/`}
+  schema={schema}
 >
-
-  <!-- ① Hero — white bg, matches .page-header -->
-  <PageHeader
-    style="padding-bottom:3rem;"
+  <PageMasthead
+    class="page-head--product"
+    standClass="release"
     crumbs={[
       { label: 'Home', href: '/' },
-      { label: 'Products', href: '/products' },
+      { label: 'Products', href: '/products/' },
       { label: data.title },
     ]}
   >
-      <div style="display:grid;grid-template-columns:1fr auto;gap:3rem;align-items:center;margin-top:1.5rem;" class="prod-hero-grid">
-        <div>
-          <SectionLabel>{typeLabel(data.type)}</SectionLabel>
-          <div style="display:flex;align-items:center;gap:0.625rem;margin-bottom:0.75rem;flex-wrap:wrap;">
-            {data.status === 'ga' ? (
-              <span style="background:var(--surface-inverse);color:var(--color-on-inverse);font-size:0.65rem;font-weight:700;padding:3px 10px;border-radius:100px;text-transform:uppercase;letter-spacing:0.06em;">
-                {statusLabel(data.status)}
-              </span>
-            ) : (
-              <span style="border:1.5px solid var(--border-strong);color:var(--color-heading);font-size:0.65rem;font-weight:700;padding:3px 10px;border-radius:100px;text-transform:uppercase;letter-spacing:0.06em;">
-                {statusLabel(data.status)}
-              </span>
-            )}
-            {data.version && (
-              <span style="font-size:0.8rem;color:var(--color-text);">v{data.version}</span>
-            )}
-            {data.lastUpdated && (
-              <span style="font-size:0.8rem;color:var(--color-text);">&middot; Updated {data.lastUpdated}</span>
-            )}
-          </div>
-          <h1 style="font-size:clamp(2rem,4vw,3rem);margin-bottom:0.75rem;">{data.title}</h1>
-          <p style="font-size:1.0625rem;color:var(--color-text);line-height:1.7;max-width:520px;margin-bottom:1.5rem;">
-            {data.tagline}
-          </p>
-          <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
-            {data.externalUrl ? (
-              <Button href={data.externalUrl} variant="primary" external>
-                {data.type === 'mobile-app' ? 'Get the App ↗' : data.type === 'desktop-app' ? 'Download ↗' : 'Get started ↗'}
-              </Button>
-            ) : (
-              <Button href="/contact" variant="primary">Join waitlist &rarr;</Button>
-            )}
-            {data.type === 'mobile-app' ? (
-              <Button href={`/apps/insurealgo/privacy`} variant="outline">Privacy Policy</Button>
-            ) : data.guideUrl ? (
-              <Button href={data.guideUrl} variant="outline">User Guide &rarr;</Button>
-            ) : data.issuesUrl ? (
-              <Button href={data.issuesUrl} variant="outline" external>Log an issue ↗</Button>
-            ) : (
-              <Button href="/contact" variant="outline">Book a demo</Button>
-            )}
-          </div>
-        </div>
-        {illustration && (
-          <div style="width:460px;flex-shrink:0;" aria-hidden="true" set:html={illustration} class="prod-hero-illo" />
-        )}
-      </div>
-  </PageHeader>
+    <Fragment slot="title" set:html={markedTitle} />
+    <Fragment slot="lede" set:html={page.lede} />
 
-  <!-- ② Key features — grey bg -->
-  <section style="background:var(--surface-page);padding:5rem 0;border-bottom:1px solid var(--border-default);">
-    <div class="container">
-      <SectionLabel class="anim-fade-up">What it does</SectionLabel>
-      <h2 class="feat-heading anim-fade-up">Key Features</h2>
-      <div class="feat-grid">
-        {data.features.map((f, i) => (
-          <div class="card card--radius-xl feat-card anim-fade-up" style={`transition-delay:${i * 0.06}s;`}>
-            <div class="feat-card-top">
-              <span class="feat-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" set:html={featIcon(f.icon)}></svg>
-              </span>
-              <span class="feat-num">{String(i + 1).padStart(2, '0')}</span>
+    <Fragment slot="actions">
+      {data.externalUrl && (
+        <a class="btn btn-primary" href={data.externalUrl} target="_blank" rel="noopener noreferrer">
+          {page.cta.primary} &rarr;
+        </a>
+      )}
+      {data.guideUrl && page.cta.secondary && (
+        <a
+          class="btn btn-outline"
+          href={data.guideUrl}
+          {...isExternal(data.guideUrl) ? { target: '_blank', rel: 'noopener noreferrer' } : {}}
+        >{page.cta.secondary}</a>
+      )}
+      {/* The catalogue's Pledgivo entry promises "Watch the tour" and
+          points at this page, so this page owes the player. */}
+      {video && (
+        <a class="btn btn-outline" href="#tour">
+          Watch the tour{video.duration ? ` · ${video.duration}` : ''}
+        </a>
+      )}
+    </Fragment>
+
+    <Fragment slot="stand">
+      <span class:list={['pip', 'release__pip', data.status === 'ga' && 'pip--ga']}>
+        <b class="pip__dot" aria-hidden="true"></b>{STATUS_LABEL[data.status] ?? data.status}
+      </span>
+      <dl>
+        {facts.map(f => (
+          <div><dt>{f.term}</dt><dd>{f.detail}</dd></div>
+        ))}
+      </dl>
+    </Fragment>
+  </PageMasthead>
+
+  {/* ── 1 · The transit ─────────────────────────────────── */}
+  <section class="section-press" aria-labelledby="transit-heading">
+    <div class="section-press__head anim-fade-up">
+      <h2 id="transit-heading" class="section-title section-title--xs section-title--tighter section-press__title">
+        {page.folds.transit.title}
+      </h2>
+      <span class="section-press__note">{page.folds.transit.note}</span>
+    </div>
+
+    <div class="transit anim-fade-up">
+      <div class="transit__port transit__port--in">
+        <span class="transit__port-label">{page.transit.source.label}</span>
+        <span class="transit__port-name">{page.transit.source.name}</span>
+        <span class="transit__port-note">{page.transit.source.note}</span>
+      </div>
+
+      <div class="transit__flow transit__flow--in" aria-hidden="true">
+        <span class="transit__flow-tag">{page.transit.inTag}</span>
+      </div>
+
+      <div class="transit__estate">
+        <span class="transit__estate-label">{page.transit.estate}</span>
+        <ol class="transit__stages">
+          {page.transit.stages.map((s, i) => (
+            <li class="transit__stage anim-fade-up" style={`--i:${i}`}>
+              <span class="transit__n">{pad(i + 1)}</span>
+              <span class="transit__name">{s.name}</span>
+              <span class="transit__what">{s.what}</span>
+            </li>
+          ))}
+        </ol>
+      </div>
+
+      {page.transit.out && (
+        <>
+          <div
+            class:list={['transit__flow', 'transit__flow--out', page.transit.out.dashed && 'transit__flow--opt']}
+            aria-hidden="true"
+          >
+            <span class="transit__flow-tag">{page.transit.out.tag}</span>
+          </div>
+
+          <div class="transit__port transit__port--out">
+            <span class="transit__port-label">{page.transit.out.label}</span>
+            <span class="transit__port-name">{page.transit.out.name}</span>
+            <span class="transit__port-note">{page.transit.out.note}</span>
+          </div>
+        </>
+      )}
+    </div>
+
+    {/* The boundary claim is authored here and set above the prose; the
+        prose itself is the collection file's own body, rendered rather
+        than restated, so an edit to the markdown lands on the page. */}
+    <div class="brief anim-fade-up">
+      <p class="brief__lead">{page.claim}</p>
+      <Content />
+      {legal.length > 0 && (
+        <p class="brief__refs">
+          Full detail: {legal.map((l, i) => (
+            <>{i > 0 && (i === legal.length - 1 ? ' and ' : ', ')}<a class="link-draw" href={l.href}>{l.label}</a></>
+          ))}.
+        </p>
+      )}
+    </div>
+  </section>
+
+  {/* ── 2 · Capabilities ────────────────────────────────── */}
+  <section class="section-press" aria-labelledby="cap-heading">
+    <div class="section-press__head anim-fade-up">
+      <h2 id="cap-heading" class="section-title section-title--xs section-title--tighter section-press__title">
+        {page.folds.cap.title}
+      </h2>
+      <span class="section-press__note">{page.folds.cap.note}</span>
+    </div>
+
+    <ol class="cap">
+      {data.features.map((f, i) => (
+        <li class="cap__row anim-fade-up" style={`--i:${i}`}>
+          <span class="cap__n">{pad(i + 1)}</span>
+          <h3 class="cap__name">{f.title}</h3>
+          <p class="cap__what">{f.description}</p>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  {/* ── 3 · The viewer ──────────────────────────────────── */}
+  {page.folds.viewer && (shots.length > 0 || video) && (
+    <section class="section-press" id="tour" aria-labelledby="view-heading">
+      <div class="section-press__head anim-fade-up">
+        <h2 id="view-heading" class="section-title section-title--xs section-title--tighter section-press__title">
+          {page.folds.viewer.title}
+        </h2>
+        <span class="section-press__note">{page.folds.viewer.note}</span>
+      </div>
+
+      {shots.length > 0 ? (
+        <figure class="viewer anim-fade-up" id="viewer" style={`--shots:${shots.length}`}>
+          <div class="viewer__frame">
+            <div class="viewer__bar">
+              <span class="viewer__bar-n">01 / {pad(shots.length)}</span>
+              <span class="viewer__bar-t">{shots[0].step}</span>
             </div>
-            <h3 class="feat-title">{f.title}</h3>
-            <p class="feat-desc">{f.description}</p>
+            {/* No `src` in the markup. A GIF cannot be paused once it is
+                in the document, so nothing is fetched until the reader
+                has asked for a step -- and under prefers-reduced-motion
+                "asked" means pressed the button, not scrolled past. */}
+            <div class="viewer__stage">
+              <img class="viewer__shot" alt="" hidden />
+              <div class="viewer__hold" hidden>
+                <p class="viewer__hold-t">
+                  This step is a screen recording. Nothing is downloaded until you ask for it.
+                </p>
+                <button class="viewer__play" type="button">Play &ldquo;{shots[0].step}&rdquo; &rarr;</button>
+              </div>
+            </div>
+          </div>
+
+          <figcaption class="viewer__cap">{shots[0].cap}</figcaption>
+
+          <ol class="viewer__strip">
+            {shots.map((s, i) => (
+              <li>
+                <button
+                  class:list={['viewer__thumb', i === 0 && 'is-on']}
+                  type="button"
+                  aria-pressed={i === 0 ? 'true' : 'false'}
+                  data-shot={s.src}
+                  data-alt={s.alt}
+                  data-cap={s.cap}
+                >
+                  <span class="viewer__thumb-n">{pad(i + 1)}</span>
+                  <span class="viewer__thumb-t">{s.step}</span>
+                </button>
+              </li>
+            ))}
+          </ol>
+
+          {/* The plain pictures, for a reader with no script at all. */}
+          <noscript>
+            <div class="viewer__noscript">
+              {shots.map(s => <img src={s.src} alt={s.alt} loading="lazy" />)}
+            </div>
+          </noscript>
+        </figure>
+      ) : video && (
+        <figure class="viewer anim-fade-up">
+          <div class="viewer__frame">
+            <div class="viewer__bar">
+              {video.duration && <span class="viewer__bar-n">{video.duration}</span>}
+              <span class="viewer__bar-t">{video.heading ?? 'The tour'}</span>
+            </div>
+            <video class="viewer__video" controls preload="none" poster={video.poster} playsinline>
+              <source src={video.src} type="video/mp4" />
+              {video.captions && (
+                <track kind="captions" src={video.captions} srclang="en" label="English" default />
+              )}
+            </video>
+          </div>
+          <figcaption class="viewer__cap">{video.title}</figcaption>
+        </figure>
+      )}
+    </section>
+  )}
+
+  {/* ── 4 · The readout ─────────────────────────────────── */}
+  {page.folds.readout && data.techStack && data.techStack.length > 0 && (
+    <section class="section-press" aria-labelledby="spec-heading">
+      <div class="section-press__head anim-fade-up">
+        <h2 id="spec-heading" class="section-title section-title--xs section-title--tighter section-press__title">
+          {page.folds.readout.title}
+        </h2>
+        <span class="section-press__note">{page.folds.readout.note}</span>
+      </div>
+
+      <dl class="readout">
+        {data.techStack.map((row, i) => (
+          <div class="readout__cell anim-fade-up" style={`--i:${i}`}>
+            <dt>{row.label}</dt>
+            <dd>{row.value}</dd>
           </div>
         ))}
+      </dl>
+    </section>
+  )}
+
+  {/* ── 5 · Terms ───────────────────────────────────────── */}
+  <section class="section-press" aria-labelledby="terms-heading">
+    <div class="section-press__head anim-fade-up">
+      <h2 id="terms-heading" class="section-title section-title--xs section-title--tighter section-press__title">
+        {page.folds.terms.title}
+      </h2>
+      <span class="section-press__note">{page.folds.terms.note}</span>
+    </div>
+
+    <div class="terms">
+      <div class="terms__price anim-fade-up">
+        <span class="terms__label">Price</span>
+        <p class="terms__figure">{page.price.figure}</p>
+        <p class="terms__gloss">{page.price.gloss}</p>
+        {/* One tier is the figure above and nothing more to say. Where
+            the file carries several, they are printed rather than
+            summarised away. */}
+        {tiers.length > 1 && (
+          <dl class="terms__tiers">
+            {tiers.map(t => (
+              <div><dt>{t.tier}</dt><dd>{t.price}</dd></div>
+            ))}
+          </dl>
+        )}
+      </div>
+
+      <div class="terms__needs anim-fade-up">
+        <span class="terms__label">Before you install</span>
+        <ol class="terms__list">
+          {(data.requirements ?? []).map(r => (
+            <li>
+              <span class:list={['terms__mark', r.optional && 'terms__mark--opt']} aria-hidden="true"></span>
+              <span class="terms__text">{r.need}</span>
+            </li>
+          ))}
+        </ol>
       </div>
     </div>
   </section>
 
-  <!-- ②b The film — near-black band, only if a video is set -->
-  {data.video && (
-    <section style="background:var(--surface-inverse);padding:5rem 0;border-bottom:1px solid var(--border-strong);">
-      <div class="container">
-        <SectionLabel class="anim-fade-up" style="color:var(--color-on-inverse-muted);">See it in action</SectionLabel>
-        <h2 class="section-title section-title--sm section-title--inverse anim-fade-up" style="margin-bottom:2rem;transition-delay:0.05s;">
-          {data.video.heading ?? `${data.title} in motion`}
+  {/* ── 6 · Ahead ───────────────────────────────────────── */}
+  {page.folds.ahead && data.roadmap && data.roadmap.length > 0 && (
+    <section class="section-press" aria-labelledby="ahead-heading">
+      <div class="section-press__head anim-fade-up">
+        <h2 id="ahead-heading" class="section-title section-title--xs section-title--tighter section-press__title">
+          {page.folds.ahead.title}
         </h2>
-        <div class="anim-fade-up" style="transition-delay:0.1s;">
-          <VideoPlayer
-            src={data.video.src}
-            poster={data.video.poster}
-            captions={data.video.captions}
-            title={data.video.title}
-            duration={data.video.duration}
-            tone="dark"
-          />
-        </div>
+        <span class="section-press__note">{page.folds.ahead.note}</span>
       </div>
+
+      <ol class="ahead">
+        {data.roadmap.map((r, i) => (
+          <li class:list={['ahead__row', 'anim-fade-up', i === 0 && 'is-shipped']} style={`--i:${i}`}>
+            <span class="ahead__v">{r.version}</span>
+            <span class="ahead__state">{i === 0 ? 'Shipped' : i === 1 ? 'In build' : 'Planned'}</span>
+            <h3 class="ahead__theme">{r.theme}</h3>
+            <p class="ahead__what">{r.description}</p>
+          </li>
+        ))}
+      </ol>
     </section>
   )}
 
-  <!-- ③ Overview — white bg (only if markdown body has content) -->
-  {hasBody && (
-    <section style="background:var(--surface-card);padding:4rem 0;border-bottom:1px solid var(--border-default);">
-      <div class="container">
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start;" class="overview-grid">
-          <div>
-            <SectionLabel class="anim-fade-up">Deep Dive</SectionLabel>
-            <h2 class="section-title section-title--sm anim-fade-up" style="margin-bottom:1.5rem;transition-delay:0.05s;">
-              About {data.title}
-            </h2>
-            <div class="prod-body anim-fade-up" style="transition-delay:0.1s;">
-              <Content />
-            </div>
-          </div>
-          <div class="overview-aside anim-fade-up" style="transition-delay:0.15s;">
-            <div style="background:var(--surface-sunk);border:1px solid var(--border-default);border-radius:12px;padding:1.75rem;">
-              <SectionLabel class="section-label--block section-label--xs">At a glance</SectionLabel>
-              <dl class="glance-list">
-                <div class="glance-row">
-                  <dt>Type</dt>
-                  <dd>{data.type === 'salesforce-app' ? 'Salesforce AppExchange App' : data.type === 'mobile-app' ? 'Flutter Mobile App' : data.type === 'desktop-app' ? 'Desktop App (macOS · Windows · Linux)' : 'Integration Connector'}</dd>
-                </div>
-                <div class="glance-row">
-                  <dt>Status</dt>
-                  <dd>{data.status === 'ga' ? 'Generally Available' : data.status === 'preview' ? 'Preview' : 'Beta'}</dd>
-                </div>
-                {data.version && (
-                  <div class="glance-row">
-                    <dt>Version</dt>
-                    <dd>v{data.version}</dd>
-                  </div>
-                )}
-                {data.requirements && data.requirements.slice(0, 2).map(req => (
-                  <div class="glance-row">
-                    <dt>Requires</dt>
-                    <dd>{req}</dd>
-                  </div>
-                ))}
-              </dl>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  )}
+  {/* ── 7 · Colophon ────────────────────────────────────── */}
+  <section class="section-press" aria-labelledby="colo-heading">
+    <div class="section-press__head anim-fade-up">
+      <h2 id="colo-heading" class="section-title section-title--xs section-title--tighter section-press__title">
+        {page.folds.colophon.title}
+      </h2>
+      <span class="section-press__note">{page.folds.colophon.note}</span>
+    </div>
 
-  <!-- ④ Tech Stack — grey bg (only if techStack data is present) -->
-  {data.techStack && data.techStack.length > 0 && (
-    <section style="background:var(--surface-page);padding:4rem 0;border-bottom:1px solid var(--border-default);">
-      <div class="container">
-        <SectionLabel class="anim-fade-up">Under the Hood</SectionLabel>
-        <h2 class="section-title section-title--sm anim-fade-up" style="margin-bottom:2rem;transition-delay:0.05s;">
-          Tech Stack
-        </h2>
-        <div class="ts-grid">
-          {data.techStack.map((item, i) => (
-            <div class={`ts-row anim-fade-up`} style={`transition-delay:${i * 0.04}s;`}>
-              <span class="ts-label">{item.label}</span>
-              <span class="ts-value">{item.value}</span>
-            </div>
-          ))}
+    <div class="colophon anim-fade-up">
+      {columns.map(col => (
+        <div class="colophon__col">
+          <span class="colophon__label">{col.label}</span>
+          <ul>
+            {col.links.map(l => (
+              <li>
+                <a
+                  class="link-draw"
+                  href={l.href}
+                  {...l.external ? { target: '_blank', rel: 'noopener noreferrer' } : {}}
+                >{l.label}{l.external && <span aria-hidden="true"> &#8599;</span>}</a>
+              </li>
+            ))}
+          </ul>
         </div>
-      </div>
-    </section>
-  )}
-
-  <!-- ⑤ Screenshots slider — white bg (only if screenshots array is non-empty) -->
-  {data.screenshots && data.screenshots.length > 0 && (
-    <section class="ss-section">
-      <div class="container">
-        <SectionLabel>See it in action</SectionLabel>
-        <h2 class="ss-heading">Screenshots</h2>
-      </div>
-
-      <div class="ss-stage" id="ssStage" data-count={data.screenshots.length}>
-        <!-- Track: slides laid out absolutely, JS drives translateX -->
-        <div class="ss-track" id="ssTrack">
-          {data.screenshots.map((src, i) => (
-            <div class="ss-slide" data-index={i}>
-              <div class="ss-frame">
-                <img
-                  src={src}
-                  alt={`${data.title} screenshot ${i + 1}`}
-                  class="ss-img"
-                  loading="lazy"
-                  draggable="false"
-                />
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <!-- Dot indicators -->
-        <div class="ss-dots" id="ssDots">
-          {data.screenshots.map((_s, i) => (
-            <button class="ss-dot" data-dot={i} aria-label={`Screenshot ${i + 1}`} />
-          ))}
-        </div>
-
-        <!-- Prev / Next arrows -->
-        <button class="ss-arrow ss-arrow-prev" id="ssPrev" aria-label="Previous screenshot">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-            <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>
-        <button class="ss-arrow ss-arrow-next" id="ssNext" aria-label="Next screenshot">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-            <path d="M7.5 5L12.5 10L7.5 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>
-      </div>
-    </section>
-  )}
-
-  <!-- ⑥ Roadmap — white bg (only if roadmap data is present) -->
-  {data.roadmap && data.roadmap.length > 0 && (
-    <section style="background:var(--surface-card);padding:4rem 0;border-bottom:1px solid var(--border-default);">
-      <div class="container">
-        <SectionLabel class="anim-fade-up">What's Coming</SectionLabel>
-        <h2 class="section-title section-title--sm anim-fade-up" style="margin-bottom:2.5rem;transition-delay:0.05s;">
-          Roadmap
-        </h2>
-        <div class="roadmap-list">
-          {data.roadmap.map((item, i) => (
-            <div class="roadmap-item anim-fade-up" style={`transition-delay:${i * 0.07}s;`}>
-              <div class="roadmap-left">
-                <span class="roadmap-version">{item.version}</span>
-                <div class="roadmap-line" aria-hidden="true" />
-              </div>
-              <div class="roadmap-body">
-                <h3 class="roadmap-theme">{item.theme}</h3>
-                <p class="roadmap-desc">{item.description}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  )}
-
-  <!-- ⑦ Pricing + Requirements — grey bg (only if at least one is set) -->
-  {hasPricingOrReqs && (
-    <section style="background:var(--surface-page);padding:4rem 0;border-bottom:1px solid var(--border-default);">
-      <div class="container">
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:3rem;">
-          {data.pricing && data.pricing.length > 0 && (
-            <div>
-              <SectionLabel>Licensing</SectionLabel>
-              <h3 style="font-size:1.125rem;font-weight:700;color:var(--color-heading);margin-bottom:1rem;">Pricing</h3>
-              <table style="width:100%;border-collapse:collapse;border:1px solid var(--border-default);border-radius:12px;overflow:hidden;background:var(--surface-card);">
-                <tbody>
-                  {data.pricing.map((row, i) => (
-                    <tr style={i > 0 ? 'border-top:1px solid var(--border-default);' : ''}>
-                      <td style="padding:0.875rem 1.25rem;font-weight:700;color:var(--color-heading);font-size:0.9375rem;">{row.tier}</td>
-                      <td style="padding:0.875rem 1.25rem;color:var(--color-text);font-weight:600;font-size:0.9375rem;text-align:right;">{row.price}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-          {data.requirements && data.requirements.length > 0 && (
-            <div>
-              <SectionLabel>Before you install</SectionLabel>
-              <h3 style="font-size:1.125rem;font-weight:700;color:var(--color-heading);margin-bottom:1rem;">Requirements</h3>
-              <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:0.75rem;">
-                {data.requirements.map(req => (
-                  <li style="font-size:0.9375rem;color:var(--color-text);padding-left:1.5rem;position:relative;line-height:1.55;">
-                    <span style="position:absolute;left:0;color:var(--color-heading);font-weight:700;">→</span>
-                    {req}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </div>
-      </div>
-    </section>
-  )}
-
-  <!-- ⑦b Legal & privacy links — white bg (only if legal links are set) -->
-  {data.legal && data.legal.length > 0 && (
-    <section style="background:var(--surface-card);padding:3rem 0;border-bottom:1px solid var(--border-default);">
-      <div class="container">
-        <SectionLabel>Legal &amp; Privacy</SectionLabel>
-        <div style="display:flex;flex-wrap:wrap;gap:0.75rem;margin-top:1rem;">
-          {data.legal.map(l => (
-            <a href={l.href} class="legal-link" style="display:inline-flex;align-items:center;gap:0.4rem;font-size:0.875rem;font-weight:600;color:var(--color-heading);border:1px solid var(--border-default);border-radius:100px;padding:0.5rem 1.1rem;text-decoration:none;">
-              {l.label} <span aria-hidden="true">&rarr;</span>
-            </a>
-          ))}
-        </div>
-      </div>
-    </section>
-  )}
-
-  <!-- ⑧ CTA strip — dark bg -->
-  <section style="background:var(--surface-inverse);padding:4rem 0;">
-    <div class="container">
-      <div style="display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap;">
-        <div>
-          <h2 class="section-title section-title--2xs section-title--heavy section-title--tight section-title--inverse" style="margin-bottom:0.35rem;">
-            Ready to get started?
-          </h2>
-          <p style="font-size:0.9375rem;color:var(--color-on-inverse-a50);margin:0;">
-            {data.type === 'mobile-app' ? 'Free on iOS & Android — built with Flutter' : data.externalUrl ? 'Available now — free to get started' : 'Early access — join the waitlist'}
-          </p>
-        </div>
-        <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
-          {data.externalUrl ? (
-            <Button href={data.externalUrl} variant="light" external>
-              {data.type === 'mobile-app' ? 'Get the App ↗' : data.type === 'desktop-app' ? 'Download ↗' : 'Get started ↗'}
-            </Button>
-          ) : (
-            <Button href="/contact" variant="light">Join waitlist →</Button>
-          )}
-          {data.type === 'mobile-app' ? (
-            <Button href={`/apps/insurealgo/privacy`} variant="ghost-inverse">
-              Privacy Policy
-            </Button>
-          ) : (
-            <Button href="/contact" variant="ghost-inverse">
-              Contact us
-            </Button>
-          )}
-        </div>
-      </div>
+      ))}
     </div>
   </section>
 
-<style>
-.legal-link { transition: border-color 0.2s ease; }
-.legal-link:hover { border-color: var(--border-strong); }
+  {/* The one place this page breaks the site's no-closing-CTA rule. A
+      product page ends on a thing the reader can download by themselves,
+      and the band is what says the harder half is still a conversation. */}
+  <CtaBand class="anim-fade-up" labelledby="band-ask">
+    <div>
+      <h2 id="band-ask" class="band-press__ask">
+        {page.band.ask} <em>{page.band.emphasis}</em>
+      </h2>
+      <p class="band-press__note">{page.band.note}</p>
+    </div>
 
-/* ── Key Features ── */
-.feat-heading {
-  font-size: clamp(1.75rem, 3vw, 2.25rem);
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  margin-bottom: 2.5rem;
-  transition-delay: 0.05s;
-}
-.feat-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.25rem;
-}
-.feat-card {
-  padding: 1.75rem;
-  display: flex;
-  flex-direction: column;
-  transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1),
-              box-shadow 0.25s ease,
-              border-color 0.25s ease,
-              opacity 0.6s ease;
-}
-.feat-card:hover {
-  transform: translateY(-4px);
-  border-color: var(--card-border-hover);
-  box-shadow: 0 12px 32px var(--color-ink-a08);
-}
-.feat-card-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 1.1rem;
-}
-.feat-icon {
-  width: 46px;
-  height: 46px;
-  border-radius: 12px;
-  border: 1px solid var(--border-default);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--color-heading);
-  transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
-}
-.feat-card:hover .feat-icon {
-  background: var(--surface-inverse);
-  color: var(--color-on-inverse);
-  border-color: var(--border-strong);
-}
-.feat-num {
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: var(--surface-ghost);
-  letter-spacing: 0.08em;
-  transition: color 0.25s ease;
-}
-.feat-card:hover .feat-num { color: var(--color-heading); }
-.feat-title {
-  font-size: 1.0625rem;
-  font-weight: 700;
-  color: var(--color-heading);
-  letter-spacing: -0.01em;
-  line-height: 1.3;
-  margin-bottom: 0.5rem;
-}
-.feat-desc {
-  font-size: 0.875rem;
-  color: var(--color-text);
-  line-height: 1.65;
-  margin: 0;
-}
-@media (max-width: 900px) { .feat-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 560px) { .feat-grid { grid-template-columns: 1fr; } }
-@media (max-width: 767px) {
-  .prod-hero-grid { grid-template-columns: 1fr !important; }
-  .prod-hero-illo { display: none !important; }
-  .overview-grid  { grid-template-columns: 1fr !important; }
-  .overview-aside { display: none !important; }
-}
-
-@media (max-width: 991px) and (min-width: 768px) {
-  .prod-hero-illo { width: 340px !important; }
-  .overview-grid  { grid-template-columns: 1fr !important; }
-  .overview-aside { display: none !important; }
-}
-
-/* ── Product body prose ──────────────────────────────────── */
-/* Content comes from <Content /> (markdown) — its elements lack Astro's
-   scope attribute, so these must be :global() to apply. */
-.prod-body :global(p) {
-  font-size: 1rem;
-  color: var(--color-text);
-  line-height: 1.7;
-  margin-bottom: 1.35rem;
-}
-.prod-body :global(p:last-child) {
-  margin-bottom: 0;
-}
-.prod-body :global(strong) {
-  font-weight: 700;
-  color: var(--color-heading);
-}
-.prod-body :global(a) {
-  color: var(--color-heading);
-  font-weight: 600;
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
-.prod-body :global(a:hover) {
-  opacity: 0.7;
-}
-.prod-body :global(code) {
-  font-family: var(--font-mono-spec-bare);
-  font-size: 0.8125rem;
-  background: var(--surface-tint);
-  padding: 1px 5px;
-  border-radius: 4px;
-  color: var(--color-heading);
-}
-.prod-body :global(ul) {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 1.35rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-.prod-body :global(li) {
-  font-size: 1rem;
-  color: var(--color-text);
-  padding-left: 1.25rem;
-  position: relative;
-  line-height: 1.6;
-}
-.prod-body :global(li)::before {
-  content: '→';
-  position: absolute;
-  left: 0;
-  color: var(--color-heading);
-  font-weight: 700;
-}
-
-/* ── At-a-glance sidebar ─────────────────────────────────── */
-.glance-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
-.glance-row {
-  display: grid;
-  grid-template-columns: 5.5rem 1fr;
-  gap: 0.5rem;
-  padding: 0.625rem 0;
-  border-bottom: 1px solid var(--border-default);
-}
-.glance-row:last-child { border-bottom: none; }
-.glance-row dt {
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: var(--color-text);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  padding-top: 1px;
-}
-.glance-row dd {
-  font-size: 0.875rem;
-  color: var(--color-heading);
-  line-height: 1.5;
-  margin: 0;
-}
-
-/* ── Tech stack grid ─────────────────────────────────────── */
-.ts-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-  gap: 0;
-  background: var(--surface-card);
-  border: 1px solid var(--border-default);
-  border-radius: 12px;
-  overflow: hidden;
-}
-.ts-row {
-  display: grid;
-  grid-template-columns: 10rem 1fr;
-  gap: 1rem;
-  padding: 0.875rem 1.25rem;
-  border-bottom: 1px solid var(--border-default);
-  align-items: start;
-}
-.ts-row:last-child { border-bottom: none; }
-.ts-label {
-  font-size: 0.8125rem;
-  font-weight: 700;
-  color: var(--color-text);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  padding-top: 1px;
-  white-space: nowrap;
-}
-.ts-value {
-  font-size: 0.9rem;
-  color: var(--color-heading);
-  line-height: 1.5;
-}
-
-@media (max-width: 767px) {
-  .ts-grid { grid-template-columns: 1fr; }
-  .ts-row  { grid-template-columns: 1fr; gap: 0.25rem; }
-  .ts-label { white-space: normal; }
-}
-
-/* ── Roadmap ─────────────────────────────────────────────── */
-.roadmap-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  max-width: 680px;
-}
-.roadmap-item {
-  display: grid;
-  grid-template-columns: 5rem 1fr;
-  gap: 1.5rem;
-  position: relative;
-}
-.roadmap-left {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-}
-.roadmap-version {
-  font-size: 0.75rem;
-  font-weight: 800;
-  color: var(--color-on-inverse);
-  background: var(--surface-inverse);
-  padding: 3px 10px;
-  border-radius: 100px;
-  letter-spacing: 0.04em;
-  white-space: nowrap;
-}
-.roadmap-line {
-  width: 1px;
-  flex: 1;
-  background: var(--border-default);
-  min-height: 2rem;
-}
-.roadmap-item:last-child .roadmap-line { display: none; }
-.roadmap-body {
-  padding-bottom: 2rem;
-}
-.roadmap-item:last-child .roadmap-body { padding-bottom: 0; }
-.roadmap-theme {
-  font-size: 1.0625rem;
-  font-weight: 700;
-  color: var(--color-heading);
-  margin-bottom: 0.35rem;
-}
-.roadmap-desc {
-  font-size: 0.9rem;
-  color: var(--color-text);
-  line-height: 1.65;
-  margin: 0;
-}
-
-@media (max-width: 767px) {
-  .roadmap-item { grid-template-columns: 4rem 1fr; gap: 1rem; }
-}
-
-/* ── Screenshot Slider ───────────────────────────────────── */
-.ss-section {
-  background: var(--surface-card);
-  padding: 4rem 0 3rem;
-  border-bottom: 1px solid var(--border-default);
-  overflow: hidden;
-}
-
-.ss-heading {
-  font-size: clamp(1.75rem, 3vw, 2.25rem);
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  margin-bottom: 2.5rem;
-}
-
-/* Stage: fixed-height viewport, clips overflow */
-.ss-stage {
-  position: relative;
-  height: 600px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Track fills the full width, slides position inside it */
-.ss-track {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Each slide */
-.ss-slide {
-  position: absolute;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition:
-    transform 0.65s cubic-bezier(0.4, 0, 0.2, 1),
-    opacity   0.65s cubic-bezier(0.4, 0, 0.2, 1),
-    scale     0.65s cubic-bezier(0.4, 0, 0.2, 1),
-    filter    0.65s cubic-bezier(0.4, 0, 0.2, 1);
-  will-change: transform, opacity, scale, filter;
-}
-
-/* Phone-frame wrapper */
-.ss-frame {
-  background: var(--surface-inverse);
-  border-radius: 36px;
-  padding: 10px;
-  box-shadow:
-    0 0 0 1px var(--color-paper-a08) inset,
-    0 24px 80px var(--color-shadow-a18),
-    0 4px 16px var(--color-shadow-a10);
-  position: relative;
-}
-
-.ss-frame::before {
-  content: '';
-  position: absolute;
-  top: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 72px;
-  height: 10px;
-  background: var(--illus-hardware);
-  border-radius: 0 0 8px 8px;
-  z-index: 1;
-}
-
-.ss-img {
-  display: block;
-  height: 480px;
-  width: auto;
-  border-radius: 28px;
-  pointer-events: none;
-  user-select: none;
-}
-
-/* Dot row */
-.ss-dots {
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 8px;
-  z-index: 10;
-}
-
-.ss-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  border: none;
-  background: var(--surface-inverse);
-  opacity: 0.18;
-  cursor: pointer;
-  padding: 0;
-  transition: opacity 0.3s, transform 0.3s, width 0.3s;
-}
-
-.ss-dot.active {
-  opacity: 1;
-  width: 24px;
-  border-radius: 4px;
-}
-
-/* Arrows */
-.ss-arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  border: 1.5px solid var(--border-default);
-  background: var(--surface-card);
-  color: var(--color-heading);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 10;
-  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
-  box-shadow: 0 2px 8px var(--color-shadow-a06);
-}
-
-.ss-arrow:hover {
-  border-color: var(--border-strong);
-  box-shadow: 0 4px 16px var(--color-shadow-a12);
-  transform: translateY(-50%) scale(1.08);
-}
-
-.ss-arrow-prev { left: max(1rem, calc(50% - 320px)); }
-.ss-arrow-next { right: max(1rem, calc(50% - 320px)); }
-
-@media (max-width: 767px) {
-  .ss-stage { height: 480px; }
-  .ss-img { height: 360px; }
-  .ss-frame { border-radius: 28px; }
-  .ss-img { border-radius: 20px; }
-  .ss-arrow-prev { left: 0.5rem; }
-  .ss-arrow-next { right: 0.5rem; }
-}
-</style>
+    <div class="band-press__actions">
+      <a class="btn btn-secondary btn-sm" href="/services/">See the services &rarr;</a>
+      <a class="btn btn-light btn-sm" href="mailto:contact@cloudalgo.com">Email contact@cloudalgo.com</a>
+    </div>
+  </CtaBand>
+</Page>
 
 <script>
-  (function () {
-    const stage   = document.getElementById('ssStage');
-    const track   = document.getElementById('ssTrack');
-    const dotsEl  = document.getElementById('ssDots');
-    const btnPrev = document.getElementById('ssPrev');
-    const btnNext = document.getElementById('ssNext');
-    if (!stage || !track || !dotsEl || !btnPrev || !btnNext) return;
+  /* The step viewer.
 
-    const slides   = Array.from(track.querySelectorAll<HTMLElement>('.ss-slide'));
-    const dots     = Array.from(dotsEl.querySelectorAll<HTMLElement>('.ss-dot'));
-    const total    = slides.length;
-    let current    = 0;
-    let timer: number | undefined;
-    const INTERVAL = 3200;
+     Six GIFs is two megabytes, and a GIF cannot be paused once it is in
+     the document -- so nothing is fetched until the reader has asked for
+     a step, and under `prefers-reduced-motion` "asked" means pressed a
+     button rather than scrolled past. The <noscript> block underneath
+     holds the plain images for a reader with no script at all. */
+  (() => {
+    const viewer = document.getElementById('viewer');
+    if (!viewer) return;
 
-    function getSlideWidth(): number {
-      const img = slides[0]?.querySelector<HTMLElement>('.ss-img');
-      return img ? img.offsetWidth + 20 : 280;
-    }
+    const shot = viewer.querySelector<HTMLImageElement>('.viewer__shot');
+    const hold = viewer.querySelector<HTMLElement>('.viewer__hold');
+    const play = viewer.querySelector<HTMLButtonElement>('.viewer__play');
+    const cap  = viewer.querySelector<HTMLElement>('.viewer__cap');
+    const barN = viewer.querySelector<HTMLElement>('.viewer__bar-n');
+    const barT = viewer.querySelector<HTMLElement>('.viewer__bar-t');
+    const thumbs = [...viewer.querySelectorAll<HTMLButtonElement>('.viewer__thumb')];
+    if (!shot || !hold || !play || !cap || !barN || !barT || !thumbs.length) return;
 
-    function render(animate: boolean): void {
-      const sw = getSlideWidth();
-      slides.forEach((slide, i) => {
-        const dist    = i - current;
-        const absDist = Math.abs(dist);
-        const xRaw    = dist * sw * 0.62;
-        const sc      = absDist === 0 ? 1    : absDist === 1 ? 0.78 : 0.62;
-        const op      = absDist === 0 ? 1    : absDist === 1 ? 0.55 : 0.28;
-        const blur    = absDist === 0 ? 0    : absDist === 1 ? 3    : 7;
-        const zIdx    = total - absDist;
+    const still = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const total = String(thumbs.length).padStart(2, '0');
+    const nameOf = (btn: HTMLButtonElement) =>
+      btn.querySelector('.viewer__thumb-t')?.textContent ?? '';
 
-        if (!animate) {
-          slide.style.transition = 'none';
-          requestAnimationFrame(() => { slide.style.transition = ''; });
-        }
+    let current = thumbs[0];
 
-        slide.style.transform = `translateX(${xRaw}px) scale(${sc})`;
-        slide.style.opacity   = String(op);
-        slide.style.filter    = blur ? `blur(${blur}px)` : '';
-        slide.style.zIndex    = String(zIdx);
+    /** Loads the step. Called on press, and on select when motion is fine. */
+    const run = (btn: HTMLButtonElement) => {
+      shot.src = btn.dataset.shot ?? '';
+      shot.alt = btn.dataset.alt ?? '';
+      shot.hidden = false;
+      hold.hidden = true;
+    };
+
+    const select = (btn: HTMLButtonElement) => {
+      current = btn;
+      thumbs.forEach((t) => {
+        const on = t === btn;
+        t.classList.toggle('is-on', on);
+        t.setAttribute('aria-pressed', String(on));
       });
+      cap.textContent = btn.dataset.cap ?? '';
+      barN.textContent = `${btn.querySelector('.viewer__thumb-n')?.textContent ?? ''} / ${total}`;
+      barT.textContent = nameOf(btn);
 
-      dots.forEach((d, i) => d.classList.toggle('active', i === current));
-    }
+      if (still.matches) {
+        /* Held. The button names the step so the press is a decision,
+           not a mystery. */
+        shot.hidden = true;
+        shot.removeAttribute('src');
+        play.textContent = `Play “${nameOf(btn)}” →`;
+        hold.hidden = false;
+      } else {
+        run(btn);
+      }
+    };
 
-    function goTo(n: number, animate = true): void {
-      current = ((n % total) + total) % total;
-      render(animate);
-    }
-
-    function next(): void { goTo(current + 1); }
-    function prev(): void { goTo(current - 1); }
-
-    function startTimer(): void {
-      clearInterval(timer);
-      timer = window.setInterval(next, INTERVAL);
-    }
-
-    render(false);
-    startTimer();
-
-    btnNext.addEventListener('click', () => { next(); startTimer(); });
-    btnPrev.addEventListener('click', () => { prev(); startTimer(); });
-
-    dots.forEach((dot, i) => {
-      dot.addEventListener('click', () => { goTo(i); startTimer(); });
-    });
-
-    stage.addEventListener('mouseenter', () => clearInterval(timer));
-    stage.addEventListener('mouseleave', () => startTimer());
-
-    let touchStartX = 0;
-    stage.addEventListener('touchstart', (e: TouchEvent) => {
-      touchStartX = e.touches[0].clientX;
-    }, { passive: true });
-    stage.addEventListener('touchend', (e: TouchEvent) => {
-      const dx = e.changedTouches[0].clientX - touchStartX;
-      if (Math.abs(dx) > 40) { dx < 0 ? next() : prev(); startTimer(); }
-    }, { passive: true });
-
-    window.addEventListener('resize', () => render(false));
+    thumbs.forEach((t) => t.addEventListener('click', () => select(t)));
+    play.addEventListener('click', () => run(current));
+    still.addEventListener('change', () => select(current));
+    select(thumbs[0]);
   })();
 </script>
-
-</Page>

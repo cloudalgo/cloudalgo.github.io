@@ -1,0 +1,220 @@
+// The viewer. /products/[slug], fold three.
+//
+// The single biggest thing the old page buried: four unlabelled images
+// at the bottom, and a two-minute tour the catalogue promised and this
+// page never delivered. One frame, captioned, with a numbered strip
+// under it -- or, where the product ships a video instead, the same
+// frame around a player and no strip at all.
+//
+// The dark plate is the screenshots' ground, not a section modifier:
+// only this device wants it, so only this device carries it.
+
+.viewer {
+  margin: 0;
+  background: var(--surface-inverse);
+  border-radius: 4px;
+  padding: 1rem;
+}
+
+.viewer__frame {
+  border: 1px solid var(--border-on-inverse);
+  border-radius: 3px;
+  overflow: hidden;
+  background: var(--surface-inverse-raised);
+}
+
+.viewer__bar {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  padding: 0.625rem 0.875rem;
+  border-bottom: 1px solid var(--border-on-inverse);
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.viewer__bar-n {
+  color: var(--color-accent-inverse);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.viewer__bar-t {
+  color: var(--color-on-inverse-strong);
+  font-weight: 600;
+}
+
+// One box for both states. The floor is the held plate's own height and
+// no more: padding it out to a recording's height would be exactly the
+// large empty plate the hold was shortened to avoid, and the fold
+// growing once when the reader presses play is what any video does. The
+// screenshots are not one shape -- OrgVitals ships wide desktop GIFs,
+// InsureAlgo tall phone stills -- so the image is centred and capped
+// rather than stretched to the box.
+.viewer__stage {
+  min-height: 17rem;
+  display: grid;
+  place-items: center;
+}
+
+.viewer__shot {
+  display: block;
+  margin-inline: auto;
+  max-width: 100%;
+  max-height: 32rem;
+  width: auto;
+  height: auto;
+}
+
+.viewer__video {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: var(--surface-inverse);
+}
+
+// The held state. Deliberately shorter than the recording it stands in
+// for: a full-height empty plate is a lot of nothing to look at, and the
+// fold growing when the reader presses play is the same thing any video
+// does.
+.viewer__hold {
+  min-height: 17rem;
+  display: grid;
+  place-content: center;
+  gap: 1rem;
+  justify-items: center;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.viewer__hold-t {
+  margin: 0;
+  max-width: 30ch;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: var(--color-on-inverse-muted);
+}
+
+.viewer__play {
+  border: 1px solid var(--color-accent-inverse);
+  border-radius: 100px;
+  background: none;
+  padding: 0.625rem 1.375rem;
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--color-accent-inverse);
+  cursor: pointer;
+  transition:
+    background var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out);
+}
+
+.viewer__play:hover {
+  background: var(--color-accent-inverse);
+  color: var(--surface-inverse);
+}
+
+.viewer__noscript img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.viewer__noscript img + img {
+  margin-top: 0.75rem;
+}
+
+.viewer__cap {
+  padding: 0.875rem 0.25rem 1rem;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: var(--color-on-inverse-body);
+  max-width: 62ch;
+}
+
+// The column count is the shot count, set inline on the figure: six on
+// OrgVitals, four on InsureAlgo, and a hardcoded six would leave two
+// empty columns on the shorter one.
+.viewer__strip {
+  list-style: none;
+  margin: 0;
+  padding: 0.875rem 0 0;
+  border-top: 1px solid var(--border-on-inverse);
+  display: grid;
+  grid-template-columns: repeat(var(--shots, 6), minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.viewer__thumb {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  align-items: flex-start;
+  background: none;
+  border: 0;
+  border-top: 2px solid var(--color-on-inverse-ghost);
+  padding: 0.5rem 0 0;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color var(--duration-base) var(--ease-out);
+}
+
+.viewer__thumb-n {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--color-on-inverse-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.viewer__thumb-t {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--color-on-inverse-strong);
+}
+
+.viewer__thumb:hover {
+  border-top-color: var(--color-on-inverse-muted);
+}
+
+.viewer__thumb.is-on {
+  border-top-color: var(--color-accent-inverse);
+}
+
+.viewer__thumb.is-on .viewer__thumb-n {
+  color: var(--color-accent-inverse);
+}
+
+.viewer__thumb.is-on .viewer__thumb-t {
+  color: var(--color-on-inverse);
+}
+
+@media (max-width: 1000px) {
+  .viewer__strip {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    row-gap: 0.875rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .viewer__strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+// Moving screenshots are the one thing on this page that must not start
+// on their own -- and a GIF, unlike a <video>, cannot be paused once it
+// is in the document. So the gating is done in the viewer's script, by
+// withholding the `src`, not here: CSS can hide a GIF but cannot stop it
+// playing. This block is only the strip's own transition.
+@media (prefers-reduced-motion: reduce) {
+  .viewer__thumb {
+    transition: none;
+  }
+}

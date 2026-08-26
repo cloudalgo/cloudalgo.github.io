@@ -1,0 +1,139 @@
+// Price and prerequisites. /products/[slug], fold five.
+//
+// The two answer the same question -- can I actually run this -- so they
+// share a fold rather than each taking one. The price is a fact in a
+// ruled panel, never a pricing table: a rate card invites comparison on
+// price before the work is understood.
+
+.terms {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr);
+  gap: 0;
+  border: 1px solid var(--color-heading);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.terms__price {
+  padding: 1.75rem;
+  background: var(--surface-wash-accent);
+  border-right: 1px solid var(--color-heading);
+}
+
+.terms__needs {
+  padding: 1.75rem;
+}
+
+.terms__label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-text-faint);
+  margin-bottom: 0.75rem;
+}
+
+.terms__figure {
+  margin: 0 0 0.625rem;
+  font-size: 2.5rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--color-heading);
+}
+
+.terms__gloss {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: var(--color-text);
+}
+
+// Only where the file carries more than one tier. A product with a
+// single line has said everything in the figure above.
+.terms__tiers {
+  margin: 1.25rem 0 0;
+  border-top: 1px solid var(--border-default);
+}
+
+.terms__tiers > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border-default);
+  font-size: 0.8125rem;
+  line-height: 1.4;
+}
+
+.terms__tiers dt {
+  color: var(--color-text);
+}
+
+.terms__tiers dd {
+  margin: 0;
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-align: right;
+  color: var(--color-heading);
+}
+
+.terms__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.terms__list li {
+  display: grid;
+  grid-template-columns: 1.25rem 1fr;
+  gap: 0.625rem;
+  align-items: start;
+  padding: 0.625rem 0;
+  border-bottom: 1px solid var(--border-default);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--color-heading);
+}
+
+.terms__list li:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.terms__mark {
+  width: 0.625rem;
+  height: 0.625rem;
+  margin-top: 0.3125rem;
+  background: var(--color-heading);
+  border-radius: 1px;
+}
+
+// Hollow, because this one is optional and the shape should say so
+// without a word of copy.
+.terms__mark--opt {
+  background: none;
+  border: 1px solid var(--color-text-faint);
+}
+
+// The row is a grid, and in a grid every bare text node becomes its own
+// grid item -- so the requirement is wrapped, and this is the wrapper.
+.terms__text {
+  min-width: 0;
+}
+
+@media (max-width: 767px) {
+  .terms {
+    grid-template-columns: 1fr;
+  }
+
+  .terms__price {
+    border-right: 0;
+    border-bottom: 1px solid var(--color-heading);
+  }
+}

@@ -95,7 +95,16 @@ const products = defineCollection({
       title:       z.string(),
       description: z.string(),
     })).min(1),
-    screenshots:  z.array(z.string()).optional(),
+    /* One entry per step in the detail page's viewer. A bare `src` was
+       enough for the old slider, which showed the pictures unlabelled;
+       the viewer names each step and captions it, and a caption is a
+       fact about the picture, so it is written where the picture is. */
+    screenshots: z.array(z.object({
+      src:  z.string(),
+      step: z.string(),
+      alt:  z.string(),
+      cap:  z.string(),
+    })).optional(),
     video: z.object({
       src:      z.string(),
       poster:   z.string().optional(),
@@ -108,7 +117,13 @@ const products = defineCollection({
       tier:  z.string(),
       price: z.string(),
     })).optional(),
-    requirements: z.array(z.string()).optional(),
+    /* `optional: true` marks a prerequisite you only need for one
+       feature. The detail page draws it as a hollow mark rather than
+       printing the word, so the flag is data and not a phrase. */
+    requirements: z.array(z.object({
+      need:     z.string(),
+      optional: z.boolean().optional(),
+    })).optional(),
     techStack: z.array(z.object({
       label: z.string(),
       value: z.string(),

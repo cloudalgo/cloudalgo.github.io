@@ -145,6 +145,21 @@
 @use 'components/board';
 @use 'components/dir';
 
+// One product, in full — /products/[slug]. Eight devices, in the order
+// the page reads them. `_transit` carries `.brief` because the diagram
+// and the prose that explains it are one fold and never appear apart.
+// `_release` is first: it is the masthead's device, and the seven under
+// it are the document. `_viewer` after `_cap` for no reason but reading
+// order — none of these eight touch each other's selectors.
+@use 'components/release';
+@use 'components/transit';
+@use 'components/cap';
+@use 'components/viewer';
+@use 'components/readout';
+@use 'components/terms';
+@use 'components/ahead';
+@use 'components/colophon';
+
 @use 'base/motion';
 @use 'utilities/grid';
 @use 'components/schedule-widget';

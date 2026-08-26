@@ -72,11 +72,13 @@ video:
   duration: "2 min 54 sec"
   heading: "The feature tour"
 requirements:
-  - "Salesforce Enterprise, Unlimited, Performance or Developer Edition"
-  - "Experience Cloud licence — only to take donations from the public"
-  - "A Stripe account, which you can connect after installing"
-  - "API version 67.0 or later"
-  - "No Nonprofit Success Pack needed — it is detected at runtime, never required"
+  - need: "Salesforce Enterprise, Unlimited, Performance or Developer Edition"
+  - need: "A Stripe account, which you can connect after installing"
+  - need: "API version 67.0 or later"
+  - need: "An Experience Cloud licence, only to take donations from the public"
+    optional: true
+  - need: "No Nonprofit Success Pack needed — it is detected at runtime, never required"
+    optional: true
 published: true
 ---
 

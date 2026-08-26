@@ -30,10 +30,22 @@ features:
     title: "One-Tap Renewal"
     description: "Renew a policy in one tap with optional auto-advance of the expiry date by one year, keeping your records accurate."
 screenshots:
-  - "/products/insurealgo/02_dashboard.webp"
-  - "/products/insurealgo/03_policy_list.webp"
-  - "/products/insurealgo/04_add_policy.webp"
-  - "/products/insurealgo/05_settings.webp"
+  - src: "/products/insurealgo/02_dashboard.webp"
+    step: "Dashboard"
+    alt: "The InsureAlgo dashboard listing policies with days remaining until each renewal."
+    cap: "Everything you hold, ordered by what expires first. The number is days, not a progress bar."
+  - src: "/products/insurealgo/03_policy_list.webp"
+    step: "Policy list"
+    alt: "The full policy list filtered by type, showing vehicle, health and life policies."
+    cap: "Filter by type — vehicle, health, life, home, or a type you invented yourself."
+  - src: "/products/insurealgo/04_add_policy.webp"
+    step: "Add a policy"
+    alt: "The add-policy form with insurer, premium, renewal date and document attachment fields."
+    cap: "Insurer, premium, renewal date, and the document itself. It takes about a minute per policy."
+  - src: "/products/insurealgo/05_settings.webp"
+    step: "Settings"
+    alt: "The settings screen showing reminder timing, biometric lock and iCloud backup switches."
+    cap: "Choose when the reminders fire, lock the app behind a fingerprint, and back up to your own iCloud."
 pricing:
   - tier: "iOS & Android"
     price: "Free"
@@ -42,10 +54,12 @@ pricing:
   - tier: "Cloud Backup"
     price: "Uses your iCloud"
 requirements:
-  - "iOS 15.0+ or Android 8.0 (API level 26)+"
-  - "Built with Flutter — native performance on both platforms"
-  - "iCloud Drive enabled (iOS only, for optional backup feature)"
-  - "Biometric sensor supported device (for optional biometric lock)"
+  - need: "iOS 15.0+ or Android 8.0 (API level 26)+"
+  - need: "Built with Flutter — native performance on both platforms"
+  - need: "iCloud Drive enabled, only for the backup feature on iOS"
+    optional: true
+  - need: "A device with a biometric sensor, only for the biometric lock"
+    optional: true
 published: true
 ---
 
