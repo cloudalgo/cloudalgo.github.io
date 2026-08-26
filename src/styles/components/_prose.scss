@@ -1,0 +1,224 @@
+/* ─── The prose ───────────────────────────────────────────
+   The body of a journal entry: one measure, one ramp, no cards.
+
+   Sizes are set here rather than inherited from `.paragraph-*` because
+   this is the only place on the site where somebody reads twelve hundred
+   words in a row. Everything is an element selector under `.prose` --
+   the markdown comes out of a content file and carries no classes.
+   ══════════════════════════════════════════════════ */
+
+.prose { max-width: 68ch; }
+
+.prose > * { margin: 0; }
+.prose > * + * { margin-top: 1.375rem; }
+
+.prose p {
+  font-size: 1.0625rem;
+  line-height: 1.72;
+  color: var(--color-prose);
+  text-wrap: pretty;
+}
+
+/* The standfirst. An entry opens on three paragraphs and only the first
+   is set up: a whole raised opening is a wall, one raised paragraph is a
+   way in. */
+.prose > p:first-child {
+  font-size: 1.25rem;
+  line-height: 1.55;
+  letter-spacing: -0.008em;
+  color: var(--color-heading);
+  font-weight: var(--weight-medium);
+}
+
+/* The rule over an h2 is the same ink rule the section heads use, and
+   the scroll margin clears the fixed header when the contents rail
+   jumps to it. */
+.prose h2 {
+  margin-top: 3rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--color-heading);
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: var(--weight-bold);
+  line-height: 1.14;
+  letter-spacing: -0.03em;
+  color: var(--color-heading);
+  text-wrap: balance;
+  scroll-margin-top: calc(var(--header-h) + 1.5rem);
+}
+
+.prose h3 {
+  margin-top: 2rem;
+  font-family: var(--font-heading);
+  font-size: 1.125rem;
+  font-weight: var(--weight-bold);
+  letter-spacing: -0.018em;
+  color: var(--color-heading);
+  scroll-margin-top: calc(var(--header-h) + 1.5rem);
+}
+
+/* The run-in head. Paragraphs across the archive open with a bold phrase
+   and a full stop; setting that as a head is reading what the author
+   already wrote rather than adding a heading level. */
+.prose p > strong:first-child {
+  font-weight: var(--weight-bold);
+  color: var(--color-heading);
+}
+
+.prose ul,
+.prose ol { padding-left: 0; list-style: none; }
+.prose li + li { margin-top: 0.75rem; }
+
+.prose li {
+  position: relative;
+  padding-left: 2.25rem;
+  font-size: 1.0625rem;
+  line-height: 1.68;
+  color: var(--color-prose);
+}
+
+/* An unordered item is a component of one architecture: it gets a rule,
+   not a bullet. */
+.prose ul > li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.85em;
+  width: 1.25rem;
+  height: 1px;
+  background-color: var(--color-heading);
+}
+.prose ul > li > strong:first-child { color: var(--color-heading); }
+
+/* An ordered item is a step that happens after the one above it, so it
+   keeps its number, counted in mono and aligned on the digit. */
+.prose ol { counter-reset: step; }
+.prose ol > li { counter-increment: step; }
+.prose ol > li::before {
+  content: counter(step, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  top: 0.3em;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--color-accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.prose a {
+  color: var(--color-heading);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+  text-decoration-color: var(--color-ink-a35);
+  transition: text-decoration-color var(--duration-fast) var(--ease-out);
+}
+.prose a:hover { text-decoration-color: var(--color-accent); }
+
+.prose code {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  background-color: var(--surface-sunk);
+  border: 1px solid var(--border-default);
+  padding: 0.08em 0.32em;
+  color: var(--color-heading);
+}
+
+.prose pre {
+  margin-top: 1.75rem;
+  background-color: var(--surface-inverse);
+  color: var(--color-on-inverse-body);
+  padding: 1.25rem 1.375rem;
+  overflow-x: auto;
+  font-size: 0.8125rem;
+  line-height: 1.65;
+}
+.prose pre code {
+  background: none;
+  border: 0;
+  padding: 0;
+  color: inherit;
+  font-size: inherit;
+}
+
+/* Quotes hang off the measure rather than sitting in a tinted box. */
+.prose blockquote {
+  margin-top: 1.75rem;
+  padding-left: 1.375rem;
+  border-left: 2px solid var(--color-accent);
+}
+.prose blockquote p {
+  font-size: 1.125rem;
+  line-height: 1.6;
+  color: var(--color-heading);
+}
+
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--size-body-sm);
+}
+.prose thead th {
+  text-align: left;
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: var(--weight-bold);
+  color: var(--color-heading);
+  border-bottom: 1px solid var(--color-heading);
+  padding: 0 1rem 0.5rem 0;
+}
+.prose tbody td {
+  padding: 0.6875rem 1rem 0.6875rem 0;
+  border-bottom: 1px solid var(--border-default);
+  color: var(--color-prose);
+  vertical-align: top;
+}
+
+/* ─── Figures ─────────────────────────────────────────────
+   Markdown hands us an image and its alt text. The rehype pass in
+   `astro.config.mjs` lifts a lone image out of its paragraph into a
+   <figure> and prints the alt as the <figcaption>, so the picture is
+   described once and read twice -- which is also the only way the
+   caption stays in the content file. */
+.prose figure {
+  margin: 2rem 0;
+  padding: 1.25rem;
+  border: 1px solid var(--border-default);
+  background-color: var(--surface-sunk);
+}
+.prose figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--border-default);
+  background-color: var(--surface-card);
+}
+.prose figcaption {
+  margin-top: 0.875rem;
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  line-height: 1.5;
+  letter-spacing: 0.03em;
+  color: var(--color-text-faint);
+}
+/* An image that is NOT alone in its paragraph is left where the author
+   put it, and still behaves. */
+.prose p > img { display: block; width: 100%; height: auto; margin: 0.5rem 0; }
+
+/* The rule before the sign-off. Not a divider between equals -- it is
+   where the entry stops and the byline speaks, so it is drawn short and
+   in ink rather than run edge to edge. */
+.prose hr {
+  margin-top: 2.5rem;
+  border: 0;
+  border-top: 1px solid var(--color-heading);
+  width: 4rem;
+}
+.prose hr + p {
+  margin-top: 1.25rem;
+  font-size: var(--size-body-sm);
+  line-height: 1.7;
+  color: var(--color-text-muted);
+}

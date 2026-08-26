@@ -91,6 +91,31 @@
   text-align: right;
 }
 
+/* ─── The head, as an entry ───────────────────────────────
+   /blog/[slug] only. An index headline is written to fit 17ch; an
+   entry's title is whatever the author called it, and four of the
+   twenty-two run past seventy characters -- so the entry gets a wider,
+   quieter measure, and the stand carries the filing details the index
+   stand carries counts. */
+.page-head--entry .page-head__title {
+  max-width: 26ch;
+  font-size: clamp(1.75rem, 3.7vw, 2.6rem);
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+}
+
+/* The stand stretches the full height of the head row so its ink rule
+   runs from the crumbs to the foot of the head. The contents rail below
+   picks the same rule up 34px later, and the right-hand column reads as
+   one ruled strip: filing slip, then contents. */
+.page-head--entry .page-head__grid { align-items: stretch; }
+
+.page-head--entry .page-head__lede {
+  font-size: var(--size-body);
+  color: var(--color-text-muted);
+  max-width: 52ch;
+}
+
 /* Only the detail pages fill this slot. The row itself is .btn-row, so
    all this adds is the gap between the copy and the ask. */
 .page-head__actions { margin-top: 1.875rem; }

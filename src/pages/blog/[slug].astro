@@ -1,813 +1,350 @@
 ---
+/**
+ * One journal entry: the filed record, opened.
+ *
+ * `/blog/` states every entry as a dated record in an archive. This is
+ * one of those records at reading size, and it keeps the archive's
+ * furniture rather than inventing its own: the same masthead, the same
+ * plate, the same pencil mark following the reader, the same pairing of
+ * a write-up with the study it produced.
+ *
+ * Four folds:
+ *   1. the head    -- the shared masthead, with the filing slip beside it
+ *   2. the record  -- the plate, the prose, and a sticky contents rail
+ *   3. the pair    -- the study on the other side, when there is one
+ *   4. the close   -- the practice this entry came out of, then the
+ *                     entries either side of it in the run
+ *
+ * The right-hand column reads as one ruled strip -- filing slip, then
+ * contents -- because both draw the same edge in the same place: the
+ * stand's rule runs to the foot of the head, and the rail picks it up
+ * again below. That is why `.page-head--entry` stretches its grid, and
+ * why the plate sits inside the document column rather than running the
+ * full width and cutting the strip in half.
+ *
+ * Nothing on this page is written down twice. The subject, the length,
+ * the byline and the plate come off the entry; the study comes off
+ * `@/data/case-studies`; the practice comes off `@/data/blog-services`;
+ * the contents rail is built from the entry's own h2s.
+ */
 import { getCollection, render } from 'astro:content';
-import Page from '../../layouts/Page.astro';
-import { getBlogIllustration } from '../../data/blog-illustrations';
-import PageHeader from '@/components/ui/PageHeader.astro';
-import Badge from '@/components/ui/Badge.astro';
+import Page from '@/layouts/Page.astro';
+import PageMasthead from '@/components/ui/PageMasthead.astro';
+import ArchivePlate from '@/components/ui/ArchivePlate.astro';
+import EngagementPager from '@/components/sections/EngagementPager.astro';
+import { BLOG_PLATES, plateCaption } from '@/data/blog-plates';
+import { getEntryService } from '@/data/blog-services';
+import { caseStudies } from '@/data/case-studies';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('blog', ({ data }) => data.published);
-  return posts.map(p => ({ params: { slug: p.id }, props: { post: p } }));
+  /* Newest first, the order the archive prints -- the pager walks this
+     same run, so "next" means the row under this one on /blog/. */
+  const posts = (await getCollection('blog', ({ data }) => data.published))
+    .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+  return posts.map((post, i) => ({
+    params: { slug: post.id },
+    props: { post, newer: posts[i - 1], older: posts[i + 1], total: posts.length },
+  }));
 }
 
-const { post } = Astro.props;
-const { Content } = await render(post);
+const { post, newer, older, total } = Astro.props;
+const { Content, headings } = await render(post);
 
-function ordinal(n: number): string {
-  const s = ['th','st','nd','rd'];
-  const v = n % 100;
-  return n + (s[(v-20)%10] || s[v] || s[0]);
+const stamp = (d: Date) =>
+  d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+const shortStamp = (d: Date) =>
+  d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
+
+const author = post.data.author ?? 'CloudAlgo Team';
+const postUrl = `https://cloudalgo.com/blog/${post.id}/`;
+const length = `${post.data.readTime} minute${post.data.readTime === 1 ? '' : 's'}`;
+
+/* The study on the other side, if this entry has one. The blog schema
+   types `relatedCaseStudy` as a bare string, so nothing else checks it. */
+const study = post.data.relatedCaseStudy
+  ? caseStudies.find((c) => c.id === post.data.relatedCaseStudy)
+  : undefined;
+if (post.data.relatedCaseStudy && !study) {
+  throw new Error(
+    `/blog/${post.id}: names case study "${post.data.relatedCaseStudy}", which has no `
+      + 'entry in src/data/case-studies.ts.'
+  );
 }
-const d = post.data.date;
-const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-const formattedDate = `${months[d.getMonth()]} ${ordinal(d.getDate())}, ${d.getFullYear()}`;
 
-const author      = post.data.author ?? 'CloudAlgo Team';
-const authorPhoto = post.data.authorPhoto ?? '';
-const authorDesig = post.data.authorDesignation ?? 'Technical Architect';
-const postUrl     = `https://cloudalgo.com/blog/${post.id}`;
+/* The practice this entry came out of, and the service page it routes to.
+   Resolved against the collection so a map pointing nowhere fails the
+   build rather than shipping a dead link at the foot of the page. */
+const service = getEntryService(post.id, post.data.category);
+const services = await getCollection('services');
+const servicePage = services.find((s) => s.id === service.id);
+if (!servicePage) {
+  throw new Error(
+    `/blog/${post.id}: service "${service.id}" from src/data/blog-services.ts has no `
+      + 'file in src/content/services/.'
+  );
+}
 
-const illustration = getBlogIllustration(post.id);
+/* The head's filing slip. "Pairs with" is only true of the entries that
+   have a client behind them. */
+const facts = [
+  { term: 'Filed', detail: stamp(post.data.date) },
+  { term: 'Subject', detail: post.data.category },
+  { term: 'Length', detail: length },
+  { term: 'Written by', detail: author },
+  ...(study ? [{ term: 'Pairs with', detail: `Study ${study.index}` }] : []),
+];
+
+/* The contents rail. Only h2s: an entry's h3s are steps inside a section,
+   and a rail that lists them stops being a place and becomes the text
+   again. Entries too short to have sections get no rail. */
+const toc = headings.filter((h) => h.depth === 2);
+
+/* The enlarged plate. Sixteen entries have a picture; the six that do not
+   get the integration they are about, drawn -- and the drawing gets a
+   caption, because a diagram nobody can name is decoration. */
+const plate = BLOG_PLATES[post.id];
+const caption = plate ? plateCaption(plate) : '';
+
+const shareText = encodeURIComponent(post.data.title);
+const shareUrl = encodeURIComponent(postUrl);
+
+/* Either end of the run has no neighbour in that direction, and the
+   archive is where a reader who ran out of entries wants to go. */
+const entryLink = (p: typeof post) => ({
+  href: `/blog/${p.id}/`,
+  n: shortStamp(p.data.date),
+  name: p.data.title,
+  shape: `${p.data.category} · ${p.data.readTime} min`,
+});
+const archiveLink = {
+  href: '/blog/',
+  name: 'The whole archive',
+  shape: `${total} entries, newest first`,
+};
 
 const schema = {
-  "@context": "https://schema.org",
-  "@type": "Article",
-  "headline": post.data.title,
-  "description": post.data.excerpt,
-  "datePublished": post.data.date.toISOString(),
-  "author": { "@type": "Organization", "name": "CloudAlgo", "url": "https://cloudalgo.com" },
-  "publisher": {
-    "@type": "Organization",
-    "name": "CloudAlgo",
-    "logo": { "@type": "ImageObject", "url": "https://cloudalgo.com/logo.svg" }
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: post.data.title,
+  description: post.data.excerpt,
+  datePublished: post.data.date.toISOString(),
+  author: { '@type': 'Organization', name: 'CloudAlgo', url: 'https://cloudalgo.com' },
+  publisher: {
+    '@type': 'Organization',
+    name: 'CloudAlgo',
+    logo: { '@type': 'ImageObject', url: 'https://cloudalgo.com/logo.svg' },
   },
-  "url": postUrl,
-  "image": "https://cloudalgo.com/og-default.jpg",
-  "mainEntityOfPage": { "@type": "WebPage", "@id": postUrl }
+  url: postUrl,
+  image: post.data.image
+    ? `https://cloudalgo.com${post.data.image}`
+    : 'https://cloudalgo.com/og-default.jpg',
+  mainEntityOfPage: { '@type': 'WebPage', '@id': postUrl },
 };
 ---
 <Page
-  title={`${post.data.title} — CloudAlgo Blog`}
+  title={`${post.data.title} — CloudAlgo Journal`}
   description={post.data.excerpt}
+  image={post.data.image}
   ogType="article"
   publishedTime={post.data.date.toISOString()}
   author={author}
   section={post.data.category}
   {schema}
 >
-
-  <!-- ── Page header — white, matches site style ── -->
-  <PageHeader
-    style="padding-bottom:2.5rem;"
-    crumbs={[{ label: '\u2190 All articles', href: '/blog' }]}
+  {/* ── 1. The head ─────────────────────────────────────── */}
+  <PageMasthead
+    class="page-head--entry anim-fade-up"
+    crumbs={[
+      { label: 'Home', href: '/' },
+      { label: 'Journal', href: '/blog/' },
+      { label: post.data.category },
+    ]}
+    facts={facts}
   >
-      <Badge tone="solid" context="post-category" style="margin-bottom:1rem;">{post.data.category}</Badge>
-      <h1 class="post-title" style="font-size:clamp(1.875rem,4vw,3rem);line-height:1.15;margin-bottom:1.5rem;">{post.data.title}</h1>
-      <div style="display:flex;align-items:center;gap:0.875rem;flex-wrap:wrap;">
-        {authorPhoto && (
-          <img src={authorPhoto} alt={author}
-               width="44" height="44"
-               style="width:44px;height:44px;border-radius:50%;object-fit:cover;border:1.5px solid var(--border-default);flex-shrink:0;"
-               loading="eager" decoding="async" />
-        )}
-        <div>
-          <div style="font-size:0.9375rem;font-weight:700;color:var(--color-heading);">{author}</div>
-          <div style="font-size:0.8125rem;color:var(--color-text);">
-            {authorDesig} &middot; {formattedDate} &middot; {post.data.readTime} min read
-          </div>
-        </div>
-      </div>
-  </PageHeader>
+    <Fragment slot="title">{post.data.title}</Fragment>
+    <Fragment slot="lede">{post.data.excerpt}</Fragment>
+  </PageMasthead>
 
-  <!-- ── Illustration hero — dark strip ── -->
-  <div class="post-hero-illus">
-    <div class="container">
-      {illustration
-        ? <div class="post-hero-svg" set:html={illustration} />
-        : post.data.image
-          ? <div class="post-hero-img">
-              <img src={post.data.image} alt={post.data.title} loading="eager" fetchpriority="high" decoding="async" />
-            </div>
-          : <div class="post-hero-fallback" aria-hidden="true">
-              <svg viewBox="0 0 480 160" fill="none" style="width:60%;opacity:0.15">
-                <rect x="40" y="20" width="400" height="120" rx="12" stroke="var(--illus-surface)" stroke-width="2"/>
-                <path d="M40 56 L440 56" stroke="var(--illus-surface)" stroke-width="2" opacity="0.5"/>
-                <path d="M80 80 L360 80M80 100 L300 100M80 120 L340 120" stroke="var(--illus-surface)" stroke-width="2" stroke-linecap="round" opacity="0.35"/>
-              </svg>
-            </div>
-      }
-    </div>
-  </div>
+  {/* ── 2. The record ───────────────────────────────────── */}
+  <div class="record">
+    <div class="record__doc">
+      <figure
+        class:list={[
+          'plate-hero',
+          'anim-fade-up',
+          plate ? 'plate-hero--drawn' : 'plate-hero--photo',
+        ]}
+      >
+        <ArchivePlate id={post.id} image={post.data.image} size="hero" alt={post.data.title} />
+        {caption && <figcaption>{caption}</figcaption>}
+      </figure>
 
-  <!-- ── Sticky share bar ── -->
-  <div class="sticky-share" id="sticky-share" role="group" aria-label="Share this article">
-    <span class="sticky-share-label">Share</span>
-    <a href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(postUrl)}&text=${encodeURIComponent(post.data.title)}`}
-       target="_blank" rel="noopener noreferrer" class="sticky-share-btn" title="Share on X" aria-label="Share on X">
-      <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="none" viewBox="0 0 18 18" aria-hidden="true">
-        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-          d="M16.5 3.008c-.75.367-1.485.516-2.25.742-.84-.949-2.087-1.001-3.285-.553C9.767 3.646 8.983 4.742 9 6v.75c-2.434.062-4.601-1.046-6-3 0 0-3.136 5.575 3 8.25-1.404.935-2.804 1.566-4.5 1.5 2.481 1.352 5.185 1.817 7.525 1.138 2.685-.78 4.892-2.793 5.739-5.807.252-.916.378-1.864.373-2.814-.002-.187 1.132-2.08 1.363-3.01z"/>
-      </svg>
-      <span>X / Twitter</span>
-    </a>
-    <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(postUrl)}`}
-       target="_blank" rel="noopener noreferrer" class="sticky-share-btn" title="Share on LinkedIn" aria-label="Share on LinkedIn">
-      <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="none" viewBox="0 0 24 24" aria-hidden="true">
-        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-          d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/>
-        <circle cx="4" cy="4" r="2" stroke="currentColor" stroke-width="1.5"/>
-      </svg>
-      <span>LinkedIn</span>
-    </a>
-  </div>
-
-  <!-- ── Article content ── -->
-  <section class="blog-post-details">
-    <div class="container">
-      <div class="blog-content">
+      <article class="prose anim-fade-up">
         <Content />
+        <div class="record__end">
+          <span>End of entry</span>
+          <span>Filed {stamp(post.data.date)} &middot; {post.data.category}</span>
+        </div>
+      </article>
+    </div>
+
+    <aside class="record__rail" aria-label="About this entry">
+      {toc.length > 0 && (
+        <nav aria-labelledby="rail-contents">
+          <span class="rail__label" id="rail-contents">In this entry</span>
+          <ul class="rail__toc">
+            {toc.map((h, i) => (
+              <li>
+                <a class="rail__link" href={`#${h.slug}`}>
+                  <span class="rail__n">{String(i + 1).padStart(2, '0')}</span>
+                  <span class="rail__t">{h.text}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )}
+
+      <div class="rail__share">
+        <span class="rail__label" id="rail-share">Send it on</span>
+        <p class="rail__links" aria-labelledby="rail-share">
+          <a href={`https://twitter.com/intent/tweet?url=${shareUrl}&text=${shareText}`}
+             target="_blank" rel="noopener noreferrer">X</a>
+          <i aria-hidden="true">&middot;</i>
+          <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}`}
+             target="_blank" rel="noopener noreferrer">LinkedIn</a>
+          <i aria-hidden="true">&middot;</i>
+          {/* An anchor, not a button: without JS it is still the link to
+              this entry, which is what "copy link" was for. */}
+          <a href={postUrl} data-copy-link>Copy link</a>
+        </p>
+      </div>
+    </aside>
+  </div>
+
+  {/* ── 3. The pair ─────────────────────────────────────── */}
+  {study && (
+    <section class="section-press" aria-labelledby="pair-heading">
+      <div class="section-press__head anim-fade-up">
+        <h2 id="pair-heading" class="section-title section-title--xs section-title--tighter section-press__title">
+          The other side of this one.
+        </h2>
+        <span class="section-press__note">Same job, written twice</span>
       </div>
 
+      <p class="section-press__lede anim-fade-up">
+        This entry is how it was built. The study is what it changed, and who for.
+      </p>
+
+      <ul class="pairs anim-fade-up">
+        <li class="pairs__row">
+          <div class="pairs__half">
+            <span class="pairs__key">This entry &mdash; how it was built</span>
+            <span class="pairs__title">{post.data.title}</span>
+            <span class="pairs__foot">
+              {post.data.category} &middot; {length} &middot; {stamp(post.data.date)}
+            </span>
+          </div>
+          <span class="pairs__arrow" aria-hidden="true">&rarr;</span>
+          <div class="pairs__half">
+            <span class="pairs__key">The study &mdash; what it changed</span>
+            <a class="pairs__title" href={`/case-studies/${study.id}/`}>
+              <span class="pairs__n">{study.index}</span>{study.detailTitle}
+            </a>
+            <span class="pairs__foot">
+              {study.ledger.client} &middot; {study.ledger.when} &middot;
+              {' '}{study.metric} {study.ledger.figLabel}
+            </span>
+          </div>
+        </li>
+      </ul>
+    </section>
+  )}
+
+  {/* ── 4. The close ────────────────────────────────────── */}
+  <section class="entry-close anim-fade-up" aria-labelledby="close-heading">
+    <div class="entry-close__inner">
+      <div class="entry-close__body">
+        <p class="entry-close__kicker">{servicePage.data.title}</p>
+        <h2 id="close-heading" class="entry-close__title">This is the work, not the write-up.</h2>
+        <p class="entry-close__note">
+          Every entry in the journal came out of a build. This one was done under
+          {' '}{servicePage.data.shortTitle.toLowerCase()} &mdash; {service.does}.
+        </p>
+        <div class="btn-row entry-close__actions">
+          <a class="btn btn-light" href={`/services/${servicePage.id}/`}>See the service &rarr;</a>
+          <a class="btn btn-ghost-inverse" href="/contact/">Book a consultation</a>
+        </div>
+      </div>
+      <dl class="entry-close__slip">
+        <div><dt>Filed under</dt><dd>{post.data.category}</dd></div>
+        <div><dt>Practice</dt><dd>{servicePage.data.shortTitle}</dd></div>
+        {study && <div><dt>Evidence</dt><dd>Study {study.index}</dd></div>}
+      </dl>
     </div>
   </section>
 
-  <!-- ── Bottom CTA ── -->
-  <section class="blog-bottom-cta">
-    <div class="container">
-      <div class="blog-bottom-cta-inner">
-        <div class="blog-bottom-cta-text">
-          <p class="blog-bottom-cta-label">Work with us</p>
-          <h2 class="blog-bottom-cta-title">Have a similar challenge?</h2>
-          <p class="blog-bottom-cta-sub">Tell us about your integration or data problem — we'll scope it and respond within one working day.</p>
-        </div>
-        <div class="blog-bottom-cta-actions">
-          <a href="/contact" class="blog-bottom-cta-primary">Start a conversation &rarr;</a>
-          {post.data.relatedCaseStudy
-            ? <a href={`/case-studies/${post.data.relatedCaseStudy}`} class="blog-bottom-cta-secondary">See case study &rarr;</a>
-            : <a href="/case-studies" class="blog-bottom-cta-secondary">See case studies</a>
-          }
-        </div>
-      </div>
-    </div>
-  </section>
-
+  <EngagementPager
+    class="anim-fade-up"
+    prev={newer ? entryLink(newer) : archiveLink}
+    next={older ? entryLink(older) : archiveLink}
+  />
 </Page>
 
-<style>
-/* ── Illustration hero strip ────────────────────── */
-.post-hero-illus {
-  background: var(--surface-tint);
-  padding: 3rem 0;
-  border-bottom: 1px solid var(--border-default);
-}
-.post-hero-svg {
-  width: 100%;
-  background: var(--surface-card);
-  border-radius: 12px;
-  border: 1px solid var(--border-default);
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 200px;
-  padding: 2rem;
-}
-.post-hero-svg svg {
-  width: 100%;
-  height: auto;
-  max-height: 280px;
-  display: block;
-  margin: 0 auto;
-}
-.post-hero-fallback {
-  background: var(--surface-card);
-  border-radius: 12px;
-  border: 1px solid var(--border-default);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 200px;
-}
-.post-hero-img {
-  width: 100%;
-  background: var(--surface-card);
-  border-radius: 12px;
-  border: 1px solid var(--border-default);
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 200px;
-}
-.post-hero-img img {
-  width: 100%;
-  height: auto;
-  max-height: 420px;
-  object-fit: cover;
-  display: block;
-}
-/* Designed SVG hero panels carry text and layout — never crop them. */
-.post-hero-img img[src$=".svg"] {
-  max-height: none;
-  object-fit: contain;
-  margin: 0 auto;
-}
-
-/* ── Content section ────────────────────────────── */
-.blog-post-details {
-  background: var(--surface-card);
-  padding-top: 3.5rem;
-  padding-bottom: 5rem;
-  font-size: 1.0625rem;
-}
-
-/* ── Reading layout ──────────────────────────────
-   The page chrome spans the full 1278px container so the article lines
-   up with every other page. Inside it, prose is held to a ~68ch measure
-   while code, tables, figures and CTA blocks break out into a wider
-   band — full-width structure, book-width text. */
-:global(.blog-content) {
-  display: grid;
-  /* ~72 characters at 18px Outfit */
-  grid-template-columns: minmax(0, 1fr) min(40rem, 100%) minmax(0, 1fr);
-}
-:global(.blog-content > *) {
-  grid-column: 2;
-  min-width: 0;
-}
-:global(.blog-content > pre),
-:global(.blog-content > table),
-:global(.blog-content > figure),
-:global(.blog-content > hr),
-:global(.blog-content > .blog-cta-inline),
-:global(.blog-content > .blog-cta-block) {
-  grid-column: 1 / -1;
-  width: min(100%, 920px);
-  justify-self: center;
-}
-
-/* ── Prose typography ───────────────────────────── */
-:global(.blog-post-details .blog-content p) {
-  font-size: 1.125rem;
-  line-height: 1.8;
-  margin-top: 1.5rem;
-  color: var(--color-prose);
-  text-wrap: pretty;
-}
-/* Standfirst — the opening paragraph sets the entry point. */
-:global(.blog-post-details .blog-content > p:first-of-type) {
-  font-size: 1.3125rem;
-  line-height: 1.65;
-  color: var(--color-prose-soft);
-  margin-top: 0;
-  margin-bottom: 0.5rem;
-}
-:global(.blog-post-details .blog-content h2) {
-  font-size: 2rem;
-  line-height: 1.2;
-  margin-top: 3.75rem;
-  margin-bottom: 1rem;
-  scroll-margin-top: 6rem;
-  text-wrap: balance;
-}
-:global(.blog-post-details .blog-content h3) {
-  font-size: 1.3125rem;
-  line-height: 1.3;
-  margin-top: 2.75rem;
-  margin-bottom: 0.625rem;
-  scroll-margin-top: 6rem;
-  text-wrap: balance;
-}
-:global(.blog-post-details .blog-content li) {
-  font-size: 1.125rem;
-  line-height: 1.75;
-  color: var(--color-prose);
-  margin-bottom: 0.625rem;
-}
-:global(.blog-post-details .blog-content li p) {
-  margin-top: 0.5rem;
-}
-
-/* Prose links read as links — underlined, not colour-only. */
-:global(.blog-post-details .blog-content p a),
-:global(.blog-post-details .blog-content li a),
-:global(.blog-post-details .blog-content td a) {
-  color: var(--color-heading);
-  font-weight: 600;
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 3px;
-  text-decoration-color: var(--color-ink-a35);
-  transition: text-decoration-color 0.2s ease, color 0.2s ease;
-}
-:global(.blog-post-details .blog-content p a:hover),
-:global(.blog-post-details .blog-content li a:hover),
-:global(.blog-post-details .blog-content td a:hover) {
-  text-decoration-color: var(--color-heading);
-  text-decoration-thickness: 2px;
-}
-:global(.blog-post-details .blog-content a:focus-visible) {
-  outline: 2px solid var(--focus-ring);
-  outline-offset: 3px;
-  border-radius: 2px;
-}
-
-/* ── Blockquote — a pull-quote, not a shout ─────── */
-:global(.blog-post-details .blog-content blockquote) {
-  font-weight: 500;
-  font-size: 1.1875rem;
-  line-height: 1.7;
-  color: var(--color-prose);
-  margin: 2.75rem 0;
-  padding: 1.5rem 1.75rem;
-  border-radius: 0 8px 8px 0;
-}
-:global(.blog-post-details .blog-content blockquote p) {
-  font-size: inherit;
-  line-height: inherit;
-  color: inherit;
-  margin-top: 0;
-}
-:global(.blog-post-details .blog-content blockquote p + p) {
-  margin-top: 1rem;
-}
-
-/* ── Inline code — monochrome, matches the palette ─ */
-:global(.blog-post-details .blog-content :not(pre) > code) {
-  color: var(--color-heading);
-  background: var(--surface-tint);
-  border: 1px solid var(--border-default);
-  font-size: 0.875em;
-  word-break: break-word;
-}
-
-/* ── Code blocks — line-height 1 was unreadable ──── */
-:global(.blog-post-details .blog-content pre code) {
-  font-size: 0.8125rem;
-  line-height: 1.65;
-  padding: 1rem 1.25rem;
-}
-/* Shiki emits a literal newline between each .line; because .line is a
-   flex box those newlines form their own line boxes and double the
-   spacing. Zero the container's line-height and set it per line. */
-:global(.blog-post-details .blog-content pre.has-line-numbers code) {
-  line-height: 0;
-}
-:global(.blog-post-details .blog-content pre.has-line-numbers .line) {
-  line-height: 1.65;
-  padding: 0;
-}
-:global(.blog-post-details .blog-content pre.has-line-numbers .line::before) {
-  line-height: 1.65;
-  font-size: 0.75rem;
-}
-
-/* ── Section divider ────────────────────────────── */
-:global(.blog-post-details .blog-content hr) {
-  border: 0;
-  border-top: 1px solid var(--border-default);
-  margin: 3.5rem auto;
-  width: min(100%, 920px);
-}
-
-/* ── Article title measure ──────────────────────── */
-.post-title {
-  max-width: 22ch;
-  text-wrap: balance;
-}
-
-@media (max-width: 767px) {
-  :global(.blog-post-details .blog-content p),
-  :global(.blog-post-details .blog-content li) {
-    font-size: 1.0625rem;
-    line-height: 1.75;
-  }
-  :global(.blog-post-details .blog-content > p:first-of-type) { font-size: 1.1875rem; }
-  :global(.blog-post-details .blog-content h2) { font-size: 1.625rem; margin-top: 2.75rem; }
-  :global(.blog-post-details .blog-content h3) { font-size: 1.1875rem; margin-top: 2rem; }
-  :global(.blog-post-details .blog-content blockquote) { padding: 1.25rem 1.25rem; margin: 2rem 0; }
-}
-
-
-/* ── Blog content — tables ─────────────────────── */
-:global(.blog-content table) {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 2rem 0;
-  font-size: 0.9375rem;
-  overflow-x: auto;
-  display: block;
-}
-:global(.blog-content thead) {
-  border-bottom: 2px solid var(--border-strong);
-}
-:global(.blog-content th) {
-  text-align: left;
-  font-weight: 700;
-  font-size: 0.75rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--color-text);
-  padding: 0.625rem 1rem;
-  white-space: nowrap;
-}
-:global(.blog-content td) {
-  padding: 0.75rem 1rem;
-  border-bottom: 1px solid var(--border-default);
-  vertical-align: top;
-  line-height: 1.65;
-}
-:global(.blog-content tr:last-child td) {
-  border-bottom: none;
-}
-:global(.blog-content tbody tr:hover) {
-  background: var(--surface-sunk);
-}
-
-/* ── Sticky share bar ───────────────────────────── */
-.sticky-share {
-  position: fixed;
-  bottom: 1.5rem;
-  left: 50%;
-  transform: translateX(-50%) translateY(calc(100% + 2rem));
-  z-index: 90;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.375rem;
-  padding: 0.4rem 0.75rem;
-  background: var(--color-paper-a18);
-  backdrop-filter: blur(28px) saturate(180%);
-  -webkit-backdrop-filter: blur(28px) saturate(180%);
-  border: 1px solid var(--color-paper-a50);
-  border-radius: 100px;
-  box-shadow: 0 4px 24px var(--color-shadow-a08);
-  white-space: nowrap;
-  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-}
-.sticky-share.is-visible {
-  transform: translateX(-50%) translateY(0);
-}
-
-/* On wide screens the share bar moves out of the reading column into the
-   left gutter, so it never sits on top of the prose. */
-@media (min-width: 1200px) {
-  .sticky-share {
-    top: 50%;
-    bottom: auto;
-    left: max(1.5rem, calc(50% - 639px));
-    flex-direction: column;
-    gap: 0.5rem;
-    padding: 0.75rem 0.5rem;
-    /* The rail is only ~48px wide, so a -100% slide still leaves it
-       peeking on screen — park it well clear of the left edge. */
-    transform: translateY(-50%) translateX(calc(-100% - 6rem));
-    opacity: 0;
-    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease;
-  }
-  .sticky-share.is-visible {
-    transform: translateY(-50%) translateX(0);
-    opacity: 1;
-  }
-  .sticky-share-label {
-    display: none;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .sticky-share { transition: none; }
-}
-.sticky-share-label {
-  font-size: 0.6875rem;
-  font-weight: 700;
-  color: var(--color-shadow-a40);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  padding-right: 0.25rem;
-}
-.sticky-share-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 30px;
-  height: 30px;
-  background: var(--color-ink-a75);
-  color: var(--color-on-inverse);
-  border-radius: 50%;
-  text-decoration: none;
-  transition: background 0.2s;
-}
-.sticky-share-btn:hover { background: var(--surface-inverse); }
-.sticky-share-btn span { display: none; }
-
-/* ── Code copy button ───────────────────────────── */
-:global(.code-copy-btn) {
-  position: absolute;
-  top: 8px;
-  right: 12px;
-  background: var(--color-paper-a08);
-  color: var(--color-on-inverse-muted);
-  border: 1px solid var(--color-paper-a12);
-  border-radius: 6px;
-  padding: 0.2rem 0.625rem;
-  font-size: 0.75rem;
-  font-weight: 600;
-  font-family: inherit;
-  cursor: pointer;
-  transition: background 0.2s, color 0.2s;
-  z-index: 1;
-}
-:global(.code-copy-btn:hover) {
-  background: var(--color-paper-a15);
-  color: var(--color-on-inverse);
-}
-
-/* ── Inline blog CTA block — must be :global so JS-created element gets styles ── */
-:global(.blog-cta-block) {
-  margin: 3rem 0 2rem;
-  background: var(--surface-inverse);
-  border-radius: 16px;
-  padding: 2.5rem 2.75rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 2rem;
-  flex-wrap: wrap;
-}
-:global(.blog-cta-block h3) {
-  font-size: 1.25rem;
-  font-weight: 800;
-  color: var(--color-on-inverse);
-  letter-spacing: -0.02em;
-  margin: 0 0 0.625rem;
-}
-:global(.blog-cta-block p) {
-  font-size: 0.9375rem;
-  color: var(--color-on-inverse-muted);
-  line-height: 1.7;
-  margin: 0;
-  max-width: 480px;
-}
-:global(.blog-cta-block a) {
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  background: var(--surface-card);
-  color: var(--color-heading);
-  font-weight: 700;
-  font-size: 0.9375rem;
-  padding: 0.75rem 1.75rem;
-  border-radius: 100px;
-  text-decoration: none;
-  transition: opacity 0.2s;
-  white-space: nowrap;
-}
-:global(.blog-cta-block a:hover) { opacity: 0.85; }
-@media (max-width: 600px) {
-  :global(.blog-cta-block) { padding: 1.75rem; flex-direction: column; align-items: flex-start; }
-}
-
-/* ── End-of-post hr + p CTA callout ── */
-:global(.blog-cta-inline) {
-  margin: 2.5rem 0 1rem;
-  background: var(--surface-inverse);
-  border-radius: 12px;
-  padding: 2rem 2.25rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-:global(.blog-cta-inline p) {
-  color: var(--color-on-inverse-a75);
-  font-size: 0.9375rem;
-  line-height: 1.75;
-  margin: 0;
-}
-:global(.blog-cta-inline__buttons) {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-}
-:global(.blog-cta-inline__buttons a) {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.625rem 1.5rem;
-  border-radius: 100px;
-  font-size: 0.875rem;
-  font-weight: 700;
-  text-decoration: none;
-  white-space: nowrap;
-  transition: opacity 0.2s;
-}
-:global(.blog-cta-inline__buttons a:first-child) {
-  background: var(--surface-card);
-  color: var(--color-heading);
-}
-:global(.blog-cta-inline__buttons a:not(:first-child)) {
-  background: transparent;
-  color: var(--color-on-inverse);
-  border: 1.5px solid var(--color-paper-a40);
-}
-:global(.blog-cta-inline__buttons a:hover) { opacity: 0.8; }
-
-/* ── Bottom CTA ── */
-.blog-bottom-cta {
-  background: var(--surface-inverse);
-  padding: 4rem 0;
-}
-.blog-bottom-cta-inner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 2.5rem;
-  flex-wrap: wrap;
-}
-.blog-bottom-cta-label {
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--color-on-inverse-a35);
-  margin-bottom: 0.625rem;
-}
-.blog-bottom-cta-title {
-  font-size: clamp(1.625rem, 3vw, 2.25rem);
-  font-weight: 900;
-  letter-spacing: -0.03em;
-  color: var(--color-on-inverse);
-  margin-bottom: 0.625rem;
-  line-height: 1.1;
-}
-.blog-bottom-cta-sub {
-  font-size: 0.9375rem;
-  color: var(--color-on-inverse-faint);
-  line-height: 1.7;
-  max-width: 400px;
-}
-.blog-bottom-cta-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  flex-shrink: 0;
-}
-.blog-bottom-cta-primary {
-  display: inline-flex;
-  align-items: center;
-  background: var(--surface-card);
-  color: var(--color-heading);
-  padding: 0.8rem 1.625rem;
-  border-radius: 100px;
-  font-weight: 700;
-  font-size: 0.9375rem;
-  text-decoration: none;
-  transition: opacity 150ms, transform 150ms;
-  white-space: nowrap;
-}
-.blog-bottom-cta-primary:hover { opacity: 0.88; transform: translateY(-1px); color: var(--color-heading); }
-.blog-bottom-cta-secondary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: transparent;
-  color: var(--color-on-inverse-muted);
-  padding: 0.8rem 1.625rem;
-  border-radius: 100px;
-  border: 1px solid var(--color-paper-a20);
-  font-weight: 600;
-  font-size: 0.9375rem;
-  text-decoration: none;
-  transition: color 150ms, border-color 150ms;
-  white-space: nowrap;
-}
-.blog-bottom-cta-secondary:hover { color: var(--color-on-inverse); border-color: var(--color-paper-a50); }
-@media (max-width: 767px) {
-  .blog-bottom-cta-inner { flex-direction: column; align-items: flex-start; }
-  .blog-bottom-cta-actions { flex-direction: row; flex-wrap: wrap; }
-}
-</style>
-
 <script>
-  // Code block enhancements
-  document.querySelectorAll('.blog-content pre').forEach(pre => {
-    const lines = pre.querySelectorAll('.line');
+  /* The rail follows the reader.
+     One observer over the entry's h2s marks the section currently under
+     the top of the viewport, and the pencil mark moves to its row. The
+     mark is the archive's, kept: on the index it followed the pointer
+     down the run, here it follows the reader down the entry. */
+  const links = [...document.querySelectorAll<HTMLAnchorElement>('.rail__link')];
+  const sections = links
+    .map((a) => document.querySelector(a.hash))
+    .filter((el): el is Element => el instanceof Element);
 
-    // Add dynamic line numbers + shrink empty lines
-    lines.forEach((line, i) => {
-      line.setAttribute('data-ln', String(i + 1));
-      if ((line.textContent ?? '').trim() === '') {
-        (line as HTMLElement).style.cssText = 'height:4px;min-height:0;overflow:hidden;display:block;';
-      }
-    });
-    if (lines.length) pre.classList.add('has-line-numbers');
+  if (sections.length > 0) {
+    const seen = new Set<Element>();
 
-    // Copy button
-    const btn = document.createElement('button');
-    btn.className = 'code-copy-btn';
-    btn.type = 'button';
-    btn.setAttribute('aria-live', 'polite');
-    btn.textContent = 'Copy';
-    btn.addEventListener('click', () => {
-      const code = Array.from(lines).map(l => l.textContent ?? '').join('\n');
-      navigator.clipboard.writeText(code).then(() => {
-        btn.textContent = 'Copied!';
-        setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
+    const mark = () => {
+      /* The last section whose head has passed the reading line, so a
+         long section stays marked all the way down rather than clearing
+         the moment its heading scrolls away. */
+      let current = -1;
+      sections.forEach((el, i) => {
+        if (seen.has(el)) current = i;
       });
-    });
-    pre.appendChild(btn);
-  });
+      links.forEach((a, i) => a.classList.toggle('is-here', i === current));
+    };
 
-  // Sticky share bar — show after 300px, hide near footer
-  const stickyShare = document.getElementById('sticky-share');
-  const footer = document.querySelector('footer');
-  function updateShareBar() {
-    if (!stickyShare) return;
-    const scrolled = window.scrollY > 300;
-    const nearFooter = footer
-      ? window.scrollY + window.innerHeight >= (footer as HTMLElement).offsetTop - 80
-      : false;
-    stickyShare.classList.toggle('is-visible', scrolled && !nearFooter);
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.boundingClientRect.top < 0 || e.isIntersecting) seen.add(e.target);
+          else seen.delete(e.target);
+        }
+        mark();
+      },
+      /* The reading line: a band from just under the fixed header down to
+         the middle of the viewport. */
+      { rootMargin: '-15% 0px -55% 0px', threshold: 0 }
+    );
+    sections.forEach((el) => io.observe(el));
   }
-  window.addEventListener('scroll', updateShareBar, { passive: true });
-  updateShareBar();
 
-  // hr + p → inline CTA callout (end-of-post CTAs)
-  document.querySelectorAll('.blog-content hr').forEach(hr => {
-    const p = hr.nextElementSibling;
-    if (!p || p.tagName !== 'P') return;
-    const links = Array.from(p.querySelectorAll('a')) as HTMLAnchorElement[];
-    if (!links.length) return;
-
-    // Collect text nodes that appear before the first link
-    let bodyText = '';
-    for (const node of Array.from(p.childNodes)) {
-      if (node.nodeType === Node.TEXT_NODE) {
-        bodyText += node.textContent ?? '';
-      } else if ((node as Element).tagName === 'A') {
-        break;
-      }
+  /* Copy link. The anchor is a working link to this entry without JS;
+     with it, the click copies instead and the label says so. */
+  const copy = document.querySelector<HTMLAnchorElement>('[data-copy-link]');
+  copy?.addEventListener('click', async (e) => {
+    if (!navigator.clipboard) return;
+    e.preventDefault();
+    const label = copy.textContent;
+    try {
+      await navigator.clipboard.writeText(copy.href);
+      copy.textContent = 'Copied';
+    } catch {
+      copy.textContent = 'Press Ctrl+C';
     }
-    bodyText = bodyText.replace(/[,\s]+$/, '').trim();
-
-    const wrapper = document.createElement('div');
-    wrapper.className = 'blog-cta-inline';
-
-    // Body paragraph (text before the links)
-    if (bodyText) {
-      const textP = document.createElement('p');
-      textP.textContent = bodyText;
-      wrapper.appendChild(textP);
-    }
-
-    // Buttons row
-    const btns = document.createElement('div');
-    btns.className = 'blog-cta-inline__buttons';
-    links.forEach(a => {
-      const btn = document.createElement('a');
-      btn.href = a.getAttribute('href') ?? '#';
-      btn.textContent = (a.textContent?.trim() ?? 'Learn more') + ' →';
-      btns.appendChild(btn);
-    });
-    wrapper.appendChild(btns);
-
-    hr.parentNode?.insertBefore(wrapper, hr);
-    hr.remove();
-    p.remove();
-  });
-
-  document.querySelectorAll('.blog-content h3').forEach(h3 => {
-    const siblings: Element[] = [];
-    let node = h3.nextElementSibling;
-    let hasLink = false;
-    while (node && node.tagName !== 'H3') {
-      siblings.push(node);
-      if (node.querySelector('a[href*="contact"]')) hasLink = true;
-      node = node.nextElementSibling;
-    }
-    if (!hasLink) return;
-
-    const wrapper = document.createElement('div');
-    wrapper.className = 'blog-cta-block';
-
-    // Left: heading + body text
-    const textDiv = document.createElement('div');
-    textDiv.appendChild(h3.cloneNode(true));
-    siblings.forEach(s => {
-      if (s.tagName !== 'P' || s.querySelector('a[href*="contact"]')) return;
-      textDiv.appendChild(s.cloneNode(true));
-    });
-    wrapper.appendChild(textDiv);
-
-    // Right: primary CTA button with arrow
-    siblings.forEach(s => {
-      const a = s.querySelector('a[href*="contact"]') as HTMLAnchorElement | null;
-      if (a) {
-        const clone = a.cloneNode(true) as HTMLAnchorElement;
-        clone.textContent = (clone.textContent?.trim() || 'Get in touch') + ' →';
-        wrapper.appendChild(clone);
-      }
-    });
-
-    h3.parentNode?.insertBefore(wrapper, h3);
-    h3.remove();
-    siblings.forEach(s => s.remove());
+    window.setTimeout(() => { copy.textContent = label; }, 2000);
   });
 </script>

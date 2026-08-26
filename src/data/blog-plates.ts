@@ -34,3 +34,40 @@ export const BLOG_PLATES: Record<string, Plate> = {
   'heroku-or-aws-how-to-choose': { systems: ['HK', 'AWS'], link: 'versus' },
   'heroku-connect-at-scale-what-goes-wrong': { systems: ['SF', 'PG'], link: 'both' },
 };
+
+/**
+ * What each code stands for, spelled out.
+ *
+ * The plate itself is two or three characters wide, so the boxes are
+ * abbreviated; the caption under the enlarged plate on `/blog/[slug]` is
+ * a sentence, and a sentence says Salesforce.
+ */
+const SYSTEM_NAMES: Record<string, string> = {
+  EMR: 'the EMR',
+  SF: 'Salesforce',
+  HP: 'the health portal',
+  MS: 'MuleSoft',
+  NS: 'NetSuite',
+  HK: 'Heroku',
+  AWS: 'AWS',
+  PG: 'Postgres',
+};
+
+/**
+ * The caption for an enlarged plate: what the drawing shows, in words.
+ *
+ * The SVG is `aria-hidden` and this is its description, so the diagram is
+ * read once rather than announced twice.
+ */
+export function plateCaption(plate: Plate): string {
+  const names = plate.systems.map((s) => SYSTEM_NAMES[s] ?? s);
+  if (plate.link === 'versus') {
+    return `The choice this entry is about — ${names.join(' or ')}`;
+  }
+  const last = names[names.length - 1];
+  const shape =
+    plate.link === 'both'
+      ? `both ways, ${names.slice(0, -1).join(', ')} and ${last}`
+      : `one way, ${names.join(' to ')}`;
+  return `The integration this entry describes — ${shape}`;
+}

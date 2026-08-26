@@ -1,13 +1,17 @@
 ---
 /**
- * One cell of the archive's plate column: the entry's own picture, or
- * the integration it is about, drawn.
+ * The entry's own picture, or the integration it is about, drawn.
+ *
+ * One component, two sizes. `plate` is the 132x88 index mark the /blog/
+ * archive prints in every row; `hero` is the same drawing at reading size,
+ * opening the entry on /blog/[slug]. Both are here so the two never drift:
+ * the pair of systems, the direction of the arrow and the dashed divider
+ * for a comparison are decided once, and only the geometry changes.
  *
  * The drawn plate is inline SVG rather than a file so its ink is
  * `currentColor` and its ground is the plate's own token -- change the
- * theme and the plates follow, which a committed .svg would not. The
- * geometry is fixed at the 132x88 the column renders at, so nothing
- * here scales type against a viewBox.
+ * theme and the plates follow, which a committed .svg would not. Nothing
+ * here scales type against a viewBox: each size states its own numbers.
  *
  * A post with neither an `image` nor an entry in BLOG_PLATES throws at
  * build time. That is deliberate: an empty cell in the middle of the
@@ -20,8 +24,14 @@ interface Props {
   id: string;
   /** The post's `image`, if it has one. */
   image?: string;
+  /** Index mark (default) or the enlarged plate that opens an entry. */
+  size?: 'plate' | 'hero';
+  /** Alt text for a photograph. Empty on the index, where the row's title
+      already names the entry and the picture adds nothing to a reader who
+      cannot see it. */
+  alt?: string;
 }
-const { id, image } = Astro.props;
+const { id, image, size = 'plate', alt = '' } = Astro.props;
 
 const plate = BLOG_PLATES[id];
 if (!image && !plate) {
@@ -31,33 +41,51 @@ if (!image && !plate) {
   );
 }
 
-/** The plate's rendered box. Everything below is in these units. */
-const W = 132;
-const H = 88;
-const MID = H / 2;
-
-/** Two systems get room to breathe; three have to share it. */
-function boxes(systems: string[]) {
-  const w = systems.length === 2 ? 44 : 36;
-  const xs = systems.length === 2 ? [10, 78] : [6, 48, 90];
-  return systems.map((label, i) => ({
-    label,
-    x: xs[i],
-    w,
+/**
+ * Everything about one rendered size, in that size's own units. `gap` is
+ * how far the joining line stops short of each box; `head` and `rise` are
+ * the arrowhead's length and half-height.
+ */
+const GEOMETRY = {
+  plate: {
+    cls: 'run__plate',
+    w: 132, h: 88, boxY: 26, boxH: 36, textY: 49,
+    stroke: 1.5, gap: 2, head: 5, rise: 3.5,
+    two: { w: 44, xs: [10, 78] },
+    three: { w: 36, xs: [6, 48, 90] },
     /** Three characters no longer fit at the two-system size. */
-    size: label.length < 3 ? 15 : 12,
-  }));
+    type: (label: string) => (label.length < 3 ? 15 : 12),
+    divider: { y1: 20, y2: 68, dash: '3 3' },
+  },
+  hero: {
+    cls: 'plate-hero__pic',
+    w: 720, h: 220, boxY: 50, boxH: 120, textY: 127,
+    stroke: 3, gap: 10, head: 14, rise: 9,
+    two: { w: 250, xs: [60, 410] },
+    three: { w: 200, xs: [30, 260, 490] },
+    type: (label: string) => (label.length < 3 ? 52 : 44),
+    divider: { y1: 24, y2: 196, dash: '9 9' },
+  },
+} as const;
+
+const g = GEOMETRY[size];
+const MID = g.boxY + g.boxH / 2;
+
+function boxes(systems: string[]) {
+  const { w, xs } = systems.length === 2 ? g.two : g.three;
+  return systems.map((label, i) => ({ label, x: xs[i], w, size: g.type(label) }));
 }
 
 /** One arrowhead at x, pointing right (dir 1) or left (dir -1). */
-const head = (x: number, dir: number) => `M${x} ${MID} l${-5 * dir} -3.5 v7 z`;
+const head = (x: number, dir: number) =>
+  `M${x} ${MID} l${-g.head * dir} -${g.rise} v${g.rise * 2} z`;
 
 const cells = plate ? boxes(plate.systems) : [];
 
 /** The joins between neighbouring boxes, one per gap. */
 const joins = cells.slice(0, -1).map((cell, i) => {
-  const from = cell.x + cell.w + 2;
-  const to = cells[i + 1].x - 2;
+  const from = cell.x + cell.w + g.gap;
+  const to = cells[i + 1].x - g.gap;
   return { from, to, mid: Math.round((from + to) / 2) };
 });
 
@@ -65,28 +93,31 @@ const joins = cells.slice(0, -1).map((cell, i) => {
 const isVersus = (link: PlateLink | undefined) => link === 'versus';
 ---
 {image ? (
-  <span class="run__plate">
-    <img src={image} alt="" width={W} height={H} loading="lazy" decoding="async" />
+  <span class={g.cls}>
+    <img src={image} alt={alt} width={g.w} height={g.h}
+         loading={size === 'hero' ? 'eager' : 'lazy'}
+         fetchpriority={size === 'hero' ? 'high' : undefined}
+         decoding="async" />
   </span>
 ) : (
-  <span class="run__plate run__plate--drawn">
-    <svg viewBox={`0 0 ${W} ${H}`} aria-hidden="true" focusable="false">
+  <span class:list={[g.cls, `${g.cls}--drawn`]}>
+    <svg viewBox={`0 0 ${g.w} ${g.h}`} aria-hidden="true" focusable="false">
       {cells.map((c) => (
         <>
-          <rect x={c.x} y={26} width={c.w} height={36} fill="none"
-                stroke="currentColor" stroke-width="1.5" />
-          <text x={c.x + c.w / 2} y={49} text-anchor="middle"
+          <rect x={c.x} y={g.boxY} width={c.w} height={g.boxH} fill="none"
+                stroke="currentColor" stroke-width={g.stroke} />
+          <text x={c.x + c.w / 2} y={g.textY} text-anchor="middle"
                 font-size={c.size} font-weight="600" fill="currentColor">{c.label}</text>
         </>
       ))}
       {joins.map((j) => (
         isVersus(plate?.link) ? (
-          <line x1={j.mid} y1={20} x2={j.mid} y2={68}
-                stroke="currentColor" stroke-width="1.5" stroke-dasharray="3 3" />
+          <line x1={j.mid} y1={g.divider.y1} x2={j.mid} y2={g.divider.y2}
+                stroke="currentColor" stroke-width={g.stroke} stroke-dasharray={g.divider.dash} />
         ) : (
           <>
             <line x1={j.from} y1={MID} x2={j.to} y2={MID}
-                  stroke="currentColor" stroke-width="1.5" />
+                  stroke="currentColor" stroke-width={g.stroke} />
             <path d={head(j.to, 1)} fill="currentColor" />
             {plate?.link === 'both' && <path d={head(j.from, -1)} fill="currentColor" />}
           </>

@@ -1,0 +1,166 @@
+/* ─── The record ──────────────────────────────────────────
+   /blog/[slug]: the entry beside its own filing details.
+
+   The archive states every entry as a dated record; this is one of them
+   opened. The columns are the SAME as `.page-head__grid` above it, so
+   the head's stand and this rail share one ruled edge and the right-hand
+   column reads as a single strip running the length of the page --
+   filing slip first, contents under it.
+
+   The rail sticks, because on a five-minute read the useful question is
+   not "what is in here" but "where am I in it".
+   ══════════════════════════════════════════════════ */
+
+.record {
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding: 0 var(--container-pad) 3.5rem;
+  display: grid;
+  grid-template-columns: 1.55fr 1fr;
+  gap: 0 2.75rem;
+  align-items: start;
+}
+
+/* The document column holds the plate and the prose, and it is the
+   measure that sets both -- otherwise the picture hangs 70px past the
+   last word of the paragraph beside it. */
+.record__doc { min-width: 0; max-width: 68ch; }
+.record__doc .prose { max-width: none; }
+
+.record__rail {
+  position: sticky;
+  top: calc(var(--header-h) + 1.75rem);
+  padding-left: var(--hero-rule-gap);
+  border-left: 1px solid var(--color-heading);
+}
+
+.rail__label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-default);
+}
+
+.rail__toc { list-style: none; margin: 0; padding: 0; }
+
+/* Numbered because the rail is an index into ONE document, and the
+   numbers are how you say where you are in it. The headings themselves
+   carry no numerals, so nothing is numbered twice. */
+.rail__link {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.5rem minmax(0, 1fr);
+  gap: 0 0.5rem;
+  padding: 0.5rem 0 0.5rem 0.625rem;
+  margin-left: -0.625rem;
+  border-bottom: 1px solid var(--border-default);
+  text-decoration: none;
+  color: inherit;
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+/* The archive's pencil mark, kept: on the index it followed the pointer
+   down the run, here it follows the reader down the entry. */
+.rail__link::before {
+  content: '';
+  position: absolute;
+  inset-block: 0;
+  left: 0;
+  width: 2px;
+  background-color: var(--color-accent);
+  transform: scaleY(0);
+  transform-origin: center;
+  transition: transform var(--duration-base) var(--ease-out);
+}
+.rail__link:hover::before,
+.rail__link:focus-visible::before,
+.rail__link.is-here::before { transform: scaleY(1); }
+
+.rail__n {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--color-text-faintest);
+  font-variant-numeric: tabular-nums;
+  padding-top: 0.15rem;
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.rail__t {
+  font-size: var(--size-body-sm);
+  line-height: 1.35;
+  color: var(--color-text-muted);
+  text-wrap: pretty;
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.rail__link:hover .rail__t,
+.rail__link:focus-visible .rail__t { color: var(--color-heading); }
+.rail__link.is-here .rail__t { color: var(--color-heading); font-weight: var(--weight-semibold); }
+.rail__link.is-here .rail__n { color: var(--color-accent); }
+
+/* Share, as three words rather than three icon buttons. The floating
+   pill of hand-drawn glyphs this replaces was the only chrome on the
+   page that moved with the reader and said nothing about the entry. */
+.rail__share { margin-top: 1.5rem; }
+.rail__share .rail__label { border-bottom: 0; padding-bottom: 0.375rem; }
+
+.rail__links {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 0.5rem;
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+/* "Copy link" is an anchor rather than a button so it still goes to the
+   entry with JS off; the script only intercepts the click. */
+.rail__links a {
+  color: var(--color-text-muted);
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--ease-out);
+}
+.rail__links a:hover { color: var(--color-heading); }
+.rail__links i { font-style: normal; color: var(--color-text-faintest); }
+
+/* Where the entry stops: the byline's filing line, in the same voice as
+   the stand it opened on. */
+.record__end {
+  margin-top: 2.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-default);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-faint);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rail__link::before {
+    transform: scaleY(1);
+    opacity: 0;
+    transition: opacity var(--duration-fast) linear;
+  }
+  .rail__link:hover::before,
+  .rail__link:focus-visible::before,
+  .rail__link.is-here::before { opacity: 1; }
+}
+
+@media (max-width: 1000px) {
+  .record { grid-template-columns: 1fr; gap: 2.25rem; }
+  /* The rail leads rather than follows once it is no longer beside the
+     text: a contents list under the entry is a table of contents for
+     something you have already read. */
+  .record__rail { position: static; order: -1; }
+  .record__doc { max-width: none; }
+}

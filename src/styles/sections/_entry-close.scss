@@ -1,0 +1,93 @@
+/* ─── /blog/[slug] fold 4: the closing band ───────────────
+   The entry ends with the practice it came out of.
+
+   Deliberately NOT the footer's ask repeated: the footer asks for a call
+   on every page of the site, and the pairing fold above already hands
+   over the client-side evidence with a name, a duration and a figure.
+   This band answers the third question an entry raises -- "who does
+   this, and under what name" -- and routes to the service page.
+
+   The service is read off the entry's category through one map
+   (`src/data/blog-services.ts`), so a new entry is filed, not wired.
+   ══════════════════════════════════════════════════ */
+
+.entry-close {
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding: 0 var(--container-pad);
+}
+
+.entry-close__inner {
+  display: grid;
+  grid-template-columns: 1.55fr 1fr;
+  gap: 0 2.75rem;
+  align-items: start;
+  padding: 2.75rem 2.5rem;
+  background-color: var(--surface-inverse);
+}
+
+.entry-close__kicker {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+/* The global `h2 { color: var(--color-heading) }` beats an inherited
+   colour, so a heading on an ink ground has to set its own. */
+.entry-close__title {
+  margin: 0.75rem 0 0;
+  font-family: var(--font-heading);
+  font-size: clamp(1.5rem, 3vw, 2.1rem);
+  font-weight: var(--weight-bold);
+  line-height: 1.08;
+  letter-spacing: -0.032em;
+  color: var(--color-on-inverse);
+  max-width: 20ch;
+  text-wrap: balance;
+}
+
+.entry-close__note {
+  margin: 1rem 0 0;
+  font-size: var(--size-body);
+  line-height: 1.65;
+  color: var(--color-on-inverse-body);
+  max-width: 58ch;
+  text-wrap: pretty;
+}
+
+.entry-close__actions { margin-top: 1.625rem; }
+
+/* The same filing slip the head opens on, closed. */
+.entry-close__slip { margin: 0; display: grid; gap: 0; }
+
+.entry-close__slip div {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.5625rem 0;
+  border-top: 1px solid var(--color-on-inverse-a20);
+}
+.entry-close__slip div:last-child { border-bottom: 1px solid var(--color-on-inverse-a20); }
+
+.entry-close__slip dt {
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-on-inverse-a50);
+}
+.entry-close__slip dd {
+  margin: 0;
+  font-size: var(--size-body-sm);
+  font-weight: var(--weight-medium);
+  color: var(--color-on-inverse);
+  text-align: right;
+}
+
+@media (max-width: 900px) {
+  .entry-close__inner { grid-template-columns: 1fr; gap: 2rem; padding: 2rem 1.5rem; }
+}

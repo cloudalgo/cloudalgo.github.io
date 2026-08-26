@@ -132,6 +132,14 @@
 @use 'components/run';
 @use 'components/pairs';
 
+// /blog/[slug] — one dated record, opened. `_prose` after `_record`
+// because `.record__doc` sets the measure the prose fills, and
+// `_entry-close` last: it is the fold the entry ends on.
+@use 'components/plate-hero';
+@use 'components/record';
+@use 'components/prose';
+@use 'sections/entry-close';
+
 @use 'base/motion';
 @use 'utilities/grid';
 @use 'components/schedule-widget';

@@ -1,0 +1,49 @@
+/* ─── The plate, enlarged ─────────────────────────────────
+   The archive gives every entry a plate. This is the same plate at
+   reading size, and it opens the RECORD rather than the page: it sits
+   in the document column, so the stand above it and the contents rail
+   beside it stay one unbroken ruled strip.
+
+   Sixteen entries have a picture of their own; the six that do not get
+   the integration they are about, drawn -- the same pair already in
+   `src/data/blog-plates.ts`, which is why the enlarged plate needs no
+   new asset. `ArchivePlate.astro` owns both sizes.
+   ══════════════════════════════════════════════════ */
+
+.plate-hero { margin: 0 0 2.25rem; }
+
+/* The picture itself, whichever kind it is. A block so the rules below
+   can size the svg or the img through it. */
+.plate-hero__pic { display: block; }
+
+/* A drawing is a diagram, so it is mounted: rule, ground, and air
+   between the ground and the ink. The same frame /blog/'s standing
+   entry puts round its one picture. */
+.plate-hero--drawn {
+  padding: 1.5rem;
+  border: 1px solid var(--border-default);
+  background-color: var(--surface-sunk);
+}
+.plate-hero--drawn svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  color: var(--color-heading);
+}
+/* Set here rather than as an attribute so the box labels take the same
+   mono face as the caption under them. */
+.plate-hero--drawn text { font-family: var(--font-mono); }
+
+/* A photograph is evidence, not a diagram: it gets the rule and nothing
+   between the rule and the picture. */
+.plate-hero--photo { border: 1px solid var(--border-default); }
+.plate-hero--photo img { display: block; width: 100%; height: auto; }
+
+.plate-hero figcaption {
+  margin-top: 0.875rem;
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  line-height: 1.5;
+  letter-spacing: 0.04em;
+  color: var(--color-text-faint);
+}
