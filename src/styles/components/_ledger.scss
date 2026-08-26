@@ -1,0 +1,156 @@
+/* One row per case study, and the row IS the argument: what was true,
+   what is true now, and the figure that settles it. The whole row is
+   the link -- there is no "read more", because every cell on it is
+   already about the same study.
+
+   The old state is struck in the accent with a plain `line-through`
+   rather than the crayon sprite: a before-state wraps to two lines and
+   the sprite is one absolutely-positioned box that can only stroke the
+   last of them. See components/_link-draw.scss. */
+
+.ledger { display: block; }
+
+.ledger__row {
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 13rem) minmax(0, 1fr) minmax(0, 9.5rem);
+  gap: 0 2rem;
+  align-items: start;
+  padding: 1.75rem 0;
+  border-top: 1px solid var(--border-default);
+  color: inherit;
+  text-decoration: none;
+  transition: background-color var(--duration-fast) var(--ease-out);
+  /* The claims index below cites these rows by number, so each one is
+     an anchor target and has to clear the sticky header. */
+  scroll-margin-top: calc(var(--header-h) + 1.5rem);
+}
+
+.ledger__row:last-child { border-bottom: 1px solid var(--border-default); }
+
+.ledger__row:hover,
+.ledger__row:focus-visible {
+  background-color: var(--surface-sunk);
+}
+
+.ledger__n {
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  font-weight: var(--weight-bold);
+  color: var(--color-text-faint);
+  padding-top: 0.3rem;
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.ledger__row:hover .ledger__n { color: var(--color-accent); }
+
+.ledger__who { display: block; padding-top: 0.1rem; }
+
+.ledger__client {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: var(--size-body);
+  font-weight: var(--weight-bold);
+  color: var(--color-heading);
+  line-height: 1.25;
+  text-wrap: balance;
+}
+
+.ledger__tags {
+  display: block;
+  margin-top: 0.35rem;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.04em;
+  color: var(--color-text-faint);
+}
+
+/* The duration, because the lede promises how long each one took.
+   Quieter than the tag line above it and set on its own row so the two
+   never read as one run-on string of metadata. */
+.ledger__when {
+  display: block;
+  margin-top: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+}
+
+.ledger__states { display: grid; gap: 0.55rem; }
+
+.ledger__state {
+  display: grid;
+  grid-template-columns: 2.75rem minmax(0, 1fr);
+  gap: 0 0.75rem;
+  font-size: var(--size-body-sm);
+  line-height: 1.55;
+  max-width: 54ch;
+}
+
+.ledger__key {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-text-faintest);
+  padding-top: 0.32rem;
+}
+
+/* The strike. In the accent, thick enough to read as a deliberate mark
+   rather than a rendering artefact, and skip-ink off so it crosses the
+   descenders instead of dodging them. */
+.ledger__state--was s {
+  color: var(--color-text-muted);
+  text-decoration: line-through;
+  text-decoration-color: var(--color-accent);
+  text-decoration-thickness: 2px;
+  text-decoration-skip-ink: none;
+}
+
+.ledger__state--now { color: var(--color-text); }
+.ledger__state--now .ledger__key { color: var(--color-accent); }
+
+.ledger__metric {
+  display: block;
+  text-align: right;
+  padding-top: 0.1rem;
+}
+
+.ledger__figure {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: 2.25rem;
+  font-weight: var(--weight-extrabold);
+  letter-spacing: -0.04em;
+  line-height: 1;
+  color: var(--color-heading);
+  font-variant-numeric: tabular-nums;
+}
+
+.ledger__figlabel {
+  display: block;
+  margin-top: 0.45rem;
+  font-size: 0.6875rem;
+  line-height: 1.35;
+  color: var(--color-text-faint);
+}
+
+/* The states cell is the widest thing on the row and the first to run
+   out of room; it drops to its own full-width line before the metric
+   gives up its column. */
+@media (max-width: 1000px) {
+  .ledger__row {
+    grid-template-columns: 2.5rem minmax(0, 1fr) minmax(0, 8rem);
+    gap: 0.9rem 1.25rem;
+  }
+  .ledger__states { grid-column: 2 / -1; }
+}
+
+@media (max-width: 620px) {
+  .ledger__row { grid-template-columns: 2.5rem minmax(0, 1fr); padding: 1.5rem 0; }
+  .ledger__states { order: 2; }
+  .ledger__metric { grid-column: 2; text-align: left; order: 3; }
+  .ledger__figure { font-size: 1.875rem; }
+  .ledger__state { grid-template-columns: 2.5rem minmax(0, 1fr); }
+}

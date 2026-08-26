@@ -1,0 +1,65 @@
+/* The ledger read the other way round: a claim first, then the studies
+   that carry it. For the reader who arrived wanting one specific thing
+   proved rather than five stories told.
+
+   Every claim cites its rows by number and every chip is a real anchor
+   into the ledger above -- a claim nothing links back to is an
+   assertion, and this page's whole argument is that it does not make
+   those. */
+
+.claims { list-style: none; margin: 0; padding: 0; }
+
+.claims__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1.05rem 0;
+  border-top: 1px solid var(--border-default);
+}
+
+.claims__row:last-child { border-bottom: 1px solid var(--border-default); }
+
+.claims__text {
+  margin: 0;
+  font-size: var(--size-body);
+  line-height: 1.5;
+  color: var(--color-heading);
+  max-width: 62ch;
+  text-wrap: pretty;
+}
+
+.claims__cites { display: flex; gap: 0.375rem; flex-shrink: 0; }
+
+.claims__cite {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: var(--weight-bold);
+  line-height: 1;
+  padding: 0.375rem 0.5rem;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-muted);
+  text-decoration: none;
+  transition: border-color var(--duration-fast) var(--ease-out),
+              color var(--duration-fast) var(--ease-out);
+}
+
+.claims__cite:hover {
+  border-color: var(--color-heading);
+  color: var(--color-heading);
+}
+
+.claims__foot {
+  margin: 1.5rem 0 0;
+  font-size: var(--size-body-sm);
+  line-height: 1.6;
+  color: var(--color-text-muted);
+  max-width: 70ch;
+}
+
+.claims__out { color: var(--color-heading); font-weight: var(--weight-bold); }
+
+@media (max-width: 620px) {
+  .claims__row { flex-direction: column; align-items: flex-start; gap: 0.7rem; }
+}

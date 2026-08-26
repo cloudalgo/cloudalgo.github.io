@@ -82,6 +82,14 @@
 @use 'components/pager';
 @use 'sections/manifest';
 
+// ── The case-studies index ────────────────────────────────────
+// A study is a CHANGE OF STATE, so its two devices both encode one:
+// the ledger states each study as was/now, and the claims index cites
+// the rows that carry each claim. `_claims` after `_ledger` because the
+// chips anchor into the rows and the pair reads in that order.
+@use 'components/ledger';
+@use 'components/claims';
+
 @use 'sections/services-press';
 @use 'sections/band-press';
 @use 'sections/cases-press';
