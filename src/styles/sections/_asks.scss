@@ -1,0 +1,70 @@
+// /contact/ fold 3 -- the five questions the call opens with.
+//
+// Ruled question/why rows. Deliberately unnumbered: these are a set,
+// not a sequence -- they get asked in whatever order the answers
+// arrive -- and 01/02/03 markers on a set assert an order that is not
+// there. `_track.scss` and `_build.scss` number their rows because
+// those genuinely are sequences.
+
+.asks {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-bottom: 1px solid var(--border-default);
+}
+
+.asks__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+  gap: 0.5rem 3rem;
+  align-items: baseline;
+  padding: 1.15rem 0;
+  border-top: 1px solid var(--border-default);
+}
+
+.asks__q {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: var(--weight-semibold);
+  letter-spacing: -0.02em;
+  line-height: 1.28;
+  color: var(--color-heading);
+  text-wrap: pretty;
+}
+
+.asks__why {
+  margin: 0;
+  font-size: var(--size-body-sm);
+  line-height: 1.6;
+  color: var(--color-text);
+}
+
+.asks__why span {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-faint);
+  margin-bottom: 0.25rem;
+}
+
+.asks__foot {
+  margin: 1.5rem 0 0;
+  font-size: var(--size-body-sm);
+  line-height: 1.65;
+  color: var(--color-text);
+  max-width: 76ch;
+}
+.asks__foot a {
+  color: var(--color-heading);
+  font-weight: var(--weight-medium);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+@media (max-width: 767px) {
+  .asks__row { grid-template-columns: minmax(0, 1fr); gap: 0.6rem; }
+  .asks__q { font-size: 1.125rem; }
+}

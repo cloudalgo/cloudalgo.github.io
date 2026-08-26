@@ -115,6 +115,13 @@
 @use 'sections/bench';
 @use 'sections/wontdo';
 @use 'sections/tenure';
+
+// /contact/ — a handover: where the message goes, what comes back,
+// what the call opens with. `components/forms` last of the four so the
+// form's own rules win inside `.desk`.
+@use 'sections/desk';
+@use 'sections/reply';
+@use 'sections/asks';
 @use 'components/forms';
 
 @use 'base/motion';

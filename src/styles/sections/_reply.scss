@@ -1,0 +1,99 @@
+// /contact/ fold 2 -- the first reply, as an exhibit.
+//
+// The claim this fold answers is "what happens after I press the
+// button", and the honest way to answer it is to show the thing. So
+// the reply is framed as a specimen: bounded in ink, headed like a
+// message, and captioned from the margin beside it rather than from
+// inside the frame -- what a reply never contains is a note ABOUT the
+// specimen, not a line of it.
+//
+// The first idea for this fold was three ruled columns headed by a
+// time, which is `_windows.scss` from /services/ wearing new copy.
+// This shape shares nothing with it.
+
+.reply__spread {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 17.5rem);
+  gap: 3rem;
+  align-items: start;
+}
+
+.reply {
+  margin: 0;
+  background: var(--surface-sunk);
+  border: 1px solid var(--color-heading);
+}
+
+.reply__head {
+  display: grid;
+  grid-template-columns: 4.75rem minmax(0, 1fr);
+  gap: 0.3rem 1rem;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--color-heading);
+}
+
+.reply__key {
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.reply__val {
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.02em;
+  color: var(--color-heading);
+}
+
+.reply__body {
+  list-style: none;
+  margin: 0;
+  padding: 0.5rem 1.5rem;
+}
+
+.reply__body li {
+  padding: 0.9rem 0;
+  font-size: var(--size-body);
+  line-height: 1.62;
+  color: var(--color-prose);
+  max-width: 62ch;
+}
+.reply__body li + li { border-top: 1px solid var(--border-default); }
+.reply__body b { font-weight: var(--weight-semibold); color: var(--color-heading); }
+
+.reply__note {
+  margin: 0;
+  padding: 0.9rem 0;
+  border-top: 1px solid var(--border-default);
+  font-size: var(--size-body-sm);
+  line-height: 1.6;
+  color: var(--color-text);
+}
+.reply__note:first-child { border-top-color: var(--color-heading); }
+
+.reply__note span {
+  display: block;
+  margin-bottom: 0.3rem;
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-faint);
+}
+
+@media (max-width: 1080px) {
+  .reply__spread { grid-template-columns: minmax(0, 1fr); gap: 1.75rem; }
+  .reply,
+  .reply__margin { max-width: 48rem; }
+  .reply__head { grid-template-columns: 4.5rem minmax(0, 1fr); }
+}
+
+@media (max-width: 767px) {
+  // Stacked: at 85% root the two-column head leaves the values about
+  // 14 characters of width and every one of them wraps.
+  .reply__head { grid-template-columns: minmax(0, 1fr); gap: 0.15rem; padding: 0.875rem 1.125rem; }
+  .reply__key { margin-top: 0.4rem; }
+  .reply__body { padding-inline: 1.125rem; }
+}

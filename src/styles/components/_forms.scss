@@ -1,22 +1,149 @@
-/* ─── Contact ─────────────────────────────────────────── */
-.contact-form { padding: 4rem 0; }
+// The contact form.
+//
+// No card. `--surface-page` and `--surface-card` are both #FFFFFF, so
+// the white card this used to sit in was a border pretending to be
+// elevation. The fields are recessed into `--surface-sunk` instead --
+// the one rung the system has for a sunk surface -- and lift to the
+// page white on focus, so the field being typed into is the brightest
+// thing on the page.
+//
+// `.form-label`, `.form-control` and `.error-line` are the selectors
+// the React island shipped with. They are kept as aliases rather than
+// renamed in one go: the island owns its own markup and the two can
+// move independently.
 
+.ca-form {
+  margin-top: 2.5rem;
+  display: grid;
+  gap: 1.25rem;
+  max-width: 40rem;
+}
+
+.ca-form__pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+
+.ca-field { display: block; }
+
+.ca-field__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.ca-field__label,
+.form-label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  font-weight: var(--weight-medium);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-heading);
+  margin-bottom: 0.5rem;
+}
+
+.ca-field__hint {
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.04em;
+  color: var(--color-text-faint);
+  margin-bottom: 0.5rem;
+}
+
+.ca-field__input,
 .form-control {
   display: block;
   width: 100%;
-  padding: 0.75rem 1rem;
-  border: 1.5px solid var(--input-border);
-  border-radius: var(--input-radius);
-  font-size: 1rem;
+  padding: 0.75rem 0.9rem;
   font-family: var(--font-body);
-  transition: border-color 0.2s;
-  background: var(--input-bg);
+  font-size: var(--size-body);
+  line-height: 1.5;
   color: var(--color-heading);
+  background: var(--surface-sunk);
+  border: 1px solid var(--input-border);
+  border-radius: var(--input-radius);
+  transition: border-color var(--duration-fast) var(--ease-out),
+              background-color var(--duration-fast) var(--ease-out);
 }
-.form-control:focus { border-color: var(--input-border-focus); }
-.form-control:focus:not(:focus-visible) { outline: none; }
-textarea.form-control { resize: vertical; min-height: 140px; }
-.form-group { margin-bottom: 0; }
-.error-line { color: var(--input-message-invalid); font-size: 0.8rem; display: block; margin-top: 0.25rem; }
-.form-label { font-weight: 600; margin-bottom: 0.35rem; display: block; font-size: 0.9375rem; color: var(--color-heading); }
-.text-danger { color: var(--color-danger); font-size: 0.8rem; }
+
+.ca-field__input::placeholder,
+.form-control::placeholder { color: var(--color-text-faintest); }
+
+.ca-field__input:hover,
+.form-control:hover { border-color: var(--color-text-faint); }
+
+.ca-field__input:focus,
+.form-control:focus {
+  background: var(--surface-page);
+  border-color: var(--input-border-focus);
+}
+
+.ca-field__input--area,
+textarea.form-control { resize: vertical; min-height: 9.5rem; }
+
+.ca-field__input[aria-invalid='true'],
+.form-control[aria-invalid='true'] { border-color: var(--input-border-invalid); }
+
+.error-line {
+  display: block;
+  margin-top: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.03em;
+  color: var(--input-message-invalid);
+}
+
+.ca-form__foot {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem 1.5rem;
+  margin-top: 0.5rem;
+}
+
+.ca-form__note {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  line-height: 1.55;
+  letter-spacing: 0.02em;
+  color: var(--color-text-faint);
+  max-width: 30ch;
+}
+.ca-form__note a { color: var(--color-text-muted); text-decoration: underline; text-underline-offset: 2px; }
+.ca-form__note a:hover { color: var(--color-heading); }
+
+// The state the form returns to once HubSpot has it. Ember on the top
+// edge, the same way the slip marks the message arriving somewhere.
+.ca-form__sent {
+  margin-top: 2.5rem;
+  max-width: 40rem;
+  border-top: 3px solid var(--color-accent);
+  border-inline: 1px solid var(--color-heading);
+  border-bottom: 1px solid var(--color-heading);
+  background: var(--surface-sunk);
+  padding: 1.75rem 1.75rem 1.5rem;
+}
+.ca-form__sent h2 {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: var(--display-2xs);
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+}
+.ca-form__sent p { margin: 0.75rem 0 0; color: var(--color-text); max-width: 46ch; }
+
+@media (max-width: 767px) {
+  .ca-form__pair { grid-template-columns: minmax(0, 1fr); }
+  // The hint becomes a second line under the label rather than a
+  // column beside it: side by side at 85% root, both wrap to two
+  // lines and neither reads.
+  .ca-field__row { display: block; }
+  .ca-field__row .ca-field__label { margin-bottom: 0.25rem; }
+  .ca-field__hint { display: block; margin-bottom: 0.5rem; }
+  .ca-form__note { max-width: none; }
+}

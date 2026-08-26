@@ -16,16 +16,22 @@ export interface Props {
   author?: string;
   section?: string;
   schema?: object | object[];
+  /**
+   * Renders the footer's consulting CTA. /contact/ passes false: the
+   * CTA's button points at /contact/, so on that page it is a button
+   * that reloads the page. The colophon is unaffected.
+   */
+  cta?: boolean;
 }
 
-const props = Astro.props;
+const { cta = true, ...baseProps } = Astro.props;
 ---
-<Base {...props}>
+<Base {...baseProps}>
   <a href="#main-content" class="skip-link">Skip to main content</a>
   <Header />
   <main id="main-content" tabindex="-1">
     <slot />
   </main>
-  <Footer />
+  <Footer cta={cta} />
   <ScheduleWidget client:only="react" />
 </Base>

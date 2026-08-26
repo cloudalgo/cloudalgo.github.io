@@ -1,0 +1,171 @@
+// /contact/ fold 1 -- the desk, and the slip beside it.
+//
+// This is the one page where the reader arrives with intent already
+// formed, so there is no masthead: the h1 and the form ARE the top of
+// the page. Every other page opens on `PageMasthead`; this one would
+// only be making somebody scroll past a stand of facts to reach the
+// field they came to type in.
+//
+// The slip is the counterpart -- where the message lands, who reads it,
+// how long it takes. It sticks so those facts stay beside the form
+// while it is being filled in, and collapses under the form below
+// 1080px where there is no margin left to sit in.
+
+.desk__inner {
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding: calc(var(--header-h) + 1.75rem) var(--container-pad) 3.25rem;
+}
+
+.desk__crumbs {
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-faint);
+  margin-bottom: 1.5rem;
+}
+.desk__crumbs ol { list-style: none; margin: 0; padding: 0; display: flex; gap: 0.5rem; }
+.desk__crumbs a { color: var(--color-text-faint); }
+.desk__crumbs a:hover { color: var(--color-heading); }
+.desk__crumbs [aria-current='page'] { color: var(--color-heading); }
+
+.desk__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 21rem);
+  gap: 4rem;
+  align-items: start;
+}
+
+.desk__title {
+  font-family: var(--font-heading);
+  font-weight: var(--weight-bold);
+  font-size: clamp(2rem, 4.6vw, 3.15rem);
+  line-height: 1.03;
+  letter-spacing: -0.038em;
+  margin: 0;
+  max-width: 18ch;
+  text-wrap: balance;
+}
+
+.desk__lede {
+  margin: 1.25rem 0 0;
+  font-size: var(--size-body-lg);
+  line-height: 1.62;
+  color: var(--color-text);
+  max-width: 54ch;
+}
+
+// ── The delivery slip ──────────────────────────────────────
+// Ember on the top edge only. On this page it means "the thing that
+// ends" the way it does on a schedule bar -- here, the message
+// arriving somewhere. It is an edge, never text: the accent measures
+// 2.80:1 as small copy on paper and cannot carry a word.
+.slip {
+  position: sticky;
+  top: calc(var(--header-h) + 1.5rem);
+  background: var(--surface-sunk);
+  border-top: 3px solid var(--color-accent);
+  border-inline: 1px solid var(--border-default);
+  border-bottom: 1px solid var(--border-default);
+  padding: 1.25rem 1.25rem 1rem;
+}
+
+.slip__title {
+  margin: 0 0 0.25rem;
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  font-weight: var(--weight-medium);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-heading);
+}
+
+.slip__rows { margin: 0; }
+
+// Dotted, where `page-head__stand` rules its rows solid -- the two are
+// the same shape and this keeps them from reading as the same device.
+.slip__rows > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.6rem 0;
+  border-bottom: 1px dotted var(--paper-300);
+}
+
+.slip__rows dt {
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+.slip__rows dd {
+  margin: 0;
+  font-size: var(--size-body-sm);
+  font-weight: var(--weight-medium);
+  line-height: 1.45;
+  color: var(--color-heading);
+  text-align: right;
+}
+
+.slip__rows i {
+  font-style: normal;
+  color: var(--color-text-faint);
+  padding: 0 0.35rem;
+}
+
+.slip__direct { padding-top: 0.5rem; }
+
+.slip__line {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0.4rem 0;
+  font-size: var(--size-body-sm);
+  font-weight: var(--weight-medium);
+  color: var(--color-heading);
+  text-decoration: none;
+}
+
+.slip__line span {
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  min-width: 3.25rem;
+}
+
+a.slip__line:hover { text-decoration: underline; text-underline-offset: 3px; }
+.slip__line--flat { color: var(--color-text); font-weight: var(--weight-regular); }
+
+.slip__seal {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  margin-top: 0.75rem;
+  padding-top: 0.875rem;
+  border-top: 1px solid var(--border-default);
+}
+.slip__seal img { width: 3.75rem; height: auto; display: block; }
+.slip__seal-text {
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  line-height: 1.5;
+  letter-spacing: 0.03em;
+  color: var(--color-text-muted);
+}
+.slip__seal-text i { display: block; font-style: normal; color: var(--color-text-faint); }
+
+@media (max-width: 1080px) {
+  .desk__grid { grid-template-columns: minmax(0, 1fr); gap: 2.75rem; }
+  .slip { position: static; max-width: 32rem; }
+}
+
+@media (max-width: 767px) {
+  .desk__inner { padding-bottom: 2.5rem; }
+}

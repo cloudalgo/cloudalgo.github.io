@@ -1,452 +1,164 @@
 ---
-import Page from '../layouts/Page.astro';
-import ContactForm from '../components/ui/ContactForm.tsx';
-import Breadcrumb from '@/components/ui/Breadcrumb.astro';
+/**
+ * /contact/ -- a handover.
+ *
+ * A product is an object and gets a spec sheet; an engagement is a
+ * period of time and gets a schedule; a case study is a change of
+ * state and gets a ledger. A contact page is a message leaving one
+ * desk and landing on another, so all three folds answer a part of
+ * that: where it goes, what comes back, and what the call opens with.
+ *
+ * Two things here are deliberate departures from every other page:
+ *
+ *   1. No `PageMasthead`. This is the one page whose reader arrives
+ *      with intent already formed. Making them scroll past a stand of
+ *      facts to reach the field they came to type in is a tax, so the
+ *      h1 and the form are the top of the page and the facts sit in
+ *      the slip beside it.
+ *
+ *   2. `cta={false}`. The footer CTA's button is "Book a consultation"
+ *      pointing at /contact/, which on /contact/ is a button that
+ *      reloads the page. The colophon still renders.
+ */
+import Page from '@/layouts/Page.astro';
+import ContactForm from '@/components/ui/ContactForm.tsx';
 ---
 <Page
-  title="Contact CloudAlgo — Salesforce & Heroku Consulting"
-  description="Get in touch with CloudAlgo's certified Salesforce consultants. Tell us about your project and we'll respond within one business day. Free initial consultation available."
+  cta={false}
+  title="Contact CloudAlgo — Salesforce, MuleSoft and Heroku consulting"
+  description="Tell us what your org is doing wrong. One of the two people who would do the work answers in writing within one working day. Half an hour on a call, no deck."
 >
 
-  <!-- ── Hero header: text left, illustration right ── -->
-  <div class="contact-hero">
-    <div class="container">
-      <div class="contact-hero-inner">
+  <!-- ── Fold 1: the desk ──────────────────────────────────── -->
+  <section class="desk" aria-labelledby="desk-heading">
+    <div class="desk__inner">
+      <nav class="desk__crumbs" aria-label="Breadcrumb">
+        <ol>
+          <li><a href="/">Home</a></li>
+          <li aria-hidden="true">/</li>
+          <li><span aria-current="page">Contact</span></li>
+        </ol>
+      </nav>
 
-        <!-- Left: heading + meta -->
-        <div class="contact-hero-text">
-          <Breadcrumb items={[{ label: 'Home', href: '/' }, { label: 'Contact' }]} />
-          <h1 class="contact-hero-title">Start a<br/>conversation.</h1>
-          <p class="contact-hero-sub">
-            Tell us about your Salesforce project, integration challenge,
-            or managed service need. We'll scope it and get back to you
-            within one business day.
+      <div class="desk__grid">
+        {/* The entrance animation stays on this Astro wrapper. The
+            island is inside it, and `anim-fade-up` on a node React
+            owns is a hydration race -- see StatsBar.astro. */}
+        <div class="desk__col anim-fade-up">
+          <h1 id="desk-heading" class="desk__title">Start with the sentence you are <span class="mark mark--draw">tired of saying</span>.</h1>
+          <p class="desk__lede">
+            &ldquo;We re-key that by hand.&rdquo; &ldquo;The data is a day old.&rdquo; &ldquo;That system
+            has no API.&rdquo; Write yours below. It reaches Sandeep and Vikash, the two people who would
+            do the work, and one of them answers in writing within one working day.
           </p>
-          <a href="mailto:sales@cloudalgo.com" class="contact-email-link">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-              <rect x="1" y="3" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.5"/>
-              <path d="M1 5.5 L8 9.5 L15 5.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-            </svg>
-            sales@cloudalgo.com
-          </a>
-        </div>
 
-        <!-- Right: communication illustration -->
-        <div class="contact-hero-illus" aria-hidden="true">
-          <svg viewBox="0 0 440 340" fill="none" xmlns="http://www.w3.org/2000/svg" class="contact-svg">
-
-            <!-- Client box (top-left) -->
-            <rect x="20" y="30" width="140" height="100" rx="10" stroke="var(--illus-ink)" stroke-width="2" opacity="0.8"/>
-            <text x="90" y="72" text-anchor="middle" font-family="var(--illus-font)" font-size="12" font-weight="700" fill="var(--illus-ink)" opacity="0.75">Your Company</text>
-            <!-- Person icon inside -->
-            <circle cx="90" cy="95" r="10" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.5"/>
-            <path d="M74 118 C74 108 82 102 90 102 C98 102 106 108 106 118" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0" fill="none"/>
-
-            <!-- CloudAlgo box (bottom-right) -->
-            <rect x="280" y="210" width="140" height="100" rx="10" stroke="var(--illus-ink)" stroke-width="2" fill="var(--illus-ink)" opacity="0.9"/>
-            <text x="350" y="252" text-anchor="middle" font-family="var(--illus-font)" font-size="12" font-weight="700" fill="var(--illus-surface)">CloudAlgo</text>
-            <text x="350" y="270" text-anchor="middle" font-family="var(--illus-font)" font-size="9" fill="var(--color-paper-a60)">Salesforce Experts</text>
-            <!-- Checkmark -->
-            <path d="M340 288 L347 296 L362 280" stroke="var(--color-paper-a70)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-
-            <!-- Message path: client → CloudAlgo -->
-            <path d="M160 80 C220 80 220 260 280 260"
-                  stroke="var(--illus-ink)" stroke-width="1.5" stroke-dasharray="8 5" opacity="0.3"/>
-
-            <!-- Message envelope 1 (travelling down) -->
-            <g transform="translate(175, 130)">
-              <rect x="-18" y="-12" width="36" height="24" rx="4" stroke="var(--illus-ink)" stroke-width="1.5" fill="var(--illus-surface)" opacity="0.9"/>
-              <path d="M-18 -12 L0 2 L18 -12" stroke="var(--illus-ink)" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
-            </g>
-
-            <!-- Message envelope 2 (travelling) -->
-            <g transform="translate(220, 185)">
-              <rect x="-14" y="-10" width="28" height="20" rx="3" stroke="var(--illus-ink)" stroke-width="1.5" fill="var(--illus-surface)" opacity="0.85"/>
-              <path d="M-14 -10 L0 2 L14 -10" stroke="var(--illus-ink)" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
-            </g>
-
-            <!-- Reply path: CloudAlgo → client -->
-            <path d="M280 228 C240 228 200 90 160 90"
-                  stroke="var(--illus-ink)" stroke-width="1.5" stroke-dasharray="5 6" opacity="0.18"/>
-
-            <!-- Reply checkmark bubble -->
-            <g transform="translate(240, 150)">
-              <circle r="14" stroke="var(--illus-ink)" stroke-width="1.5" fill="var(--illus-surface)" opacity="0.8"/>
-              <path d="M-5 0 L-1 4 L7 -4" stroke="var(--illus-ink)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.7"/>
-            </g>
-
-            <!-- Floating time badge -->
-            <rect x="290" y="60" width="130" height="40" rx="20" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.6" fill="var(--illus-surface)"/>
-            <text x="355" y="78" text-anchor="middle" font-family="var(--illus-font)" font-size="10" font-weight="700" fill="var(--illus-ink)" opacity="0.8">⏱ 1 business day</text>
-            <text x="355" y="91" text-anchor="middle" font-family="var(--illus-font)" font-size="9" fill="var(--illus-ink-soft)" opacity="0.7">guaranteed response</text>
-
-            <!-- Floating project tag -->
-            <rect x="20" y="170" width="120" height="36" rx="8" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.55" fill="var(--illus-surface)"/>
-            <text x="80" y="185" text-anchor="middle" font-family="var(--illus-font)" font-size="9" font-weight="700" fill="var(--illus-ink)" opacity="0.7">Salesforce Project</text>
-            <text x="80" y="198" text-anchor="middle" font-family="var(--illus-font)" font-size="8" fill="var(--illus-ink-soft)" opacity="0.6">Implementation · Integration</text>
-
-            <!-- Three dots / typing indicator (bottom left) -->
-            <rect x="20" y="240" width="80" height="32" rx="16" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.4" fill="var(--illus-surface)"/>
-            <circle cx="42" cy="256" r="3.5" fill="var(--illus-ink)" opacity="0.35"/>
-            <circle cx="55" cy="256" r="3.5" fill="var(--illus-ink)" opacity="0.5" class="contact-dot-b"/>
-            <circle cx="68" cy="256" r="3.5" fill="var(--illus-ink)" opacity="0.35" class="contact-dot-c"/>
-
-            <!-- Decorative circles -->
-            <circle cx="420" cy="170" r="6" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.2"/>
-            <circle cx="20" cy="310" r="4" fill="var(--illus-ink)" opacity="0.12"/>
-            <circle cx="420" cy="310" r="4" fill="var(--illus-ink)" opacity="0.1"/>
-          </svg>
-        </div>
-
-      </div>
-    </div>
-  </div>
-
-  <!-- ── Trust stats strip ── -->
-  <div class="contact-stats">
-    <div class="container">
-      <div class="contact-stats-row">
-        {[
-          { num: '70+',    label: 'Projects delivered' },
-          { num: '15+',    label: 'Happy clients' },
-          { num: '12+',    label: 'Years combined experience' },
-          { num: '< 1 day', label: 'Response time' },
-        ].map(s => (
-          <div class="contact-stat">
-            <span class="stat-num stat-num--md">{s.num}</span>
-            <span class="stat-label contact-stat-label">{s.label}</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  </div>
-
-  <!-- ── Form + sidebar ── -->
-  <section class="contact-body">
-    <div class="container">
-      <div class="contact-grid">
-
-        <!-- Form column -->
-        <div class="contact-form-col">
-          <p class="contact-col-label">Send us a message</p>
           <ContactForm client:load />
         </div>
 
-        <!-- Sidebar -->
-        <div class="contact-sidebar">
+        <aside class="slip anim-fade-up" aria-labelledby="slip-heading">
+          <h2 id="slip-heading" class="slip__title">Where this lands</h2>
 
-          <!-- Contact info -->
-          <div class="card card--radius-xl contact-info-card">
-            <p class="contact-col-label">Contact details</p>
-            <ul class="contact-info-list">
-              <li>
-                <span class="contact-info-icon">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1" y="3" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M1 5.5L8 9.5L15 5.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-                </span>
-                <div>
-                  <div class="contact-info-label">Email</div>
-                  <a href="mailto:sales@cloudalgo.com" class="contact-info-value">sales@cloudalgo.com</a>
-                </div>
-              </li>
-              <li>
-                <span class="contact-info-icon">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 3a1 1 0 0 1 1-1h2.5a1 1 0 0 1 1 .9l.5 3a1 1 0 0 1-.57.96l-1 .45a9 9 0 0 0 3.96 3.96l.45-1a1 1 0 0 1 .96-.57l3 .5a1 1 0 0 1 .9 1V13a1 1 0 0 1-1 1h-1C5.37 14 2 10.63 2 7V3Z" stroke="currentColor" stroke-width="1.5"/></svg>
-                </span>
-                <div>
-                  <div class="contact-info-label">Phone</div>
-                  <a href="tel:+916377360659" class="contact-info-value">+91 6377-360659</a>
-                </div>
-              </li>
-              <li>
-                <span class="contact-info-icon">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1.5C5.5 1.5 3.5 3.5 3.5 6 3.5 9.5 8 14.5 8 14.5S12.5 9.5 12.5 6C12.5 3.5 10.5 1.5 8 1.5Z" stroke="currentColor" stroke-width="1.5"/><circle cx="8" cy="6" r="1.5" stroke="currentColor" stroke-width="1.5"/></svg>
-                </span>
-                <div>
-                  <div class="contact-info-label">Location</div>
-                  <span class="contact-info-value">Jaipur, India</span>
-                </div>
-              </li>
-            </ul>
+          <dl class="slip__rows">
+            <div><dt>Read by</dt><dd>Sandeep Kumar<i>&amp;</i>Vikash Agarwal</dd></div>
+            <div><dt>First reply</dt><dd>One working day</dd></div>
+            <div><dt>Replies from</dt><dd>sales@cloudalgo.com</dd></div>
+            <div><dt>We work in</dt><dd>IST &middot; UTC+5:30</dd></div>
+            <div><dt>The call</dt><dd>Half an hour. No deck.</dd></div>
+          </dl>
+
+          <div class="slip__direct">
+            <a class="slip__line" href="mailto:sales@cloudalgo.com"><span>Write</span>sales@cloudalgo.com</a>
+            <a class="slip__line" href="tel:+916377360659"><span>Call</span>+91 6377 360659</a>
+            <p class="slip__line slip__line--flat"><span>Find</span>Jaipur, Rajasthan, India</p>
           </div>
 
-          <!-- What happens next -->
-          <div class="card card--radius-xl contact-next-card">
-            <p class="contact-col-label">What happens next</p>
-            <ol class="contact-next-list">
-              <li>
-                <span class="stat-num stat-num--xs stat-num--ghost contact-next-num">01</span>
-                <div>
-                  <strong>We review your message</strong>
-                  <p>Within one business day, a certified architect reads your requirements.</p>
-                </div>
-              </li>
-              <li>
-                <span class="stat-num stat-num--xs stat-num--ghost contact-next-num">02</span>
-                <div>
-                  <strong>Scoping call</strong>
-                  <p>We schedule a 30-min call to understand your goals and constraints.</p>
-                </div>
-              </li>
-              <li>
-                <span class="stat-num stat-num--xs stat-num--ghost contact-next-num">03</span>
-                <div>
-                  <strong>Proposal</strong>
-                  <p>You receive a clear scope, timeline, and transparent fixed price.</p>
-                </div>
-              </li>
-            </ol>
+          <div class="slip__seal">
+            <img src="/salesforce/Salesforce_Partner_Badge_RGB.webp" alt="" width="120" height="84" loading="lazy" decoding="async" />
+            <span class="slip__seal-text">Salesforce Consulting Partner<i>since 2019</i></span>
           </div>
-
-          <!-- Certifications -->
-          <div class="contact-cert-card">
-            <div class="contact-cert-badge">
-              <img src="/salesforce/Salesforce_Partner_Badge_RGB.webp"
-                   alt="Certified Salesforce Partner"
-                   style="height:56px;width:auto;opacity:0.85;" />
-            </div>
-            <p class="contact-cert-text">Certified Salesforce Consulting Partner since 2019</p>
-          </div>
-
-        </div>
+        </aside>
       </div>
     </div>
   </section>
 
+  <!-- ── Fold 2: the reply, as an exhibit ──────────────────── -->
+  <section class="section-press" aria-labelledby="reply-heading">
+    <div class="section-press__head anim-fade-up">
+      <h2 id="reply-heading" class="section-title section-title--xs section-title--tighter section-press__title">
+        What comes back.
+      </h2>
+      <span class="section-press__note">A template of the first reply, not a real thread</span>
+    </div>
+
+    <div class="reply__spread anim-fade-up">
+      <figure class="reply">
+        <div class="reply__head">
+          <span class="reply__key">From</span><span class="reply__val">Sandeep Kumar or Vikash Agarwal &middot; sales@cloudalgo.com</span>
+          <span class="reply__key">Subject</span><span class="reply__val">Re: the sentence you sent us</span>
+          <span class="reply__key">Sent</span><span class="reply__val">Within one working day</span>
+        </div>
+
+        <ol class="reply__body">
+          <li>
+            <b>What we think is actually going wrong</b>, in three lines. It is not always the thing you described &mdash; a
+            manual step is often a symptom of a permission model nobody has touched since go-live.
+          </li>
+          <li>
+            <b>Which shape this is</b>: a project with an ending, a retainer, one of our four products, or nothing at all.
+            We have talked people out of building things.
+          </li>
+          <li>
+            <b>The two or three things we still need to know</b> before anyone could scope it honestly &mdash; usually who
+            owns the system on the other side, and whether it will give us an API.
+          </li>
+          <li>
+            <b>Three times we could talk</b>, half an hour each. If none of them work, say so and we will send three more.
+          </li>
+        </ol>
+      </figure>
+
+      <div class="reply__margin">
+        <p class="reply__note"><span>Who writes it</span>One of the two people whose names are on the work. There is no account manager to hand you to.</p>
+        <p class="reply__note"><span>What it never contains</span>A proposal you did not ask for, a deck, or a price written before we understand the work.</p>
+        <p class="reply__note"><span>If we cannot help</span>We say so in the same reply, and name someone who can. We would rather lose the work than scope something we cannot land.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Fold 3: the questions ─────────────────────────────── -->
+  <section class="section-press" aria-labelledby="asks-heading">
+    <div class="section-press__head anim-fade-up">
+      <h2 id="asks-heading" class="section-title section-title--xs section-title--tighter section-press__title">
+        What we will ask on the call.
+      </h2>
+      <span class="section-press__note">Five questions &middot; bring the answers and half an hour is enough</span>
+    </div>
+
+    <ul class="asks anim-fade-up">
+      <li class="asks__row">
+        <p class="asks__q">What does the person doing this by hand actually do, step by step?</p>
+        <p class="asks__why"><span>Why we ask</span>The step that hurts is rarely the one on the process diagram.</p>
+      </li>
+      <li class="asks__row">
+        <p class="asks__q">How many times a day does it happen, and what does one mistake cost?</p>
+        <p class="asks__why"><span>Why we ask</span>This is what decides whether it is worth building at all.</p>
+      </li>
+      <li class="asks__row">
+        <p class="asks__q">What has already been tried, and why did it stop?</p>
+        <p class="asks__why"><span>Why we ask</span>What failed last time usually rules out the obvious answer before we start.</p>
+      </li>
+      <li class="asks__row">
+        <p class="asks__q">Who owns the system on the other side, and will they give us an API?</p>
+        <p class="asks__why"><span>Why we ask</span>Nothing else moves a delivery date as much as this answer.</p>
+      </li>
+      <li class="asks__row">
+        <p class="asks__q">What has to be true before you would call this finished?</p>
+        <p class="asks__why"><span>Why we ask</span>Work with no ending is a retainer, not a project. Better to know now.</p>
+      </li>
+    </ul>
+
+    {/* One line on purpose: Astro trims whitespace at a markup boundary,
+        so a line break either side of a link welds it to its neighbour. */}
+    <p class="asks__foot">If a form is the wrong shape for this, write to <a href="mailto:sales@cloudalgo.com">sales@cloudalgo.com</a> or call <a href="tel:+916377360659">+91 6377 360659</a> &mdash; both reach the same two people. Not ready to talk? <a href="/case-studies/">Read the five case studies</a> instead.</p>
+  </section>
 </Page>
-
-<style>
-/* ── Hero ─────────────────────────────── */
-.contact-hero {
-  background: var(--surface-page);
-  padding-top: 7rem;
-  padding-bottom: 3rem;
-  border-bottom: 1px solid var(--border-default);
-  overflow: hidden;
-}
-.contact-hero-inner {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
-  align-items: center;
-}
-.contact-hero-text { padding-top: 0.5rem; }
-.contact-hero-title {
-  font-size: clamp(2.75rem, 5vw, 5rem);
-  font-weight: 900;
-  letter-spacing: -0.04em;
-  line-height: 1.05;
-  color: var(--color-heading);
-  margin: 1rem 0 1.25rem;
-}
-.contact-hero-sub {
-  font-size: 1rem;
-  color: var(--color-text);
-  line-height: 1.75;
-  max-width: 400px;
-  margin-bottom: 1.75rem;
-}
-.contact-email-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--color-heading);
-  text-decoration: underline;
-  text-underline-offset: 4px;
-  text-decoration-thickness: 1.5px;
-  transition: opacity 0.2s;
-}
-.contact-email-link:hover { opacity: 0.6; color: var(--color-heading); }
-
-.contact-hero-illus {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.contact-svg { width: 100%; max-width: 440px; height: auto; }
-
-/* Typing dots animation */
-.contact-dot-b { animation: contactDot 1.4s ease-in-out 0.2s infinite; }
-.contact-dot-c { animation: contactDot 1.4s ease-in-out 0.4s infinite; }
-@keyframes contactDot {
-  0%, 80%, 100% { opacity: 0.35; }
-  40%            { opacity: 0.9; }
-}
-
-/* ── Stats strip ──────────────────────── */
-.contact-stats {
-  background: var(--surface-card);
-  border-bottom: 1px solid var(--border-default);
-  padding: 2rem 0;
-}
-.contact-stats-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-.contact-stat {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  flex: 1;
-  min-width: 120px;
-  padding: 0.5rem 1rem;
-  border-right: 1px solid var(--border-default);
-}
-.contact-stat:last-child { border-right: none; }
-/* Type for both comes from `.stat-num stat-num--md` and `.stat-label`. */
-.contact-stat-label { margin-top: 0.25rem; }
-
-/* ── Body: form + sidebar ─────────────── */
-.contact-body {
-  background: var(--surface-page);
-  padding: 4rem 0 5rem;
-}
-.contact-grid {
-  display: grid;
-  grid-template-columns: 1fr 380px;
-  gap: 3rem;
-  align-items: start;
-}
-.contact-col-label {
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--color-text);
-  margin-bottom: 1.25rem;
-}
-
-/* Form column */
-.contact-form-col {
-  background: var(--surface-card);
-  border: 1px solid var(--border-default);
-  border-radius: 14px;
-  padding: 2.5rem;
-}
-
-/* Sidebar */
-.contact-sidebar {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-}
-
-/* Info card */
-.contact-info-card {
-  padding: 1.75rem;
-}
-.contact-info-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 1.125rem;
-}
-.contact-info-list li {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.875rem;
-}
-.contact-info-icon {
-  width: 32px;
-  height: 32px;
-  background: var(--surface-sunk);
-  border: 1px solid var(--border-default);
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  color: var(--color-heading);
-}
-.contact-info-label {
-  font-size: 0.6875rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--color-text);
-  margin-bottom: 0.2rem;
-}
-.contact-info-value {
-  font-size: 0.9375rem;
-  font-weight: 600;
-  color: var(--color-heading);
-  text-decoration: none;
-  transition: opacity 0.2s;
-}
-.contact-info-value:hover { opacity: 0.6; color: var(--color-heading); }
-
-/* What happens next card */
-.contact-next-card {
-  padding: 1.75rem;
-}
-.contact-next-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-}
-.contact-next-list li {
-  display: flex;
-  gap: 1rem;
-  align-items: flex-start;
-}
-/* Type comes from `.stat-num stat-num--xs stat-num--ghost`; the width
-   is what keeps the three rows' copy on one left edge. */
-.contact-next-num {
-  flex-shrink: 0;
-  width: 2.5rem;
-}
-.contact-next-list strong {
-  display: block;
-  font-size: 0.875rem;
-  font-weight: 700;
-  color: var(--color-heading);
-  margin-bottom: 0.25rem;
-}
-.contact-next-list p {
-  font-size: 0.8125rem;
-  color: var(--color-text);
-  line-height: 1.6;
-  margin: 0;
-}
-
-/* Cert card */
-.contact-cert-card {
-  background: var(--surface-inverse);
-  border-radius: 14px;
-  padding: 1.5rem 1.75rem;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-.contact-cert-badge { flex-shrink: 0; }
-.contact-cert-text {
-  font-size: 0.8125rem;
-  color: var(--color-on-inverse-strong);
-  line-height: 1.6;
-  margin: 0;
-}
-
-/* ── Responsive ───────────────────────── */
-@media (max-width: 1024px) {
-  .contact-grid { grid-template-columns: 1fr; }
-}
-@media (max-width: 767px) {
-  .contact-hero-inner { grid-template-columns: 1fr; }
-  .contact-hero-illus { display: none; }
-  .contact-hero-title { font-size: 2.75rem; }
-  .contact-stats-row { justify-content: center; }
-  .contact-stat { border-right: none; border-bottom: 1px solid var(--border-default); }
-  .contact-stat:last-child { border-bottom: none; }
-  .contact-form-col { padding: 1.5rem; }
-}
-</style>

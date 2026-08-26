@@ -19,6 +19,13 @@ import BrandLockup from '@/components/ui/BrandLockup.astro';
 // Products and services come from their collections. A fifth of either
 // appears here without a footer edit.
 
+export interface Props {
+  /** /contact/ passes false -- see the note in Page.astro. */
+  cta?: boolean;
+}
+
+const { cta = true } = Astro.props;
+
 const year = new Date().getFullYear();
 
 const products = (await getCollection('products')).sort(
@@ -32,6 +39,7 @@ const services = (await getCollection('services')).sort(
 ---
 
 <!-- ── Fold 8: the ask ─────────────────────────────────────── -->
+{cta && (
 <section class="footer-cta">
   <div>
     <h2>Tell us what your org is doing wrong.</h2>
@@ -42,6 +50,7 @@ const services = (await getCollection('services')).sort(
   </div>
   <a class="btn btn-primary" href="/contact/">Book a consultation &rarr;</a>
 </section>
+)}
 
 <!-- ── Fold 9: the colophon ────────────────────────────────── -->
 <footer class="ca-footer">
