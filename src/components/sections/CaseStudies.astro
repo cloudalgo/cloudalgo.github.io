@@ -5,17 +5,21 @@ import { caseStudies } from '../../data/case-studies';
 // figures. Every number rendered here is quoted verbatim from
 // case-studies.ts, so a corrected figure is corrected in one place.
 //
-// Each column opens on the 16:9 shot the approved mock leads with, both
-// carried over from docs/superpowers/specs/assets/. Neither is
-// photography of these engagements -- they are generic stock, and the
-// alt text says only what is in the frame rather than captioning a
-// desk scene as a client meeting.
+// Each column opens on a 16:9 shot. Both are generated images, made to
+// the prompts in docs/superpowers/specs/assets/case-study-image-prompts.md
+// -- which is why there is no licence to record: the files are ours. They
+// replaced two vendored stock files that arrived in a96c497 with no
+// provenance at all.
 //
-// UNRESOLVED BEFORE MERGE: neither file has a licence on record. They
-// entered the repo in a96c497 as vendored mock assets and the spec says
-// nothing about where they came from. Confirm the licence or swap both
-// files at public/case-studies/<slug>.jpg -- the markup is keyed on the
-// slug, so replacing the two files is the whole change.
+// Neither is photography of these engagements, and each was framed so it
+// could not be mistaken for one: no faces to camera, no legible signage,
+// no screen content. The alt text says only what is in the frame rather
+// than captioning a room as a client meeting.
+//
+// The markup is keyed on the slug, so replacing a shot is replacing the
+// file at public/case-studies/<slug>.webp. They are stored greyscale
+// because --case-shot-filter renders them that way; a theme that sets
+// that token to `none` gets these back unchanged, not in colour.
 
 const featured = caseStudies.slice(0, 2);
 
@@ -53,8 +57,8 @@ const HOME: Record<string, HomeCopy> = {
       ['6',   'Systems integrated'],
     ],
     shot: {
-      src: '/case-studies/nonprofit-web-platform.jpg',
-      alt: 'Two people at a desk marking up a printed data model beside two open laptops.',
+      src: '/case-studies/nonprofit-web-platform.webp',
+      alt: 'A training room seen from the back: rows of people at long tables with open laptops, facing a presenter beside a blank projection screen.',
     },
   },
   // The mock closes this row with a "75-90%" index-tuning gain and a "3 layer"
@@ -71,8 +75,8 @@ const HOME: Record<string, HomeCopy> = {
       ['90%',     'Faster account linkage query'],
     ],
     shot: {
-      src: '/case-studies/enterprise-data-pipeline.jpg',
-      alt: 'Three colleagues talking at a floor-to-ceiling window above a city skyline.',
+      src: '/case-studies/enterprise-data-pipeline.webp',
+      alt: 'A factory floor running away from the camera between two lines of steel pipework and conveyors, with two workers in hi-vis walking down the centre aisle.',
     },
   },
 };

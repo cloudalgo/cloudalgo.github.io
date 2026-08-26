@@ -35,9 +35,10 @@
    under a picture.
 
    aspect-ratio holds the box before the file arrives, which is what
-   stops the two columns from jumping past each other as they load --
-   the images are different native ratios (1.28:1 and 3.47:1) and both
-   are cropped to this one. */
+   stops the two columns from jumping past each other as they load. Both
+   files are cut to this ratio already, so the box and the image agree --
+   but a replacement shot at some other ratio still lands in a box of the
+   right shape rather than reflowing the fold. */
 .cases-press__shot {
   margin: 0 0 var(--case-shot-gap);
   aspect-ratio: var(--case-shot-ratio);
