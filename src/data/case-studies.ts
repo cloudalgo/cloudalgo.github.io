@@ -10,6 +10,18 @@ export interface CaseStudy {
   tags: string[];
   duration: string;
   result: string;
+  /* The index row. `/case-studies/` states each study as a change of
+     state -- what was true, what is true now -- so the ledger carries its
+     own short copy rather than trimming `summary` down to fit. The figure
+     itself is `metric`, not repeated here; only its caption is. */
+  ledger: {
+    client: string;
+    tags: string;
+    when: string;
+    was: string;
+    now: string;
+    figLabel: string;
+  };
   // Detail page — core
   headline: string;
   executiveSummary: string;
@@ -42,6 +54,15 @@ export const caseStudies: CaseStudy[] = [
     tags: ['Next.js 14', 'Salesforce', 'Stripe', 'AWS Cognito', 'Heroku', 'Segment', 'React Query', 'Framer Motion'],
     duration: 'Ongoing (2+ years)',
     result: 'Full platform rebuild replacing a legacy PHP monolith — CRM-connected, continuously expanding',
+
+    ledger: {
+      client: 'A global non-profit, 180+ countries',
+      tags: 'Non-profit · Full-stack & Salesforce',
+      when: 'Ongoing',
+      was: 'A PHP monolith with no CRM. Member records, enrolments and activity kept in three places that never agreed.',
+      now: 'One Next.js platform with Salesforce underneath it. Enrolment, donations and membership all land on the same record.',
+      figLabel: 'on one platform, was three',
+    },
 
     headline: 'From a legacy PHP monolith to a CRM-connected platform built for global reach.',
 
@@ -180,6 +201,15 @@ export const caseStudies: CaseStudy[] = [
     ],
     duration: 'Ongoing engagement',
     result: 'Sub-15 min data freshness across CRM + ERP with zero manual intervention',
+
+    ledger: {
+      client: 'An enterprise manufacturer, multi-division',
+      tags: 'Manufacturing · Data engineering',
+      when: 'Ongoing',
+      was: 'Yesterday\'s numbers. A batch 12 to 24 hours behind sat between the CRM, the ERP and anyone asking a question.',
+      now: 'A medallion pipeline in Airflow. CRM and ERP land in one analytics layer, on a schedule nobody has to run.',
+      figLabel: 'end-to-end data latency',
+    },
 
     headline: 'From disconnected systems to a unified, analytics-ready data layer.',
 
@@ -357,6 +387,15 @@ export const caseStudies: CaseStudy[] = [
     duration: '3-month engagement',
     result: 'Fully automated Salesforce → EMR patient sync — zero re-entry, 24/7 coverage',
 
+    ledger: {
+      client: 'A paediatric therapy clinic',
+      tags: 'Healthcare · Salesforce & Heroku',
+      when: '3 months',
+      was: 'Every patient typed twice — once into Salesforce, once into an EMR that shipped without an API.',
+      now: 'A headless browser on Heroku does the second typing, around the clock, and writes the failure back to the record when it can\'t.',
+      figLabel: 'records re-entered by hand',
+    },
+
     headline: 'No API? No problem. Automating patient data sync with a browser robot on Heroku.',
 
     executiveSummary:
@@ -494,6 +533,15 @@ export const caseStudies: CaseStudy[] = [
     tags: ['MuleSoft', 'Salesforce', 'NetSuite', 'CloudHub', 'DataWeave', 'Platform Events', 'Object Store'],
     duration: '5-month engagement',
     result: 'Bidirectional Salesforce ↔ NetSuite sync — orders, customers, invoices, and payments fully automated',
+
+    ledger: {
+      client: 'A specialty wholesale distributor',
+      tags: 'Distribution · Salesforce & NetSuite',
+      when: '5 months',
+      was: 'Orders re-keyed out of Salesforce into NetSuite, and invoices chased back the other way by email.',
+      now: 'One API layer between them. Orders, customers, invoices and payments move both ways without a person in the middle.',
+      figLabel: 'orders typed in twice',
+    },
 
     headline: 'One source of truth: bidirectional Salesforce ↔ NetSuite sync via MuleSoft API-led integration.',
 
@@ -640,6 +688,15 @@ export const caseStudies: CaseStudy[] = [
     tags: ['MuleSoft', 'Salesforce', 'CloudHub', 'DataWeave', 'Object Store', 'Bulk API v2', 'Person Accounts', 'Logistics API'],
     duration: '6-month engagement',
     result: 'Three-system integration — health portal, Salesforce, and logistics — with bidirectional data flow, automated case management, and real-time kit tracking',
+
+    ledger: {
+      client: 'An at-home diagnostics platform',
+      tags: 'Digital health · Salesforce & logistics',
+      when: '6 months',
+      was: 'A patient asking where their test kit had got to, and nobody on the portal side who could answer.',
+      now: 'Portal, CRM and logistics on one integration layer. The status is on the page before anyone thinks to ask.',
+      figLabel: 'logistics to portal',
+    },
     headline: 'Three systems, eight applications, one integration layer: how a digital health platform connected its portal, CRM, and logistics without a gap.',
     executiveSummary: `A digital health company offering at-home diagnostic testing had three systems that didn't talk to each other. Their customer portal managed member journeys and orders. Salesforce managed accounts, cases, and support. A third-party logistics platform handled kit shipment. Staff bridged the gaps manually — creating Salesforce records after portal registrations, copying support actions between Salesforce and the portal, and checking the logistics dashboard to answer basic questions about kit status.
 
