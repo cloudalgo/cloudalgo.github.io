@@ -92,7 +92,7 @@ const rows = posts.map((p, i) => ({
   post: p,
   opensYear: i === 0 || year(p.data.date) !== year(posts[i - 1].data.date),
 }));
-import { orgRef, breadcrumbs, abs } from '@/data/schema';
+import { organization, orgRef, breadcrumbs, abs } from '@/data/schema';
 
 // The page shows the whole run in reverse chronology, so the ItemList says
 // so -- positions are the order a reader actually meets them, and every
@@ -130,13 +130,14 @@ const schema = [
       name: p.data.title,
     })),
   },
+  organization,
   breadcrumbs([{ label: 'Home', href: '/' }, { label: 'Journal' }], abs('/blog/')),
 ];
 
 ---
 <Page
   {schema}
-  title="Journal — CloudAlgo | Everything here came out of a job we were actually doing"
+  title="Journal — everything here came out of a job we were doing"
   description={`${n} write-ups on Salesforce, Heroku, MuleSoft and AWS integration work, newest first `
     + '— each one a problem that cost us an afternoon, and the fix that ended it.'}
 >

@@ -47,12 +47,30 @@ Testimonials used to be a Swiper React slider; it is now static markup in `src/c
 
 ### Content collections (Astro content layer v2)
 
-Defined in `src/content.config.ts` using `glob` loader (not the legacy v1 API). Two collections:
+Defined in `src/content.config.ts` using `glob` loader (not the legacy v1 API). Three collections:
 
-- `blog` — Markdown in `src/content/blog/`; schema requires `title`, `date`, `category` (enum: Salesforce/Heroku/MuleSoft/AWS/Product), `excerpt`, `readTime`, `published`
-- `services` — Markdown in `src/content/services/`; schema requires `title`, `order`, `icon`, `excerpt`
+- `blog` — Markdown in `src/content/blog/`; requires `title`, `date`, `category` (enum: Salesforce/Heroku/MuleSoft/AWS/Product), `excerpt`, `readTime`, `published`
+- `services` — Markdown in `src/content/services/`; requires `title`, `shortTitle`, `order`, `icon`, `excerpt`, and at most one of `proves` / `provenBy`
+- `products` — Markdown in `src/content/products/`; requires `title`, `status`, `type`, `tagline`, `excerpt`, `icon`, `order`, `features`, `published`
+
+Case studies are **not** a collection — they are typed records in `src/data/case-studies.ts`, because each one carries about forty fields of page furniture that no markdown body wants to hold.
 
 **Critical**: dynamic route files (`[slug].astro`) use `p.id`, not `p.slug`, as the route param — this is an Astro 6 content layer change.
+
+#### What a `<title>` and a `<meta description>` are allowed to be
+
+A search result shows roughly **60 characters of title** and **160 of description**. The on-page copy is not written to that budget and should not be — a standfirst is written to be read. So where the two diverge, the page states the search version separately and the template prefers it:
+
+- `blog` — optional `seoTitle` / `seoDescription` frontmatter. Absent, the headline and the `excerpt` are used as they stand, which is right for most entries. `blog/[slug].astro` appends `— CloudAlgo Journal` only when the headline leaves room for it.
+- `products` — optional `seoTitle` frontmatter; `excerpt` is meta-only (nothing renders it) so it is written to the budget directly.
+- `services` — `excerpt` is meta-only too. `services/[slug].astro` appends the brand only when title + engagement shape leave room.
+- Case studies — `seoTitle` is required on every record; `summary` is the meta description and renders nowhere, while `headline` stays the JSON-LD headline and `detailTitle` the H1.
+
+Never widen a title by pasting a full sentence into a template. That is how five case studies came to ship titles of 116–192 characters.
+
+#### Structured data
+
+`src/data/schema.ts` holds the entity facts once. Every page emits `organization` plus a `breadcrumbs(crumbs, url)` built from **the same array the masthead renders**, and refers to the org elsewhere by `orgRef` (`@id`) rather than restating it. Build page URLs with `abs('/path/')` — trailing slash included, since the site is served as directories. Do not hand-roll an `Organization` node in a page.
 
 ### Styling
 

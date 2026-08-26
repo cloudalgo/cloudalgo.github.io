@@ -3,6 +3,8 @@ title: "Before You Delete That Salesforce Field: How We Built a Seven-Pass Safet
 date: 2026-06-16
 category: Salesforce
 excerpt: "A client wanted to clean up 800+ legacy custom fields before a major data migration. The native dependency graph wasn't enough. Here's the script we built — and what it found."
+seoTitle: "Before you delete that Salesforce field"
+seoDescription: "A client wanted 800+ legacy custom fields cleaned up before a migration. The native dependency graph was not enough. Here is the script we built."
 readTime: 6
 published: true
 image: /blog-images/salesforce-field-impact-hero.svg

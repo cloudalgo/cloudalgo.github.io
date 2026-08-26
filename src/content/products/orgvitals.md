@@ -3,12 +3,12 @@ title: "OrgVitals"
 status: preview
 type: desktop-app
 tagline: "A desktop health scanner for Salesforce orgs — 49 read-only checks, an A–F grade, and a fix-it workflow, all running on your machine."
-excerpt: "OrgVitals connects to any org you've authenticated with the Salesforce CLI, pulls a read-only metadata snapshot, and runs 49 scanners across Security, Code Quality, Automation, Tech Debt, and Performance. You get a graded health report, prioritized findings, historical trends, cross-org comparison, and an AI assistant. Your Salesforce metadata and scan results stay on your device — access to the org is strictly read-only."
+excerpt: "OrgVitals scans any Salesforce org you can reach with the CLI — 49 read-only checks across security, code, automation and tech debt, graded A to F on your laptop."
 icon: "orgvitals"
 externalUrl: "https://github.com/cloudalgo/orgvitals-releases/releases"
 issuesUrl: "https://github.com/cloudalgo/orgvitals-releases/issues"
 guideUrl: "/products/orgvitals/guide/"
-seoTitle: "OrgVitals — Salesforce Org Health Scanner (Desktop) | CloudAlgo"
+seoTitle: "OrgVitals — Salesforce Org Health Scanner for Desktop"
 version: "1.1.1"
 lastUpdated: "2026-07-01"
 order: 1

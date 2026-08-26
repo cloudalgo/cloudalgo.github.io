@@ -3,7 +3,7 @@ title: "AWS Cloud Solutions"
 shortTitle: "AWS"
 order: 5
 icon: "🏗️"
-excerpt: "AWS architecture for the workloads that do not belong inside Salesforce — VPC and IAM foundations as code, serverless processing, and the analytics layer, with cost work in the design rather than sold afterwards."
+excerpt: "AWS architecture for the workloads that do not belong inside Salesforce — VPC and IAM as code, serverless processing, analytics, and cost work in the design."
 ---
 
 ### The architecture review

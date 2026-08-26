@@ -64,7 +64,7 @@ for (const claim of CLAIMS) {
     }
   }
 }
-import { orgRef, breadcrumbs, abs } from '@/data/schema';
+import { organization, orgRef, breadcrumbs, abs } from '@/data/schema';
 
 const schema = [
   {
@@ -86,13 +86,14 @@ const schema = [
       })),
     },
   },
+  organization,
   breadcrumbs([{ label: 'Home', href: '/' }, { label: 'Case studies' }], abs('/case-studies/')),
 ];
 
 ---
 <Page
   {schema}
-  title="Case studies — CloudAlgo | Five things that are no longer true"
+  title="Case studies — five things that are no longer true"
   description="Five Salesforce, MuleSoft and Heroku engagements stated as a change of state: what was true before, what is true now, and the one number that settles each of them."
 >
   <PageMasthead

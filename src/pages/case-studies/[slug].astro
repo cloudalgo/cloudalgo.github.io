@@ -23,6 +23,7 @@ import PageMasthead from '@/components/ui/PageMasthead.astro';
 import ClosingManifest from '@/components/sections/ClosingManifest.astro';
 import EngagementPager from '@/components/sections/EngagementPager.astro';
 import { caseStudies } from '@/data/case-studies';
+import { organization, orgRef, breadcrumbs, abs, SITE_ID } from '@/data/schema';
 
 export function getStaticPaths() {
   return caseStudies.map(cs => ({ params: { slug: cs.id }, props: { cs } }));
@@ -62,45 +63,42 @@ const WORDS = ['No', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eig
 const constraints = `${WORDS[cs.challengePoints.length] ?? cs.challengePoints.length} constraints`;
 const components = `${WORDS[cs.techStack.length] ?? cs.techStack.length} components`;
 
-const siteBase = 'https://cloudalgo.com';
-const csUrl = `${siteBase}/case-studies/${cs.id}`;
+const csUrl = abs(`/case-studies/${cs.id}/`);
+
+/* One array, rendered by the masthead and declared to the crawler. A
+   trail invented for the crawler that does not match the printed one is
+   what gets the rich result dropped. */
+const crumbs = [
+  { label: 'Home', href: '/' },
+  { label: 'Case studies', href: '/case-studies/' },
+  { label: cs.company },
+];
 
 const schema: object[] = [
   {
     '@type': 'Article',
+    '@id': csUrl,
     headline: cs.headline,
     description: cs.summary,
-    author:    { '@type': 'Organization', name: 'CloudAlgo', url: siteBase },
-    publisher: {
-      '@type': 'Organization',
-      name: 'CloudAlgo',
-      logo: { '@type': 'ImageObject', url: `${siteBase}/logo.svg` },
-    },
+    author: orgRef,
+    publisher: orgRef,
+    isPartOf: { '@id': SITE_ID },
+    inLanguage: 'en',
     url: csUrl,
     mainEntityOfPage: { '@type': 'WebPage', '@id': csUrl },
   },
-  {
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home',         item: `${siteBase}/` },
-      { '@type': 'ListItem', position: 2, name: 'Case studies', item: `${siteBase}/case-studies/` },
-      { '@type': 'ListItem', position: 3, name: cs.company,     item: csUrl },
-    ],
-  },
+  organization,
+  breadcrumbs(crumbs, csUrl),
 ];
 ---
 <Page
-  title={`${cs.company} — ${cs.headline} | CloudAlgo Case Study`}
+  title={`${cs.seoTitle} — CloudAlgo case study`}
   description={cs.summary}
   ogType="article"
   schema={schema}
 >
   <PageMasthead
-    crumbs={[
-      { label: 'Home', href: '/' },
-      { label: 'Case studies', href: '/case-studies/' },
-      { label: cs.company },
-    ]}
+    {crumbs}
     facts={facts}
   >
     <Fragment slot="title" set:html={markedTitle} />

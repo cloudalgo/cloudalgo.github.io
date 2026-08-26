@@ -3,6 +3,8 @@ title: "Connecting a Health Portal, Salesforce, and a Logistics Platform with Mu
 date: 2026-06-10
 category: MuleSoft
 excerpt: "How we built an eight-application MuleSoft integration layer for a digital health company — connecting a customer portal, Salesforce CRM, and a logistics platform with bidirectional case management and automated kit tracking every 5 minutes."
+seoTitle: "A health portal, Salesforce and logistics on MuleSoft"
+seoDescription: "How we built an eight-application MuleSoft layer for a digital health company, connecting a customer portal, Salesforce CRM and a logistics platform."
 readTime: 7
 published: true
 author: "Sandeep Kumar"

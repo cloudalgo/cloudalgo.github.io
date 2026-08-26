@@ -6,6 +6,10 @@ export interface CaseStudy {
   service: string;
   metric: string;
   metricLabel: string;
+  /** The <meta name="description">, and the JSON-LD description. It is
+      never printed on a page -- the index writes its own row copy in
+      `ledger` -- so it is written to a search result's budget, which is
+      about 160 characters before the snippet is cut and rewritten. */
   summary: string;
   tags: string[];
   duration: string;
@@ -23,9 +27,18 @@ export interface CaseStudy {
     figLabel: string;
   };
   // Detail page — core
-  /** The <title> and the JSON-LD headline. Reads like a piece of writing;
-      the page's own H1 is `detailTitle`, which reads like a fact. */
+  /** The JSON-LD headline. Reads like a piece of writing; the page's own
+      H1 is `detailTitle`, which reads like a fact. It used to be the
+      <title> as well, pasted into a template behind `company` -- a whole
+      sentence in a slot with about sixty characters in it, which is how
+      five studies came to ship titles of 116 to 192 characters. */
   headline: string;
+  /** The <title>, minus the brand suffix the page appends. Written per
+      study rather than assembled from `company` and `service`, because
+      the clients are anonymised: "Specialist Wholesale Distributor" is
+      thirty-two characters nobody searches for, and the words that earn
+      the click are the platforms. Keep it under about 46 characters. */
+  seoTitle: string;
   executiveSummary: string;
   challenge: string;
   challengePoints: string[];
@@ -99,7 +112,7 @@ export const caseStudies: CaseStudy[] = [
     metric: '2+ yrs',
     metricLabel: 'ongoing platform engagement — serving 180+ countries',
     summary:
-      'A global spiritual non-profit with presence in 180+ countries had outgrown its legacy PHP monolith — no CRM integration, growing technical debt, and a scalability ceiling that threatened every major event launch. CloudAlgo rebuilt the platform from the ground up: a Next.js 14 application with Salesforce CRM, Stripe-powered enrolment and donations, AWS Cognito passwordless auth, and a full content library — a platform the client has continued expanding for two years and counting.',
+      'A global non-profit in 180+ countries traded a legacy PHP monolith for a Next.js platform on Salesforce, with Stripe enrolment and passwordless auth.',
     tags: ['Next.js 14', 'Salesforce', 'Stripe', 'AWS Cognito', 'Heroku', 'Segment', 'React Query', 'Framer Motion'],
     duration: 'Ongoing (2+ years)',
     result: 'Full platform rebuild replacing a legacy PHP monolith — CRM-connected, continuously expanding',
@@ -126,6 +139,7 @@ export const caseStudies: CaseStudy[] = [
     pagerNote: 'One platform with a CRM under it, two years and counting',
 
     headline: 'From a legacy PHP monolith to a CRM-connected platform built for global reach.',
+    seoTitle: 'Non-profit platform rebuild on Next.js',
 
     executiveSummary:
       'A global non-profit spiritual organisation operating across 180+ countries had outgrown its custom PHP platform — a monolith with no CRM connectivity, mounting technical debt, and a scalability ceiling that made every course launch a risk. CloudAlgo led a deliberate full-platform rebuild: a Next.js 14 application with a Node.js backend, Salesforce as the CRM backbone, Stripe for payments and donations, and AWS Cognito for passwordless authentication. The result is a modern, maintainable platform the client has continued to expand for two-plus years — adding course types, membership tiers, content features, and integrations — the clearest signal that the architecture was right.',
@@ -254,7 +268,7 @@ export const caseStudies: CaseStudy[] = [
     metric: '<15 min',
     metricLabel: 'end-to-end data latency — down from 24 hours',
     summary:
-      'An enterprise manufacturer was sitting on a goldmine of operational data — spread across CRM and ERP systems — but couldn\'t act on any of it in real time. CloudAlgo delivered a fully automated, cloud-native medallion pipeline that replaced 24-hour-stale reports with sub-15-minute analytics, eliminated manual reconciliation, and gave leadership a single source of truth they could trust.',
+      'An enterprise manufacturer\'s CRM and ERP reporting ran a day behind. An Airflow medallion pipeline brought end-to-end latency under fifteen minutes.',
     tags: [
       'Apache Airflow',
       'PostgreSQL',
@@ -291,6 +305,7 @@ export const caseStudies: CaseStudy[] = [
     pagerNote: 'Yesterday\u2019s numbers, now under 15 minutes old',
 
     headline: 'From disconnected systems to a unified, analytics-ready data layer.',
+    seoTitle: 'CRM and ERP data in under 15 minutes',
 
     executiveSummary:
       'An enterprise manufacturing business was sitting on a goldmine of operational data — spread across a leading CRM platform, an ERP system, and multiple business divisions — but couldn\'t act on any of it in real time. Reports were hours stale. Sales goals couldn\'t be reconciled with actual shipments. Account data across systems drifted out of sync daily. CloudAlgo designed and delivered a fully automated, cloud-native data pipeline that ingests raw transactional data, transforms it through a rigorous validation and enrichment layer, and surfaces analytics-ready datasets — all with sub-15-minute latency, fault-tolerant processing, and zero manual intervention. The result: a single source of truth that leadership, operations, and sales teams could trust and act on.',
@@ -465,7 +480,7 @@ export const caseStudies: CaseStudy[] = [
     metric: '0',
     metricLabel: 'manual data entry required — every patient sync fully automated',
     summary:
-      'How CloudAlgo automated Salesforce-to-EMR patient data sync for a therapy clinic with no API access — Heroku, Puppeteer, and RabbitMQ running 24/7, zero manual re-entry.',
+      'How CloudAlgo automated Salesforce-to-EMR patient sync for a therapy clinic with no API access — Heroku, Puppeteer and RabbitMQ, running 24/7.',
     tags: ['Heroku', 'Salesforce', 'Puppeteer', 'Node.js', 'RabbitMQ', 'Redis', 'TypeScript'],
     duration: '3-month engagement',
     result: 'Fully automated Salesforce → EMR patient sync — zero re-entry, 24/7 coverage',
@@ -495,6 +510,7 @@ export const caseStudies: CaseStudy[] = [
     pagerNote: 'Every patient typed once, and a browser does the rest',
 
     headline: 'No API? No problem. Automating patient data sync with a browser robot on Heroku.',
+    seoTitle: 'Salesforce to EMR sync with no API',
 
     executiveSummary:
       'A paediatric therapy clinic had two systems that couldn\'t talk to each other: Salesforce for patient intake and an EMR for clinical records. Every new patient meant staff manually re-entering the same information twice — names, dates of birth, insurance, parent contacts, case notes. The EMR vendor provided no public API. CloudAlgo built a Heroku-hosted integration that closes the gap: a queue-backed Node.js worker that uses Puppeteer to drive a headless Chrome session through the EMR portal, populating every field exactly as a human would — but continuously, automatically, and without errors.',
@@ -659,7 +675,7 @@ export const caseStudies: CaseStudy[] = [
     metric: '0',
     metricLabel: 'manual order re-entry — every Salesforce order syncs to NetSuite automatically',
     summary:
-      'MuleSoft API-led integration connecting Salesforce and NetSuite for a specialist wholesale distributor — orders, customers, invoices, and payments syncing bidirectionally via Platform Events and scheduled flows.',
+      'A MuleSoft API-led integration syncing orders, customers, invoices and payments both ways between Salesforce and NetSuite for a wholesale distributor.',
     tags: ['MuleSoft', 'Salesforce', 'NetSuite', 'CloudHub', 'DataWeave', 'Platform Events', 'Object Store'],
     duration: '5-month engagement',
     result: 'Bidirectional Salesforce ↔ NetSuite sync — orders, customers, invoices, and payments fully automated',
@@ -687,6 +703,7 @@ export const caseStudies: CaseStudy[] = [
     pagerNote: 'Orders and invoices, both ways, nobody in the middle',
 
     headline: 'One source of truth: bidirectional Salesforce ↔ NetSuite sync via MuleSoft API-led integration.',
+    seoTitle: 'Salesforce ↔ NetSuite sync in MuleSoft',
 
     executiveSummary:
       'A specialist wholesale distributor ran Salesforce for CRM and NetSuite for ERP — with no connection between them. Sales orders placed in Salesforce were re-entered into NetSuite by the operations team. Invoices in NetSuite were invisible to the sales team without a separate login. Customer updates in Salesforce didn\'t reflect in NetSuite until someone noticed a discrepancy. CloudAlgo built a MuleSoft integration closing every gap: Platform Events trigger real-time customer and order sync to NetSuite, a 15-minute scheduler pushes NetSuite invoices and refunds to Salesforce, and a payment event keeps financial data flowing in near real-time — all without manual re-entry or a human in the loop.',
@@ -832,7 +849,8 @@ export const caseStudies: CaseStudy[] = [
     service: 'MuleSoft · Salesforce · Logistics',
     metric: '5 min',
     metricLabel: 'kit tracking to portal — order status, shipment details, and delivery date synced from the logistics platform every 5 minutes',
-    summary: 'MuleSoft API-led integration connecting a health portal, Salesforce CRM, and a logistics platform — customer journeys into Salesforce, support cases back to the portal, and kit shipment tracking every five minutes.',
+    summary:
+      'A MuleSoft layer joining a health portal, Salesforce and a logistics platform — journeys in, support cases back, kit tracking every five minutes.',
     tags: ['MuleSoft', 'Salesforce', 'CloudHub', 'DataWeave', 'Object Store', 'Bulk API v2', 'Person Accounts', 'Logistics API'],
     duration: '6-month engagement',
     result: 'Three-system integration — health portal, Salesforce, and logistics — with bidirectional data flow, automated case management, and real-time kit tracking',
@@ -859,6 +877,7 @@ export const caseStudies: CaseStudy[] = [
     pagerNote: 'Portal, CRM and logistics, five minutes apart',
 
     headline: 'Three systems, eight applications, one integration layer: how a digital health platform connected its portal, CRM, and logistics without a gap.',
+    seoTitle: 'Three systems on one MuleSoft layer',
     executiveSummary: `A digital health company offering at-home diagnostic testing had three systems that didn't talk to each other. Their customer portal managed member journeys and orders. Salesforce managed accounts, cases, and support. A third-party logistics platform handled kit shipment. Staff bridged the gaps manually — creating Salesforce records after portal registrations, copying support actions between Salesforce and the portal, and checking the logistics dashboard to answer basic questions about kit status.
 
 CloudAlgo built the integration layer: eight MuleSoft applications covering customer onboarding, bidirectional case management, kit fulfilment, and automated shipment tracking. All three systems now stay in sync without manual intervention.`,

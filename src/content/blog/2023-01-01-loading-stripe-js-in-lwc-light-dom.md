@@ -3,6 +3,7 @@ title: "Loading Stripe.js in an LWC: Why You Need Light DOM"
 date: 2023-01-01
 category: Salesforce
 excerpt: "Stripe Elements mounts by CSS selector, and a selector cannot reach inside a shadow root. That is the real reason this needs Light DOM — plus the CSP setting everyone forgets."
+seoDescription: "Stripe Elements mounts by CSS selector, and a selector cannot reach inside a shadow root. That is the real reason this needs Light DOM — plus the CSP setting."
 readTime: 3
 image: /blog-images/5e16611d37dc352a2525cbd77af54dc81b9b95e7-850x382.webp
 published: true

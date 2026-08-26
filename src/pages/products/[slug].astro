@@ -34,6 +34,7 @@ import PageMasthead from '@/components/ui/PageMasthead.astro';
 import CtaBand from '@/components/ui/CtaBand.astro';
 import { TYPE_LABEL, STATUS_LABEL } from '@/data/product-labels';
 import { productPages } from '@/data/product-pages';
+import { organization, orgRef, breadcrumbs, abs, SITE_ID } from '@/data/schema';
 
 export async function getStaticPaths() {
   const products = await getCollection('products', ({ data }) => data.published);
@@ -137,7 +138,14 @@ const columns = [
   { label: 'The rest of the catalogue', links: elsewhere },
 ].filter(c => c.links.length > 0);
 
-const siteBase = 'https://cloudalgo.com';
+const productUrl = abs(`/products/${slug}/`);
+
+/* One array, printed by the masthead and declared to the crawler. */
+const crumbs = [
+  { label: 'Home', href: '/' },
+  { label: 'Products', href: '/products/' },
+  { label: data.title },
+];
 
 const osMap: Record<string, string> = {
   'salesforce-app': 'Salesforce',
@@ -152,40 +160,28 @@ const softwareApp: Record<string, unknown> = {
   description:         data.tagline,
   applicationCategory: 'BusinessApplication',
   operatingSystem:     osMap[data.type] ?? 'Web',
-  url:                 `${siteBase}/products/${slug}`,
-  provider: { '@type': 'Organization', name: 'CloudAlgo', url: siteBase },
+  url:                 productUrl,
+  '@id':               `${productUrl}#software`,
+  isPartOf:            { '@id': SITE_ID },
+  provider:            orgRef,
 };
 if (data.externalUrl) softwareApp.downloadUrl = data.externalUrl;
 if (data.status === 'ga') {
   softwareApp.offers = { '@type': 'Offer', price: '0', priceCurrency: 'USD' };
 }
 
-const schema: object[] = [
-  softwareApp,
-  {
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home',      item: `${siteBase}/` },
-      { '@type': 'ListItem', position: 2, name: 'Products',  item: `${siteBase}/products/` },
-      { '@type': 'ListItem', position: 3, name: data.title,  item: `${siteBase}/products/${slug}/` },
-    ],
-  },
-];
+const schema: object[] = [softwareApp, organization, breadcrumbs(crumbs, productUrl)];
 ---
 <Page
   title={data.seoTitle ?? `${data.title} — ${TYPE_LABEL[data.type] ?? 'Product'} — CloudAlgo`}
   description={data.excerpt}
-  canonicalURL={`${siteBase}/products/${slug}/`}
+  canonicalURL={productUrl}
   schema={schema}
 >
   <PageMasthead
     class="page-head--product"
     standClass="release"
-    crumbs={[
-      { label: 'Home', href: '/' },
-      { label: 'Products', href: '/products/' },
-      { label: data.title },
-    ]}
+    {crumbs}
   >
     <Fragment slot="title" set:html={markedTitle} />
     <Fragment slot="lede" set:html={page.lede} />

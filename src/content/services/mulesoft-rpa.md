@@ -3,7 +3,7 @@ title: "MuleSoft RPA"
 shortTitle: "RPA"
 order: 4
 icon: "🤖"
-excerpt: "Robotic process automation on MuleSoft RPA — bots for the supplier portals, mainframe screens and PDFs that never got an API, governed on the same platform as your integrations."
+excerpt: "Robotic process automation on MuleSoft RPA — bots for the supplier portals, mainframe screens and PDFs that never got an API, governed like your integrations."
 ---
 
 ### Process capture first

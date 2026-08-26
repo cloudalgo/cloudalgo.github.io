@@ -3,6 +3,7 @@ title: "Setting Up Salesforce OAuth: Connected App and Web Server Flow in Node.j
 date: 2023-04-04
 category: Salesforce
 excerpt: "Creating the Connected App, the authorization code exchange, and a working Node.js example with PKCE — plus the instance_url detail that breaks the first API call people make."
+seoDescription: "Creating the Connected App, the authorization code exchange, and a working Node.js example with PKCE — plus the instance_url detail that breaks the first call."
 readTime: 4
 image: /blog-images/2cc845d7ae68538fd778e5758ed0861708e0a76c-1200x600.jpg
 published: true

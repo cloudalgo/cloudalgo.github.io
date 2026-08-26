@@ -3,6 +3,7 @@ title: "Triggering Async Heroku Processes from Salesforce Apex with RabbitMQ"
 date: 2024-01-01
 category: Salesforce
 excerpt: "Apex cannot speak AMQP, but it can POST to RabbitMQ's HTTP API. Here is the publish call, the Named Credential setup, and the staging-record pattern that makes failures retryable."
+seoDescription: "Apex cannot speak AMQP, but it can POST to RabbitMQ's HTTP API. The publish call, the Named Credential setup, and the pattern that makes failures retryable."
 readTime: 4
 image: /blog-images/e94d9966c30f4e9a42597b6210253e356bc16c0d-1992x1130.webp
 published: true

@@ -29,6 +29,7 @@ import ScopeDoc from '@/components/sections/ScopeDoc.astro';
 import ClosingManifest from '@/components/sections/ClosingManifest.astro';
 import EngagementPager from '@/components/sections/EngagementPager.astro';
 import { ENGAGEMENTS, BY_SLUG, WINDOWS, TIERS } from '@/data/engagements';
+import { organization, orgRef, breadcrumbs, abs, SITE_ID } from '@/data/schema';
 
 export async function getStaticPaths() {
   const services = await getCollection('services');
@@ -86,39 +87,46 @@ const areas = `${count[0].toUpperCase()}${count.slice(1)} area${rail.length === 
    compares them; the rows themselves are shared with the index's data. */
 const TIER_COLUMNS = ['Essentials', 'Growth', 'Enterprise'];
 
-const siteBase = 'https://cloudalgo.com';
+const serviceUrl = abs(`/services/${service.id}/`);
+
+/* A search result shows about sixty characters of a title. The shape --
+   "Project · 6-12 weeks", "Retainer · rolling month" -- is the thing a
+   reader choosing between seven engagements is actually reading, so the
+   brand is what gives way when both will not fit; Google prints the
+   site name on its own line beside the result regardless. */
+const headline = `${service.data.title} — ${engagement.shape}`;
+const headTitle = headline.length <= 48 ? `${headline} — CloudAlgo` : headline;
+
+/* One array, printed by the masthead and declared to the crawler. */
+const crumbs = [
+  { label: 'Home', href: '/' },
+  { label: 'Services', href: '/services/' },
+  { label: service.data.title },
+];
 
 const serviceSchema: object[] = [
   {
     '@type':       'ProfessionalService',
+    '@id':         `${serviceUrl}#service`,
     name:          service.data.title,
     description:   service.data.excerpt,
     serviceType:   service.data.title,
     areaServed:    'Worldwide',
-    url:           `${siteBase}/services/${service.id}`,
-    provider: { '@type': 'Organization', name: 'CloudAlgo', url: siteBase },
+    url:           serviceUrl,
+    isPartOf:      { '@id': SITE_ID },
+    provider:      orgRef,
   },
-  {
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home',     item: `${siteBase}/` },
-      { '@type': 'ListItem', position: 2, name: 'Services', item: `${siteBase}/services` },
-      { '@type': 'ListItem', position: 3, name: service.data.title, item: `${siteBase}/services/${service.id}` },
-    ],
-  },
+  organization,
+  breadcrumbs(crumbs, serviceUrl),
 ];
 ---
 <Page
-  title={`${service.data.title} — ${engagement.shape} | CloudAlgo`}
+  title={headTitle}
   description={service.data.excerpt}
   schema={serviceSchema}
 >
   <PageMasthead
-    crumbs={[
-      { label: 'Home', href: '/' },
-      { label: 'Services', href: '/services/' },
-      { label: service.data.title },
-    ]}
+    {crumbs}
     facts={facts}
   >
     <Fragment slot="title" set:html={detail.title} />

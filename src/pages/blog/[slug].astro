@@ -133,12 +133,21 @@ const articleImage =
     ? `https://cloudalgo.com${post.data.image}`
     : 'https://cloudalgo.com/og-default.jpg';
 
+/* The suffix names the section, which is worth a result's space until it
+   costs the headline its own words. Sixty characters is what a result
+   shows; an entry whose headline already fills that keeps the headline
+   and drops the suffix, because Google prints the site name beside the
+   result either way. */
+const head = post.data.seoTitle ?? post.data.title;
+const headTitle = head.length <= 41 ? `${head} — CloudAlgo Journal` : head;
+const headDescription = post.data.seoDescription ?? post.data.excerpt;
+
 const schema = [
   {
     '@type': 'BlogPosting',
     '@id': postUrl,
     headline: post.data.title,
-    description: post.data.excerpt,
+    description: headDescription,
     datePublished: post.data.date.toISOString(),
     /* The byline the page prints, credited to the person who wrote it. It
        used to say the author was the company, which is the one thing the
@@ -175,8 +184,8 @@ const schema = [
 ];
 ---
 <Page
-  title={`${post.data.title} — CloudAlgo Journal`}
-  description={post.data.excerpt}
+  title={headTitle}
+  description={headDescription}
   image={post.data.image}
   ogType="article"
   publishedTime={post.data.date.toISOString()}

@@ -3,10 +3,10 @@ title: "AlgoBridge"
 status: ga
 type: integration
 tagline: "Sync Salesforce to PostgreSQL. In Real Time."
-excerpt: "AlgoBridge is a bidirectional sync engine that connects Salesforce and PostgreSQL with trigger-based change detection and 10-second batch processing — self-hosted, open source, zero vendor lock-in."
+excerpt: "A bidirectional sync engine between Salesforce and PostgreSQL — trigger-based change detection, ten-second batches, self-hosted and open source."
 icon: "algobridge"
 externalUrl: "https://bridge.cloudalgo.com/"
-seoTitle: "AlgoBridge — Salesforce to PostgreSQL Sync Tool | CloudAlgo"
+seoTitle: "AlgoBridge — Salesforce to PostgreSQL Sync Tool"
 version: "1.0"
 lastUpdated: "2026-05-01"
 order: 2

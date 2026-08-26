@@ -3,6 +3,8 @@ title: "How healthy is your Salesforce org, really? A free, offline way to find 
 date: 2026-07-02
 category: Salesforce
 excerpt: "Nobody can tell you how healthy a Salesforce org is until something breaks on a Friday. OrgVitals scans it in a few minutes, grades it A to F, and tells you exactly what to fix first. It runs on your laptop, uploads nothing, and it's free right now."
+seoTitle: "How healthy is your Salesforce org, really?"
+seoDescription: "Nobody can tell you how healthy a Salesforce org is until something breaks on a Friday. OrgVitals scans it in minutes and grades it A to F, free."
 readTime: 9
 published: true
 featured: editors-pick

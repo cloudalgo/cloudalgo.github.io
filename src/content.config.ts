@@ -19,8 +19,20 @@ const blog = defineCollection({
     date:      z.date(),
     category:  z.enum(['Salesforce', 'Heroku', 'MuleSoft', 'AWS', 'Product']),
     excerpt:   z.string(),
+    /* The entry's standfirst, printed under the headline and on the cards.
+       It is written to be read, so it runs longer than a search result
+       shows -- the two fields below carry the search-result versions for
+       the entries where that difference matters, and only for those. */
     readTime:  z.number(),
     published: z.boolean().default(true),
+    /* A result shows about sixty characters of title and a hundred and
+       sixty of description. Where the headline or the standfirst is
+       longer than that -- and several are, because a headline is written
+       for the page and not for a list of ten blue links -- these carry
+       the short version. Absent, the headline and the standfirst are
+       used as they stand, which is the right answer for most entries. */
+    seoTitle:           z.string().optional(),
+    seoDescription:     z.string().optional(),
     featured:           z.enum(['editors-pick', 'bottom-pick']).optional(),
     image:              z.string().optional(),
     author:             z.string().optional(),

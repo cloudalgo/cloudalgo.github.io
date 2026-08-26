@@ -3,6 +3,8 @@ title: "We're Building an Offline Salesforce Org Health Checker. First We Had to
 date: 2026-06-26
 category: Salesforce
 excerpt: "We wanted one runtime: Node. So the Apex analysis had to run in Node too, with no JVM anywhere in the picture. Here's how we built a 41-rule static analysis engine — and why we open-sourced it."
+seoTitle: "Linting Apex in Node, without a JVM"
+seoDescription: "We wanted one runtime: Node. So the Apex analysis had to run in Node too, with no JVM anywhere. How we built a 41-rule engine, and why we open-sourced it."
 readTime: 9
 published: true
 image: /blog-images/apex-lint-hero.svg

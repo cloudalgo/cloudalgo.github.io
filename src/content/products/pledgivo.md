@@ -3,11 +3,11 @@ title: "Pledgivo"
 status: preview
 type: salesforce-app
 tagline: "Fundraising that never leaves Salesforce. Donations, recurring giving, campaigns and ticketed events all run inside your org — no external platform, no sync job, no second permission model."
-excerpt: "A native AppExchange managed package for fundraising. The donation form, the payment processing and the donor records live in your Salesforce org, so a gift is an Opportunity the instant it is taken. Free for your first 200 donations a year."
+excerpt: "A native AppExchange package for fundraising: the form, the payment and the donor record live in your org, so a gift is an Opportunity the instant it is taken."
 icon: "pledgivo"
 externalUrl: "https://pledgivo.cloudalgo.com/"
 guideUrl: "https://pledgivo.cloudalgo.com/getting-started/installation/"
-seoTitle: "Pledgivo — Native Salesforce Fundraising & Donation Management App | CloudAlgo"
+seoTitle: "Pledgivo — Native Salesforce Fundraising & Donations"
 order: 3
 lastUpdated: "August 2026"
 features:
