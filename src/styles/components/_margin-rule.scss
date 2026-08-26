@@ -1,0 +1,164 @@
+/* ─── The margin rule ─────────────────────────────────────
+   The page's scrollbar, in this site's register: a hairline ruled
+   down the right margin, ticked once per section, with a solid rule
+   travelling it. Same family as every other line on the site --
+   borders, dividers, the ledger's rows -- so it is sharp, not a
+   pill. The pill radius is reserved for buttons; this is a rule.
+
+   It REPLACES the native scrollbar rather than sitting beside it, so
+   `html.has-margin-rule` is what hides the native one -- and the
+   script sets that class only once it has confirmed a fine pointer
+   and a wide viewport. Without JS, on touch, or under a coarse
+   pointer the class is never set and the browser's own scrollbar
+   stays exactly where it was. Nothing here is load-bearing.
+
+   Two waking states, because they answer different questions:
+     .is-awake   -- "where am I?"  Track and ticks materialise, the
+                    rule thickens. Fires on scroll, then sleeps after
+                    a beat, so the ruler is present exactly while you
+                    are moving through the page.
+     .is-engaged -- "what am I pointing at?"  Adds the current
+                    section's name. Hover and drag only, never scroll,
+                    because a name that flashed on every wheel tick
+                    would be noise.
+
+   It is `aria-hidden`: this swaps the scrollbar's PIXELS, not its
+   function. Arrow keys, Page Up/Down, Home/End and screen-reader
+   navigation are untouched by hiding the native bar, so adding a
+   focusable control here would only buy a redundant tab stop ahead
+   of every page's content.
+*/
+
+html.has-margin-rule { scrollbar-width: none; }
+html.has-margin-rule::-webkit-scrollbar,
+html.has-margin-rule body::-webkit-scrollbar { width: 0; height: 0; }
+
+.margin-rule {
+  position: fixed;
+  /* Clears the fixed header at the top and the schedule launcher at
+     the bottom. Insetting it also reads correctly: this is a margin
+     rule aligned to the page's frame, not browser chrome bolted to
+     the viewport edge. */
+  top: calc(var(--header-h) + 1.5rem);
+  bottom: 8.5rem;
+  right: 0;
+  /* 22px of hit area around 1px of ink. The rule sits at 10.5px from
+     the right edge; every child below is centred on that axis. */
+  width: 22px;
+  z-index: 998;
+  display: none;
+  cursor: pointer;
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+}
+html.has-margin-rule .margin-rule { display: block; }
+
+/* The track. Absent at rest, so what the page shows when nobody is
+   scrolling is a single mark in the margin and nothing else. */
+.margin-rule::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 10px;
+  width: 1px;
+  background-color: var(--border-default);
+  opacity: 0;
+  transition: opacity 0.28s ease;
+}
+
+.margin-rule__tick {
+  position: absolute;
+  right: 6px;
+  width: 9px;
+  height: 1px;
+  background-color: var(--color-text-faint);
+  opacity: 0;
+  transition: opacity 0.28s ease;
+}
+
+.margin-rule__thumb {
+  position: absolute;
+  top: 0;
+  right: 9px;
+  width: 3px;
+  background-color: var(--color-text-muted);
+  /* translateY composites; animating `top` would relayout every frame */
+  transform: translateY(0);
+  will-change: transform;
+  transition:
+    width 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+    right 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 0.28s ease;
+}
+
+/* The name of the section under the rule. It floats over whatever the
+   page has put in its right margin -- on the case studies that is live
+   diagram copy -- so it carries its own ground rather than trusting the
+   gutter to be empty. That makes it a tag, and the site already has one
+   tag: black fill, white text, uppercase, 0.6875rem, pill. Reusing that
+   settles both the contrast and the shape question. */
+.margin-rule__label {
+  position: absolute;
+  right: 22px;
+  /* Set by script; -50% centres the name on the travelling rule */
+  transform: translateY(-50%);
+  /* A px cap, not a `ch` one: `ch` measures the digit zero, and this is set
+     uppercase with 0.1em tracking, so the two disagree by a third. The
+     script already cuts names to ~32 characters at a word seam -- this is
+     the backstop for a heading with one very long word in it. */
+  max-width: 18rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 0.4375rem 0.75rem;
+  border-radius: 100px;
+  background-color: var(--surface-inverse);
+  color: var(--surface-page);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  line-height: 1;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.22s ease;
+}
+/* An empty tag would still paint a black lozenge in the margin */
+.margin-rule__label:empty { display: none; }
+
+/* ── Awake: the ruler materialises ─────────────────────── */
+.margin-rule.is-awake::before,
+.margin-rule.is-awake .margin-rule__tick { opacity: 1; }
+
+.margin-rule.is-awake .margin-rule__thumb {
+  width: 5px;
+  right: 8px;
+  background-color: var(--surface-inverse);
+}
+
+/* ── Engaged: name the section under the rule ──────────── */
+/* Only where the gutter is wide enough to hold a name without it
+   crossing the container. Below that the ruler speaks for itself. */
+@media (min-width: 1280px) {
+  .margin-rule.is-engaged .margin-rule__label { opacity: 1; }
+}
+
+/* ── Reduced motion ────────────────────────────────────── */
+/* No materialising, no fade back to sleep: the ruler is simply
+   always there, and the rule still tracks the page. */
+@media (prefers-reduced-motion: reduce) {
+  .margin-rule::before,
+  .margin-rule__tick,
+  .margin-rule__thumb,
+  .margin-rule__label { transition: none; }
+
+  .margin-rule::before,
+  .margin-rule .margin-rule__tick { opacity: 1; }
+
+  .margin-rule .margin-rule__thumb {
+    width: 5px;
+    right: 8px;
+    background-color: var(--surface-inverse);
+  }
+}

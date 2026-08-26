@@ -100,15 +100,23 @@ const ogImage = image.startsWith('http') ? image : `${imageHost}${image}`;
 
   </head>
   <body>
-    <div id="scroll-progress-bar" aria-hidden="true"></div>
+    <div id="margin-rule" class="margin-rule" aria-hidden="true">
+      <span class="margin-rule__label"></span>
+      <span class="margin-rule__thumb"></span>
+    </div>
     <slot />
     <script>
       // Scrollable page height, measured once and refreshed when the layout
       // actually changes. Reading scrollHeight inside a scroll handler forces a
       // synchronous layout on every event, which is the expensive part.
       let scrollableHeight = 0;
+      // Anything that has to re-derive geometry from the new page height
+      // registers here, so it runs inside the one measurement rather than
+      // observing the body a second time.
+      const onRelayout: Array<() => void> = [];
       const measureScrollable = () => {
         scrollableHeight = document.body.scrollHeight - window.innerHeight;
+        for (const hook of onRelayout) hook();
       };
       measureScrollable();
       window.addEventListener('resize', measureScrollable, { passive: true });
@@ -117,21 +125,219 @@ const ogImage = image.startsWith('http') ? image : `${imageHost}${image}`;
         new ResizeObserver(measureScrollable).observe(document.body);
       }
 
-      // Scroll progress bar
-      const progressBar = document.getElementById('scroll-progress-bar');
-      if (progressBar) {
-        let barRafId: number | null = null;
-        const paintProgress = () => {
-          barRafId = null;
-          const pct = scrollableHeight > 0 ? window.scrollY / scrollableHeight : 0;
-          // scaleX composites; animating width relayouts the page every frame
-          progressBar.style.transform = `scaleX(${Math.min(Math.max(pct, 0), 1)})`;
+      // ── The margin rule ────────────────────────────────
+      // Drives the custom scrollbar in src/styles/components/_margin-rule.scss,
+      // which hides the native one. Read that file's header first: the
+      // `has-margin-rule` class set below is the ONLY thing that hides the
+      // browser's scrollbar, so every early return here leaves the page with
+      // its normal scrollbar rather than with no way to scroll.
+      const rule = document.getElementById('margin-rule');
+      const ruleThumb = rule?.querySelector<HTMLElement>('.margin-rule__thumb');
+      const ruleLabel = rule?.querySelector<HTMLElement>('.margin-rule__label');
+
+      if (rule && ruleThumb && ruleLabel) {
+        // Coarse pointers already get overlay scrollbars they cannot drag, and
+        // a 22px rail is not a touch target. Below `md` and on touch the native
+        // bar is simply left alone.
+        const drivable = window.matchMedia('(min-width: 768px) and (pointer: fine)');
+        const stillness = window.matchMedia('(prefers-reduced-motion: reduce)');
+        // A rule shorter than this stops reading as a rule and starts reading
+        // as a dot, so it is clamped and the travel shortened to match.
+        const MIN_RULE = 44;
+
+        let live = false;
+        let railLen = 0;
+        let thumbLen = 0;
+        let travel = 0;
+        let marks: Array<{ top: number; name: string }> = [];
+        let shownName = '';
+        let dragging = false;
+        let grabOffset = 0;
+        let sleepTimer: number | undefined;
+        let ruleRaf: number | null = null;
+
+        const progress = () =>
+          scrollableHeight > 0
+            ? Math.min(Math.max(window.scrollY / scrollableHeight, 0), 1)
+            : 0;
+
+        // Every section on the site labels itself with the heading that names
+        // it, so the headings ARE the page's table of contents -- no per-page
+        // data to keep in sync. Pages that predate the convention just come
+        // back with too few marks and get an unticked rule.
+        // Every section heading on this site is a written sentence, not a
+        // label -- "Four things we will not do, and what each one costs us."
+        // The tag holds about 32 characters of uppercase before it stops
+        // being a mark in the margin and becomes a banner over the page, so
+        // the heading is cut down to the part that names the section:
+        //   1. the trailing full stop goes. It is editorial voice at 3.5rem;
+        //      at 0.6875rem uppercase in a lozenge it reads as a typo.
+        //   2. long headings drop to their first sentence or clause, which is
+        //      where these headings put the name and after which they qualify
+        //      it -- "Seven shapes, drawn to scale" -> "Seven shapes".
+        //   3. the few that have no such seam get a plain word-boundary
+        //      truncation. Three of the site's twenty-five headings land here,
+        //      all of them a fold's opening line, and all still recognisable.
+        const NAME_MAX = 32;
+        const shortName = (raw: string) => {
+          let name = raw.replace(/\s+/g, ' ').trim().replace(/[.,;:\u2014-]+$/, '').trim();
+          if (name.length <= NAME_MAX) return name;
+          const seam = name.search(/[.,;:] | \u2014 /);
+          if (seam > 0) name = name.slice(0, seam).trim();
+          if (name.length <= NAME_MAX) return name;
+          const cut = name.lastIndexOf(' ', NAME_MAX - 1);
+          return `${name.slice(0, cut > 0 ? cut : NAME_MAX - 1).replace(/[.,;:]$/, '')}\u2026`;
         };
+
+        const readMarks = () => {
+          const found: Array<{ top: number; name: string }> = [];
+          document.querySelectorAll<HTMLElement>('section[aria-labelledby]').forEach(section => {
+            const id = section.getAttribute('aria-labelledby');
+            const heading = id ? document.getElementById(id)?.textContent : '';
+            const name = heading ? shortName(heading) : '';
+            if (!name) return;
+            found.push({ top: section.getBoundingClientRect().top + window.scrollY, name });
+          });
+          return found.sort((a, b) => a.top - b.top);
+        };
+
+        const drawTicks = () => {
+          rule.querySelectorAll('.margin-rule__tick').forEach(tick => tick.remove());
+          // Two ticks is not a ruler, it is a pair of stray marks.
+          if (marks.length < 3 || travel <= 0 || scrollableHeight <= 0) return;
+          const frag = document.createDocumentFragment();
+          for (const mark of marks) {
+            const pct = Math.min(Math.max(mark.top / scrollableHeight, 0), 1);
+            const tick = document.createElement('span');
+            tick.className = 'margin-rule__tick';
+            // Aligned to where the rule's CENTRE lands when that section is at
+            // the top of the viewport, so a tick is an honest drag target.
+            tick.style.top = `${thumbLen / 2 + travel * pct}px`;
+            frag.appendChild(tick);
+          }
+          rule.appendChild(frag);
+        };
+
+        const nameHere = () => {
+          if (!marks.length) return '';
+          // A section counts as the one you are in once its top has passed the
+          // upper third, which is where the eye actually sits.
+          const probe = window.scrollY + window.innerHeight * 0.35;
+          let name = marks[0].name;
+          for (const mark of marks) {
+            if (mark.top > probe) break;
+            name = mark.name;
+          }
+          return name;
+        };
+
+        const paintRule = () => {
+          ruleRaf = null;
+          const y = travel * progress();
+          ruleThumb.style.transform = `translateY(${y}px)`;
+          ruleLabel.style.top = `${y + thumbLen / 2}px`;
+          const name = nameHere();
+          if (name !== shownName) {
+            shownName = name;
+            ruleLabel.textContent = name;
+          }
+        };
+
+        const measureRule = () => {
+          if (!live) return;
+          railLen = rule.getBoundingClientRect().height;
+          const docHeight = scrollableHeight + window.innerHeight;
+          const seen = docHeight > 0 ? window.innerHeight / docHeight : 1;
+          // Length is the proportion of the document on screen, exactly as a
+          // native thumb reports it -- the rule says how much page there is,
+          // not only where you are in it.
+          thumbLen = Math.min(railLen, Math.max(MIN_RULE, Math.round(railLen * seen)));
+          travel = railLen - thumbLen;
+          ruleThumb.style.height = `${thumbLen}px`;
+          drawTicks();
+          paintRule();
+        };
+
+        const sleep = () => {
+          if (dragging || rule.matches(':hover')) return;
+          rule.classList.remove('is-awake');
+        };
+        const wake = () => {
+          rule.classList.add('is-awake');
+          window.clearTimeout(sleepTimer);
+          sleepTimer = window.setTimeout(sleep, 1200);
+        };
+        const engage = () => {
+          window.clearTimeout(sleepTimer);
+          rule.classList.add('is-awake', 'is-engaged');
+        };
+        const release = () => {
+          rule.classList.remove('is-engaged');
+          wake();
+        };
+
+        // Maps a pointer's y to a scroll position. `offset` is where inside the
+        // rule the pointer took hold, so a drag does not jump the rule's top
+        // under the cursor on the first move.
+        const scrollFromPointer = (clientY: number, offset: number) => {
+          if (travel <= 0) return;
+          const top = clientY - rule.getBoundingClientRect().top - offset;
+          const pct = Math.min(Math.max(top / travel, 0), 1);
+          // `instant`, not `auto`: `auto` DEFERS to the element's computed
+          // scroll-behavior, and this site sets `scroll-behavior: smooth` on
+          // <html>, which would animate every drag frame and leave the page
+          // trailing several hundred ms behind the cursor.
+          window.scrollTo({ top: pct * scrollableHeight, behavior: 'instant' });
+        };
+
+        rule.addEventListener('pointerenter', engage);
+        rule.addEventListener('pointerleave', () => { if (!dragging) release(); });
+
+        rule.addEventListener('pointerdown', (event: PointerEvent) => {
+          if (event.button !== 0 || !live) return;
+          event.preventDefault();
+          const ruleTop = rule.getBoundingClientRect().top + travel * progress();
+          const onRule = event.clientY >= ruleTop && event.clientY <= ruleTop + thumbLen;
+          // Taking hold of the rule keeps your grip on it; clicking the track
+          // centres the rule on the click and drags from there.
+          grabOffset = onRule ? event.clientY - ruleTop : thumbLen / 2;
+          dragging = true;
+          rule.classList.add('is-awake', 'is-engaged');
+          rule.setPointerCapture(event.pointerId);
+          scrollFromPointer(event.clientY, grabOffset);
+        });
+
+        rule.addEventListener('pointermove', (event: PointerEvent) => {
+          if (dragging) scrollFromPointer(event.clientY, grabOffset);
+        });
+
+        const endDrag = (event: PointerEvent) => {
+          if (!dragging) return;
+          dragging = false;
+          if (rule.hasPointerCapture(event.pointerId)) rule.releasePointerCapture(event.pointerId);
+          if (rule.matches(':hover')) wake(); else release();
+        };
+        rule.addEventListener('pointerup', endDrag);
+        rule.addEventListener('pointercancel', endDrag);
+
         window.addEventListener('scroll', () => {
-          if (barRafId === null) barRafId = requestAnimationFrame(paintProgress);
+          if (!live) return;
+          if (!stillness.matches) wake();
+          if (ruleRaf === null) ruleRaf = requestAnimationFrame(paintRule);
         }, { passive: true });
-        window.addEventListener('resize', paintProgress, { passive: true });
-        paintProgress();
+
+        const syncRule = () => {
+          live = drivable.matches;
+          document.documentElement.classList.toggle('has-margin-rule', live);
+          if (!live) return;
+          marks = readMarks();
+          measureRule();
+        };
+        drivable.addEventListener('change', syncRule);
+        // Lazy images and the font swap move every section, so the marks are
+        // re-read with the height they were measured against.
+        onRelayout.push(syncRule);
+        syncRule();
       }
 
       // Scroll animations

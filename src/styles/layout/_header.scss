@@ -48,24 +48,6 @@ main[id] {
   .header.scrolled { background-color: var(--surface-page); }
 }
 
-#scroll-progress-bar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 2px;
-  /* Full width, scaled down on the compositor rather than resized on layout */
-  width: 100%;
-  transform: scaleX(0);
-  transform-origin: 0 50%;
-  will-change: transform;
-  background-color: var(--surface-inverse);
-  z-index: 1001;
-  transition: transform 0.1s linear;
-}
-@media (prefers-reduced-motion: reduce) {
-  #scroll-progress-bar { transition: none; }
-}
-
 /* Three columns rather than a flex row, because the menu is centred on
    the BAR, not on the space left over between the brand and the CTA. The
    two 1fr rails are equal by definition, so the auto middle lands on the

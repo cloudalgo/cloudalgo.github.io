@@ -23,6 +23,9 @@
 // The header's second half -- it is positioned by `.header` and measures
 // itself off --header-h, so it loads directly after it.
 @use 'layout/mobile-menu';
+// The page's own scrollbar, replacing the native one. Chrome, like the
+// header, and it reads `--header-h` to inset itself beneath it.
+@use 'components/margin-rule';
 
 // ── Components ────────────────────────────────────────────
 @use 'components/buttons';
