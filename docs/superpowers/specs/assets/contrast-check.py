@@ -112,8 +112,7 @@ TEXT_ROLES = [
 #
 # `--color-on-inverse-a35/-a40` are real text at:
 #   a35: src/pages/blog/[slug].astro:629, src/pages/case-studies/[slug].astro:975
-#   a40: src/pages/case-studies.astro:416,
-#        src/components/ui/ProductCard.astro:82,
+#   a40: src/components/ui/ProductCard.astro:82,
 #        src/styles/tokens/_components.scss:50 (--section-label-color-inverse)
 # Composited over this theme's `ink-900` (#131110) they measure 3.21 / 3.82 --
 # both under 4.5:1. This is NOT something the repaint introduced: the
@@ -133,7 +132,7 @@ ALPHA_TEXT_ROLES = [
     ('on-inverse-a35 (--color-on-inverse-a35)', 0.35, 4.5,
      'KNOWN -- blog/[slug].astro:629, case-studies/[slug].astro:975'),
     ('on-inverse-a40 (--color-on-inverse-a40)', 0.40, 4.5,
-     'KNOWN -- case-studies.astro:416, ProductCard.astro:82, _components.scss:50'),
+     'KNOWN -- ProductCard.astro:82, _components.scss:50'),
     ('on-inverse-faint / a45 (--color-on-inverse-faint)', 0.45, 4.5, None),
     ('on-inverse-muted / a55 (--color-on-inverse-muted)', 0.55, 4.5, None),
     ('on-inverse-strong / a70 (--color-on-inverse-strong)', 0.70, 4.5, None),

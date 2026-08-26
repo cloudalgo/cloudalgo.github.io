@@ -1,435 +1,154 @@
 ---
-import Page from '../layouts/Page.astro';
-import { caseStudies } from '../data/case-studies';
-import Breadcrumb from '@/components/ui/Breadcrumb.astro';
-import SectionLabel from '../components/ui/SectionLabel.astro';
-import Badge from '@/components/ui/Badge.astro';
+/**
+ * Five case studies, stated as what stopped being true.
+ *
+ * A product is an object and gets a spec sheet; an engagement is a period
+ * of time and gets a schedule. A case study is neither -- it is a CHANGE
+ * OF STATE, so both devices on this page encode one. The ledger sets each
+ * study out as was/now with the figure that settles it, and the claims
+ * index reads the same five rows the other way round: a claim first, then
+ * the studies that carry it, cited by number into the ledger above.
+ *
+ * Every string on the page comes from `@/data/case-studies` -- the index
+ * copy from each study's `ledger` block, the figure from its `metric`.
+ * The masthead's countable facts are counted here rather than written
+ * down, so a sixth study cannot leave the stand claiming five.
+ */
+import Page from '@/layouts/Page.astro';
+import PageMasthead from '@/components/ui/PageMasthead.astro';
+import { caseStudies } from '@/data/case-studies';
 
+/* "Ongoing" is the one `when` value that is not a length, which makes it
+   the one that answers "still running". Counted, not asserted. */
+const ongoing = caseStudies.filter((c) => c.ledger.when === 'Ongoing').length;
+
+const industries = [...new Set(caseStudies.map((c) => c.ledger.tags.split(' · ')[0]))];
+
+/* The shortest engagement, off the same field the rows print. Studies
+   with no number in `when` are the open-ended ones and have no length to
+   compare. */
+const months = caseStudies
+  .map((c) => Number(c.ledger.when.match(/^(\d+) months?$/)?.[1]))
+  .filter((n) => !Number.isNaN(n));
+const shortest = `${Math.min(...months)} months`;
+
+/* Four claims about the set, each carried by the rows it names. A claim
+   nothing links back to is an assertion, and this page's whole argument
+   is that it does not make those -- so the chips are real anchors and
+   every study id here is checked against the data below. */
+const CLAIMS = [
+  {
+    text: 'All five removed a manual step somebody did every working day.',
+    cites: ['01', '02', '03', '04', '05'],
+  },
+  {
+    text: 'Three connect Salesforce to a system that was never built to talk to it.',
+    cites: ['03', '04', '05'],
+  },
+  {
+    text: 'Two are still running long after the first release — which is the only review of an architecture that counts.',
+    cites: ['01', '02'],
+  },
+  {
+    text: 'One had no API to integrate with at all, so we drove the browser instead.',
+    cites: ['03'],
+  },
+];
+
+/* Fail the build rather than ship a chip that scrolls nowhere. */
+const indexes = new Set(caseStudies.map((c) => c.index));
+for (const claim of CLAIMS) {
+  for (const n of claim.cites) {
+    if (!indexes.has(n)) {
+      throw new Error(`case-studies.astro: claim cites study "${n}", which has no row.`);
+    }
+  }
+}
 ---
-
 <Page
-  title="Case Studies — CloudAlgo | Salesforce, Heroku & MuleSoft Results"
-  description="Real outcomes from CloudAlgo's Salesforce, Heroku, and MuleSoft engagements — bidirectional CRM integrations, EMR automation, and data pipelines built for healthcare, distribution, and non-profit clients."
+  title="Case studies — CloudAlgo | Five things that are no longer true"
+  description="Five Salesforce, MuleSoft and Heroku engagements stated as a change of state: what was true before, what is true now, and the one number that settles each of them."
 >
+  <PageMasthead
+    crumbs={[{ label: 'Home', href: '/' }, { label: 'Case studies' }]}
+    facts={[
+      { term: 'Studies',       detail: String(caseStudies.length) },
+      { term: 'Industries',    detail: industries.join(' · ') },
+      { term: 'Platforms',     detail: 'Salesforce · MuleSoft · Heroku · NetSuite · Airflow' },
+      { term: 'Shortest',      detail: shortest },
+      { term: 'Longest',       detail: '2+ years' },
+      { term: 'Still running', detail: `${ongoing} of ${caseStudies.length}` },
+      { term: 'Enquiries',     detail: 'contact@cloudalgo.com' },
+    ]}
+  >
+    <Fragment slot="title">
+      Five companies. Five things that are <span class="mark mark--draw">no longer true</span>.
+    </Fragment>
+    <Fragment slot="lede">
+      Each of these began as a sentence somebody was tired of saying &mdash; &ldquo;we re-key that by
+      hand&rdquo;, &ldquo;the data is a day old&rdquo;, &ldquo;that system has no API&rdquo;. Below is
+      what replaced each sentence, how long it took, and the one number that settles it.
+    </Fragment>
+  </PageMasthead>
 
-  <!-- ── Hero ── -->
-  <div class="cs-hero">
-    <div class="container">
-      <div class="cs-hero-split">
-        <div class="cs-hero-text">
-          <Breadcrumb items={[{ label: 'Home', href: '/' }, { label: 'Case Studies' }]} />
-          <SectionLabel>Results that speak</SectionLabel>
-          <h1 class="cs-hero-title">What we've built.<br/>What it delivered.</h1>
-          <p class="cs-hero-sub">Real engagements, real constraints, and the numbers they moved.</p>
-        </div>
-        <div class="cs-hero-illo" aria-hidden="true">
-          <svg viewBox="0 0 480 340" fill="none" xmlns="http://www.w3.org/2000/svg" class="cs-hero-svg">
-            <!-- ── Doc 3: back, rotated left ── -->
-            <g transform="rotate(-13 230 175)">
-              <rect x="120" y="38" width="220" height="272" rx="12" fill="var(--surface-tint)" stroke="var(--color-ink-a18)" stroke-width="1.5"/>
-              <rect x="120" y="38" width="220" height="44" rx="12" fill="var(--color-ink-a15)"/>
-              <rect x="120" y="60" width="220" height="22" fill="var(--color-ink-a15)"/>
-              <rect x="140" y="98" width="138" height="8" rx="2" fill="var(--color-ink-a09)"/>
-              <rect x="140" y="113" width="106" height="7" rx="2" fill="var(--color-ink-a07)"/>
-              <rect x="140" y="127" width="122" height="7" rx="2" fill="var(--color-ink-a07)"/>
-            </g>
-            <!-- ── Doc 2: middle, slightly rotated ── -->
-            <g transform="rotate(-5 230 175)">
-              <rect x="120" y="38" width="220" height="272" rx="12" fill="var(--surface-wash)" stroke="var(--color-ink-a42)" stroke-width="1.5"/>
-              <rect x="120" y="38" width="220" height="44" rx="12" fill="var(--color-ink-a65)"/>
-              <rect x="120" y="60" width="220" height="22" fill="var(--color-ink-a65)"/>
-              <text x="230" y="66" text-anchor="middle" font-family="var(--illus-font)" font-size="10" font-weight="700" fill="var(--color-paper-a55)">Case Study</text>
-              <rect x="140" y="98" width="152" height="8" rx="2" fill="var(--color-ink-a13)"/>
-              <rect x="140" y="113" width="116" height="7" rx="2" fill="var(--color-ink-a10)"/>
-              <text x="230" y="178" text-anchor="middle" font-family="var(--illus-font)" font-size="32" font-weight="900" fill="var(--color-ink-a22)">&lt;15m</text>
-            </g>
-            <!-- ── Doc 1: front, straight ── -->
-            <rect x="120" y="38" width="220" height="272" rx="12" fill="var(--illus-surface)" stroke="var(--color-ink-a82)" stroke-width="2"/>
-            <rect x="120" y="38" width="220" height="44" rx="12" fill="var(--illus-ink)"/>
-            <rect x="120" y="60" width="220" height="22" fill="var(--illus-ink)"/>
-            <text x="230" y="65" text-anchor="middle" font-family="var(--illus-font)" font-size="11" font-weight="700" fill="var(--illus-surface)">Case Study Report</text>
-            <rect x="140" y="98" width="152" height="9" rx="3" fill="var(--color-ink-a14)"/>
-            <rect x="140" y="115" width="118" height="7" rx="2" fill="var(--color-ink-a09)"/>
-            <rect x="140" y="129" width="136" height="7" rx="2" fill="var(--color-ink-a09)"/>
-            <line x1="140" y1="150" x2="320" y2="150" stroke="var(--color-ink-a08)" stroke-width="1.5"/>
-            <rect x="140" y="159" width="180" height="68" rx="8" fill="var(--illus-wash)"/>
-            <text x="230" y="193" text-anchor="middle" font-family="var(--illus-font)" font-size="30" font-weight="900" fill="var(--illus-ink)">&lt;15m</text>
-            <text x="230" y="214" text-anchor="middle" font-family="var(--illus-font)" font-size="9" font-weight="500" fill="var(--color-ink-a50)">data freshness</text>
-            <rect x="140" y="243" width="124" height="7" rx="2" fill="var(--color-ink-a09)"/>
-            <rect x="140" y="257" width="146" height="7" rx="2" fill="var(--color-ink-a07)"/>
-            <rect x="140" y="275" width="80" height="20" rx="10" stroke="var(--color-ink-a25)" stroke-width="1.5"/>
-            <text x="180" y="289" text-anchor="middle" font-family="var(--illus-font)" font-size="8" font-weight="700" fill="var(--color-ink-a50)">Data Eng.</text>
-            <rect x="228" y="275" width="72" height="20" rx="10" stroke="var(--color-ink-a25)" stroke-width="1.5"/>
-            <text x="264" y="289" text-anchor="middle" font-family="var(--illus-font)" font-size="8" font-weight="700" fill="var(--color-ink-a50)">Airflow</text>
-            <!-- floating badge -->
-            <rect x="346" y="50" width="90" height="30" rx="15" fill="var(--illus-ink)"/>
-            <text x="391" y="69" text-anchor="middle" font-family="var(--illus-font)" font-size="11" font-weight="700" fill="var(--illus-surface)">5 studies</text>
-            <!-- decorative dots -->
-            <circle cx="66"  cy="130" r="4"   fill="var(--color-ink-a07)"/>
-            <circle cx="56"  cy="188" r="2.5" fill="var(--illus-wash)"/>
-            <circle cx="458" cy="155" r="4"   fill="var(--color-ink-a07)"/>
-            <circle cx="464" cy="225" r="2.5" fill="var(--illus-wash)"/>
-          </svg>
-        </div>
-      </div>
+  <section class="section-press" aria-labelledby="ledger-heading">
+    <div class="section-press__head anim-fade-up">
+      <h2 id="ledger-heading" class="section-title section-title--xs section-title--tighter section-press__title">
+        What stopped being true.
+      </h2>
+      <span class="section-press__note">Struck through: the way it used to work</span>
     </div>
-  </div>
 
-  <!-- ── Cards grid ── -->
-  <section class="cs-grid-section">
-    <div class="container">
-      <div class="cs-grid">
-        {caseStudies.map((cs) => (
-          <article
-            class="card card--radius-2xl card--lift cs-card"
-            onclick={`window.location='/case-studies/${cs.id}'`}
-            style="cursor:pointer;"
-          >
-            <div class="stat-num stat-num--3xl stat-num--tighter cs-card-metric-bg" aria-hidden="true">{cs.metric}</div>
-
-            <div class="cs-card-illo" aria-hidden="true">
-              {cs.id === 'nonprofit-web-platform' && (
-                <svg viewBox="0 0 320 160" fill="none" class="cs-illo-svg">
-                  <!-- Layer 1: Frontend -->
-                  <rect x="16" y="12" width="288" height="30" rx="5" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.15" fill="var(--color-ink-a02)"/>
-                  <text x="30" y="31" font-family="var(--illus-font)" font-size="9" font-weight="800" fill="var(--illus-ink)" opacity="0.30" letter-spacing="0.08em">NEXT.JS 14 · REACT 18</text>
-                  <!-- Arrow 1→2 -->
-                  <path d="M160 44 L160 50" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.25" stroke-linecap="round"/>
-                  <path d="M157 47 L160 52 L163 47" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.25" stroke-linecap="round" stroke-linejoin="round"/>
-                  <!-- Layer 2: Backend -->
-                  <rect x="16" y="52" width="288" height="30" rx="5" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.32" fill="var(--color-ink-a04)"/>
-                  <text x="30" y="71" font-family="var(--illus-font)" font-size="9" font-weight="800" fill="var(--illus-ink)" opacity="0.52" letter-spacing="0.08em">NODE.JS API · HEROKU</text>
-                  <!-- Arrow 2→3 -->
-                  <path d="M160 84 L160 90" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.35" stroke-linecap="round"/>
-                  <path d="M157 87 L160 92 L163 87" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.35" stroke-linecap="round" stroke-linejoin="round"/>
-                  <!-- Integration nodes -->
-                  <rect x="16" y="92" width="72" height="28" rx="5" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.45" fill="var(--illus-wash)"/>
-                  <text x="52" y="110" text-anchor="middle" font-family="var(--illus-font)" font-size="8" font-weight="800" fill="var(--illus-ink)" opacity="0.65">Salesforce</text>
-                  <rect x="96" y="92" width="52" height="28" rx="5" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.45" fill="var(--illus-wash)"/>
-                  <text x="122" y="110" text-anchor="middle" font-family="var(--illus-font)" font-size="8" font-weight="800" fill="var(--illus-ink)" opacity="0.65">Stripe</text>
-                  <rect x="156" y="92" width="60" height="28" rx="5" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.45" fill="var(--illus-wash)"/>
-                  <text x="186" y="110" text-anchor="middle" font-family="var(--illus-font)" font-size="8" font-weight="800" fill="var(--illus-ink)" opacity="0.65">Cognito</text>
-                  <!-- Metric badge -->
-                  <rect x="224" y="92" width="80" height="28" rx="5" fill="var(--illus-ink)"/>
-                  <text x="264" y="110" text-anchor="middle" font-family="var(--illus-font)" font-size="10" font-weight="800" fill="var(--illus-surface)">2+ yrs</text>
-                  <!-- Sub-row: additional integrations label -->
-                  <text x="16" y="140" font-family="var(--illus-font)" font-size="8" font-weight="600" fill="var(--illus-ink)" opacity="0.22" letter-spacing="0.05em">Segment · Marketing Cloud · Framer Motion · React Query</text>
-                </svg>
-              )}
-              {cs.id === 'enterprise-data-pipeline' && (
-                <svg viewBox="0 0 320 160" fill="none" class="cs-illo-svg">
-                  <rect x="16" y="10"  width="288" height="28" rx="5" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.15" fill="var(--color-ink-a02)"/>
-                  <rect x="16" y="48"  width="288" height="28" rx="5" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.28" fill="var(--color-ink-a03)"/>
-                  <rect x="16" y="86"  width="288" height="28" rx="5" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.48" fill="var(--illus-wash)"/>
-                  <rect x="16" y="124" width="288" height="28" rx="5" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.72" fill="var(--color-ink-a07)"/>
-                  <text x="30" y="29"  font-family="var(--illus-font)" font-size="9" font-weight="800" fill="var(--illus-ink)" opacity="0.3"  letter-spacing="0.08em">STAGING</text>
-                  <text x="30" y="67"  font-family="var(--illus-font)" font-size="9" font-weight="800" fill="var(--illus-ink)" opacity="0.45" letter-spacing="0.08em">BRONZE</text>
-                  <text x="30" y="105" font-family="var(--illus-font)" font-size="9" font-weight="800" fill="var(--illus-ink)" opacity="0.65" letter-spacing="0.08em">SILVER</text>
-                  <text x="30" y="143" font-family="var(--illus-font)" font-size="9" font-weight="800" fill="var(--illus-ink)" opacity="0.85" letter-spacing="0.08em">GOLD</text>
-                  <path d="M160 40 L160 46" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.28" stroke-linecap="round"/>
-                  <path d="M157 43 L160 48 L163 43" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.28" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M160 78 L160 84" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.42" stroke-linecap="round"/>
-                  <path d="M157 81 L160 86 L163 81" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.42" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M160 116 L160 122" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.6" stroke-linecap="round"/>
-                  <path d="M157 119 L160 124 L163 119" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.6" stroke-linecap="round" stroke-linejoin="round"/>
-                  <rect x="208" y="124" width="88" height="28" rx="5" fill="var(--illus-ink)"/>
-                  <text x="252" y="143" text-anchor="middle" font-family="var(--illus-font)" font-size="10" font-weight="800" fill="var(--illus-surface)">&lt;15 min</text>
-                </svg>
-              )}
-              {cs.id === 'salesforce-netsuite-sync' && (
-                <svg viewBox="0 0 320 160" fill="none" class="cs-illo-svg">
-                  <rect x="16" y="10"  width="288" height="28" rx="5" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.15" fill="var(--color-ink-a02)"/>
-                  <rect x="16" y="48"  width="288" height="28" rx="5" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.28" fill="var(--color-ink-a03)"/>
-                  <rect x="16" y="86"  width="288" height="28" rx="5" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.48" fill="var(--illus-wash)"/>
-                  <rect x="16" y="124" width="288" height="28" rx="5" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.72" fill="var(--color-ink-a07)"/>
-                  <text x="30" y="29"  font-family="var(--illus-font)" font-size="9" font-weight="800" fill="var(--illus-ink)" opacity="0.30" letter-spacing="0.08em">SALESFORCE CRM</text>
-                  <text x="30" y="67"  font-family="var(--illus-font)" font-size="9" font-weight="800" fill="var(--illus-ink)" opacity="0.45" letter-spacing="0.08em">MULESOFT ANYPOINT</text>
-                  <text x="30" y="105" font-family="var(--illus-font)" font-size="9" font-weight="800" fill="var(--illus-ink)" opacity="0.65" letter-spacing="0.08em">NETSUITE ERP</text>
-                  <text x="30" y="143" font-family="var(--illus-font)" font-size="9" font-weight="800" fill="var(--illus-ink)" opacity="0.85" letter-spacing="0.08em">ORDERS · INVOICES · PAYMENTS</text>
-                  <!-- down arrow 1→2 -->
-                  <path d="M160 40 L160 46" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.28" stroke-linecap="round"/>
-                  <path d="M157 43 L160 48 L163 43" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.28" stroke-linecap="round" stroke-linejoin="round"/>
-                  <!-- dashed return 2→1 -->
-                  <path d="M150 46 L150 40" stroke="var(--illus-ink)" stroke-width="1.2" opacity="0.14" stroke-linecap="round" stroke-dasharray="3 2"/>
-                  <!-- down arrow 2→3 -->
-                  <path d="M160 78 L160 84" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.42" stroke-linecap="round"/>
-                  <path d="M157 81 L160 86 L163 81" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.42" stroke-linecap="round" stroke-linejoin="round"/>
-                  <!-- dashed return 3→2 -->
-                  <path d="M150 84 L150 78" stroke="var(--illus-ink)" stroke-width="1.2" opacity="0.18" stroke-linecap="round" stroke-dasharray="3 2"/>
-                  <!-- down arrow 3→4 -->
-                  <path d="M160 116 L160 122" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.60" stroke-linecap="round"/>
-                  <path d="M157 119 L160 124 L163 119" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.60" stroke-linecap="round" stroke-linejoin="round"/>
-                  <!-- metric badge -->
-                  <rect x="214" y="124" width="82" height="28" rx="5" fill="var(--illus-ink)"/>
-                  <text x="255" y="143" text-anchor="middle" font-family="var(--illus-font)" font-size="10" font-weight="800" fill="var(--illus-surface)">0 re-entry</text>
-                </svg>
-              )}
-              {cs.id === 'salesforce-emr-sync' && (
-                <svg viewBox="0 0 320 160" fill="none" class="cs-illo-svg">
-                  <rect x="16" y="10"  width="288" height="28" rx="5" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.15" fill="var(--color-ink-a02)"/>
-                  <rect x="16" y="48"  width="288" height="28" rx="5" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.28" fill="var(--color-ink-a03)"/>
-                  <rect x="16" y="86"  width="288" height="28" rx="5" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.48" fill="var(--illus-wash)"/>
-                  <rect x="16" y="124" width="288" height="28" rx="5" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.72" fill="var(--color-ink-a07)"/>
-                  <text x="30" y="29"  font-family="var(--illus-font)" font-size="9" font-weight="800" fill="var(--illus-ink)" opacity="0.3"  letter-spacing="0.08em">SALESFORCE CRM</text>
-                  <text x="30" y="67"  font-family="var(--illus-font)" font-size="9" font-weight="800" fill="var(--illus-ink)" opacity="0.45" letter-spacing="0.08em">RABBITMQ QUEUE</text>
-                  <text x="30" y="105" font-family="var(--illus-font)" font-size="9" font-weight="800" fill="var(--illus-ink)" opacity="0.65" letter-spacing="0.08em">HEROKU WORKER · PUPPETEER</text>
-                  <text x="30" y="143" font-family="var(--illus-font)" font-size="9" font-weight="800" fill="var(--illus-ink)" opacity="0.85" letter-spacing="0.08em">FUSION EMR PORTAL</text>
-                  <path d="M160 40 L160 46" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.28" stroke-linecap="round"/>
-                  <path d="M157 43 L160 48 L163 43" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.28" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M160 78 L160 84" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.42" stroke-linecap="round"/>
-                  <path d="M157 81 L160 86 L163 81" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.42" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M160 116 L160 122" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.6" stroke-linecap="round"/>
-                  <path d="M157 119 L160 124 L163 119" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.6" stroke-linecap="round" stroke-linejoin="round"/>
-                  <rect x="220" y="124" width="76" height="28" rx="5" fill="var(--illus-ink)"/>
-                  <text x="258" y="143" text-anchor="middle" font-family="var(--illus-font)" font-size="10" font-weight="800" fill="var(--illus-surface)">0 errors</text>
-                </svg>
-              )}
-              {cs.id === 'health-portal-mulesoft-integration' && (
-                <svg viewBox="0 0 320 160" fill="none" class="cs-illo-svg">
-                  <rect x="16" y="10"  width="288" height="28" rx="5" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.15" fill="var(--color-ink-a02)"/>
-                  <rect x="16" y="48"  width="288" height="28" rx="5" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.28" fill="var(--color-ink-a03)"/>
-                  <rect x="16" y="86"  width="288" height="28" rx="5" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.48" fill="var(--illus-wash)"/>
-                  <rect x="16" y="124" width="288" height="28" rx="5" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.72" fill="var(--color-ink-a07)"/>
-                  <text x="30" y="29"  font-family="var(--illus-font)" font-size="9" font-weight="800" fill="var(--illus-ink)" opacity="0.30" letter-spacing="0.08em">HEALTH PORTAL</text>
-                  <text x="30" y="67"  font-family="var(--illus-font)" font-size="9" font-weight="800" fill="var(--illus-ink)" opacity="0.45" letter-spacing="0.08em">MULESOFT ANYPOINT · 8 APPS</text>
-                  <text x="30" y="105" font-family="var(--illus-font)" font-size="9" font-weight="800" fill="var(--illus-ink)" opacity="0.65" letter-spacing="0.08em">SALESFORCE CRM</text>
-                  <text x="30" y="143" font-family="var(--illus-font)" font-size="9" font-weight="800" fill="var(--illus-ink)" opacity="0.85" letter-spacing="0.08em">LOGISTICS PLATFORM · KITS</text>
-                  <path d="M160 40 L160 46" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.28" stroke-linecap="round"/>
-                  <path d="M157 43 L160 48 L163 43" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.28" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M150 46 L150 40" stroke="var(--illus-ink)" stroke-width="1.2" opacity="0.14" stroke-linecap="round" stroke-dasharray="3 2"/>
-                  <path d="M160 78 L160 84" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.42" stroke-linecap="round"/>
-                  <path d="M157 81 L160 86 L163 81" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.42" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M150 84 L150 78" stroke="var(--illus-ink)" stroke-width="1.2" opacity="0.18" stroke-linecap="round" stroke-dasharray="3 2"/>
-                  <path d="M160 116 L160 122" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.60" stroke-linecap="round"/>
-                  <path d="M157 119 L160 124 L163 119" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.60" stroke-linecap="round" stroke-linejoin="round"/>
-                  <rect x="218" y="124" width="78" height="28" rx="5" fill="var(--illus-ink)"/>
-                  <text x="257" y="143" text-anchor="middle" font-family="var(--illus-font)" font-size="10" font-weight="800" fill="var(--illus-surface)">5 min sync</text>
-                </svg>
-              )}
-            </div>
-
-            <div class="cs-card-body">
-              <div class="cs-card-header">
-                <span class="ordinal ordinal--wide ordinal--watermark-strong">{cs.index}</span>
-                <span class="cs-card-industry">{cs.industry}</span>
-                <span class="cs-card-service">{cs.service}</span>
-              </div>
-              <h2 class="cs-card-company">{cs.company}</h2>
-              <p class="cs-card-headline">{cs.headline}</p>
-              <div class="cs-card-metric-row">
-                <span class="stat-num stat-num--lg stat-num--tight">{cs.metric}</span>
-                <span class="stat-label stat-label--sm cs-card-metric-desc">{cs.metricLabel}</span>
-              </div>
-              <p class="cs-card-summary">{cs.summary}</p>
-              <div class="cs-card-meta">
-                <span class="cs-card-result">{cs.result}</span>
-                <span class="cs-card-duration">{cs.duration}</span>
-              </div>
-              <div class="cs-card-tags">
-                {cs.tags.slice(0, 5).map(tag => (
-                  <Badge tone="outline" context="tag">{tag}</Badge>
-                ))}
-              </div>
-              <a href={`/case-studies/${cs.id}`} class="cs-card-link">
-                Read full case study &rarr;
-              </a>
-            </div>
-          </article>
-        ))}
-      </div>
+    <div class="ledger anim-fade-up">
+      {caseStudies.map((cs) => (
+        <a class="ledger__row" id={`cs-${cs.index}`} href={`/case-studies/${cs.id}/`}>
+          <span class="ledger__n">{cs.index}</span>
+          <span class="ledger__who">
+            <span class="ledger__client">{cs.ledger.client}</span>
+            <span class="ledger__tags">{cs.ledger.tags}</span>
+            <span class="ledger__when">{cs.ledger.when}</span>
+          </span>
+          <span class="ledger__states">
+            <span class="ledger__state ledger__state--was">
+              <span class="ledger__key">was</span><s>{cs.ledger.was}</s>
+            </span>
+            <span class="ledger__state ledger__state--now">
+              <span class="ledger__key">now</span>{cs.ledger.now}
+            </span>
+          </span>
+          <span class="ledger__metric">
+            <span class="ledger__figure">{cs.metric}</span>
+            <span class="ledger__figlabel">{cs.ledger.figLabel}</span>
+          </span>
+        </a>
+      ))}
     </div>
   </section>
 
-  <!-- ── CTA ── -->
-  <section class="cs-cta">
-    <div class="container">
-      <div class="cs-cta-inner">
-        <div class="cs-cta-text">
-          <p class="cs-cta-label">Ready to get started?</p>
-          <h2 class="cs-cta-title">Your result could be next.</h2>
-          <p class="cs-cta-sub">Tell us about your Salesforce, integration, or platform challenge. We'll scope it and respond within one business day.</p>
-        </div>
-        <div class="cs-cta-actions">
-          <a href="/contact" class="cs-cta-btn-primary">Start a conversation &rarr;</a>
-          <a href="#schedule" class="cs-cta-btn-secondary">Book a 30-min call</a>
-        </div>
-      </div>
+  <section class="section-press" aria-labelledby="common-heading">
+    <div class="section-press__head anim-fade-up">
+      <h2 id="common-heading" class="section-title section-title--xs section-title--tighter section-press__title">
+        What the five have in common.
+      </h2>
+      <span class="section-press__note">Four claims, and who carries them</span>
     </div>
-  </section>
 
+    <ul class="claims anim-fade-up">
+      {CLAIMS.map((claim) => (
+        <li class="claims__row">
+          <p class="claims__text">{claim.text}</p>
+          <span class="claims__cites">
+            {claim.cites.map((n) => (
+              <a href={`#cs-${n}`} class="claims__cite" aria-label={`Study ${n}`}>{n}</a>
+            ))}
+          </span>
+        </li>
+      ))}
+    </ul>
+
+    {/* One line on purpose: Astro trims the whitespace at a markup
+        boundary, so a line break either side of the link would weld it
+        to the words next to it. */}
+    <p class="claims__foot">Not sure which of these is your situation? <a href="/services/" class="claims__out">Start from the seven engagements</a> &mdash; each one names the shape of the work and what it ends with.</p>
+  </section>
 </Page>
-
-<style>
-/* ── Hero ── */
-.cs-hero {
-  background: var(--surface-page);
-  padding-top: 7rem;
-  padding-bottom: 3rem;
-  border-bottom: 1px solid var(--border-default);
-  overflow: hidden;
-}
-.cs-hero-split {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
-  align-items: center;
-}
-.cs-hero-title {
-  font-size: clamp(2.75rem, 5vw, 4.5rem);
-  font-weight: 900;
-  letter-spacing: -0.04em;
-  line-height: 1.05;
-  color: var(--color-heading);
-  margin: 0.75rem 0 1.25rem;
-}
-.cs-hero-sub { font-size: 1rem; color: var(--color-text); line-height: 1.75; max-width: 440px; }
-.cs-hero-illo { display: flex; justify-content: center; align-items: center; }
-.cs-hero-svg  { width: 100%; max-width: 480px; height: auto; }
-
-/* ── Grid ── */
-.cs-grid-section { background: var(--surface-card); padding: 4rem 0 5rem; }
-.cs-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-/* Card. Shell and hover come from `.card card--radius-2xl card--lift`. */
-.cs-card {
-  overflow: hidden;
-  position: relative;
-}
-/* Type comes from `.stat-num stat-num--3xl stat-num--tighter`; this is
-   the watermark's placement, and the 0.04 that makes it a watermark. */
-.cs-card-metric-bg {
-  position: absolute;
-  top: 8px; right: 16px;
-  opacity: 0.04;
-  pointer-events: none;
-  user-select: none;
-  z-index: 0;
-}
-.cs-card-illo {
-  background: var(--surface-sunk);
-  border-bottom: 1px solid var(--border-default);
-  padding: 2.5rem 6rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 240px;
-  position: relative;
-  z-index: 1;
-}
-.cs-illo-svg { width: 100%; height: 100%; }
-.cs-card-body { padding: 1.75rem; position: relative; z-index: 1; }
-.cs-card-header {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 0.75rem;
-  flex-wrap: wrap;
-}
-.cs-card-industry, .cs-card-service {
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--color-text);
-  background: var(--surface-sunk);
-  border: 1px solid var(--border-default);
-  border-radius: 100px;
-  padding: 0.2rem 0.625rem;
-}
-.cs-card-company {
-  font-size: 1.375rem;
-  font-weight: 900;
-  letter-spacing: -0.02em;
-  color: var(--color-heading);
-  margin-bottom: 0.375rem;
-  line-height: 1.2;
-}
-.cs-card-headline {
-  font-size: 0.875rem;
-  color: var(--color-text);
-  font-style: italic;
-  margin-bottom: 1.25rem;
-  line-height: 1.5;
-}
-.cs-card-metric-row {
-  display: flex;
-  align-items: baseline;
-  gap: 0.625rem;
-  margin-bottom: 1rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid var(--border-default);
-}
-/* Type for both comes from `.stat-num stat-num--lg stat-num--tight`
-   and `.stat-label stat-label--sm`. */
-.cs-card-metric-desc {
-  line-height: 1.4;
-  max-width: 200px;
-}
-.cs-card-summary {
-  font-size: 0.875rem;
-  color: var(--color-text);
-  line-height: 1.75;
-  margin-bottom: 1rem;
-}
-.cs-card-meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
-  font-size: 0.75rem;
-}
-.cs-card-result { color: var(--color-heading); font-weight: 600; line-height: 1.4; flex: 1; }
-.cs-card-duration {
-  color: var(--color-text);
-  font-weight: 500;
-  white-space: nowrap;
-  padding: 0.2rem 0.625rem;
-  background: var(--surface-sunk);
-  border: 1px solid var(--border-default);
-  border-radius: 100px;
-  flex-shrink: 0;
-}
-.cs-card-tags { display: flex; flex-wrap: wrap; gap: 0.375rem; }.cs-card-link {
-  display: inline-flex;
-  align-items: center;
-  margin-top: 1rem;
-  font-size: 0.8125rem;
-  font-weight: 700;
-  color: var(--color-heading);
-  text-decoration: none;
-  border-bottom: 1.5px solid var(--border-default);
-  padding-bottom: 1px;
-  transition: border-color 150ms, opacity 150ms;
-}
-.cs-card-link:hover { border-color: var(--border-strong); opacity: 0.7; color: var(--color-heading); }
-
-/* ── CTA ── */
-.cs-cta { background: var(--surface-inverse); padding: 5rem 0; }
-.cs-cta-inner { display: flex; align-items: center; justify-content: space-between; gap: 3rem; flex-wrap: wrap; }
-.cs-cta-label { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-on-inverse-a40); margin-bottom: 0.75rem; }
-.cs-cta-title { font-size: clamp(2rem, 3.5vw, 3rem); font-weight: 900; letter-spacing: -0.03em; color: var(--color-on-inverse); margin-bottom: 0.75rem; line-height: 1.1; }
-.cs-cta-sub { font-size: 0.9375rem; color: var(--color-on-inverse-a50); line-height: 1.7; max-width: 420px; }
-.cs-cta-actions { display: flex; flex-direction: column; gap: 0.75rem; flex-shrink: 0; }
-.cs-cta-btn-primary { display: inline-flex; align-items: center; background: var(--surface-card); color: var(--color-heading); padding: 0.875rem 1.75rem; border-radius: 100px; font-weight: 700; font-size: 0.9375rem; text-decoration: none; transition: opacity 150ms, transform 150ms; white-space: nowrap; }
-.cs-cta-btn-primary:hover { opacity: 0.88; transform: translateY(-1px); color: var(--color-heading); }
-.cs-cta-btn-secondary { display: inline-flex; align-items: center; justify-content: center; background: transparent; color: var(--color-on-inverse-a60); padding: 0.875rem 1.75rem; border-radius: 100px; border: 1px solid var(--color-paper-a20); font-weight: 600; font-size: 0.9375rem; text-decoration: none; transition: color 150ms, border-color 150ms; white-space: nowrap; }
-.cs-cta-btn-secondary:hover { color: var(--color-on-inverse); border-color: var(--color-paper-a50); }
-
-/* ── Responsive ── */
-@media (max-width: 768px) { .cs-grid { grid-template-columns: 1fr; } }
-@media (max-width: 767px) {
-  .cs-hero       { padding-top: 5.5rem; padding-bottom: 2rem; }
-  .cs-hero-split { grid-template-columns: 1fr; }
-  .cs-hero-illo  { display: none; }
-  .cs-hero-title { font-size: 2.75rem; }
-  .cs-cta-inner  { flex-direction: column; align-items: flex-start; }
-  .cs-cta-actions { flex-direction: row; flex-wrap: wrap; }
-}
-</style>
