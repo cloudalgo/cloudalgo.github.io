@@ -93,13 +93,13 @@ export const caseStudies: CaseStudy[] = [
   {
     id: 'nonprofit-web-platform',
     index: '01',
-    company: 'Global Non-Profit Organization',
+    company: 'Global Non-Profit Organisation',
     industry: 'Non-Profit',
     service: 'Full-Stack · Salesforce',
     metric: '2+ yrs',
     metricLabel: 'ongoing platform engagement — serving 180+ countries',
     summary:
-      'A global spiritual non-profit with presence in 180+ countries had outgrown its legacy PHP monolith — no CRM integration, growing technical debt, and a scalability ceiling that threatened every major event launch. CloudAlgo rebuilt the platform from the ground up: a Next.js 14 application with Salesforce CRM, Stripe-powered enrollment and donations, AWS Cognito passwordless auth, and a full content library — a platform the client has continued expanding for two years and counting.',
+      'A global spiritual non-profit with presence in 180+ countries had outgrown its legacy PHP monolith — no CRM integration, growing technical debt, and a scalability ceiling that threatened every major event launch. CloudAlgo rebuilt the platform from the ground up: a Next.js 14 application with Salesforce CRM, Stripe-powered enrolment and donations, AWS Cognito passwordless auth, and a full content library — a platform the client has continued expanding for two years and counting.',
     tags: ['Next.js 14', 'Salesforce', 'Stripe', 'AWS Cognito', 'Heroku', 'Segment', 'React Query', 'Framer Motion'],
     duration: 'Ongoing (2+ years)',
     result: 'Full platform rebuild replacing a legacy PHP monolith — CRM-connected, continuously expanding',
@@ -128,26 +128,26 @@ export const caseStudies: CaseStudy[] = [
     headline: 'From a legacy PHP monolith to a CRM-connected platform built for global reach.',
 
     executiveSummary:
-      'A global non-profit spiritual organization operating across 180+ countries had outgrown its custom PHP platform — a monolith with no CRM connectivity, mounting technical debt, and a scalability ceiling that made every course launch a risk. CloudAlgo led a deliberate full-platform rebuild: a Next.js 14 application with a Node.js backend, Salesforce as the CRM backbone, Stripe for payments and donations, and AWS Cognito for passwordless authentication. The result is a modern, maintainable platform the client has continued to expand for two-plus years — adding course types, membership tiers, content features, and integrations — the clearest signal that the architecture was right.',
+      'A global non-profit spiritual organisation operating across 180+ countries had outgrown its custom PHP platform — a monolith with no CRM connectivity, mounting technical debt, and a scalability ceiling that made every course launch a risk. CloudAlgo led a deliberate full-platform rebuild: a Next.js 14 application with a Node.js backend, Salesforce as the CRM backbone, Stripe for payments and donations, and AWS Cognito for passwordless authentication. The result is a modern, maintainable platform the client has continued to expand for two-plus years — adding course types, membership tiers, content features, and integrations — the clearest signal that the architecture was right.',
 
     challenge:
-      'The client had served its global community for years on a custom PHP platform. But the system had accumulated enough technical debt that every new feature became a negotiation with legacy constraints. More critically, there was no CRM integration: member data, course enrollments, and user activity lived in separate silos with no unified view, no automation, and no path to real-time reporting.',
+      'Software that still works can still be finished. The client had run its global community on a custom PHP platform for years, and it still served \u2014 but every new feature had become a negotiation with the code already in place. Here it was one organisation, 180+ countries, and nothing underneath that agreed on who a member was.',
 
     challengePoints: [
-      'No CRM connectivity — member records, course enrollments, and user activity lived in separate systems with no single source of truth and no automation between them.',
-      'Feature delivery was slow. New requests required navigating a legacy PHP codebase with no modern tooling, no standardized patterns, and no onboarding documentation for new contributors.',
-      'Traffic spikes during major course launches and enrollment windows pushed the PHP system toward its scalability ceiling.',
-      'Without standardized development patterns, every new contributor increased the risk of regressions and maintenance became progressively harder with every release.',
+      'No CRM connectivity — member records, course enrolments, and user activity lived in separate systems with no single source of truth and no automation between them.',
+      'Feature delivery was slow. New requests required navigating a legacy PHP codebase with no modern tooling, no standardised patterns, and no onboarding documentation for new contributors.',
+      'Traffic spikes during major course launches and enrolment windows pushed the PHP system toward its scalability ceiling.',
+      'Without standardised development patterns, every new contributor increased the risk of regressions and maintenance became progressively harder with every release.',
     ],
 
     solution:
-      'CloudAlgo led a full-platform rebuild — not a gradual migration, but a deliberate re-architecture. The new platform is a Next.js 14 application (React 18, Pages Router) deployed on Heroku, with a Node.js backend that normalizes data contracts across six external systems, Salesforce as the unified CRM backbone, and Heroku Marketing Cloud for campaign and transactional email automation.',
+      'CloudAlgo led a full-platform rebuild — not a gradual migration, but a deliberate re-architecture. The new platform is a Next.js 14 application (React 18, Pages Router) deployed on Heroku, with a Node.js backend that normalises data contracts across six external systems, Salesforce as the unified CRM backbone, and Heroku Marketing Cloud for campaign and transactional email automation.',
 
     solutionSteps: [
       {
         title: 'Course & Event Platform',
         path: 'Next.js \u2192 Stripe',
-        body: 'A complete enrollment system for in-person courses, online workshops, ticketed events, youth programs, and retreats. Users can discover offerings via geo-based center finder (Google Maps + Autocomplete), register, pay via Stripe with saved payment methods and coupon support, and receive Apple Wallet passes and QR codes for in-person check-in — all within a single cohesive experience.',
+        body: 'A complete enrolment system for in-person courses, online workshops, ticketed events, youth programmes, and retreats. Users can discover offerings via geo-based centre finder (Google Maps + Autocomplete), register, pay via Stripe with saved payment methods and coupon support, and receive Apple Wallet passes and QR codes for in-person check-in — in one pass, without leaving the site.',
       },
       {
         title: 'Authentication & Identity',
@@ -162,48 +162,48 @@ export const caseStudies: CaseStudy[] = [
       {
         title: 'Donation Platform',
         path: 'Stripe \u2192 Salesforce',
-        body: 'A full donation lifecycle built on Salesforce, Stripe, and Salesforce Community Cloud — one-time and recurring giving options, automated Salesforce sync per transaction, a donor self-service portal (giving history, tax receipts, payment method management), campaign and fund attribution, and Marketing Cloud acknowledgement emails triggered on transaction confirmation. This replaced a manual, spreadsheet-driven process with the organization\'s first fully auditable, end-to-end donation tracking system.',
+        body: 'A full donation lifecycle built on Salesforce, Stripe, and Salesforce Community Cloud — one-time and recurring giving options, automated Salesforce sync per transaction, a donor self-service portal (giving history, tax receipts, payment method management), campaign and fund attribution, and Marketing Cloud acknowledgement emails triggered on transaction confirmation. This replaced a manual, spreadsheet-driven process with the organisation\'s first fully auditable, end-to-end donation tracking system.',
       },
       {
         title: 'CRM-Connected Analytics',
         path: 'Segment \u2192 Salesforce',
-        body: 'Every significant user action — page views, course views, checkout initiation, purchases — is tracked through Segment into Salesforce, enabling the marketing team to build audience segments, trigger Marketing Cloud automations, and report on enrollment funnel performance with no manual data entry.',
+        body: 'Every significant user action — page views, course views, checkout initiation, purchases — is tracked through Segment into Salesforce, enabling the marketing team to build audience segments, trigger Marketing Cloud automations, and report on enrolment funnel performance with no manual data entry.',
       },
     ],
 
     technicalHighlights: [
       {
-        title: 'Six External Systems, One Clean Backend Layer',
-        body: 'The platform integrates Salesforce, Salesforce Community Cloud, Stripe, AWS Cognito, Segment, and Heroku Marketing Cloud — each with distinct data models and failure modes. CloudAlgo built a Node.js backend layer that normalizes data contracts, handles retries, and decouples the frontend from individual vendor APIs. A Salesforce schema change doesn\'t cascade into the UI. A Stripe webhook failure doesn\'t leave the client state inconsistent.',
+        title: 'Six external systems, one backend layer',
+        body: 'The platform integrates Salesforce, Salesforce Community Cloud, Stripe, AWS Cognito, Segment, and Heroku Marketing Cloud — each with distinct data models and failure modes. CloudAlgo built a Node.js backend layer that normalises data contracts, handles retries, and decouples the frontend from individual vendor APIs. A Salesforce schema change doesn\'t cascade into the UI. A Stripe webhook failure doesn\'t leave the client state inconsistent.',
       },
       {
-        title: 'Enforced Conventions at Scale',
-        body: 'With a large team and 4,500+ commits over two years, ad-hoc patterns accumulate fast. Enforced conventions kept the codebase navigable: a custom useRouter hook that automatically preserves UTM parameters across every navigation; a useEntityTracking hook that standardizes analytics event payloads so no developer can accidentally fire a malformed track event; Pino structured logging replacing console.log throughout; React Query for consistent server-state management; and global modal and alert context providers preventing z-index conflicts and duplicated state logic scattered across features.',
+        title: 'Conventions the tooling enforces, not the reviewer',
+        body: 'With a large team and 4,500+ commits over two years, ad-hoc patterns accumulate fast. Enforced conventions kept the codebase navigable: a custom useRouter hook that automatically preserves UTM parameters across every navigation; a useEntityTracking hook that standardises analytics event payloads so no developer can accidentally fire a malformed track event; Pino structured logging replacing console.log throughout; React Query for consistent server-state management; and global modal and alert context providers preventing z-index conflicts and duplicated state logic scattered across features.',
       },
       {
-        title: '82% SSR Payload Reduction',
-        body: 'One major performance initiative reduced a key centers page SSR payload from 228 kB to 42 kB — an 82% reduction — by selectively deferring non-critical data to client-side fetches. Combined with Next.js SWC compilation, WebP image conversion at build time, and ongoing bundle analysis via @next/bundle-analyzer, the platform handles course launch traffic spikes without degradation.',
+        title: 'The centres page ships 42 kB, not 228',
+        body: 'One major performance initiative reduced a key centres page SSR payload from 228 kB to 42 kB — an 82% reduction — by selectively deferring non-critical data to client-side fetches. Combined with Next.js SWC compilation, WebP image conversion at build time, and ongoing bundle analysis via @next/bundle-analyzer, the platform handles course launch traffic spikes without degradation.',
       },
       {
-        title: 'Multi-Environment CI/CD with Sentry Monitoring',
+        title: 'Three environments, one pipeline, Sentry across all of them',
         body: 'Three environments — development, QA, and production — each with distinct API credentials, feature flags, and Salesforce org connections. Heroku pipelines coordinate promotion from QA to production. Sentry monitors error rates post-deploy, and structured Pino logs give the engineering team clean, searchable production visibility without opening a dashboard.',
       },
     ],
 
     outcomes: [
       { metric: '2+ yrs', label: 'Ongoing client engagement — platform continuously expanding' },
-      { metric: '82%', label: 'SSR payload reduction on centers page (228 kB → 42 kB)' },
-      { metric: '6', label: 'External systems integrated cohesively — Salesforce, Stripe, Cognito, Segment, and more' },
+      { metric: '82%', label: 'SSR payload reduction on centres page (228 kB → 42 kB)' },
+      { metric: '6', label: 'External systems behind one Node.js backend layer, each with its own failure mode' },
     ],
 
     resultsTable: [
       { metric: 'Platform foundation', before: 'Legacy PHP monolith — no modern tooling', after: 'Next.js 14, React 18, modular architecture on Heroku' },
-      { metric: 'CRM integration', before: 'None — siloed member and enrollment data', after: 'Salesforce as unified source of truth for all member activity' },
+      { metric: 'CRM integration', before: 'None — siloed member and enrolment data', after: 'Salesforce as unified source of truth for all member activity' },
       { metric: 'Donation tracking', before: 'Manual, spreadsheet-driven process', after: 'Full Salesforce-backed lifecycle with automated receipts and donor portal' },
       { metric: 'Authentication', before: 'Email/password only', after: 'AWS Cognito with passwordless magic link and OTP' },
       { metric: 'Feature delivery', before: 'Weeks — navigating legacy constraints', after: 'Days — clean architecture and reusable components' },
-      { metric: 'SSR payload (centers page)', before: '228 kB', after: '42 kB (82% reduction)' },
-      { metric: 'Analytics pipeline', before: 'No structured pipeline', after: 'Segment → Salesforce with full enrollment funnel visibility' },
+      { metric: 'SSR payload (centres page)', before: '228 kB', after: '42 kB (82% reduction)' },
+      { metric: 'Analytics pipeline', before: 'No structured pipeline', after: 'Segment → Salesforce with full enrolment funnel visibility' },
       { metric: 'Deployment', before: 'Manual', after: 'Heroku multi-environment pipelines with Sentry error monitoring' },
     ],
 
@@ -218,7 +218,7 @@ export const caseStudies: CaseStudy[] = [
       },
       {
         title: 'Enforced conventions pay for themselves.',
-        body: 'A custom useRouter hook, a standardized analytics event contract, global context providers for modals and alerts — these feel like overhead in week one. By year two, with 4,500+ commits from a large team, they\'re the reason the codebase is still navigable and safe to work in.',
+        body: 'A custom useRouter hook, a standardised analytics event contract, global context providers for modals and alerts — these feel like overhead in week one. By year two, with 4,500+ commits from a large team, they\'re the reason the codebase is still navigable and safe to work in.',
       },
       {
         title: 'Ongoing engagement is the real metric.',
@@ -335,7 +335,7 @@ export const caseStudies: CaseStudy[] = [
       {
         tool: 'MuleSoft',
         category: 'iPaaS / Integration',
-        doesWell: 'Robust connector library; enterprise-grade support',
+        doesWell: 'Large connector library; enterprise support',
         limitation:
           'Extremely heavyweight. Licensing costs are prohibitive. Built for API-centric integrations, not high-volume batch data pipelines with complex state management.',
       },
@@ -367,22 +367,22 @@ export const caseStudies: CaseStudy[] = [
 
     solutionSteps: [
       {
-        title: 'Intelligent Ingestion — Staging Layer',
+        title: 'Nothing runs until every table for the division has arrived',
         path: 'API \u2192 Redis state',
         body: 'A dedicated orchestration DAG receives table-level payloads via API and uses Redis-backed state coordination to track which tables have arrived for a given sync window. Only when all expected tables for a division are confirmed does the downstream pipeline trigger — eliminating the partial-data problem that caused reporting inconsistencies. Configurable timeout and retry handling ensure no sync window is silently skipped.',
       },
       {
-        title: 'Bronze — The Faithful Copy',
+        title: 'What arrived is kept exactly as it arrived',
         path: 'Staging \u2192 Bronze',
-        body: 'Raw data lands in the Bronze layer with minimal transformation — the goal is a clean, complete, denormalized record of what arrived. Records are processed in configurable batch sizes using executemany semantics so individual row failures don\'t abort the entire batch. A custom formula evaluation engine handles concatenation, unit conversion (tons ↔ pounds), date part extraction, and duration calculations — all driven by JSON configuration, not hardcoded logic. Business analysts can update derivation rules without touching Python.',
+        body: 'Raw data lands in the Bronze layer with minimal transformation — the goal is a clean, complete, denormalised record of what arrived. Records are processed in configurable batch sizes using executemany semantics so individual row failures don\'t abort the entire batch. A custom formula evaluation engine handles concatenation, unit conversion (tons ↔ pounds), date part extraction, and duration calculations — all driven by JSON configuration, not hardcoded logic. Business analysts can update derivation rules without touching Python.',
       },
       {
-        title: 'Silver — The Trust Layer',
+        title: 'Every record is validated, deduplicated and typed before it moves',
         path: 'Bronze \u2192 Silver',
         body: 'The Silver pipeline is where raw data becomes trusted data. Every record passes through Cerberus schema validation (type checking, required field enforcement, value constraints), duplicate detection, column normalisation (uppercase, trimming, type coercion, null handling), and upsert writes. New records are inserted; existing records are updated on conflict, making the pipeline idempotent and safe to re-run. Anything downstream can trust that Silver data is structurally valid, deduplicated, and correctly typed.',
       },
       {
-        title: 'Gold — Analytics at Speed',
+        title: 'Analytics schemas refresh every fifteen minutes',
         path: 'Silver \u2192 Gold',
         body: 'The Gold layer exposes analytics-optimised schemas at 15-minute cadence. A Table Sync DAG maps Silver columns to Gold schema names with idempotent upserts. An Account Relationship DAG solves the hardest cross-system problem — linking CRM account identifiers to ERP records across 4 destination tables using functional indexes on TRIM()+LOWER() columns, cutting query time by 75–90%. A KPI Calculation DAG joins shipped quantity data against annual and prior-year sales goals at product and division level, giving sales leadership a live view of performance vs. plan.',
       },
@@ -390,19 +390,19 @@ export const caseStudies: CaseStudy[] = [
 
     technicalHighlights: [
       {
-        title: 'Config-Driven Architecture',
+        title: 'The pipeline is configuration, not code',
         body: 'Every pipeline stage — table definitions, column mappings, validation schemas, formula rules, relationship joins — is driven by JSON configuration files. Adding a new table or modifying a transformation does not require code changes. This makes the system maintainable by data engineers who didn\'t write it and adaptable to schema evolution without pipeline downtime.',
       },
       {
-        title: 'Fault Tolerance by Design',
+        title: 'A bad row costs a row, not the batch',
         body: 'Batch processing uses executemany with per-row error isolation. A single bad record is logged and skipped — it doesn\'t abort the batch. Failed rows are counted, reported in email notifications, and surfaced in the Airflow task log for investigation. The pipeline always completes; it never silently swallows failures.',
       },
       {
-        title: '75–90% Performance Gain via Index Optimisation',
+        title: 'An index took the linkage query from hours to minutes',
         body: 'An early version of the Account Relationship DAG used ILIKE pattern matching for account lookup — readable, but unindexable. As data volumes grew, this stage became a multi-hour bottleneck. CloudAlgo created functional indexes on TRIM(source_account_id) and TRIM(LOWER(division)) columns, then rewrote queries using identical semantics that were now index-scannable. Execution time dropped from 1–2 hours to 10–30 minutes — a 75–90% reduction with no change to output correctness.',
       },
       {
-        title: 'Standardised Operational Observability',
+        title: 'Every stage reports in the same line',
         body: 'Every pipeline stage emits structured email notifications in a consistent format: [ENVIRONMENT] [STATUS] PIPELINE — DIVISION — RECORDS_PROCESSED / RECORDS_FAILED. Operations teams see at a glance what ran, whether it succeeded, what division it processed, and how many records were affected — without opening Airflow. Partial failures surface immediately, not after someone notices a dashboard anomaly.',
       },
     ],
@@ -459,7 +459,7 @@ export const caseStudies: CaseStudy[] = [
   {
     id: 'salesforce-emr-sync',
     index: '03',
-    company: 'Pediatric Therapy Clinic',
+    company: 'Paediatric Therapy Clinic',
     industry: 'Healthcare',
     service: 'Heroku · Salesforce · Integration',
     metric: '0',
@@ -497,7 +497,7 @@ export const caseStudies: CaseStudy[] = [
     headline: 'No API? No problem. Automating patient data sync with a browser robot on Heroku.',
 
     executiveSummary:
-      'A pediatric therapy clinic had two systems that couldn\'t talk to each other: Salesforce for patient intake and an EMR for clinical records. Every new patient meant staff manually re-entering the same information twice — names, dates of birth, insurance, parent contacts, case notes. The EMR vendor provided no public API. CloudAlgo built a Heroku-hosted integration that closes the gap: a queue-backed Node.js worker that uses Puppeteer to drive a headless Chrome session through the EMR portal, populating every field exactly as a human would — but continuously, automatically, and without errors.',
+      'A paediatric therapy clinic had two systems that couldn\'t talk to each other: Salesforce for patient intake and an EMR for clinical records. Every new patient meant staff manually re-entering the same information twice — names, dates of birth, insurance, parent contacts, case notes. The EMR vendor provided no public API. CloudAlgo built a Heroku-hosted integration that closes the gap: a queue-backed Node.js worker that uses Puppeteer to drive a headless Chrome session through the EMR portal, populating every field exactly as a human would — but continuously, automatically, and without errors.',
 
     challenge:
       'Healthcare operations teams rarely choose their software. The EMR is mandated, the CRM is the enterprise standard, and the gap between them quietly becomes a staffing problem. Here it was one clinic, two systems, and the same information entered field by field, form by form, twice.',
@@ -653,19 +653,19 @@ export const caseStudies: CaseStudy[] = [
   {
     id: 'salesforce-netsuite-sync',
     index: '04',
-    company: 'Specialty Wholesale Distributor',
+    company: 'Specialist Wholesale Distributor',
     industry: 'Distribution',
     service: 'MuleSoft · Salesforce · NetSuite',
     metric: '0',
     metricLabel: 'manual order re-entry — every Salesforce order syncs to NetSuite automatically',
     summary:
-      'MuleSoft API-led integration connecting Salesforce and NetSuite for a specialty wholesale distributor — orders, customers, invoices, and payments syncing bidirectionally via Platform Events and scheduled flows.',
+      'MuleSoft API-led integration connecting Salesforce and NetSuite for a specialist wholesale distributor — orders, customers, invoices, and payments syncing bidirectionally via Platform Events and scheduled flows.',
     tags: ['MuleSoft', 'Salesforce', 'NetSuite', 'CloudHub', 'DataWeave', 'Platform Events', 'Object Store'],
     duration: '5-month engagement',
     result: 'Bidirectional Salesforce ↔ NetSuite sync — orders, customers, invoices, and payments fully automated',
 
     ledger: {
-      client: 'A specialty wholesale distributor',
+      client: 'A specialist wholesale distributor',
       tags: 'Distribution · Salesforce & NetSuite',
       when: '5 months',
       was: 'Orders re-keyed out of Salesforce into NetSuite, and invoices chased back the other way by email.',
@@ -676,7 +676,7 @@ export const caseStudies: CaseStudy[] = [
     detailTitle: 'Orders were typed into NetSuite by hand. Now nobody is in the middle.',
     detailMark: 'nobody is in the middle',
     detailLede:
-      'A specialty wholesale distributor ran Salesforce for the sale and NetSuite for everything after it, with nothing between them. Orders were re-keyed by the operations team; invoices and payments were invisible to sales without a second login. We built a MuleSoft API layer that moves customers, orders, invoices and payments both ways.',
+      'A specialist wholesale distributor ran Salesforce for the sale and NetSuite for everything after it, with nothing between them. Orders were re-keyed by the operations team; invoices and payments were invisible to sales without a second login. We built a MuleSoft API layer that moves customers, orders, invoices and payments both ways.',
     standNote: { label: 'Sync surface', detail: 'Platform Events one way, a 15-minute scheduler the other.' },
     stateTitle: 'One order, before and after',
     stateWhat: 'The order',
@@ -689,7 +689,7 @@ export const caseStudies: CaseStudy[] = [
     headline: 'One source of truth: bidirectional Salesforce ↔ NetSuite sync via MuleSoft API-led integration.',
 
     executiveSummary:
-      'A specialty wholesale distributor ran Salesforce for CRM and NetSuite for ERP — with no connection between them. Sales orders placed in Salesforce were re-entered into NetSuite by the operations team. Invoices in NetSuite were invisible to the sales team without a separate login. Customer updates in Salesforce didn\'t reflect in NetSuite until someone noticed a discrepancy. CloudAlgo built a MuleSoft integration closing every gap: Platform Events trigger real-time customer and order sync to NetSuite, a 15-minute scheduler pushes NetSuite invoices and refunds to Salesforce, and a payment event keeps financial data flowing in near real-time — all without manual re-entry or a human in the loop.',
+      'A specialist wholesale distributor ran Salesforce for CRM and NetSuite for ERP — with no connection between them. Sales orders placed in Salesforce were re-entered into NetSuite by the operations team. Invoices in NetSuite were invisible to the sales team without a separate login. Customer updates in Salesforce didn\'t reflect in NetSuite until someone noticed a discrepancy. CloudAlgo built a MuleSoft integration closing every gap: Platform Events trigger real-time customer and order sync to NetSuite, a 15-minute scheduler pushes NetSuite invoices and refunds to Salesforce, and a payment event keeps financial data flowing in near real-time — all without manual re-entry or a human in the loop.',
 
     challenge:
       'Wholesale distributors run two essential systems that rarely talk to each other: Salesforce for the sales process, NetSuite for everything after the deal closes. When those systems are disconnected, the gap becomes a daily operational tax — paid in manual re-entry, stale data, and coordination overhead that scales with every additional order, customer, and invoice.',
@@ -737,22 +737,22 @@ export const caseStudies: CaseStudy[] = [
 
     solutionSteps: [
       {
-        title: 'Real-Time Customer Sync (SF → NetSuite)',
+        title: 'An account saved in Salesforce arrives in NetSuite',
         path: 'Salesforce \u2192 NetSuite',
         body: 'When a Salesforce Account is created or updated, an AccountsEvent__e Platform Event triggers the MuleSoft Salesforce SAPI. DataWeave transforms Salesforce Account fields — company name, payment terms, credit limit, tax ID/VAT, DUNS, shipping carrier, parent account — into a NetSuite Customer record. For new customers, the resulting NetSuite Customer ID is written back to the Salesforce Account. For existing customers, the record is updated by NetSuite ID.',
       },
       {
-        title: 'Real-Time Order Sync (SF → NetSuite)',
+        title: 'An order queued to fulfilment becomes a Sales Order',
         path: 'Salesforce \u2192 NetSuite',
         body: 'When a Salesforce Order is queued for fulfilment, a Create_NS_Order__e Platform Event fires. MuleSoft queries the Salesforce OrderItems — product SKUs, quantities, unit prices, discounts, expected ship dates, sequence names, quote line IDs — and transforms them into a NetSuite Sales Order via SOAP/XML. A DataWeave script handles country enum mapping, conditional null guards, and date format conversion. The resulting NetSuite Order ID and Number are written back to the Salesforce Order asynchronously.',
       },
       {
-        title: 'Scheduled Invoice & Refund Sync (NetSuite → SF)',
+        title: 'Invoices and refunds come back every fifteen minutes',
         path: 'NetSuite \u2192 Salesforce',
         body: 'Two schedulers run every 15 minutes — staggered by 7 minutes to prevent resource contention. Each fetches records modified since the last run, using a timestamp watermark persisted in Anypoint Object Store (minus a two-minute buffer for clock skew). Fetching is paginated: 50 records per request, with recursive sub-flow calls while hasMore == true. Records are posted to the Salesforce SAPI for upsert. Any HTTP 400 responses are collected, and a structured HTML error email is sent to the operations team.',
       },
       {
-        title: 'Real-Time Payment Sync (SF → NetSuite)',
+        title: 'A payment posts against the invoice it belongs to',
         path: 'Salesforce \u2192 NetSuite',
         body: 'When a payment is recorded in Salesforce, an ABT_Payment_and_Refund_Event__e Platform Event carries the payment amount, NetSuite Account number, and NetSuite Invoice ID. MuleSoft transforms this into a NetSuite payment application — specifying the AR account, GL account, payment amount, and the exact invoice to apply it against. The payment is posted to NetSuite via REST, keeping accounts receivable in sync with Salesforce payment records without manual journal entries.',
       },
@@ -760,19 +760,19 @@ export const caseStudies: CaseStudy[] = [
 
     technicalHighlights: [
       {
-        title: 'Platform Events as the Integration Bus',
+        title: 'Platform Events are the bus, not direct callouts',
         body: 'All real-time flows are triggered by Salesforce Platform Events, not by direct cross-system API calls. This decouples Salesforce from NetSuite response times — a Salesforce Order save doesn\'t wait for a NetSuite SOAP call to complete. Platform Events provide built-in replay, retry, and delivery guarantees that a synchronous callout cannot.',
       },
       {
-        title: 'Watermark-Based Incremental Sync with Object Store',
+        title: 'A watermark, so the scheduler never re-reads',
         body: 'The invoice and refund schedulers use Anypoint Object Store to persist the last-run timestamp, minus a two-minute buffer to handle clock skew. Each run fetches only records modified since that timestamp — avoiding full-table scans, preventing duplicates, and handling API rate limits. The watermark can be reset to a configured default date via a config flag without code changes.',
       },
       {
-        title: 'SOAP/XML for NetSuite Sales Order Complexity',
+        title: 'SOAP for the Sales Order, on purpose',
         body: 'The Sales Order create and update operations use NetSuite\'s SOAP WebServices API, not REST. DataWeave generates the full XML structure — including conditional field inclusion via null guards, country enum mapping via string camelize functions, date format conversion, and item list construction. This path was chosen deliberately: NetSuite\'s SOAP API supports field-level conditional inclusion and complex transactional object types that its REST API does not yet fully expose.',
       },
       {
-        title: 'Bidirectional ID Writeback',
+        title: 'The IDs point both ways',
         body: 'Every flow that creates a record in one system writes the resulting ID back to the other. NetSuite Customer IDs and Order Numbers are written to Salesforce fields via Salesforce Connector update. Salesforce Account and Order Line IDs are embedded in the NetSuite payload as custom fields. This mutual reference pattern makes the integration idempotent: an update flow checks whether a NetSuite ID already exists on the Salesforce record before deciding to create or update.',
       },
     ],
@@ -879,34 +879,34 @@ CloudAlgo built the integration layer: eight MuleSoft applications covering cust
     solution: `Eight MuleSoft applications — three System APIs, four Process APIs, and one batch job — created a complete integration layer across the health portal, Salesforce, and the logistics platform. The architecture follows API-led connectivity: each system API wraps one external system behind a stable interface, and each process API orchestrates business logic without touching external systems directly.`,
     solutionSteps: [
       {
-        title: 'Customer Onboarding (dh-customer-papi)',
+        title: 'Registration creates the Salesforce record',
         path: 'Portal \u2192 Salesforce',
-        body: 'When a new member registers on the health portal, MuleSoft receives the registration payload and creates a Salesforce Person Account under the "Member" RecordType — splitting the full name, mapping email, phone, gender, Portal_ID__c as external ID, subscription ID, and start date. If the registration includes a Journey ID, a linked Case is created simultaneously with Journey_ID__c as the external identifier. Both Salesforce record IDs are returned to the caller.',
+        body: 'When a new member registers on the health portal, the dh-customer-papi process API receives the registration payload and creates a Salesforce Person Account under the "Member" RecordType — splitting the full name, mapping email, phone, gender, Portal_ID__c as external ID, subscription ID, and start date. If the registration includes a Journey ID, a linked Case is created simultaneously with Journey_ID__c as the external identifier. Both Salesforce record IDs are returned to the caller.',
       },
       {
-        title: 'Journey Sync (dh-journey-sync-papi, scheduled)',
+        title: 'Journeys sync to Salesforce on a schedule',
         path: 'Portal \u2192 Salesforce',
-        body: 'A scheduler fetches pending journeys from the portal (using portal user ID and journey ID as identifiers), queries Salesforce for existing Member Accounts by Portal_ID__c, and runs a RecordType filter to prevent accidental updates to non-Member records. Valid accounts are upserted with current journey data; Cases are upserted on Journey_ID__c. Portal IDs are zipped with Salesforce Account IDs after each batch to maintain the cross-system ID map.',
+        body: 'The dh-journey-sync-papi scheduler fetches pending journeys from the portal (using portal user ID and journey ID as identifiers), queries Salesforce for existing Member Accounts by Portal_ID__c, and runs a RecordType filter to prevent accidental updates to non-Member records. Valid accounts are upserted with current journey data; Cases are upserted on Journey_ID__c. Portal IDs are zipped with Salesforce Account IDs after each batch to maintain the cross-system ID map.',
       },
       {
-        title: 'Case Sync (dh-case-sync-papi, Object Store watermark)',
+        title: 'An agent flag becomes a portal request',
         path: 'Salesforce \u2192 Portal',
-        body: 'Salesforce support agents flag cases using four boolean fields: New_Kit_Requested__c, New_Blood_Draw_Requested__c, Cancellation_Requested__c, New_Telehealth_Requested__c. The case sync scheduler polls for cases where Integration_Timestamp__c exceeds the last-run timestamp (stored in Anypoint Object Store), transforms each flagged case into a structured request type ("new_kit", "reschedule_blood_draw", "cancellation", "follow_up"), and sends a bulk PATCH to the portal\'s journeys endpoint — up to 100 requests per batch. The Object Store watermark is updated after each successful run.',
+        body: 'Salesforce support agents flag cases using four boolean fields: New_Kit_Requested__c, New_Blood_Draw_Requested__c, Cancellation_Requested__c, New_Telehealth_Requested__c. The dh-case-sync-papi scheduler polls for cases where Integration_Timestamp__c exceeds the last-run timestamp (stored in Anypoint Object Store), transforms each flagged case into a structured request type ("new_kit", "reschedule_blood_draw", "cancellation", "follow_up"), and sends a bulk PATCH to the portal\'s journeys endpoint — up to 100 requests per batch. The Object Store watermark is updated after each successful run.',
       },
       {
-        title: 'Kit Fulfilment (dh-order-to-shipment-papi)',
+        title: 'A kit order becomes a shipment',
         path: 'Portal \u2192 Logistics',
-        body: 'When a diagnostic kit order is created in the portal, MuleSoft POSTs it to the logistics platform via Bearer token authentication — creating the outbound shipment record in the logistics system.',
+        body: 'When a diagnostic kit order is created in the portal, dh-order-to-shipment-papi POSTs it to the logistics platform via Bearer token authentication — creating the outbound shipment record in the logistics system.',
       },
       {
-        title: 'Order Status Sync (dh-order-status-sync-batch, every 5 minutes)',
+        title: 'Tracking comes back every five minutes',
         path: 'Logistics \u2192 Portal',
-        body: 'A scheduled batch fetches pending orders from the portal, queries the logistics platform for each order\'s status and shipment details — tracking number, carrier code, service code, estimated delivery date, delivery timestamp, kit IDs — and PATCHes the order back to the portal. If an order has status updates but no shipments yet, the status is applied without shipment fields; once shipments exist, full tracking data is included.',
+        body: 'The dh-order-status-sync-batch job fetches pending orders from the portal every five minutes, queries the logistics platform for each order\'s status and shipment details — tracking number, carrier code, service code, estimated delivery date, delivery timestamp, kit IDs — and PATCHes the order back to the portal. If an order has status updates but no shipments yet, the status is applied without shipment fields; once shipments exist, full tracking data is included.',
       },
     ],
     outcomes: [
       { metric: '0', label: 'manual Salesforce account creation — every portal registration creates the CRM record automatically' },
-      { metric: '4', label: 'case request types synced to portal — new kit, blood draw reschedule, cancellation, telehealth — directly from Salesforce agent flags' },
+      { metric: '4', label: 'Request types an agent can raise in Salesforce and see land in the portal, unassisted' },
       { metric: '5 min', label: 'maximum shipment tracking lag — kit status, tracking URL, and estimated delivery date visible in portal within one polling cycle' },
     ],
     resultsTable: [
@@ -919,19 +919,19 @@ CloudAlgo built the integration layer: eight MuleSoft applications covering cust
     ],
     technicalHighlights: [
       {
-        title: 'Object Store watermark on Integration_Timestamp__c',
+        title: 'The watermark uses our timestamp, not the platform one',
         body: 'The case sync uses a dedicated custom field rather than Salesforce\'s LastModifiedDate to track which records have been processed. This was a deliberate v1.1.0 change noted in the flow code: LastModifiedDate can be updated by any system change, causing reprocessing of already-synced records. Integration_Timestamp__c is only updated when the integration itself processes a case, making the watermark exact.',
       },
       {
-        title: 'RecordType-filtered upserts for Person Accounts',
+        title: 'The upsert checks the record type first',
         body: 'Before upserting accounts, the journey sync queries the Salesforce RecordType ID for "Member" accounts and filters the incoming payload to only include records where Portal_ID__c matches an existing Member-type account. This prevents the upsert from accidentally creating wrong-type Account records when a Portal_ID__c appears in the system but belongs to a different record type.',
       },
       {
-        title: 'Multi-lookup resolution in the Salesforce SAPI',
+        title: 'Lookups resolve in the system API, not the process layer',
         body: 'The Salesforce System API includes a generic lookup resolution layer: before upserting records, it detects lookup fields in the payload (identified by the presence of lookupTable and lookupField properties), queries Salesforce for the corresponding parent record IDs, and substitutes them into the payload. This keeps business logic out of the process layer and makes the SAPI reusable across any object with relational dependencies.',
       },
       {
-        title: 'Shipment-level tracking propagation',
+        title: 'Every tracking field goes back to the portal',
         body: 'The order status batch fetches shipment-level detail for every shipment on the order: direction (inbound/outbound), estimated delivery date, tracking status, tracking number, tracking URL, carrier code, service code, delivery timestamp, and kit IDs. Each field is written back to the portal, making the full logistics picture visible without requiring direct access to the logistics platform.',
       },
     ],
