@@ -1,0 +1,112 @@
+/* ─── /blog/ fold 2: the standing entry ───────────────────
+   A product is an object and gets a spec sheet; an engagement is a
+   period of time and gets a schedule; a case study is a change of
+   state and gets a ledger. A journal entry is a DATED RECORD, so
+   /blog/ is an archive -- see `components/_run.scss` for the run
+   itself. This fold is the one entry we would hand you first, given
+   the room the run denies all twenty-two.
+   ══════════════════════════════════════════════════ */
+
+.standing {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  gap: 0 3rem;
+  align-items: start;
+}
+
+.standing__meta {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 0.5rem;
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+.standing__meta i { font-style: normal; color: var(--color-text-faintest); }
+
+.standing__title {
+  margin: 0.875rem 0 0;
+  font-family: var(--font-heading);
+  font-weight: var(--weight-bold);
+  font-size: clamp(1.5rem, 3.2vw, 2.3rem);
+  line-height: 1.09;
+  letter-spacing: -0.034em;
+  text-wrap: balance;
+  max-width: 20ch;
+}
+.standing__title a { color: var(--color-heading); text-decoration: none; }
+.standing__title a:hover { color: var(--color-accent-hover); }
+
+.standing__excerpt {
+  margin: 1.125rem 0 0;
+  font-size: var(--size-body-lg);
+  line-height: 1.6;
+  color: var(--color-prose);
+  max-width: 56ch;
+  text-wrap: pretty;
+}
+
+.standing__go {
+  display: inline-block;
+  margin-top: 1.375rem;
+  font-size: var(--size-body-sm);
+  font-weight: var(--weight-bold);
+  color: var(--color-heading);
+  text-decoration: none;
+  border-bottom: 2px solid var(--color-accent);
+  padding-bottom: 0.2rem;
+  transition: color var(--duration-fast) var(--ease-out);
+}
+.standing__go:hover { color: var(--color-accent-hover); }
+
+.standing__side { display: grid; gap: 1.375rem; }
+
+/* The page's one picture. It is the entry's own hero art, so it is
+   evidence rather than decoration — and it is the only image on the
+   page, which is what stops 22 ruled rows reading as a spreadsheet. */
+.standing__fig {
+  margin: 0;
+  border: 1px solid var(--border-default);
+  background: var(--surface-sunk);
+  padding: 1.25rem;
+}
+.standing__fig img { display: block; width: 100%; height: auto; }
+
+.standing__slip { margin: 0; display: grid; gap: 0; }
+
+.standing__slip div {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.5rem 0;
+  border-top: 1px solid var(--border-default);
+}
+.standing__slip div:last-child { border-bottom: 1px solid var(--border-default); }
+
+.standing__slip dt {
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-faint);
+}
+.standing__slip dd {
+  margin: 0;
+  font-size: var(--size-body-sm);
+  font-weight: var(--weight-medium);
+  color: var(--color-heading);
+  text-align: right;
+}
+
+@media (max-width: 900px) {
+  .standing { grid-template-columns: 1fr; gap: 2rem; }
+  .standing__side { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: start; }
+}
+@media (max-width: 620px) {
+  .standing__side { grid-template-columns: 1fr; }
+}

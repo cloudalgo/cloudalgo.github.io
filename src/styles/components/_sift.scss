@@ -1,0 +1,58 @@
+/* ─── The sift ────────────────────────────────────────────
+   The archive's subject filter. Every count here is read off the
+   collection at build time, so a subject with nothing filed under
+   it cannot appear, and the bar doubles as the breakdown.
+   ══════════════════════════════════════════════════ */
+
+.sift {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.875rem 0;
+  border-top: 1px solid var(--border-default);
+  border-bottom: 1px solid var(--border-default);
+}
+
+.sift__btn {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.4375rem;
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  background: transparent;
+  border: 1px solid var(--border-default);
+  padding: 0.4375rem 0.75rem;
+  cursor: pointer;
+  transition: border-color var(--duration-fast) var(--ease-out),
+              color var(--duration-fast) var(--ease-out),
+              background-color var(--duration-fast) var(--ease-out);
+}
+.sift__btn:hover { border-color: var(--color-heading); color: var(--color-heading); }
+
+.sift__n {
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-faintest);
+  transition: color var(--duration-fast) var(--ease-out);
+}
+.sift__btn:hover .sift__n { color: var(--color-text-faint); }
+
+.sift__btn.is-on {
+  background: var(--surface-inverse);
+  border-color: var(--surface-inverse);
+  color: var(--color-on-inverse);
+}
+.sift__btn.is-on .sift__n { color: var(--color-on-inverse-a60); }
+
+.sift__count {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-faint);
+  font-variant-numeric: tabular-nums;
+}

@@ -1,431 +1,303 @@
 ---
+/**
+ * The journal index, as an archive.
+ *
+ * A product is an object and gets a spec sheet; an engagement is a period
+ * of time and gets a schedule; a case study is a change of state and gets
+ * a ledger. A journal entry is a DATED RECORD, so this page is an archive:
+ * one standing entry we would hand you first, then every entry on the site
+ * as a ruled row in reverse chronology, broken by year and filterable by
+ * subject. No cards, no excerpts, no load-more -- the whole run is here.
+ *
+ * Every count, date and length below is read off the collection at build
+ * time rather than written down, so a twenty-third entry cannot leave the
+ * stand claiming twenty-two. The case-study pairings are resolved against
+ * `@/data/case-studies` and throw if one points nowhere: the blog schema
+ * types `relatedCaseStudy` as a bare string, so nothing else checks it.
+ */
+import Page from '@/layouts/Page.astro';
+import PageMasthead from '@/components/ui/PageMasthead.astro';
+import ArchivePlate from '@/components/ui/ArchivePlate.astro';
 import { getCollection } from 'astro:content';
-import Page from '../../layouts/Page.astro';
-import BlogCard from '../../components/ui/BlogCard.astro';
-import { getBlogIllustration } from '../../data/blog-illustrations';
-import PageHeader from '@/components/ui/PageHeader.astro';
-import Button from '../../components/ui/Button.astro';
-import Badge from '@/components/ui/Badge.astro';
+import { caseStudies } from '@/data/case-studies';
 
-const allPublished = (await getCollection('blog', ({ data }) => data.published))
+const posts = (await getCollection('blog', ({ data }) => data.published))
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 
-const featuredPost = allPublished.find(p => p.data.featured === 'editors-pick') ?? allPublished[0];
-const otherPosts   = allPublished.filter(p => p !== featuredPost);
+const n = posts.length;
+const minutes = posts.reduce((sum, p) => sum + p.data.readTime, 0);
+const newest = posts[0];
+const oldest = posts[n - 1];
 
-const featuredIllustration = featuredPost ? getBlogIllustration(featuredPost.id) : '';
+/** Subjects and bylines in order of how much of the archive each carries. */
+function byFrequency(values: string[]): string[] {
+  const counts = new Map<string, number>();
+  for (const v of values) counts.set(v, (counts.get(v) ?? 0) + 1);
+  return [...counts.keys()].sort((a, b) => counts.get(b)! - counts.get(a)!);
+}
+const categoryCount = new Map<string, number>();
+for (const p of posts) {
+  categoryCount.set(p.data.category, (categoryCount.get(p.data.category) ?? 0) + 1);
+}
+const categories = byFrequency(posts.map((p) => p.data.category));
 
-const categories = ['All', ...Array.from(new Set(allPublished.map(p => p.data.category)))];
+/* The house byline is not a person, so it is not a name in the stand. */
+const authors = byFrequency(
+  posts.map((p) => p.data.author ?? 'CloudAlgo Team')
+).filter((a) => a !== 'CloudAlgo Team');
 
-const formatDate = (d: Date) =>
-  d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+const stamp = (d: Date) =>
+  d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+const monthYear = (d: Date) =>
+  d.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
+const iso = (d: Date) => d.toISOString().slice(0, 10);
+const year = (d: Date) => String(d.getFullYear());
+
+/* Counts that sit inside a sentence are spelled; counts in the stand, the
+   sift bar or a row stay as figures. A numeral mid-prose reads as data,
+   and every one of these is read aloud as a word. */
+const ONES = ('zero one two three four five six seven eight nine ten eleven twelve thirteen '
+  + 'fourteen fifteen sixteen seventeen eighteen nineteen').split(' ');
+const TENS = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+function words(k: number, cap = false): string {
+  let s: string;
+  if (k < 20) s = ONES[k];
+  else if (k < 100) s = TENS[Math.floor(k / 10)] + (k % 10 ? `-${ONES[k % 10]}` : '');
+  else s = String(k);
+  return cap ? s[0].toUpperCase() + s.slice(1) : s;
+}
+
+/* The entries with a client on the other side, in study order. */
+const studies = new Map(caseStudies.map((c) => [c.id, c]));
+const paired = posts.filter((p) => p.data.relatedCaseStudy);
+for (const p of paired) {
+  if (!studies.has(p.data.relatedCaseStudy!)) {
+    throw new Error(
+      `/blog/: "${p.id}" names case study "${p.data.relatedCaseStudy}", which has no entry `
+        + 'in src/data/case-studies.ts.'
+    );
+  }
+}
+paired.sort((a, b) =>
+  studies.get(a.data.relatedCaseStudy!)!.index.localeCompare(
+    studies.get(b.data.relatedCaseStudy!)!.index));
+
+/* The one we would hand you first: newest of the editor's picks, else
+   newest overall. */
+const standing = posts.find((p) => p.data.featured === 'editors-pick') ?? newest;
+
+/* The year headings are rendered inline with the rows, so each row knows
+   whether it opens a year. */
+const rows = posts.map((p, i) => ({
+  post: p,
+  opensYear: i === 0 || year(p.data.date) !== year(posts[i - 1].data.date),
+}));
 ---
 <Page
-  title="Blog — Salesforce & Heroku Insights | CloudAlgo"
-  description="Technical articles on Salesforce development, Heroku architecture, MuleSoft integration, and AWS from CloudAlgo's certified consultants."
+  title="Journal — CloudAlgo | Everything here came out of a job we were actually doing"
+  description={`${n} write-ups on Salesforce, Heroku, MuleSoft and AWS integration work, newest first `
+    + '— each one a problem that cost us an afternoon, and the fix that ended it.'}
 >
-
-  <!-- Page header — matches rest of site -->
-  <PageHeader
-    crumbs={[{ label: 'Home', href: '/' }, { label: 'Blog' }]}
-    title="From the team"
-    lead="Technical deep-dives on Salesforce, Heroku, MuleSoft, Airflow, and AWS from engineers who build with them every day."
+  <PageMasthead
+    crumbs={[{ label: 'Home', href: '/' }, { label: 'Journal' }]}
+    facts={[
+      { term: 'Entries',    detail: String(n) },
+      { term: 'Newest',     detail: monthYear(newest.data.date) },
+      { term: 'Oldest',     detail: monthYear(oldest.data.date) },
+      { term: 'Subjects',   detail: categories.join(' · ') },
+      { term: 'Written by', detail: authors.join(' · ') },
+      { term: 'End to end', detail: `${minutes} minutes` },
+    ]}
   >
+    <Fragment slot="title">
+      Everything here came out of a job we were <span class="mark mark--draw">actually doing</span>.
+    </Fragment>
+    <Fragment slot="lede">
+      No roadmaps, no predictions, no rewriting the release notes in our own words.
+      {' '}{words(n, true)} entries below, newest first &mdash; each one a problem that cost us an
+      afternoon, and the fix that ended it. {words(paired.length, true)} have a client on the other
+      side, and those are named.
+    </Fragment>
+  </PageMasthead>
 
-      <!-- Category filter — lives inside the header, below the title -->
-      <div class="blog-filter-row" role="tablist" aria-label="Filter by category">
-        {categories.map((cat, i) => (
-          <button
-            class:list={['blog-filter-btn', { 'blog-filter-btn--active': i === 0 }]}
-            data-cat={cat === 'All' ? 'all' : cat}
-            role="tab"
-            aria-selected={i === 0 ? 'true' : 'false'}
-            type="button"
-          >
-            {cat}
-          </button>
-        ))}
-        <span class="blog-filter-count" id="visible-count">{allPublished.length} articles</span>
+  <section class="section-press" aria-labelledby="standing-heading">
+    <div class="section-press__head anim-fade-up">
+      <h2 id="standing-heading" class="section-title section-title--xs section-title--tighter section-press__title">
+        Start here.
+      </h2>
+      <span class="section-press__note">The one we would hand you first</span>
+    </div>
+
+    <div class="standing anim-fade-up">
+      <div class="standing__body">
+        <p class="standing__meta">
+          <span>{stamp(standing.data.date)}</span><i>&middot;</i>
+          <span>{standing.data.category.toUpperCase()}</span><i>&middot;</i>
+          <span>{standing.data.readTime} min</span>
+        </p>
+        <h3 class="standing__title">
+          <a href={`/blog/${standing.id}/`}>{standing.data.title}</a>
+        </h3>
+        <p class="standing__excerpt">{standing.data.excerpt}</p>
+        <a class="standing__go" href={`/blog/${standing.id}/`}>Read the entry &rarr;</a>
       </div>
-  </PageHeader>
 
-  <!-- Featured post — full-width editorial card -->
-  {featuredPost && (
-    <section class="blog-featured-wrap">
-      <div class="container">
-
-        <a href={`/blog/${featuredPost.id}`} class="blog-featured-card" aria-label={`Read: ${featuredPost.data.title}`}>
-
-          <!-- Left: text panel -->
-          <div class="blog-featured-body">
-
-            <div class="blog-featured-top">
-              <Badge tone="plain" context="featured">Featured</Badge>
-              <span class="blog-featured-cat">{featuredPost.data.category}</span>
-            </div>
-
-            <h2 class="blog-featured-title">{featuredPost.data.title}</h2>
-            <p class="blog-featured-excerpt">{featuredPost.data.excerpt}</p>
-
-            <div class="blog-featured-footer">
-              <div class="blog-featured-meta">
-                {featuredPost.data.authorPhoto && (
-                  <img src={featuredPost.data.authorPhoto} alt={featuredPost.data.author ?? ''}
-                       class="blog-featured-avatar" loading="eager" />
-                )}
-                <span class="blog-featured-byline">
-                  {featuredPost.data.author ?? 'CloudAlgo Team'}
-                  <span style="opacity:0.5"> · </span>
-                  {formatDate(featuredPost.data.date)}
-                  <span style="opacity:0.5"> · </span>
-                  {featuredPost.data.readTime} min read
-                </span>
-              </div>
-              <span class="blog-featured-cta">Read article →</span>
-            </div>
-
-          </div>
-
-          <!-- Right: illustration panel -->
-          <div class="blog-featured-illus-panel" aria-hidden="true">
-            {featuredIllustration
-              ? <div class="blog-featured-illus-svg" set:html={featuredIllustration} />
-              : featuredPost.data.image
-                ? <img class="blog-featured-illus-img" src={featuredPost.data.image} alt="" loading="eager" />
-                : <div class="blog-featured-illus-empty" />
-            }
-          </div>
-
-        </a>
-
-      </div>
-    </section>
-  )}
-
-  <!-- All articles grid -->
-  <section class="blog-grid-wrap">
-    <div class="container">
-      {otherPosts.length > 0 && (
-        <>
-          <div class="blog-grid" id="blog-grid">
-            {otherPosts.map((post, i) => (
-              <div class={`blog-grid-item${i >= 9 ? ' hidden-post' : ''}`}
-                   data-category={post.data.category}>
-                <BlogCard
-                  title={post.data.title}
-                  excerpt={post.data.excerpt}
-                  category={post.data.category}
-                  date={post.data.date}
-                  readTime={post.data.readTime}
-                  slug={post.id}
-                  image={post.data.image}
-                  author={post.data.author}
-                  authorPhoto={post.data.authorPhoto}
-                  delay={Math.min(i % 3, 2) * 80}
-                />
-              </div>
-            ))}
-          </div>
-          {otherPosts.length > 9 && (
-            <div style="text-align:center;margin-top:3rem;">
-              <Button id="load-more-btn" variant="outline" type="button">
-                Load more articles
-              </Button>
-            </div>
-          )}
-        </>
-      )}
+      <aside class="standing__side">
+        {standing.data.image && (
+          <figure class="standing__fig">
+            <img src={standing.data.image} alt="" width="640" height="360" loading="lazy" decoding="async" />
+          </figure>
+        )}
+        <dl class="standing__slip">
+          <div><dt>Written by</dt><dd>{standing.data.author ?? 'CloudAlgo Team'}</dd></div>
+          <div><dt>Length</dt><dd>{standing.data.readTime} minutes</dd></div>
+          <div><dt>Filed under</dt><dd>{standing.data.category}</dd></div>
+        </dl>
+      </aside>
     </div>
   </section>
 
+  <section class="section-press" aria-labelledby="run-heading">
+    <div class="section-press__head anim-fade-up">
+      <h2 id="run-heading" class="section-title section-title--xs section-title--tighter section-press__title">
+        The archive.
+      </h2>
+      <span class="section-press__note">Newest first &middot; whole run on one page</span>
+    </div>
+
+    {/* Every count here is read off the collection, so a subject with
+        nothing filed under it cannot appear and the bar doubles as the
+        breakdown. */}
+    <div class="sift anim-fade-up" role="group" aria-label="Filter entries by subject">
+      <button type="button" class="sift__btn is-on" data-cat="all" aria-pressed="true">
+        All<span class="sift__n">{n}</span>
+      </button>
+      {categories.map((cat) => (
+        <button type="button" class="sift__btn" data-cat={cat} aria-pressed="false">
+          {cat}<span class="sift__n">{categoryCount.get(cat)}</span>
+        </button>
+      ))}
+      <span class="sift__count" role="status" data-total={n}>Showing all {n}</span>
+    </div>
+
+    <div class="run anim-fade-up">
+      {rows.map(({ post, opensYear }) => (
+        <>
+          {opensYear && (
+            <p class="run__year" data-year={year(post.data.date)}>{year(post.data.date)}</p>
+          )}
+          <a
+            class="run__row"
+            href={`/blog/${post.id}/`}
+            data-cat={post.data.category}
+            data-year={year(post.data.date)}
+          >
+            <ArchivePlate id={post.id} image={post.data.image} />
+            <time class="run__date" datetime={iso(post.data.date)}>{stamp(post.data.date)}</time>
+            <span class="run__cat">{post.data.category}</span>
+            <span class="run__title">
+              {post.data.title}
+              {post.data.relatedCaseStudy && (
+                <span class="run__mark">
+                  case study {studies.get(post.data.relatedCaseStudy)!.index}
+                </span>
+              )}
+            </span>
+            <span class="run__len">{post.data.readTime} min</span>
+          </a>
+        </>
+      ))}
+    </div>
+
+    <p class="run__none" hidden>Nothing filed under that subject yet.</p>
+  </section>
+
+  <section class="section-press" aria-labelledby="pairs-heading">
+    <div class="section-press__head anim-fade-up">
+      <h2 id="pairs-heading" class="section-title section-title--xs section-title--tighter section-press__title">
+        {words(paired.length, true)} of them have a client behind them.
+      </h2>
+      <span class="section-press__note">The write-up, and the outcome it produced</span>
+    </div>
+
+    <ul class="pairs anim-fade-up">
+      {paired.map((p) => {
+        const cs = studies.get(p.data.relatedCaseStudy!)!;
+        return (
+          <li class="pairs__row">
+            <div class="pairs__half">
+              <span class="pairs__key">The write-up</span>
+              <a class="pairs__title" href={`/blog/${p.id}/`}>{p.data.title}</a>
+              <span class="pairs__foot">{p.data.category} &middot; {p.data.readTime} min</span>
+            </div>
+            <span class="pairs__arrow" aria-hidden="true">&rarr;</span>
+            <div class="pairs__half">
+              <span class="pairs__key">The outcome</span>
+              <a class="pairs__title" href={`/case-studies/${cs.id}/`}>
+                <span class="pairs__n">{cs.index}</span>{cs.ledger.client}
+              </a>
+              <span class="pairs__foot">Case study &middot; {cs.ledger.when}</span>
+            </div>
+          </li>
+        );
+      })}
+    </ul>
+
+    <p class="pairs__foot-note">
+      The other {words(n - paired.length)} have no client attached &mdash; they came out of work we
+      cannot name, or out of an afternoon lost to something small enough that nobody bills for it.
+      {' '}<a href="/case-studies/">All {words(caseStudies.length)} case studies</a> are indexed
+      separately.
+    </p>
+  </section>
 </Page>
 
-<style>
-
-
-/* ── Filter row (sits inside .page-header) ──── */
-.blog-filter-row {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  flex-wrap: wrap;
-  margin-top: 2rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--border-default);
-}
-.blog-filter-btn {
-  background: none;
-  border: 1.5px solid var(--border-default);
-  border-radius: 100px;
-  padding: 0.375rem 1rem;
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: var(--color-text);
-  cursor: pointer;
-  font-family: var(--font-body);
-  transition: all 0.2s;
-  white-space: nowrap;
-}
-.blog-filter-btn:hover {
-  color: var(--color-heading);
-  border-color: var(--border-strong);
-  background: var(--surface-card);
-}
-.blog-filter-btn--active {
-  background: var(--surface-inverse);
-  color: var(--color-on-inverse);
-  border-color: var(--border-strong);
-}
-.blog-filter-count {
-  margin-left: auto;
-  font-size: 0.8125rem;
-  color: var(--color-text-faint);
-  font-weight: 500;
-}
-
-/* ── Featured card — split layout ───────────── */
-.blog-featured-wrap {
-  background: var(--surface-inverse);
-  padding: 2.5rem 0;
-  border-bottom: 1px solid var(--border-on-inverse);
-}
-.blog-featured-card {
-  display: grid;
-  grid-template-columns: 55% 45%;
-  text-decoration: none;
-  border-radius: 14px;
-  overflow: hidden;
-  min-height: 380px;
-  background: var(--surface-inverse-raised);
-  border: 1px solid var(--color-paper-a08);
-  transition: border-color 0.3s;
-}
-.blog-featured-card:hover {
-  border-color: var(--color-paper-a20);
-}
-
-/* Left: text panel */
-.blog-featured-body {
-  padding: 2.5rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 1rem;
-  background: var(--surface-inverse);
-}
-
-/* Right: illustration panel */
-.blog-featured-illus-panel {
-  background: var(--surface-sunk);
-  border-left: 1px solid var(--border-default);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 2rem;
-  overflow: hidden;
-  position: relative;
-  transition: background 0.3s;
-}
-.blog-featured-card:hover .blog-featured-illus-panel {
-  background: var(--surface-tint);
-}
-.blog-featured-illus-svg {
-  width: 100%;
-}
-.blog-featured-illus-svg svg {
-  width: 100%;
-  height: auto;
-  opacity: 0.85;
-  transition: opacity 0.4s ease, transform 0.5s ease;
-}
-.blog-featured-card:hover .blog-featured-illus-svg svg {
-  opacity: 1;
-  transform: scale(1.03);
-}
-.blog-featured-illus-img {
-  width: 100%;
-  height: auto;
-  display: block;
-  opacity: 0.9;
-  transition: opacity 0.4s ease, transform 0.5s ease;
-}
-.blog-featured-card:hover .blog-featured-illus-img {
-  opacity: 1;
-  transform: scale(1.03);
-}
-.blog-featured-illus-empty {
-  width: 100%;
-  height: 100%;
-  background: var(--surface-sunk);
-}
-.blog-featured-top {
-  display: flex;
-  align-items: center;
-  gap: 0.625rem;
-  margin-bottom: 0.25rem;
-}.blog-featured-cat {
-  font-size: 0.6875rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--color-on-inverse-a65);
-  border: 1px solid var(--color-paper-a25);
-  padding: 0.2rem 0.625rem;
-  border-radius: 100px;
-}
-.blog-featured-title {
-  font-size: clamp(1.5rem, 3vw, 2.5rem);
-  font-weight: 900;
-  letter-spacing: -0.03em;
-  color: var(--color-on-inverse);
-  line-height: 1.15;
-  margin: 0;
-  max-width: 680px;
-  transition: opacity 0.2s;
-}
-.blog-featured-card:hover .blog-featured-title { opacity: 0.85; }
-.blog-featured-excerpt {
-  font-size: 0.9375rem;
-  color: var(--color-on-inverse-strong);
-  line-height: 1.65;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  max-width: 620px;
-  margin: 0;
-}
-.blog-featured-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 1rem;
-  margin-top: 0.5rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--color-paper-a15);
-}
-.blog-featured-meta {
-  display: flex;
-  align-items: center;
-  gap: 0.625rem;
-}
-.blog-featured-avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 1.5px solid var(--color-paper-a30);
-  flex-shrink: 0;
-}
-.blog-featured-byline {
-  font-size: 0.8125rem;
-  color: var(--color-on-inverse-a65);
-}
-.blog-featured-cta {
-  font-size: 0.9375rem;
-  font-weight: 700;
-  color: var(--color-on-inverse);
-  padding: 0.5rem 1.25rem;
-  border: 1.5px solid var(--color-paper-a40);
-  border-radius: 100px;
-  transition: background 0.2s, border-color 0.2s;
-}
-.blog-featured-card:hover .blog-featured-cta {
-  background: var(--color-paper-a12);
-  border-color: var(--color-paper-a70);
-}
-
-/* ── All articles grid ───────────────────────── */
-.blog-grid-wrap {
-  background: var(--surface-page);
-  padding: 3.5rem 0 5rem;
-}
-.blog-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1.5rem;
-}
-.blog-grid-item { display: flex; }
-.blog-grid-item.hidden-post { display: none; }
-
-@media (min-width: 992px) {
-  .blog-grid { grid-template-columns: repeat(3, 1fr); }
-}
-@media (max-width: 767px) {
-  .blog-featured-card { grid-template-columns: 1fr; }
-  .blog-featured-illus-panel { min-height: 200px; border-left: none; border-top: 1px solid var(--color-paper-a07); }
-  .blog-featured-body { padding: 1.75rem; }
-  .blog-featured-title { font-size: 1.375rem; }
-  .blog-grid { grid-template-columns: 1fr; }
-  .blog-filter-count { display: none; }
-}
-</style>
-
 <script>
-// ── Category filter ──────────────────────────────────
-const filterBtns = document.querySelectorAll<HTMLButtonElement>('.blog-filter-btn');
-const allItems   = document.querySelectorAll<HTMLElement>('.blog-grid-item');
-const countEl    = document.getElementById('visible-count');
+  /* The sift. One subject at a time, or all of them: a row hides when its
+     subject is not the chosen one, and a year heading hides when nothing
+     is left under it. Filtering happens here rather than in the URL
+     because the whole archive is already on the page -- there is nothing
+     to fetch, and a filter is not a destination worth a back-button
+     entry. */
+  (function () {
+    const bar = document.querySelector<HTMLElement>('.sift');
+    const run = document.querySelector<HTMLElement>('.run');
+    if (!bar || !run) return;
 
-filterBtns.forEach(btn => {
-  btn.addEventListener('click', () => {
-    const cat = btn.dataset.cat ?? 'all';
-    filterBtns.forEach(b => {
-      b.classList.remove('blog-filter-btn--active');
-      b.setAttribute('aria-selected', 'false');
-    });
-    btn.classList.add('blog-filter-btn--active');
-    btn.setAttribute('aria-selected', 'true');
+    const buttons = Array.from(bar.querySelectorAll<HTMLButtonElement>('.sift__btn'));
+    const count = bar.querySelector<HTMLElement>('.sift__count');
+    const rows = Array.from(run.querySelectorAll<HTMLElement>('.run__row'));
+    const years = Array.from(run.querySelectorAll<HTMLElement>('.run__year'));
+    const none = document.querySelector<HTMLElement>('.run__none');
+    const total = Number(count?.dataset.total ?? rows.length);
 
-    let visible = 0;
-    allItems.forEach(item => {
-      const match = cat === 'all' || item.dataset.category === cat;
-      item.style.display = match ? 'flex' : 'none';
-      if (match) visible++;
-    });
-    if (countEl) countEl.textContent = `${visible} article${visible !== 1 ? 's' : ''}`;
-  });
-});
-
-// ── Load more ────────────────────────────────────────
-document.getElementById('load-more-btn')?.addEventListener('click', function () {
-  document.querySelectorAll<HTMLElement>('.hidden-post').forEach(el => {
-    el.style.display = 'flex';
-    el.classList.remove('hidden-post');
-  });
-  this.style.display = 'none';
-  const total = document.querySelectorAll('.blog-grid-item').length;
-  if (countEl) countEl.textContent = `${total} articles`;
-});
-
-// ── Magnetic hover on cards ──────────────────────────
-document.querySelectorAll<HTMLElement>('.blog-card-thumb').forEach(thumb => {
-  const raw = thumb.querySelector<HTMLElement>('.blog-card-illus, .blog-thumb-img');
-  if (!raw) return;
-  const el: HTMLElement = raw;
-
-  let rafId = 0;
-  let lx = 0, ly = 0;
-  function lerp(a: number, b: number, t: number) { return a + (b - a) * t; }
-  function spring(toX: number, toY: number) {
-    function step() {
-      lx = lerp(lx, toX, 0.14);
-      ly = lerp(ly, toY, 0.14);
-      el.style.transform = `translate(${lx}px, ${ly}px)`;
-      if (Math.abs(lx - toX) > 0.05 || Math.abs(ly - toY) > 0.05)
-        rafId = requestAnimationFrame(step);
-      else
-        el.style.transform = `translate(${toX}px, ${toY}px)`;
+    function apply(cat: string): void {
+      let shown = 0;
+      for (const row of rows) {
+        const on = cat === 'all' || row.dataset.cat === cat;
+        row.hidden = !on;
+        if (on) shown++;
+      }
+      for (const heading of years) {
+        heading.hidden = !rows.some(
+          (row) => !row.hidden && row.dataset.year === heading.dataset.year
+        );
+      }
+      if (none) none.hidden = shown > 0;
+      if (count) {
+        count.textContent = cat === 'all' ? `Showing all ${total}` : `Showing ${shown} of ${total}`;
+      }
     }
-    cancelAnimationFrame(rafId);
-    rafId = requestAnimationFrame(step);
-  }
-  thumb.addEventListener('mousemove', (e: MouseEvent) => {
-    const r = thumb.getBoundingClientRect();
-    spring(((e.clientX - r.left) / r.width - 0.5) * 14,
-           ((e.clientY - r.top)  / r.height - 0.5) * 10);
-  });
-  thumb.addEventListener('mouseleave', () => spring(0, 0));
-});
+
+    for (const button of buttons) {
+      button.addEventListener('click', () => {
+        for (const other of buttons) {
+          const on = other === button;
+          other.classList.toggle('is-on', on);
+          other.setAttribute('aria-pressed', String(on));
+        }
+        apply(button.dataset.cat ?? 'all');
+      });
+    }
+  })();
 </script>

@@ -1,8 +1,0 @@
-/* `.blog-card`, `.blog-card:hover`, `.blog-card-img` and
-   `.blog-card-category` were removed here: no element on the site
-   carries any of those four classes. The card they styled is
-   `.blog-card-new`, in components/ui/BlogCard.astro. */
-.blog-card-body { padding: 1.25rem; }
-.blog-card-title { font-size: 1rem; font-weight: 700; color: var(--color-heading); margin-bottom: 0.5rem; line-height: 1.4; }
-.blog-card-excerpt { font-size: 0.875rem; color: var(--color-text); line-height: 1.6; }
-.blog-card-meta { font-size: 0.75rem; color: var(--color-text-faint); margin-top: 0.75rem; }

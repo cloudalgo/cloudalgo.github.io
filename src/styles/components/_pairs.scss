@@ -1,0 +1,83 @@
+/* ─── The pairs ───────────────────────────────────────────
+   The entries that have a client on the other side, set as what
+   they are: the same job written twice -- once as how it was built,
+   once as what it changed.
+   ══════════════════════════════════════════════════ */
+
+.pairs { list-style: none; margin: 0; padding: 0; }
+
+.pairs__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 2rem minmax(0, 1fr);
+  align-items: start;
+  gap: 0 1.25rem;
+  padding: 1.375rem 0;
+  border-top: 1px solid var(--border-default);
+}
+.pairs__row:last-of-type { border-bottom: 1px solid var(--border-default); }
+
+.pairs__half { display: block; min-width: 0; }
+
+.pairs__key {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-text-faintest);
+}
+
+.pairs__title {
+  display: block;
+  margin-top: 0.4375rem;
+  font-family: var(--font-heading);
+  font-size: var(--size-body);
+  font-weight: var(--weight-semibold);
+  line-height: 1.3;
+  letter-spacing: -0.012em;
+  color: var(--color-heading);
+  text-decoration: none;
+  text-wrap: pretty;
+}
+.pairs__title:hover { color: var(--color-accent-hover); }
+
+.pairs__n {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: var(--weight-bold);
+  color: var(--color-accent);
+  margin-right: 0.5rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.pairs__foot {
+  display: block;
+  margin-top: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.04em;
+  color: var(--color-text-faint);
+}
+
+.pairs__arrow {
+  align-self: center;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: var(--size-body);
+  color: var(--color-text-faintest);
+}
+
+.pairs__foot-note {
+  margin: 1.5rem 0 0;
+  font-size: var(--size-body-sm);
+  line-height: 1.6;
+  color: var(--color-text-muted);
+  max-width: 72ch;
+}
+.pairs__foot-note a { color: var(--color-heading); font-weight: var(--weight-bold); }
+
+@media (max-width: 720px) {
+  .pairs__row { grid-template-columns: 1fr; gap: 0.875rem; }
+  .pairs__arrow { text-align: left; transform: rotate(90deg); transform-origin: left center; }
+}

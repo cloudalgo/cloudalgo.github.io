@@ -1,0 +1,97 @@
+---
+/**
+ * One cell of the archive's plate column: the entry's own picture, or
+ * the integration it is about, drawn.
+ *
+ * The drawn plate is inline SVG rather than a file so its ink is
+ * `currentColor` and its ground is the plate's own token -- change the
+ * theme and the plates follow, which a committed .svg would not. The
+ * geometry is fixed at the 132x88 the column renders at, so nothing
+ * here scales type against a viewBox.
+ *
+ * A post with neither an `image` nor an entry in BLOG_PLATES throws at
+ * build time. That is deliberate: an empty cell in the middle of the
+ * column is a defect nobody would notice in review.
+ */
+import { BLOG_PLATES, type PlateLink } from '@/data/blog-plates';
+
+interface Props {
+  /** The post's collection id, used to look up a drawn plate. */
+  id: string;
+  /** The post's `image`, if it has one. */
+  image?: string;
+}
+const { id, image } = Astro.props;
+
+const plate = BLOG_PLATES[id];
+if (!image && !plate) {
+  throw new Error(
+    `/blog/: "${id}" has no image and no drawn plate. Add an \`image\` to the ` +
+      'post, or its systems to src/data/blog-plates.ts.'
+  );
+}
+
+/** The plate's rendered box. Everything below is in these units. */
+const W = 132;
+const H = 88;
+const MID = H / 2;
+
+/** Two systems get room to breathe; three have to share it. */
+function boxes(systems: string[]) {
+  const w = systems.length === 2 ? 44 : 36;
+  const xs = systems.length === 2 ? [10, 78] : [6, 48, 90];
+  return systems.map((label, i) => ({
+    label,
+    x: xs[i],
+    w,
+    /** Three characters no longer fit at the two-system size. */
+    size: label.length < 3 ? 15 : 12,
+  }));
+}
+
+/** One arrowhead at x, pointing right (dir 1) or left (dir -1). */
+const head = (x: number, dir: number) => `M${x} ${MID} l${-5 * dir} -3.5 v7 z`;
+
+const cells = plate ? boxes(plate.systems) : [];
+
+/** The joins between neighbouring boxes, one per gap. */
+const joins = cells.slice(0, -1).map((cell, i) => {
+  const from = cell.x + cell.w + 2;
+  const to = cells[i + 1].x - 2;
+  return { from, to, mid: Math.round((from + to) / 2) };
+});
+
+/** A comparison is not a flow: it gets a divider, not an arrow. */
+const isVersus = (link: PlateLink | undefined) => link === 'versus';
+---
+{image ? (
+  <span class="run__plate">
+    <img src={image} alt="" width={W} height={H} loading="lazy" decoding="async" />
+  </span>
+) : (
+  <span class="run__plate run__plate--drawn">
+    <svg viewBox={`0 0 ${W} ${H}`} aria-hidden="true" focusable="false">
+      {cells.map((c) => (
+        <>
+          <rect x={c.x} y={26} width={c.w} height={36} fill="none"
+                stroke="currentColor" stroke-width="1.5" />
+          <text x={c.x + c.w / 2} y={49} text-anchor="middle"
+                font-size={c.size} font-weight="600" fill="currentColor">{c.label}</text>
+        </>
+      ))}
+      {joins.map((j) => (
+        isVersus(plate?.link) ? (
+          <line x1={j.mid} y1={20} x2={j.mid} y2={68}
+                stroke="currentColor" stroke-width="1.5" stroke-dasharray="3 3" />
+        ) : (
+          <>
+            <line x1={j.from} y1={MID} x2={j.to} y2={MID}
+                  stroke="currentColor" stroke-width="1.5" />
+            <path d={head(j.to, 1)} fill="currentColor" />
+            {plate?.link === 'both' && <path d={head(j.from, -1)} fill="currentColor" />}
+          </>
+        )
+      ))}
+    </svg>
+  </span>
+)}

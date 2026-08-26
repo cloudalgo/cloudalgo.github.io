@@ -49,11 +49,7 @@
 @use 'components/stats';
 @use 'components/proof-strip';
 
-@use 'sections/blog-featured';
-@use 'components/blog-cards';
-
 @use 'utilities/helpers';
-@use 'components/blog-card';
 
 @use 'layout/footer';
 
@@ -126,6 +122,15 @@
 @use 'sections/reply';
 @use 'sections/asks';
 @use 'components/forms';
+
+// /blog/ — a journal entry is a DATED RECORD, so the index is an
+// archive: one standing entry, then every entry as a ruled row. `_run`
+// after `_sift` because the bar sits above the run it filters and the
+// two share the same rules along that seam.
+@use 'sections/standing';
+@use 'components/sift';
+@use 'components/run';
+@use 'components/pairs';
 
 @use 'base/motion';
 @use 'utilities/grid';
