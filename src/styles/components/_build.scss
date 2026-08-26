@@ -1,0 +1,152 @@
+/* What was built, and the colophon of what it is made of.
+   `.stack` lives here rather than in its own partial because it is the
+   closing line of this section and never appears without it.
+
+   Two shapes, one device. A study whose stages are a real chain -- a
+   queue or a layer between each one -- draws the rail and numbers the
+   stages. A study whose "stages" are parallel flows of one build takes
+   `.build--parts`, which drops the numeral column: numbering a set that
+   has no order tells the reader something untrue. Same argument as the
+   engineering notes in components/_notes.scss. */
+
+.build {
+  list-style: none;
+  margin: 0 0 3.25rem;
+  padding: 0;
+}
+
+.build__stage {
+  display: grid;
+  grid-template-columns: 2.75rem minmax(0, 1fr);
+  gap: 0 1.75rem;
+}
+
+/* The gap between stages is padding on the BODY, not on the stage: the
+   mark column has to stretch the stage's full height or the rail stops
+   short and the chain reads as four separate bullets. */
+.build__body { padding-bottom: 2.25rem; }
+.build__stage:last-child .build__body { padding-bottom: 0; }
+
+/* The rail is the point: these are one path, not a list of bullets. */
+.build__mark {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.build__n {
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  font-weight: var(--weight-bold);
+  color: var(--color-accent);
+}
+
+.build__mark::after {
+  content: '';
+  width: 1px;
+  flex: 1;
+  min-height: 1.5rem;
+  margin: 0.6rem 0 0 0.35rem;
+  background: var(--border-strong);
+}
+
+.build__stage:last-child .build__mark::after { display: none; }
+
+/* Parallel parts: no numeral, no rail, and the column collapses so the
+   titles start at the section's left edge like any other list. */
+.build--parts .build__stage {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
+}
+
+.build--parts .build__mark { display: none; }
+
+.build__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1.5rem;
+  border-bottom: 1px solid var(--border-default);
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.build__title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: var(--size-body-lg);
+  font-weight: var(--weight-bold);
+  color: var(--color-heading);
+  line-height: 1.2;
+}
+
+/* Where the data moves, opposite the title. Mono, because it is a
+   signature rather than prose. */
+.build__path {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.04em;
+  color: var(--color-text-faint);
+  white-space: nowrap;
+}
+
+.build__body p { margin: 0; max-width: 68ch; }
+
+/* ── The colophon ─────────────────────────────────────────────── */
+
+.stack {
+  border-top: 1px solid var(--color-heading);
+  padding-top: 0.875rem;
+}
+
+.stack__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.stack__label,
+.stack__count {
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.stack__label { color: var(--color-heading); font-weight: var(--weight-bold); }
+.stack__count { color: var(--color-text-muted); }
+
+.stack__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 3rem;
+}
+
+.stack__row {
+  display: grid;
+  grid-template-columns: minmax(0, 10rem) minmax(0, 1fr);
+  gap: 0 1.25rem;
+  margin: 0;
+  padding: 0.5rem 0;
+  border-top: 1px solid var(--border-default);
+  font-size: var(--size-body-sm);
+}
+
+.stack__layer {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.04em;
+  color: var(--color-text-faint);
+  padding-top: 0.15rem;
+}
+
+@media (max-width: 900px) {
+  .stack__grid { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (max-width: 640px) {
+  .build__row { flex-direction: column; gap: 0.35rem; }
+  .build__path { white-space: normal; }
+}

@@ -1,0 +1,122 @@
+/* The change, in one band. This is the index ledger's row exploded: the
+   row gives one `was` and one `now` per study, and here every line the
+   engagement moved gets its own pair.
+
+   It is the only full-bleed sunk surface on the page, and it sits
+   directly under the masthead on purpose -- a reader who wants the
+   answer and nothing else can take it from here and leave.
+
+   The old state is struck with a plain `line-through` in the accent
+   rather than the crayon sprite, for the reason given in
+   components/_ledger.scss: these lines wrap, and the sprite is one
+   absolutely-positioned box that can only stroke the last of them. */
+
+.state {
+  background: var(--surface-sunk);
+  border-top: 1px solid var(--border-default);
+  border-bottom: 1px solid var(--border-default);
+}
+
+.state__inner {
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding: 2.75rem var(--container-pad) 3rem;
+}
+
+.state__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+/* Mono and small, not a section title: the band is a table with a
+   caption, and a display heading here would outrank the page's H1. */
+.state__title {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-heading);
+}
+
+.state__note {
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  text-align: right;
+}
+
+.state__row {
+  display: grid;
+  grid-template-columns: minmax(0, 13rem) minmax(0, 1fr) minmax(0, 1fr);
+  gap: 0 2.5rem;
+  align-items: baseline;
+  padding: 0.9rem 0;
+  border-top: 1px solid var(--border-default);
+  font-size: var(--size-body-sm);
+}
+
+/* The column headings carry no rule of their own -- the first data row's
+   border-top is the line under them. */
+.state__row--head {
+  padding: 0 0 0.55rem;
+  border-top: 0;
+}
+
+.state__what {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.04em;
+  color: var(--color-text-faint);
+}
+
+.state__key {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-faint);
+}
+
+.state__was { color: var(--color-text-muted); }
+
+.state__was s {
+  text-decoration: line-through;
+  text-decoration-color: var(--color-accent);
+  text-decoration-thickness: 1px;
+}
+
+.state__now {
+  color: var(--color-heading);
+  font-weight: var(--weight-bold);
+}
+
+/* Narrow: the three columns become three stacked lines, and the head row
+   goes away -- its two keys are printed from `data-key` onto the rows
+   themselves, where they still label the right cell. */
+@media (max-width: 900px) {
+  .state__row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.4rem;
+  }
+
+  .state__row--head { display: none; }
+
+  .state__was::before,
+  .state__now::before {
+    content: attr(data-key);
+    display: inline-block;
+    min-width: 3.25rem;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-text-faint);
+  }
+}

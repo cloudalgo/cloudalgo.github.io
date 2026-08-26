@@ -90,6 +90,21 @@
 @use 'components/ledger';
 @use 'components/claims';
 
+// ── One case study, in full ───────────────────────────────────
+// The detail page's seven devices, in the order the page reads them.
+// `_state` is the index's ledger row at one zoom level in -- one
+// was/now pair per thing the engagement moved -- and `_tally` closes on
+// the same figures the row carried. The five between them are the
+// argument: what held it in place, what was rejected, what was built,
+// and what was learned. `.stack` lives in `_build` because it is that
+// section's closing line and never appears without it.
+@use 'components/state';
+@use 'components/impasse';
+@use 'components/ruledout';
+@use 'components/build';
+@use 'components/notes';
+@use 'components/tally';
+
 @use 'sections/services-press';
 @use 'sections/band-press';
 @use 'sections/cases-press';

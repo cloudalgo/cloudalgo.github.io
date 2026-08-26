@@ -1,0 +1,72 @@
+/* The disqualification register: every candidate that was considered,
+   what it genuinely does, and the one fact that settled it.
+
+   Two of the five studies list the platform that WAS chosen alongside
+   the ones it beat, so the second line has two keys. `--out` is the
+   default and prints what rules a tool out; `--in` prints why the tool
+   we shipped won. Stamping "rules it out" against the thing running in
+   production would be a plain factual error, not a styling detail. */
+
+.ruledout__row {
+  display: grid;
+  grid-template-columns: minmax(0, 13rem) minmax(0, 1fr);
+  gap: 0 2.5rem;
+  padding: 1.5rem 0;
+  border-top: 1px solid var(--border-default);
+}
+
+.ruledout__row:last-child { border-bottom: 1px solid var(--border-default); }
+
+.ruledout__name {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: var(--size-body-lg);
+  font-weight: var(--weight-bold);
+  color: var(--color-heading);
+  line-height: 1.2;
+}
+
+.ruledout__cat {
+  display: block;
+  margin-top: 0.35rem;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.04em;
+  color: var(--color-text-faint);
+}
+
+.ruledout__pair { display: grid; gap: 0.5rem; }
+
+.ruledout__line {
+  display: grid;
+  grid-template-columns: 6.5rem minmax(0, 1fr);
+  gap: 0 1.25rem;
+  margin: 0;
+  font-size: var(--size-body-sm);
+}
+
+.ruledout__key {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-faint);
+  padding-top: 0.15rem;
+}
+
+/* Both verdict lines take the accent key and the ink body -- what
+   changes between them is the word in the key, not the weight of the
+   line. The verdict is the point of the row either way. */
+.ruledout__line--out .ruledout__key,
+.ruledout__line--in .ruledout__key { color: var(--color-accent); }
+
+.ruledout__line--out span:last-child,
+.ruledout__line--in span:last-child { color: var(--color-heading); }
+
+@media (max-width: 900px) {
+  .ruledout__row { grid-template-columns: minmax(0, 1fr); gap: 0.9rem; }
+}
+
+@media (max-width: 640px) {
+  .ruledout__line { grid-template-columns: minmax(0, 1fr); gap: 0.15rem; }
+}

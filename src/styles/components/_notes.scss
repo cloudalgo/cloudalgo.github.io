@@ -1,0 +1,34 @@
+/* Engineering notes, two up. The decisions a reader who has to maintain
+   this would want to have been told about. */
+
+.notes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 3rem;
+}
+
+.notes__item {
+  border-top: 1px solid var(--color-heading);
+  padding: 1rem 0 1.75rem;
+}
+
+/* No numerals here: the build stages above are a sequence, these
+   observations are not, and numbering them would only decorate. */
+.notes__title {
+  margin: 0 0 0.6rem;
+  font-family: var(--font-heading);
+  font-size: var(--size-body-lg);
+  font-weight: var(--weight-bold);
+  color: var(--color-heading);
+  line-height: 1.2;
+  text-wrap: balance;
+}
+
+.notes__item p { margin: 0; font-size: var(--size-body-sm); }
+
+/* One column, and the first item needs the rule the grid used to give
+   it from the row above. */
+@media (max-width: 900px) {
+  .notes { grid-template-columns: minmax(0, 1fr); }
+  .notes__item:first-child { border-top: 1px solid var(--color-heading); }
+}

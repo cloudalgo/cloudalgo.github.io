@@ -23,21 +23,70 @@ export interface CaseStudy {
     figLabel: string;
   };
   // Detail page — core
+  /** The <title> and the JSON-LD headline. Reads like a piece of writing;
+      the page's own H1 is `detailTitle`, which reads like a fact. */
   headline: string;
   executiveSummary: string;
   challenge: string;
   challengePoints: string[];
   solution: string;
-  solutionSteps: { title: string; body: string }[];
+  solutionSteps: { title: string; body: string; path?: string }[];
   outcomes: { metric: string; label: string }[];
   testimonial?: { quote: string; name: string; role: string };
   // Detail page — rich sections
   whyNotOffShelf?: string;
-  toolComparison?: { tool: string; category: string; doesWell: string; limitation: string }[];
-  technicalHighlights?: { title: string; body: string }[];
-  resultsTable?: { metric: string; before: string; after: string }[];
-  whatDemonstrates?: { title: string; body: string }[];
-  techStack?: { layer: string; technology: string }[];
+  toolComparison?: {
+    tool: string;
+    category: string;
+    doesWell: string;
+    limitation: string;
+    /** Set on the tool that WAS picked. Two of these registers list the
+        chosen platform alongside the ones it beat, and printing "rules it
+        out" against the thing we shipped would be a plain lie. */
+    chosen?: boolean;
+  }[];
+  /* The four below are required, not optional: the detail page renders
+     each of them under a heading of its own, so a study missing one
+     would ship a section head with nothing under it. Every study
+     carries all four. */
+  technicalHighlights: { title: string; body: string }[];
+  /** The before/after band the detail page opens on. Every row is one
+      thing the engagement changed, struck through on the left. */
+  resultsTable: { metric: string; before: string; after: string }[];
+  whatDemonstrates: { title: string; body: string }[];
+  techStack: { layer: string; technology: string }[];
+
+  /* ── Detail page — the page's own furniture ──────────────────────
+     `headline` is a sentence about the work; these are what the page
+     itself prints. Kept per study rather than derived: which phrase
+     carries the crayon, and what each section's stamp says, are copy
+     decisions and not something a template can guess. */
+
+  /** The H1. Contains `detailMark` verbatim, once. */
+  detailTitle: string;
+  /** The substring of `detailTitle` that takes the hero mark. */
+  detailMark: string;
+  detailLede: string;
+  /** One extra fact in the masthead stand, specific to this engagement. */
+  standNote: { label: string; detail: string };
+  /** Title over the before/after band. */
+  stateTitle: string;
+  /** Heading of the band's first column -- the thing each row is about. */
+  stateWhat: string;
+  /** True when `solutionSteps` are stages of ONE path -- then the section
+      draws its rail and numbers them. False when they are parallel parts
+      of one build, where a numeral would only decorate. */
+  buildChain: boolean;
+  buildNote: string;
+  notesNote: string;
+  /** Omitted with `toolComparison`. */
+  ruledoutNote?: string;
+  /** Index into `challengePoints` of the constraint that picks the
+      architecture, where exactly one does. */
+  decisivePoint?: number;
+  decisiveStamp?: string;
+  /** The line the neighbouring pages print under this study's name. */
+  pagerNote: string;
 }
 
 export const caseStudies: CaseStudy[] = [
@@ -63,6 +112,18 @@ export const caseStudies: CaseStudy[] = [
       now: 'One Next.js platform with Salesforce underneath it. Enrolment, donations and membership all land on the same record.',
       figLabel: 'on one platform, was three',
     },
+
+    detailTitle: 'They had a PHP monolith and no CRM. Two years on, they are still building on what replaced it.',
+    detailMark: 'still building on what replaced it',
+    detailLede:
+      'A global non-profit serving 180+ countries ran its community on a custom PHP platform with no CRM behind it — member records, course enrolments and donations in separate systems that never agreed. We rebuilt it as a Next.js platform with Salesforce as the backbone and six external systems behind one backend layer. The client has been extending it ever since.',
+    standNote: { label: 'Systems integrated', detail: 'Six, behind one Node.js backend layer.' },
+    stateTitle: 'One platform, before and after',
+    stateWhat: 'The platform',
+    buildChain: false,
+    buildNote: 'Five parts of one platform',
+    notesNote: 'What keeps it navigable at 4,500 commits',
+    pagerNote: 'One platform with a CRM under it, two years and counting',
 
     headline: 'From a legacy PHP monolith to a CRM-connected platform built for global reach.',
 
@@ -211,6 +272,19 @@ export const caseStudies: CaseStudy[] = [
       figLabel: 'end-to-end data latency',
     },
 
+    detailTitle: 'Leadership ran on yesterday\u2019s numbers. Now nothing on the dashboard is more than fifteen minutes old.',
+    detailMark: 'more than fifteen minutes old',
+    detailLede:
+      'An enterprise manufacturer had CRM and ERP data it could not act on: reports 12 to 24 hours behind, account identifiers that did not match across the two systems, and reconciliation done by hand every week. We built a medallion pipeline in Airflow that ingests, validates and publishes both systems into one analytics layer, on a schedule nobody has to run.',
+    standNote: { label: 'Cadence', detail: 'Every 15 minutes, with no manual step in the cycle.' },
+    stateTitle: 'One sync window, before and after',
+    stateWhat: 'The sync',
+    buildChain: true,
+    buildNote: 'Four layers, each with a contract',
+    notesNote: 'Why it still runs at year two',
+    ruledoutNote: 'Seven tools evaluated, none of them whole',
+    pagerNote: 'Yesterday\u2019s numbers, now under 15 minutes old',
+
     headline: 'From disconnected systems to a unified, analytics-ready data layer.',
 
     executiveSummary:
@@ -289,18 +363,22 @@ export const caseStudies: CaseStudy[] = [
     solutionSteps: [
       {
         title: 'Intelligent Ingestion — Staging Layer',
+        path: 'API \u2192 Redis state',
         body: 'A dedicated orchestration DAG receives table-level payloads via API and uses Redis-backed state coordination to track which tables have arrived for a given sync window. Only when all expected tables for a division are confirmed does the downstream pipeline trigger — eliminating the partial-data problem that caused reporting inconsistencies. Configurable timeout and retry handling ensure no sync window is silently skipped.',
       },
       {
         title: 'Bronze — The Faithful Copy',
+        path: 'Staging \u2192 Bronze',
         body: 'Raw data lands in the Bronze layer with minimal transformation — the goal is a clean, complete, denormalized record of what arrived. Records are processed in configurable batch sizes using executemany semantics so individual row failures don\'t abort the entire batch. A custom formula evaluation engine handles concatenation, unit conversion (tons ↔ pounds), date part extraction, and duration calculations — all driven by JSON configuration, not hardcoded logic. Business analysts can update derivation rules without touching Python.',
       },
       {
         title: 'Silver — The Trust Layer',
+        path: 'Bronze \u2192 Silver',
         body: 'The Silver pipeline is where raw data becomes trusted data. Every record passes through Cerberus schema validation (type checking, required field enforcement, value constraints), duplicate detection, column normalisation (uppercase, trimming, type coercion, null handling), and upsert writes. New records are inserted; existing records are updated on conflict, making the pipeline idempotent and safe to re-run. Anything downstream can trust that Silver data is structurally valid, deduplicated, and correctly typed.',
       },
       {
         title: 'Gold — Analytics at Speed',
+        path: 'Silver \u2192 Gold',
         body: 'The Gold layer exposes analytics-optimised schemas at 15-minute cadence. A Table Sync DAG maps Silver columns to Gold schema names with idempotent upserts. An Account Relationship DAG solves the hardest cross-system problem — linking CRM account identifiers to ERP records across 4 destination tables using functional indexes on TRIM()+LOWER() columns, cutting query time by 75–90%. A KPI Calculation DAG joins shipped quantity data against annual and prior-year sales goals at product and division level, giving sales leadership a live view of performance vs. plan.',
       },
     ],
@@ -396,127 +474,174 @@ export const caseStudies: CaseStudy[] = [
       figLabel: 'records re-entered by hand',
     },
 
+    detailTitle: 'Every patient was typed twice. Now a browser does the second typing.',
+    detailMark: 'a browser does the second typing',
+    detailLede:
+      'A paediatric therapy clinic ran intake in Salesforce and clinical records in an EMR that shipped without an API. Staff re-keyed every name, date of birth, insurance ID and case note by hand. We put a headless browser on Heroku in the gap, and it has done the second typing ever since.',
+    standNote: { label: 'Integration surface', detail: 'The EMR\u2019s own web portal. No API, no webhook, no export.' },
+    stateTitle: 'One patient intake, before and after',
+    stateWhat: 'The intake',
+    buildChain: true,
+    buildNote: 'Four stages, one queue between them',
+    notesNote: 'Why it runs at 3am on a Monday',
+    ruledoutNote: 'Four candidates, none of them fit',
+    decisivePoint: 3,
+    decisiveStamp: 'This one decides the architecture',
+    pagerNote: 'Every patient typed once, and a browser does the rest',
+
     headline: 'No API? No problem. Automating patient data sync with a browser robot on Heroku.',
 
     executiveSummary:
       'A pediatric therapy clinic had two systems that couldn\'t talk to each other: Salesforce for patient intake and an EMR for clinical records. Every new patient meant staff manually re-entering the same information twice — names, dates of birth, insurance, parent contacts, case notes. The EMR vendor provided no public API. CloudAlgo built a Heroku-hosted integration that closes the gap: a queue-backed Node.js worker that uses Puppeteer to drive a headless Chrome session through the EMR portal, populating every field exactly as a human would — but continuously, automatically, and without errors.',
 
     challenge:
-      'Healthcare operations teams rarely choose which software they use — the EMR is mandated, the CRM is the enterprise standard, and the integration gap between them becomes a staffing problem. For this clinic, every patient intake created a dual-entry burden: clinical and administrative data recorded in Salesforce had to be manually transcribed into the EMR portal, field by field, form by form.',
+      'Healthcare operations teams rarely choose their software. The EMR is mandated, the CRM is the enterprise standard, and the gap between them quietly becomes a staffing problem. Here it was one clinic, two systems, and the same information entered field by field, form by form, twice.',
 
     challengePoints: [
-      'Every patient intake required staff to open two systems and enter the same information twice — patient details, parent/guardian contacts, insurance coverage, and clinical case notes.',
-      'Transcription errors in patient records carry real risk in a clinical setting. A wrong date of birth, an incorrect insurance ID, or a missing parent phone number creates downstream problems in billing, scheduling, and care coordination.',
-      'Staff time spent on dual data entry could not be spent on patient care, scheduling, or clinical support — the work the clinic actually hired for.',
-      'The EMR vendor provided no public API, no webhook support, and no data export endpoint. The only integration surface was the web portal itself.',
+      'Every intake meant opening both systems and entering the same details twice: the patient, the parent or guardian, the insurance cover, and the clinical case notes.',
+      'Transcription errors carry real risk in a clinical setting. A wrong date of birth, an incorrect insurance ID or a missing parent phone number turns into a billing, scheduling or care-coordination problem downstream.',
+      'Time spent typing the same record twice was not spent on patient care, scheduling or clinical support \u2014 the work the clinic actually hired for.',
+      'The EMR vendor offered no public API, no webhooks and no export endpoint. The only integration surface was the portal a human logs into.',
+    ],
+
+    resultsTable: [
+      {
+        metric: 'Systems opened',
+        before: 'Two. Salesforce, then the EMR portal.',
+        after: 'One. Salesforce, and nothing else.',
+      },
+      {
+        metric: 'Times a field is typed',
+        before: 'Twice. Once in each system.',
+        after: 'Once. Salesforce is the source of truth.',
+      },
+      {
+        metric: 'Who does the second typing',
+        before: 'Clinic staff, by hand.',
+        after: 'A headless Chrome session on a Heroku worker.',
+      },
+      {
+        metric: 'Hours covered',
+        before: 'While somebody is at a desk.',
+        after: 'Around the clock, unsupervised.',
+      },
+      {
+        metric: 'When it goes wrong',
+        before: 'Found later, if somebody notices.',
+        after: 'Written back onto the Salesforce record as an error.',
+      },
     ],
 
     whyNotOffShelf:
-      'The absence of an API is not a configuration problem — it\'s an architectural one. No integration platform, no middleware connector, and no low-code tool can connect to a system that doesn\'t expose an integration interface. Zapier, MuleSoft, and Heroku Connect all require at minimum a REST API or a database connection. When the only interface is a JavaScript-heavy web portal, the only viable bridge is a programmatic browser that can interact with it as a human would.',
+      'A missing API is not a configuration problem \u2014 it is an architectural one. Zapier, MuleSoft and Heroku Connect all want a REST API or a database at the far end, and this system exposes neither. When the only interface is a JavaScript-heavy portal, the only viable bridge is a programmatic browser that uses it the way a person does.',
 
     toolComparison: [
       {
         tool: 'Zapier',
         category: 'No-code automation',
-        doesWell: 'Simple trigger-action workflows between systems with native connectors',
-        limitation: 'Requires an API or a native app connector. No EMR connector exists. Cannot drive a web portal.',
+        doesWell: 'Simple trigger-and-action workflows between systems that already have connectors.',
+        limitation: 'Needs an API or a native connector. No EMR connector exists, and it cannot drive a portal.',
       },
       {
         tool: 'MuleSoft',
         category: 'iPaaS',
-        doesWell: 'Enterprise-grade API connectivity with deep integration logic',
-        limitation: 'Only as capable as the APIs available. No API means MuleSoft has nothing to connect to on the EMR side.',
+        doesWell: 'Enterprise-grade API connectivity with real integration logic behind it.',
+        limitation: 'Only ever as capable as the APIs it is given. On the EMR side there is nothing to connect to.',
       },
       {
         tool: 'Heroku Connect',
         category: 'Database sync',
-        doesWell: 'Bidirectional Salesforce ↔ Postgres sync with no custom code',
-        limitation: 'Syncs to a Postgres database, not to a web portal. The EMR has no database access layer.',
+        doesWell: 'Two-way Salesforce and Postgres sync with no custom code to maintain.',
+        limitation: 'Syncs to a database, not to a portal. The EMR has no database access layer to point it at.',
       },
       {
-        tool: 'Manual entry',
-        category: 'Status quo',
-        doesWell: 'Always works — no technical risk or upfront investment',
-        limitation: 'Staff time per patient, transcription errors, and no scaling path as patient volume grows.',
+        tool: 'Carrying on by hand',
+        category: 'The status quo',
+        doesWell: 'Always works. No technical risk and nothing to build.',
+        limitation: 'Staff time on every patient, transcription errors nobody catches, and no path as volume grows.',
       },
     ],
 
     solution:
-      'CloudAlgo built a two-process Heroku application: a web process that manages Salesforce OAuth credentials and a worker process that listens to a RabbitMQ queue. When a patient record is created or updated in Salesforce, an Apex trigger publishes a job to the queue. The worker picks it up, launches a Puppeteer-controlled headless Chrome session, operates the EMR portal to create or update the patient record, and returns the resulting EMR patient ID back to Salesforce via an Apex REST callback.',
+      'A two-process Heroku application. The web process owns the Salesforce OAuth credentials; the worker process listens to a RabbitMQ queue, drives the portal, and reports back. Nothing in Salesforce waits for a browser.',
 
     solutionSteps: [
       {
-        title: 'Salesforce Triggers the Queue',
-        body: 'When a patient record is created or updated in Salesforce, an Apex trigger publishes a job payload to a RabbitMQ queue hosted on CloudAMQP. The queue decouples Salesforce event timing from the sync operation — Salesforce doesn\'t wait for the browser to finish, job bursts don\'t stack up Puppeteer sessions, and failed jobs are nack\'d without data loss.',
+        title: 'Salesforce triggers the queue',
+        path: 'Salesforce \u2192 RabbitMQ',
+        body: 'When a patient record is created or updated, an Apex trigger publishes a job to a RabbitMQ queue on CloudAMQP. The queue decouples the event from the work: Salesforce does not wait for the browser, bursts do not stack up Puppeteer sessions, and a failed job is nack\u2019d rather than lost.',
       },
       {
-        title: 'OAuth Credentials Cached in Redis',
-        body: 'A web process handles the Salesforce OAuth 2.0 flow and stores access tokens, refresh tokens, and instance URLs in Heroku Redis. The jsforce library automatically refreshes expired tokens and updates the cache — so the integration stays connected indefinitely without manual re-authentication.',
+        title: 'Credentials cached in Redis',
+        path: 'Web dyno \u2192 Heroku Redis',
+        body: 'The web process handles the Salesforce OAuth 2.0 flow and keeps access tokens, refresh tokens and instance URLs in Heroku Redis. jsforce refreshes expired tokens and writes them back, so the integration stays connected without anyone re-authenticating it by hand.',
       },
       {
-        title: 'Puppeteer Drives the EMR Portal',
-        body: 'For each job, the worker launches a headless Chrome browser via the Google Chrome buildpack on Heroku. Puppeteer navigates to the EMR portal, logs in, and programmatically interacts with the interface: clicking buttons, selecting dropdown options, filling form fields, and waiting for network idle before each step. The worker detects and resolves idle lock screen re-authentication automatically, and checks field values before writing — only updating fields that have actually changed.',
+        title: 'Puppeteer drives the portal',
+        path: 'Worker \u2192 EMR portal',
+        body: 'For each job the worker starts headless Chrome through the Google Chrome buildpack, logs in, and works the interface: clicking, selecting, filling fields, waiting for network idle before each step. It notices the idle lock screen and clears it, and it reads a field before writing it, so only values that actually changed are touched.',
       },
       {
-        title: 'EMR Patient ID Written Back to Salesforce',
-        body: 'After creating or updating the patient record, the worker extracts the EMR patient ID from the portal and calls a Salesforce Apex REST endpoint to write it back. The Salesforce record is now linked to the EMR record by ID, enabling future updates to target the correct patient without re-searching. On any failure, the worker sends an error callback so the Salesforce record reflects the failure rather than remaining silently stale.',
+        title: 'The EMR ID goes back to Salesforce',
+        path: 'Worker \u2192 Salesforce',
+        body: 'The worker lifts the EMR patient ID out of the portal and writes it back through an Apex REST endpoint, so the two records are linked by ID and the next update finds the right patient without searching. If anything fails, an error callback puts that on the record rather than leaving it quietly stale.',
       },
     ],
 
     technicalHighlights: [
       {
-        title: 'Browser Automation as Integration Layer',
-        body: 'Puppeteer driving a full Chromium instance is not the first-choice integration pattern — but when there is no API, it is the only viable one. The architecture treats the browser as a typed, programmatic interface: CSS selectors as contracts, network idle waits as synchronisation points, and field-level read-before-write logic to prevent unnecessary mutations.',
+        title: 'A browser as the integration layer',
+        body: 'Driving a full Chromium instance is nobody\u2019s first-choice integration pattern, but with no API it is the only one that exists. The architecture treats the browser as a typed interface: CSS selectors as contracts, network idle as the synchronisation point, and read-before-write at field level so nothing is mutated without cause.',
       },
       {
-        title: 'Queue-Backed, Decoupled Architecture',
-        body: 'A synchronous Salesforce → EMR call would mean Salesforce waits for Puppeteer to complete — a multi-second operation that can time out, stall on a lock screen, or encounter unexpected DOM state. RabbitMQ decouples the trigger from the execution: the queue absorbs bursts, failed jobs are nack\'d without data loss, and the worker processes at its own pace without blocking the Salesforce transaction.',
+        title: 'The queue is what makes it survivable',
+        body: 'A synchronous call would mean Salesforce waiting on Puppeteer \u2014 a multi-second operation that can time out, stall on a lock screen, or meet a DOM it did not expect. RabbitMQ absorbs the bursts, holds failed jobs instead of dropping them, and lets the worker go at its own pace without blocking a Salesforce transaction.',
       },
       {
-        title: 'Lock Screen and Idempotent Field Writes',
-        body: 'The EMR portal shows a password re-entry dialog after idle periods. The worker detects this overlay at every interaction point and resolves it before continuing. Field writes are also idempotent: the current value is read before typing, and the field is only updated if the value differs — preventing spurious writes and reducing the risk of triggering portal-side validation errors on unchanged fields.',
+        title: 'Lock screens and idempotent writes',
+        body: 'The portal throws a password re-entry dialog after an idle period. The worker checks for that overlay at every interaction point and clears it before continuing. Writes are idempotent too: the current value is read first, and the field is only touched if it differs, which keeps portal-side validation from firing on fields that never changed.',
       },
       {
-        title: 'Heroku Add-Ons Eliminate Infrastructure',
-        body: 'The Google Chrome buildpack makes Chrome available on the dyno without Docker. Heroku Redis provides token caching, CloudAMQP provides the managed RabbitMQ queue, and Papertrail aggregates logs. No container orchestration, no managed cloud infrastructure. The stack deploys with a git push.',
+        title: 'Add-ons instead of infrastructure',
+        body: 'The Chrome buildpack puts a browser on the dyno without Docker. Redis caches tokens, CloudAMQP runs the queue, Papertrail collects the logs. No container orchestration and nothing of our own to look after \u2014 the whole stack deploys with a git push.',
       },
     ],
 
     outcomes: [
-      { metric: '0', label: 'Manual data entry — every patient sync is fully automated' },
-      { metric: '24/7', label: 'Continuous coverage — the worker runs around the clock without supervision' },
-      { metric: '0', label: 'Transcription errors — Salesforce is the source of truth, written once' },
+      { metric: '0', label: 'Records re-entered by hand. Every patient sync runs without a person in it.' },
+      { metric: '24/7', label: 'Coverage. The worker runs around the clock and nobody supervises it.' },
+      { metric: '0', label: 'Transcription errors between the two systems. Salesforce holds the record, and it is typed once.' },
     ],
 
     whatDemonstrates: [
       {
-        title: 'We find the integration path, even when there isn\'t one.',
-        body: 'No API doesn\'t mean no solution. It means the solution requires a different kind of engineering. Recognising that a headless browser is a legitimate, architecturally sound integration layer — not a workaround — is what made this problem solvable.',
+        title: 'We find the integration path, even when there isn\u2019t one.',
+        body: 'No API does not mean no solution. It means a different kind of engineering. Treating a headless browser as a legitimate integration layer rather than a workaround is what made this solvable at all.',
       },
       {
         title: 'Architecture decisions prevent operational debt.',
-        body: 'A synchronous direct-call integration would have worked initially and broken under any load or timeout. Queue decoupling, Redis token caching, and error callbacks to Salesforce are not over-engineering — they\'re the difference between something that works at 3am on a Monday and something that only works when someone is watching.',
+        body: 'A direct synchronous call would have worked on day one and broken under the first timeout. Queue decoupling, token caching and error callbacks are the difference between something that works at 3am and something that works while you watch it.',
       },
       {
-        title: 'Healthcare constraints require defensive engineering.',
-        body: 'Patient data accuracy is not a UX concern — it\'s a clinical one. Idempotent writes, lock screen detection, and failure callbacks were built because silent errors in a medical context are not acceptable. The integration behaves defensively by design.',
+        title: 'Clinical constraints get defensive engineering.',
+        body: 'Patient data accuracy is not a UX concern. Idempotent writes, lock-screen detection and failure callbacks exist because a silent error in a medical context is not something you get to explain later.',
       },
       {
-        title: 'Platform choice is an operational cost decision.',
-        body: 'Heroku\'s add-on ecosystem eliminated a significant infrastructure footprint: no managed Redis to provision, no AMQP cluster to configure, no Chrome runtime to containerise. That operational simplicity is a cost advantage that compounds over the lifetime of the integration.',
+        title: 'Platform choice is an operating cost.',
+        body: 'Heroku\u2019s add-ons removed a whole infrastructure footprint: no Redis to run, no AMQP cluster to stand up, no Chrome runtime to containerise. The add-ons are the infrastructure, and that simplicity compounds for as long as the integration runs.',
       },
     ],
 
     techStack: [
-      { layer: 'Runtime', technology: 'Node.js · TypeScript' },
-      { layer: 'Web Framework', technology: 'Express.js' },
-      { layer: 'Browser Automation', technology: 'Puppeteer (headless Chromium)' },
-      { layer: 'Salesforce API', technology: 'jsforce (OAuth 2.0, Apex REST callbacks)' },
-      { layer: 'Job Queue', technology: 'RabbitMQ via CloudAMQP' },
-      { layer: 'Token Cache', technology: 'Heroku Redis (mini)' },
-      { layer: 'Process Management', technology: 'Throng (clustered worker processes)' },
-      { layer: 'Hosting', technology: 'Heroku (web + worker dyno formation)' },
-      { layer: 'Chrome Runtime', technology: 'Google Chrome buildpack' },
+      { layer: 'Runtime', technology: 'Node.js \u00b7 TypeScript' },
+      { layer: 'Web framework', technology: 'Express.js' },
+      { layer: 'Browser automation', technology: 'Puppeteer, headless Chromium' },
+      { layer: 'Salesforce API', technology: 'jsforce, OAuth 2.0 and Apex REST callbacks' },
+      { layer: 'Job queue', technology: 'RabbitMQ via CloudAMQP' },
+      { layer: 'Token cache', technology: 'Heroku Redis (mini)' },
+      { layer: 'Process management', technology: 'Throng, clustered workers' },
+      { layer: 'Hosting', technology: 'Heroku, web and worker dynos' },
+      { layer: 'Chrome runtime', technology: 'Google Chrome buildpack' },
       { layer: 'Logging', technology: 'Papertrail' },
     ],
   },
@@ -542,6 +667,19 @@ export const caseStudies: CaseStudy[] = [
       now: 'One API layer between them. Orders, customers, invoices and payments move both ways without a person in the middle.',
       figLabel: 'orders typed in twice',
     },
+
+    detailTitle: 'Orders were typed into NetSuite by hand. Now nobody is in the middle.',
+    detailMark: 'nobody is in the middle',
+    detailLede:
+      'A specialty wholesale distributor ran Salesforce for the sale and NetSuite for everything after it, with nothing between them. Orders were re-keyed by the operations team; invoices and payments were invisible to sales without a second login. We built a MuleSoft API layer that moves customers, orders, invoices and payments both ways.',
+    standNote: { label: 'Sync surface', detail: 'Platform Events one way, a 15-minute scheduler the other.' },
+    stateTitle: 'One order, before and after',
+    stateWhat: 'The order',
+    buildChain: false,
+    buildNote: 'Four flows, two directions',
+    notesNote: 'The decisions that keep it idempotent',
+    ruledoutNote: 'Four candidates, one of them chosen',
+    pagerNote: 'Orders and invoices, both ways, nobody in the middle',
 
     headline: 'One source of truth: bidirectional Salesforce ↔ NetSuite sync via MuleSoft API-led integration.',
 
@@ -585,6 +723,7 @@ export const caseStudies: CaseStudy[] = [
         category: 'iPaaS / API-led',
         doesWell: 'Full connector library for Salesforce and NetSuite; DataWeave for field-level transformation; Object Store for watermark sync; per-flow error handling; CloudHub deployment',
         limitation: 'Higher upfront investment in design and configuration vs. point-to-point tools; requires MuleSoft expertise to architect correctly.',
+        chosen: true,
       },
     ],
 
@@ -594,18 +733,22 @@ export const caseStudies: CaseStudy[] = [
     solutionSteps: [
       {
         title: 'Real-Time Customer Sync (SF → NetSuite)',
+        path: 'Salesforce \u2192 NetSuite',
         body: 'When a Salesforce Account is created or updated, an AccountsEvent__e Platform Event triggers the MuleSoft Salesforce SAPI. DataWeave transforms Salesforce Account fields — company name, payment terms, credit limit, tax ID/VAT, DUNS, shipping carrier, parent account — into a NetSuite Customer record. For new customers, the resulting NetSuite Customer ID is written back to the Salesforce Account. For existing customers, the record is updated by NetSuite ID.',
       },
       {
         title: 'Real-Time Order Sync (SF → NetSuite)',
+        path: 'Salesforce \u2192 NetSuite',
         body: 'When a Salesforce Order is queued for fulfilment, a Create_NS_Order__e Platform Event fires. MuleSoft queries the Salesforce OrderItems — product SKUs, quantities, unit prices, discounts, expected ship dates, sequence names, quote line IDs — and transforms them into a NetSuite Sales Order via SOAP/XML. A DataWeave script handles country enum mapping, conditional null guards, and date format conversion. The resulting NetSuite Order ID and Number are written back to the Salesforce Order asynchronously.',
       },
       {
         title: 'Scheduled Invoice & Refund Sync (NetSuite → SF)',
+        path: 'NetSuite \u2192 Salesforce',
         body: 'Two schedulers run every 15 minutes — staggered by 7 minutes to prevent resource contention. Each fetches records modified since the last run, using a timestamp watermark persisted in Anypoint Object Store (minus a two-minute buffer for clock skew). Fetching is paginated: 50 records per request, with recursive sub-flow calls while hasMore == true. Records are posted to the Salesforce SAPI for upsert. Any HTTP 400 responses are collected, and a structured HTML error email is sent to the operations team.',
       },
       {
         title: 'Real-Time Payment Sync (SF → NetSuite)',
+        path: 'Salesforce \u2192 NetSuite',
         body: 'When a payment is recorded in Salesforce, an ABT_Payment_and_Refund_Event__e Platform Event carries the payment amount, NetSuite Account number, and NetSuite Invoice ID. MuleSoft transforms this into a NetSuite payment application — specifying the AR account, GL account, payment amount, and the exact invoice to apply it against. The payment is posted to NetSuite via REST, keeping accounts receivable in sync with Salesforce payment records without manual journal entries.',
       },
     ],
@@ -697,6 +840,19 @@ export const caseStudies: CaseStudy[] = [
       now: 'Portal, CRM and logistics on one integration layer. The status is on the page before anyone thinks to ask.',
       figLabel: 'logistics to portal',
     },
+    detailTitle: 'Nobody could say where the kit was. Now the portal says it before anyone asks.',
+    detailMark: 'before anyone asks',
+    detailLede:
+      'An at-home diagnostics platform ran a customer portal, Salesforce and a third-party logistics system that shared nothing. Staff created CRM records by hand, re-entered support actions into the portal, and opened a logistics dashboard to answer where a kit had got to. We built eight MuleSoft applications that keep all three in step.',
+    standNote: { label: 'Systems joined', detail: 'A health portal, Salesforce, and a third-party logistics API.' },
+    stateTitle: 'One test kit, before and after',
+    stateWhat: 'The kit',
+    buildChain: false,
+    buildNote: 'Five flows across three systems',
+    notesNote: 'The decisions that keep it exact',
+    ruledoutNote: 'Four candidates, one of them chosen',
+    pagerNote: 'Portal, CRM and logistics, five minutes apart',
+
     headline: 'Three systems, eight applications, one integration layer: how a digital health platform connected its portal, CRM, and logistics without a gap.',
     executiveSummary: `A digital health company offering at-home diagnostic testing had three systems that didn't talk to each other. Their customer portal managed member journeys and orders. Salesforce managed accounts, cases, and support. A third-party logistics platform handled kit shipment. Staff bridged the gaps manually — creating Salesforce records after portal registrations, copying support actions between Salesforce and the portal, and checking the logistics dashboard to answer basic questions about kit status.
 
@@ -713,28 +869,33 @@ CloudAlgo built the integration layer: eight MuleSoft applications covering cust
       { tool: 'Zapier', category: 'Low-code automation', doesWell: 'Connecting popular SaaS apps with standard triggers and actions', limitation: 'No support for custom API auth patterns; no Object Store for watermarks; no batch operations' },
       { tool: 'Workato', category: 'Enterprise automation', doesWell: 'Pre-built connectors for popular business apps', limitation: 'Same connector gap as Zapier for a custom portal API; no fine control over Salesforce Bulk API v2 behaviour' },
       { tool: 'Point-to-point Apex', category: 'Native Salesforce', doesWell: 'Direct Salesforce → external API calls', limitation: 'Salesforce-only; cannot orchestrate Portal → Salesforce flows; tight coupling; no observability across systems' },
-      { tool: 'MuleSoft', category: 'Integration platform', doesWell: 'API-led architecture, DataWeave, Object Store, CloudHub', limitation: 'Higher initial investment; right choice for multi-system orchestration with durable state and bidirectional flows' },
+      { tool: 'MuleSoft', category: 'Integration platform', doesWell: 'API-led architecture, DataWeave, Object Store, CloudHub', limitation: 'Higher initial investment; right choice for multi-system orchestration with durable state and bidirectional flows', chosen: true },
     ],
     solution: `Eight MuleSoft applications — three System APIs, four Process APIs, and one batch job — created a complete integration layer across the health portal, Salesforce, and the logistics platform. The architecture follows API-led connectivity: each system API wraps one external system behind a stable interface, and each process API orchestrates business logic without touching external systems directly.`,
     solutionSteps: [
       {
         title: 'Customer Onboarding (dh-customer-papi)',
+        path: 'Portal \u2192 Salesforce',
         body: 'When a new member registers on the health portal, MuleSoft receives the registration payload and creates a Salesforce Person Account under the "Member" RecordType — splitting the full name, mapping email, phone, gender, Portal_ID__c as external ID, subscription ID, and start date. If the registration includes a Journey ID, a linked Case is created simultaneously with Journey_ID__c as the external identifier. Both Salesforce record IDs are returned to the caller.',
       },
       {
         title: 'Journey Sync (dh-journey-sync-papi, scheduled)',
+        path: 'Portal \u2192 Salesforce',
         body: 'A scheduler fetches pending journeys from the portal (using portal user ID and journey ID as identifiers), queries Salesforce for existing Member Accounts by Portal_ID__c, and runs a RecordType filter to prevent accidental updates to non-Member records. Valid accounts are upserted with current journey data; Cases are upserted on Journey_ID__c. Portal IDs are zipped with Salesforce Account IDs after each batch to maintain the cross-system ID map.',
       },
       {
         title: 'Case Sync (dh-case-sync-papi, Object Store watermark)',
+        path: 'Salesforce \u2192 Portal',
         body: 'Salesforce support agents flag cases using four boolean fields: New_Kit_Requested__c, New_Blood_Draw_Requested__c, Cancellation_Requested__c, New_Telehealth_Requested__c. The case sync scheduler polls for cases where Integration_Timestamp__c exceeds the last-run timestamp (stored in Anypoint Object Store), transforms each flagged case into a structured request type ("new_kit", "reschedule_blood_draw", "cancellation", "follow_up"), and sends a bulk PATCH to the portal\'s journeys endpoint — up to 100 requests per batch. The Object Store watermark is updated after each successful run.',
       },
       {
         title: 'Kit Fulfilment (dh-order-to-shipment-papi)',
+        path: 'Portal \u2192 Logistics',
         body: 'When a diagnostic kit order is created in the portal, MuleSoft POSTs it to the logistics platform via Bearer token authentication — creating the outbound shipment record in the logistics system.',
       },
       {
         title: 'Order Status Sync (dh-order-status-sync-batch, every 5 minutes)',
+        path: 'Logistics \u2192 Portal',
         body: 'A scheduled batch fetches pending orders from the portal, queries the logistics platform for each order\'s status and shipment details — tracking number, carrier code, service code, estimated delivery date, delivery timestamp, kit IDs — and PATCHes the order back to the portal. If an order has status updates but no shipments yet, the status is applied without shipment fields; once shipments exist, full tracking data is included.',
       },
     ],

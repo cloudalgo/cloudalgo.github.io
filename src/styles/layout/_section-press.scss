@@ -127,3 +127,14 @@
      allowed to break rather than push the row past the container. */
   text-align: right;
 }
+
+/* The paragraph that opens a fold's body, between the head row and the
+   device below it. Three folds on a case study render one, so like the
+   head row itself it belongs to the shell -- naming it after whichever
+   section is styled first is how a design system rots. */
+.section-press__lede {
+  max-width: 62ch;
+  margin: 0 0 2rem;
+  font-size: var(--size-body-lg);
+  color: var(--color-text);
+}

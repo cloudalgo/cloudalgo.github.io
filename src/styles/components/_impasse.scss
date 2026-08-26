@@ -1,0 +1,52 @@
+/* The constraints that kept the old state in place, numbered because
+   the register is a fixed list the sections below refer back to.
+
+   One study marks a decisive constraint. Where the data sets it, that
+   row takes the accent and a stamp: the two sections that follow -- what
+   was ruled out, and what was built -- are only legible if you know
+   which constraint picked the architecture. Where no single constraint
+   decides, nothing is stamped rather than something being nominated. */
+
+.impasse {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.impasse__item {
+  display: grid;
+  grid-template-columns: 2.75rem minmax(0, 1fr);
+  gap: 0 1.75rem;
+  padding: 1.25rem 0;
+  border-top: 1px solid var(--border-default);
+}
+
+.impasse__item:last-child { border-bottom: 1px solid var(--border-default); }
+
+.impasse__n {
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  font-weight: var(--weight-bold);
+  color: var(--color-text-faint);
+  padding-top: 0.2rem;
+}
+
+.impasse__text {
+  margin: 0;
+  max-width: 68ch;
+}
+
+.impasse__item--decisive .impasse__n { color: var(--color-accent); }
+.impasse__item--decisive .impasse__text { color: var(--color-heading); }
+
+/* Second row of the text column, not a third column: the stamp belongs
+   under the constraint it marks, at its measure. */
+.impasse__stamp {
+  grid-column: 2;
+  margin-top: 0.6rem;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}

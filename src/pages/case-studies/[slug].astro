@@ -1,1004 +1,293 @@
 ---
-import Page from '../../layouts/Page.astro';
-import { caseStudies } from '../../data/case-studies';
-import PageHeader from '@/components/ui/PageHeader.astro';
-import SectionLabel from '../../components/ui/SectionLabel.astro';
-import Badge from '@/components/ui/Badge.astro';
+/**
+ * One engagement, in full: what changed, why it stayed broken, what we
+ * ruled out, what we built, what we learned, and what it settled.
+ *
+ * /case-studies/ answers "which of the five is like mine?" -- this page
+ * answers "what actually happened?", so it is the index's ledger row at
+ * one zoom level in. The row's struck-through `was` becomes the whole
+ * `.state` band; the row's figure becomes the closing `.tally`.
+ *
+ * Everything on the page comes from `@/data/case-studies`. There is no
+ * per-study markup here: the five differ only in the fields they carry,
+ * and the two optional sections (`.ruledout`, the decisive stamp) are
+ * gated on the presence of their data rather than on the study's id.
+ *
+ * No closing CTA. The footer's `.footer-cta` is on every page and a
+ * second ask three blocks above it reads as a page that does not trust
+ * its own argument.
+ */
+import Page from '@/layouts/Page.astro';
+import Button from '@/components/ui/Button.astro';
+import PageMasthead from '@/components/ui/PageMasthead.astro';
+import ClosingManifest from '@/components/sections/ClosingManifest.astro';
+import EngagementPager from '@/components/sections/EngagementPager.astro';
+import { caseStudies } from '@/data/case-studies';
 
 export function getStaticPaths() {
   return caseStudies.map(cs => ({ params: { slug: cs.id }, props: { cs } }));
 }
 
 const { cs } = Astro.props;
-const prev = caseStudies[caseStudies.findIndex(c => c.id === cs.id) - 1];
-const next = caseStudies[caseStudies.findIndex(c => c.id === cs.id) + 1];
 
-const csUrl = `https://cloudalgo.com/case-studies/${cs.id}`;
-const schema = {
-  "@context": "https://schema.org",
-  "@type": "Article",
-  "headline": cs.headline,
-  "description": cs.summary,
-  "author": {
-    "@type": "Organization",
-    "name": "CloudAlgo",
-    "url": "https://cloudalgo.com"
+const at = caseStudies.findIndex(c => c.id === cs.id);
+const prev = caseStudies[at - 1];
+const next = caseStudies[at + 1];
+
+/* The hero mark. `detailMark` is a verbatim substring of `detailTitle`
+   -- if an edit breaks that the page fails the build rather than
+   shipping a headline with no emphasis and no explanation why. */
+if (!cs.detailTitle.includes(cs.detailMark)) {
+  throw new Error(
+    `case-studies/[slug].astro: detailMark "${cs.detailMark}" is not in ` +
+    `detailTitle for "${cs.id}". Both live in src/data/case-studies.ts.`,
+  );
+}
+const [beforeMark, afterMark] = cs.detailTitle.split(cs.detailMark);
+const markedTitle =
+  `${beforeMark}<span class="mark mark--draw">${cs.detailMark}</span>${afterMark}`;
+
+const facts = [
+  { term: 'Client', detail: cs.ledger.client },
+  { term: 'Sector', detail: cs.industry },
+  { term: 'Platforms', detail: cs.service },
+  { term: 'Engagement', detail: cs.duration },
+  { term: cs.standNote.label, detail: cs.standNote.detail },
+  { term: 'Study', detail: `${cs.index} of five` },
+];
+
+/* Counted rather than written down, so a constraint added to the data
+   cannot leave the section head claiming the old number. */
+const WORDS = ['No', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten'];
+const constraints = `${WORDS[cs.challengePoints.length] ?? cs.challengePoints.length} constraints`;
+const components = `${WORDS[cs.techStack.length] ?? cs.techStack.length} components`;
+
+const siteBase = 'https://cloudalgo.com';
+const csUrl = `${siteBase}/case-studies/${cs.id}`;
+
+const schema: object[] = [
+  {
+    '@type': 'Article',
+    headline: cs.headline,
+    description: cs.summary,
+    author:    { '@type': 'Organization', name: 'CloudAlgo', url: siteBase },
+    publisher: {
+      '@type': 'Organization',
+      name: 'CloudAlgo',
+      logo: { '@type': 'ImageObject', url: `${siteBase}/logo.svg` },
+    },
+    url: csUrl,
+    mainEntityOfPage: { '@type': 'WebPage', '@id': csUrl },
   },
-  "publisher": {
-    "@type": "Organization",
-    "name": "CloudAlgo",
-    "logo": { "@type": "ImageObject", "url": "https://cloudalgo.com/logo.svg" }
+  {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home',         item: `${siteBase}/` },
+      { '@type': 'ListItem', position: 2, name: 'Case studies', item: `${siteBase}/case-studies/` },
+      { '@type': 'ListItem', position: 3, name: cs.company,     item: csUrl },
+    ],
   },
-  "url": csUrl,
-  "mainEntityOfPage": { "@type": "WebPage", "@id": csUrl }
-};
+];
 ---
-
 <Page
   title={`${cs.company} — ${cs.headline} | CloudAlgo Case Study`}
   description={cs.summary}
   ogType="article"
   schema={schema}
 >
-
-  <!-- ── Hero ── -->
-  <PageHeader
-    class="csd-hero-wrap"
+  <PageMasthead
     crumbs={[
       { label: 'Home', href: '/' },
-      { label: 'Case Studies', href: '/case-studies' },
+      { label: 'Case studies', href: '/case-studies/' },
       { label: cs.company },
     ]}
+    facts={facts}
   >
-      <div class="csd-hero-inner">
-        <div class="csd-hero-text">
-          <div class="csd-hero-meta">
-            <span class="ordinal">{cs.index}</span>
-            <Badge tone="outline" context="facet">{cs.industry}</Badge>
-            <Badge tone="outline" context="facet">{cs.service}</Badge>
-          </div>
-          <h1 class="csd-hero-title">{cs.headline}</h1>
-          <p class="csd-hero-sub">{cs.executiveSummary}</p>
-          <div class="csd-hero-stats">
-            <div class="csd-hero-stat">
-              <span class="stat-num stat-num--tight">{cs.metric}</span>
-              <span class="stat-label stat-label--xs">{cs.metricLabel}</span>
-            </div>
-            <div class="csd-hero-divider"></div>
-            <div class="csd-hero-stat">
-              <span class="stat-num stat-num--tight">{cs.duration}</span>
-              <span class="stat-label stat-label--xs">engagement</span>
-            </div>
-          </div>
-        </div>
-        <div class="csd-hero-illo" aria-hidden="true">
-          {cs.id === 'nonprofit-web-platform' && (
-            <svg viewBox="0 0 360 300" fill="none" class="csd-hero-svg">
-              <!-- Browser / users -->
-              <rect x="20" y="20" width="320" height="40" rx="8" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.20" fill="var(--color-ink-a02)"/>
-              <circle cx="40" cy="40" r="5" fill="var(--illus-ink)" opacity="0.12"/>
-              <circle cx="56" cy="40" r="5" fill="var(--illus-ink)" opacity="0.09"/>
-              <circle cx="72" cy="40" r="5" fill="var(--illus-ink)" opacity="0.07"/>
-              <text x="200" y="45" text-anchor="middle" font-family="var(--illus-font)" font-size="10" font-weight="700" fill="var(--illus-ink)" opacity="0.30" letter-spacing="0.06em">180+ COUNTRIES · WEB + MOBILE</text>
-              <!-- Arrow down to Next.js -->
-              <path d="M180 62 L180 74" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.20" stroke-dasharray="4 3"/>
-              <path d="M177 71 L180 76 L183 71" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.20" stroke-linecap="round" stroke-linejoin="round"/>
-              <!-- Next.js layer -->
-              <rect x="20" y="76" width="320" height="40" rx="6" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.35" fill="var(--color-ink-a03)"/>
-              <text x="36" y="101" font-family="var(--illus-font)" font-size="9" font-weight="800" fill="var(--illus-ink)" opacity="0.55" letter-spacing="0.1em">NEXT.JS 14 · REACT 18</text>
-              <text x="340" y="101" text-anchor="end" font-family="var(--illus-font)" font-size="9" fill="var(--illus-ink)" opacity="0.30">SSR · Pages Router · SWC</text>
-              <!-- Arrow down to Node.js -->
-              <path d="M180 118 L180 130" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.28" stroke-linecap="round"/>
-              <path d="M177 127 L180 132 L183 127" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.28" stroke-linecap="round" stroke-linejoin="round"/>
-              <!-- Node.js API layer -->
-              <rect x="20" y="132" width="320" height="40" rx="6" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.48" fill="var(--illus-wash)"/>
-              <text x="36" y="157" font-family="var(--illus-font)" font-size="9" font-weight="800" fill="var(--illus-ink)" opacity="0.70" letter-spacing="0.1em">NODE.JS API · HEROKU PIPELINES</text>
-              <text x="340" y="157" text-anchor="end" font-family="var(--illus-font)" font-size="9" fill="var(--illus-ink)" opacity="0.40">Pino · Sentry · React Query</text>
-              <!-- Arrows down to integrations (3 fan) -->
-              <path d="M76  174 L76  186" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.28" stroke-linecap="round"/>
-              <path d="M73  183 L76  188 L79  183" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.28" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M180 174 L180 186" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.32" stroke-linecap="round"/>
-              <path d="M177 183 L180 188 L183 183" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.32" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M284 174 L284 186" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.36" stroke-linecap="round"/>
-              <path d="M281 183 L284 188 L287 183" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.36" stroke-linecap="round" stroke-linejoin="round"/>
-              <!-- Integration nodes row 1 -->
-              <rect x="20"  y="188" width="104" height="36" rx="6" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.50" fill="var(--illus-wash)"/>
-              <text x="72"  y="204" text-anchor="middle" font-family="var(--illus-font)" font-size="8"  font-weight="800" fill="var(--illus-ink)" opacity="0.65" letter-spacing="0.06em">SALESFORCE</text>
-              <text x="72"  y="216" text-anchor="middle" font-family="var(--illus-font)" font-size="7"  fill="var(--illus-ink)" opacity="0.35">CRM + Community Cloud</text>
-              <rect x="132" y="188" width="96"  height="36" rx="6" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.50" fill="var(--illus-wash)"/>
-              <text x="180" y="204" text-anchor="middle" font-family="var(--illus-font)" font-size="8"  font-weight="800" fill="var(--illus-ink)" opacity="0.65" letter-spacing="0.06em">STRIPE</text>
-              <text x="180" y="216" text-anchor="middle" font-family="var(--illus-font)" font-size="7"  fill="var(--illus-ink)" opacity="0.35">Payments · Donations</text>
-              <rect x="236" y="188" width="104" height="36" rx="6" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.50" fill="var(--illus-wash)"/>
-              <text x="288" y="204" text-anchor="middle" font-family="var(--illus-font)" font-size="8"  font-weight="800" fill="var(--illus-ink)" opacity="0.65" letter-spacing="0.06em">AWS COGNITO</text>
-              <text x="288" y="216" text-anchor="middle" font-family="var(--illus-font)" font-size="7"  fill="var(--illus-ink)" opacity="0.35">Passwordless Auth</text>
-              <!-- Integration nodes row 2 -->
-              <rect x="20"  y="234" width="100" height="36" rx="6" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.65" fill="var(--color-ink-a06)"/>
-              <text x="70"  y="250" text-anchor="middle" font-family="var(--illus-font)" font-size="8"  font-weight="800" fill="var(--illus-ink)" opacity="0.80" letter-spacing="0.06em">SEGMENT</text>
-              <text x="70"  y="262" text-anchor="middle" font-family="var(--illus-font)" font-size="7"  fill="var(--illus-ink)" opacity="0.45">Analytics Pipeline</text>
-              <rect x="128" y="234" width="112" height="36" rx="6" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.65" fill="var(--color-ink-a06)"/>
-              <text x="184" y="250" text-anchor="middle" font-family="var(--illus-font)" font-size="8"  font-weight="800" fill="var(--illus-ink)" opacity="0.80" letter-spacing="0.06em">MARKETING CLOUD</text>
-              <text x="184" y="262" text-anchor="middle" font-family="var(--illus-font)" font-size="7"  fill="var(--illus-ink)" opacity="0.45">Email · SMS · Triggers</text>
-              <!-- Metric badge -->
-              <rect x="248" y="234" width="92"  height="36" rx="6" fill="var(--illus-ink)"/>
-              <text x="294" y="250" text-anchor="middle" font-family="var(--illus-font)" font-size="11" font-weight="700" fill="var(--color-paper-a70)">2+ yrs</text>
-              <text x="294" y="263" text-anchor="middle" font-family="var(--illus-font)" font-size="8"  fill="var(--color-paper-a40)">ongoing</text>
-            </svg>
-          )}
-          {cs.id === 'salesforce-netsuite-sync' && (
-            <svg viewBox="0 0 360 300" fill="none" class="csd-hero-svg">
-              <!-- Salesforce layer -->
-              <rect x="20" y="20" width="320" height="40" rx="8" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.20" fill="var(--color-ink-a02)"/>
-              <text x="36" y="38" font-family="var(--illus-font)" font-size="9" font-weight="800" fill="var(--illus-ink)" opacity="0.35" letter-spacing="0.1em">SALESFORCE CRM</text>
-              <text x="340" y="38" text-anchor="end" font-family="var(--illus-font)" font-size="9" fill="var(--illus-ink)" opacity="0.25">Platform Events · SOQL</text>
-              <text x="36" y="53" font-family="var(--illus-font)" font-size="7.5" fill="var(--illus-ink)" opacity="0.22" letter-spacing="0.04em">AccountsEvent__e · Create_NS_Order__e · ABT_Payment_and_Refund_Event__e</text>
-              <!-- Bidirectional arrows SF ↕ MuleSoft -->
-              <path d="M172 62 L172 74" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.22" stroke-linecap="round"/>
-              <path d="M169 71 L172 76 L175 71" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.22" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M182 76 L182 64" stroke="var(--illus-ink)" stroke-width="1.2" opacity="0.13" stroke-linecap="round" stroke-dasharray="3 2"/>
-              <path d="M179 67 L182 62 L185 67" stroke="var(--illus-ink)" stroke-width="1.2" opacity="0.13" stroke-linecap="round" stroke-linejoin="round"/>
-              <!-- MuleSoft layer -->
-              <rect x="20" y="76" width="320" height="40" rx="6" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.42" fill="var(--color-ink-a04)"/>
-              <text x="36" y="101" font-family="var(--illus-font)" font-size="9" font-weight="800" fill="var(--illus-ink)" opacity="0.65" letter-spacing="0.1em">MULESOFT ANYPOINT · CLOUDHUB</text>
-              <text x="340" y="101" text-anchor="end" font-family="var(--illus-font)" font-size="9" fill="var(--illus-ink)" opacity="0.38">DataWeave · Object Store</text>
-              <!-- Bidirectional arrows MuleSoft ↕ NetSuite -->
-              <path d="M172 118 L172 130" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.32" stroke-linecap="round"/>
-              <path d="M169 127 L172 132 L175 127" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.32" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M182 132 L182 120" stroke="var(--illus-ink)" stroke-width="1.2" opacity="0.18" stroke-linecap="round" stroke-dasharray="3 2"/>
-              <path d="M179 123 L182 118 L185 123" stroke="var(--illus-ink)" stroke-width="1.2" opacity="0.18" stroke-linecap="round" stroke-linejoin="round"/>
-              <!-- NetSuite layer -->
-              <rect x="20" y="132" width="320" height="40" rx="6" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.62" fill="var(--color-ink-a06)"/>
-              <text x="36" y="157" font-family="var(--illus-font)" font-size="9" font-weight="800" fill="var(--illus-ink)" opacity="0.82" letter-spacing="0.1em">NETSUITE ERP</text>
-              <text x="340" y="157" text-anchor="end" font-family="var(--illus-font)" font-size="9" fill="var(--illus-ink)" opacity="0.42">SOAP/XML · REST API</text>
-              <!-- Fan-out arrows -->
-              <path d="M72  174 L72  186" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.28" stroke-linecap="round"/>
-              <path d="M69  183 L72  188 L75  183" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.28" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M180 174 L180 186" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.32" stroke-linecap="round"/>
-              <path d="M177 183 L180 188 L183 183" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.32" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M288 174 L288 186" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.36" stroke-linecap="round"/>
-              <path d="M285 183 L288 188 L291 183" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.36" stroke-linecap="round" stroke-linejoin="round"/>
-              <!-- Flow type nodes row 1 -->
-              <rect x="20"  y="188" width="104" height="36" rx="6" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.50" fill="var(--illus-wash)"/>
-              <text x="72"  y="204" text-anchor="middle" font-family="var(--illus-font)" font-size="8" font-weight="800" fill="var(--illus-ink)" opacity="0.68" letter-spacing="0.06em">REAL-TIME</text>
-              <text x="72"  y="216" text-anchor="middle" font-family="var(--illus-font)" font-size="7" fill="var(--illus-ink)" opacity="0.38">Orders · Customers</text>
-              <rect x="132" y="188" width="96"  height="36" rx="6" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.50" fill="var(--illus-wash)"/>
-              <text x="180" y="204" text-anchor="middle" font-family="var(--illus-font)" font-size="8" font-weight="800" fill="var(--illus-ink)" opacity="0.68" letter-spacing="0.06em">SCHEDULED</text>
-              <text x="180" y="216" text-anchor="middle" font-family="var(--illus-font)" font-size="7" fill="var(--illus-ink)" opacity="0.38">Invoices · Refunds (15 min)</text>
-              <rect x="236" y="188" width="104" height="36" rx="6" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.50" fill="var(--illus-wash)"/>
-              <text x="288" y="204" text-anchor="middle" font-family="var(--illus-font)" font-size="8" font-weight="800" fill="var(--illus-ink)" opacity="0.68" letter-spacing="0.06em">EVENT-DRIVEN</text>
-              <text x="288" y="216" text-anchor="middle" font-family="var(--illus-font)" font-size="7" fill="var(--illus-ink)" opacity="0.38">Payments · near real-time</text>
-              <!-- Detail nodes row 2 -->
-              <rect x="20"  y="234" width="104" height="36" rx="6" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.65" fill="var(--color-ink-a06)"/>
-              <text x="72"  y="250" text-anchor="middle" font-family="var(--illus-font)" font-size="8" font-weight="800" fill="var(--illus-ink)" opacity="0.80" letter-spacing="0.06em">PLATFORM EVENTS</text>
-              <text x="72"  y="262" text-anchor="middle" font-family="var(--illus-font)" font-size="7" fill="var(--illus-ink)" opacity="0.45">Decoupled trigger bus</text>
-              <rect x="132" y="234" width="96"  height="36" rx="6" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.65" fill="var(--color-ink-a06)"/>
-              <text x="180" y="250" text-anchor="middle" font-family="var(--illus-font)" font-size="8" font-weight="800" fill="var(--illus-ink)" opacity="0.80" letter-spacing="0.06em">OBJECT STORE</text>
-              <text x="180" y="262" text-anchor="middle" font-family="var(--illus-font)" font-size="7" fill="var(--illus-ink)" opacity="0.45">Watermark timestamps</text>
-              <!-- Metric badge -->
-              <rect x="244" y="234" width="96" height="36" rx="6" fill="var(--illus-ink)"/>
-              <text x="292" y="250" text-anchor="middle" font-family="var(--illus-font)" font-size="11" font-weight="700" fill="var(--color-paper-a70)">0 re-entry</text>
-              <text x="292" y="263" text-anchor="middle" font-family="var(--illus-font)" font-size="8" fill="var(--color-paper-a40)">4 flows automated</text>
-            </svg>
-          )}
-          {cs.id === 'health-portal-mulesoft-integration' && (
-            <svg viewBox="0 0 360 300" fill="none" class="csd-hero-svg">
-              <!-- Health Portal layer -->
-              <rect x="20" y="20" width="320" height="40" rx="8" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.20" fill="var(--color-ink-a02)"/>
-              <text x="36" y="38" font-family="var(--illus-font)" font-size="9" font-weight="800" fill="var(--illus-ink)" opacity="0.35" letter-spacing="0.1em">HEALTH PORTAL</text>
-              <text x="340" y="38" text-anchor="end" font-family="var(--illus-font)" font-size="9" fill="var(--illus-ink)" opacity="0.25">X-Client-ID · Secure Properties</text>
-              <text x="36" y="53" font-family="var(--illus-font)" font-size="7.5" fill="var(--illus-ink)" opacity="0.22" letter-spacing="0.04em">journeys · orders · cases · member registration</text>
-              <!-- Bidirectional arrows Portal ↕ MuleSoft -->
-              <path d="M172 62 L172 74" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.22" stroke-linecap="round"/>
-              <path d="M169 71 L172 76 L175 71" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.22" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M182 76 L182 64" stroke="var(--illus-ink)" stroke-width="1.2" opacity="0.13" stroke-linecap="round" stroke-dasharray="3 2"/>
-              <path d="M179 67 L182 62 L185 67" stroke="var(--illus-ink)" stroke-width="1.2" opacity="0.13" stroke-linecap="round" stroke-linejoin="round"/>
-              <!-- MuleSoft layer -->
-              <rect x="20" y="76" width="320" height="40" rx="6" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.42" fill="var(--color-ink-a04)"/>
-              <text x="36" y="101" font-family="var(--illus-font)" font-size="9" font-weight="800" fill="var(--illus-ink)" opacity="0.65" letter-spacing="0.1em">MULESOFT ANYPOINT · CLOUDHUB</text>
-              <text x="340" y="101" text-anchor="end" font-family="var(--illus-font)" font-size="9" fill="var(--illus-ink)" opacity="0.38">8 apps · DataWeave · Object Store</text>
-              <!-- Bidirectional arrows MuleSoft ↕ Salesforce -->
-              <path d="M110 118 L110 130" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.32" stroke-linecap="round"/>
-              <path d="M107 127 L110 132 L113 127" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.32" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M120 132 L120 120" stroke="var(--illus-ink)" stroke-width="1.2" opacity="0.18" stroke-linecap="round" stroke-dasharray="3 2"/>
-              <path d="M117 123 L120 118 L123 123" stroke="var(--illus-ink)" stroke-width="1.2" opacity="0.18" stroke-linecap="round" stroke-linejoin="round"/>
-              <!-- Arrow MuleSoft → Logistics -->
-              <path d="M250 118 L250 130" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.32" stroke-linecap="round"/>
-              <path d="M247 127 L250 132 L253 127" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.32" stroke-linecap="round" stroke-linejoin="round"/>
-              <!-- Salesforce layer (left half) -->
-              <rect x="20" y="132" width="148" height="40" rx="6" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.62" fill="var(--color-ink-a06)"/>
-              <text x="36" y="152" font-family="var(--illus-font)" font-size="9" font-weight="800" fill="var(--illus-ink)" opacity="0.82" letter-spacing="0.1em">SALESFORCE CRM</text>
-              <text x="36" y="166" font-family="var(--illus-font)" font-size="7.5" fill="var(--illus-ink)" opacity="0.42">Person Accounts · Cases · Portal_ID__c</text>
-              <!-- Logistics layer (right half) -->
-              <rect x="192" y="132" width="148" height="40" rx="6" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.62" fill="var(--color-ink-a06)"/>
-              <text x="208" y="152" font-family="var(--illus-font)" font-size="9" font-weight="800" fill="var(--illus-ink)" opacity="0.82" letter-spacing="0.1em">LOGISTICS PLATFORM</text>
-              <text x="208" y="166" font-family="var(--illus-font)" font-size="7.5" fill="var(--illus-ink)" opacity="0.42">Bearer token · orders · shipments</text>
-              <!-- Fan-out arrows -->
-              <path d="M76  174 L76  186" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.28" stroke-linecap="round"/>
-              <path d="M73  183 L76  188 L79  183" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.28" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M180 174 L180 186" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.32" stroke-linecap="round"/>
-              <path d="M177 183 L180 188 L183 183" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.32" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M284 174 L284 186" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.36" stroke-linecap="round"/>
-              <path d="M281 183 L284 188 L287 183" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.36" stroke-linecap="round" stroke-linejoin="round"/>
-              <!-- Capability nodes row 1 -->
-              <rect x="20"  y="188" width="104" height="36" rx="6" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.50" fill="var(--illus-wash)"/>
-              <text x="72"  y="204" text-anchor="middle" font-family="var(--illus-font)" font-size="8" font-weight="800" fill="var(--illus-ink)" opacity="0.68" letter-spacing="0.06em">JOURNEY SYNC</text>
-              <text x="72"  y="216" text-anchor="middle" font-family="var(--illus-font)" font-size="7" fill="var(--illus-ink)" opacity="0.38">Portal → Salesforce</text>
-              <rect x="132" y="188" width="96"  height="36" rx="6" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.50" fill="var(--illus-wash)"/>
-              <text x="180" y="204" text-anchor="middle" font-family="var(--illus-font)" font-size="8" font-weight="800" fill="var(--illus-ink)" opacity="0.68" letter-spacing="0.06em">CASE SYNC</text>
-              <text x="180" y="216" text-anchor="middle" font-family="var(--illus-font)" font-size="7" fill="var(--illus-ink)" opacity="0.38">Salesforce → Portal</text>
-              <rect x="236" y="188" width="104" height="36" rx="6" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.50" fill="var(--illus-wash)"/>
-              <text x="288" y="204" text-anchor="middle" font-family="var(--illus-font)" font-size="8" font-weight="800" fill="var(--illus-ink)" opacity="0.68" letter-spacing="0.06em">KIT TRACKING</text>
-              <text x="288" y="216" text-anchor="middle" font-family="var(--illus-font)" font-size="7" fill="var(--illus-ink)" opacity="0.38">Logistics → Portal · 5 min</text>
-              <!-- Capability nodes row 2 -->
-              <rect x="20"  y="234" width="104" height="36" rx="6" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.65" fill="var(--color-ink-a06)"/>
-              <text x="72"  y="250" text-anchor="middle" font-family="var(--illus-font)" font-size="8" font-weight="800" fill="var(--illus-ink)" opacity="0.80" letter-spacing="0.06em">OBJECT STORE</text>
-              <text x="72"  y="262" text-anchor="middle" font-family="var(--illus-font)" font-size="7" fill="var(--illus-ink)" opacity="0.45">Integration_Timestamp__c</text>
-              <rect x="132" y="234" width="96"  height="36" rx="6" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.65" fill="var(--color-ink-a06)"/>
-              <text x="180" y="250" text-anchor="middle" font-family="var(--illus-font)" font-size="8" font-weight="800" fill="var(--illus-ink)" opacity="0.80" letter-spacing="0.06em">BULK API v2</text>
-              <text x="180" y="262" text-anchor="middle" font-family="var(--illus-font)" font-size="7" fill="var(--illus-ink)" opacity="0.45">upsert · Portal_ID__c</text>
-              <!-- Metric badge -->
-              <rect x="236" y="234" width="104" height="36" rx="6" fill="var(--illus-ink)"/>
-              <text x="288" y="250" text-anchor="middle" font-family="var(--illus-font)" font-size="11" font-weight="700" fill="var(--color-paper-a70)">5 min</text>
-              <text x="288" y="263" text-anchor="middle" font-family="var(--illus-font)" font-size="8" fill="var(--color-paper-a40)">8 apps deployed</text>
-            </svg>
-          )}
-          {cs.id === 'salesforce-emr-sync' && (
-            <svg viewBox="0 0 360 300" fill="none" class="csd-hero-svg">
-              <!-- Salesforce layer -->
-              <rect x="20" y="20" width="320" height="40" rx="8" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.20" fill="var(--color-ink-a02)"/>
-              <text x="36" y="45" font-family="var(--illus-font)" font-size="9" font-weight="800" fill="var(--illus-ink)" opacity="0.35" letter-spacing="0.1em">SALESFORCE CRM</text>
-              <text x="340" y="45" text-anchor="end" font-family="var(--illus-font)" font-size="9" fill="var(--illus-ink)" opacity="0.25">Apex trigger · REST callback</text>
-              <!-- Arrow to queue -->
-              <path d="M180 62 L180 74" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.20" stroke-dasharray="4 3"/>
-              <path d="M177 71 L180 76 L183 71" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.20" stroke-linecap="round" stroke-linejoin="round"/>
-              <!-- Queue layer -->
-              <rect x="20" y="76" width="320" height="40" rx="6" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.35" fill="var(--color-ink-a03)"/>
-              <text x="36" y="101" font-family="var(--illus-font)" font-size="9" font-weight="800" fill="var(--illus-ink)" opacity="0.55" letter-spacing="0.1em">RABBITMQ QUEUE</text>
-              <text x="340" y="101" text-anchor="end" font-family="var(--illus-font)" font-size="9" fill="var(--illus-ink)" opacity="0.35">CloudAMQP · async decoupling</text>
-              <!-- Arrow to worker -->
-              <path d="M180 118 L180 130" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.28" stroke-linecap="round"/>
-              <path d="M177 127 L180 132 L183 127" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.28" stroke-linecap="round" stroke-linejoin="round"/>
-              <!-- Worker layer -->
-              <rect x="20" y="132" width="320" height="40" rx="6" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.48" fill="var(--illus-wash)"/>
-              <text x="36" y="157" font-family="var(--illus-font)" font-size="9" font-weight="800" fill="var(--illus-ink)" opacity="0.70" letter-spacing="0.1em">HEROKU WORKER · NODE.JS</text>
-              <text x="340" y="157" text-anchor="end" font-family="var(--illus-font)" font-size="9" fill="var(--illus-ink)" opacity="0.40">Throng · Redis token cache</text>
-              <!-- Fan-out arrows -->
-              <path d="M76  174 L76  186" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.28" stroke-linecap="round"/>
-              <path d="M73  183 L76  188 L79  183" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.28" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M180 174 L180 186" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.32" stroke-linecap="round"/>
-              <path d="M177 183 L180 188 L183 183" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.32" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M284 174 L284 186" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.36" stroke-linecap="round"/>
-              <path d="M281 183 L284 188 L287 183" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.36" stroke-linecap="round" stroke-linejoin="round"/>
-              <!-- Integration nodes row 1 -->
-              <rect x="20"  y="188" width="104" height="36" rx="6" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.50" fill="var(--illus-wash)"/>
-              <text x="72"  y="204" text-anchor="middle" font-family="var(--illus-font)" font-size="8"  font-weight="800" fill="var(--illus-ink)" opacity="0.65" letter-spacing="0.06em">PUPPETEER</text>
-              <text x="72"  y="216" text-anchor="middle" font-family="var(--illus-font)" font-size="7"  fill="var(--illus-ink)" opacity="0.35">Browser automation</text>
-              <rect x="132" y="188" width="96"  height="36" rx="6" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.50" fill="var(--illus-wash)"/>
-              <text x="180" y="204" text-anchor="middle" font-family="var(--illus-font)" font-size="8"  font-weight="800" fill="var(--illus-ink)" opacity="0.65" letter-spacing="0.06em">CHROME</text>
-              <text x="180" y="216" text-anchor="middle" font-family="var(--illus-font)" font-size="7"  fill="var(--illus-ink)" opacity="0.35">Heroku buildpack</text>
-              <rect x="236" y="188" width="104" height="36" rx="6" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.50" fill="var(--illus-wash)"/>
-              <text x="288" y="204" text-anchor="middle" font-family="var(--illus-font)" font-size="8"  font-weight="800" fill="var(--illus-ink)" opacity="0.65" letter-spacing="0.06em">FUSION EMR</text>
-              <text x="288" y="216" text-anchor="middle" font-family="var(--illus-font)" font-size="7"  fill="var(--illus-ink)" opacity="0.35">Portal · no API</text>
-              <!-- Integration nodes row 2 -->
-              <rect x="20"  y="234" width="100" height="36" rx="6" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.65" fill="var(--color-ink-a06)"/>
-              <text x="70"  y="250" text-anchor="middle" font-family="var(--illus-font)" font-size="8"  font-weight="800" fill="var(--illus-ink)" opacity="0.80" letter-spacing="0.06em">OAUTH 2.0</text>
-              <text x="70"  y="262" text-anchor="middle" font-family="var(--illus-font)" font-size="7"  fill="var(--illus-ink)" opacity="0.45">jsforce · Redis</text>
-              <rect x="128" y="234" width="112" height="36" rx="6" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.65" fill="var(--color-ink-a06)"/>
-              <text x="184" y="250" text-anchor="middle" font-family="var(--illus-font)" font-size="8"  font-weight="800" fill="var(--illus-ink)" opacity="0.80" letter-spacing="0.06em">IDEMPOTENT WRITES</text>
-              <text x="184" y="262" text-anchor="middle" font-family="var(--illus-font)" font-size="7"  fill="var(--illus-ink)" opacity="0.45">read-before-write</text>
-              <!-- Metric badge -->
-              <rect x="248" y="234" width="92"  height="36" rx="6" fill="var(--illus-ink)"/>
-              <text x="294" y="250" text-anchor="middle" font-family="var(--illus-font)" font-size="11" font-weight="700" fill="var(--color-paper-a70)">24/7</text>
-              <text x="294" y="263" text-anchor="middle" font-family="var(--illus-font)" font-size="8"  fill="var(--color-paper-a40)">automated</text>
-            </svg>
-          )}
-          {cs.id === 'enterprise-data-pipeline' && (
-            <svg viewBox="0 0 360 300" fill="none" class="csd-hero-svg">
-              <!-- Source systems -->
-              <rect x="20" y="20" width="100" height="48" rx="8" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.3" fill="var(--color-ink-a03)"/>
-              <text x="70" y="46" text-anchor="middle" font-family="var(--illus-font)" font-size="11" font-weight="700" fill="var(--illus-ink)" opacity="0.5">CRM</text>
-              <rect x="240" y="20" width="100" height="48" rx="8" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.3" fill="var(--color-ink-a03)"/>
-              <text x="290" y="46" text-anchor="middle" font-family="var(--illus-font)" font-size="11" font-weight="700" fill="var(--illus-ink)" opacity="0.5">ERP</text>
-              <!-- Arrows down to staging -->
-              <path d="M70 68 L70 94" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.25" stroke-dasharray="4 3"/>
-              <path d="M67 91 L70 96 L73 91" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.25" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M290 68 L290 94" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.25" stroke-dasharray="4 3"/>
-              <path d="M287 91 L290 96 L293 91" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.25" stroke-linecap="round" stroke-linejoin="round"/>
-              <!-- Medallion layers -->
-              <rect x="20" y="96" width="320" height="38" rx="6" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.18" fill="var(--color-ink-a02)"/>
-              <text x="36" y="120" font-family="var(--illus-font)" font-size="9" font-weight="800" fill="var(--illus-ink)" opacity="0.35" letter-spacing="0.1em">STAGING</text>
-              <text x="300" y="120" text-anchor="end" font-family="var(--illus-font)" font-size="9" fill="var(--illus-ink)" opacity="0.25">Redis coordination</text>
-              <path d="M180 136 L180 148" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.25" stroke-linecap="round"/>
-              <path d="M177 145 L180 150 L183 145" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.25" stroke-linecap="round" stroke-linejoin="round"/>
-              <rect x="20" y="150" width="320" height="38" rx="6" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.3" fill="var(--color-ink-a03)"/>
-              <text x="36" y="174" font-family="var(--illus-font)" font-size="9" font-weight="800" fill="var(--illus-ink)" opacity="0.5" letter-spacing="0.1em">BRONZE</text>
-              <text x="300" y="174" text-anchor="end" font-family="var(--illus-font)" font-size="9" fill="var(--illus-ink)" opacity="0.35">Formula engine · batch writes</text>
-              <path d="M180 190 L180 202" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.38" stroke-linecap="round"/>
-              <path d="M177 199 L180 204 L183 199" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.38" stroke-linecap="round" stroke-linejoin="round"/>
-              <rect x="20" y="204" width="320" height="38" rx="6" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.48" fill="var(--color-ink-a04)"/>
-              <text x="36" y="228" font-family="var(--illus-font)" font-size="9" font-weight="800" fill="var(--illus-ink)" opacity="0.65" letter-spacing="0.1em">SILVER</text>
-              <text x="300" y="228" text-anchor="end" font-family="var(--illus-font)" font-size="9" fill="var(--illus-ink)" opacity="0.45">Validation · dedup · upsert</text>
-              <path d="M180 244 L180 256" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.55" stroke-linecap="round"/>
-              <path d="M177 253 L180 258 L183 253" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.55" stroke-linecap="round" stroke-linejoin="round"/>
-              <rect x="20" y="258" width="320" height="38" rx="6" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.72" fill="var(--color-ink-a06)"/>
-              <text x="36" y="282" font-family="var(--illus-font)" font-size="9" font-weight="800" fill="var(--illus-ink)" opacity="0.85" letter-spacing="0.1em">GOLD</text>
-              <text x="300" y="282" text-anchor="end" font-family="var(--illus-font)" font-size="9" fill="var(--illus-ink)" opacity="0.6">KPIs · account resolution</text>
-              <!-- Badge -->
-              <rect x="248" y="258" width="84" height="38" rx="6" fill="var(--illus-ink)"/>
-              <text x="290" y="274" text-anchor="middle" font-family="var(--illus-font)" font-size="10" font-weight="700" fill="var(--color-paper-a60)">&lt;15 min</text>
-              <text x="290" y="288" text-anchor="middle" font-family="var(--illus-font)" font-size="8" fill="var(--color-paper-a40)">refresh</text>
-            </svg>
-          )}
-        </div>
-      </div>
-  </PageHeader>
+    <Fragment slot="title" set:html={markedTitle} />
+    <Fragment slot="lede">{cs.detailLede}</Fragment>
+    <Fragment slot="actions">
+      <Button href="/contact/" variant="primary" size="sm">Tell us your version of this &rarr;</Button>
+      <Button href="/case-studies/" variant="outline" size="sm">All five studies</Button>
+    </Fragment>
+  </PageMasthead>
 
-  <!-- ── Challenge ── -->
-  <section class="csd-section csd-section--white">
-    <div class="container csd-two-col">
-      <div class="csd-col-label-block">
-        <SectionLabel>The challenge</SectionLabel>
-        <div class="stat-num stat-num--3xl stat-num--tighter stat-num--watermark csd-col-number" aria-hidden="true">01</div>
+  {/* ── The change, in one band ─────────────────────────────────── */}
+  <section class="state" aria-labelledby="state-heading">
+    <div class="state__inner">
+      <div class="state__head anim-fade-up">
+        <h2 id="state-heading" class="state__title">{cs.stateTitle}</h2>
+        <span class="state__note">Struck through: the way it used to work</span>
       </div>
-      <div class="csd-col-content">
-        <h2 class="section-title section-title--xs csd-section-title">What needed solving.</h2>
-        <p class="paragraph-large csd-body-text">{cs.challenge}</p>
-        {cs.challengePoints && cs.challengePoints.length > 0 && (
-          <ul class="csd-challenge-list">
-            {cs.challengePoints.map(point => (
-              <li class="csd-challenge-item">
-                <span class="csd-challenge-dot" aria-hidden="true"></span>
-                <span>{point}</span>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
-    </div>
-  </section>
 
-  <!-- ── Why off-the-shelf failed ── -->
-  {cs.toolComparison && cs.toolComparison.length > 0 && (
-    <section class="csd-section csd-section--offwhite">
-      <div class="container">
-        <div class="csd-two-col" style="margin-bottom:2.5rem;">
-          <div class="csd-col-label-block">
-            <SectionLabel>Why standard tools failed</SectionLabel>
-            <div class="stat-num stat-num--3xl stat-num--tighter stat-num--watermark csd-col-number" aria-hidden="true">02</div>
-          </div>
-          <div class="csd-col-content">
-            <h2 class="section-title section-title--xs csd-section-title">Why off-the-shelf wasn't enough.</h2>
-            <p class="paragraph-large csd-body-text">{cs.whyNotOffShelf}</p>
-          </div>
+      <div class="state__table anim-fade-up">
+        <div class="state__row state__row--head" aria-hidden="true">
+          <span class="state__what">{cs.stateWhat}</span>
+          <span class="state__key">Was</span>
+          <span class="state__key">Now</span>
         </div>
-        <div class="csd-tool-table-wrap">
-          <table class="csd-tool-table">
-            <thead>
-              <tr>
-                <th>Tool</th>
-                <th>Category</th>
-                <th>What it does well</th>
-                <th>Why it wasn't enough</th>
-              </tr>
-            </thead>
-            <tbody>
-              {cs.toolComparison.map(row => (
-                <tr>
-                  <td class="csd-tool-name">{row.tool}</td>
-                  <td class="csd-tool-cat">{row.category}</td>
-                  <td>{row.doesWell}</td>
-                  <td class="csd-tool-limit">{row.limitation}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-  )}
-
-  <!-- ── Solution ── -->
-  <section class="csd-section csd-section--dark">
-    <div class="container">
-      <div class="csd-two-col">
-        <div class="csd-col-label-block">
-          <SectionLabel class="section-label--inverse">The solution</SectionLabel>
-          <div class="stat-num stat-num--3xl stat-num--tighter stat-num--watermark csd-col-number" style="color:var(--color-on-inverse-a08);" aria-hidden="true">{cs.toolComparison ? '03' : '02'}</div>
-        </div>
-        <div class="csd-col-content">
-          <h2 class="section-title section-title--xs section-title--inverse csd-section-title">What we built.</h2>
-          <p class="paragraph-large csd-body-text" style="color:var(--color-on-inverse-a60);">{cs.solution}</p>
-        </div>
-      </div>
-      <div class="csd-steps">
-        {cs.solutionSteps.map((step, i) => (
-          <div class="csd-step anim-fade-up" style={`transition-delay:${i * 0.08}s`}>
-            <div class="ordinal ordinal--on-inverse csd-step-num">{String(i + 1).padStart(2, '0')}</div>
-            <div class="csd-step-body">
-              <h3 class="csd-step-title">{step.title}</h3>
-              <p class="csd-step-text">{step.body}</p>
-            </div>
+        {cs.resultsTable.map((row) => (
+          <div class="state__row">
+            <span class="state__what">{row.metric}</span>
+            <span class="state__was" data-key="was"><s>{row.before}</s></span>
+            <span class="state__now" data-key="now">{row.after}</span>
           </div>
         ))}
       </div>
     </div>
   </section>
 
-  <!-- ── Technical highlights ── -->
-  {cs.technicalHighlights && cs.technicalHighlights.length > 0 && (
-    <section class="csd-section csd-section--white">
-      <div class="container">
-        <div class="csd-two-col" style="margin-bottom:2.5rem;">
-          <div class="csd-col-label-block">
-            <SectionLabel>Engineering depth</SectionLabel>
-            <div class="stat-num stat-num--3xl stat-num--tighter stat-num--watermark csd-col-number" aria-hidden="true">{cs.toolComparison ? '04' : '03'}</div>
-          </div>
-          <div class="csd-col-content">
-            <h2 class="section-title section-title--xs csd-section-title">Technical highlights.</h2>
-          </div>
-        </div>
-        <div class="csd-highlights">
-          {cs.technicalHighlights.map((h, i) => (
-            <div class="csd-highlight anim-fade-up" style={`transition-delay:${i * 0.07}s`}>
-              <div class="ordinal ordinal--watermark csd-highlight-num">{String(i + 1).padStart(2, '0')}</div>
-              <h3 class="csd-highlight-title">{h.title}</h3>
-              <p class="csd-highlight-body">{h.body}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  )}
+  {/* ── Why it stayed that way ──────────────────────────────────── */}
+  <section class="section-press" aria-labelledby="impasse-heading">
+    <div class="section-press__head anim-fade-up">
+      <h2 id="impasse-heading" class="section-title section-title--xs section-title--tighter section-press__title">Why it stayed that way.</h2>
+      <span class="section-press__note">{constraints}</span>
+    </div>
 
-  <!-- ── Outcomes ── -->
-  <section class="csd-section csd-section--offwhite">
-    <div class="container">
-      <div class="csd-two-col" style="margin-bottom:3rem;">
-        <div class="csd-col-label-block">
-          <SectionLabel>The results</SectionLabel>
-          <div class="stat-num stat-num--3xl stat-num--tighter stat-num--watermark csd-col-number" aria-hidden="true">{cs.technicalHighlights ? (cs.toolComparison ? '05' : '04') : (cs.toolComparison ? '04' : '03')}</div>
-        </div>
-        <div class="csd-col-content">
-          <h2 class="section-title section-title--xs csd-section-title">Measurable outcomes.</h2>
-        </div>
+    <p class="section-press__lede anim-fade-up">{cs.challenge}</p>
+
+    <ol class="impasse anim-fade-up">
+      {cs.challengePoints.map((point, i) => (
+        <li class:list={['impasse__item', i === cs.decisivePoint && 'impasse__item--decisive']}>
+          <span class="impasse__n">{String(i + 1).padStart(2, '0')}</span>
+          <p class="impasse__text">{point}</p>
+          {i === cs.decisivePoint && cs.decisiveStamp && (
+            <span class="impasse__stamp">{cs.decisiveStamp}</span>
+          )}
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  {/* ── What we ruled out ───────────────────────────────────────────
+      Four of the five have a register. Study 01 rebuilt a platform
+      rather than picking a tool, so there was nothing to rule out and
+      the section is absent rather than padded. */}
+  {cs.toolComparison && (
+    <section class="section-press" aria-labelledby="ruledout-heading">
+      <div class="section-press__head anim-fade-up">
+        <h2 id="ruledout-heading" class="section-title section-title--xs section-title--tighter section-press__title">What we ruled out first.</h2>
+        <span class="section-press__note">{cs.ruledoutNote}</span>
       </div>
-      <div class="csd-outcomes">
-        {cs.outcomes.map((o, i) => (
-          <div class="csd-outcome anim-scale-pop" style={`transition-delay:${i * 0.07}s`}>
-            <div class="stat-num stat-num--fluid stat-num--tight csd-outcome-num">{o.metric}</div>
-            <div class="csd-outcome-label">{o.label}</div>
+
+      {cs.whyNotOffShelf && <p class="section-press__lede anim-fade-up">{cs.whyNotOffShelf}</p>}
+
+      <div class="ruledout anim-fade-up">
+        {cs.toolComparison.map((t) => (
+          <div class="ruledout__row">
+            <div class="ruledout__who">
+              <span class="ruledout__name">{t.tool}</span>
+              <span class="ruledout__cat">{t.category}</span>
+            </div>
+            <div class="ruledout__pair">
+              <p class="ruledout__line"><span class="ruledout__key">Does</span><span>{t.doesWell}</span></p>
+              <p class:list={['ruledout__line', t.chosen ? 'ruledout__line--in' : 'ruledout__line--out']}>
+                <span class="ruledout__key">{t.chosen ? 'Why it won' : 'Rules it out'}</span>
+                <span>{t.limitation}</span>
+              </p>
+            </div>
           </div>
         ))}
       </div>
-      {cs.resultsTable && cs.resultsTable.length > 0 && (
-        <div class="csd-results-table-wrap">
-          <table class="csd-results-table">
-            <thead>
-              <tr>
-                <th>Metric</th>
-                <th>Before</th>
-                <th>After</th>
-              </tr>
-            </thead>
-            <tbody>
-              {cs.resultsTable.map(row => (
-                <tr>
-                  <td class="csd-result-metric">{row.metric}</td>
-                  <td class="csd-result-before">{row.before}</td>
-                  <td class="csd-result-after">{row.after}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+    </section>
+  )}
+
+  {/* ── What we built ───────────────────────────────────────────────
+      `buildChain` is the difference between a sequence and a set. Two
+      of the five are one path with a queue or a layer between stages,
+      and those get the rail and the numerals; the other three are
+      parallel flows of one build, where a numeral would only decorate.
+      Same reasoning as the engineering notes below. */}
+  <section class="section-press" aria-labelledby="build-heading">
+    <div class="section-press__head anim-fade-up">
+      <h2 id="build-heading" class="section-title section-title--xs section-title--tighter section-press__title">What we built instead.</h2>
+      <span class="section-press__note">{cs.buildNote}</span>
     </div>
-  </section>
 
-  <!-- ── What this demonstrates ── -->
-  {cs.whatDemonstrates && cs.whatDemonstrates.length > 0 && (
-    <section class="csd-section csd-section--dark">
-      <div class="container">
-        <div class="csd-two-col" style="margin-bottom:2.5rem;">
-          <div class="csd-col-label-block">
-            <SectionLabel class="section-label--inverse">The CloudAlgo difference</SectionLabel>
-          </div>
-          <div class="csd-col-content">
-            <h2 class="section-title section-title--xs section-title--inverse csd-section-title">What this shows about how we work.</h2>
-          </div>
-        </div>
-        <div class="csd-demonstrates">
-          {cs.whatDemonstrates.map((d, i) => (
-            <div class="csd-demonstrate anim-fade-up" style={`transition-delay:${i * 0.07}s`}>
-              <div class="ordinal ordinal--on-inverse-faint csd-demonstrate-num">{String(i + 1).padStart(2, '0')}</div>
-              <h3 class="csd-demonstrate-title">{d.title}</h3>
-              <p class="csd-demonstrate-body">{d.body}</p>
+    <p class="section-press__lede anim-fade-up">{cs.solution}</p>
+
+    <ol class:list={['build', 'anim-fade-up', !cs.buildChain && 'build--parts']}>
+      {cs.solutionSteps.map((step, i) => (
+        <li class="build__stage">
+          <span class="build__mark">{cs.buildChain && <span class="build__n">{String(i + 1).padStart(2, '0')}</span>}</span>
+          <div class="build__body">
+            <div class="build__row">
+              <h3 class="build__title">{step.title}</h3>
+              {step.path && <span class="build__path">{step.path}</span>}
             </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  )}
+            <p>{step.body}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
 
-  <!-- ── Testimonial ── -->
-  {cs.testimonial && (
-    <section class="csd-section csd-section--white">
-      <div class="container">
-        <blockquote class="csd-quote anim-fade-up">
-          <div class="csd-quote-mark">"</div>
-          <p class="csd-quote-text">{cs.testimonial.quote}</p>
-          <footer class="csd-quote-footer">
-            <span class="csd-quote-name">{cs.testimonial.name}</span>
-            <span class="csd-quote-role">{cs.testimonial.role}</span>
-          </footer>
-        </blockquote>
+    <div class="stack anim-fade-up">
+      <div class="stack__head">
+        <span class="stack__label">What it is made of</span>
+        <span class="stack__count">{components}</span>
       </div>
-    </section>
-  )}
-
-  <!-- ── Tech stack ── -->
-  {cs.techStack && cs.techStack.length > 0 ? (
-    <section class="csd-section csd-section--white" style="padding-top:3.5rem;padding-bottom:3.5rem;">
-      <div class="container">
-        <SectionLabel style="margin-bottom:1.5rem;">Technology stack</SectionLabel>
-        <div class="csd-stack-grid">
-          {cs.techStack.map(row => (
-            <div class="csd-stack-row">
-              <span class="csd-stack-layer">{row.layer}</span>
-              <span class="csd-stack-tech">{row.technology}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  ) : (
-    <section class="csd-section csd-section--offwhite" style="padding-top:3rem;padding-bottom:3rem;">
-      <div class="container">
-        <SectionLabel style="margin-bottom:1rem;">Tech stack</SectionLabel>
-        <div class="csd-tags">
-          {cs.tags.map(tag => <Badge tone="outline" context="tag-lg">{tag}</Badge>)}
-        </div>
-      </div>
-    </section>
-  )}
-
-  <!-- ── Prev / Next ── -->
-  {(prev || next) && (
-    <section class="csd-nav-section">
-      <div class="container">
-        <div class="csd-nav-grid">
-          {prev ? (
-            <a href={`/case-studies/${prev.id}`} class="card csd-nav-card csd-nav-card--prev">
-              <span class="csd-nav-direction">&larr; Previous</span>
-              <span class="csd-nav-company">{prev.company}</span>
-              <span class="csd-nav-headline">{prev.headline}</span>
-            </a>
-          ) : <div />}
-          {next ? (
-            <a href={`/case-studies/${next.id}`} class="card csd-nav-card csd-nav-card--next">
-              <span class="csd-nav-direction">Next &rarr;</span>
-              <span class="csd-nav-company">{next.company}</span>
-              <span class="csd-nav-headline">{next.headline}</span>
-            </a>
-          ) : <div />}
-        </div>
-      </div>
-    </section>
-  )}
-
-  <!-- ── CTA ── -->
-  <section class="csd-cta">
-    <div class="container">
-      <p class="csd-cta-label">Work with us</p>
-      <h2 class="csd-cta-title">Facing a similar challenge?</h2>
-      <p class="csd-cta-sub">Tell us about your data problem — we'll scope it and respond within one business day.</p>
-      <div class="csd-cta-actions">
-        <a href="/contact" class="csd-cta-btn-primary">Start a conversation &rarr;</a>
-        <a href="/case-studies" class="csd-cta-btn-secondary">See all case studies</a>
+      <div class="stack__grid">
+        {cs.techStack.map((row) => (
+          <p class="stack__row"><span class="stack__layer">{row.layer}</span><span>{row.technology}</span></p>
+        ))}
       </div>
     </div>
   </section>
 
+  {/* ── Engineering notes ───────────────────────────────────────── */}
+  <section class="section-press" aria-labelledby="notes-heading">
+    <div class="section-press__head anim-fade-up">
+      <h2 id="notes-heading" class="section-title section-title--xs section-title--tighter section-press__title">Engineering notes.</h2>
+      <span class="section-press__note">{cs.notesNote}</span>
+    </div>
+
+    <div class="notes anim-fade-up">
+      {cs.technicalHighlights.map((note) => (
+        <div class="notes__item">
+          <h3 class="notes__title">{note.title}</h3>
+          <p>{note.body}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  {/* ── What it settled ─────────────────────────────────────────── */}
+  <section class="section-press" aria-labelledby="tally-heading">
+    <div class="section-press__head anim-fade-up">
+      <h2 id="tally-heading" class="section-title section-title--xs section-title--tighter section-press__title">What it settled.</h2>
+      <span class="section-press__note">Three figures, still true</span>
+    </div>
+
+    <div class="tally anim-fade-up">
+      {cs.outcomes.map((o) => (
+        <div class="tally__cell">
+          <span class="tally__fig stat-num stat-num--fluid stat-num--tight">{o.metric}</span>
+          <p class="tally__cap">{o.label}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <ClosingManifest
+    class="anim-fade-up"
+    labelledby="manifest-heading"
+    kicker="What this one shows"
+    items={cs.whatDemonstrates.map((d) => ({ title: d.title, detail: d.body }))}
+  >
+    <Fragment slot="title">Four things you can hold us to.</Fragment>
+    <Fragment slot="note">A case study is only worth reading if it generalises. These are the parts of this build that would show up again on yours.</Fragment>
+    <a class="btn btn-light btn-sm" slot="actions" href="/case-studies/">See the other four studies</a>
+  </ClosingManifest>
+
+  {/* At either end of the run the neighbour is the index: 01 has nothing
+      before it and 05 nothing after, and a reader who has run out of
+      studies in one direction wants the list, not a dead half-row. */}
+  <EngagementPager
+    class="anim-fade-up"
+    prev={prev
+      ? { href: `/case-studies/${prev.id}/`, n: prev.index, name: prev.ledger.client, shape: prev.pagerNote }
+      : { href: '/case-studies/', name: '← All five studies', shape: 'The index' }}
+    next={next
+      ? { href: `/case-studies/${next.id}/`, n: next.index, name: next.ledger.client, shape: next.pagerNote }
+      : { href: '/case-studies/', name: 'All five studies →', shape: 'The index' }}
+  />
 </Page>
-
-<style>
-/* ── Hero ── */
-.csd-hero-wrap { padding-bottom: 4rem; }
-.csd-hero-inner {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 3rem;
-  align-items: center;
-  margin-top: 0.5rem;
-}
-.csd-hero-meta {
-  display: flex;
-  align-items: center;
-  gap: 0.625rem;
-  margin-bottom: 1.25rem;
-  flex-wrap: wrap;
-}
-.csd-hero-title {
-  font-size: clamp(1.875rem, 3.5vw, 3rem);
-  font-weight: 900;
-  letter-spacing: -0.03em;
-  line-height: 1.1;
-  color: var(--color-heading);
-  margin-bottom: 1.25rem;
-}
-.csd-hero-sub {
-  font-size: 0.9375rem;
-  color: var(--color-text);
-  line-height: 1.8;
-  margin-bottom: 2rem;
-  max-width: 560px;
-}
-.csd-hero-stats { display: flex; align-items: center; gap: 2rem; }
-.csd-hero-stat { display: flex; flex-direction: column; gap: 0.25rem; }
-/* The hero stat's type comes from `.stat-num stat-num--tight` and
-   `.stat-label stat-label--xs`. */
-.csd-hero-divider { width: 1px; height: 40px; background: var(--border-default); }
-.csd-hero-illo { display: flex; justify-content: center; align-items: center; }
-.csd-hero-svg  { width: 100%; max-width: 420px; height: auto; }
-
-/* ── Sections ── */
-.csd-section { padding: 5rem 0; }
-.csd-section--white    { background: var(--surface-card); border-bottom: 1px solid var(--border-default); }
-.csd-section--offwhite { background: var(--surface-page); border-bottom: 1px solid var(--border-default); }
-.csd-section--dark     { background: var(--surface-inverse); }
-
-.csd-two-col {
-  display: grid;
-  grid-template-columns: 200px 1fr;
-  gap: 3rem;
-  align-items: start;
-}
-.csd-col-label-block { position: relative; padding-top: 0.25rem; }
-/* Type comes from `.stat-num stat-num--3xl stat-num--tighter
-   stat-num--watermark`; the section number is decorative, hence
-   user-select. It is hidden outright below 991px -- see the media
-   query at the foot of this file. */
-.csd-col-number {
-  margin-top: 0.5rem;
-  user-select: none;
-}
-/* Type comes from `.section-title section-title--xs`; what stays here
-   is the section's spacing and this heading's own line-height. */
-.csd-section-title {
-  margin-bottom: 1.25rem;
-  line-height: 1.15;
-}
-.csd-body-text { color: var(--color-text); max-width: 640px; }
-
-/* ── Challenge list ── */
-.csd-challenge-list {
-  list-style: none;
-  padding: 0;
-  margin: 1.75rem 0 0;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  max-width: 640px;
-}
-.csd-challenge-item {
-  display: flex;
-  gap: 0.875rem;
-  align-items: flex-start;
-  font-size: 0.9375rem;
-  color: var(--color-prose-soft);
-  line-height: 1.65;
-}
-.csd-challenge-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--surface-inverse);
-  flex-shrink: 0;
-  margin-top: 0.6rem;
-  opacity: 0.5;
-}
-
-/* ── Tool comparison table ── */
-.csd-tool-table-wrap {
-  overflow-x: auto;
-  border-radius: 12px;
-  border: 1px solid var(--border-default);
-  background: var(--surface-card);
-}
-.csd-tool-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.875rem;
-}
-.csd-tool-table thead tr {
-  background: var(--surface-inverse);
-}
-.csd-tool-table thead th {
-  padding: 0.875rem 1.25rem;
-  text-align: left;
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--color-on-inverse-a50);
-}
-.csd-tool-table tbody tr {
-  border-bottom: 1px solid var(--border-default);
-}
-.csd-tool-table tbody tr:last-child { border-bottom: none; }
-.csd-tool-table tbody tr:hover { background: var(--surface-wash); }
-.csd-tool-table tbody td {
-  padding: 1rem 1.25rem;
-  color: var(--color-prose-soft);
-  line-height: 1.55;
-  vertical-align: top;
-}
-.csd-tool-name { font-weight: 700; color: var(--color-heading); white-space: nowrap; }
-.csd-tool-cat {
-  color: var(--color-text);
-  font-size: 0.8125rem;
-  white-space: nowrap;
-}
-.csd-tool-limit { color: var(--color-text); }
-
-/* ── Solution steps ── */
-.csd-steps {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1.5rem;
-  margin-top: 3rem;
-}
-.csd-step {
-  border: 1px solid var(--color-paper-a10);
-  border-radius: 12px;
-  padding: 1.75rem;
-  background: var(--color-paper-a03);
-}
-/* Type comes from `.ordinal ordinal--on-inverse`. */
-.csd-step-num { margin-bottom: 0.875rem; }
-.csd-step-title {
-  font-size: 0.95rem;
-  font-weight: 800;
-  color: var(--color-on-inverse);
-  margin-bottom: 0.625rem;
-  line-height: 1.3;
-}
-.csd-step-text {
-  font-size: 0.875rem;
-  color: var(--color-on-inverse-a50);
-  line-height: 1.75;
-}
-
-/* ── Technical highlights ── */
-.csd-highlights {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1.5rem;
-}
-.csd-highlight {
-  background: var(--surface-sunk);
-  border: 1px solid var(--border-default);
-  border-radius: 12px;
-  padding: 1.75rem;
-}
-/* Type comes from `.ordinal ordinal--watermark`. */
-.csd-highlight-num { margin-bottom: 0.75rem; }
-.csd-highlight-title {
-  font-size: 1rem;
-  font-weight: 800;
-  color: var(--color-heading);
-  margin-bottom: 0.625rem;
-  line-height: 1.3;
-}
-.csd-highlight-body {
-  font-size: 0.875rem;
-  color: var(--color-text);
-  line-height: 1.75;
-}
-
-/* ── Outcomes ── */
-.csd-outcomes {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
-  margin-bottom: 3rem;
-}
-.csd-outcome {
-  background: var(--surface-card);
-  border: 1px solid var(--border-default);
-  border-radius: 14px;
-  padding: 2rem 1.75rem;
-}
-/* Type comes from `.stat-num stat-num--fluid stat-num--tight`. */
-.csd-outcome-num { margin-bottom: 0.625rem; }
-.csd-outcome-label {
-  font-size: 0.875rem;
-  color: var(--color-text);
-  line-height: 1.5;
-  font-weight: 500;
-}
-
-/* ── Results table ── */
-.csd-results-table-wrap {
-  overflow-x: auto;
-  border-radius: 12px;
-  border: 1px solid var(--border-default);
-  background: var(--surface-card);
-}
-.csd-results-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.875rem;
-}
-.csd-results-table thead tr { background: var(--surface-inverse); }
-.csd-results-table thead th {
-  padding: 0.875rem 1.25rem;
-  text-align: left;
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--color-on-inverse-a50);
-}
-.csd-results-table tbody tr { border-bottom: 1px solid var(--border-default); }
-.csd-results-table tbody tr:last-child { border-bottom: none; }
-.csd-results-table tbody tr:hover { background: var(--surface-wash); }
-.csd-results-table tbody td {
-  padding: 1rem 1.25rem;
-  vertical-align: top;
-  line-height: 1.55;
-}
-.csd-result-metric { font-weight: 700; color: var(--color-heading); white-space: nowrap; }
-.csd-result-before { color: var(--color-text); }
-.csd-result-after  { color: var(--color-heading); font-weight: 600; }
-
-/* ── What this demonstrates ── */
-.csd-demonstrates {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1.5rem;
-}
-.csd-demonstrate {
-  border: 1px solid var(--color-paper-a10);
-  border-radius: 12px;
-  padding: 1.75rem;
-  background: var(--color-paper-a03);
-}
-/* Type comes from `.ordinal ordinal--on-inverse-faint`. */
-.csd-demonstrate-num { margin-bottom: 0.75rem; }
-.csd-demonstrate-title {
-  font-size: 0.95rem;
-  font-weight: 800;
-  color: var(--color-on-inverse);
-  margin-bottom: 0.625rem;
-  line-height: 1.35;
-}
-.csd-demonstrate-body {
-  font-size: 0.875rem;
-  color: var(--color-on-inverse-a50);
-  line-height: 1.75;
-}
-
-/* ── Testimonial ── */
-.csd-quote {
-  max-width: 780px;
-  margin: 0 auto;
-  text-align: center;
-}
-.csd-quote-mark {
-  font-size: 6rem;
-  font-weight: 900;
-  color: var(--color-text-ghost);
-  font-family: var(--font-heading);
-  line-height: 0.5;
-  margin-bottom: 1.5rem;
-}
-.csd-quote-text {
-  font-size: clamp(1.125rem, 2vw, 1.375rem);
-  font-weight: 600;
-  color: var(--color-heading);
-  line-height: 1.65;
-  letter-spacing: -0.01em;
-  margin-bottom: 2rem;
-}
-.csd-quote-footer { display: flex; flex-direction: column; gap: 0.25rem; align-items: center; }
-.csd-quote-name { font-size: 0.9375rem; font-weight: 700; color: var(--color-heading); }
-.csd-quote-role  { font-size: 0.8125rem; color: var(--color-text); }
-
-/* ── Tech stack grid ── */
-.csd-stack-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 0;
-  border: 1px solid var(--border-default);
-  border-radius: 12px;
-  overflow: hidden;
-  background: var(--surface-card);
-}
-.csd-stack-row {
-  display: flex;
-  gap: 0;
-  border-bottom: 1px solid var(--border-default);
-  border-right: 1px solid var(--border-default);
-}
-.csd-stack-row:nth-child(even) { border-right: none; }
-.csd-stack-row:last-child,
-.csd-stack-row:nth-last-child(2):nth-child(odd) { border-bottom: none; }
-.csd-stack-layer {
-  padding: 0.875rem 1.25rem;
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--color-text);
-  background: var(--surface-sunk);
-  width: 180px;
-  flex-shrink: 0;
-  border-right: 1px solid var(--border-default);
-  display: flex;
-  align-items: center;
-}
-.csd-stack-tech {
-  padding: 0.875rem 1.25rem;
-  font-size: 0.875rem;
-  color: var(--color-heading);
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-}
-
-/* ── Tags fallback ── */
-.csd-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-/* ── Prev/Next nav ── */
-.csd-nav-section {
-  background: var(--surface-page);
-  padding: 3rem 0;
-  border-top: 1px solid var(--border-default);
-  border-bottom: 1px solid var(--border-default);
-}
-.csd-nav-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
-.csd-nav-card {
-  display: flex;
-  flex-direction: column;
-  gap: 0.375rem;
-  padding: 1.5rem;
-  text-decoration: none;
-  transition: border-color 200ms, transform 200ms cubic-bezier(0.34,1.56,0.64,1);
-}
-.csd-nav-card:hover { border-color: var(--card-border-hover); transform: translateY(-2px); }
-.csd-nav-card--next { text-align: right; }
-.csd-nav-direction { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--color-text); }
-.csd-nav-company { font-size: 1.125rem; font-weight: 900; color: var(--color-heading); letter-spacing: -0.02em; }
-.csd-nav-headline { font-size: 0.8125rem; color: var(--color-text); line-height: 1.5; }
-
-/* ── CTA ── */
-.csd-cta { background: var(--surface-inverse); padding: 5rem 0; text-align: center; }
-.csd-cta-label { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-on-inverse-a35); margin-bottom: 1rem; }
-.csd-cta-title { font-size: clamp(2rem, 3.5vw, 3rem); font-weight: 900; letter-spacing: -0.03em; color: var(--color-on-inverse); margin-bottom: 0.875rem; line-height: 1.1; }
-.csd-cta-sub { font-size: 1rem; color: var(--color-on-inverse-faint); line-height: 1.7; max-width: 420px; margin: 0 auto 2.5rem; }
-.csd-cta-actions { display: flex; align-items: center; justify-content: center; gap: 1rem; flex-wrap: wrap; }
-.csd-cta-btn-primary { background: var(--surface-card); color: var(--color-heading); padding: 0.875rem 1.75rem; border-radius: 100px; font-weight: 700; font-size: 0.9375rem; text-decoration: none; transition: opacity 150ms, transform 150ms; }
-.csd-cta-btn-primary:hover { opacity: 0.88; transform: translateY(-1px); color: var(--color-heading); }
-.csd-cta-btn-secondary { color: var(--color-on-inverse-muted); padding: 0.875rem 1.75rem; border-radius: 100px; border: 1px solid var(--color-paper-a20); font-weight: 600; font-size: 0.9375rem; text-decoration: none; transition: color 150ms, border-color 150ms; }
-.csd-cta-btn-secondary:hover { color: var(--color-on-inverse); border-color: var(--color-paper-a50); }
-
-/* ── Responsive ── */
-@media (max-width: 1024px) {
-  .csd-two-col { grid-template-columns: 1fr; gap: 1.5rem; }
-  .csd-col-number { display: none; }
-  .csd-steps { grid-template-columns: 1fr; }
-  .csd-highlights { grid-template-columns: 1fr; }
-  .csd-outcomes { grid-template-columns: 1fr; }
-  .csd-demonstrates { grid-template-columns: 1fr; }
-  .csd-stack-grid { grid-template-columns: 1fr; }
-  .csd-stack-row { border-right: none !important; }
-  .csd-stack-row { border-bottom: 1px solid var(--border-default) !important; }
-  .csd-stack-row:last-child { border-bottom: none !important; }
-}
-@media (max-width: 767px) {
-  .csd-hero-inner { grid-template-columns: 1fr; }
-  .csd-hero-illo  { display: none; }
-  .csd-nav-grid   { grid-template-columns: 1fr; }
-  .csd-nav-card--next { text-align: left; }
-  .csd-hero-stats { gap: 1.25rem; flex-wrap: wrap; }
-}
-</style>

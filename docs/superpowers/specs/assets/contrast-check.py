@@ -111,7 +111,7 @@ TEXT_ROLES = [
 # ALLOWLIST -- white-over-inverse text under AA, tracked on purpose.
 #
 # `--color-on-inverse-a35/-a40` are real text at:
-#   a35: src/pages/blog/[slug].astro:629, src/pages/case-studies/[slug].astro:975
+#   a35: src/pages/blog/[slug].astro:629
 #   a40: src/components/ui/ProductCard.astro:82,
 #        src/styles/tokens/_components.scss:50 (--section-label-color-inverse)
 # Composited over this theme's `ink-900` (#131110) they measure 3.21 / 3.82 --
@@ -130,7 +130,7 @@ TEXT_ROLES = [
 # (role label, alpha, minimum, allowlist reason or None)
 ALPHA_TEXT_ROLES = [
     ('on-inverse-a35 (--color-on-inverse-a35)', 0.35, 4.5,
-     'KNOWN -- blog/[slug].astro:629, case-studies/[slug].astro:975'),
+     'KNOWN -- blog/[slug].astro:629'),
     ('on-inverse-a40 (--color-on-inverse-a40)', 0.40, 4.5,
      'KNOWN -- ProductCard.astro:82, _components.scss:50'),
     ('on-inverse-faint / a45 (--color-on-inverse-faint)', 0.45, 4.5, None),
