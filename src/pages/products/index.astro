@@ -254,23 +254,18 @@ const COMPARE_ROWS = [
         n="01"
         caption="the dashboard after a full scan. Grade, category breakdown, trend against every prior run."
       >
-        {/* The GIF loops, so a reader who has asked for less motion gets
-            the still frame of the same view instead of a preference the
-            page ignores. Same source, same crop, one frame. */}
-        <picture>
-          <source
-            srcset="/products/orgvitals/guide/03-dashboard-still.webp"
-            media="(prefers-reduced-motion: reduce)"
-          />
-          <img
-            src="/products/orgvitals/guide/03-dashboard.gif"
-            alt="The OrgVitals dashboard: an overall health grade with per-category scores and a trend chart across previous scans."
-            width="1000"
-            height="627"
-            loading="lazy"
-            decoding="async"
-          />
-        </picture>
+        {/* One frame, not the recording. The moving version of this view
+            lives on the product page's viewer and in the guide, where a
+            reader has asked for it; here it is evidence, and evidence
+            does not need to loop. Same poster the viewer opens on. */}
+        <img
+          src="/products/orgvitals/guide/posters/03-dashboard.webp"
+          alt="The OrgVitals dashboard: an overall health grade with per-category scores and a trend chart across previous scans."
+          width="1000"
+          height="628"
+          loading="lazy"
+          decoding="async"
+        />
       </EvidenceStrip>
     </ProductEntry>
 

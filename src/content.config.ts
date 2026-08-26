@@ -104,6 +104,11 @@ const products = defineCollection({
       step: z.string(),
       alt:  z.string(),
       cap:  z.string(),
+      /* A step that moves carries its recording here and a still frame
+         in `src`. The still is what the plate shows before the press,
+         what <noscript> gets, and what a reader who asked for less
+         motion keeps. A step without a clip is simply a picture. */
+      clip: z.string().optional(),
     })).optional(),
     video: z.object({
       src:      z.string(),

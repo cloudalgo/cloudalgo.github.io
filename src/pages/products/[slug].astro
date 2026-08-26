@@ -328,19 +328,27 @@ const schema: object[] = [
               <span class="viewer__bar-n">01 / {pad(shots.length)}</span>
               <span class="viewer__bar-t">{shots[0].step}</span>
             </div>
-            {/* No `src` in the markup. A GIF cannot be paused once it is
-                in the document, so nothing is fetched until the reader
-                has asked for a step -- and under prefers-reduced-motion
-                "asked" means pressed the button, not scrolled past. */}
+            {/* The still is what the stage opens on, for every step. A
+                step that also has a recording swaps the still for the
+                clip -- straight away when motion is fine, on a press
+                when the reader has asked for less of it. The clip is
+                `preload="none"`, so a step nobody opens costs nothing. */}
             <div class="viewer__stage">
-              <img class="viewer__shot" alt="" hidden />
+              <img
+                class="viewer__shot"
+                src={shots[0].src}
+                alt={shots[0].alt}
+                loading="lazy"
+                decoding="async"
+              />
+              <video class="viewer__clip" controls loop muted playsinline preload="none" hidden></video>
+            </div>
+            {shots.some(s => s.clip) && (
               <div class="viewer__hold" hidden>
-                <p class="viewer__hold-t">
-                  This step is a screen recording. Nothing is downloaded until you ask for it.
-                </p>
+                <p class="viewer__hold-t">This step was recorded. The still above is the same view, held.</p>
                 <button class="viewer__play" type="button">Play &ldquo;{shots[0].step}&rdquo; &rarr;</button>
               </div>
-            </div>
+            )}
           </div>
 
           <figcaption class="viewer__cap">{shots[0].cap}</figcaption>
@@ -355,6 +363,7 @@ const schema: object[] = [
                   data-shot={s.src}
                   data-alt={s.alt}
                   data-cap={s.cap}
+                  data-clip={s.clip}
                 >
                   <span class="viewer__thumb-n">{pad(i + 1)}</span>
                   <span class="viewer__thumb-t">{s.step}</span>
@@ -524,23 +533,30 @@ const schema: object[] = [
 <script>
   /* The step viewer.
 
-     Six GIFs is two megabytes, and a GIF cannot be paused once it is in
-     the document -- so nothing is fetched until the reader has asked for
-     a step, and under `prefers-reduced-motion` "asked" means pressed a
-     button rather than scrolled past. The <noscript> block underneath
-     holds the plain images for a reader with no script at all. */
+     Every step has a still; some steps also have a recording. Selecting a
+     step always shows its still first, which costs one small image, and
+     the recording replaces it only when there is one -- immediately when
+     motion is fine, on a press when the reader has asked for less of it.
+     The clip element is `preload="none"` and its `src` is cleared on the
+     way out, so a step nobody opens is never fetched and a step left
+     behind stops playing. The <noscript> block underneath holds the
+     plain stills for a reader with no script at all. */
   (() => {
     const viewer = document.getElementById('viewer');
     if (!viewer) return;
 
     const shot = viewer.querySelector<HTMLImageElement>('.viewer__shot');
+    const clip = viewer.querySelector<HTMLVideoElement>('.viewer__clip');
     const hold = viewer.querySelector<HTMLElement>('.viewer__hold');
     const play = viewer.querySelector<HTMLButtonElement>('.viewer__play');
     const cap  = viewer.querySelector<HTMLElement>('.viewer__cap');
     const barN = viewer.querySelector<HTMLElement>('.viewer__bar-n');
     const barT = viewer.querySelector<HTMLElement>('.viewer__bar-t');
     const thumbs = [...viewer.querySelectorAll<HTMLButtonElement>('.viewer__thumb')];
-    if (!shot || !hold || !play || !cap || !barN || !barT || !thumbs.length) return;
+    /* `hold` and `play` are absent on a viewer whose steps are all
+       stills -- InsureAlgo's four phone screens -- so they are optional
+       here where the rest are not. */
+    if (!shot || !clip || !cap || !barN || !barT || !thumbs.length) return;
 
     const still = window.matchMedia('(prefers-reduced-motion: reduce)');
     const total = String(thumbs.length).padStart(2, '0');
@@ -549,12 +565,29 @@ const schema: object[] = [
 
     let current = thumbs[0];
 
-    /** Loads the step. Called on press, and on select when motion is fine. */
-    const run = (btn: HTMLButtonElement) => {
+    /** Puts the step's still on the stage and stops whatever was playing. */
+    const showStill = (btn: HTMLButtonElement) => {
+      clip.pause();
+      clip.hidden = true;
+      clip.removeAttribute('src');
+      clip.load(); // drops the buffered clip rather than leaving it decoding
       shot.src = btn.dataset.shot ?? '';
       shot.alt = btn.dataset.alt ?? '';
       shot.hidden = false;
-      hold.hidden = true;
+    };
+
+    /** Loads the recording. Called on press, and on select when motion is fine. */
+    const run = (btn: HTMLButtonElement) => {
+      const src = btn.dataset.clip;
+      if (!src) return;
+      clip.src = src;
+      clip.poster = btn.dataset.shot ?? '';
+      shot.hidden = true;
+      clip.hidden = false;
+      if (hold) hold.hidden = true;
+      void clip.play().catch(() => {
+        /* Autoplay refused. The controls are there; the still is not. */
+      });
     };
 
     const select = (btn: HTMLButtonElement) => {
@@ -568,11 +601,15 @@ const schema: object[] = [
       barN.textContent = `${btn.querySelector('.viewer__thumb-n')?.textContent ?? ''} / ${total}`;
       barT.textContent = nameOf(btn);
 
-      if (still.matches) {
+      showStill(btn);
+      if (hold) hold.hidden = true;
+
+      /* A step that is just a picture: the still is the whole step. */
+      if (!btn.dataset.clip) return;
+
+      if (still.matches && hold && play) {
         /* Held. The button names the step so the press is a decision,
            not a mystery. */
-        shot.hidden = true;
-        shot.removeAttribute('src');
         play.textContent = `Play “${nameOf(btn)}” →`;
         hold.hidden = false;
       } else {
@@ -581,7 +618,7 @@ const schema: object[] = [
     };
 
     thumbs.forEach((t) => t.addEventListener('click', () => select(t)));
-    play.addEventListener('click', () => run(current));
+    play?.addEventListener('click', () => run(current));
     still.addEventListener('change', () => select(current));
     select(thumbs[0]);
   })();

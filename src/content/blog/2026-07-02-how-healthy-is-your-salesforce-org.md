@@ -49,7 +49,7 @@ It reads a snapshot of your org's metadata once, runs 49 checks against it, and 
 
 You've already logged into your orgs with the Salesforce CLI, the `sf` command every Salesforce dev has installed. OrgVitals uses that session to pull a read-only copy of the metadata: Apex, flows, LWC, profiles, permission sets, objects, fields, the lot. Then it runs 49 scanners grouped into five categories, and a few minutes later hands you this:
 
-![OrgVitals dashboard showing one A-to-F grade, five category scores, and a Fix These First list](/products/orgvitals/guide/03-dashboard.gif)
+![OrgVitals dashboard showing one A-to-F grade, five category scores, and a Fix These First list](/products/orgvitals/guide/posters/03-dashboard.webp)
 
 One grade. Five category scores. A "Fix These First" list with the critical items and the quick wins on top. Click any finding and it explains itself and links straight to the component it's complaining about.
 
@@ -76,7 +76,7 @@ Four kinds of people get the most out of this, and none of them are "SEO manager
 
 **The consultant walking into a new client org.** This one is personal, because it's us. When someone brings you in to fix their Salesforce, week one is archaeology: figuring out how bad it is before you can even quote the work. OrgVitals turns that into a ten-minute scan and an honest baseline. And because it handles whole families of orgs, you can line up a sandbox against production and see exactly where they've drifted apart.
 
-![Comparing two orgs in an Org Family, with metadata and source diffs side by side](/products/orgvitals/guide/07-org-family.gif)
+![Comparing two orgs in an Org Family, with metadata and source diffs side by side](/products/orgvitals/guide/posters/07-org-family.webp)
 
 **The client, or your boss.** They don't want a 200-row spreadsheet. They want to know if the thing is getting better. A letter grade and a trend line pointing up is a language everyone in the room understands, including the person who approves the budget.
 

@@ -46,20 +46,19 @@
   font-weight: 600;
 }
 
-// One box for both states. The floor is the held plate's own height and
-// no more: padding it out to a recording's height would be exactly the
-// large empty plate the hold was shortened to avoid, and the fold
-// growing once when the reader presses play is what any video does. The
-// screenshots are not one shape -- OrgVitals ships wide desktop GIFs,
-// InsureAlgo tall phone stills -- so the image is centred and capped
-// rather than stretched to the box.
+// One box for the still and the recording alike. The floor keeps the
+// fold from collapsing before the first image decodes; beyond that the
+// screenshots are not one shape -- OrgVitals ships wide desktop
+// recordings, InsureAlgo tall phone stills -- so both are centred and
+// capped rather than stretched to the box.
 .viewer__stage {
   min-height: 17rem;
   display: grid;
   place-items: center;
 }
 
-.viewer__shot {
+.viewer__shot,
+.viewer__clip {
   display: block;
   margin-inline: auto;
   max-width: 100%;
@@ -75,23 +74,23 @@
   background: var(--surface-inverse);
 }
 
-// The held state. Deliberately shorter than the recording it stands in
-// for: a full-height empty plate is a lot of nothing to look at, and the
-// fold growing when the reader presses play is the same thing any video
-// does.
+// The held state -- now a strip beneath the still rather than a plate
+// instead of it. A reader who has asked for less motion still sees the
+// step; what is held back is only the part that moves, and the strip is
+// the offer to start it.
 .viewer__hold {
-  min-height: 17rem;
-  display: grid;
-  place-content: center;
-  gap: 1rem;
-  justify-items: center;
-  padding: 1.5rem;
-  text-align: center;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1.5rem;
+  padding: 0.875rem 1.25rem;
+  border-top: 1px solid var(--border-on-inverse);
 }
 
 .viewer__hold-t {
   margin: 0;
-  max-width: 30ch;
+  max-width: 54ch;
   font-size: 0.9375rem;
   line-height: 1.55;
   color: var(--color-on-inverse-muted);
