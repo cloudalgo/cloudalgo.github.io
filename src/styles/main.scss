@@ -191,6 +191,11 @@
 @use 'base/motion';
 @use 'utilities/grid';
 @use 'components/schedule-widget';
+// The consent notice. Site chrome, so it loads with the other two fixed
+// panels rather than with the page devices -- and after
+// `components/buttons`, because `.notice__btn` resizes `.btn` through
+// its knobs and one of them is a plain `font-size`.
+@use 'components/notice';
 
 // Last, so the focus indicators win. See the note in the file.
 @use 'base/a11y';

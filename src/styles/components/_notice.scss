@@ -1,0 +1,382 @@
+/* The consent notice.
+ *
+ * The one piece of site chrome that asks the reader for something. It
+ * had been left behind by the repaint: frosted glass, a blurred drop
+ * shadow, an iOS toggle and a pill button family, floating centred over
+ * a page whose every other surface is ruled paper. Glass is not a
+ * material this site has; a rounded pill is a shape it deleted.
+ *
+ * A consent panel is a NOTICE POSTED AT THE DESK -- it names who
+ * records, what they record, and it takes your mark -- so it is drawn
+ * as one: white stock, a 1px ink rule around it, an ember tab along the
+ * top edge, and the same press block the buttons stand on rather than a
+ * blur. Nothing here is translucent. The page does not show through a
+ * document lying on top of it.
+ *
+ * It is `.notice`, not `.slip`: `sections/_desk.scss` already owns that
+ * name for the contact page's delivery slip, and that one is sticky
+ * with a `top` of its own. Two devices under one class is not a naming
+ * quibble -- the desk's `top` reached this panel and stretched it from
+ * the header to the floor of the viewport.
+ *
+ * ── Why it moved off centre ──
+ * It was 760px wide, centred at the bottom of the viewport, at z-index
+ * 1000 -- directly over the schedule launcher, which is fixed at
+ * bottom-right and 276px wide. The two collided on every desktop
+ * narrower than about 1300px. Docked bottom-left the panel clears the
+ * launcher and the margin rule both, and a notice that does not stand
+ * in the middle of the page is a notice that can be read past.
+ *
+ * ── The two states ──
+ * `.notice__ask` is what a first visit sees; `.notice--open` swaps it
+ * for `.notice__register`, the same card carrying the register of what
+ * is recorded, the switch that sets it, and the full text folded into a
+ * disclosure at the foot. One width across both: the panel does not
+ * resize under the reader's cursor, it just says more.
+ */
+
+.notice {
+  position: fixed;
+  left: 1.5rem;
+  bottom: 1.5rem;
+  z-index: 1000;
+  width: min(30rem, calc(100vw - 3rem));
+  background: var(--surface-card);
+  border: 1px solid var(--color-heading);
+  /* The tab. The one place on this panel the accent is a surface
+     rather than a control, and what makes the panel read as filed
+     against the page rather than drawn on it. */
+  border-top: 3px solid var(--color-accent);
+  /* The press block, same gesture as every button on the site --
+     `--btn-press-offset` is 5px and this is deliberately the same
+     value read literally, because the notice does not press. */
+  box-shadow: 5px 5px 0 var(--color-heading);
+  font-family: var(--font-body);
+  opacity: 0;
+  transform: translateY(12px);
+  animation: notice-in var(--duration-slow) var(--ease-out) 1.2s forwards;
+}
+
+.notice.ca-hidden {
+  display: none;
+  animation: none;
+}
+
+@keyframes notice-in {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── State ── */
+
+.notice__register { display: none; }
+
+.notice--open .notice__ask { display: none; }
+
+.notice--open .notice__register {
+  display: flex;
+  flex-direction: column;
+  max-height: min(70vh, 38rem);
+  overflow: hidden;
+}
+
+/* ── The notice ── */
+
+.notice__ask { padding: 1.25rem 1.375rem 1.375rem; }
+
+/* Hollow mark, per `_pip.scss`: the dot fills only for something that
+   is live. Before a choice is made nothing has loaded, and that is
+   what the pip says. */
+.notice__pip { margin-bottom: 0.875rem; }
+
+.notice__title {
+  margin: 0 0 0.5rem;
+  font-family: var(--font-heading);
+  font-size: 1.125rem;
+  font-weight: var(--weight-bold);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: var(--color-heading);
+}
+
+.notice__body {
+  margin: 0 0 1.25rem;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--color-text);
+}
+
+/* ── The buttons ──
+   `.btn` and its two variants, at panel scale. Only the knobs and the
+   size change; the press block, the hover lift and the ember fill are
+   the site's. */
+
+.notice__acts {
+  display: flex;
+  gap: 0.625rem;
+}
+
+.notice__btn {
+  --btn-padding: 0.5625rem 1rem;
+  flex: 1;
+  justify-content: center;
+  font-size: 0.875rem;
+  /* The block is drawn inside a panel with 1.375rem of padding, so it
+     is stepped down from the button default to keep off the rule. */
+  --btn-press-lift: 2px;
+  --btn-press-offset: 3px;
+}
+
+/* ── The register ── */
+
+.notice__head {
+  flex-shrink: 0;
+  padding: 1.125rem 1.375rem 0.875rem;
+  border-bottom: 1px solid var(--border-default);
+}
+
+.notice__label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-text-faint);
+}
+
+.notice__sub {
+  margin: 0.375rem 0 0;
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  color: var(--color-text);
+}
+
+.notice__scroll {
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0 1.375rem;
+}
+
+/* ── One recorded thing, per row ──
+   Rows, not cards. A card inside a panel is a second frame around
+   something already framed, and the site separates with rules. */
+
+.notice__row {
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--border-default);
+}
+
+.notice__row-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.notice__row-name {
+  font-size: 0.875rem;
+  font-weight: var(--weight-bold);
+  line-height: 1.3;
+  color: var(--color-heading);
+}
+
+/* The name is the switch's label, so it takes the pointer too. */
+label.notice__row-name { cursor: pointer; }
+
+.notice__row-desc {
+  margin: 0.5rem 0 0;
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  color: var(--color-text);
+}
+
+/* Who actually receives the data. The old panel named the three
+   processors inside a sentence, where they read as prose; named as
+   marks they read as a list you can check. */
+.notice__parties {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+  margin: 0.625rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.notice__party {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  background: var(--surface-sunk);
+  border: 1px solid var(--border-default);
+  padding: 0.1875rem 0.4375rem;
+}
+
+/* ── The switch ──
+   Square, because the site is. Shape carries the state before hue
+   does: the knob is at one end or the other, and the badge beside it
+   states the same fact in a word. Strip the ember out and the control
+   still reads. */
+
+.notice__control {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.notice__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.notice__switch {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  width: 38px;
+  height: 20px;
+  padding: 2px;
+  background: var(--surface-sunk);
+  border: 1px solid var(--color-heading);
+  cursor: pointer;
+  transition: background var(--duration-base) var(--ease-out);
+}
+
+.notice__knob {
+  width: 14px;
+  height: 14px;
+  background: var(--color-heading);
+  transition: transform var(--duration-base) var(--ease-out);
+}
+
+.notice__input:checked + .notice__switch {
+  background: var(--color-accent);
+}
+
+.notice__input:checked + .notice__switch .notice__knob {
+  transform: translateX(16px);
+  background: var(--color-on-accent);
+}
+
+/* The hidden input keeps the keyboard ring on the thing you can see.
+   base/_a11y.scss draws the ring with an outline, so this mirrors it
+   rather than inventing a second focus language. */
+.notice__input:focus-visible + .notice__switch {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* ── The foot of the register ── */
+
+.notice__responsible {
+  margin: 1rem 0 0;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--color-text-muted);
+}
+
+.notice__responsible a { color: var(--color-heading); }
+
+/* The full text, folded. Every word of it is still here -- it is a
+   consent notice and it may not be summarised -- but a reader who
+   wants the two-line answer no longer scrolls 900 words to reach the
+   buttons. */
+.notice__more {
+  margin: 1rem 0 1.375rem;
+  border-top: 1px solid var(--border-default);
+}
+
+.notice__more-sum {
+  padding: 0.75rem 0 0;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-heading);
+  cursor: pointer;
+  list-style: none;
+}
+
+.notice__more-sum::-webkit-details-marker { display: none; }
+
+/* The marker is drawn here so it can turn with the disclosure. */
+.notice__more-sum::after {
+  content: '+';
+  float: right;
+  font-weight: var(--weight-bold);
+  color: var(--color-accent);
+}
+
+.notice__more[open] .notice__more-sum::after { content: '\2212'; }
+
+.notice__doc {
+  padding-top: 0.5rem;
+  font-size: 0.8125rem;
+  line-height: 1.7;
+  color: var(--color-prose);
+}
+
+.notice__doc h4 {
+  margin: 1.125rem 0 0.375rem;
+  font-family: var(--font-heading);
+  font-size: 0.8125rem;
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.01em;
+  line-height: 1.3;
+  color: var(--color-heading);
+}
+
+.notice__doc h4:first-child { margin-top: 0; }
+
+.notice__doc p { margin: 0 0 0.5rem; }
+
+.notice__doc ul {
+  margin: 0 0 0.5rem;
+  padding-left: 1.125rem;
+}
+
+.notice__doc li { margin-bottom: 0.25rem; }
+
+.notice__foot {
+  flex-shrink: 0;
+  display: flex;
+  gap: 0.625rem;
+  padding: 0.875rem 1.375rem 1.125rem;
+  border-top: 1px solid var(--border-default);
+  background: var(--surface-card);
+}
+
+/* ── Phones ──
+   Full width, and the block goes with it: 5px of ink hanging off a
+   panel that already touches both margins is a smudge, not a block. */
+
+@media (max-width: 640px) {
+  .notice {
+    left: 0.75rem;
+    right: 0.75rem;
+    bottom: 0.75rem;
+    width: auto;
+    box-shadow: none;
+  }
+
+  .notice--open .notice__register { max-height: 78vh; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .notice {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+}

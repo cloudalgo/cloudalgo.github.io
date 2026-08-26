@@ -1,511 +1,218 @@
 ---
-// Cookie consent — two-state non-blocking popup.
+/**
+ * The consent notice -- the site's one piece of chrome that asks the
+ * reader for something, and the last surface still wearing the old
+ * costume: frosted glass, a blurred shadow, an iOS toggle and 900 words
+ * of policy dumped above the buttons.
+ *
+ * It is drawn as a notice posted at the desk now. Appearance lives in
+ * styles/components/_notice.scss; the reasoning is in that file's
+ * header, including why it is not called a slip.
+ *
+ * ── What did NOT change ──
+ * The consent contract. Three actions in, three actions out (accept
+ * all, customise/reject, accept selected), the same localStorage key
+ * and values, the same trackers behind the same gate, and every word of
+ * the long-form notice, verbatim. A cookie panel is a legal surface:
+ * this pass moves copy and repaints it, it does not edit it. The one
+ * sentence dropped from the opening notice told the reader which button
+ * to click, which the buttons now do themselves.
+ *
+ * ── Why the trackers are injected from here ──
+ * Unchanged and load-bearing: GA4, HubSpot and Clarity exist nowhere
+ * else in the codebase. Nothing in a layout may add a fourth.
+ */
 import Badge from '@/components/ui/Badge.astro';
+// The controller is named from the register, not retyped here. This
+// banner said "CloudAlgo Inc." while all seven instruments and the
+// register itself said "CloudAlgo Private Limited" -- a US form against
+// the Indian one the company is actually incorporated under, on the one
+// surface that exists to make a data-protection claim.
+import { ISSUER } from '@/data/legal';
 ---
 
-<div
-  id="ca-cookie-popup"
-  class="ca-hidden"
-  role="region"
-  aria-label="Cookie preferences"
->
+<div id="ca-cookie-popup" class="notice ca-hidden" role="region" aria-label="Cookie preferences">
 
-  <!-- ── State 1: Initial notice ── -->
-  <div id="ca-s1">
-    <div class="ca-s1-inner">
-      <div class="ca-cookie-icon">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="12" cy="12" r="10"/>
-          <circle cx="8.5" cy="8.5" r="1.5" fill="currentColor" stroke="none"/>
-          <circle cx="14" cy="7.5" r="1" fill="currentColor" stroke="none"/>
-          <circle cx="9" cy="14" r="1" fill="currentColor" stroke="none"/>
-          <circle cx="14.5" cy="13.5" r="1.5" fill="currentColor" stroke="none"/>
-          <circle cx="11" cy="11" r="0.75" fill="currentColor" stroke="none"/>
-        </svg>
-      </div>
-      <h3 class="ca-cookie-title">We use cookies</h3>
-      <p class="ca-cookie-body">
-        We use cookies, including third-party tools (Google Analytics, HubSpot, Microsoft Clarity),
-        to understand how visitors engage with our site and to improve our content and services.
-        No personal data is sold to third parties. Click <strong>"Accept all"</strong> to consent,
-        or <strong>"Customise&nbsp;/&nbsp;reject"</strong> to review your options.
-      </p>
-      <div class="ca-btns">
-        <button id="ca-btn-customise" class="ca-btn-outline">Customise&nbsp;/&nbsp;reject</button>
-        <button id="ca-btn-accept-s1" class="ca-btn-primary">Accept all</button>
-      </div>
+  <!-- ── The ask ── -->
+  <div class="notice__ask">
+    <span class="pip notice__pip">
+      <b class="pip__dot" aria-hidden="true"></b>No trackers loaded
+    </span>
+    <h3 class="notice__title">We use cookies</h3>
+    <p class="notice__body">
+      We use cookies, including third-party tools (Google Analytics, HubSpot, Microsoft Clarity),
+      to understand how visitors engage with our site and to improve our content and services.
+      No personal data is sold to third parties.
+    </p>
+    <div class="notice__acts">
+      <button id="ca-btn-customise" class="btn btn-outline notice__btn">Customise&nbsp;/&nbsp;reject</button>
+      <button id="ca-btn-accept-s1" class="btn btn-primary notice__btn">Accept all</button>
     </div>
   </div>
 
-  <!-- ── State 2: Modifications & Details ── -->
-  <div id="ca-s2">
-    <div class="ca-s2-header">
-      <h3 class="ca-s2-title">Cookies — Modifications &amp; Details</h3>
-      <p class="ca-s2-sub">Essential cookies are always active. Review and enable optional cookies below.</p>
+  <!-- ── The register ── -->
+  <div class="notice__register">
+    <div class="notice__head">
+      <span class="notice__label">Modifications and details</span>
+      <h3 class="notice__title">What this site records</h3>
+      <p class="notice__sub">Essential cookies are always active. Analytics cookies load only if you allow them here.</p>
     </div>
 
-    <div class="ca-s2-body">
+    <div class="notice__scroll">
 
-      <!-- Analytics & Marketing card -->
-      <div id="ca-analytics-card" class="ca-cat-card">
-        <div class="ca-cat-top">
-          <span class="ca-cat-name">Analytics &amp; Marketing Cookies</span>
-          <div class="ca-cb-group">
-            <input type="checkbox" id="ca-analytics-cb" class="ca-cb-input" />
-            <label for="ca-analytics-cb" class="ca-cb-toggle" aria-hidden="true"><span class="ca-cb-knob"></span></label>
+      <div class="notice__row">
+        <div class="notice__row-top">
+          <label class="notice__row-name" for="ca-analytics-cb">Analytics &amp; marketing cookies</label>
+          <div class="notice__control">
+            <input type="checkbox" id="ca-analytics-cb" class="notice__input" />
+            <label for="ca-analytics-cb" class="notice__switch" aria-hidden="true"><span class="notice__knob"></span></label>
             <Badge id="ca-analytics-badge" tone="outline" context="consent">Prohibited</Badge>
           </div>
         </div>
-        <p class="ca-cat-desc">
-          Used by Google Analytics, HubSpot, and Microsoft Clarity to measure site traffic,
-          understand user behaviour, and surface relevant content about CloudAlgo's Salesforce,
-          Heroku, and AWS services. Unchecked by default — enable only if you consent.
+        <p class="notice__row-desc">
+          Measure site traffic, understand user behaviour, and surface relevant content about
+          CloudAlgo's Salesforce, Heroku, and AWS services. Unchecked by default;
+          enable only if you consent.
         </p>
-        <a href="#ca-cookie-detail" class="ca-cat-link">Open cookies and options in detail ↓</a>
+        <ul class="notice__parties">
+          <li class="notice__party">Google Analytics</li>
+          <li class="notice__party">HubSpot</li>
+          <li class="notice__party">Microsoft Clarity</li>
+        </ul>
       </div>
 
-      <!-- Essential cookies card -->
-      <div class="ca-cat-card">
-        <div class="ca-cat-top">
-          <span class="ca-cat-name">Essential Cookies</span>
-          <Badge tone="solid" context="consent">Always on</Badge>
+      <div class="notice__row">
+        <div class="notice__row-top">
+          <span class="notice__row-name">Essential cookies</span>
+          <div class="notice__control">
+            <Badge tone="solid" context="consent">Always on</Badge>
+          </div>
         </div>
-        <p class="ca-cat-desc">
+        <p class="notice__row-desc">
           Required for page navigation, session continuity, form submissions, and stable
           delivery of the CloudAlgo website. These cannot be disabled.
         </p>
-        <a href="#ca-cookie-detail" class="ca-cat-link">Open cookies and options in detail ↓</a>
       </div>
 
-      <!-- Responsible line -->
-      <p class="ca-responsible">Responsible as defined by data protection law: CloudAlgo Inc.</p>
+      <p class="notice__responsible">
+        Responsible as defined by data protection law: {ISSUER}.&nbsp;<a href="/page/privacy-policy/">Privacy policy</a>
+      </p>
 
-      <!-- Long-form cookie detail -->
-      <div id="ca-cookie-detail" class="ca-detail-text">
-        <h4>Cookies and Modifications</h4>
-        <p>
-          In the following paragraphs, we'll explain our purposes for using cookies and similar
-          technologies on our websites. We also offer you the opportunity to modify your consent
-          to our use or to revoke your consent at any time.
-        </p>
+      <details class="notice__more" id="ca-cookie-detail">
+        <summary class="notice__more-sum">Cookies and modifications, in full</summary>
+        <div class="notice__doc">
+          <h4>Cookies and Modifications</h4>
+          <p>
+            In the following paragraphs, we'll explain our purposes for using cookies and similar
+            technologies on our websites. We also offer you the opportunity to modify your consent
+            to our use or to revoke your consent at any time.
+          </p>
 
-        <h4>What are Cookies?</h4>
-        <p>
-          Cookies and web storage technologies, such as Local Storage and Session Storage,
-          referred to as "cookies", facilitate your interaction with our websites. As soon as
-          you visit our websites, cookies are downloaded by the internet browser to your end
-          device, for example as a small text file. Third-party technologies — like scripts,
-          pixels, and tags — which we integrate into our websites for analytics purposes, also
-          place cookies on your end device.
-        </p>
+          <h4>What are Cookies?</h4>
+          <p>
+            Cookies and web storage technologies, such as Local Storage and Session Storage,
+            referred to as "cookies", facilitate your interaction with our websites. As soon as
+            you visit our websites, cookies are downloaded by the internet browser to your end
+            device, for example as a small text file. Third-party technologies, like scripts,
+            pixels, and tags, which we integrate into our websites for analytics purposes, also
+            place cookies on your end device.
+          </p>
 
-        <h4>Purposes of Cookies</h4>
-        <p>Cookies take care of many different tasks that contribute to a seamless online experience. Some specific cookies are essential for the running and maintenance of our websites, because they enable us to:</p>
-        <ul>
-          <li>Provide you with the services of your preference at all times</li>
-          <li>Present you with specific and relevant information</li>
-          <li>Offer you a seamless and comfortable online experience</li>
-        </ul>
+          <h4>Purposes of Cookies</h4>
+          <p>Cookies take care of many different tasks that contribute to a seamless online experience. Some specific cookies are essential for the running and maintenance of our websites, because they enable us to:</p>
+          <ul>
+            <li>Provide you with the services of your preference at all times</li>
+            <li>Present you with specific and relevant information</li>
+            <li>Offer you a seamless and comfortable online experience</li>
+          </ul>
 
-        <h4>Recognition and Response</h4>
-        <p>Cookies show us how you use and interact with our websites. This helps us to:</p>
-        <ul>
-          <li>Provide you with a more personal experience by bringing you to the most important pages more efficiently</li>
-          <li>Remind us of some of your personal preferences</li>
-          <li>Guide you to useful content or pages relevant to CloudAlgo's services</li>
-        </ul>
+          <h4>Recognition and Response</h4>
+          <p>Cookies show us how you use and interact with our websites. This helps us to:</p>
+          <ul>
+            <li>Provide you with a more personal experience by bringing you to the most important pages more efficiently</li>
+            <li>Remind us of some of your personal preferences</li>
+            <li>Guide you to useful content or pages relevant to CloudAlgo's services</li>
+          </ul>
 
-        <h4>Continuous Improvements</h4>
-        <p>Cookies help us understand how visitors use our websites and enable us to make improvements. For example, cookies make it possible to analyse what type of content is popular and create similar topics. This helps us to:</p>
-        <ul>
-          <li>Improve the design of our websites and provide you with a better online experience</li>
-          <li>Try different approaches and present visitors with content most relevant to them</li>
-        </ul>
+          <h4>Continuous Improvements</h4>
+          <p>Cookies help us understand how visitors use our websites and enable us to make improvements. For example, cookies make it possible to analyse what type of content is popular and create similar topics. This helps us to:</p>
+          <ul>
+            <li>Improve the design of our websites and provide you with a better online experience</li>
+            <li>Try different approaches and present visitors with content most relevant to them</li>
+          </ul>
 
-        <h4>Advertising and Retargeting</h4>
-        <p>Our websites may use cookies for retargeting purposes. This means cookies store information from your browsing history to track your interests and activity. This helps us, or our advertising partners, to present you with:</p>
-        <ul>
-          <li>Relevant advertising for our products on other websites, based on your visits here</li>
-          <li>A combination of relevant and specific information so that displayed advertising matches your interests</li>
-        </ul>
+          <h4>Advertising and Retargeting</h4>
+          <p>Our websites may use cookies for retargeting purposes. This means cookies store information from your browsing history to track your interests and activity. This helps us, or our advertising partners, to present you with:</p>
+          <ul>
+            <li>Relevant advertising for our products on other websites, based on your visits here</li>
+            <li>A combination of relevant and specific information so that displayed advertising matches your interests</li>
+          </ul>
 
-        <h4>Cookie Categories</h4>
-        <p>
-          Both data processing and associated cookies may be deployed on our websites. Depending
-          on function and purpose, we have divided data processing into different categories.
-          Please find further information on the various cookie categories at the start of this
-          page, under "Modifications and Details".
-        </p>
+          <h4>Cookie Categories</h4>
+          <p>
+            Both data processing and associated cookies may be deployed on our websites. Depending
+            on function and purpose, we have divided data processing into different categories.
+            Please find further information on the various cookie categories at the start of this
+            panel, under "Modifications and details".
+          </p>
 
-        <h4>What do you need to know about cookies?</h4>
-        <p>
-          A cookie is a small text file that stores internet settings. Almost every website uses
-          cookies. When you visit a website for the first time, the cookies are downloaded by
-          your internet browser. The next time you visit this website using the same end device,
-          the website recognises you and displays content tailored to your personal needs and
-          interests. The cookies mentioned below are synonymous with HTML5 Session Web Storage
-          and HTML5 Local Web Storage.
-        </p>
+          <h4>What do you need to know about cookies?</h4>
+          <p>
+            A cookie is a small text file that stores internet settings. Almost every website uses
+            cookies. When you visit a website for the first time, the cookies are downloaded by
+            your internet browser. The next time you visit this website using the same end device,
+            the website recognises you and displays content tailored to your personal needs and
+            interests. The cookies mentioned below are synonymous with HTML5 Session Web Storage
+            and HTML5 Local Web Storage.
+          </p>
 
-        <h4>First-Party Cookies</h4>
-        <p>
-          First-party cookies are cookies that we, or contracted service providers, place on the
-          website and with which you interact if you continue to use our website.
-        </p>
+          <h4>First-Party Cookies</h4>
+          <p>
+            First-party cookies are cookies that we, or contracted service providers, place on the
+            website and with which you interact if you continue to use our website.
+          </p>
 
-        <h4>Third-Party Cookies</h4>
-        <p>
-          Our websites may also contain content from other providers (third-party providers),
-          who possibly use their own cookies. Third-party providers may place cookies during your
-          visit to our websites that request information like, for example, whether you loaded one
-          of our websites. Please go to the website of the third-party provider to learn more
-          about their use of cookies. You can reject cookies from third-party providers at any
-          time by using the corresponding function on our websites.
-        </p>
+          <h4>Third-Party Cookies</h4>
+          <p>
+            Our websites may also contain content from other providers (third-party providers),
+            who possibly use their own cookies. Third-party providers may place cookies during your
+            visit to our websites that request information like, for example, whether you loaded one
+            of our websites. Please go to the website of the third-party provider to learn more
+            about their use of cookies. You can reject cookies from third-party providers at any
+            time by using the corresponding function on our websites.
+          </p>
 
-        <h4>Rejecting Cookies</h4>
-        <p>
-          When you reject cookies that require your consent, we'll duly accept your decision and
-          refrain from placing the respective cookies. If you revoke your consent, we'll stop
-          placing cookies that require consent starting from your visit to the next page. We'll
-          delete any first-party cookies, insofar as this is technically possible. Please note
-          that we cannot delete third-party cookies — if you would like to delete all third-party
-          cookies, please go to your browser settings.
-        </p>
+          <h4>Rejecting Cookies</h4>
+          <p>
+            When you reject cookies that require your consent, we'll duly accept your decision and
+            refrain from placing the respective cookies. If you revoke your consent, we'll stop
+            placing cookies that require consent starting from your visit to the next page. We'll
+            delete any first-party cookies, insofar as this is technically possible. Please note
+            that we cannot delete third-party cookies. If you would like to delete all third-party
+            cookies, please go to your browser settings.
+          </p>
 
-        <h4>Cookie Management in your browser</h4>
-        <p>
-          You can manage cookie settings via the features on our website, and also through
-          changing your browser settings (enable, disable, and delete). Most browsers allow you
-          to manage cookies by either accepting or rejecting all cookies. Go to the help section
-          of your browser to learn more about how to manage and delete cookies. When you change
-          your cookie settings, certain cookies will be blocked. In this case, you may not fully
-          benefit from some features on our website.
-        </p>
-      </div>
+          <h4>Cookie Management in your browser</h4>
+          <p>
+            You can manage cookie settings via the features on our website, and also through
+            changing your browser settings (enable, disable, and delete). Most browsers allow you
+            to manage cookies by either accepting or rejecting all cookies. Go to the help section
+            of your browser to learn more about how to manage and delete cookies. When you change
+            your cookie settings, certain cookies will be blocked. In this case, you may not fully
+            benefit from some features on our website.
+          </p>
+        </div>
+      </details>
 
-    </div><!-- /.ca-s2-body -->
+    </div><!-- /.notice__scroll -->
 
-    <div class="ca-s2-footer">
-      <div class="ca-btns">
-        <button id="ca-btn-accept-selected" class="ca-btn-outline">Accept Selected</button>
-        <button id="ca-btn-accept-s2" class="ca-btn-primary">Accept All</button>
-      </div>
+    <div class="notice__foot">
+      <button id="ca-btn-accept-selected" class="btn btn-outline notice__btn">Accept selected</button>
+      <button id="ca-btn-accept-s2" class="btn btn-primary notice__btn">Accept all</button>
     </div>
-  </div><!-- /#ca-s2 -->
+  </div><!-- /.notice__register -->
 
 </div><!-- /#ca-cookie-popup -->
-
-<style>
-/* ── Outer popup — non-blocking fixed panel ── */
-#ca-cookie-popup {
-  position: fixed;
-  bottom: 1.25rem;
-  left: 50%;
-  transform: translateX(-50%) translateY(20px);
-  width: 90%;
-  max-width: 760px;
-  background: var(--color-paper-a82);
-  backdrop-filter: blur(18px) saturate(160%);
-  -webkit-backdrop-filter: blur(18px) saturate(160%);
-  border: 1px solid var(--border-glass);
-  border-radius: var(--radius-lg);
-  box-shadow: 0 8px 40px var(--color-shadow-a14), 0 2px 8px var(--color-shadow-a06);
-  z-index: 1000;
-  font-family: var(--font-system);
-  opacity: 0;
-  animation: caPanelIn 0.35s cubic-bezier(0.34, 1.2, 0.64, 1) 1.5s forwards;
-}
-
-#ca-cookie-popup.ca-hidden {
-  display: none;
-  animation: none;
-}
-
-@keyframes caPanelIn {
-  to {
-    transform: translateX(-50%) translateY(0);
-    opacity: 1;
-  }
-}
-
-/* ── State visibility ── */
-
-/* State 2 is hidden by default */
-#ca-s2 {
-  display: none;
-}
-
-/* When popup has .ca-state2: hide s1, show s2 as flex column */
-#ca-cookie-popup.ca-state2 #ca-s1 {
-  display: none;
-}
-
-#ca-cookie-popup.ca-state2 #ca-s2 {
-  display: flex;
-  flex-direction: column;
-  max-height: 70vh;
-  overflow: hidden;
-}
-
-/* ── State 1 ── */
-.ca-s1-inner {
-  padding: 1.25rem 1.375rem 1.5rem;
-}
-
-.ca-cookie-icon {
-  width: 32px;
-  height: 32px;
-  background: var(--surface-sunk);
-  border: 1px solid var(--border-default);
-  border-radius: var(--radius-md);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--color-heading);
-  margin-bottom: 0.75rem;
-}
-
-.ca-cookie-title {
-  font-size: 1rem;
-  font-weight: 800;
-  color: var(--color-heading);
-  letter-spacing: -0.01em;
-  line-height: 1.2;
-  margin-bottom: 0.375rem;
-}
-
-.ca-cookie-body {
-  font-size: 0.875rem;
-  color: var(--color-text);
-  line-height: 1.65;
-  margin-bottom: 1.25rem;
-}
-
-/* ── Shared button row ── */
-.ca-btns {
-  display: flex;
-  gap: 0.625rem;
-}
-
-.ca-btn-primary {
-  flex: 1;
-  background: var(--surface-inverse);
-  color: var(--color-on-inverse);
-  border: none;
-  border-radius: var(--radius-pill);
-  padding: 0.625rem 1rem;
-  font-size: 0.9375rem;
-  font-weight: 700;
-  font-family: var(--font-system);
-  cursor: pointer;
-  transition: opacity 0.2s;
-  text-align: center;
-}
-.ca-btn-primary:hover { opacity: 0.8; }
-
-.ca-btn-outline {
-  flex: 1;
-  background: transparent;
-  color: var(--color-heading);
-  border: 1.5px solid var(--border-default);
-  border-radius: var(--radius-pill);
-  padding: 0.625rem 1rem;
-  font-size: 0.9375rem;
-  font-weight: 700;
-  font-family: var(--font-system);
-  cursor: pointer;
-  transition: background 0.2s;
-  text-align: center;
-}
-.ca-btn-outline:hover { background: var(--surface-sunk); }
-
-/* ── State 2 layout ── */
-.ca-s2-header {
-  padding: 1rem 1.375rem 0.875rem;
-  border-bottom: 1px solid var(--border-default);
-  flex-shrink: 0;
-}
-
-.ca-s2-title {
-  font-size: 1rem;
-  font-weight: 800;
-  color: var(--color-heading);
-  letter-spacing: -0.01em;
-  margin-bottom: 0.25rem;
-}
-
-.ca-s2-sub {
-  font-size: 0.8125rem;
-  color: var(--color-text);
-  line-height: 1.55;
-}
-
-.ca-s2-body {
-  flex: 1;
-  overflow-y: auto;
-  padding: 1rem 1.375rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-.ca-s2-footer {
-  padding: 0.75rem 1.375rem 1.25rem;
-  border-top: 1px solid var(--border-default);
-  flex-shrink: 0;
-}
-
-/* ── Category cards ── */
-.ca-cat-card {
-  background: var(--surface-glass);
-  border: 1px solid var(--border-glass-strong);
-  border-radius: var(--radius-lg);
-  padding: 0.875rem 1rem;
-  transition: border-color 0.2s;
-}
-
-.ca-cat-card.ca-allowed {
-  border-color: var(--border-strong);
-}
-
-.ca-cat-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 0.5rem;
-}
-
-.ca-cat-name {
-  font-size: 0.875rem;
-  font-weight: 700;
-  color: var(--color-heading);
-}
-
-.ca-cat-desc {
-  font-size: 0.8125rem;
-  color: var(--color-text);
-  line-height: 1.55;
-}
-
-.ca-cat-link {
-  display: inline-block;
-  margin-top: 0.5rem;
-  font-size: 0.8125rem;
-  font-weight: 600;
-  color: var(--color-heading);
-  text-decoration: underline;
-  text-underline-offset: 2px;
-  text-decoration-color: var(--border-default);
-  cursor: pointer;
-}
-
-/* ── Checkbox ── */
-.ca-cb-group {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  flex-shrink: 0;
-}
-
-.ca-cb-input {
-  position: absolute;
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.ca-cb-toggle {
-  width: 38px;
-  height: 22px;
-  background: var(--surface-ghost);
-  border-radius: var(--radius-pill);
-  display: flex;
-  align-items: center;
-  padding: 3px;
-  cursor: pointer;
-  transition: background 0.25s;
-  flex-shrink: 0;
-}
-
-.ca-cb-knob {
-  width: 16px;
-  height: 16px;
-  background: var(--surface-card);
-  border-radius: var(--radius-pill);
-  box-shadow: 0 1px 4px var(--color-shadow-a25);
-  transition: transform 0.25s cubic-bezier(0.34, 1.2, 0.64, 1);
-  flex-shrink: 0;
-}
-
-.ca-cb-input:checked + .ca-cb-toggle {
-  background: var(--surface-inverse);
-}
-
-.ca-cb-input:checked + .ca-cb-toggle .ca-cb-knob {
-  transform: translateX(16px);
-}
-
-/* ── Badges ── */
-/* ── Responsible line ── */
-.ca-responsible {
-  font-size: 0.8125rem;
-  color: var(--color-text);
-  opacity: 0.65;
-}
-
-/* ── Long-form detail text ── */
-.ca-detail-text {
-  font-size: 0.8125rem;
-  color: var(--color-text);
-  line-height: 1.7;
-  padding-top: 0.25rem;
-}
-
-.ca-detail-text h4 {
-  font-size: 0.875rem;
-  font-weight: 700;
-  color: var(--color-heading);
-  margin-top: 1.25rem;
-  margin-bottom: 0.375rem;
-  line-height: 1.3;
-}
-
-.ca-detail-text h4:first-child {
-  margin-top: 0;
-}
-
-.ca-detail-text p {
-  margin-bottom: 0.5rem;
-}
-
-.ca-detail-text ul {
-  padding-left: 1.25rem;
-  margin-bottom: 0.5rem;
-}
-
-.ca-detail-text li {
-  margin-bottom: 0.25rem;
-}
-
-/* ── Mobile ── */
-@media (max-width: 640px) {
-  #ca-cookie-popup {
-    width: calc(100% - 1.5rem);
-    bottom: 0.75rem;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  #ca-cookie-popup {
-    animation: none;
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-    bottom: 1.25rem;
-  }
-}
-</style>
 
 <script>
   let trackersInjected = false;
@@ -555,41 +262,38 @@ import Badge from '@/components/ui/Badge.astro';
   if (consent === 'accepted') {
     injectTrackers();
   } else if (!consent) {
-    // First visit: remove ca-hidden to show the popup
+    // First visit: remove ca-hidden to show the notice
     document.getElementById('ca-cookie-popup')?.classList.remove('ca-hidden');
   }
-  // If 'declined', popup stays hidden (ca-hidden remains), no trackers.
+  // If 'declined', the notice stays hidden (ca-hidden remains), no trackers.
 
-  // ── State 1: "Customise / reject" → show State 2 ──
+  // ── The notice: "Customise / reject" opens the register ──
   document.getElementById('ca-btn-customise')?.addEventListener('click', () => {
-    document.getElementById('ca-cookie-popup')?.classList.add('ca-state2');
+    document.getElementById('ca-cookie-popup')?.classList.add('notice--open');
   });
 
-  // ── State 1: "Accept all" ──
+  // ── The notice: "Accept all" ──
   document.getElementById('ca-btn-accept-s1')?.addEventListener('click', () => {
     setConsent('accepted');
     injectTrackers();
     hidePopup();
   });
 
-  // ── State 2: checkbox → update badge + card border ──
+  // ── The register: the switch states itself twice, in shape and in a word ──
   const cb = document.getElementById('ca-analytics-cb') as HTMLInputElement | null;
   const badge = document.getElementById('ca-analytics-badge');
-  const card = document.getElementById('ca-analytics-card');
 
   cb?.addEventListener('change', () => {
     if (cb.checked) {
       badge?.classList.replace('badge--outline', 'badge--solid');
       if (badge) badge.textContent = 'Allowed';
-      card?.classList.add('ca-allowed');
     } else {
       badge?.classList.replace('badge--solid', 'badge--outline');
       if (badge) badge.textContent = 'Prohibited';
-      card?.classList.remove('ca-allowed');
     }
   });
 
-  // ── State 2: "Accept Selected" ──
+  // ── The register: "Accept selected" ──
   document.getElementById('ca-btn-accept-selected')?.addEventListener('click', () => {
     if (cb?.checked) {
       setConsent('accepted');
@@ -600,7 +304,7 @@ import Badge from '@/components/ui/Badge.astro';
     hidePopup();
   });
 
-  // ── State 2: "Accept All" ──
+  // ── The register: "Accept all" ──
   document.getElementById('ca-btn-accept-s2')?.addEventListener('click', () => {
     setConsent('accepted');
     injectTrackers();
