@@ -110,8 +110,7 @@ TEXT_ROLES = [
 
 # ALLOWLIST -- white-over-inverse text under AA, tracked on purpose.
 #
-# `--color-on-inverse-a35/-a40` are real text at:
-#   a35: src/pages/blog/[slug].astro:629
+# `--color-on-inverse-a40` is real text at:
 #   a40: src/components/ui/ProductCard.astro:82,
 #        src/styles/tokens/_components.scss:50 (--section-label-color-inverse)
 # Composited over this theme's `ink-900` (#131110) they measure 3.21 / 3.82 --
@@ -129,8 +128,11 @@ TEXT_ROLES = [
 #
 # (role label, alpha, minimum, allowlist reason or None)
 ALPHA_TEXT_ROLES = [
+    # a35's one call site went with the /blog/[slug] rebuild. The rung is
+    # still declared, so it is still measured -- if anything reaches for it
+    # again this row is the record of what it costs.
     ('on-inverse-a35 (--color-on-inverse-a35)', 0.35, 4.5,
-     'KNOWN -- blog/[slug].astro:629'),
+     'KNOWN -- no call sites'),
     ('on-inverse-a40 (--color-on-inverse-a40)', 0.40, 4.5,
      'KNOWN -- ProductCard.astro:82, _components.scss:50'),
     ('on-inverse-faint / a45 (--color-on-inverse-faint)', 0.45, 4.5, None),

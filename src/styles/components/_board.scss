@@ -1,0 +1,163 @@
+/* ─── /404 fold 1: the records desk ───────────────────────
+   The site files things -- entries, records, studies -- so a
+   request for a page we do not hold is a query the records desk
+   answers empty. The stand slot every other interior page fills
+   with a fact list here carries a Solari board and the slip
+   underneath it.
+
+   The board is the page's one animated device, and it animates
+   the single state change the page exists to report: it spells
+   SEARCHING, holds, then flips to NO RECORD and stops. No idle
+   loop -- a board that never lands is a board that never
+   answered. `src/pages/404.astro` drives it; under
+   prefers-reduced-motion the script writes the final state
+   without flipping and this file drops the turn.
+   ══════════════════════════════════════════════════ */
+
+/* The stand runs the full height of the head so its ink rule
+   reaches the foot, the same move .page-head--entry makes. */
+.page-head--miss .page-head__grid { align-items: stretch; }
+.page-head--miss .page-head__title { max-width: 15ch; }
+.page-head--miss .page-head__lede { max-width: 46ch; }
+
+.miss__stand {
+  display: flex;
+  flex-direction: column;
+  gap: 1.125rem;
+}
+
+/* ─── The board ────────────────────────────────────────── */
+.board {
+  background-color: var(--surface-inverse);
+  padding: 0.875rem;
+}
+
+.board__bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-on-inverse-a50);
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--color-on-inverse-a20);
+  margin-bottom: 0.875rem;
+}
+
+.board__status {
+  color: var(--color-accent-inverse);
+  font-weight: var(--weight-bold);
+  transition: color var(--duration-base) var(--ease-out);
+}
+
+.board__cells {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  gap: 3px;
+}
+
+/* Each cell is a flap. The two halves of a real one never catch
+   the light equally, and that split -- plus the seam they meet
+   on -- is what stops the row reading as text on a dark box. */
+.flap {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  perspective: 220px;
+  background-image: linear-gradient(
+    var(--ink-870) 0 50%,
+    var(--surface-inverse-raised) 50% 100%
+  );
+}
+
+.flap::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  top: 50%;
+  height: 1px;
+  background-color: rgb(0 0 0 / 0.65);
+  z-index: 2;
+}
+
+/* The turn is 70ms because the script re-triggers it on every
+   character it puts down, and anything slower reads as a fade
+   rather than a flap. */
+.flap__char {
+  font-family: var(--font-mono);
+  font-weight: var(--weight-bold);
+  font-size: clamp(0.75rem, 3.2vw, 1.5rem);
+  line-height: 1;
+  color: var(--color-on-inverse);
+  transform-origin: center center;
+  animation: flap-turn 0.07s linear;
+}
+
+@keyframes flap-turn {
+  from { transform: rotateX(-84deg); opacity: 0.3; }
+  to   { transform: rotateX(0);      opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flap__char { animation: none; }
+}
+
+/* ─── The filing slip ──────────────────────────────────────
+   The same three-row slip the entry head and the closing band
+   carry, on paper rather than ink. */
+.miss__slip {
+  margin: 0;
+  display: grid;
+  gap: 0;
+}
+
+.miss__slip div {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.875rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border-default);
+  font-size: var(--size-label);
+}
+
+/* An author-level `display: flex` beats the UA's `[hidden]`, so
+   the row the nearest-section guess hides needs its own rule. */
+.miss__slip div[hidden] { display: none; }
+
+.miss__slip dt { color: var(--color-text-muted); }
+
+.miss__slip dd {
+  margin: 0;
+  font-family: var(--font-mono);
+  color: var(--color-heading);
+  text-align: right;
+  min-width: 0;
+}
+
+/* The requested path is the one string on the page nobody here
+   wrote, so it gets room to break rather than a truncation. */
+.miss__slip code {
+  font-family: inherit;
+  font-size: inherit;
+  overflow-wrap: anywhere;
+}
+
+.miss__slip a { color: var(--color-heading); text-decoration: none; }
+.miss__slip a:hover { color: var(--color-accent); }
+
+@media (max-width: 900px) {
+  /* The stand's rule turns the corner with the grid: down the
+     left at two columns, across the top at one. */
+  .miss__stand {
+    padding-left: 0;
+    border-left: 0;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--color-heading);
+  }
+  .board__cells { gap: 2px; }
+}

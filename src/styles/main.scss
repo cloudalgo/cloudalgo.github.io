@@ -140,6 +140,11 @@
 @use 'components/prose';
 @use 'sections/entry-close';
 
+// /404 — a request the records desk cannot fill. `_board` first:
+// it is the head's device, and `_dir` is the fold under it.
+@use 'components/board';
+@use 'components/dir';
+
 @use 'base/motion';
 @use 'utilities/grid';
 @use 'components/schedule-widget';

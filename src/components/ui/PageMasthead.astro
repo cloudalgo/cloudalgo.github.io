@@ -8,6 +8,11 @@
  * bottom-aligned -- so /products/, /services/, /case-studies/ and
  * /blog/ all open on the same shape rather than four near-misses.
  *
+ * The right-hand column is a slot, not a fixed fact list: pass `facts`
+ * for the ruled dl every index uses, or fill the `stand` slot to put
+ * something else in that position (/404 puts a board there). Passing
+ * both is a mistake, so the slot wins and the facts are ignored.
+ *
  * Emphasis in the title is the site's one hero device: wrap the phrase
  * in `<span class="mark mark--draw">`. The approved mock draws a crayon
  * stroke under the phrase instead; the ember mark is what shipped on
@@ -31,11 +36,14 @@ export interface Fact {
 
 interface Props {
   crumbs: Crumb[];
-  /** The bordered dl beside the headline. Omit for a head with no facts. */
+  /** The bordered dl beside the headline. Omit for a head with no facts,
+      or fill the `stand` slot to put something else in its place. */
   facts?: Fact[];
   class?: string;
+  /** Goes on the stand itself, for a page that fills the slot. */
+  standClass?: string;
 }
-const { crumbs, facts = [], class: className } = Astro.props;
+const { crumbs, facts = [], class: className, standClass } = Astro.props;
 ---
 <header class:list={['page-head', className]}>
   <Breadcrumb items={crumbs} separator="/" class="page-head__crumbs" />
@@ -55,7 +63,9 @@ const { crumbs, facts = [], class: className } = Astro.props;
       )}
     </div>
 
-    {facts.length > 0 && (
+    {Astro.slots.has('stand') ? (
+      <div class:list={['page-head__stand', standClass]}><slot name="stand" /></div>
+    ) : facts.length > 0 && (
       <div class="page-head__stand">
         <dl>
           {facts.map((f) => (

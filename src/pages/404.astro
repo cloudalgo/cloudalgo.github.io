@@ -1,23 +1,236 @@
 ---
-import Page from '../layouts/Page.astro';
-import Button from '../components/ui/Button.astro';
+/**
+ * The page for an address we do not hold.
+ *
+ * The site files things -- entries are filed, studies are records, every
+ * interior page carries a slip -- so a 404 here is a query the records
+ * desk answers empty rather than an apology with a big grey numeral. The
+ * head reports the miss on a Solari board sitting in the slot every other
+ * masthead fills with a fact list; the register below lists what IS held.
+ *
+ * Every count in that register is read off the collections at build time,
+ * for the same reason the journal's stand is: a fifth product would
+ * otherwise leave this page telling a reader there are four.
+ */
+import Page from '@/layouts/Page.astro';
+import PageMasthead from '@/components/ui/PageMasthead.astro';
+import { getCollection } from 'astro:content';
+import { caseStudies } from '@/data/case-studies';
+
+const [posts, services, products] = await Promise.all([
+  getCollection('blog', ({ data }) => data.published),
+  getCollection('services'),
+  getCollection('products', ({ data }) => data.published),
+]);
+
+/** Two figures wide, so the counts stack into a column rather than a
+    ragged edge. Tabular numerals do the rest. */
+const pad = (n: number) => String(n).padStart(2, '0');
+
+const register = [
+  {
+    href: '/blog/',
+    name: 'The journal',
+    count: posts.length,
+    what: 'Write-ups of the work — integration patterns, Apex, Heroku, and the tooling we build for our own jobs.',
+  },
+  {
+    href: '/case-studies/',
+    name: 'Case studies',
+    count: caseStudies.length,
+    what: 'Engagements stated as what each one was before and what it is now.',
+  },
+  {
+    href: '/services/',
+    name: 'Services',
+    count: services.length,
+    what: 'How an engagement is shaped, what a week inside one looks like, and where it ends.',
+  },
+  {
+    href: '/products/',
+    name: 'Products',
+    count: products.length,
+    what: 'The things we sell, each with the spec sheet it is held to.',
+  },
+];
+
+const onFile = register.reduce((sum, r) => sum + r.count, 0);
+
+/* The board is nine cells because NO RECORD is nine characters. */
+const CELLS = 9;
 ---
 <Page
-  title="Page Not Found — CloudAlgo"
-  description="That page doesn't exist or has moved. Head back to CloudAlgo — Salesforce & Heroku consulting, products, and case studies."
+  title="Not on file — CloudAlgo"
+  description="Nothing is filed at this address. The register lists everything CloudAlgo does hold: the journal, the case studies, the services and the products."
 >
-  <section style="background:var(--surface-page);min-height:80vh;display:flex;align-items:center;justify-content:center;padding:6rem 1.5rem;text-align:center;">
-    <div>
-      <div class="stat-num stat-num--hero stat-num--tighter stat-num--ghost" style="user-select:none;" aria-hidden="true">
-        404
+  <PageMasthead
+    class="page-head--miss"
+    standClass="miss__stand"
+    crumbs={[{ label: 'Home', href: '/' }, { label: 'Not found' }]}
+  >
+    <Fragment slot="title">
+      Nothing is <span class="mark mark--draw">filed</span> at this address.
+    </Fragment>
+    <Fragment slot="lede">
+      Either the address was mistyped, or the page moved when we rebuilt the site.
+      The register below is everything we actually hold.
+    </Fragment>
+    <Fragment slot="actions">
+      <a href="/" class="btn btn-primary">Back to the front page &rarr;</a>
+      <a href="/blog/" class="btn btn-outline">Open the journal</a>
+    </Fragment>
+
+    <Fragment slot="stand">
+      <div class="board">
+        <div class="board__bar">
+          <span>Records desk</span>
+          <span class="board__status" id="board-status">Query</span>
+        </div>
+        <div class="board__cells" id="board-cells" role="img" aria-label="No record">
+          {Array.from({ length: CELLS }, () => (
+            <span class="flap"><span class="flap__char"></span></span>
+          ))}
+        </div>
       </div>
-      <h1 style="font-size:clamp(1.75rem,3vw,2.5rem);font-weight:800;color:var(--color-heading);margin:1rem 0 0.75rem;letter-spacing:-0.03em;">
-        Page not found
-      </h1>
-      <p style="color:var(--color-text);font-size:1rem;margin-bottom:2.5rem;max-width:380px;margin-left:auto;margin-right:auto;">
-        That page doesn't exist or has moved. Let's get you back on track.
-      </p>
-      <Button href="/" variant="primary">Back to home &rarr;</Button>
+
+      <dl class="miss__slip">
+        <div>
+          <dt>Requested</dt>
+          <dd><code id="miss-path">this address</code></dd>
+        </div>
+        <div>
+          <dt>Status</dt>
+          <dd>404 &middot; not on file</dd>
+        </div>
+        {/* Hidden until the script has a section to name. A guess we
+            cannot make is a row we do not print. */}
+        <div id="miss-near" hidden>
+          <dt>Nearest</dt>
+          <dd><a id="miss-near-link" href="/">&nbsp;</a></dd>
+        </div>
+      </dl>
+    </Fragment>
+  </PageMasthead>
+
+  <section class="section-press" aria-labelledby="dir-heading">
+    <div class="section-press__head anim-fade-up">
+      <h2 id="dir-heading" class="section-title section-press__title">What is filed</h2>
+      <span class="dir__meta">{onFile} items on file</span>
     </div>
+
+    <ul class="dir">
+      {register.map((r, i) => (
+        <li class="dir__row anim-fade-up" style={`--i:${i}`}>
+          <a class="dir__link" href={r.href}>
+            <span class="dir__n">{pad(r.count)}</span>
+            <span class="dir__name link-draw">{r.name}</span>
+            <span class="dir__what">{r.what}</span>
+            <span class="dir__go" aria-hidden="true">&rarr;</span>
+          </a>
+        </li>
+      ))}
+      <li class="dir__foot anim-fade-up" style={`--i:${register.length}`}>
+        <span>Or read who does the work, or send us a line.</span>
+        <span class="dir__foot-links">
+          <a class="link-draw" href="/about/">About the firm</a>
+          <a class="link-draw" href="/contact/">Contact</a>
+        </span>
+      </li>
+    </ul>
   </section>
 </Page>
+
+<script>
+  /* The board, and the two lines of the slip only the browser knows.
+
+     GitHub Pages serves this file at whatever address was asked for, so
+     `location.pathname` IS the missing record -- it is printed, never
+     interpolated into markup, so a crafted URL cannot write anything but
+     text into the slip. */
+  const cells = Array.from(
+    document.querySelectorAll<HTMLElement>('#board-cells .flap__char'),
+  );
+
+  const pathEl = document.getElementById('miss-path');
+  if (pathEl) pathEl.textContent = location.pathname;
+
+  /* The first segment of the path against the sections we hold. A miss
+     under /blog/ is nearly always a renamed entry, so the journal is a
+     real answer; no match at all is not, and the row stays hidden. */
+  const NEAREST: Record<string, { label: string; href: string }> = {
+    'blog':          { label: 'The journal',  href: '/blog/' },
+    'case-studies':  { label: 'Case studies', href: '/case-studies/' },
+    'services':      { label: 'Services',     href: '/services/' },
+    'products':      { label: 'Products',     href: '/products/' },
+    'apps':          { label: 'Products',     href: '/products/' },
+    'about':         { label: 'About',        href: '/about/' },
+    'contact':       { label: 'Contact',      href: '/contact/' },
+  };
+
+  const segment = location.pathname.split('/').filter(Boolean)[0] ?? '';
+  const near = NEAREST[segment];
+  const nearRow = document.getElementById('miss-near');
+  const nearLink = document.getElementById('miss-near-link') as HTMLAnchorElement | null;
+  if (near && nearRow && nearLink) {
+    nearLink.href = near.href;
+    nearLink.textContent = `${near.label} →`;
+    nearRow.hidden = false;
+  }
+
+  const status = document.getElementById('board-status');
+  const POOL = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /** One character onto one flap, re-triggering the turn. Reassigning
+      `animation` after a reflow is what restarts a CSS animation that is
+      already at its end state. */
+  const put = (el: HTMLElement, ch: string) => {
+    el.textContent = ch === ' ' ? '' : ch;
+    if (reduce) return;
+    el.style.animation = 'none';
+    void el.offsetWidth;
+    el.style.animation = '';
+  };
+
+  const spread = (word: string) =>
+    word.padEnd(cells.length, ' ').slice(0, cells.length).split('');
+
+  const write = (word: string) => spread(word).forEach((ch, i) => put(cells[i], ch));
+
+  /** Spins each flap a few times before it settles, staggered left to
+      right so the row lands the way a real board does. */
+  const flip = (word: string, done?: () => void) => {
+    const chars = spread(word);
+    let left = cells.length;
+    cells.forEach((el, i) => {
+      let spins = 4 + (i % 5);
+      const tick = () => {
+        if (spins <= 0) {
+          put(el, chars[i]);
+          if ((left -= 1) === 0) done?.();
+          return;
+        }
+        put(el, POOL[Math.floor(Math.random() * POOL.length)]);
+        spins -= 1;
+        window.setTimeout(tick, 62);
+      };
+      window.setTimeout(tick, i * 55);
+    });
+  };
+
+  if (cells.length) {
+    if (reduce) {
+      write('NO RECORD');
+      if (status) status.textContent = '404';
+    } else {
+      /* It lands and stops. A board still turning is a query still open,
+         and this one has its answer. */
+      flip('SEARCHING', () =>
+        window.setTimeout(() => {
+          if (status) status.textContent = '404';
+          flip('NO RECORD');
+        }, 900),
+      );
+    }
+  }
+</script>

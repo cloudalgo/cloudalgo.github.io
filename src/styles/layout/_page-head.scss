@@ -73,7 +73,10 @@
   gap: 0;
 }
 
-.page-head__stand div {
+/* `dl >` and not a bare `div`: the stand is a slot, and /404 fills it
+   with a board rather than a fact list. Left unqualified, these rows
+   land on whatever is put in there. */
+.page-head__stand dl > div {
   display: flex;
   justify-content: space-between;
   gap: 0.875rem;
