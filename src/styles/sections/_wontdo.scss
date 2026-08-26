@@ -1,0 +1,69 @@
+/* The refusals: what /about/ turns down to hold its one rule.
+
+   No rules, no numerals, no eyebrow. The heading hangs in the left
+   column at body scale while the refusals run at display scale in the
+   right -- the smallest type in the fold labels it and the biggest type
+   in the fold carries it. Numbering was tried and cut: these four are
+   not a sequence, they are a set, and 01-04 would have been decoration
+   standing in for structure. */
+
+.wontdo {
+  display: grid;
+  grid-template-columns: minmax(0, 14rem) minmax(0, 1fr);
+  gap: 0 3.5rem;
+}
+
+.wontdo__lead {
+  margin: 0;
+  align-self: start;
+  position: sticky;
+  top: calc(var(--header-h) + 2rem);
+  font-family: var(--font-heading);
+  font-size: var(--size-body-lg);
+  font-weight: var(--weight-bold);
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+  color: var(--color-heading);
+  text-wrap: balance;
+}
+
+.wontdo__list { display: grid; gap: 3rem; }
+
+.wontdo__say {
+  margin: 0;
+  max-width: 24ch;
+  font-family: var(--font-heading);
+  font-weight: var(--weight-bold);
+  font-size: clamp(1.65rem, 2.7vw, 2.05rem);
+  line-height: 1.14;
+  letter-spacing: -0.026em;
+  color: var(--color-heading);
+  text-wrap: balance;
+}
+
+/* "We will not" is the same four words every time, so it drops to the
+   muted ink and lets the eye land on the clause that changes. */
+.wontdo__say b {
+  font-weight: var(--weight-regular);
+  color: var(--color-text-muted);
+}
+
+.wontdo__cost {
+  margin: 0.875rem 0 0;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.wontdo__cost span { color: var(--color-text-faint); }
+
+@media (max-width: 900px) {
+  .wontdo { grid-template-columns: minmax(0, 1fr); gap: 1.5rem; }
+  .wontdo__lead { position: static; }
+}
+
+@media (max-width: 640px) {
+  .wontdo__list { gap: 2.25rem; }
+}

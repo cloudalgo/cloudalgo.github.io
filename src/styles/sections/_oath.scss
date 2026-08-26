@@ -1,0 +1,64 @@
+/* The oath: the one rule, full bleed, on /about/.
+
+   The only ink on that page, and the only fold with no heading, no list
+   and no link. /services/ closes on a band like this; that one is a
+   two-column argument with a numbered list, this one is a single
+   sentence. Same ground, opposite job -- which is the point of spending
+   the page's boldness in exactly one place. */
+
+.oath {
+  background: var(--surface-inverse);
+  color: var(--color-on-inverse);
+  /* Padded to the container gutter so the sentence starts on the same
+     vertical as every heading above and below it, while the ink itself
+     runs edge to edge. */
+  padding: 5.5rem var(--container-pad) 4.75rem;
+}
+
+.oath__inner {
+  max-width: var(--container-max);
+  margin-inline: auto;
+}
+
+/* Deliberately larger than any h2 the site ships -- --display-3xl tops
+   out at 3.5rem and this goes past it. One thing on the page is allowed
+   to be the biggest thing on the page. */
+.oath__say {
+  margin: 0;
+  max-width: 22ch;
+  /* The global h2 rule paints --color-heading, which is this band's own
+     background. Stated here rather than inherited from .oath. */
+  color: var(--color-on-inverse);
+  font-family: var(--font-heading);
+  font-weight: var(--weight-extrabold);
+  font-size: clamp(2.3rem, 4.6vw, 4rem);
+  line-height: 1.06;
+  letter-spacing: -0.032em;
+  text-wrap: balance;
+}
+
+/* The ember is the site's decisive marker. Here it lands on the clause
+   that is the actual promise -- the rest of the sentence is setup. */
+.oath__say em {
+  font-style: normal;
+  color: var(--color-accent);
+}
+
+.oath__sign {
+  display: block;
+  margin-top: 2.5rem;
+  padding-top: 0.875rem;
+  border-top: 1px solid var(--border-on-inverse);
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-on-inverse-muted);
+}
+
+@media (max-width: 900px) {
+  .oath {
+    padding-top: 4rem;
+    padding-bottom: 3.5rem;
+  }
+}

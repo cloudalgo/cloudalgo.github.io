@@ -34,7 +34,6 @@
 // ── Page sections ─────────────────────────────────────────
 @use 'sections/hero';
 @use 'sections/hero-press';
-@use 'sections/about';
 @use 'components/mark';
 @use 'components/section-label';
 @use 'components/badge';
@@ -110,6 +109,12 @@
 @use 'sections/cases-press';
 @use 'sections/journal-press';
 @use 'sections/industries';
+
+// /about/ — one layout family per fold; see each partial's header.
+@use 'sections/oath';
+@use 'sections/bench';
+@use 'sections/wontdo';
+@use 'sections/tenure';
 @use 'components/forms';
 
 @use 'base/motion';

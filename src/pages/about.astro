@@ -1,305 +1,260 @@
 ---
-import Page from '../layouts/Page.astro';
-import StatsBar from '../components/sections/StatsBar.astro';
-import PageHeader from '@/components/ui/PageHeader.astro';
-import Button from '../components/ui/Button.astro';
-import SectionLabel from '../components/ui/SectionLabel.astro';
+/**
+ * /about/ — one layout family per fold, and a ground that changes
+ * underneath them.
+ *
+ * The brief for this page was that its previous draft was four folds of
+ * one texture (ruled head + mono note + ruled rows), which is the
+ * texture every other index page already uses. So no two folds here
+ * share an arrangement:
+ *
+ *   .page-head  paper  masthead + standing data column
+ *   .oath       ink    one sentence, full bleed, nothing else
+ *   .bench      paper  image-led two-up, the only faces on the site
+ *   .wontdo     paper  hanging heading, display type, no rules
+ *   .tenure     sunk   a measured chart, not a list
+ *
+ * The chart's rows are derived from `@/data/case-studies` rather than
+ * written down -- sector, length and open state all come from each
+ * study's own ledger, so a sixth study cannot leave this page claiming
+ * five, and a study whose duration changes cannot leave a bar behind.
+ * The one string per row this file owns is the sub-label, which is
+ * copy, and the build throws if it names a study that has no row.
+ */
+import Page from '@/layouts/Page.astro';
+import PageMasthead from '@/components/ui/PageMasthead.astro';
+import Button from '@/components/ui/Button.astro';
+import { caseStudies } from '@/data/case-studies';
+
+/* The chart axis. Eight months holds the three closed engagements with
+   room left, and the two open ones run past it on purpose. */
+const AXIS_MONTHS = 8;
+
+/* The one line per row this page writes: what the engagement was, in
+   the words a reader scanning the chart needs. The platform half of
+   `ledger.tags` ("Salesforce & Heroku") names the stack, not the job. */
+const SUBTITLES: Record<string, string> = {
+  'salesforce-emr-sync': 'Salesforce to EMR sync',
+  'salesforce-netsuite-sync': 'Salesforce to NetSuite sync',
+  'health-portal-mulesoft-integration': 'Portal, Salesforce and logistics',
+  'enterprise-data-pipeline': 'CRM and ERP into one pipeline',
+  'nonprofit-web-platform': 'Platform rebuild, CRM connected',
+};
+
+const ids = new Set(caseStudies.map((c) => c.id));
+for (const id of Object.keys(SUBTITLES)) {
+  if (!ids.has(id)) {
+    throw new Error(`about.astro: the tenure chart labels "${id}", which has no study.`);
+  }
+}
+
+const rows = caseStudies.map((c) => {
+  const label = SUBTITLES[c.id];
+  if (!label) {
+    throw new Error(`about.astro: study "${c.id}" has no tenure sub-label.`);
+  }
+  const months = Number(c.ledger.when.match(/^(\d+) months?$/)?.[1]);
+  const open = Number.isNaN(months);
+  /* An open engagement's length is whatever its duration states in
+     full -- "Ongoing (2+ years)" is a claim, "Ongoing engagement" is
+     not, and the chart must not invent the difference. */
+  const span = c.duration.match(/\(([^)]+)\)/)?.[1];
+  return {
+    href: `/case-studies/${c.id}/`,
+    sector: c.ledger.tags.split(' · ')[0],
+    label,
+    open,
+    months,
+    span,
+    length: open ? (span ?? 'Still running') : c.ledger.when,
+    width: open ? undefined : `${(months / AXIS_MONTHS) * 100}%`,
+  };
+});
+
+/* Closed engagements ascend; the open ones follow, the unquantified one
+   before the one that states a span, so the axis keeps climbing. */
+rows.sort((a, b) => {
+  if (a.open !== b.open) return a.open ? 1 : -1;
+  if (a.open) return (a.span ? 1 : 0) - (b.span ? 1 : 0);
+  return a.months - b.months;
+});
+
+const closed = rows.filter((r) => !r.open);
+const openRows = rows.filter((r) => r.open);
+const longestClosed = Math.max(...closed.map((r) => r.months));
+const stated = openRows.find((r) => r.span);
+if (!stated) {
+  throw new Error('about.astro: the chart footnote cites an open engagement with a stated span, and none has one.');
+}
+
+/* Counting words rather than digits, because the sentence is prose --
+   and counted here so the footnote cannot drift from the chart. */
+const WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
+const word = (n: number) => WORDS[n] ?? String(n);
+const Word = (n: number) => {
+  const w = word(n);
+  return w.charAt(0).toUpperCase() + w.slice(1);
+};
 ---
+
 <Page
-  title="About Us — CloudAlgo | Certified Salesforce Consulting Partner"
-  description="Meet the CloudAlgo team — a certified Salesforce & Heroku consulting firm founded in 2019. 70+ projects delivered for 15+ clients worldwide with clean, scalable implementations."
+  title="About CloudAlgo — small on purpose since 2019"
+  description="A Salesforce and Heroku consulting partner in Jaipur. Two co-founders, one rule we build against, the work we turn down to hold it, and how long our engagements actually last."
 >
 
-  <!-- Page header -->
-  <PageHeader
-    crumbs={[{ label: 'Home', href: '/' }, { label: 'About Us' }]}
-    title="We're a small, focused team<br/>of Salesforce architects."
-  />
+  <PageMasthead
+    crumbs={[{ label: 'Home', href: '/' }, { label: 'About' }]}
+    facts={[
+      { term: 'Founded',     detail: '2019' },
+      { term: 'Studio',      detail: 'Jaipur, India' },
+      { term: 'Partner',     detail: 'Salesforce Consulting Partner' },
+      { term: 'Projects',    detail: '70+ for 15+ clients' },
+      { term: 'First reply', detail: 'Within one working day' },
+    ]}
+  >
+    <Fragment slot="title">
+      Since 2019, and still <span class="mark mark--draw">small on purpose</span>.
+    </Fragment>
+    <Fragment slot="lede">
+      A Salesforce and Heroku consulting partner working out of Jaipur. Seventy-plus projects,
+      fifteen-plus clients, four products of our own. What follows is the part most consultancies
+      leave out &mdash; the one rule we build against, the work we turn down to hold it, and how
+      long the engagements actually last.
+    </Fragment>
+    <Fragment slot="actions">
+      <Button href="/contact/" variant="primary" size="sm">Tell us what your org is doing wrong &rarr;</Button>
+      <Button href="/case-studies/" variant="outline" size="sm">Read the {word(caseStudies.length)} studies</Button>
+    </Fragment>
+  </PageMasthead>
 
-  <!-- About content -->
-  <section style="background:var(--surface-card);padding:5rem 0;border-bottom:1px solid var(--border-default);">
-    <div class="container">
-      <div class="row align-items-center" style="gap:3rem 0;">
-        <div class="col-lg-5">
-          <!-- Decorative stat block -->
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
-            {[
-              { number: '70+', label: 'Projects delivered' },
-              { number: '12+', label: 'Years combined experience' },
-              { number: '15+', label: 'Happy clients' },
-              { number: '2019', label: 'Year founded' },
-            ].map(stat => (
-              <div style="background:var(--surface-sunk);border:1px solid var(--border-default);border-radius:12px;padding:1.5rem;">
-                <div class="stat-num stat-num--lg stat-num--leading-inherit">{stat.number}</div>
-                <div class="stat-label stat-label--md" style="margin-top:0.25rem;">{stat.label}</div>
-              </div>
-            ))}
-          </div>
+  <section class="oath" aria-labelledby="oath-heading">
+    <div class="oath__inner anim-fade-up">
+      <h2 id="oath-heading" class="oath__say">
+        Every org we hand back is one your own admin can change <em>without calling us</em>.
+      </h2>
+      <span class="oath__sign">One rule, held since 2019</span>
+    </div>
+  </section>
+
+  <section class="section-press" aria-labelledby="bench-heading">
+    <div class="bench__head anim-fade-up">
+      <h2 id="bench-heading" class="bench__lead">Two people sign the work.</h2>
+      <p class="bench__note">
+        CloudAlgo has two co-founders, and both of them are on the build. Whoever you speak to on
+        the first call is one of the two people who will be in your org, and neither of us has
+        stopped writing Apex.
+      </p>
+    </div>
+
+    <div class="bench anim-fade-up">
+      <div class="bench__who">
+        {/* The portrait is a specified empty frame, not stock and not an
+            initials disc: a placeholder that looks finished is a
+            placeholder that ships by accident. */}
+        <div class="bench__shot" role="img" aria-label="Portrait of Sandeep Kumar to be supplied">
+          <span>Portrait</span>
+          <b>4:5 &middot; to supply</b>
         </div>
-        <div class="col-lg-7">
-          <SectionLabel>Our story</SectionLabel>
-          <h2 class="section-title section-title--xs" style="margin-bottom:1.5rem;line-height:1.2;">
-            We help businesses get more out of their Salesforce investment.
-          </h2>
-          <p class="paragraph-large" style="margin-bottom:1.25rem;">
-            CloudAlgo is a certified Salesforce &amp; Heroku consulting team. We work closely with
-            clients to understand their business processes and build solutions that actually hold up —
-            no over-engineered orgs, no technical debt for the next team to clean up.
-          </p>
-          <p class="paragraph-large" style="margin-bottom:1.25rem;">
-            Our approach is collaborative. We take time to deeply understand your goals, then we
-            suggest customized solutions tailored to your specific needs. We believe clean architecture
-            and on-time delivery aren't trade-offs — they're both achievable.
-          </p>
-          <p class="paragraph-large">
-            From CRM implementation to AppExchange product development, MuleSoft integrations,
-            and Heroku application development — we cover the full Salesforce ecosystem.
-          </p>
-          <Button href="/contact" variant="primary" style="margin-top:2rem;">
-            Work with us &rarr;
-          </Button>
+        <h3 class="bench__name">Sandeep Kumar
+          <span class="bench__since">Co-founder &middot; certified since 2014</span>
+        </h3>
+        <p class="bench__role">
+          Fifteen-plus years in software, based in Jaipur. Holds the architect-track certifications
+          the integration work leans on &mdash; integration architecture, and sharing and
+          visibility. Writes apex-lint, and builds OrgVitals.
+        </p>
+        <p class="bench__certs">Integration Architecture Designer<em>2019</em><i>&middot;</i>Sharing and Visibility Designer<em>2019</em><i>&middot;</i>Platform App Builder<em>2018</em><i>&middot;</i>Administrator<em>2014</em><i>&middot;</i>Force.com Developer<em>2014</em><i>&middot;</i>Force.com Advanced Developer<i>&middot;</i>Sales Cloud Consultant<i>&middot;</i>Service Cloud Consultant</p>
+      </div>
+
+      <div class="bench__who">
+        <div class="bench__shot" role="img" aria-label="Portrait of Vikash Agarwal to be supplied">
+          <span>Portrait</span>
+          <b>4:5 &middot; to supply</b>
+        </div>
+        <h3 class="bench__name">Vikash Agarwal
+          <span class="bench__since">Co-founder &middot; certified since 2016</span>
+        </h3>
+        <p class="bench__role">
+          Fifteen-plus years in software, also in Jaipur. Holds the mobile solutions architecture
+          certification, and writes on Apex and on Salesforce security. Builds OrgVitals and
+          Pledgivo.
+        </p>
+        <p class="bench__certs">Mobile Solutions Architecture Designer<em>2017</em><i>&middot;</i>Administrator<em>2017</em><i>&middot;</i>Platform Developer I<em>2016</em></p>
+      </div>
+
+      <div class="bench__foot">
+        <span class="bench__key">What we build on</span>
+        <p class="bench__run">Salesforce<i>&middot;</i>Heroku<i>&middot;</i>MuleSoft<i>&middot;</i>Apex<i>&middot;</i>LWC<i>&middot;</i>SOQL<i>&middot;</i>REST / SOAP APIs<i>&middot;</i>Node.js<i>&middot;</i>PostgreSQL<i>&middot;</i>AWS</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-press" aria-labelledby="wontdo-heading">
+    <div class="wontdo anim-fade-up">
+      <h2 id="wontdo-heading" class="wontdo__lead">
+        Four things we will not do, and what each one costs us.
+      </h2>
+      <div class="wontdo__list">
+        <div>
+          <p class="wontdo__say"><b>We will not</b> build anything your admin cannot change without us.</p>
+          <p class="wontdo__cost"><span>Costs us</span> &mdash; the change requests</p>
+        </div>
+        <div>
+          <p class="wontdo__say"><b>We will not</b> quote before we have been inside the org.</p>
+          <p class="wontdo__cost"><span>Costs us</span> &mdash; a slower first invoice</p>
+        </div>
+        <div>
+          <p class="wontdo__say"><b>We will not</b> write Apex where configuration would have held.</p>
+          <p class="wontdo__cost"><span>Costs us</span> &mdash; the billable hours</p>
+        </div>
+        <div>
+          <p class="wontdo__say"><b>We will not</b> leave without the handover.</p>
+          <p class="wontdo__cost"><span>Costs us</span> &mdash; the second engagement</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Industries -->
-  <section style="background:var(--surface-page);padding:5rem 0;border-bottom:1px solid var(--border-default);">
-    <div class="container">
-      <SectionLabel class="anim-fade-up">Expertise</SectionLabel>
-      <h2 class="section-title section-title--lg anim-fade-up" style="margin-bottom:3rem;transition-delay:0.05s;">
-        Industries we serve
-      </h2>
-      <div class="row">
-
-        <div class="indutries-card col-6 col-lg-3 col-md-4 align-items-stretch anim-scale-pop" style="transition-delay:0s;">
-          <div class="card indutries-card-bg">
-            <div class="indutries-card-icon">
-              <svg width="40" height="40" viewBox="0 0 91 90" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 20.25C9.5 18.4598 10.2112 16.7429 11.477 15.477C12.7429 14.2112 14.4598 13.5 16.25 13.5H74.75C76.3441 13.4976 77.8875 14.0595 79.1071 15.0861C80.3266 16.1127 81.1434 17.5377 81.4129 19.1089C81.6824 20.68 81.3871 22.2958 80.5794 23.6701C79.7718 25.0444 78.5037 26.0885 77 26.6175V54H72.5V27H18.5V72H23V56.25C23 55.6533 23.2371 55.081 23.659 54.659C24.081 54.2371 24.6533 54 25.25 54H43.25C43.6831 53.9997 44.1071 54.1243 44.4711 54.359C44.835 54.5937 45.1236 54.9284 45.302 55.323C43.9874 56.127 42.9014 57.2552 42.1481 58.5995C41.3948 59.9438 40.9995 61.4591 41 63V58.5H27.5V72H41V76.5H16.25C15.6533 76.5 15.081 76.263 14.659 75.841C14.2371 75.419 14 74.8467 14 74.25V26.6175C12.6834 26.152 11.5436 25.2896 10.7376 24.1492C9.93168 23.0088 9.49927 21.6465 9.5 20.25ZM16.25 18C15.6533 18 15.081 18.2371 14.659 18.659C14.2371 19.081 14 19.6533 14 20.25C14 20.8467 14.2371 21.419 14.659 21.841C15.081 22.263 15.6533 22.5 16.25 22.5H74.75C75.3467 22.5 75.919 22.263 76.341 21.841C76.7629 21.419 77 20.8467 77 20.25C77 19.6533 76.7629 19.081 76.341 18.659C75.919 18.2371 75.3467 18 74.75 18H16.25Z" fill="currentColor"/></svg>
-            </div>
-            <p class="indutries-card-text">Retail</p>
-          </div>
-        </div>
-
-        <div class="indutries-card col-6 col-lg-3 col-md-4 align-items-stretch anim-scale-pop" style="transition-delay:0.05s;">
-          <div class="card indutries-card-bg">
-            <div class="indutries-card-icon">
-              <svg width="40" height="40" viewBox="0 0 91 91" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M68.2498 75.8343L82.7491 61.335C83.1759 60.9087 83.4159 60.3305 83.4164 59.7273V39.8135C83.4164 38.3051 82.8172 36.8584 81.7506 35.7918C80.684 34.7252 79.2373 34.126 77.7289 34.126C76.2205 34.126 74.7739 34.7252 73.7073 35.7918C72.6406 36.8584 72.0414 38.3051 72.0414 39.8135V56.876M22.7498 75.8343L8.25046 61.335C7.8237 60.9087 7.58366 60.3305 7.58313 59.7273V39.8135C7.58313 38.3051 8.18235 36.8584 9.24896 35.7918C10.3156 34.7252 11.7622 34.126 13.2706 34.126C14.779 34.126 16.2257 34.7252 17.2923 35.7918C18.3589 36.8584 18.9581 38.3051 18.9581 39.8135V56.876M51.8205 45.5008H39.1791V36.6549H30.3331V24.0134H39.1791V15.1675H51.8205V24.0134H60.6665V36.6549H51.8205V45.5008Z" stroke="currentColor" stroke-width="5.6875" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </div>
-            <p class="indutries-card-text">Healthcare</p>
-          </div>
-        </div>
-
-        <div class="indutries-card col-6 col-lg-3 col-md-4 align-items-stretch anim-scale-pop" style="transition-delay:0.1s;">
-          <div class="card indutries-card-bg">
-            <div class="indutries-card-icon">
-              <svg width="40" height="40" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M38 39.375V30M45.5 82.5C66.2112 82.5 83 65.7112 83 45C83 24.2888 66.2112 7.5 45.5 7.5C24.7888 7.5 8 24.2888 8 45C8 65.7112 24.7888 82.5 45.5 82.5ZM53 39.375V30V39.375Z" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M45.5 82.5V60M45.5 60C49.4782 60 53.2936 58.4196 56.1066 55.6066C58.9196 52.7936 60.5 48.9782 60.5 45V39.375H30.5V45C30.5 48.9782 32.0804 52.7936 34.8934 55.6066C37.7064 58.4196 41.5218 60 45.5 60Z" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </div>
-            <p class="indutries-card-text">Energy &amp; Utilities</p>
-          </div>
-        </div>
-
-        <div class="indutries-card col-6 col-lg-3 col-md-4 align-items-stretch anim-scale-pop" style="transition-delay:0.15s;">
-          <div class="card indutries-card-bg">
-            <div class="indutries-card-icon">
-              <svg width="40" height="40" viewBox="0 0 90 90" fill="none"><path d="M45 10 L80 25 L80 50 C80 68 64 83 45 88 C26 83 10 68 10 50 L10 25 Z" stroke="currentColor" stroke-width="4" fill="none" stroke-linejoin="round"/><path d="M32 45 L40 53 L58 35" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </div>
-            <p class="indutries-card-text">Insurance</p>
-          </div>
-        </div>
-
-        <div class="indutries-card col-6 col-lg-3 col-md-4 align-items-stretch anim-scale-pop" style="transition-delay:0.2s;">
-          <div class="card indutries-card-bg">
-            <div class="indutries-card-icon">
-              <svg width="40" height="40" viewBox="0 0 90 90" fill="none"><rect x="8" y="8" width="30" height="30" rx="4" stroke="currentColor" stroke-width="4"/><rect x="52" y="8" width="30" height="30" rx="4" stroke="currentColor" stroke-width="4"/><path d="M8 52h74M45 8v74" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></svg>
-            </div>
-            <p class="indutries-card-text">Services</p>
-          </div>
-        </div>
-
-        <div class="indutries-card col-6 col-lg-3 col-md-4 align-items-stretch anim-scale-pop" style="transition-delay:0.25s;">
-          <div class="card indutries-card-bg">
-            <div class="indutries-card-icon">
-              <svg width="40" height="40" viewBox="0 0 90 90" fill="none"><path d="M30 45 A15 15 0 1 1 60 45 A15 15 0 1 1 30 45Z" stroke="currentColor" stroke-width="4"/><path d="M45 30 V10 M45 60 V80 M30 45 H10 M60 45 H80" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></svg>
-            </div>
-            <p class="indutries-card-text">Pharma</p>
-          </div>
-        </div>
-
-        <div class="indutries-card col-6 col-lg-3 col-md-4 align-items-stretch anim-scale-pop" style="transition-delay:0.3s;">
-          <div class="card indutries-card-bg">
-            <div class="indutries-card-icon">
-              <svg width="40" height="40" viewBox="0 0 90 90" fill="none"><path d="M45 10 C30 10 15 22 15 38 C15 58 45 80 45 80 C45 80 75 58 75 38 C75 22 60 10 45 10Z" stroke="currentColor" stroke-width="4" fill="none"/><circle cx="45" cy="38" r="10" stroke="currentColor" stroke-width="4"/></svg>
-            </div>
-            <p class="indutries-card-text">Communications</p>
-          </div>
-        </div>
-
-        <div class="indutries-card col-6 col-lg-3 col-md-4 align-items-stretch anim-scale-pop" style="transition-delay:0.35s;">
-          <div class="card indutries-card-bg">
-            <div class="indutries-card-icon">
-              <svg width="40" height="40" viewBox="0 0 90 90" fill="none"><path d="M10 75 L10 45 L35 25 L60 45 L60 75Z" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/><path d="M60 55 L80 40 L80 75 L60 75" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/><path d="M10 75 L80 75" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></svg>
-            </div>
-            <p class="indutries-card-text">Manufacturing</p>
-          </div>
-        </div>
-
+  <section class="tenure" aria-labelledby="tenure-heading">
+    <div class="tenure__inner">
+      <div class="section-press__head anim-fade-up">
+        <h2 id="tenure-heading" class="section-title section-title--xs section-title--tighter section-press__title">
+          How long the work actually lasts.
+        </h2>
+        <span class="section-press__note">
+          {Word(caseStudies.length)} published studies &mdash; engagement length
+        </span>
       </div>
-    </div>
-  </section>
 
-  <!-- Core Values -->
-  <section style="background:var(--surface-card);padding:5rem 0;border-bottom:1px solid var(--border-default);">
-    <div class="container">
-      <SectionLabel class="anim-fade-up">How we work</SectionLabel>
-      <h2 class="section-title section-title--lg anim-fade-up" style="margin-bottom:3rem;transition-delay:0.05s;">
-        Built on three core principles.
-      </h2>
-      <div class="row">
-
-        <div class="col-lg-4 col-md-6 anim-scale-pop" style="transition-delay:0s;margin-bottom:1.5rem;">
-          <div style="background:var(--surface-sunk);border:1px solid var(--border-default);border-radius:12px;padding:1.75rem;height:100%;">
-            <svg width="36" height="36" viewBox="0 0 36 36" fill="none" style="display:block;margin-bottom:1rem;" aria-hidden="true">
-              <rect x="3" y="3" width="30" height="30" rx="4" stroke="var(--illus-ink)" stroke-width="2"/>
-              <path d="M10 18h16M18 10v16" stroke="var(--illus-ink)" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-            <h3 style="font-size:1rem;font-weight:800;margin-bottom:0.5rem;">Clean architecture</h3>
-            <p class="paragraph-small" style="color:var(--color-text);line-height:1.6;">No over-engineered orgs. Solutions built to last, not to impress.</p>
-          </div>
-        </div>
-
-        <div class="col-lg-4 col-md-6 anim-scale-pop" style="transition-delay:0.05s;margin-bottom:1.5rem;">
-          <div style="background:var(--surface-sunk);border:1px solid var(--border-default);border-radius:12px;padding:1.75rem;height:100%;">
-            <svg width="36" height="36" viewBox="0 0 36 36" fill="none" style="display:block;margin-bottom:1rem;" aria-hidden="true">
-              <circle cx="18" cy="18" r="14" stroke="var(--illus-ink)" stroke-width="2"/>
-              <path d="M12 18l4 4 8-8" stroke="var(--illus-ink)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            <h3 style="font-size:1rem;font-weight:800;margin-bottom:0.5rem;">On-time delivery</h3>
-            <p class="paragraph-small" style="color:var(--color-text);line-height:1.6;">We scope carefully and commit to timelines that are real — not aspirational.</p>
-          </div>
-        </div>
-
-        <div class="col-lg-4 col-md-6 anim-scale-pop" style="transition-delay:0.1s;margin-bottom:1.5rem;">
-          <div style="background:var(--surface-sunk);border:1px solid var(--border-default);border-radius:12px;padding:1.75rem;height:100%;">
-            <svg width="36" height="36" viewBox="0 0 36 36" fill="none" style="display:block;margin-bottom:1rem;" aria-hidden="true">
-              <path d="M6 28C6 20 12 14 18 14C24 14 30 20 30 28" stroke="var(--illus-ink)" stroke-width="2" stroke-linecap="round"/>
-              <circle cx="18" cy="10" r="4" stroke="var(--illus-ink)" stroke-width="2"/>
-              <path d="M12 28C12 24 15 21 18 21C21 21 24 24 24 28" stroke="var(--illus-ink)" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-            <h3 style="font-size:1rem;font-weight:800;margin-bottom:0.5rem;">Collaborative by default</h3>
-            <p class="paragraph-small" style="color:var(--color-text);line-height:1.6;">We work beside your team, not around them. Knowledge transfer is part of every project.</p>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- How We Work -->
-  <section style="background:var(--surface-page);padding:5rem 0;border-bottom:1px solid var(--border-default);">
-    <div class="container">
-      <SectionLabel class="anim-fade-up">Engagement model</SectionLabel>
-      <h2 class="section-title section-title--lg anim-fade-up" style="margin-bottom:3rem;transition-delay:0.05s;">
-        How a project with us actually runs.
-      </h2>
-      <div class="row align-items-center" style="gap:3rem 0;">
-
-        <!-- Steps -->
-        <div class="col-lg-6">
-          <div style="display:flex;flex-direction:column;gap:2rem;">
-            {[
-              { num: '01', title: 'Discovery', body: 'We map your processes, data model, and goals before writing a single line of configuration.' },
-              { num: '02', title: 'Architecture', body: 'We design the solution blueprint and validate it with your team before build starts.' },
-              { num: '03', title: 'Build & iterate', body: 'Agile sprints with weekly demos. You see real progress from week one.' },
-              { num: '04', title: 'Handover & support', body: 'Full documentation, team training, and optional ongoing support post-launch.' },
-            ].map((step, i) => (
-              <div class="anim-fade-up" style={`display:flex;gap:1rem;align-items:flex-start;transition-delay:${i * 0.07}s;`}>
-                <div style="width:36px;height:36px;background:var(--surface-inverse);color:var(--color-on-inverse);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0;font-family:var(--font-heading);">
-                  {step.num}
-                </div>
-                <div>
-                  <h3 style="font-size:1rem;font-weight:800;margin-bottom:0.3rem;">{step.title}</h3>
-                  <p class="paragraph-small" style="color:var(--color-text);line-height:1.6;">{step.body}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <!-- Process illustration -->
-        <div class="col-lg-6 anim-scale-pop" style="display:flex;justify-content:center;align-items:center;" aria-hidden="true">
-          <svg width="280" height="280" viewBox="0 0 260 260" fill="none" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;">
-            <circle cx="130" cy="130" r="110" stroke="var(--illus-ink)" stroke-width="1.5" stroke-dasharray="6 4" opacity="0.18"/>
-            <circle cx="130" cy="130" r="70" stroke="var(--illus-ink)" stroke-width="1.5" opacity="0.12"/>
-            <circle cx="130" cy="130" r="22" stroke="var(--illus-ink)" stroke-width="2"/>
-            <text x="130" y="127" text-anchor="middle" font-family="var(--illus-font)" font-size="8" font-weight="700" fill="var(--illus-ink)">Cloud</text>
-            <text x="130" y="138" text-anchor="middle" font-family="var(--illus-font)" font-size="8" font-weight="700" fill="var(--illus-ink)">Algo</text>
-            <line x1="130" y1="108" x2="130" y2="34" stroke="var(--illus-ink)" stroke-width="1.5" stroke-dasharray="3 3"/>
-            <circle cx="130" cy="20" r="14" stroke="var(--illus-ink)" stroke-width="2" fill="var(--illus-sunk)"/>
-            <text x="130" y="24" text-anchor="middle" font-family="var(--illus-font)" font-size="8.5" font-weight="800" fill="var(--illus-ink)">01</text>
-            <line x1="152" y1="130" x2="226" y2="130" stroke="var(--illus-ink)" stroke-width="1.5" stroke-dasharray="3 3"/>
-            <circle cx="240" cy="130" r="14" stroke="var(--illus-ink)" stroke-width="2" fill="var(--illus-sunk)"/>
-            <text x="240" y="134" text-anchor="middle" font-family="var(--illus-font)" font-size="8.5" font-weight="800" fill="var(--illus-ink)">02</text>
-            <line x1="130" y1="152" x2="130" y2="226" stroke="var(--illus-ink)" stroke-width="1.5" stroke-dasharray="3 3"/>
-            <circle cx="130" cy="240" r="14" stroke="var(--illus-ink)" stroke-width="2" fill="var(--illus-sunk)"/>
-            <text x="130" y="244" text-anchor="middle" font-family="var(--illus-font)" font-size="8.5" font-weight="800" fill="var(--illus-ink)">03</text>
-            <line x1="108" y1="130" x2="34" y2="130" stroke="var(--illus-ink)" stroke-width="1.5" stroke-dasharray="3 3"/>
-            <circle cx="20" cy="130" r="14" stroke="var(--illus-ink)" stroke-width="2" fill="var(--illus-sunk)"/>
-            <text x="20" y="134" text-anchor="middle" font-family="var(--illus-font)" font-size="8.5" font-weight="800" fill="var(--illus-ink)">04</text>
-            <circle cx="185" cy="75" r="3" fill="var(--illus-ink)" opacity="0.18"/>
-            <circle cx="75" cy="75" r="3" fill="var(--illus-ink)" opacity="0.18"/>
-            <circle cx="185" cy="185" r="3" fill="var(--illus-ink)" opacity="0.18"/>
-            <circle cx="75" cy="185" r="3" fill="var(--illus-ink)" opacity="0.18"/>
-          </svg>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- Certifications & Tech Stack -->
-  <section style="background:var(--surface-card);padding:5rem 0;border-bottom:1px solid var(--border-default);">
-    <div class="container">
-      <SectionLabel class="anim-fade-up">Credentials</SectionLabel>
-      <h2 class="section-title section-title--lg anim-fade-up" style="margin-bottom:2.5rem;transition-delay:0.05s;">
-        Certified across the Salesforce ecosystem.
-      </h2>
-
-      <div style="display:flex;flex-wrap:wrap;gap:0.875rem;">
-        {[
-          'Salesforce Administrator',
-          'Platform Developer I',
-          'Platform Developer II',
-          'Sales Cloud Consultant',
-          'Service Cloud Consultant',
-          'Heroku Architecture Designer',
-          'MuleSoft Developer',
-          'App Builder',
-        ].map((cert, i) => (
-          <div class="anim-scale-pop" style={`display:flex;align-items:center;gap:0.625rem;background:var(--surface-sunk);border:1.5px solid var(--border-default);border-radius:10px;padding:0.875rem 1.125rem;transition-delay:${i * 0.04}s;`}>
-            <svg width="22" height="22" viewBox="0 0 28 28" fill="none" aria-hidden="true">
-              <circle cx="14" cy="14" r="12" stroke="var(--illus-ink)" stroke-width="1.5"/>
-              <path d="M9 14l3 3 7-7" stroke="var(--illus-ink)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            <span style="font-size:0.8rem;font-weight:700;color:var(--color-heading);line-height:1.3;">{cert}</span>
-          </div>
+      <div class="tenure__chart anim-fade-up">
+        {rows.map((r) => (
+          <a class:list={['tenure__row', r.open && 'tenure__row--open']} href={r.href}>
+            <span class="tenure__name">
+              <span class="tenure__sector">{r.sector}</span>
+              <span class="tenure__what">{r.label}</span>
+            </span>
+            <span class="tenure__track">
+              <span class="tenure__bar" style={r.width ? `--w:${r.width}` : undefined}></span>
+            </span>
+            <span class="tenure__len">{r.length}</span>
+          </a>
         ))}
-      </div>
 
-      <hr style="border:none;border-top:1px solid var(--border-default);margin:2.5rem 0;" />
-
-      <SectionLabel class="anim-fade-up">Tech stack</SectionLabel>
-      <div style="display:flex;flex-wrap:wrap;gap:0.625rem;margin-top:1rem;">
-        {['Salesforce', 'Heroku', 'MuleSoft', 'Apex', 'LWC', 'SOQL', 'REST / SOAP APIs', 'Node.js', 'PostgreSQL', 'AWS'].map((tech, i) => (
-          <span class="anim-fade-up" style={`border:1.5px solid var(--border-default);border-radius:100px;padding:0.4rem 1rem;font-size:0.8rem;font-weight:600;color:var(--color-heading);background:var(--surface-card);transition-delay:${i * 0.03}s;`}>
-            {tech}
+        <div class="tenure__axis">
+          <span class="tenure__scale">
+            {Array.from({ length: AXIS_MONTHS / 2 + 1 }, (_, i) => <span>{i * 2}</span>)}
           </span>
-        ))}
+          <span class="tenure__unit">Months</span>
+        </div>
       </div>
 
+      <p class="tenure__foot anim-fade-up">
+        {Word(closed.length)} of the {word(rows.length)} closed inside {word(longestClosed)} months.
+        {' '}{Word(openRows.length)} are still open &mdash; one of them past {stated.span?.replace(/^2\+ /, 'two ')},
+        still shipping against the architecture we put in.
+        {' '}<a href="/case-studies/">Read the {word(caseStudies.length)} studies &rarr;</a>
+      </p>
     </div>
   </section>
-
-  <StatsBar />
 
 </Page>
