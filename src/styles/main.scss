@@ -152,6 +152,8 @@
 // an address: the docket says what the instrument is, the clause carries
 // a counter-driven number you can link to, the rail is that numbering as
 // a contents list, and the register is the other instruments in force.
+// `components/toc` is the rail; it is shared with the OrgVitals guide,
+// which is why it is not named after clauses.
 // `layout/doc` first -- it sets the columns the rail measures itself
 // against -- and `_precis` before `_clause` because the plate sits above
 // the first clause and the two share the seam.
@@ -159,7 +161,7 @@
 @use 'components/docket';
 @use 'components/precis';
 @use 'components/clause';
-@use 'components/clauses';
+@use 'components/toc';
 @use 'components/instruments';
 
 // One product, in full — /products/[slug]. Eight devices, in the order
@@ -176,6 +178,16 @@
 @use 'components/terms';
 @use 'components/ahead';
 @use 'components/colophon';
+
+// The OrgVitals user guide — a product's operating manual. It runs on
+// `layout/doc` and `components/toc` above; these three are its own. A
+// guide is a MANUAL FOR A MACHINE IN FRONT OF YOU, so its devices are
+// the section you are in, the screen the instruction happens on, and
+// the control you press. `_panel` after `_proc` because the section
+// owns the spacing around the screens inside it.
+@use 'components/proc';
+@use 'components/panel';
+@use 'components/key';
 
 @use 'base/motion';
 @use 'utilities/grid';

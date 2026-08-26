@@ -1,0 +1,125 @@
+/* One numbered section of the manual.
+ *
+ * A guide is an operating manual for a machine that is in front of you.
+ * You read it while doing the thing, so position in the procedure is
+ * information: sections 1 to 13 are a genuine sequence, which is what
+ * makes numbering them honest rather than decorative.
+ *
+ * The number is a CSS counter, never the copy -- the same rule
+ * `_clause.scss` follows and for the same reason. The guide was
+ * hand-numbered ("4. Running a scan") and a section inserted anywhere
+ * would otherwise leave a stale figure in the body, in the rail, and in
+ * every cross-reference at once.
+ *
+ * `counter-reset: proc` lives on `.doc--manual .doc__body`, one level up.
+ *
+ * `.proc__kind` is the one thing on the page a contents list cannot
+ * carry: a section either tells you HOW TO DO something or tells you
+ * WHAT SOMETHING MEANS, and a reader sitting at the machine wants the
+ * first. Typing them is information, not ornament.
+ */
+
+.proc {
+  counter-increment: proc;
+  scroll-margin-top: calc(var(--header-h) + 1.5rem);
+  border-top: 1px solid var(--border-default);
+  padding-top: 1.375rem;
+  margin-top: 3.25rem;
+}
+
+/* The first section opens the document; it has nothing to be ruled off
+   from, and `.doc__lead` has already measured the seam above it. */
+.proc:first-of-type {
+  border-top: 0;
+  padding-top: 0;
+  margin-top: 0;
+}
+
+.proc__head {
+  display: grid;
+  grid-template-columns: 3.25rem minmax(0, 1fr);
+  gap: 0.125rem 1rem;
+  align-items: baseline;
+  margin-bottom: 1.125rem;
+}
+
+.proc__kind {
+  grid-column: 2;
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-text-faint);
+}
+
+.proc__n {
+  grid-column: 1;
+  grid-row: 2;
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  font-weight: var(--weight-bold);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-faintest);
+  transition: color var(--duration-base) var(--ease-out);
+}
+
+.proc__n::before { content: counter(proc, decimal-leading-zero); }
+
+.proc__head:hover .proc__n { color: var(--color-accent); }
+
+.proc__h {
+  grid-column: 2;
+  grid-row: 2;
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 1.375rem;
+  font-weight: var(--weight-extrabold);
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  color: var(--color-heading);
+}
+
+/* The deep link. A manual gets cited in a ticket the way a contract
+   gets cited in a letter -- "see section 4" -- so every section answers
+   its own anchor. Hidden until the heading is hovered or the link takes
+   focus, like `.clause__cite`. */
+.proc__cite {
+  margin-left: 0.5rem;
+  font-size: 0.8125rem;
+  font-weight: var(--weight-regular);
+  color: var(--color-text-faintest);
+  text-decoration: none;
+  opacity: 0;
+  transition: opacity var(--duration-base) var(--ease-out);
+}
+
+.proc__head:hover .proc__cite,
+.proc__cite:focus-visible { opacity: 1; }
+
+/* Indented to clear the numeral's column, so the body of a section
+   hangs off its own number rather than off the page margin. */
+.proc__body { padding-left: 4.25rem; }
+
+/* The gap between a paragraph block and the screen under it is set here
+   rather than on `.panel`. `.prose > * + *` has the same specificity as
+   a margin on `.panel` would, so a panel spacing itself would win or
+   lose on `main.scss` load order alone. It also lets a panel out of the
+   72ch measure: prose is read, a screen recording is looked at. */
+.proc__body > * + * { margin-top: 1.75rem; }
+.proc__body > .prose { max-width: 72ch; }
+
+@media (max-width: 900px) {
+  /* No room for a hanging numeral on a phone: the number goes inline in
+     front of the title, which is where it would be read out anyway. */
+  .proc__body { padding-left: 0; }
+  .proc__head { display: block; }
+  .proc__n { margin-right: 0.5rem; }
+  .proc__h { display: inline; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .proc__n,
+  .proc__cite { transition: none; }
+}

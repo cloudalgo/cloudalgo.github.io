@@ -1,0 +1,35 @@
+---
+/**
+ * One numbered section of the manual.
+ *
+ * The number is a CSS counter, never the copy: the page this replaces
+ * hand-numbered its headings ("4. Running a scan"), so a section moved
+ * or removed left a wrong numeral behind. `.doc--manual .doc__body`
+ * resets the counter; `.proc__n::before` prints it.
+ *
+ * `kind` is the one fact a contents list cannot carry -- whether the
+ * section tells you how to do something or explains how something
+ * works -- so it sits above the heading rather than in the rail.
+ */
+
+interface Props {
+  /** The anchor, and the id the rail links to. */
+  id: string;
+  kind: 'Procedure' | 'Reference';
+  title: string;
+}
+
+const { id, kind, title } = Astro.props;
+---
+
+<section class="proc" id={id}>
+  <header class="proc__head">
+    <p class="proc__kind">{kind}</p>
+    <span class="proc__n" aria-hidden="true"></span>
+    <h2 class="proc__h">
+      {title}
+      <a class="proc__cite" href={`#${id}`} aria-label={`Link to ${title}`}>&para;</a>
+    </h2>
+  </header>
+  <div class="proc__body"><slot /></div>
+</section>

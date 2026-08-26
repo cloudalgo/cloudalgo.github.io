@@ -1,0 +1,138 @@
+---
+/**
+ * A screen from the app, on its plate.
+ *
+ * The guide's evidence device. It prints a poster still on a dark frame
+ * with a title bar -- which screen, what it shows, how long it runs --
+ * and swaps in the recording when the reader presses it.
+ *
+ * ── Why a still and a button ──
+ * The page this replaces shipped fifteen GIFs and an MP4: 7.15 MB that
+ * downloaded and looped whether or not you wanted them, and a GIF cannot
+ * be paused once it is in the document. Sixteen posters are 436 KB and
+ * nothing moves until pressed. Playing every clip on the page costs
+ * 1.48 MB, and the reader chooses which.
+ *
+ * ── Two kinds of recording ──
+ * A short clip is what the GIF was -- a silent loop with no transport --
+ * so the whole plate stays the control and the video takes the poster's
+ * own class, which is why the frame does not resize on the swap. The
+ * minute-long walkthrough needs a scrubber, and a control with a scrubber
+ * cannot live inside a button that would swallow every click on it, so
+ * there the plate steps aside and the video replaces it.
+ */
+
+const BASE = '/products/orgvitals/guide/';
+
+interface Props {
+  /** The number on the bar, and the screen's order on the page. */
+  n: string;
+  /** What the screen shows, as the bar prints it. */
+  title: string;
+  /** Running time, as the bar prints it. */
+  dur: string;
+  /** File stem: the poster is posters/<stem>.webp, and unless `video`
+      is given the clip is clips/<stem>.mp4. */
+  stem: string;
+  /** A recording long enough to need its own transport. A path. */
+  video?: string;
+  /** What the poster shows, for a reader who cannot see it. */
+  alt: string;
+  /** The plate that opens the document, under the lead paragraph. */
+  lead?: boolean;
+}
+
+const { n, title, dur, stem, video, alt, lead = false } = Astro.props;
+
+const poster = `${BASE}posters/${stem}.webp`;
+const clip = `${BASE}clips/${stem}.mp4`;
+---
+
+<figure class:list={['panel', lead && 'panel--lead']}>
+  <div class="panel__frame">
+    <p class="panel__bar">
+      <span class="panel__bar-n">Screen {n}</span>
+      <span class="panel__bar-t">{title}</span>
+      <span class="panel__bar-d">{dur}</span>
+    </p>
+    <button
+      class="panel__stage"
+      type="button"
+      data-clip={video ? undefined : clip}
+      data-video={video}
+      aria-label={`Play screen ${n}: ${title}`}
+    >
+      <img
+        class="panel__shot"
+        src={poster}
+        alt={alt}
+        width="1000"
+        height="625"
+        loading="lazy"
+        decoding="async"
+      />
+      <span class="panel__play" aria-hidden="true">Play</span>
+    </button>
+  </div>
+  <figcaption class="panel__cap"><slot /></figcaption>
+</figure>
+
+<script>
+  /* One handler for every plate on the page: Astro bundles a component's
+     script once, however many times the component renders. */
+  document.querySelectorAll<HTMLElement>('.panel').forEach((panel) => {
+    const stage = panel.querySelector<HTMLButtonElement>('.panel__stage');
+    const shot = panel.querySelector<HTMLImageElement>('.panel__shot');
+    const play = panel.querySelector<HTMLElement>('.panel__play');
+    if (!stage || !shot || !play) return;
+
+    const clip = stage.dataset.clip;
+    const full = stage.dataset.video;
+    let live: HTMLVideoElement | null = null;
+
+    stage.addEventListener('click', () => {
+      if (panel.hasAttribute('data-playing')) {
+        panel.removeAttribute('data-playing');
+        play.textContent = 'Play';
+        if (live) {
+          live.pause();
+          live.replaceWith(shot);
+          live = null;
+        }
+        return;
+      }
+
+      panel.setAttribute('data-playing', '');
+      play.textContent = 'Stop';
+
+      if (full) {
+        /* The walkthrough gets a scrubber, so the plate steps aside. */
+        const player = document.createElement('video');
+        player.className = 'panel__video';
+        player.src = full;
+        player.controls = true;
+        player.autoplay = true;
+        player.playsInline = true;
+        stage.replaceWith(player);
+        return;
+      }
+
+      if (!clip) return;
+      /* A clip is a silent loop with no transport of its own, so the
+         plate stays the control. It takes the poster's class, which is
+         why the frame does not resize on the swap. */
+      live = document.createElement('video');
+      live.className = 'panel__shot';
+      live.src = clip;
+      live.width = 1000;
+      live.height = 625;
+      live.muted = true;
+      live.loop = true;
+      live.autoplay = true;
+      live.playsInline = true;
+      live.setAttribute('aria-hidden', 'true');
+      shot.replaceWith(live);
+      void live.play();
+    });
+  });
+</script>

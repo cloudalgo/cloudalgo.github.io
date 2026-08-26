@@ -6,20 +6,52 @@
  * the whole body of /products/orgvitals/legal ("everything that governs
  * OrgVitals"). One component, because it is the same list either way --
  * only the heading and whether the current document is excluded change.
+ *
+ * ── Why it also takes plain rows ──
+ * The OrgVitals guide ends on the same question a legal document does --
+ * what else is there, and where -- so it ends on the same device. Its
+ * three destinations are not instruments (one is a GitHub releases page),
+ * so `rows` lets a caller state the row directly. `items` stays the
+ * register's own path: it derives the same row from an Instrument, so
+ * the seven legal pages cannot drift from src/data/legal.ts.
  */
 
 import type { Instrument } from '@/data/legal';
 import { ISSUER } from '@/data/legal';
 
+/** One row of the register, as printed. */
+export interface Row {
+  href: string;
+  name: string;
+  /** What it is, in one line. A filing fact, never a blurb. */
+  what: string;
+  /** The right-hand column, one fact per line. */
+  facts: string[];
+  /** Off-site, so it opens in its own tab. */
+  external?: boolean;
+}
+
 interface Props {
   title: string;
   /** Right of the rule: who issued these, or how many there are. */
   meta?: string;
-  items: Instrument[];
+  /** Instruments from the register; each becomes a row. */
+  items?: Instrument[];
+  /** Rows stated directly, for a foot that is not a legal register. */
+  rows?: Row[];
   class?: string;
 }
 
-const { title, meta, items, class: className } = Astro.props;
+const { title, meta, items, rows, class: className } = Astro.props;
+
+const list: Row[] =
+  rows ??
+  (items ?? []).map((i) => ({
+    href: i.href,
+    name: i.title,
+    what: i.what,
+    facts: [`In force ${i.inForce}`, `${i.clauses} clauses`],
+  }));
 ---
 
 <section class:list={['instruments', className]}>
@@ -29,13 +61,20 @@ const { title, meta, items, class: className } = Astro.props;
   </div>
 
   <ul class="instruments__list">
-    {items.map((i) => (
+    {list.map((r) => (
       <li>
-        <a class="instruments__link" href={i.href}>
-          <span class="instruments__name">{i.title}</span>
-          <span class="instruments__what">{i.what}</span>
+        <a
+          class="instruments__link"
+          href={r.href}
+          target={r.external ? '_blank' : undefined}
+          rel={r.external ? 'noopener' : undefined}
+        >
+          <span class="instruments__name">{r.name}</span>
+          <span class="instruments__what">{r.what}</span>
           <span class="instruments__facts">
-            In force {i.inForce}<br />{i.clauses} clauses
+            {r.facts.map((f, n) => (
+              <>{n > 0 && <br />}{f}</>
+            ))}
           </span>
           <span class="instruments__go" aria-hidden="true">&rarr;</span>
         </a>

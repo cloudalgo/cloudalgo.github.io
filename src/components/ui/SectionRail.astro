@@ -1,0 +1,129 @@
+---
+/**
+ * The section rail: a page's contents list, and a marker for the
+ * section currently being read.
+ *
+ * The list is built from the same array the page's sections are, so the
+ * rail cannot fall out of step with the body -- LegalDoc derives both
+ * from the headings it renders, and the guide derives both from one
+ * `sections` array.
+ *
+ * It was ClauseRail until the OrgVitals guide needed the same thing.
+ * Two pages, two labels, one device: what a legal document calls a
+ * clause and a manual calls a section is the same numbered anchor, so
+ * the label, the numeral style and the selector it watches are props
+ * rather than a second copy of this file.
+ *
+ * The live state is written with `aria-current`, not a class: the
+ * marker is a real statement about which entry is current, and the
+ * attribute is what a screen reader announces.
+ */
+
+export interface RailItem {
+  id: string;
+  title: string;
+}
+
+interface Props {
+  items: RailItem[];
+  /** The heading above the list, and the nav's accessible name. */
+  label: string;
+  /** What the rail watches, so it can mark the section being read.
+      A selector, because the sections are the caller's markup. */
+  observe: string;
+  /** Leading-zero numerals, for a body that numbers itself that way. */
+  padded?: boolean;
+  /** Where the reader goes next, at the foot of the rail. */
+  footHref?: string;
+  footLabel?: string;
+  /** One line above the link, saying what that destination is. */
+  footNote?: string;
+}
+
+const {
+  items,
+  label,
+  observe,
+  padded = false,
+  footHref,
+  footLabel,
+  footNote,
+} = Astro.props;
+---
+
+<nav
+  class:list={['toc', padded && 'toc--padded']}
+  aria-label={label}
+  data-observe={observe}
+>
+  <p class="toc__label">{label}</p>
+
+  <ol class="toc__list">
+    {items.map((i) => (
+      <li>
+        <a class="toc__link" href={`#${i.id}`}><span>{i.title}</span></a>
+      </li>
+    ))}
+  </ol>
+
+  {(footNote || footHref) && (
+    <p class="toc__foot">
+      {footNote && <>{footNote}{' '}</>}
+      {footHref && <a href={footHref}>{footLabel} &rarr;</a>}
+    </p>
+  )}
+</nav>
+
+<script>
+  /* Marks the section being read. The band is deliberately narrow and
+     high -- from 15% down the viewport to 25% -- so the mark tracks the
+     heading you are reading rather than whichever section happens to
+     cover the most pixels, which on a long one is the section you left
+     three screens ago.
+
+     Reduced motion is irrelevant here (nothing moves), but a browser
+     without IntersectionObserver simply gets a plain contents list,
+     which is what the rail is before the script runs. */
+  (() => {
+    const rail = document.querySelector<HTMLElement>('.toc');
+    if (!rail || !('IntersectionObserver' in window)) return;
+
+    const selector = rail.dataset.observe;
+    if (!selector) return;
+
+    const sections = Array.from(document.querySelectorAll<HTMLElement>(selector));
+    if (sections.length === 0) return;
+
+    const links = new Map<string, HTMLAnchorElement>();
+    rail.querySelectorAll<HTMLAnchorElement>('.toc__link').forEach((a) => {
+      links.set(a.getAttribute('href')!.slice(1), a);
+    });
+
+    let current: HTMLAnchorElement | null = null;
+    const visible = new Set<string>();
+
+    const mark = () => {
+      /* Document order, not intersection order: when two sections are in
+         the band at once the reader is at the top of the lower one. */
+      const first = sections.find((s) => visible.has(s.id));
+      const next = first ? links.get(first.id) ?? null : current;
+      if (next === current) return;
+      current?.removeAttribute('aria-current');
+      next?.setAttribute('aria-current', 'true');
+      current = next;
+    };
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) visible.add(e.target.id);
+          else visible.delete(e.target.id);
+        }
+        mark();
+      },
+      { rootMargin: '-15% 0px -75% 0px' },
+    );
+
+    sections.forEach((s) => io.observe(s));
+  })();
+</script>

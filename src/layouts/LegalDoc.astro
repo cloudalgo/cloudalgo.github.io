@@ -33,7 +33,7 @@
 import Page from '@/layouts/Page.astro';
 import PageMasthead from '@/components/ui/PageMasthead.astro';
 import type { Crumb } from '@/components/ui/PageMasthead.astro';
-import ClauseRail from '@/components/ui/ClauseRail.astro';
+import SectionRail from '@/components/ui/SectionRail.astro';
 import Instruments from '@/components/sections/Instruments.astro';
 import { instrumentFor, siblingsOf, registerLabel, ISSUER } from '@/data/legal';
 
@@ -169,8 +169,10 @@ const family = registerLabel[doc.register];
       ))}
     </div>
 
-    <ClauseRail
-      clauses={clauses.map((c) => ({ id: c.id, title: c.title }))}
+    <SectionRail
+      items={clauses.map((c) => ({ id: c.id, title: c.title }))}
+      label="Clauses"
+      observe=".clause"
       footNote="Questions about this document go to"
       footHref="mailto:contact@cloudalgo.com"
       footLabel="contact@cloudalgo.com"

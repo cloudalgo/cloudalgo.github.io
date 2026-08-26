@@ -1,0 +1,24 @@
+/* A control you press.
+ *
+ * The page this replaced set every button, tab and menu path in bold --
+ * in a document where bold also carries emphasis, so "press Rescan" and
+ * "nothing is ever written to your org" looked identical. A control is
+ * not emphasis: it is a thing that exists on a screen in front of the
+ * reader, and it gets the face the application itself uses.
+ *
+ * Sized in `em`, not `rem`, so it holds its proportion inside a heading
+ * as well as inside body copy.
+ */
+
+.key {
+  font-family: var(--font-mono);
+  font-size: 0.8125em;
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.01em;
+  color: var(--color-heading);
+  background: var(--surface-sunk);
+  border: 1px solid var(--border-default);
+  border-radius: 3px;
+  padding: 0.125em 0.375em;
+  white-space: nowrap;
+}

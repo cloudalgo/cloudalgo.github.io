@@ -51,11 +51,29 @@
 
 .doc__lead strong { color: var(--color-heading); font-weight: var(--weight-bold); }
 
+/* ─── The document as a manual ────────────────────────────
+   /products/orgvitals/guide. Same two-column plate, one measured
+   difference: its body carries 1000px screen recordings, so the body
+   takes the width and the rail takes only what a numbered index needs.
+   The legal columns (1.55fr / 1fr) would give the rail 340px of empty
+   paper and crop every screen to fit. */
+.doc--manual {
+  grid-template-columns: minmax(0, 1fr) 14rem;
+  gap: 3.25rem;
+}
+
+.doc--manual .doc__body { counter-reset: proc; }
+
+/* Wider than the legal seam: the lead here ends on the walkthrough
+   panel, and a screen needs more air beneath it than a paragraph. */
+.doc--manual .doc__lead { margin-bottom: 3.25rem; }
+
 /* On a phone the rail stops being a rail: a sticky column on a 390px
    screen is a column that eats the screen, so it goes back above the
    document as a plain contents list. */
 @media (max-width: 900px) {
-  .doc {
+  .doc,
+  .doc--manual {
     grid-template-columns: 1fr;
     gap: 2rem;
   }

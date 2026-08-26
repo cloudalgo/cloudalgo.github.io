@@ -1,207 +1,295 @@
 ---
-// src/pages/products/orgvitals/guide.astro
-// OrgVitals User Guide — long-form documentation page with sticky TOC + 8 GIFs.
-import Page from '../../../layouts/Page.astro';
-import PageHeader from '@/components/ui/PageHeader.astro';
-import Button from '../../../components/ui/Button.astro';
-import SectionLabel from '../../../components/ui/SectionLabel.astro';
+/**
+ * The OrgVitals user guide.
+ *
+ * A guide is an OPERATING MANUAL FOR A MACHINE THAT IS IN FRONT OF YOU.
+ * You read it while doing the thing, so three facts have to be legible at
+ * every moment: where you are in the procedure, which control the
+ * instruction names, and what the screen looks like when you find it.
+ * Those are the page's three devices -- `.proc`, `.key`, `.panel` -- and
+ * the rail is the first of them as a contents list.
+ *
+ * Sections 1 to 13 are a genuine sequence: connect, scan, read the grade,
+ * work the findings down. That is what makes the numbering honest, and
+ * why the numerals are a CSS counter rather than typed into the copy.
+ *
+ * The page it replaces was a fourth bespoke costume -- ~400 lines of
+ * page-local `.ug-*` CSS restating `.prose`, `.doc` and the masthead --
+ * and it shipped 7.15 MB of GIFs that played whether you wanted them to
+ * or not. It now runs on the legal document's layout: same two columns,
+ * widened for 1000px screens by `.doc--manual`.
+ *
+ * `sections` is the single register. Both the body and the rail read it,
+ * through `s()`, so a section cannot appear in one and not the other.
+ */
+import Page from '@/layouts/Page.astro';
+import PageMasthead from '@/components/ui/PageMasthead.astro';
+import type { Crumb, Fact } from '@/components/ui/PageMasthead.astro';
+import SectionRail from '@/components/ui/SectionRail.astro';
+import Proc from '@/components/ui/Proc.astro';
+import ScreenPanel from '@/components/ui/ScreenPanel.astro';
+import Instruments from '@/components/sections/Instruments.astro';
+import type { Row } from '@/components/sections/Instruments.astro';
 
-const sections = [
-  { id: 'how-orgvitals-works',        num: 1,  label: 'How OrgVitals works' },
-  { id: 'prerequisites-first-launch', num: 2,  label: 'Prerequisites & first launch' },
-  { id: 'connecting-your-org',        num: 3,  label: 'Connecting your org' },
-  { id: 'running-a-scan',             num: 4,  label: 'Running a scan' },
-  { id: 'how-scoring-works',          num: 5,  label: 'How scoring works' },
-  { id: 'dashboard',                  num: 6,  label: 'Dashboard' },
-  { id: 'findings-triage',            num: 7,  label: 'Findings & triage' },
-  { id: 'insights',                   num: 8,  label: 'Insights' },
-  { id: 'history-org-family',         num: 9,  label: 'History & Org Family' },
-  { id: 'ask-vita',                   num: 10, label: 'Ask Vita — AI assistant' },
-  { id: 'demo-mode',                  num: 11, label: 'Demo mode & guided tour' },
-  { id: 'notifications-reports',      num: 12, label: 'Notifications, reports & housekeeping' },
-  { id: 'tips-shortcuts-faq',         num: 13, label: 'Tips, shortcuts & FAQ' },
+const RELEASES = 'https://github.com/cloudalgo/orgvitals-releases/releases';
+
+const crumbs: Crumb[] = [
+  { label: 'Home', href: '/' },
+  { label: 'Products', href: '/products' },
+  { label: 'OrgVitals', href: '/products/orgvitals' },
+  { label: 'User guide' },
 ];
 
-const releasesUrl = 'https://github.com/cloudalgo/orgvitals-releases/releases';
+/* The stand states what the manual covers and what the app is allowed to
+   do -- read-only, local -- because those two are the questions an
+   administrator asks before they install anything. */
+const facts: Fact[] = [
+  { term: 'Sections', detail: '13' },
+  { term: 'Screens', detail: '16' },
+  { term: 'Scanners', detail: '49' },
+  { term: 'Platforms', detail: 'macOS, Windows, Linux' },
+  { term: 'Org access', detail: 'Read-only' },
+  { term: 'Data', detail: 'Local SQLite' },
+];
+
+interface Section {
+  id: string;
+  /** Whether the section tells you how to do something, or explains
+      how something works. The rail cannot carry this; the head does. */
+  kind: 'Procedure' | 'Reference';
+  title: string;
+}
+
+const sections: Section[] = [
+  { id: 'how-orgvitals-works', kind: 'Reference', title: 'How OrgVitals works' },
+  { id: 'before-you-start', kind: 'Procedure', title: 'Before you start' },
+  { id: 'connect-an-org', kind: 'Procedure', title: 'Connect an org' },
+  { id: 'run-a-scan', kind: 'Procedure', title: 'Run a scan' },
+  { id: 'how-scoring-works', kind: 'Reference', title: 'How scoring works' },
+  { id: 'the-dashboard', kind: 'Reference', title: 'The dashboard' },
+  { id: 'findings-and-triage', kind: 'Procedure', title: 'Findings and triage' },
+  { id: 'insights', kind: 'Reference', title: 'Insights' },
+  { id: 'history-and-org-family', kind: 'Reference', title: 'History and org family' },
+  { id: 'ask-vita', kind: 'Reference', title: 'Ask Vita' },
+  { id: 'demo-mode-and-the-guided-tour', kind: 'Reference', title: 'Demo mode and the guided tour' },
+  { id: 'notifications-reports-and-housekeeping', kind: 'Procedure', title: 'Notifications, reports and housekeeping' },
+  { id: 'tips-shortcuts-and-faq', kind: 'Reference', title: 'Tips, shortcuts and FAQ' },
+];
+
+/** The section registered under `id`. A body section that is not in the
+    register throws at build time rather than going missing from the rail. */
+const s = (id: string): Section => {
+  const found = sections.find((x) => x.id === id);
+  if (!found) {
+    throw new Error(`guide: no section registered for "${id}". Add it to sections.`);
+  }
+  return found;
+};
+
+/* The foot answers the same question a legal document's register does --
+   what else is there, and where -- so it is the same device. */
+const elsewhere: Row[] = [
+  {
+    href: '/products/orgvitals/',
+    name: 'Product overview',
+    what: 'What it checks, and what it costs your org to run.',
+    facts: ['49 scanners'],
+  },
+  {
+    href: '/products/orgvitals/legal/',
+    name: 'Legal',
+    what: 'Terms, privacy, data processing and acceptable use.',
+    facts: ['4 instruments'],
+  },
+  {
+    href: RELEASES,
+    name: 'Releases',
+    what: 'Every build, with its notes and its downloads.',
+    facts: ['GitHub ↗'],
+    external: true,
+  },
+];
 ---
 
 <Page
-  title="OrgVitals User Guide — CloudAlgo"
-  description="Everything you can do in OrgVitals: connect an org, run read-only scans, understand scoring, triage findings, explore metadata, compare orgs, and use Ask Vita — the local-first Salesforce health desktop app."
+  title="OrgVitals user guide — CloudAlgo"
+  description="Everything OrgVitals does, in the order you meet it: connect an org, run a read-only scan, read the grade, and work the findings down. Thirteen sections and sixteen screens."
   canonicalURL="https://cloudalgo.com/products/orgvitals/guide"
 >
+  <PageMasthead crumbs={crumbs} facts={facts}>
+    <Fragment slot="title">OrgVitals user guide</Fragment>
+    <Fragment slot="lede">
+      Everything the app does, in the order you meet it: connect an org, run a
+      read-only scan, read the grade, work the findings down. Thirteen sections,
+      sixteen screens, no step that writes to your org.
+    </Fragment>
+    <Fragment slot="actions">
+      <a class="btn btn-primary" href={RELEASES} target="_blank" rel="noopener">
+        Download OrgVitals &#8599;
+      </a>
+      <a class="btn btn-outline" href="/products/orgvitals/">Product overview</a>
+    </Fragment>
+  </PageMasthead>
 
-  <!-- Header band -->
-  <PageHeader
-    class="ug-header"
-    crumbs={[
-      { label: 'Home', href: '/' },
-      { label: 'Products', href: '/products' },
-      { label: 'OrgVitals', href: '/products/orgvitals' },
-      { label: 'User Guide' },
-    ]}
-  >
-
-      <SectionLabel>Guide</SectionLabel>
-      <h1>OrgVitals User Guide</h1>
-      <p class="ug-meta">
-        Everything you can do in OrgVitals &nbsp;&middot;&nbsp; Desktop app (macOS · Windows · Linux) &nbsp;&middot;&nbsp; Read-only &amp; local-first
-      </p>
-      <div class="ug-header-actions">
-        <Button href={releasesUrl} variant="primary" external>Download OrgVitals ↗</Button>
-        <Button href="/products/orgvitals" variant="outline">Product overview</Button>
-      </div>
-  </PageHeader>
-
-  <!-- Body -->
-  <div class="ug-body-section">
-    <div class="container ug-grid">
-
-      <article class="ug-body">
-
-        <!-- Intro -->
-        <p class="ug-lead">
-          OrgVitals is a desktop app that scans a Salesforce org for technical debt, security risks,
-          automation problems, code-quality issues, and performance concerns, then grades it
-          <strong>A&ndash;F</strong> so you know exactly what to fix first. It runs entirely on your
-          machine and reads your org through the Salesforce CLI you already use &mdash;
-          <strong>your metadata never leaves your computer</strong>. The only exception is
-          <em>Ask Vita</em> (opt-in, off by default; see <a href="#ask-vita">&sect;10</a>).
+  <div class="doc doc--manual">
+    <div class="doc__body">
+      <div class="doc__lead">
+        <p>
+          OrgVitals scans a Salesforce org for technical debt, security risk,
+          automation faults, code-quality problems and performance concerns, then
+          grades it <strong>A to F</strong> so you know what to fix first. It runs on
+          your machine and reads the org through the Salesforce CLI you already
+          use — <strong>your metadata never leaves your computer.</strong> Ask Vita is
+          the single exception, and it is off until you turn it on.
         </p>
 
-        <ul class="ug-meta-list">
-          <li><strong>Platform:</strong> macOS, Windows, Linux (Electron desktop app)</li>
-          <li><strong>Cost to your org:</strong> none &mdash; scans are <strong>read-only</strong>; nothing is modified or deployed</li>
-          <li><strong>Data:</strong> stored in a local SQLite database in your user data folder</li>
-        </ul>
+        <ScreenPanel
+          lead
+          n="00"
+          title="Full walkthrough"
+          dur="0:59"
+          stem="00-walkthrough"
+          video="/products/orgvitals/guide/walkthrough.mp4"
+          alt="The OrgVitals dashboard, at the opening of the walkthrough."
+        >
+          <b>The whole app in a minute.</b> Every recording on this page was made
+          against demo mode — a synthetic org family called Acme. Real screens,
+          invented data. You can walk the same thing yourself from
+          <span class="key">Help &rarr; Take the Tour</span>.
+        </ScreenPanel>
+      </div>
 
-        <div class="ug-callout">
-          <span class="ug-callout-label">About the animations</span>
+      <Proc {...s('how-orgvitals-works')}>
+        <div class="prose">
           <p>
-            Every clip below was recorded against OrgVitals' built-in <strong>demo mode</strong>, which
-            uses a synthetic sample org family (&ldquo;Acme&rdquo;) so every screen is populated with
-            realistic &mdash; but entirely fake &mdash; data. You can explore the exact same thing
-            yourself: <strong>Help &rarr; Take the Tour</strong> starts a guided walkthrough over this
-            sample data. See <a href="#demo-mode">&sect;11</a>.
+            OrgVitals never sees your Salesforce username or password. It uses the
+            Salesforce CLI (<span class="key">sf</span>) you have already installed and
+            authenticated. When you pick an org, OrgVitals opens that CLI session,
+            pulls a read-only snapshot of the org's metadata — Apex, LWC, flows,
+            objects, profiles, permission sets — stores it on your machine, and runs
+            its scanners against the snapshot.
+          </p>
+          <p>
+            A single Google sign-in unlocks the app for licensing and identity.
+            Everything after that is local. Because the analysis works from a stored
+            snapshot, you can browse, filter, export and compare without touching
+            Salesforce again.
+          </p>
+        </div>
+      </Proc>
+
+      <Proc {...s('before-you-start')}>
+        <div class="prose">
+          <p><strong>You need the Salesforce CLI.</strong> Install it, then authenticate at least one org:</p>
+          <pre><code># see developer.salesforce.com/tools/salesforcecli
+sf org login web        # opens a browser to authenticate an org
+sf org list             # confirm the org shows up</code></pre>
+          <p>
+            On launch OrgVitals runs <span class="key">which sf</span> to find the CLI. If
+            it is missing, a prompt explains how to install it. On a first run you
+            will also:
+          </p>
+          <ol>
+            <li>Accept the terms and privacy notice — a one-time consent gate.</li>
+            <li>Sign in with Google. This is identity and licensing only; no Salesforce credentials are entered.</li>
+            <li>Watch a short guided tour over demo data. Skip it if you like, and replay it later from <span class="key">Help &rarr; Take the Tour</span>.</li>
+          </ol>
+        </div>
+      </Proc>
+
+      <Proc {...s('connect-an-org')}>
+        <div class="prose">
+          <p>
+            Open the org picker at the top-left of the header. It lists every org your
+            Salesforce CLI is authenticated to — the same list
+            <span class="key">sf org list</span> prints. Select one to make it the active
+            org. OrgVitals resolves its 18-character Id, instance URL, edition and user
+            count, and stores them locally.
           </p>
         </div>
 
-        <!-- Walkthrough video -->
-        <div class="ug-video-block">
-          <SectionLabel>&#9654; Full walkthrough</SectionLabel>
-          <p class="ug-video-sub">A ~60-second tour of every feature.</p>
-          <video class="ug-video" src="/products/orgvitals/guide/walkthrough.mp4" controls preload="metadata" playsinline></video>
+        <ScreenPanel
+          n="01"
+          title="Connect an org — the org picker"
+          dur="0:02"
+          stem="01-connect-org"
+          alt="The org picker open, listing orgs the Salesforce CLI is authenticated to."
+        >
+          Selecting an authenticated org from the picker.
+        </ScreenPanel>
+
+        <div class="prose">
+          <ul>
+            <li><strong>Switching orgs</strong> re-scopes the whole app to that org.</li>
+            <li><strong>API version.</strong> Metadata queries use a target API version you can change under <span class="key">Settings &rarr; Salesforce API Version</span>. It is validated and cached per org.</li>
+            <li><strong>Org family.</strong> If the selected org belongs to a family, an extra <span class="key">Org Family</span> tab appears — see <a href="#history-and-org-family">section 09</a>.</li>
+          </ul>
+        </div>
+      </Proc>
+
+      <Proc {...s('run-a-scan')}>
+        <div class="prose">
+          <p>
+            Press <span class="key">Rescan</span> — or <span class="key">Run Scan</span> on a
+            freshly connected org — to open the scanner picker.
+          </p>
         </div>
 
-        <!-- 1 -->
-        <h2 id="how-orgvitals-works">1. How OrgVitals works</h2>
-        <p>
-          OrgVitals never handles your Salesforce username or password. Instead it relies on the
-          <strong>Salesforce CLI</strong> (<code>sf</code>) that you've already installed and
-          authenticated. When you pick an org, OrgVitals uses that CLI session to pull a
-          <strong>read-only snapshot</strong> of the org's metadata (Apex, LWC, flows, objects,
-          profiles, permission sets, and more), stores it locally, and runs its scanners against that
-          snapshot.
-        </p>
-        <p>
-          A single sign-in with Google (for licensing/identity) unlocks the app; from there everything
-          is local. Because the analysis works from a stored snapshot, you can browse results, filter,
-          export, and compare orgs without hitting Salesforce again.
-        </p>
+        <ScreenPanel
+          n="02"
+          title="Run a scan — picking scanners"
+          dur="0:07"
+          stem="02-run-scan"
+          alt="The scanner picker, with categories of checks toggled on and off."
+        >
+          Choosing scanners, then running a read-only scan.
+        </ScreenPanel>
 
-        <!-- 2 -->
-        <h2 id="prerequisites-first-launch">2. Prerequisites &amp; first launch</h2>
-        <p><strong>You need the Salesforce CLI.</strong> Install it and authenticate at least one org:</p>
-        <pre class="ug-code"><code># install (see https://developer.salesforce.com/tools/salesforcecli)
-sf org login web        # opens a browser to authenticate an org
-sf org list             # confirm the org shows up</code></pre>
-        <p>
-          On launch OrgVitals runs <code>which sf</code> to detect the CLI. If it's missing, a prompt
-          explains how to install it. On first run you'll also:
-        </p>
-        <ol>
-          <li><strong>Accept the Terms / privacy notice</strong> (one-time consent gate).</li>
-          <li><strong>Sign in with Google</strong> &mdash; used for identity and licensing only; no Salesforce credentials are entered.</li>
-          <li>A short <strong>guided tour</strong> starts automatically over demo data (you can skip it, and replay it later from <strong>Help &rarr; Take the Tour</strong>).</li>
-        </ol>
-
-        <!-- 3 -->
-        <h2 id="connecting-your-org">3. Connecting your org</h2>
-        <p>
-          Open the <strong>org picker</strong> in the top-left of the header. It lists every org your
-          Salesforce CLI is authenticated to (<code>sf org list</code>). Select one to make it the
-          active org &mdash; OrgVitals resolves its identity (18-char Id, instance URL, edition, user
-          count) and stores it locally.
-        </p>
-
-        <figure class="ug-figure">
-          <img src="/products/orgvitals/guide/01-connect-org.gif" alt="Connecting a Salesforce org in OrgVitals via the org picker" loading="lazy" decoding="async" width="1000" height="625" />
-          <figcaption>Selecting an authenticated org from the org picker.</figcaption>
-        </figure>
-
-        <ul>
-          <li><strong>Switching orgs</strong> at any time re-scopes the whole app to that org.</li>
-          <li><strong>API version:</strong> metadata queries use a target API version you can change under <strong>Settings &rarr; Salesforce API Version…</strong> (validated and cached per org).</li>
-          <li><strong>Org Family:</strong> if the selected org belongs to a family, an extra <em>Org Family</em> tab appears (see <a href="#history-org-family">&sect;9</a>).</li>
-        </ul>
-
-        <!-- 4 -->
-        <h2 id="running-a-scan">4. Running a scan</h2>
-        <p>Click <strong>Rescan</strong> (or <strong>Run Scan</strong> on a freshly connected org) to open the scanner picker.</p>
-
-        <figure class="ug-figure">
-          <img src="/products/orgvitals/guide/02-run-scan.gif" alt="Choosing scanners and running a scan in OrgVitals" loading="lazy" decoding="async" width="1000" height="625" />
-          <figcaption>Picking scanners and running a read-only scan.</figcaption>
-        </figure>
-
-        <p>
-          <strong>Choose what to run.</strong> All <strong>49 scanners</strong> are enabled by default,
-          grouped into five categories. Toggle individual scanners or whole categories &mdash; for
-          example, run only the <strong>Security</strong> checks before a go-live. Some scanners expose
-          <strong>configurable thresholds</strong> (e.g. &ldquo;empty field %&rdquo;, &ldquo;max class
-          lines&rdquo;, &ldquo;stale after N days&rdquo;) you can tune before running.
-        </p>
-        <p><strong>What happens during a scan:</strong></p>
-        <ol>
-          <li><strong>Connect</strong> &mdash; OrgVitals opens the CLI session for the org.</li>
-          <li><strong>Fetch metadata</strong> &mdash; a single snapshot is downloaded (SObjects &amp; fields, Apex &amp; flows, profiles &amp; permissions, reports). A live terminal shows progress per phase.</li>
-          <li><strong>Run scanners</strong> &mdash; every selected scanner runs in parallel across a worker pool, in dependency order. The running finding count ticks up as they complete.</li>
-          <li><strong>Score &amp; save</strong> &mdash; OrgVitals computes the overall score, grade, and per-category scores, persists the run, and opens the Dashboard.</li>
-        </ol>
-        <p>Everything is <strong>read-only</strong> &mdash; no changes are made to your org.</p>
-
-        <p class="ug-table-title"><strong>The five categories</strong></p>
-        <div class="ug-table-wrap">
-          <table class="ug-table">
-            <thead>
-              <tr><th>Category</th><th>What it covers</th></tr>
-            </thead>
+        <div class="prose">
+          <p>
+            <strong>Choose what to run.</strong> All 49 scanners are on by default,
+            grouped into five categories. Toggle individual scanners or whole
+            categories — run only the security checks before a go-live, for instance.
+            Some scanners expose thresholds you can tune first: empty-field percentage,
+            maximum class lines, stale after N days.
+          </p>
+          <p><strong>What happens during a scan.</strong></p>
+          <ol>
+            <li><strong>Connect.</strong> OrgVitals opens the CLI session for the org.</li>
+            <li><strong>Fetch metadata.</strong> One snapshot is downloaded — objects and fields, Apex and flows, profiles and permissions, reports. A live terminal shows progress per phase.</li>
+            <li><strong>Run scanners.</strong> Every selected scanner runs across a worker pool, in dependency order. The finding count ticks up as they complete.</li>
+            <li><strong>Score and save.</strong> OrgVitals computes the overall score, the grade and the per-category scores, persists the run, and opens the dashboard.</li>
+          </ol>
+          <p>All of it is read-only. Nothing in your org is modified.</p>
+          <p><strong>The five categories</strong></p>
+          <table>
+            <thead><tr><th>Category</th><th>What it covers</th></tr></thead>
             <tbody>
-              <tr><td><strong>Security</strong></td><td>Hardcoded credentials, over-permissioned profiles/permission sets, View/Modify All Data, guest access, XSS, missing input validation</td></tr>
-              <tr><td><strong>Code Quality</strong></td><td>Test coverage, large classes, SOQL injection, async without tests, Apex/LWC lint</td></tr>
-              <tr><td><strong>Automation</strong></td><td>Flows (DML/SOQL in loops, missing fault paths, hardcoded IDs), legacy workflow rules, inactive/duplicate automation</td></tr>
-              <tr><td><strong>Tech Debt</strong></td><td>Stale API versions, unused Apex/LWC/Aura/VF/fields, empty fields, excessive validation rules</td></tr>
-              <tr><td><strong>Performance</strong></td><td>SOQL/DML in loops, object field limits, org limit consumption</td></tr>
+              <tr><td>Security</td><td>Hardcoded credentials, over-permissioned profiles and permission sets, View and Modify All Data, guest access, XSS, missing input validation</td></tr>
+              <tr><td>Code quality</td><td>Test coverage, large classes, SOQL injection, async without tests, Apex and LWC lint</td></tr>
+              <tr><td>Automation</td><td>Flows with DML or SOQL in loops, missing fault paths, hardcoded Ids, legacy workflow rules, inactive and duplicate automation</td></tr>
+              <tr><td>Tech debt</td><td>Stale API versions, unused Apex, LWC, Aura, Visualforce and fields, empty fields, excessive validation rules</td></tr>
+              <tr><td>Performance</td><td>SOQL and DML in loops, object field limits, org limit consumption</td></tr>
             </tbody>
           </table>
+          <p>
+            <strong>Batch scans.</strong> You can scan several orgs in one run — this is
+            what org family uses. Each org is scanned in isolation, so one failure does
+            not abort the batch, and you get a per-org progress list with a completed
+            and failed summary.
+          </p>
         </div>
+      </Proc>
 
-        <p>
-          <strong>Batch scans.</strong> You can scan <strong>multiple orgs in one run</strong> (used by
-          Org Family). Each org is scanned in isolation, so one failure doesn't abort the batch; you get
-          a per-org progress list and a completed/failed summary.
-        </p>
-
-        <!-- 5 -->
-        <h2 id="how-scoring-works">5. How scoring works</h2>
-        <p>OrgVitals turns findings into a score with a single, transparent model.</p>
-
-        <p>
-          <strong>Step 1 &mdash; per-category penalties.</strong> Each finding subtracts points from its
-          category, by severity:
-        </p>
-        <div class="ug-table-wrap">
-          <table class="ug-table">
+      <Proc {...s('how-scoring-works')}>
+        <div class="prose">
+          <p>OrgVitals turns findings into a score with one transparent model.</p>
+          <p>
+            <strong>Step one — per-category penalties.</strong> Each finding subtracts
+            points from its category, by severity. Every category starts at 100 and
+            cannot drop below zero.
+          </p>
+          <table>
             <thead><tr><th>Severity</th><th>Penalty</th></tr></thead>
             <tbody>
               <tr><td>Critical</td><td>&minus;25</td></tr>
@@ -210,816 +298,423 @@ sf org list             # confirm the org shows up</code></pre>
               <tr><td>Low</td><td>&minus;1</td></tr>
             </tbody>
           </table>
-        </div>
-        <p>Each category starts at 100 and can't drop below 0.</p>
-
-        <p><strong>Step 2 &mdash; weighted overall score.</strong> Category scores are combined by weight:</p>
-        <div class="ug-table-wrap">
-          <table class="ug-table">
-            <thead><tr><th>Category</th><th>Weight</th></tr></thead>
-            <tbody>
-              <tr><td>Security</td><td>30%</td></tr>
-              <tr><td>Code Quality</td><td>20%</td></tr>
-              <tr><td>Automation</td><td>20%</td></tr>
-              <tr><td>Tech Debt</td><td>20%</td></tr>
-              <tr><td>Performance</td><td>10%</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <p><strong>Step 3 &mdash; letter grade.</strong></p>
-        <div class="ug-table-wrap">
-          <table class="ug-table">
+          <p>
+            <strong>Step two — the weighted overall score.</strong> Category scores
+            combine by weight: security 30%, code quality 20%, automation 20%, tech
+            debt 20%, performance 10%.
+          </p>
+          <p><strong>Step three — the letter grade.</strong></p>
+          <table>
             <thead><tr><th>Grade</th><th>Score</th></tr></thead>
             <tbody>
-              <tr><td><strong>A</strong></td><td>90&ndash;100</td></tr>
-              <tr><td><strong>B</strong></td><td>75&ndash;89</td></tr>
-              <tr><td><strong>C</strong></td><td>60&ndash;74</td></tr>
-              <tr><td><strong>D</strong></td><td>45&ndash;59</td></tr>
-              <tr><td><strong>F</strong></td><td>0&ndash;44</td></tr>
+              <tr><td>A</td><td>90&ndash;100</td></tr>
+              <tr><td>B</td><td>75&ndash;89</td></tr>
+              <tr><td>C</td><td>60&ndash;74</td></tr>
+              <tr><td>D</td><td>45&ndash;59</td></tr>
+              <tr><td>F</td><td>0&ndash;44</td></tr>
             </tbody>
           </table>
-        </div>
-
-        <p>
-          <strong>Managed score.</strong> As you triage findings (mark them fixed / ignored / snoozed),
-          the Dashboard also shows a <strong>managed score</strong> that recomputes health
-          <em>excluding</em> what you've dismissed &mdash; so you see both the raw picture and where
-          you'll land after planned work.
-        </p>
-
-        <!-- 6 -->
-        <h2 id="dashboard">6. Dashboard</h2>
-        <p>The Dashboard is your landing view after a scan.</p>
-
-        <figure class="ug-figure">
-          <img src="/products/orgvitals/guide/03-dashboard.gif" alt="OrgVitals Dashboard showing overall grade, trend, and category breakdown" loading="lazy" decoding="async" width="1000" height="625" />
-          <figcaption>The Dashboard: overall grade, trend, and category breakdown.</figcaption>
-        </figure>
-
-        <ul>
-          <li><strong>Overall grade &amp; score</strong> &mdash; a large A&ndash;F grade with the numeric score out of 100.</li>
-          <li><strong>Score trend</strong> &mdash; your overall score plotted across recent scans, so you can see direction.</li>
-          <li><strong>New / Resolved / Total open</strong> &mdash; how findings changed versus the previous scan.</li>
-          <li><strong>Scanner results grid</strong> &mdash; every check that ran, shown as <strong>pass / warn / fail</strong>, grouped by category.</li>
-          <li><strong>Category breakdown</strong> &mdash; the five category scores with their own letter grades.</li>
-          <li><strong>Fix These First</strong> &mdash; the highest-impact issues plus <strong>quick wins</strong> (high impact, low effort), so you always have a starting point.</li>
-          <li><strong>Export PDF</strong> &mdash; render the full report to a PDF (see <a href="#notifications-reports">&sect;12</a>).</li>
-        </ul>
-
-        <!-- 7 -->
-        <h2 id="findings-triage">7. Findings &amp; triage</h2>
-        <p>The <strong>Findings</strong> tab is the complete, filterable list of everything the scanners found.</p>
-
-        <figure class="ug-figure">
-          <img src="/products/orgvitals/guide/04-findings.gif" alt="Filtering and triaging findings in OrgVitals" loading="lazy" decoding="async" width="1000" height="625" />
-          <figcaption>Filtering findings by severity, category, and status.</figcaption>
-        </figure>
-
-        <p>
-          <strong>See a finding's detail.</strong> Click any finding row to expand it &mdash; you get the
-          full explanation, the affected component, an effort estimate, remediation guidance, and the
-          status controls (Open / Fixed / Ignored / Snooze) right there.
-        </p>
-
-        <figure class="ug-figure">
-          <img src="/products/orgvitals/guide/09-finding-detail.gif" alt="Expanding a finding for its full detail and status controls" loading="lazy" decoding="async" width="1000" height="625" />
-          <figcaption>Click a finding to expand its full detail and status controls.</figcaption>
-        </figure>
-
-        <p>
-          <strong>Each finding shows:</strong> category, <strong>severity</strong> (critical / high /
-          medium / low), a title, a detailed explanation, the <strong>affected count</strong>, the
-          <strong>linked component</strong> (click through to Insights), and remediation guidance.
-        </p>
-        <p><strong>Filtering &amp; sorting</strong></p>
-        <ul>
-          <li>By <strong>severity</strong> &mdash; the chips at the top (Critical / High / Medium / Low / All).</li>
-          <li>By <strong>category</strong>, by <strong>scanner</strong>, and by <strong>workflow status</strong>.</li>
-          <li><strong>Search</strong> findings by text.</li>
-          <li><strong>Prioritize</strong> &mdash; sort by a Severity or Priority model that surfaces quick wins first.</li>
-        </ul>
-        <p>
-          <strong>Triage workflow.</strong> Give any finding a status; it's saved per org and
-          <strong>persists across future scans</strong> (matched by a stable finding key), so your
-          triage survives re-scans.
-        </p>
-        <div class="ug-table-wrap">
-          <table class="ug-table">
-            <thead><tr><th>Status</th><th>Meaning</th></tr></thead>
-            <tbody>
-              <tr><td><strong>Open</strong></td><td>Default &mdash; not yet acted on</td></tr>
-              <tr><td><strong>Fixed</strong></td><td>You've remediated it</td></tr>
-              <tr><td><strong>Ignored</strong></td><td>Won't fix / not applicable</td></tr>
-              <tr><td><strong>Snoozed</strong></td><td>Deferred until a date you choose</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <p>Dismissed findings drop out of the Dashboard's <strong>managed score</strong>.</p>
-
-        <p><strong>Export &amp; cleanup</strong></p>
-        <ul>
-          <li><strong>CSV</strong> &mdash; export the findings table for sharing or ticketing.</li>
-          <li><strong>PDF</strong> &mdash; export the full formatted report.</li>
-          <li><strong>Cleanup generation</strong> &mdash; for findings that map to deletable metadata (unused Apex classes, fields, LWC, Aura, VF pages, empty fields), OrgVitals can generate a <code>destructiveChanges.xml</code> + <code>package.xml</code> pair you feed to a normal metadata deploy. OrgVitals never performs the deletion itself.</li>
-        </ul>
-
-        <!-- 8 -->
-        <h2 id="insights">8. Insights &mdash; exploring your metadata</h2>
-        <p><strong>Insights</strong> turns your org into a browsable, cross-linked map of its metadata.</p>
-
-        <figure class="ug-figure">
-          <img src="/products/orgvitals/guide/05-insights.gif" alt="Exploring metadata, dependencies, and impact analysis in OrgVitals Insights" loading="lazy" decoding="async" width="1000" height="625" />
-          <figcaption>Insights: browse, cross-link, and trace dependencies across metadata.</figcaption>
-        </figure>
-
-        <ul>
-          <li><strong>Browse by type</strong> &mdash; Apex classes, triggers, LWC, Aura, Visualforce, objects, fields, flows, workflows, approvals, email templates, profiles, permission sets, reports, dashboards, named credentials, users, org limits, and more, each with counts and an &ldquo;⚠ with issues&rdquo; filter.</li>
-          <li><strong>Component detail</strong> &mdash; for any component: status, API version, line/method counts, <strong>test coverage</strong>, sharing/access, and <strong>code flags</strong> (SOQL/DML in loop, SOQL injection risk, CRUD/FLS violations, hardcoded credentials).</li>
-          <li><strong>Delete safety</strong> &mdash; see what references a component before you remove it (&ldquo;no refs found&rdquo; vs a list of dependents).</li>
-          <li><strong>View source</strong> &mdash; read the actual Apex/LWC/Aura/VF source inline, with the flagged lines.</li>
-          <li><strong>Dependency graph</strong> &mdash; a visual map of directed relationships between components (triggers &rarr; objects, LWC &rarr; Apex, flows &rarr; objects, SOQL queries, and more).</li>
-          <li><strong>Impact analysis</strong> &mdash; for a chosen component, the <strong>blast radius</strong>: everything that depends on it.</li>
-          <li><strong>Global search</strong> &mdash; press <strong>⌘K / Ctrl-K</strong> anywhere to fuzzy-search all indexed metadata and jump straight to it.</li>
-        </ul>
-
-        <p>
-          <strong>View the source.</strong> Pick a metadata type (e.g. Apex Classes), select a component,
-          and click <strong>View Source</strong> to read the syntax-highlighted, read-only source inline
-          &mdash; flagged lines and issue counts included.
-        </p>
-
-        <figure class="ug-figure">
-          <img src="/products/orgvitals/guide/10-view-source.gif" alt="Viewing a component's source inline in OrgVitals Insights" loading="lazy" decoding="async" width="1000" height="625" />
-          <figcaption>View Source: read the syntax-highlighted, read-only source with flagged lines.</figcaption>
-        </figure>
-
-        <p>
-          <strong>See the dependency graph.</strong> From the same detail panel, click <strong>Dep Graph</strong>
-          to visualize what a component depends on and what depends on it &mdash; so you understand the
-          blast radius before changing anything.
-        </p>
-
-        <figure class="ug-figure">
-          <img src="/products/orgvitals/guide/11-dependency-graph.gif" alt="Visualizing a component's dependency graph in OrgVitals Insights" loading="lazy" decoding="async" width="1000" height="625" />
-          <figcaption>Dependency graph: what a component depends on, and what depends on it.</figcaption>
-        </figure>
-
-        <!-- 9 -->
-        <h2 id="history-org-family">9. History &amp; Org Family</h2>
-
-        <h3>History &mdash; progress over time</h3>
-        <p>
-          Every scan is saved locally. The <strong>History</strong> tab plots your score over time and
-          lists each run with its grade, severity counts, and duration, so you can tell whether
-          remediation work is actually moving the needle. Select an older scan to review its findings or
-          compare it to the current one.
-        </p>
-
-        <figure class="ug-figure">
-          <img src="/products/orgvitals/guide/06-history.gif" alt="Reviewing scan history and score trend over time in OrgVitals" loading="lazy" decoding="async" width="1000" height="625" />
-          <figcaption>History: score over time, with per-run grades and durations.</figcaption>
-        </figure>
-
-        <h3>Org Family &mdash; compare related orgs</h3>
-        <p>
-          An <strong>Org Family</strong> is a user-named group of related orgs &mdash; for example a
-          production org and its sandboxes (<strong>QA / UAT / Prod</strong>). One org belongs to at most
-          one family. Create and manage families from the <strong>Org Family</strong> tab (which appears
-          when the selected org is in a family).
-        </p>
-
-        <figure class="ug-figure">
-          <img src="/products/orgvitals/guide/07-org-family.gif" alt="Comparing related orgs in an OrgVitals Org Family" loading="lazy" decoding="async" width="1000" height="625" />
-          <figcaption>Org Family: side-by-side rollup, shared findings, and A/B compare.</figcaption>
-        </figure>
-
-        <ul>
-          <li><strong>Rollup / Overview</strong> &mdash; every org in the family side by side: score, grade, critical count, category bars, and last-scan date. <strong>Scan All</strong> runs a batch scan across the family.</li>
-          <li><strong>Shared findings</strong> &mdash; checks that appear in <strong>two or more</strong> orgs of the family, so you can tell systemic problems from one-off ones.</li>
-          <li><strong>A/B Compare</strong> &mdash; pick two orgs and see a latest-scan diff: category deltas, per-check differences, and a finding-level diff.</li>
-          <li><strong>Metadata diff</strong> &mdash; a structural diff between two orgs across nine metadata types (Apex, triggers, VF, LWC, Aura, objects, fields, flows, workflow rules, email templates, profiles, permission sets, reports, dashboards): what exists only in A, only in B, or differs.</li>
-          <li><strong>Source diff</strong> &mdash; a full line-by-line diff of a single component's source between the two orgs (split or unified view).</li>
-        </ul>
-
-        <p>
-          <strong>To compare code:</strong> open <strong>Compare</strong>, pick two orgs (e.g. Production
-          vs QA), switch to the <strong>Metadata</strong> tab to see what's <em>only in A</em>,
-          <em>only in B</em>, or <em>differs</em>, then click any differing component for its
-          <strong>source line-diff</strong>.
-        </p>
-
-        <figure class="ug-figure">
-          <img src="/products/orgvitals/guide/12-family-compare.gif" alt="Comparing metadata and source between two orgs in an OrgVitals Org Family" loading="lazy" decoding="async" width="1000" height="625" />
-          <figcaption>Compare: metadata diff between two orgs, then a component-level source line-diff.</figcaption>
-        </figure>
-
-        <!-- 10 -->
-        <h2 id="ask-vita">10. Ask Vita &mdash; AI assistant</h2>
-        <p>
-          <strong>Vita</strong> answers plain-English questions about your org and links the relevant
-          records in the answer &mdash; for example: <em>&ldquo;Which flows have the highest
-          risk?&rdquo;</em>, <em>&ldquo;Which profiles have Modify All Data?&rdquo;</em>,
-          <em>&ldquo;Which Apex classes have zero coverage?&rdquo;</em>.
-        </p>
-
-        <figure class="ug-figure">
-          <img src="/products/orgvitals/guide/08-vita.gif" alt="Asking Vita plain-English questions about a Salesforce org in OrgVitals" loading="lazy" decoding="async" width="1000" height="625" />
-          <figcaption>Ask Vita: plain-English questions with linked records in the answer.</figcaption>
-        </figure>
-
-        <p>
-          Vita can read your local scan data through read-only lookups (flows, Apex classes/triggers,
-          users, profiles, permission sets, fields, objects, findings, org limits) and summarizes what
-          it finds.
-        </p>
-        <p>
-          <strong>Privacy &mdash; Vita is opt-in and off by default.</strong> It is the <em>one</em>
-          feature that sends data off-device: to answer a question, it sends that question plus the
-          specific metadata it reads to Anthropic's Claude API. To use it in a real org you supply
-          <strong>your own Anthropic API key</strong> (stored <strong>encrypted, locally</strong>),
-          acknowledge the notice, and enable Vita. Nothing is sent to OrgVitals' servers.
-        </p>
-
-        <div class="ug-callout">
-          <span class="ug-callout-label">In demo mode</span>
           <p>
-            Vita returns <strong>static sample answers instantly</strong> &mdash; no API key is required
-            and nothing is sent anywhere &mdash; so you can see the experience without configuring
-            anything.
+            <strong>The managed score.</strong> As you triage findings — fixed, ignored,
+            snoozed — the dashboard also shows a managed score that recomputes health
+            excluding what you have dismissed. You see the raw picture and where you
+            will land after the planned work.
+          </p>
+        </div>
+      </Proc>
+
+      <Proc {...s('the-dashboard')}>
+        <div class="prose">
+          <p>The dashboard is where a scan lands.</p>
+        </div>
+
+        <ScreenPanel
+          n="03"
+          title="The dashboard — grade, trend, categories"
+          dur="0:03"
+          stem="03-dashboard"
+          alt="The dashboard: an overall letter grade, a score trend, and five category scores."
+        >
+          Overall grade, score trend, and the category breakdown.
+        </ScreenPanel>
+
+        <div class="prose">
+          <ul>
+            <li><strong>Overall grade and score</strong> — a large A to F grade with the number out of 100.</li>
+            <li><strong>Score trend</strong> — your overall score plotted across recent scans, so direction is visible.</li>
+            <li><strong>New, resolved, total open</strong> — how findings moved against the previous scan.</li>
+            <li><strong>Scanner results grid</strong> — every check that ran, as pass, warn or fail, grouped by category.</li>
+            <li><strong>Category breakdown</strong> — the five category scores with their own letter grades.</li>
+            <li><strong>Fix these first</strong> — the highest-impact issues, plus quick wins that are high impact and low effort.</li>
+            <li><span class="key">Export PDF</span> — render the full report to a file. See <a href="#notifications-reports-and-housekeeping">section 12</a>.</li>
+          </ul>
+        </div>
+      </Proc>
+
+      <Proc {...s('findings-and-triage')}>
+        <div class="prose">
+          <p>
+            The <span class="key">Findings</span> tab is the complete, filterable list of
+            everything the scanners found.
           </p>
         </div>
 
-        <!-- 11 -->
-        <h2 id="demo-mode">11. Demo mode &amp; the guided tour</h2>
-        <p>
-          OrgVitals ships with a self-contained <strong>demo mode</strong> so you (or a teammate
-          evaluating the app) can see every feature fully populated without connecting a real org.
-        </p>
-        <ul>
-          <li><strong>The guided tour</strong> runs automatically the first time you launch the app, walking through the Dashboard, Findings, Insights, History, Org Family, and Ask Vita over the sample <strong>Acme</strong> org family. Use <strong>Next / Back</strong>, or <strong>Skip</strong> at any time. When you finish, the app returns to your real (empty) state, ready to connect your own org.</li>
-          <li><strong>Replay anytime</strong> from <strong>Help &rarr; Take the Tour</strong>.</li>
-          <li>While demo data is showing, a small <strong>DEMO</strong> badge appears in the header, and all data is the synthetic Acme family &mdash; your real org data is never touched.</li>
-        </ul>
+        <ScreenPanel
+          n="04"
+          title="Findings — filter and triage"
+          dur="0:32"
+          stem="04-findings"
+          alt="The findings list, with severity chips and status filters along the top."
+        >
+          Filtering findings by severity, category and status.
+        </ScreenPanel>
 
-        <p>The Acme family demonstrates the full score range and the QA/UAT/Prod comparison workflow:</p>
-        <div class="ug-table-wrap">
-          <table class="ug-table">
-            <thead><tr><th>Demo org</th><th>Role</th><th>Grade</th></tr></thead>
-            <tbody>
-              <tr><td>Acme UAT</td><td>UAT</td><td><strong>A</strong></td></tr>
-              <tr><td>Acme Production</td><td>Prod</td><td><strong>C</strong></td></tr>
-              <tr><td>Acme QA</td><td>QA</td><td><strong>F</strong></td></tr>
-            </tbody>
-          </table>
+        <div class="prose">
+          <p>
+            <strong>Open a finding.</strong> Click any row to expand it. You get the full
+            explanation, the affected component, an effort estimate, remediation
+            guidance and the status controls in place.
+          </p>
         </div>
 
-        <!-- 12 -->
-        <h2 id="notifications-reports">12. Notifications, reports &amp; housekeeping</h2>
+        <ScreenPanel
+          n="05"
+          title="A finding, opened"
+          dur="0:04"
+          stem="09-finding-detail"
+          alt="One finding expanded, showing its explanation and status controls."
+        >
+          The expanded detail, with its status controls.
+        </ScreenPanel>
 
-        <h3>Notifications</h3>
-        <p>
-          The <strong>bell</strong> in the top-right opens the notification panel &mdash; scan results,
-          warnings, export outcomes, and app updates land here, newest first. Unread items are badged on
-          the bell; open the panel to mark them read, or <strong>Clear all</strong>.
-        </p>
-
-        <figure class="ug-figure">
-          <img src="/products/orgvitals/guide/13-notifications.gif" alt="Opening the notifications panel in OrgVitals" loading="lazy" decoding="async" width="1000" height="625" />
-          <figcaption>Notifications: scan results, warnings, export outcomes, and app updates, newest first.</figcaption>
-        </figure>
-
-        <h3>Export a report (PDF) and findings (CSV)</h3>
-        <ul>
-          <li><strong>PDF</strong> &mdash; on the Dashboard, click <strong>PDF</strong> to export the full health report. OrgVitals renders it and opens a save dialog so you choose where to write the file; you'll get a notification when it's saved.</li>
-          <li><strong>CSV</strong> &mdash; on the Findings tab, click <strong>Export</strong> to save the currently-filtered findings as CSV (great for tickets or spreadsheets). Whatever filters are active is what gets exported.</li>
-        </ul>
-
-        <figure class="ug-figure">
-          <img src="/products/orgvitals/guide/14-export.gif" alt="Exporting a PDF report and CSV findings from OrgVitals" loading="lazy" decoding="async" width="1000" height="625" />
-          <figcaption>Export a PDF health report from the Dashboard, or CSV findings from the Findings tab.</figcaption>
-        </figure>
-
-        <h3>Delete an org-family mapping</h3>
-        <p>
-          An Org Family is just a saved grouping &mdash; deleting it never touches your orgs or their
-          scans. On the <strong>Org Family</strong> tab, use the <strong>trash</strong> icon next to the
-          family name to remove the grouping; the member orgs remain exactly as they were.
-        </p>
-
-        <figure class="ug-figure">
-          <img src="/products/orgvitals/guide/15-delete-family.gif" alt="Deleting an org-family mapping in OrgVitals" loading="lazy" decoding="async" width="1000" height="625" />
-          <figcaption>Deleting a family mapping removes only the grouping; the member orgs are untouched.</figcaption>
-        </figure>
-
-        <!-- 13 -->
-        <h2 id="tips-shortcuts-faq">13. Tips, shortcuts &amp; FAQ</h2>
-        <p><strong>Shortcuts</strong></p>
-        <ul>
-          <li><strong>⌘K / Ctrl-K</strong> &mdash; open global metadata search from anywhere.</li>
-          <li><strong>Rescan</strong> (header) &mdash; re-run a scan on the current org.</li>
-          <li><strong>Help &rarr; Take the Tour</strong> &mdash; replay the guided walkthrough.</li>
-        </ul>
-        <p><strong>Exporting reports</strong></p>
-        <ul>
-          <li><strong>CSV</strong> exports the findings table; <strong>PDF</strong> exports the full formatted report (rendered off-screen and saved via a normal file dialog). You can re-open PDFs OrgVitals previously wrote.</li>
-        </ul>
-        <p><strong>FAQ</strong></p>
-        <ul>
-          <li><strong>Does OrgVitals change my org?</strong> No. Scans are strictly read-only. Even cleanup generation only produces a <code>destructiveChanges.xml</code> you choose to deploy yourself.</li>
-          <li><strong>Where is my data stored?</strong> In a local SQLite database in your OS user-data folder. It is never uploaded (Ask Vita is the only opt-in exception, and only sends what's needed to answer your question).</li>
-          <li><strong>Do I have to enter Salesforce credentials?</strong> No &mdash; OrgVitals uses your existing Salesforce CLI sessions.</li>
-          <li><strong>The CLI isn't detected.</strong> Install the Salesforce CLI and run <code>sf org login web</code>, then reopen OrgVitals.</li>
-          <li><strong>Can I compare a sandbox against production?</strong> Yes &mdash; put them in an Org Family and use A/B Compare, metadata diff, and source diff.</li>
-        </ul>
-
-        <p class="ug-signoff"><em>Built by CloudAlgo. Questions? Help &rarr; Contact Support.</em></p>
-
-        <!-- Bottom "More" nav -->
-        <nav class="ug-more" aria-label="More about OrgVitals">
-          <span class="ug-more-label">More</span>
+        <div class="prose">
+          <p>
+            <strong>Every finding carries</strong> its category, a severity of critical,
+            high, medium or low, a title, a detailed explanation, the affected count,
+            the linked component — click through to insights — and remediation guidance.
+          </p>
+          <p><strong>Filtering and sorting.</strong></p>
           <ul>
-            <li><a href="/products/orgvitals">OrgVitals product page &rarr;</a></li>
-            <li><a href="/products/orgvitals/legal/privacy">Privacy Policy &rarr;</a></li>
-            <li><a href="/products/orgvitals/legal/terms">Terms of Service &rarr;</a></li>
+            <li>By severity, using the chips along the top: <span class="key">Critical</span> <span class="key">High</span> <span class="key">Medium</span> <span class="key">Low</span> <span class="key">All</span>.</li>
+            <li>By category, by scanner, and by workflow status.</li>
+            <li>By text search.</li>
+            <li>By priority — sort on a severity or priority model that surfaces quick wins first.</li>
           </ul>
-        </nav>
-
-      </article>
-
-      <!-- Sticky TOC -->
-      <aside class="ug-side">
-        <details class="ug-toc">
-          <summary class="ug-toc-label">On this page</summary>
+          <p>
+            <strong>Triage.</strong> Give any finding a status. It is saved per org and
+            matched by a stable finding key, so it survives future scans.
+          </p>
+          <table>
+            <thead><tr><th>Status</th><th>Meaning</th></tr></thead>
+            <tbody>
+              <tr><td>Open</td><td>The default — not yet acted on</td></tr>
+              <tr><td>Fixed</td><td>You have remediated it</td></tr>
+              <tr><td>Ignored</td><td>Will not fix, or not applicable</td></tr>
+              <tr><td>Snoozed</td><td>Deferred until a date you choose</td></tr>
+            </tbody>
+          </table>
+          <p>Dismissed findings drop out of the dashboard's managed score.</p>
+          <p><strong>Export and cleanup.</strong></p>
           <ul>
-            {sections.map((s) => (
-              <li>
-                <a href={`#${s.id}`} data-toc={s.id}>
-                  <span class="ug-toc-num">{s.num}</span>
-                  {s.label}
-                </a>
-              </li>
-            ))}
+            <li><strong>CSV</strong> — export the findings table for sharing or ticketing.</li>
+            <li><strong>PDF</strong> — export the full formatted report.</li>
+            <li><strong>Cleanup generation</strong> — for findings that map to deletable metadata (unused Apex classes, fields, LWC, Aura, Visualforce pages, empty fields), OrgVitals generates a <span class="key">destructiveChanges.xml</span> and <span class="key">package.xml</span> pair for a normal metadata deploy. It never performs the deletion itself.</li>
           </ul>
-        </details>
-        <script is:inline>
-          /* Set initial TOC state before paint: open on desktop, collapsed on mobile. */
-          (function () {
-            var d = document.currentScript.previousElementSibling;
-            if (d && d.tagName === 'DETAILS') {
-              d.open = window.matchMedia('(min-width: 901px)').matches;
-            }
-          })();
-        </script>
-      </aside>
+        </div>
+      </Proc>
 
+      <Proc {...s('insights')}>
+        <div class="prose">
+          <p>Insights turns the org into a browsable, cross-linked map of its own metadata.</p>
+        </div>
+
+        <ScreenPanel
+          n="06"
+          title="Insights — browse and cross-link"
+          dur="0:04"
+          stem="05-insights"
+          alt="The insights browser, listing metadata by type with issue counts."
+        >
+          Browsing metadata and tracing dependencies.
+        </ScreenPanel>
+
+        <div class="prose">
+          <ul>
+            <li><strong>Browse by type</strong> — Apex classes and triggers, LWC, Aura, Visualforce, objects, fields, flows, workflows, approvals, email templates, profiles, permission sets, reports, dashboards, named credentials, users, org limits. Each carries a count and a with-issues filter.</li>
+            <li><strong>Component detail</strong> — status, API version, line and method counts, test coverage, sharing and access, and code flags: SOQL or DML in a loop, injection risk, CRUD and FLS violations, hardcoded credentials.</li>
+            <li><strong>Delete safety</strong> — what references a component, before you remove it.</li>
+            <li><strong>Impact analysis</strong> — the blast radius of a chosen component: everything that depends on it.</li>
+            <li><strong>Global search</strong> — press <span class="key">&#8984;K</span> or <span class="key">Ctrl-K</span> anywhere to fuzzy-search all indexed metadata and jump to it.</li>
+          </ul>
+          <p>
+            <strong>Read the source.</strong> Pick a metadata type, select a component, and
+            press <span class="key">View Source</span> for the syntax-highlighted, read-only
+            source — flagged lines and issue counts included.
+          </p>
+        </div>
+
+        <ScreenPanel
+          n="07"
+          title="View source — flagged lines in place"
+          dur="0:05"
+          stem="10-view-source"
+          alt="Read-only Apex source, with flagged lines marked in the gutter."
+        >
+          Read-only source, with the flagged lines marked.
+        </ScreenPanel>
+
+        <div class="prose">
+          <p>
+            <strong>See what depends on what.</strong> From the same detail panel, press
+            <span class="key">Dep Graph</span> for a directed map of the component's
+            relationships — triggers to objects, LWC to Apex, flows to objects, SOQL
+            queries.
+          </p>
+        </div>
+
+        <ScreenPanel
+          n="08"
+          title="Dependency graph"
+          dur="0:05"
+          stem="11-dependency-graph"
+          alt="A directed graph of one component's dependencies and dependents."
+        >
+          What a component depends on, and what depends on it.
+        </ScreenPanel>
+      </Proc>
+
+      <Proc {...s('history-and-org-family')}>
+        <div class="prose">
+          <p>
+            <strong>History — progress over time.</strong> Every scan is saved locally. The
+            <span class="key">History</span> tab plots your score over time and lists each
+            run with its grade, severity counts and duration, so you can tell whether
+            remediation is moving the needle. Select an older scan to review its
+            findings or compare it against the current one.
+          </p>
+        </div>
+
+        <ScreenPanel
+          n="09"
+          title="History — score over time"
+          dur="0:03"
+          stem="06-history"
+          alt="The history tab: a score plotted across runs, with each run listed below."
+        >
+          Per-run grades and durations, plotted.
+        </ScreenPanel>
+
+        <div class="prose">
+          <p>
+            <strong>Org family — related orgs, side by side.</strong> A family is a group of
+            related orgs that you name — a production org and its sandboxes, say, as QA,
+            UAT and Prod. An org belongs to at most one family. Create and manage them
+            from the <span class="key">Org Family</span> tab, which appears when the
+            selected org is in one.
+          </p>
+        </div>
+
+        <ScreenPanel
+          n="10"
+          title="Org family — rollup and compare"
+          dur="0:04"
+          stem="07-org-family"
+          alt="The org family rollup: several orgs with their scores and grades side by side."
+        >
+          The family rollup, shared findings, and A/B compare.
+        </ScreenPanel>
+
+        <div class="prose">
+          <ul>
+            <li><strong>Rollup</strong> — every org in the family side by side: score, grade, critical count, category bars, last-scan date. Scan all runs a batch across the family.</li>
+            <li><strong>Shared findings</strong> — checks that appear in two or more orgs, separating systemic problems from one-offs.</li>
+            <li><strong>A/B compare</strong> — pick two orgs for a latest-scan diff: category deltas, per-check differences, finding-level diff.</li>
+            <li><strong>Metadata diff</strong> — a structural diff across Apex, triggers, Visualforce, LWC, Aura, objects, fields, flows, workflow rules, email templates, profiles, permission sets, reports and dashboards: what exists only in A, only in B, or differs.</li>
+            <li><strong>Source diff</strong> — a line-by-line diff of one component's source between the two orgs, split or unified.</li>
+          </ul>
+          <p>
+            <strong>To compare code:</strong> open compare, pick two orgs, switch to the
+            metadata tab to see what is only in A, only in B or differs, then click a
+            differing component for its source line-diff.
+          </p>
+        </div>
+
+        <ScreenPanel
+          n="11"
+          title="Compare — metadata, then source"
+          dur="0:09"
+          stem="12-family-compare"
+          alt="A metadata diff between two orgs, then one component's source line-diff."
+        >
+          A metadata diff between two orgs, then a component line-diff.
+        </ScreenPanel>
+      </Proc>
+
+      <Proc {...s('ask-vita')}>
+        <div class="prose">
+          <p>
+            Vita answers plain-English questions about your org and links the relevant
+            records in the answer. Which flows carry the highest risk. Which profiles
+            have Modify All Data. Which Apex classes have zero coverage.
+          </p>
+        </div>
+
+        <ScreenPanel
+          n="12"
+          title="Ask Vita — a question, answered"
+          dur="0:05"
+          stem="08-vita"
+          alt="A plain-English question to Vita, answered with linked org records."
+        >
+          A plain-English question, with linked records in the answer.
+        </ScreenPanel>
+
+        <div class="prose">
+          <p>
+            Vita reads your local scan data through read-only lookups — flows, Apex
+            classes and triggers, users, profiles, permission sets, fields, objects,
+            findings, org limits — and summarises what it finds.
+          </p>
+          <p>
+            <strong>Vita is opt-in and off by default.</strong> It is the one feature that
+            sends data off your device: to answer a question it sends that question,
+            plus the specific metadata it reads, to Anthropic's Claude API. To use it
+            against a real org you supply your own Anthropic API key, stored encrypted
+            and locally, acknowledge the notice, and enable Vita. Nothing reaches
+            CloudAlgo's servers.
+          </p>
+          <p>
+            In demo mode Vita returns static sample answers instantly. No key is
+            required and nothing is sent anywhere.
+          </p>
+        </div>
+      </Proc>
+
+      <Proc {...s('demo-mode-and-the-guided-tour')}>
+        <div class="prose">
+          <p>
+            OrgVitals ships with a self-contained demo mode, so you — or a colleague
+            evaluating the app — can see every feature fully populated without
+            connecting a real org.
+          </p>
+          <ul>
+            <li><strong>The guided tour</strong> runs automatically on first launch, walking through the dashboard, findings, insights, history, org family and Ask Vita over the sample Acme family. Use <span class="key">Next</span>, <span class="key">Back</span> or <span class="key">Skip</span>. When it finishes, the app returns to your real, empty state, ready for your own org.</li>
+            <li><strong>Replay it</strong> from <span class="key">Help &rarr; Take the Tour</span>.</li>
+            <li>While demo data is showing, a <span class="key">DEMO</span> badge sits in the header. All of it is the synthetic Acme family; your real org data is never touched.</li>
+          </ul>
+          <p>
+            The Acme family covers the full score range and the QA-to-Prod comparison
+            workflow: Acme UAT grades A, Acme Production grades C, Acme QA grades F.
+          </p>
+        </div>
+      </Proc>
+
+      <Proc {...s('notifications-reports-and-housekeeping')}>
+        <div class="prose">
+          <p>
+            <strong>Notifications.</strong> The bell at the top-right opens the panel — scan
+            results, warnings, export outcomes and app updates, newest first. Unread
+            items are badged on the bell; open the panel to mark them read, or
+            <span class="key">Clear all</span>.
+          </p>
+        </div>
+
+        <ScreenPanel
+          n="13"
+          title="Notifications"
+          dur="0:02"
+          stem="13-notifications"
+          alt="The notifications panel, listing scan results and export outcomes."
+        >
+          Scan results, warnings, exports and updates, newest first.
+        </ScreenPanel>
+
+        <div class="prose">
+          <p><strong>Export a report.</strong></p>
+          <ul>
+            <li><strong>PDF</strong> — on the dashboard, press <span class="key">PDF</span> to export the full health report. OrgVitals renders it and opens a save dialogue so you choose where it goes; a notification confirms it is written.</li>
+            <li><strong>CSV</strong> — on the findings tab, press <span class="key">Export</span> to save the currently filtered findings. Whatever filters are active is what gets exported.</li>
+          </ul>
+        </div>
+
+        <ScreenPanel
+          n="14"
+          title="Export — PDF report, CSV findings"
+          dur="0:04"
+          stem="14-export"
+          alt="Exporting a PDF health report from the dashboard, and CSV from findings."
+        >
+          A PDF health report from the dashboard, CSV from findings.
+        </ScreenPanel>
+
+        <div class="prose">
+          <p>
+            <strong>Delete a family mapping.</strong> A family is only a saved grouping —
+            deleting it never touches your orgs or their scans. On the
+            <span class="key">Org Family</span> tab, use the trash icon next to the family
+            name. The member orgs remain exactly as they were.
+          </p>
+        </div>
+
+        <ScreenPanel
+          n="15"
+          title="Delete a family mapping"
+          dur="0:03"
+          stem="15-delete-family"
+          alt="Deleting an org family grouping; the member orgs stay as they were."
+        >
+          Removing the grouping; the member orgs are untouched.
+        </ScreenPanel>
+      </Proc>
+
+      <Proc {...s('tips-shortcuts-and-faq')}>
+        <div class="prose">
+          <p><strong>Shortcuts</strong></p>
+          <ul>
+            <li><span class="key">&#8984;K</span> or <span class="key">Ctrl-K</span> — global metadata search, from anywhere.</li>
+            <li><span class="key">Rescan</span> in the header — re-run a scan on the current org.</li>
+            <li><span class="key">Help &rarr; Take the Tour</span> — replay the guided walkthrough.</li>
+          </ul>
+          <p>
+            <strong>Does OrgVitals change my org?</strong> No. Scans are strictly read-only.
+            Even cleanup generation only produces a
+            <span class="key">destructiveChanges.xml</span> that you choose to deploy
+            yourself.
+          </p>
+          <p>
+            <strong>Where is my data stored?</strong> In a local SQLite database in your
+            operating system's user-data folder. It is never uploaded. Ask Vita is the
+            only opt-in exception, and it sends only what is needed to answer your
+            question.
+          </p>
+          <p>
+            <strong>Do I have to enter Salesforce credentials?</strong> No. OrgVitals uses
+            your existing Salesforce CLI sessions.
+          </p>
+          <p>
+            <strong>The CLI is not detected.</strong> Install the Salesforce CLI, run
+            <span class="key">sf org login web</span>, then reopen OrgVitals.
+          </p>
+          <p>
+            <strong>Can I compare a sandbox against production?</strong> Yes. Put them in an
+            org family and use A/B compare, metadata diff and source diff.
+          </p>
+        </div>
+      </Proc>
     </div>
+
+    <SectionRail
+      items={sections}
+      label="Sections"
+      observe=".proc"
+      padded
+      footNote="Sixteen screens on this page. Nothing plays until you press it."
+    />
   </div>
 
+  <Instruments title="Elsewhere on OrgVitals" meta="3 documents" rows={elsewhere}>
+    Something in the app not covered here? Write to{' '}
+    <a href="mailto:contact@cloudalgo.com">contact@cloudalgo.com</a>, or use{' '}
+    <span class="key">Help &rarr; Contact Support</span> inside OrgVitals.
+  </Instruments>
 </Page>
-
-<style>
-  .ug-header { padding-bottom: 2.75rem; }
-  .ug-meta {
-    font-size: 0.9375rem;
-    color: var(--color-text-muted);
-    max-width: none;
-    margin: 0.35rem 0 0;
-  }
-  .ug-header-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-    margin-top: 1.75rem;
-  }
-
-  .ug-body-section {
-    background: var(--surface-page);
-    padding: 3.5rem 0 5rem;
-  }
-  .ug-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 260px;
-    gap: 4rem;
-    align-items: start;
-  }
-  .ug-body { max-width: 800px; }
-  .ug-side {
-    position: sticky;
-    top: 96px;
-  }
-
-  /* ── Intro ── */
-  .ug-lead {
-    font-size: 1.0625rem;
-    line-height: 1.75;
-    color: var(--color-text);
-    margin: 0 0 1.5rem;
-  }
-  .ug-meta-list {
-    list-style: none;
-    margin: 0 0 1.75rem;
-    padding: 1.25rem 1.5rem;
-    background: var(--surface-card);
-    border: 1px solid var(--border-default);
-    border-radius: 12px;
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-  }
-  .ug-meta-list li {
-    font-size: 0.9375rem;
-    color: var(--color-text);
-    line-height: 1.6;
-  }
-  .ug-meta-list strong { color: var(--color-heading); font-weight: 700; }
-
-  /* ── Callout ── */
-  .ug-callout {
-    background: var(--surface-tint);
-    border: 1px solid var(--border-default);
-    border-left: 3px solid var(--border-strong);
-    border-radius: 10px;
-    padding: 1.1rem 1.4rem;
-    margin: 0 0 2rem;
-  }
-  .ug-callout-label {
-    display: block;
-    font-size: 0.6875rem;
-    font-weight: 800;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--color-heading);
-    margin-bottom: 0.5rem;
-  }
-  .ug-callout p {
-    margin: 0;
-    font-size: 0.9375rem;
-    line-height: 1.7;
-    color: var(--color-text);
-  }
-
-  /* ── Body typography ── */
-  .ug-body h2 {
-    font-size: 1.5rem;
-    font-weight: 800;
-    letter-spacing: -0.02em;
-    color: var(--color-heading);
-    margin: 3.25rem 0 1rem;
-    padding-top: 0.5rem;
-    scroll-margin-top: 90px;
-  }
-  .ug-body h3 {
-    font-size: 1.125rem;
-    font-weight: 700;
-    color: var(--color-heading);
-    margin: 2rem 0 0.75rem;
-    scroll-margin-top: 90px;
-  }
-  .ug-body p {
-    font-size: 1rem;
-    color: var(--color-text);
-    line-height: 1.7;
-    margin: 0 0 1rem;
-  }
-  .ug-body ul,
-  .ug-body ol {
-    margin: 0 0 1.25rem;
-    padding-left: 1.35rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.55rem;
-  }
-  .ug-body li {
-    font-size: 1rem;
-    color: var(--color-text);
-    line-height: 1.65;
-  }
-  .ug-body strong { color: var(--color-heading); font-weight: 700; }
-  .ug-body em { font-style: italic; }
-  .ug-body a {
-    color: var(--color-heading);
-    font-weight: 600;
-    text-decoration: underline;
-    text-underline-offset: 2px;
-  }
-  .ug-body a:hover { opacity: 0.72; }
-  .ug-body code {
-    font-family: var(--font-mono-spec);
-    font-size: 0.8125rem;
-    background: var(--surface-tint);
-    border: 1px solid var(--border-default);
-    padding: 1px 5px;
-    border-radius: 4px;
-    color: var(--color-heading);
-  }
-  .ug-table-title { margin-bottom: 0.5rem; }
-
-  /* ── Code block ── */
-  .ug-code {
-    background: var(--surface-inverse);
-    color: var(--color-on-inverse-soft);
-    border-radius: 12px;
-    padding: 1.1rem 1.35rem;
-    margin: 0 0 1.5rem;
-    overflow-x: auto;
-    line-height: 1.65;
-  }
-  .ug-code code {
-    font-family: var(--font-mono-spec);
-    font-size: 0.8125rem;
-    background: transparent;
-    border: 0;
-    padding: 0;
-    color: inherit;
-    white-space: pre;
-  }
-
-  /* ── Figures / GIFs ── */
-  .ug-figure {
-    margin: 1.25rem 0 2rem;
-  }
-  .ug-figure img {
-    display: block;
-    width: 100%;
-    height: auto;
-    aspect-ratio: 16 / 10;
-    object-fit: cover;
-    background: var(--surface-card);
-    border: 1px solid var(--border-default);
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 8px 28px var(--shadow-ink);
-  }
-  .ug-figure figcaption {
-    margin-top: 0.65rem;
-    font-size: 0.8125rem;
-    color: var(--color-text-muted);
-    line-height: 1.5;
-  }
-
-  /* ── Tables ── */
-  .ug-table-wrap {
-    margin: 0.25rem 0 1.75rem;
-    border: 1px solid var(--border-default);
-    border-radius: 12px;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-  .ug-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.875rem;
-    background: var(--surface-card);
-  }
-  .ug-table thead th {
-    background: var(--surface-inverse);
-    color: var(--color-on-inverse);
-    text-align: left;
-    font-weight: 700;
-    font-size: 0.75rem;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    padding: 12px 14px;
-  }
-  .ug-table td {
-    padding: 11px 14px;
-    border-top: 1px solid var(--border-default);
-    color: var(--color-text);
-    line-height: 1.55;
-    vertical-align: top;
-  }
-  .ug-table td strong { color: var(--color-heading); }
-
-  /* ── Sign-off + more nav ── */
-  .ug-signoff {
-    margin-top: 2.5rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid var(--border-default);
-    font-size: 0.9375rem;
-    color: var(--color-text-muted);
-  }
-  .ug-more {
-    margin-top: 2rem;
-    padding: 1.4rem 1.6rem;
-    background: var(--surface-card);
-    border: 1px solid var(--border-default);
-    border-radius: 12px;
-  }
-  .ug-more-label {
-    display: block;
-    font-size: 0.6875rem;
-    font-weight: 800;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--color-text-muted);
-    margin-bottom: 0.75rem;
-  }
-  .ug-more ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem 1.75rem;
-  }
-  .ug-more a {
-    font-size: 0.9375rem;
-    font-weight: 600;
-    color: var(--color-heading);
-    text-decoration: none;
-  }
-  .ug-more a:hover { opacity: 0.7; }
-
-  /* ── TOC ── */
-  .ug-toc {
-    padding: 1.25rem 1.4rem;
-    background: var(--surface-card);
-    border: 1px solid var(--border-default);
-    border-radius: 12px;
-  }
-  .ug-toc-label {
-    font-size: 0.6875rem;
-    font-weight: 800;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--color-text-muted);
-    margin-bottom: 0.85rem;
-  }
-  .ug-toc ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.15rem;
-  }
-  .ug-toc a {
-    display: flex;
-    align-items: baseline;
-    gap: 0.5rem;
-    font-size: 0.8125rem;
-    line-height: 1.4;
-    color: var(--color-text);
-    text-decoration: none;
-    padding: 0.35rem 0.5rem;
-    border-radius: 7px;
-    border-left: 2px solid transparent;
-    transition: color 0.18s ease, background 0.18s ease, border-color 0.18s ease;
-  }
-  .ug-toc a:hover { color: var(--color-heading); background: var(--surface-sunk); }
-  .ug-toc a.active {
-    color: var(--color-heading);
-    font-weight: 700;
-    background: var(--surface-sunk);
-    border-left-color: var(--border-strong);
-  }
-  .ug-toc-num {
-    font-size: 0.6875rem;
-    font-weight: 700;
-    color: var(--color-text-faintest);
-    min-width: 1.1em;
-  }
-  .ug-toc a.active .ug-toc-num { color: var(--color-heading); }
-  /* Collapsible on mobile: summary is the tappable "On this page" bar. */
-  .ug-toc > summary {
-    list-style: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 0;
-  }
-  .ug-toc > summary::-webkit-details-marker { display: none; }
-  .ug-toc > summary::after {
-    content: '';
-    width: 7px;
-    height: 7px;
-    border-right: 2px solid var(--illus-ink-faint);
-    border-bottom: 2px solid var(--illus-ink-faint);
-    transform: rotate(45deg);
-    transition: transform 0.2s ease;
-    margin-left: 0.5rem;
-    flex-shrink: 0;
-  }
-  .ug-toc[open] > summary { margin-bottom: 0.85rem; }
-  .ug-toc[open] > summary::after { transform: rotate(-135deg); }
-  /* Desktop: always expanded, not interactive. */
-  @media (min-width: 901px) {
-    .ug-toc > ul { display: flex !important; }
-    .ug-toc > summary { cursor: default; pointer-events: none; margin-bottom: 0.85rem; }
-    .ug-toc > summary::after { display: none; }
-  }
-
-  @media (max-width: 900px) {
-    .ug-grid { grid-template-columns: minmax(0, 1fr); gap: 1.5rem; }
-    .ug-side { position: static; order: -1; max-width: 100%; }
-    .ug-body { max-width: 100%; }
-  }
-  @media (max-width: 600px) {
-    .ug-body-section { padding: 2.5rem 0 4rem; }
-    .ug-body h2 { font-size: 1.3rem; }
-  }
-
-  /* ── Walkthrough video ── */
-  .ug-video-block { margin: 0 0 2.25rem; }
-  .ug-video-block .section-label { margin-bottom: 0.35rem; }
-  .ug-video-sub {
-    font-size: 0.9375rem;
-    color: var(--color-text-muted);
-    margin: 0 0 0.85rem;
-  }
-  .ug-video {
-    display: block;
-    width: 100%;
-    height: auto;
-    aspect-ratio: 16 / 10;
-    background: var(--surface-card);
-    border: 1px solid var(--border-default);
-    border-radius: 12px;
-    box-shadow: 0 8px 28px var(--shadow-ink);
-  }
-</style>
-
-<script>
-  // Scroll-spy: highlight the TOC link for the section currently in view.
-  // Dependency-free and resilient — no errors if elements are missing.
-  (() => {
-    // TOC: expanded & static on desktop, collapsible <details> on mobile.
-    const toc = document.querySelector<HTMLDetailsElement>('details.ug-toc');
-    if (toc) {
-      const mq = window.matchMedia('(min-width: 901px)');
-      const syncToc = () => { toc.open = mq.matches; };
-      syncToc();
-      mq.addEventListener('change', syncToc);
-    }
-
-    const links = Array.from(
-      document.querySelectorAll<HTMLAnchorElement>('.ug-toc a[data-toc]')
-    );
-    if (!links.length) return;
-
-    const linkFor = new Map<string, HTMLAnchorElement>();
-    links.forEach((a) => {
-      const id = a.getAttribute('data-toc');
-      if (id) linkFor.set(id, a);
-    });
-
-    const headings = Array.from(linkFor.keys())
-      .map((id) => document.getElementById(id))
-      .filter((el): el is HTMLElement => el !== null);
-    if (!headings.length) return;
-
-    let current = '';
-    const setActive = (id: string) => {
-      if (id === current) return;
-      current = id;
-      links.forEach((a) => a.classList.remove('active'));
-      const a = linkFor.get(id);
-      if (a) a.classList.add('active');
-    };
-
-    if ('IntersectionObserver' in window) {
-      const visible = new Set<string>();
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            const id = entry.target.id;
-            if (entry.isIntersecting) visible.add(id);
-            else visible.delete(id);
-          });
-          // Pick the topmost heading currently in view.
-          let best: HTMLElement | null = null;
-          let bestTop = Infinity;
-          for (const h of headings) {
-            if (!visible.has(h.id)) continue;
-            const top = h.getBoundingClientRect().top;
-            if (top < bestTop) {
-              bestTop = top;
-              best = h;
-            }
-          }
-          if (best) setActive(best.id);
-        },
-        { rootMargin: '-88px 0px -70% 0px', threshold: 0 }
-      );
-      headings.forEach((h) => observer.observe(h));
-    }
-
-    // Respect reduced-motion for anchor smooth-scroll.
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (!reduce) {
-      links.forEach((a) => {
-        a.addEventListener('click', (e) => {
-          const id = a.getAttribute('data-toc');
-          const target = id && document.getElementById(id);
-          if (!target) return;
-          e.preventDefault();
-          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          history.replaceState(null, '', `#${id}`);
-          setActive(id);
-        });
-      });
-    }
-  })();
-</script>

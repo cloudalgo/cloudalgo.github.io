@@ -1,0 +1,173 @@
+/* The screen.
+ *
+ * A manual's evidence is the application itself, so every instruction
+ * that names a control is followed by the screen that control is on.
+ *
+ * ── Why it opens on a still ──
+ * The page it replaced carried fifteen looping GIFs and a video: 7.15 MB
+ * that downloaded and started moving whether you wanted it or not, and a
+ * GIF in a document cannot be stopped once it is there. A manual that
+ * flickers while you read it is a manual you close. So a panel opens on
+ * a still frame lifted from its own recording -- 436 KB for all sixteen
+ * -- and fetches the recording only when the reader presses play.
+ * Pressing again puts the still back, which is the one thing the GIF
+ * could never do.
+ *
+ * The recordings ship as H.264 rather than GIF: the same frames at
+ * 1.48 MB instead of 5.74 MB, and a silent looping <video> has a stop.
+ *
+ * ── Why the bar ──
+ * A reader deciding whether to press needs to know what pressing buys:
+ * which screen it is, what happens on it, and how long it runs. The bar
+ * states all three, which is why a panel is worth pressing at all.
+ */
+
+.panel {
+  /* Spacing is `.proc__body`'s, not this component's -- see the note
+     there. A margin here would race `.prose > * + *` on load order. */
+  margin: 0;
+  background: var(--surface-inverse);
+  border-radius: 4px;
+  padding: 0.875rem;
+}
+
+.panel__frame {
+  border: 1px solid var(--border-on-inverse);
+  border-radius: 3px;
+  overflow: hidden;
+  background: var(--surface-inverse-raised);
+}
+
+.panel__bar {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--border-on-inverse);
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.panel__bar-n {
+  color: var(--color-accent-inverse);
+  font-weight: var(--weight-bold);
+  font-variant-numeric: tabular-nums;
+}
+
+.panel__bar-t {
+  color: var(--color-on-inverse-strong);
+  font-weight: var(--weight-semibold);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.panel__bar-d {
+  margin-left: auto;
+  color: var(--color-on-inverse-muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* The whole still is the control. A play affordance the size of a
+   thumbnail is a target you have to aim at, and there is nothing else
+   in the frame to click. */
+.panel__stage {
+  display: block;
+  position: relative;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font: inherit;
+  line-height: 0;
+}
+
+/* Also the class the playing clip takes, so the swap does not resize
+   the frame between the still and the recording. */
+.panel__shot {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.panel__play {
+  position: absolute;
+  left: 0.75rem;
+  bottom: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4375rem 0.9375rem 0.4375rem 0.75rem;
+  border-radius: 100px;
+  background: var(--surface-inverse);
+  border: 1px solid var(--color-accent-inverse);
+  color: var(--color-accent-inverse);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1;
+  transition:
+    background-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out);
+}
+
+.panel__stage:hover .panel__play,
+.panel__stage:focus-visible .panel__play {
+  background: var(--color-accent-inverse);
+  color: var(--surface-inverse);
+}
+
+/* Drawn rather than set: two glyphs at 11px in a mono face are a
+   triangle and a square only by reputation. */
+.panel__play::before {
+  content: '';
+  width: 0;
+  height: 0;
+  border-left: 7px solid currentColor;
+  border-top: 4.5px solid transparent;
+  border-bottom: 4.5px solid transparent;
+}
+
+.panel[data-playing] .panel__play::before {
+  border: 0;
+  width: 7px;
+  height: 8px;
+  background: currentColor;
+}
+
+.panel__cap {
+  padding: 0.75rem 0.25rem 0.125rem;
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  color: var(--color-on-inverse-body);
+  max-width: 68ch;
+}
+
+.panel__cap b {
+  color: var(--color-on-inverse-strong);
+  font-weight: var(--weight-semibold);
+}
+
+.panel--lead { margin-top: 1.75rem; }
+
+/* The walkthrough is a minute long, so it gets a scrubber -- and a
+   control with a scrubber cannot sit inside a button that would swallow
+   every click on it. The stage steps aside and this replaces it. */
+.panel__video {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: var(--surface-inverse);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel__play { transition: none; }
+}
