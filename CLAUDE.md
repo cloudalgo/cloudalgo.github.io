@@ -111,6 +111,8 @@ Astro 7 bundles with **rolldown** instead of rollup/esbuild. Two things bite, an
 
 Because a green build no longer implies a working page, load the built site before shipping a dependency or bundler change — `npm run preview` and check the browser console, not just `npm run build`.
 
+**Markdown runs on Sätteri, not unified.** `markdown.remarkPlugins`, `markdown.rehypePlugins` and `markdown.remarkRehype` now need `@astrojs/markdown-remark` installed and fail the build without it. The native path is `markdown: { processor: satteri({ hastPlugins: [...] }) }` from `@astrojs/markdown-satteri`, with plugins built by `defineHastPlugin` / `defineMdastPlugin` from `satteri`. `astro.config.mjs` has one: `satteriFigures` turns a lone captioned `<img>` in a paragraph into a `<figure>` + `<figcaption>`, moving the alt rather than copying it.
+
 ### Third-party integrations (all live — no placeholders left)
 
 - **ContactForm** (`src/components/ui/ContactForm.tsx`) — posts to the HubSpot Forms API (`api.hsforms.com/submissions/v3/integration/submit/<portal>/<form>`). Portal and form IDs are real constants at the top of the file. Not Formspree.
