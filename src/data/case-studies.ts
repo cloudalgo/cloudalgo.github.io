@@ -146,22 +146,27 @@ export const caseStudies: CaseStudy[] = [
     solutionSteps: [
       {
         title: 'Course & Event Platform',
+        path: 'Next.js \u2192 Stripe',
         body: 'A complete enrollment system for in-person courses, online workshops, ticketed events, youth programs, and retreats. Users can discover offerings via geo-based center finder (Google Maps + Autocomplete), register, pay via Stripe with saved payment methods and coupon support, and receive Apple Wallet passes and QR codes for in-person check-in — all within a single cohesive experience.',
       },
       {
         title: 'Authentication & Identity',
+        path: 'Next.js \u2192 AWS Cognito',
         body: 'Authentication runs on AWS Cognito with Cognito Passwordless Auth — enabling one-tap magic link and OTP logins alongside traditional email/password flows. This reduced friction at account creation and login significantly, critical for an audience spanning a wide age range and range of technical comfort across 180+ countries.',
       },
       {
         title: 'Membership & Content Platform',
+        path: 'Salesforce \u2192 Next.js',
         body: 'A complete membership lifecycle covering tier selection, billing, renewal, and personalized content gating. The content layer includes Daily Sky (daily inspiration), a guided meditation audio/video library, Ask Gurudev Q&A, a wisdom article and video collection, and a global audio player that persists playback state across page navigation.',
       },
       {
         title: 'Donation Platform',
+        path: 'Stripe \u2192 Salesforce',
         body: 'A full donation lifecycle built on Salesforce, Stripe, and Salesforce Community Cloud — one-time and recurring giving options, automated Salesforce sync per transaction, a donor self-service portal (giving history, tax receipts, payment method management), campaign and fund attribution, and Marketing Cloud acknowledgement emails triggered on transaction confirmation. This replaced a manual, spreadsheet-driven process with the organization\'s first fully auditable, end-to-end donation tracking system.',
       },
       {
         title: 'CRM-Connected Analytics',
+        path: 'Segment \u2192 Salesforce',
         body: 'Every significant user action — page views, course views, checkout initiation, purchases — is tracked through Segment into Salesforce, enabling the marketing team to build audience segments, trigger Marketing Cloud automations, and report on enrollment funnel performance with no manual data entry.',
       },
     ],
