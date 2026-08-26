@@ -287,7 +287,7 @@ function StepDatePicker({
             </button>
           </div>
 
-          <div className="sw-cal-grid">
+          <div className="sw-cal-grid" key={monthLabel}>
             {WEEKDAY_LABELS.map(d => (
               <span key={d} className="sw-cal-dow">{d}</span>
             ))}
@@ -610,7 +610,7 @@ function StepDetails({
           {errorMsg && <p className="sw-error-msg" role="alert">{errorMsg}</p>}
           <button
             type="submit"
-            className="sw-submit-btn"
+            className={`sw-submit-btn${submitting ? ' sw-submit-btn--busy' : ''}`}
             disabled={submitting || !name.trim() || (emails.length === 0 && !emailInput.trim())}
           >
             {submitting ? 'Scheduling…' : 'Schedule Call'}
