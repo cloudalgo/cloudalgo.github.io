@@ -1,0 +1,10 @@
+/* The docket -- a legal document's filing facts, in the masthead stand.
+ *
+ * The rows themselves are .page-head__stand's; this file is only the seam
+ * between the stand and the status pip above it, exactly as _release.scss
+ * is for a product masthead. The pip carries real state -- in force --
+ * which is why the three hand-rolled legal headers' decorative eyebrow
+ * dots could go: the site reserves a dot for something that is true.
+ */
+
+.docket__pip { margin-bottom: 1rem; }

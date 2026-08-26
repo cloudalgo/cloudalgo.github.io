@@ -30,7 +30,10 @@
 .breadcrumb {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  /* Wraps rather than squeezing: without it the last crumb is the only
+     flexible item on a 390px trail and breaks one word per line. */
+  flex-wrap: wrap;
+  gap: 0.25rem 0.5rem;
   font-size: 0.875rem;
   color: var(--color-text);
   margin-bottom: 1rem;

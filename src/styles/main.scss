@@ -145,6 +145,23 @@
 @use 'components/board';
 @use 'components/dir';
 
+// ── The legal instruments ────────────────────────────────
+// Seven documents on one layout, replacing three hand-rolled costumes.
+// A legal document is an INSTRUMENT THAT IS IN FORCE, and the thing you
+// do with one is CITE it, so every device here encodes a filing fact or
+// an address: the docket says what the instrument is, the clause carries
+// a counter-driven number you can link to, the rail is that numbering as
+// a contents list, and the register is the other instruments in force.
+// `layout/doc` first -- it sets the columns the rail measures itself
+// against -- and `_precis` before `_clause` because the plate sits above
+// the first clause and the two share the seam.
+@use 'layout/doc';
+@use 'components/docket';
+@use 'components/precis';
+@use 'components/clause';
+@use 'components/clauses';
+@use 'components/instruments';
+
 // One product, in full — /products/[slug]. Eight devices, in the order
 // the page reads them. `_transit` carries `.brief` because the diagram
 // and the prose that explains it are one fold and never appear apart.

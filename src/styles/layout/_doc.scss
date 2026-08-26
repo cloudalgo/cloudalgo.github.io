@@ -1,0 +1,64 @@
+/* The document plate -- a legal instrument, opened.
+ *
+ * Filed under layout/, not sections/, for the same reason _page-head is:
+ * seven documents open on this, so it is a shell rather than one page's
+ * fold.
+ *
+ * The columns are .page-head__grid's own -- 1.55fr against 1fr -- so the
+ * clause rail lands directly beneath the docket and the ink rule down the
+ * right-hand side runs unbroken from the crumbs to the last clause. Change
+ * one and you must change the other.
+ */
+
+.doc {
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding: 0 var(--container-pad) 4.5rem;
+  display: grid;
+  grid-template-columns: 1.55fr 1fr;
+  gap: 2.75rem;
+  align-items: start;
+}
+
+/* `min-width: 0` because a grid item's default `auto` minimum is its
+   content, and one wide table would otherwise push the rail off-screen
+   instead of scrolling inside its own box. */
+.doc__body {
+  min-width: 0;
+  counter-reset: clause;
+}
+
+/* Copy that sits above the first clause: the precis, and any preamble a
+   document opens with before its numbered text begins.
+
+   The first clause's heading drops its own top margin and its rule (see
+   `_clause.scss`), so the seam between the lead and clause 1 is measured
+   here -- and it is wider than the gap between two clauses, because the
+   lead is a different kind of text, not the clause before it. */
+.doc__lead {
+  margin-bottom: 3rem;
+}
+
+.doc__lead > :last-child { margin-bottom: 0; }
+
+.doc__lead p {
+  margin: 0 0 1rem;
+  font-size: var(--size-body-sm);
+  line-height: 1.75;
+  color: var(--color-text);
+  max-width: 62ch;
+}
+
+.doc__lead strong { color: var(--color-heading); font-weight: var(--weight-bold); }
+
+/* On a phone the rail stops being a rail: a sticky column on a 390px
+   screen is a column that eats the screen, so it goes back above the
+   document as a plain contents list. */
+@media (max-width: 900px) {
+  .doc {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .doc__body { order: 2; }
+}

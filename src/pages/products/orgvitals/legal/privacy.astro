@@ -1,22 +1,23 @@
 ---
 // DRAFT: template prepared for CloudAlgo. Review by qualified legal counsel before relying on it.
-import LegalDoc from '../../../../layouts/LegalDoc.astro';
+import LegalDoc from '@/layouts/LegalDoc.astro';
 ---
 <LegalDoc
-  docTitle="Privacy Policy"
+  href="/products/orgvitals/legal/privacy"
   description="How OrgVitals by CloudAlgo handles your data: your Salesforce metadata and scan results stay on your device; we store your Google account and optional diagnostics and analytics."
   canonicalURL="https://cloudalgo.com/products/orgvitals/legal/privacy"
-  lastUpdated="July 1, 2026"
+  lede="What OrgVitals keeps on your machine, the little that reaches us, and the rights you hold over both."
 >
 
-  <div class="legal-summary">
-    <div class="legal-summary-label">The short version</div>
-    <ul>
+  <div class="precis">
+    <p class="precis__label">The short version</p>
+    <ul class="precis__list">
       <li>OrgVitals connects to your Salesforce org <strong>read-only</strong>. It never writes to your org.</li>
       <li>Your metadata snapshot, scan results, and findings detail stay in a <strong>local database on your device</strong>. We never receive them.</li>
       <li>We do store your <strong>Google account profile</strong> (needed to sign in), plus <strong>optional</strong> crash diagnostics (on by default, you can turn off) and <strong>optional</strong> product analytics (off by default).</li>
       <li>The "Ask Vita" AI assistant is <strong>opt-in and off by default</strong>. It is the only feature that sends org metadata off your device, and it does nothing until you add your own Anthropic API key and explicitly acknowledge the data sharing. When used, requests go from your device to Anthropic's Claude API — <strong>never to us</strong>. If you never enable Vita, nothing is ever sent to Anthropic.</li>
     </ul>
+    <p class="precis__note">This summary is not the agreement. Clauses 1 to 11 are.</p>
   </div>
 
   <h2>1. Who we are</h2>
@@ -39,7 +40,7 @@ import LegalDoc from '../../../../layouts/LegalDoc.astro';
   <h2>3. What we collect and store</h2>
   <p>A limited set of information does leave your device and reaches CloudAlgo through Google Firebase. It is summarised below.</p>
 
-  <table class="legal-table">
+  <table class="clause__table">
     <thead>
       <tr><th>Data</th><th>Fields</th><th>Purpose</th><th>Consent status</th></tr>
     </thead>

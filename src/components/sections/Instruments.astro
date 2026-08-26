@@ -1,0 +1,52 @@
+---
+/**
+ * The register: the other instruments in force.
+ *
+ * It closes every legal document ("what else governs this") and it is
+ * the whole body of /products/orgvitals/legal ("everything that governs
+ * OrgVitals"). One component, because it is the same list either way --
+ * only the heading and whether the current document is excluded change.
+ */
+
+import type { Instrument } from '@/data/legal';
+import { ISSUER } from '@/data/legal';
+
+interface Props {
+  title: string;
+  /** Right of the rule: who issued these, or how many there are. */
+  meta?: string;
+  items: Instrument[];
+  class?: string;
+}
+
+const { title, meta, items, class: className } = Astro.props;
+---
+
+<section class:list={['instruments', className]}>
+  <div class="instruments__head">
+    <h2 class="instruments__title">{title}</h2>
+    {meta && <p class="instruments__meta">{meta}</p>}
+  </div>
+
+  <ul class="instruments__list">
+    {items.map((i) => (
+      <li>
+        <a class="instruments__link" href={i.href}>
+          <span class="instruments__name">{i.title}</span>
+          <span class="instruments__what">{i.what}</span>
+          <span class="instruments__facts">
+            In force {i.inForce}<br />{i.clauses} clauses
+          </span>
+          <span class="instruments__go" aria-hidden="true">&rarr;</span>
+        </a>
+      </li>
+    ))}
+  </ul>
+
+  <p class="instruments__note">
+    <slot>
+      All issued by {ISSUER}. Questions about any of them go to{' '}
+      <a href="mailto:contact@cloudalgo.com">contact@cloudalgo.com</a>.
+    </slot>
+  </p>
+</section>

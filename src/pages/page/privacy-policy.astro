@@ -1,379 +1,116 @@
 ---
-import Page from '../../layouts/Page.astro';
-import PageHeader from '@/components/ui/PageHeader.astro';
-const lastUpdated = 'May 2026';
+// DRAFT: template prepared for CloudAlgo. Review by qualified legal counsel before relying on it.
+import LegalDoc from '@/layouts/LegalDoc.astro';
 ---
-<Page
-  title="Privacy Policy — CloudAlgo"
-  description="How CloudAlgo collects, uses, and protects your personal information."
+<LegalDoc
+  href="/page/privacy-policy"
+  description="How CloudAlgo collects, uses, and protects personal information gathered through cloudalgo.com."
+  canonicalURL="https://cloudalgo.com/page/privacy-policy"
+  lede="What we collect when you use this site, why we collect it, who else sees it, and the rights you hold over it."
 >
 
-  <PageHeader
-    crumbs={[{ label: 'Home', href: '/' }, { label: 'Privacy Policy' }]}
-    title="Privacy Policy"
-    lead={`Last updated: ${lastUpdated}`}
-  />
+  <p>CloudAlgo ("<strong>we</strong>", "<strong>us</strong>", or "<strong>our</strong>") operates <strong>cloudalgo.com</strong> (the "Site"). This Privacy Policy explains what personal information we collect, why we collect it, how we use it, and the choices you have regarding your data.</p>
+  <p>By using our Site or services, you agree to the collection and use of information in accordance with this policy.</p>
 
-  <section class="legal-body">
-    <div class="container legal-container">
+  <h2>Information we collect</h2>
 
-      <!-- Quick-nav -->
-      <nav class="legal-toc" aria-label="Table of contents">
-        <p class="legal-toc-label">On this page</p>
-        <ol>
-          <li><a href="#information-we-collect">Information We Collect</a></li>
-          <li><a href="#how-we-use">How We Use Your Information</a></li>
-          <li><a href="#legal-basis">Legal Basis for Processing</a></li>
-          <li><a href="#data-sharing">Data Sharing</a></li>
-          <li><a href="#cookies">Cookies &amp; Tracking</a></li>
-          <li><a href="#data-retention">Data Retention</a></li>
-          <li><a href="#your-rights">Your Rights</a></li>
-          <li><a href="#security">Security</a></li>
-          <li><a href="#third-party">Third-Party Services</a></li>
-          <li><a href="#changes">Changes to This Policy</a></li>
-          <li><a href="#contact">Contact Us</a></li>
-        </ol>
-      </nav>
+  <h3>Information you provide to us</h3>
+  <ul>
+    <li><strong>Contact form submissions</strong> — name, email address, and message content when you reach out through our contact page.</li>
+    <li><strong>Meeting scheduling</strong> — name, email, and any notes entered when booking a consultation via our scheduling widget.</li>
+    <li><strong>Email correspondence</strong> — messages and attachments sent directly to our email addresses.</li>
+  </ul>
 
-      <div class="legal-section" id="overview">
-        <p>
-          CloudAlgo ("<strong>we</strong>", "<strong>us</strong>", or "<strong>our</strong>") operates
-          <strong>cloudalgo.com</strong> (the "Site"). This Privacy Policy explains what personal information
-          we collect, why we collect it, how we use it, and the choices you have regarding your data.
-        </p>
-        <p>
-          By using our Site or services, you agree to the collection and use of information in accordance
-          with this policy.
-        </p>
-      </div>
+  <h3>Information collected automatically</h3>
+  <ul>
+    <li><strong>Usage data</strong> — pages visited, time spent on pages, browser type, operating system, and referring URLs.</li>
+    <li><strong>IP address</strong> — used for geographic analytics and security.</li>
+    <li><strong>Cookies and local storage</strong> — small data files placed on your device. See clause 5.</li>
+  </ul>
 
-      <div class="legal-section" id="information-we-collect">
-        <h2>1. Information We Collect</h2>
+  <h2>How we use your information</h2>
+  <ul>
+    <li>To respond to your enquiries and provide the services you have requested.</li>
+    <li>To schedule and conduct discovery calls and project consultations.</li>
+    <li>To send relevant project proposals, status updates, and invoices.</li>
+    <li>To improve the content and functionality of our Site.</li>
+    <li>To analyse aggregate usage trends using anonymised data.</li>
+    <li>To comply with legal obligations.</li>
+  </ul>
+  <p>We do <strong>not</strong> sell, rent, or trade your personal information to third parties for their marketing purposes.</p>
 
-        <h3>Information you provide to us</h3>
-        <ul>
-          <li><strong>Contact form submissions</strong> — name, email address, and message content when you reach out through our contact page.</li>
-          <li><strong>Meeting scheduling</strong> — name, email, and any notes entered when booking a consultation via our scheduling widget.</li>
-          <li><strong>Email correspondence</strong> — messages and attachments sent directly to our email addresses.</li>
-        </ul>
+  <h2>Legal basis for processing (GDPR)</h2>
+  <p>If you are located in the European Economic Area, our legal basis for processing your data is:</p>
+  <table>
+    <thead>
+      <tr><th>Purpose</th><th>Legal basis</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Responding to contact form enquiries</td><td>Legitimate interests / pre-contractual steps</td></tr>
+      <tr><td>Delivering agreed consulting services</td><td>Contract performance</td></tr>
+      <tr><td>Site analytics</td><td>Consent</td></tr>
+      <tr><td>Legal obligations (tax, compliance)</td><td>Legal obligation</td></tr>
+    </tbody>
+  </table>
 
-        <h3>Information collected automatically</h3>
-        <ul>
-          <li><strong>Usage data</strong> — pages visited, time spent on pages, browser type, operating system, and referring URLs.</li>
-          <li><strong>IP address</strong> — used for geographic analytics and security.</li>
-          <li><strong>Cookies &amp; local storage</strong> — small data files placed on your device (see Cookies section).</li>
-        </ul>
-      </div>
+  <h2>Data sharing</h2>
+  <p>We may share your information with:</p>
+  <ul>
+    <li><strong>HubSpot</strong> — processes contact form submissions and stores the enquiry. See <a href="https://legal.hubspot.com/privacy-policy" target="_blank" rel="noopener">HubSpot's Privacy Policy</a>.</li>
+    <li><strong>Scheduling provider</strong> — processes meeting bookings made through the scheduling widget.</li>
+    <li><strong>Google Analytics</strong> — site usage analytics, loaded only after you accept analytics cookies.</li>
+    <li><strong>Microsoft Clarity</strong> — session analytics, loaded only after you accept analytics cookies.</li>
+    <li><strong>Legal and compliance</strong> — if required by law or court order.</li>
+  </ul>
+  <p>All third-party processors are contractually obligated to protect your data and may only use it for the purposes we specify.</p>
 
-      <div class="legal-section" id="how-we-use">
-        <h2>2. How We Use Your Information</h2>
-        <ul>
-          <li>To respond to your enquiries and provide the services you've requested.</li>
-          <li>To schedule and conduct discovery calls and project consultations.</li>
-          <li>To send relevant project proposals, status updates, and invoices.</li>
-          <li>To improve the content and functionality of our Site.</li>
-          <li>To analyse aggregate usage trends using anonymised data.</li>
-          <li>To comply with legal obligations.</li>
-        </ul>
-        <p>
-          We do <strong>not</strong> sell, rent, or trade your personal information to third parties
-          for their marketing purposes.
-        </p>
-      </div>
+  <h2>Cookies and tracking</h2>
+  <p>We use the following types of cookies:</p>
+  <table>
+    <thead>
+      <tr><th>Type</th><th>Purpose</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Essential</strong></td><td>Required for the Site to function correctly, including recording your cookie choice.</td></tr>
+      <tr><td><strong>Analytics</strong></td><td>Understand how visitors use the Site. Loaded only after you accept.</td></tr>
+      <tr><td><strong>Functional</strong></td><td>Remember your preferences, such as the timezone used for scheduling.</td></tr>
+    </tbody>
+  </table>
+  <p>No analytics or tracking script loads before you accept it. You can also disable cookies through your browser settings, though doing so may affect some Site functionality. We do not use advertising cookies.</p>
 
-      <div class="legal-section" id="legal-basis">
-        <h2>3. Legal Basis for Processing (GDPR)</h2>
-        <p>If you are located in the European Economic Area, our legal basis for processing your data is:</p>
-        <div class="legal-table">
-          <div class="legal-table-row">
-            <div class="legal-table-cell legal-table-head">Purpose</div>
-            <div class="legal-table-cell legal-table-head">Legal Basis</div>
-          </div>
-          <div class="legal-table-row">
-            <div class="legal-table-cell">Responding to contact form enquiries</div>
-            <div class="legal-table-cell">Legitimate interests / Pre-contractual steps</div>
-          </div>
-          <div class="legal-table-row">
-            <div class="legal-table-cell">Delivering agreed consulting services</div>
-            <div class="legal-table-cell">Contract performance</div>
-          </div>
-          <div class="legal-table-row">
-            <div class="legal-table-cell">Site analytics</div>
-            <div class="legal-table-cell">Legitimate interests</div>
-          </div>
-          <div class="legal-table-row">
-            <div class="legal-table-cell">Legal obligations (tax, compliance)</div>
-            <div class="legal-table-cell">Legal obligation</div>
-          </div>
-        </div>
-      </div>
+  <h2>Data retention</h2>
+  <ul>
+    <li><strong>Contact form submissions</strong> — retained for 24 months or until the enquiry is resolved, whichever is longer.</li>
+    <li><strong>Client project data</strong> — retained for 7 years to comply with tax and legal obligations.</li>
+    <li><strong>Analytics data</strong> — retained in anonymised, aggregated form for up to 26 months.</li>
+  </ul>
+  <p>After the applicable retention period, data is securely deleted or anonymised.</p>
 
-      <div class="legal-section" id="data-sharing">
-        <h2>4. Data Sharing</h2>
-        <p>We may share your information with:</p>
-        <ul>
-          <li><strong>Formspree</strong> — processes contact form submissions. See <a href="https://formspree.io/legal/privacy-policy" target="_blank" rel="noopener">Formspree's Privacy Policy</a>.</li>
-          <li><strong>Calendly / scheduling providers</strong> — processes meeting bookings.</li>
-          <li><strong>Google Analytics</strong> — anonymised site usage analytics (if enabled).</li>
-          <li><strong>Legal &amp; compliance</strong> — if required by law or court order.</li>
-        </ul>
-        <p>
-          All third-party processors are contractually obligated to protect your data and may only use
-          it for the purposes we specify.
-        </p>
-      </div>
+  <h2>Your rights</h2>
+  <p>Depending on your jurisdiction, you may have the right to:</p>
+  <ul>
+    <li><strong>Access</strong> — request a copy of the personal data we hold about you.</li>
+    <li><strong>Rectification</strong> — request correction of inaccurate data.</li>
+    <li><strong>Erasure</strong> — request deletion of your personal data ("right to be forgotten").</li>
+    <li><strong>Portability</strong> — receive your data in a structured, machine-readable format.</li>
+    <li><strong>Restriction</strong> — request that we limit processing of your data.</li>
+    <li><strong>Objection</strong> — object to processing based on legitimate interests.</li>
+    <li><strong>Withdraw consent</strong> — where processing is based on consent, you can withdraw at any time.</li>
+  </ul>
+  <p>To exercise any of these rights, contact us at <a href="mailto:contact@cloudalgo.com">contact@cloudalgo.com</a>. We will respond within 30 days.</p>
 
-      <div class="legal-section" id="cookies">
-        <h2>5. Cookies &amp; Tracking</h2>
-        <p>We use the following types of cookies:</p>
-        <div class="legal-table">
-          <div class="legal-table-row">
-            <div class="legal-table-cell legal-table-head">Type</div>
-            <div class="legal-table-cell legal-table-head">Purpose</div>
-          </div>
-          <div class="legal-table-row">
-            <div class="legal-table-cell"><strong>Essential</strong></div>
-            <div class="legal-table-cell">Required for the Site to function correctly.</div>
-          </div>
-          <div class="legal-table-row">
-            <div class="legal-table-cell"><strong>Analytics</strong></div>
-            <div class="legal-table-cell">Understand how visitors use the Site (anonymised).</div>
-          </div>
-          <div class="legal-table-row">
-            <div class="legal-table-cell"><strong>Functional</strong></div>
-            <div class="legal-table-cell">Remember your preferences (e.g., timezone for scheduling).</div>
-          </div>
-        </div>
-        <p>
-          You can disable cookies through your browser settings. Note that disabling cookies may affect
-          some Site functionality. We do not use advertising or tracking cookies.
-        </p>
-      </div>
+  <h2>Security</h2>
+  <p>We implement commercially reasonable technical and organisational measures to protect your personal information against unauthorised access, loss, destruction, or alteration. All data transmission over the Site uses HTTPS encryption.</p>
+  <p>However, no method of electronic transmission or storage is 100% secure. We cannot guarantee absolute security, and you provide information at your own risk.</p>
 
-      <div class="legal-section" id="data-retention">
-        <h2>6. Data Retention</h2>
-        <ul>
-          <li><strong>Contact form submissions</strong> — retained for 24 months or until the enquiry is resolved, whichever is longer.</li>
-          <li><strong>Client project data</strong> — retained for 7 years to comply with tax and legal obligations.</li>
-          <li><strong>Analytics data</strong> — retained in anonymised, aggregated form for up to 26 months.</li>
-        </ul>
-        <p>After the applicable retention period, data is securely deleted or anonymised.</p>
-      </div>
+  <h2>Third-party services and links</h2>
+  <p>Our Site may link to third-party websites including GitHub, LinkedIn, and the Salesforce AppExchange. These sites have their own privacy policies. We are not responsible for the privacy practices of external sites and encourage you to review their policies before providing any personal information.</p>
 
-      <div class="legal-section" id="your-rights">
-        <h2>7. Your Rights</h2>
-        <p>Depending on your jurisdiction, you may have the right to:</p>
-        <ul>
-          <li><strong>Access</strong> — request a copy of the personal data we hold about you.</li>
-          <li><strong>Rectification</strong> — request correction of inaccurate data.</li>
-          <li><strong>Erasure</strong> — request deletion of your personal data ("right to be forgotten").</li>
-          <li><strong>Portability</strong> — receive your data in a structured, machine-readable format.</li>
-          <li><strong>Restriction</strong> — request that we limit processing of your data.</li>
-          <li><strong>Objection</strong> — object to processing based on legitimate interests.</li>
-          <li><strong>Withdraw consent</strong> — where processing is based on consent, you can withdraw at any time.</li>
-        </ul>
-        <p>
-          To exercise any of these rights, contact us at
-          <a href="mailto:contact@cloudalgo.com">contact@cloudalgo.com</a>.
-          We will respond within 30 days.
-        </p>
-      </div>
+  <h2>Changes to this policy</h2>
+  <p>We may update this Privacy Policy from time to time. We will notify you of significant changes by posting the new policy on this page with a revised date in force. We encourage you to review this page periodically.</p>
 
-      <div class="legal-section" id="security">
-        <h2>8. Security</h2>
-        <p>
-          We implement commercially reasonable technical and organisational measures to protect your
-          personal information against unauthorised access, loss, destruction, or alteration. All
-          data transmission over the Site uses HTTPS encryption.
-        </p>
-        <p>
-          However, no method of electronic transmission or storage is 100% secure. We cannot guarantee
-          absolute security, and you provide information at your own risk.
-        </p>
-      </div>
+  <h2>Contact</h2>
+  <p>For questions, data requests, or concerns about this Privacy Policy, contact our data controller: CloudAlgo, 115 Irish, Manglam Aananda, Jaipur, Rajasthan, India — <a href="mailto:contact@cloudalgo.com">contact@cloudalgo.com</a>, +91 6377 360659.</p>
+  <p>If you are in the EU or EEA and believe we have not handled your request adequately, you have the right to lodge a complaint with your local data protection authority.</p>
 
-      <div class="legal-section" id="third-party">
-        <h2>9. Third-Party Services &amp; Links</h2>
-        <p>
-          Our Site may link to third-party websites including GitHub, LinkedIn, and the Salesforce
-          AppExchange. These sites have their own privacy policies. We are not responsible for the
-          privacy practices of external sites and encourage you to review their policies before
-          providing any personal information.
-        </p>
-      </div>
-
-      <div class="legal-section" id="changes">
-        <h2>10. Changes to This Policy</h2>
-        <p>
-          We may update this Privacy Policy from time to time. We will notify you of significant
-          changes by posting the new policy on this page with an updated "Last updated" date.
-          We encourage you to review this page periodically.
-        </p>
-      </div>
-
-      <div class="legal-section" id="contact">
-        <h2>11. Contact Us</h2>
-        <p>
-          For questions, data requests, or concerns about this Privacy Policy, please contact our
-          data controller:
-        </p>
-        <div class="legal-contact">
-          <strong>CloudAlgo</strong><br/>
-          115, Irish, Manglam Aananda<br/>
-          Jaipur, Rajasthan, India<br/>
-          <a href="mailto:contact@cloudalgo.com">contact@cloudalgo.com</a><br/>
-          +91 6377-360659
-        </div>
-        <p style="margin-top:1.25rem;">
-          If you are in the EU/EEA and believe we have not handled your request adequately, you
-          have the right to lodge a complaint with your local data protection authority.
-        </p>
-      </div>
-
-    </div>
-  </section>
-
-</Page>
-
-<style>
-.legal-body {
-  background: var(--surface-card);
-  padding: 4rem 0 6rem;
-}
-.legal-container {
-  max-width: 720px;
-}
-
-/* Table of contents */
-.legal-toc {
-  background: var(--surface-sunk);
-  border: 1px solid var(--border-default);
-  border-radius: 10px;
-  padding: 1.5rem 1.75rem;
-  margin-bottom: 3rem;
-}
-.legal-toc-label {
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--color-text);
-  margin-bottom: 0.875rem;
-}
-.legal-toc ol {
-  margin: 0;
-  padding-left: 1.25rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.375rem;
-}
-.legal-toc a {
-  font-size: 0.9375rem;
-  color: var(--color-heading);
-  font-weight: 500;
-  text-decoration: none;
-  transition: opacity 0.2s;
-}
-.legal-toc a:hover { opacity: 0.55; }
-
-/* Sections */
-.legal-section {
-  margin-bottom: 3rem;
-  padding-bottom: 3rem;
-  border-bottom: 1px solid var(--border-default);
-}
-.legal-section:last-child {
-  border-bottom: none;
-  margin-bottom: 0;
-  padding-bottom: 0;
-}
-.legal-section h2 {
-  font-size: 1.25rem;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  color: var(--color-heading);
-  margin-bottom: 1rem;
-  margin-top: 0;
-}
-.legal-section h3 {
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--color-heading);
-  margin: 1.5rem 0 0.625rem;
-}
-.legal-section p {
-  font-size: 1rem;
-  color: var(--color-text);
-  line-height: 1.8;
-  margin-bottom: 1rem;
-}
-.legal-section p:last-child { margin-bottom: 0; }
-.legal-section ul, .legal-section ol {
-  padding-left: 1.375rem;
-  margin: 0.5rem 0 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-.legal-section li {
-  font-size: 1rem;
-  color: var(--color-text);
-  line-height: 1.7;
-}
-.legal-section a {
-  color: var(--color-heading);
-  font-weight: 600;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-.legal-section a:hover { opacity: 0.6; }
-
-/* Data table */
-.legal-table {
-  border: 1px solid var(--border-default);
-  border-radius: 8px;
-  overflow: hidden;
-  margin: 1rem 0;
-}
-.legal-table-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  border-bottom: 1px solid var(--border-default);
-}
-.legal-table-row:last-child { border-bottom: none; }
-.legal-table-cell {
-  padding: 0.75rem 1rem;
-  font-size: 0.9rem;
-  color: var(--color-text);
-  line-height: 1.6;
-  border-right: 1px solid var(--border-default);
-}
-.legal-table-cell:last-child { border-right: none; }
-.legal-table-head {
-  background: var(--surface-sunk);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--color-heading);
-}
-
-/* Contact card */
-.legal-contact {
-  background: var(--surface-sunk);
-  border: 1px solid var(--border-default);
-  border-radius: 10px;
-  padding: 1.25rem 1.5rem;
-  font-size: 0.9375rem;
-  color: var(--color-heading);
-  line-height: 1.8;
-  margin-top: 1rem;
-}
-.legal-contact a { color: var(--color-heading); font-weight: 600; }
-
-@media (max-width: 600px) {
-  .legal-table-row { grid-template-columns: 1fr; }
-  .legal-table-cell { border-right: none; border-bottom: 1px solid var(--border-default); }
-  .legal-table-cell:last-child { border-bottom: none; }
-}
-</style>
+</LegalDoc>

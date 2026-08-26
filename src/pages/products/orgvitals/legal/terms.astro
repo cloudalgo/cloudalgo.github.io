@@ -1,22 +1,23 @@
 ---
 // DRAFT: template prepared for CloudAlgo. Review by qualified legal counsel before relying on it.
-import LegalDoc from '../../../../layouts/LegalDoc.astro';
+import LegalDoc from '@/layouts/LegalDoc.astro';
 ---
 <LegalDoc
-  docTitle="Terms of Service"
+  href="/products/orgvitals/legal/terms"
   description="The Terms of Service and end-user licence agreement governing your use of OrgVitals by CloudAlgo, a read-only Salesforce org health scanner."
   canonicalURL="https://cloudalgo.com/products/orgvitals/legal/terms"
-  lastUpdated="July 1, 2026"
+  lede="The licence you accept in the app, and what each side is responsible for. OrgVitals is free while it is in Preview."
 >
 
-  <div class="legal-summary">
-    <div class="legal-summary-label">The short version</div>
-    <ul>
+  <div class="precis">
+    <p class="precis__label">The short version</p>
+    <ul class="precis__list">
       <li>OrgVitals is currently <strong>free and in Preview</strong>. You accept these terms through the in-app consent gate before you can use it.</li>
       <li>You may only scan Salesforce orgs you are <strong>authorised</strong> to assess, and you are responsible for your own credentials.</li>
       <li>OrgVitals is a <strong>read-only, informational</strong> tool. Any remediation you choose to run is your decision and your responsibility.</li>
       <li>The app is provided <strong>"as is"</strong>, with liability limited to the maximum extent permitted by Indian law. These terms are governed by the law of India.</li>
     </ul>
+    <p class="precis__note">This summary is not the agreement. Clauses 1 to 12 are.</p>
   </div>
 
   <h2>1. Acceptance</h2>

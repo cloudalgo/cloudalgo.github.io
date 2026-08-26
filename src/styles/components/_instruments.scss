@@ -1,0 +1,134 @@
+/* The register -- the other instruments in force.
+ *
+ * /404's directory row at one size down. Each row prints its own docket
+ * facts (date in force, clause count) rather than a blurb: a legal index
+ * says what is in force, not why you should want to read it.
+ *
+ * It is both the foot of every document and the whole body of
+ * /products/orgvitals/legal, which is why it is a component rather than
+ * a section of one page.
+ */
+
+.instruments {
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding: 0 var(--container-pad) 5rem;
+}
+
+.instruments__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid var(--color-heading);
+  padding-bottom: 0.75rem;
+  margin-bottom: 0.25rem;
+}
+
+.instruments__title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 1.125rem;
+  font-weight: var(--weight-bold);
+  letter-spacing: -0.01em;
+  color: var(--color-heading);
+}
+
+.instruments__meta {
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-faint);
+  white-space: nowrap;
+}
+
+.instruments__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.instruments__list li { border-bottom: 1px solid var(--border-default); }
+
+.instruments__link {
+  display: grid;
+  /* 11rem, not 8.5: the facts cell holds `In force <date>` on one line,
+     and a long month ("29 September 2026") measures ~176px in the mono
+     face at 0.6875rem. Below that the date breaks after the month name. */
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr) 11rem 2rem;
+  align-items: baseline;
+  gap: 0 1.5rem;
+  padding: 1rem 0.875rem;
+  margin-inline: -0.875rem;
+  text-decoration: none;
+  color: inherit;
+  transition: background-color var(--duration-base) var(--ease-out);
+}
+
+.instruments__link:hover,
+.instruments__link:focus-visible { background-color: var(--surface-sunk); }
+
+.instruments__name {
+  font-family: var(--font-heading);
+  font-size: 1.0625rem;
+  font-weight: var(--weight-bold);
+  letter-spacing: -0.01em;
+  color: var(--color-heading);
+}
+
+.instruments__what {
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  color: var(--color-text-muted);
+}
+
+.instruments__facts {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.04em;
+  line-height: 1.65;
+  color: var(--color-text-faint);
+}
+
+.instruments__go {
+  justify-self: end;
+  color: var(--color-text-faint);
+  transition:
+    transform var(--duration-base) var(--ease-out),
+    color var(--duration-base) var(--ease-out);
+}
+
+.instruments__link:hover .instruments__go,
+.instruments__link:focus-visible .instruments__go {
+  transform: translateX(0.3125rem);
+  color: var(--color-accent);
+}
+
+.instruments__note {
+  margin: 1.5rem 0 0;
+  font-size: 0.875rem;
+  line-height: 1.7;
+  color: var(--color-text-muted);
+}
+
+.instruments__note a {
+  color: var(--color-heading);
+  font-weight: var(--weight-bold);
+  text-decoration: underline;
+  text-underline-offset: 0.1875em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .instruments__link:hover .instruments__go,
+  .instruments__link:focus-visible .instruments__go { transform: none; }
+}
+
+@media (max-width: 900px) {
+  .instruments__link {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.3125rem;
+  }
+
+  .instruments__go { display: none; }
+}

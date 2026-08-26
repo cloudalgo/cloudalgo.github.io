@@ -1,342 +1,187 @@
 ---
-// DRAFT: template prepared for CloudAlgo. Review by qualified legal counsel before relying on it.
-// src/layouts/LegalDoc.astro
-// Shared layout for OrgVitals legal documents. Wraps Page.astro.
-import Page from './Page.astro';
+/**
+ * DRAFT: template prepared for CloudAlgo. Review by qualified legal
+ * counsel before relying on it.
+ *
+ * The layout every legal document on the site opens on.
+ *
+ * A legal document is an instrument that is IN FORCE, and the thing you
+ * do with one is CITE it. So the page is built around citation: the
+ * docket in the masthead says what the instrument is and since when, the
+ * clauses are numbered by a CSS counter and each one answers its own
+ * anchor, the rail is that numbering as a contents list, and the register
+ * at the foot is the other instruments in force.
+ *
+ * ── Why this file parses its own slot ──
+ * Each page writes plain `<h2>` / `<h3>` / `<p>` markup, and this layout
+ * renders the slot to a string, splits it on the headings, and wraps each
+ * one in the clause markup. The alternative -- every page hand-writing
+ * `<section class="clause" id="c-4">` around every heading -- is 400
+ * lines of duplicated scaffolding across seven files, and the rail would
+ * be a second hand-maintained copy of the same list. Parsing once here
+ * means the body and the rail cannot disagree, and a clause inserted
+ * anywhere renumbers both.
+ *
+ * The numbering is never read from the copy. Documents that were
+ * hand-numbered ("4. Your responsibilities") have that prefix stripped,
+ * so a clause deleted in one of them cannot leave a stale "7." behind.
+ *
+ * The clause count is checked against src/data/legal.ts at build time.
+ * A document and its register entry drifting apart fails the build
+ * rather than shipping a wrong figure in the docket.
+ */
+import Page from '@/layouts/Page.astro';
+import PageMasthead from '@/components/ui/PageMasthead.astro';
+import type { Crumb } from '@/components/ui/PageMasthead.astro';
+import ClauseRail from '@/components/ui/ClauseRail.astro';
+import Instruments from '@/components/sections/Instruments.astro';
+import { instrumentFor, siblingsOf, registerLabel, ISSUER } from '@/data/legal';
 
-export interface Props {
-  docTitle: string;
+interface Props {
+  /** The document's route -- its key in the register. */
+  href: string;
   description: string;
   canonicalURL: string;
-  lastUpdated: string;
+  /** The standfirst beside the title: what this document is for, in a
+      sentence a reader who is not counsel can act on. */
+  lede: string;
+  /** Overrides the trail derived from the document's register. */
+  crumbs?: Crumb[];
 }
 
-const { docTitle, description, canonicalURL, lastUpdated } = Astro.props;
+const { href, description, canonicalURL, lede, crumbs } = Astro.props;
 
-const otherDocs = [
-  { title: 'Privacy Policy',           href: '/products/orgvitals/legal/privacy' },
-  { title: 'Terms of Service',         href: '/products/orgvitals/legal/terms' },
-  { title: 'Data Processing & Usage',  href: '/products/orgvitals/legal/data-processing' },
-  { title: 'Acceptable Use Policy',    href: '/products/orgvitals/legal/acceptable-use' },
-].filter((d) => d.title !== docTitle);
+const doc = instrumentFor(href);
+if (!doc) {
+  throw new Error(
+    `LegalDoc: no instrument registered for "${href}". ` +
+      `Add it to src/data/legal.ts before giving it a page.`,
+  );
+}
+
+/* The trail follows the register, so the four OrgVitals documents cannot
+   drift into four slightly different versions of the same path. */
+const trails: Record<typeof doc.register, Crumb[]> = {
+  site: [{ label: 'Home', href: '/' }],
+  orgvitals: [
+    { label: 'Home', href: '/' },
+    { label: 'Products', href: '/products' },
+    { label: 'OrgVitals', href: '/products/orgvitals' },
+    { label: 'Legal', href: '/products/orgvitals/legal' },
+  ],
+  insurealgo: [
+    { label: 'Home', href: '/' },
+    { label: 'Products', href: '/products' },
+    { label: 'InsureAlgo', href: '/products/insurealgo' },
+  ],
+};
+
+const trail: Crumb[] = crumbs ?? [...trails[doc.register], { label: doc.title }];
+
+/* ── Parsing the slot ────────────────────────────────────── */
+
+const raw = await Astro.slots.render('default');
+
+const H2 = /<h2\b[^>]*>([\s\S]*?)<\/h2>/g;
+const heads = [...raw.matchAll(H2)];
+
+/** Heading markup to a plain string, for the rail and the anchor label. */
+const plain = (html: string) =>
+  html
+    .replace(/<[^>]+>/g, '')
+    .replace(/&amp;/g, '&')
+    .replace(/&nbsp;/g, ' ')
+    .trim()
+    /* Hand-typed clause numbers are dropped: the counter owns numbering. */
+    .replace(/^\d+\.\s*/, '');
+
+/** Sub-headings and tables inside a clause take the clause's own markup. */
+const dress = (html: string) =>
+  html
+    .replace(
+      /<h3\b[^>]*>([\s\S]*?)<\/h3>/g,
+      (_m, inner) =>
+        `<h3 class="clause__sub"><span class="clause__sub-n" aria-hidden="true"></span><span>${inner}</span></h3>`,
+    )
+    .replace(/<table\b[^>]*>/g, '<table class="clause__table">');
+
+const lead = (heads.length > 0 ? raw.slice(0, heads[0].index) : raw).trim();
+
+const clauses = heads.map((m, i) => {
+  const start = m.index! + m[0].length;
+  const end = i + 1 < heads.length ? heads[i + 1].index! : raw.length;
+  return {
+    id: `c-${i + 1}`,
+    title: plain(m[1]),
+    body: dress(raw.slice(start, end)),
+  };
+});
+
+if (clauses.length !== doc.clauses) {
+  throw new Error(
+    `LegalDoc: ${href} renders ${clauses.length} clauses, but the register ` +
+      `in src/data/legal.ts says ${doc.clauses}. Update whichever is wrong.`,
+  );
+}
+
+const siblings = siblingsOf(href);
+const family = registerLabel[doc.register];
 ---
 
 <Page
-  title={`${docTitle} — OrgVitals by CloudAlgo`}
+  title={`${doc.title}${doc.register === 'site' ? '' : ` — ${family}`} | CloudAlgo`}
   description={description}
   canonicalURL={canonicalURL}
 >
+  <PageMasthead crumbs={trail} standClass="docket">
+    <Fragment slot="title">{doc.title}</Fragment>
+    <Fragment slot="lede">{lede}</Fragment>
 
-<div class="ld-header">
-  <div class="container">
-    <nav class="ld-breadcrumb" aria-label="Breadcrumb">
-      <a href="/">Home</a>
-      <span>&rarr;</span>
-      <a href="/products">Products</a>
-      <span>&rarr;</span>
-      <a href="/products/orgvitals">OrgVitals</a>
-      <span>&rarr;</span>
-      <span aria-current="page">{docTitle}</span>
-    </nav>
+    <Fragment slot="stand">
+      <span class="pip pip--ga docket__pip">In force</span>
+      <dl>
+        <div><dt>Applies to</dt><dd>{doc.appliesTo}</dd></div>
+        <div><dt>In force since</dt><dd>{doc.inForce}</dd></div>
+        <div><dt>Clauses</dt><dd>{doc.clauses}</dd></div>
+        {doc.governingLaw && (
+          <div><dt>Governing law</dt><dd>{doc.governingLaw}</dd></div>
+        )}
+        <div><dt>Issued by</dt><dd>{ISSUER}</dd></div>
+      </dl>
+    </Fragment>
+  </PageMasthead>
 
-    <div class="ld-eyebrow">
-      <span class="ld-eyebrow-dot"></span>
-      Legal
+  <div class="doc">
+    <div class="doc__body">
+      {lead && <div class="doc__lead" set:html={lead} />}
+
+      {clauses.map((c) => (
+        <section class="clause" id={c.id}>
+          <h2 class="clause__h">
+            <span class="clause__n" aria-hidden="true"></span>
+            <span>
+              {c.title}
+              <a class="clause__cite" href={`#${c.id}`} aria-label={`Link to ${c.title}`}>&para;</a>
+            </span>
+          </h2>
+          <div class="clause__body" set:html={c.body} />
+        </section>
+      ))}
     </div>
 
-    <h1 class="ld-h1">{docTitle}</h1>
-    <p class="ld-meta">
-      OrgVitals by CloudAlgo &nbsp;&middot;&nbsp; CloudAlgo Private Limited &nbsp;&middot;&nbsp; Last updated: {lastUpdated}
-    </p>
+    <ClauseRail
+      clauses={clauses.map((c) => ({ id: c.id, title: c.title }))}
+      footNote="Questions about this document go to"
+      footHref="mailto:contact@cloudalgo.com"
+      footLabel="contact@cloudalgo.com"
+    />
   </div>
-</div>
 
-<div class="ld-body-section">
-  <div class="container ld-grid">
-    <article class="ld-body">
-      <slot />
-    </article>
-
-    <aside class="ld-side">
-      <nav class="ld-footer-nav" aria-label="More legal documents">
-        <div class="ld-footer-label">More from OrgVitals Legal</div>
-        <ul>
-          {otherDocs.map((d) => (
-            <li><a href={d.href}>{d.title} &rarr;</a></li>
-          ))}
-          <li><a href="/products/orgvitals">OrgVitals product page &rarr;</a></li>
-        </ul>
-      </nav>
-    </aside>
-  </div>
-</div>
-
+  {siblings.length > 0 && (
+    <Instruments
+      title={`Also in force${doc.register === 'site' ? '' : ` for ${family}`}`}
+      meta={`Issued by ${ISSUER}`}
+      items={siblings}
+    />
+  )}
 </Page>
-
-<style>
-  .ld-header {
-    background: var(--surface-card);
-    border-bottom: 1px solid var(--border-default);
-    padding: 7rem 0 3rem;
-  }
-  .ld-body-section {
-    background: var(--surface-page);
-    padding: 3.5rem 0 5rem;
-  }
-  /* Two-column: readable article left, sticky related-docs nav right */
-  .ld-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 260px;
-    gap: 4rem;
-    align-items: start;
-  }
-  .ld-body {
-    max-width: 760px;
-    overflow-wrap: break-word;
-  }
-  .ld-side {
-    position: sticky;
-    top: 96px;
-  }
-
-  /* ── Breadcrumb ── */
-  .ld-breadcrumb {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 8px;
-    font-size: 0.8125rem;
-    color: var(--color-text);
-    margin-bottom: 32px;
-  }
-  .ld-breadcrumb a {
-    color: var(--color-text);
-    text-decoration: none;
-    transition: color 0.2s;
-  }
-  .ld-breadcrumb a:hover {
-    color: var(--color-heading);
-  }
-  .ld-breadcrumb span {
-    color: var(--color-text-faintest);
-  }
-
-  /* ── Eyebrow ── */
-  .ld-eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--color-text);
-    margin-bottom: 14px;
-  }
-  .ld-eyebrow-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--surface-inverse);
-  }
-
-  /* ── Heading + meta ── */
-  .ld-h1 {
-    font-size: clamp(2rem, 5vw, 3rem);
-    font-weight: 900;
-    letter-spacing: -0.04em;
-    line-height: 1.1;
-    color: var(--color-heading);
-    margin-bottom: 12px;
-  }
-  .ld-meta {
-    font-size: 0.875rem;
-    color: var(--color-text-muted);
-    margin-bottom: 0;
-  }
-
-  /* ── Slotted body typography ── */
-  .ld-body :global(.legal-summary) {
-    background: var(--surface-inverse);
-    border-radius: 16px;
-    padding: 26px 30px;
-    margin: 0 0 40px;
-  }
-  .ld-body :global(.legal-summary .legal-summary-label) {
-    font-size: 0.6875rem;
-    font-weight: 800;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--color-on-inverse-faint);
-    margin-bottom: 14px;
-  }
-  .ld-body :global(.legal-summary p) {
-    color: var(--color-on-inverse-body);
-    font-size: 0.9375rem;
-    line-height: 1.7;
-    margin: 0 0 10px;
-  }
-  .ld-body :global(.legal-summary p:last-child) {
-    margin-bottom: 0;
-  }
-  .ld-body :global(.legal-summary strong) {
-    color: var(--color-on-inverse);
-    font-weight: 700;
-  }
-  .ld-body :global(.legal-summary ul) {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  .ld-body :global(.legal-summary li) {
-    color: var(--color-on-inverse-body);
-    font-size: 0.9375rem;
-    line-height: 1.6;
-    padding-left: 18px;
-    position: relative;
-  }
-  .ld-body :global(.legal-summary li::before) {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 9px;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--color-paper-a50);
-  }
-
-  .ld-body :global(h2) {
-    font-size: 1.375rem;
-    font-weight: 800;
-    letter-spacing: -0.02em;
-    color: var(--color-heading);
-    margin: 40px 0 14px;
-    padding-top: 8px;
-  }
-  .ld-body :global(h2:first-child) {
-    margin-top: 0;
-  }
-  .ld-body :global(h3) {
-    font-size: 1.0625rem;
-    font-weight: 700;
-    color: var(--color-heading);
-    margin: 26px 0 10px;
-  }
-  .ld-body :global(p) {
-    font-size: 0.9375rem;
-    color: var(--color-text);
-    line-height: 1.75;
-    margin: 0 0 14px;
-  }
-  .ld-body :global(ul),
-  .ld-body :global(ol) {
-    margin: 0 0 16px;
-    padding-left: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-  .ld-body :global(li) {
-    font-size: 0.9375rem;
-    color: var(--color-text);
-    line-height: 1.7;
-  }
-  .ld-body :global(strong) {
-    color: var(--color-heading);
-    font-weight: 600;
-  }
-  .ld-body :global(a) {
-    color: var(--color-heading);
-    font-weight: 600;
-    text-decoration: underline;
-    text-underline-offset: 2px;
-  }
-  .ld-body :global(a:hover) {
-    opacity: 0.75;
-  }
-
-  /* ── Legal table ── */
-  .ld-body :global(.legal-table) {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 4px 0 22px;
-    font-size: 0.875rem;
-    background: var(--surface-card);
-    border: 1px solid var(--border-default);
-    border-radius: 12px;
-    overflow: hidden;
-  }
-  .ld-body :global(.legal-table thead th) {
-    background: var(--surface-inverse);
-    color: var(--color-on-inverse);
-    text-align: left;
-    font-weight: 700;
-    font-size: 0.75rem;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    padding: 12px 14px;
-  }
-  .ld-body :global(.legal-table td) {
-    padding: 12px 14px;
-    border-top: 1px solid var(--border-default);
-    color: var(--color-text);
-    line-height: 1.6;
-    vertical-align: top;
-  }
-  .ld-body :global(.legal-table td strong) {
-    color: var(--color-heading);
-  }
-
-  /* ── Footer nav ── */
-  .ld-footer-nav {
-    margin-top: 0;
-    padding: 24px 28px;
-    background: var(--surface-card);
-    border: 1px solid var(--border-default);
-    border-radius: 12px;
-  }
-  .ld-footer-label {
-    font-size: 0.6875rem;
-    font-weight: 800;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--color-text-muted);
-    margin-bottom: 14px;
-  }
-  .ld-footer-nav ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  .ld-footer-nav a {
-    font-size: 0.9375rem;
-    font-weight: 600;
-    color: var(--color-heading);
-    text-decoration: none;
-    transition: opacity 0.2s;
-  }
-  .ld-footer-nav a:hover {
-    opacity: 0.7;
-  }
-
-  @media (max-width: 900px) {
-    .ld-grid { grid-template-columns: minmax(0, 1fr); gap: 2.75rem; }
-    .ld-side { position: static; max-width: 100%; }
-    .ld-body { max-width: 100%; }
-    /* Wide tables scroll within their box instead of clipping/overflowing */
-    .ld-body :global(.legal-table) { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-  }
-  @media (max-width: 600px) {
-    .ld-header { padding: 5.5rem 0 2.25rem; }
-    .ld-body-section { padding: 2.5rem 0 4rem; }
-    .ld-h1 { font-size: 1.875rem; }
-    .ld-body :global(.legal-summary) { padding: 20px; }
-  }
-</style>

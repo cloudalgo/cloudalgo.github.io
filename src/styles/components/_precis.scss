@@ -1,0 +1,73 @@
+/* The precis -- "the short version", on the inverse plate.
+ *
+ * Kept from the documents it replaces, because a reader who is not
+ * counsel needs it, but given a stated relationship to the body: the
+ * closing note says the summary is not the agreement and names the
+ * clauses that are. A summary that does not say what it is not is a
+ * summary a reader can rely on by mistake.
+ */
+
+.precis {
+  background: var(--surface-inverse);
+  color: var(--color-on-inverse-body);
+  padding: 1.75rem 1.875rem 1.5rem;
+  border-radius: 3px;
+  margin-bottom: 3rem;
+}
+
+.precis__label {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-on-inverse-muted);
+  margin-bottom: 0.875rem;
+}
+
+.precis__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* The marker is a positioned pseudo-element rather than a grid cell.
+   In a grid container every bare text node becomes its own grid item,
+   so a bullet whose sentence carries a <strong> shatters into three
+   columns. Learned the hard way; do not convert this to a grid. */
+.precis__list li {
+  position: relative;
+  padding: 0.5rem 0 0.5rem 1.25rem;
+  font-size: var(--size-body-sm);
+  line-height: 1.6;
+}
+
+.precis__list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 1rem;
+  width: 0.375rem;
+  height: 0.375rem;
+  background: var(--color-paper-a50);
+}
+
+.precis__list strong {
+  color: var(--color-on-inverse);
+  font-weight: var(--weight-bold);
+}
+
+.precis__note {
+  margin: 1rem 0 0;
+  padding-top: 0.875rem;
+  border-top: 1px solid var(--color-paper-a20);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.04em;
+  line-height: 1.6;
+  color: var(--color-on-inverse-muted);
+}
+
+@media (max-width: 600px) {
+  .precis { padding: 1.375rem 1.25rem 1.125rem; }
+}

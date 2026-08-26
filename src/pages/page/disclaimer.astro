@@ -1,178 +1,40 @@
 ---
-import Page from '../../layouts/Page.astro';
-import PageHeader from '@/components/ui/PageHeader.astro';
-const lastUpdated = 'May 2026';
+// DRAFT: template prepared for CloudAlgo. Review by qualified legal counsel before relying on it.
+import LegalDoc from '@/layouts/LegalDoc.astro';
 ---
-<Page
-  title="Disclaimer — CloudAlgo"
-  description="Disclaimer for CloudAlgo's website and consulting services."
+<LegalDoc
+  href="/page/disclaimer"
+  description="Disclaimer for CloudAlgo's website: the limits of the information published here, and what it is not a substitute for."
+  canonicalURL="https://cloudalgo.com/page/disclaimer"
+  lede="What the writing on this site is, and what it is not. Nothing published here is professional advice, and no code sample is warranted for production."
 >
 
-  <PageHeader
-    crumbs={[{ label: 'Home', href: '/' }, { label: 'Disclaimer' }]}
-    title="Disclaimer"
-    lead={`Last updated: ${lastUpdated}`}
-  />
+  <h2>Website information</h2>
+  <p>The information provided on <strong>cloudalgo.com</strong> (the "Site") is for general informational purposes only. While CloudAlgo makes every effort to keep the information accurate, complete, and up to date, we make no representations or warranties of any kind — express or implied — about the completeness, accuracy, reliability, suitability, or availability of the information, products, services, or related graphics on the Site.</p>
+  <p>Any reliance you place on such information is therefore strictly at your own risk.</p>
 
-  <section class="legal-body">
-    <div class="container legal-container">
+  <h2>No professional advice</h2>
+  <p>Content on this Site is not intended to constitute professional legal, financial, or technical advice. The blog articles, case studies, and guides published on this Site reflect the opinions and experience of the authors and are provided for educational purposes only.</p>
+  <p>Before making any business or technology decision based on content found on this Site, we recommend consulting with a qualified professional. CloudAlgo is happy to provide a formal consultation — <a href="/contact">get in touch</a>.</p>
 
-      <div class="legal-section">
-        <h2>Website Information</h2>
-        <p>
-          The information provided on <strong>cloudalgo.com</strong> (the "Site") is for general informational
-          purposes only. While CloudAlgo makes every effort to keep the information accurate, complete, and
-          up to date, we make no representations or warranties of any kind — express or implied — about the
-          completeness, accuracy, reliability, suitability, or availability of the information, products,
-          services, or related graphics on the Site.
-        </p>
-        <p>
-          Any reliance you place on such information is therefore strictly at your own risk.
-        </p>
-      </div>
+  <h2>Salesforce and third-party products</h2>
+  <p>CloudAlgo is an independent Salesforce consulting partner. We are not affiliated with, endorsed by, or officially connected with Salesforce.com, Inc., Heroku, MuleSoft, or any other third-party product referenced on this Site, beyond our status as an authorised Salesforce consulting partner.</p>
+  <p>All product names, logos, brands, and trademarks mentioned on this Site are the property of their respective owners. Reference to any products, services, processes, or other information by trade name, trademark, manufacturer, or otherwise does not necessarily constitute or imply our endorsement, recommendation, or favouring by CloudAlgo.</p>
 
-      <div class="legal-section">
-        <h2>No Professional Advice</h2>
-        <p>
-          Content on this Site is not intended to constitute professional legal, financial, or technical
-          advice. The blog articles, case studies, and guides published on this Site reflect the
-          opinions and experience of the authors and are provided for educational purposes only.
-        </p>
-        <p>
-          Before making any business or technology decision based on content found on this Site,
-          we recommend consulting with a qualified professional. CloudAlgo is happy to provide a
-          formal consultation — <a href="/contact">get in touch</a>.
-        </p>
-      </div>
+  <h2>Limitation of liability</h2>
+  <p>In no event will CloudAlgo, its directors, employees, partners, agents, or affiliates be liable for any indirect, incidental, special, consequential, or punitive damages arising from your use of this Site or reliance on any information contained herein, even if CloudAlgo has been advised of the possibility of such damages.</p>
+  <p>Our total liability for any claim related to the Site shall not exceed the amount paid by you to CloudAlgo in the 12 months prior to the claim, or USD $100, whichever is greater.</p>
 
-      <div class="legal-section">
-        <h2>Salesforce & Third-Party Products</h2>
-        <p>
-          CloudAlgo is an independent Salesforce consulting partner. We are not affiliated with,
-          endorsed by, or officially connected with Salesforce.com, Inc., Heroku, MuleSoft, or any
-          other third-party product referenced on this Site, beyond our status as an authorized
-          Salesforce consulting partner.
-        </p>
-        <p>
-          All product names, logos, brands, and trademarks mentioned on this Site are the property
-          of their respective owners. Reference to any products, services, processes, or other
-          information by trade name, trademark, manufacturer, or otherwise does not necessarily
-          constitute or imply our endorsement, recommendation, or favouring by CloudAlgo.
-        </p>
-      </div>
+  <h2>External links</h2>
+  <p>This Site may contain links to external websites operated by third parties. These links are provided for convenience only. CloudAlgo has no control over the content of those sites, and we accept no responsibility for them or for any loss or damage that may arise from your use of them.</p>
 
-      <div class="legal-section">
-        <h2>Limitation of Liability</h2>
-        <p>
-          In no event will CloudAlgo, its directors, employees, partners, agents, or affiliates be
-          liable for any indirect, incidental, special, consequential, or punitive damages arising
-          from your use of this Site or reliance on any information contained herein, even if
-          CloudAlgo has been advised of the possibility of such damages.
-        </p>
-        <p>
-          Our total liability for any claim related to the Site shall not exceed the amount paid by
-          you to CloudAlgo in the 12 months prior to the claim, or USD $100, whichever is greater.
-        </p>
-      </div>
+  <h2>Technical accuracy</h2>
+  <p>Code samples, configuration examples, and technical tutorials published on this Site are provided as-is. They are intended as illustrative examples only. You should thoroughly test any code or configuration in a sandbox environment before deploying to production. CloudAlgo accepts no liability for data loss, org corruption, or service disruption arising from the use of technical examples on this Site.</p>
 
-      <div class="legal-section">
-        <h2>External Links</h2>
-        <p>
-          This Site may contain links to external websites operated by third parties. These links
-          are provided for convenience only. CloudAlgo has no control over the content of those
-          sites, and we accept no responsibility for them or for any loss or damage that may arise
-          from your use of them.
-        </p>
-      </div>
+  <h2>Changes to this disclaimer</h2>
+  <p>We reserve the right to update this Disclaimer at any time without prior notice. Changes become effective immediately upon posting to the Site. Your continued use of the Site constitutes your acceptance of the updated Disclaimer.</p>
 
-      <div class="legal-section">
-        <h2>Technical Accuracy</h2>
-        <p>
-          Code samples, configuration examples, and technical tutorials published on this Site are
-          provided as-is. They are intended as illustrative examples only. You should thoroughly
-          test any code or configuration in a sandbox environment before deploying to production.
-          CloudAlgo accepts no liability for data loss, org corruption, or service disruption
-          arising from the use of technical examples on this Site.
-        </p>
-      </div>
+  <h2>Contact</h2>
+  <p>Questions about this Disclaimer go to <a href="mailto:contact@cloudalgo.com">contact@cloudalgo.com</a>, or by post to CloudAlgo, 115 Irish, Manglam Aananda, Jaipur, India.</p>
 
-      <div class="legal-section">
-        <h2>Changes to This Disclaimer</h2>
-        <p>
-          We reserve the right to update this Disclaimer at any time without prior notice.
-          Changes become effective immediately upon posting to the Site. Your continued use of
-          the Site constitutes your acceptance of the updated Disclaimer.
-        </p>
-      </div>
-
-      <div class="legal-section">
-        <h2>Contact</h2>
-        <p>
-          If you have any questions about this Disclaimer, please contact us:
-        </p>
-        <div class="legal-contact">
-          <strong>CloudAlgo</strong><br/>
-          115, Irish, Manglam Aananda, Jaipur, India<br/>
-          <a href="mailto:contact@cloudalgo.com">contact@cloudalgo.com</a>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-</Page>
-
-<style>
-.legal-body {
-  background: var(--surface-card);
-  padding: 4rem 0 6rem;
-}
-.legal-container {
-  max-width: 720px;
-}
-.legal-section {
-  margin-bottom: 3rem;
-  padding-bottom: 3rem;
-  border-bottom: 1px solid var(--border-default);
-}
-.legal-section:last-child {
-  border-bottom: none;
-  margin-bottom: 0;
-  padding-bottom: 0;
-}
-.legal-section h2 {
-  font-size: 1.25rem;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  color: var(--color-heading);
-  margin-bottom: 1rem;
-}
-.legal-section p {
-  font-size: 1rem;
-  color: var(--color-text);
-  line-height: 1.8;
-  margin-bottom: 1rem;
-}
-.legal-section p:last-child { margin-bottom: 0; }
-.legal-section a {
-  color: var(--color-heading);
-  font-weight: 600;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-.legal-section a:hover { opacity: 0.6; }
-.legal-contact {
-  background: var(--surface-sunk);
-  border: 1px solid var(--border-default);
-  border-radius: 10px;
-  padding: 1.25rem 1.5rem;
-  font-size: 0.9375rem;
-  color: var(--color-heading);
-  line-height: 1.8;
-  margin-top: 1rem;
-}
-.legal-contact a {
-  color: var(--color-heading);
-  font-weight: 600;
-}
-</style>
+</LegalDoc>

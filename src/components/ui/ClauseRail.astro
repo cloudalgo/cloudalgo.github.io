@@ -1,0 +1,96 @@
+---
+/**
+ * The clause rail: a document's contents list, and a marker for the
+ * clause currently being read.
+ *
+ * The list is built from the same array the document's clauses are, so
+ * the rail cannot fall out of step with the body -- LegalDoc derives
+ * both from the headings it renders.
+ *
+ * The live state is written with `aria-current`, not a class: the
+ * marker is a real statement about which entry is current, and the
+ * attribute is what a screen reader announces.
+ */
+
+export interface Clause {
+  id: string;
+  title: string;
+}
+
+interface Props {
+  clauses: Clause[];
+  /** Where the reader goes next, at the foot of the rail. */
+  footHref: string;
+  footLabel: string;
+  /** One line above the link, saying what that destination is. */
+  footNote?: string;
+}
+
+const { clauses, footHref, footLabel, footNote } = Astro.props;
+---
+
+<nav class="clauses" aria-label="Clauses">
+  <p class="clauses__label">Clauses</p>
+
+  <ol class="clauses__list">
+    {clauses.map((c) => (
+      <li>
+        <a class="clauses__link" href={`#${c.id}`}><span>{c.title}</span></a>
+      </li>
+    ))}
+  </ol>
+
+  <p class="clauses__foot">
+    {footNote && <>{footNote}{' '}</>}
+    <a href={footHref}>{footLabel} &rarr;</a>
+  </p>
+</nav>
+
+<script>
+  /* Marks the clause being read. The band is deliberately narrow and
+     high -- from 15% down the viewport to 25% -- so the mark tracks the
+     heading you are reading rather than whichever clause happens to
+     cover the most pixels, which on a long clause is the one you left
+     three screens ago.
+
+     Reduced motion is irrelevant here (nothing moves), but a browser
+     without IntersectionObserver simply gets a plain contents list,
+     which is what the rail is before the script runs. */
+  (() => {
+    const rail = document.querySelector<HTMLElement>('.clauses');
+    const clauses = Array.from(document.querySelectorAll<HTMLElement>('.clause'));
+    if (!rail || clauses.length === 0 || !('IntersectionObserver' in window)) return;
+
+    const links = new Map<string, HTMLAnchorElement>();
+    rail.querySelectorAll<HTMLAnchorElement>('.clauses__link').forEach((a) => {
+      links.set(a.getAttribute('href')!.slice(1), a);
+    });
+
+    let current: HTMLAnchorElement | null = null;
+    const visible = new Set<string>();
+
+    const mark = () => {
+      /* Document order, not intersection order: when two clauses are in
+         the band at once the reader is at the top of the lower one. */
+      const first = clauses.find((c) => visible.has(c.id));
+      const next = first ? links.get(first.id) ?? null : current;
+      if (next === current) return;
+      current?.removeAttribute('aria-current');
+      next?.setAttribute('aria-current', 'true');
+      current = next;
+    };
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) visible.add(e.target.id);
+          else visible.delete(e.target.id);
+        }
+        mark();
+      },
+      { rootMargin: '-15% 0px -75% 0px' },
+    );
+
+    clauses.forEach((c) => io.observe(c));
+  })();
+</script>
