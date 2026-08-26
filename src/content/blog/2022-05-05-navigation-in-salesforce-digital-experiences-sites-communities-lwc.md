@@ -35,4 +35,4 @@ The one thing I had wrong was the `name` attribute. Copy the API name straight o
 
 ---
 
-If you are working on Salesforce Experience Cloud customisation and need to bring in external libraries, you might find [Loading Stripe.js in an LWC: Why You Need Light DOM](/blog/loading-stripe-js-in-lwc-light-dom) useful as well.
+If you are working on Salesforce Experience Cloud customisation and need to bring in external libraries, you might find [Loading Stripe.js in an LWC: Why You Need Light DOM](/blog/loading-stripe-js-in-lwc-light-dom/) useful as well.

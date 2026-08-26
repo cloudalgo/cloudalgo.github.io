@@ -7,7 +7,7 @@ excerpt: "OrgVitals connects to any org you've authenticated with the Salesforce
 icon: "orgvitals"
 externalUrl: "https://github.com/cloudalgo/orgvitals-releases/releases"
 issuesUrl: "https://github.com/cloudalgo/orgvitals-releases/issues"
-guideUrl: "/products/orgvitals/guide"
+guideUrl: "/products/orgvitals/guide/"
 seoTitle: "OrgVitals — Salesforce Org Health Scanner (Desktop) | CloudAlgo"
 version: "1.1.1"
 lastUpdated: "2026-07-01"
@@ -98,19 +98,19 @@ screenshots:
     cap: "Ask a question in English. Vita answers from the local database, not from the org."
 legal:
   - label: "Privacy Policy"
-    href: "/products/orgvitals/legal/privacy"
+    href: "/products/orgvitals/legal/privacy/"
   - label: "Terms of Service"
-    href: "/products/orgvitals/legal/terms"
+    href: "/products/orgvitals/legal/terms/"
   - label: "Data Processing"
-    href: "/products/orgvitals/legal/data-processing"
+    href: "/products/orgvitals/legal/data-processing/"
   - label: "Acceptable Use"
-    href: "/products/orgvitals/legal/acceptable-use"
+    href: "/products/orgvitals/legal/acceptable-use/"
 published: true
 ---
 
 OrgVitals is a desktop app that gives Salesforce architects and admins one place to see how healthy an org really is. You pick an org you've already authenticated with the `sf` CLI; OrgVitals fetches a **read-only** snapshot of its metadata — Apex, Flows, profiles, permission sets, objects, fields, reports, dashboards, limits, health-check score, and test coverage — stores it in a local SQLite database, and runs the selected scanners across a worker pool.
 
-The snapshot and all scan history live in a local database on your machine. OrgVitals uses a Google sign-in (your account profile is stored via Firebase), sends crash diagnostics by default (you can opt out), and offers opt-in product analytics. Ask Vita is opt-in and off by default — it's the only feature that sends org data off the device; if you enable it with your own Anthropic API key, your questions and the metadata it reads go to Anthropic's Claude API, never to CloudAlgo. Full details are in the [Privacy Policy](/products/orgvitals/legal/privacy) and [Data Processing](/products/orgvitals/legal/data-processing) pages.
+The snapshot and all scan history live in a local database on your machine. OrgVitals uses a Google sign-in (your account profile is stored via Firebase), sends crash diagnostics by default (you can opt out), and offers opt-in product analytics. Ask Vita is opt-in and off by default — it's the only feature that sends org data off the device; if you enable it with your own Anthropic API key, your questions and the metadata it reads go to Anthropic's Claude API, never to CloudAlgo. Full details are in the [Privacy Policy](/products/orgvitals/legal/privacy/) and [Data Processing](/products/orgvitals/legal/data-processing/) pages.
 
 **How the grade works.** Each finding has a severity that subtracts a penalty from its category's 100-point base. The five categories roll up by fixed weight into a single overall grade from **A to F**, and a trend chart tracks that grade across every scan so you can see whether the org is getting healthier over time.
 

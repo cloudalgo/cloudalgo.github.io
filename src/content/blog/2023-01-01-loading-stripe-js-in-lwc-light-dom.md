@@ -81,4 +81,4 @@ That is an acceptable trade for a payment field that has to be mounted by a thir
 
 ---
 
-If you are building custom Salesforce Lightning components and need help with complex integrations or third-party libraries, [see how we approach Salesforce development](/services/salesforce-consulting).
+If you are building custom Salesforce Lightning components and need help with complex integrations or third-party libraries, [see how we approach Salesforce development](/services/salesforce-consulting/).

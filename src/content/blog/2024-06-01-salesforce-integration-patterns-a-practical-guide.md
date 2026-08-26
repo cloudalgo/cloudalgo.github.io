@@ -150,4 +150,4 @@ Getting this architecture right from the start avoids the painful rewrites we se
 
 ---
 
-If you are in the middle of an integration project and want an experienced team to review your approach or take it on entirely, [get in touch](/contact) — this is the kind of work we do every day.
+If you are in the middle of an integration project and want an experienced team to review your approach or take it on entirely, [get in touch](/contact/) — this is the kind of work we do every day.

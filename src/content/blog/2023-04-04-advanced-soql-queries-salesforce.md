@@ -93,4 +93,4 @@ The rest is limit arithmetic worth committing to memory: 100 SOQL queries per sy
 
 ---
 
-If you are running into data retrieval performance issues or hitting governor limits in a larger org, [we are happy to take a look](/contact).
+If you are running into data retrieval performance issues or hitting governor limits in a larger org, [we are happy to take a look](/contact/).

@@ -20,7 +20,7 @@ SOAP is still worth knowing for two situations: middleware that wants a formal W
 Every call below needs an access token and an instance URL. How you get them depends on what is calling:
 
 - **A server-to-server integration** — no user at a keyboard — should use the JWT bearer flow or the client credentials flow. Both authenticate the application itself, with no interactive login and no stored password.
-- **Anything acting on behalf of a user** should use the web server flow. We covered that setup in detail in [Setting Up Salesforce OAuth](/blog/salesforce-oauth-connected-app-setup).
+- **Anything acting on behalf of a user** should use the web server flow. We covered that setup in detail in [Setting Up Salesforce OAuth](/blog/salesforce-oauth-connected-app-setup/).
 
 The username-password flow that older examples reach for — posting a username, password, and security token to the token endpoint — is disabled by default in new orgs and on a deprecation path. Do not build anything new on it.
 
@@ -155,4 +155,4 @@ Unlike REST, SOAP is XML only. There is no JSON option.
 
 ---
 
-If you are building or maintaining a Salesforce integration and want to talk through the architecture, [see how we work with Salesforce and Heroku](/services/salesforce-consulting) or [get in touch directly](/contact).
+If you are building or maintaining a Salesforce integration and want to talk through the architecture, [see how we work with Salesforce and Heroku](/services/salesforce-consulting/) or [get in touch directly](/contact/).

@@ -85,6 +85,6 @@ Miss any one and you are on SOAP, at SOAP speed, wondering why the sync is slow.
 
 ---
 
-For what these look like once an org is at real volume, see [Heroku Connect at Scale: What Goes Wrong and How to Fix It](/blog/heroku-connect-at-scale-what-goes-wrong).
+For what these look like once an org is at real volume, see [Heroku Connect at Scale: What Goes Wrong and How to Fix It](/blog/heroku-connect-at-scale-what-goes-wrong/).
 
-We help teams get Heroku Connect right from the start — and recover it when things have gone sideways. If you are dealing with sync issues or planning a new integration, [see how we work with Heroku and Salesforce](/services/salesforce-consulting) or [get in touch](/contact).
+We help teams get Heroku Connect right from the start — and recover it when things have gone sideways. If you are dealing with sync issues or planning a new integration, [see how we work with Heroku and Salesforce](/services/salesforce-consulting/) or [get in touch](/contact/).

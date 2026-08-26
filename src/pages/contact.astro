@@ -22,8 +22,27 @@
  */
 import Page from '@/layouts/Page.astro';
 import ContactForm from '@/components/ui/ContactForm.tsx';
+
+import { organization, orgRef, breadcrumbs, abs } from '@/data/schema';
+
+const schema = [
+  {
+    '@type': 'ContactPage',
+    '@id': abs('/contact/'),
+    url: abs('/contact/'),
+    name: 'Contact CloudAlgo',
+    mainEntity: orgRef,
+    isPartOf: { '@id': abs('/') + '#website' },
+    publisher: orgRef,
+    inLanguage: 'en',
+  },
+  organization,
+  breadcrumbs([{ label: 'Home', href: '/' }, { label: 'Contact' }], abs('/contact/')),
+];
+
 ---
 <Page
+  {schema}
   cta={false}
   title="Contact CloudAlgo — Salesforce, MuleSoft and Heroku consulting"
   description="Tell us what your org is doing wrong. One of the two people who would do the work answers in writing within one working day. Half an hour on a call, no deck."

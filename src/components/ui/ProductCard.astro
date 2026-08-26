@@ -84,7 +84,7 @@ const iconSvg = productIcons[slug] ?? productIcons['cloudalgo-flow-audit'];
       </div>
       <div style="font-size:1rem;font-weight:700;color:var(--color-on-inverse);margin-bottom:0.35rem;">{data.title}</div>
       <div style="font-size:0.85rem;color:var(--color-on-inverse-muted);line-height:1.6;margin-bottom:1rem;">{data.excerpt}</div>
-      <a href={`/products/${slug}`} style="font-size:0.8rem;font-weight:700;color:var(--color-on-inverse-a80);text-decoration:underline;text-underline-offset:3px;transition:color 0.2s;margin-top:auto;" class="prod-card-link-dark">
+      <a href={`/products/${slug}/`} style="font-size:0.8rem;font-weight:700;color:var(--color-on-inverse-a80);text-decoration:underline;text-underline-offset:3px;transition:color 0.2s;margin-top:auto;" class="prod-card-link-dark">
         Learn more &rarr;
       </a>
     </div>
@@ -126,7 +126,7 @@ const iconSvg = productIcons[slug] ?? productIcons['cloudalgo-flow-audit'];
         ))}
       </ul>
       <div class="prod-card-ctas">
-        <Button href={`/products/${slug}`} variant="primary" size="xs">
+        <Button href={`/products/${slug}/`} variant="primary" size="xs">
           Learn more &rarr;
         </Button>
         {data.externalUrl ? (
@@ -134,7 +134,7 @@ const iconSvg = productIcons[slug] ?? productIcons['cloudalgo-flow-audit'];
             {data.type === 'desktop-app' ? 'Download ↗' : 'Get started ↗'}
           </Button>
         ) : (
-          <Button href="/contact" variant="outline" size="xs">
+          <Button href="/contact/" variant="outline" size="xs">
             Join waitlist
           </Button>
         )}

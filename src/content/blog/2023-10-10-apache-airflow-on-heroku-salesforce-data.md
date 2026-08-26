@@ -49,4 +49,4 @@ The tradeoff is real: three copies of the data, and more pipeline code than a di
 
 ---
 
-We design and maintain Airflow pipelines for clients with complex data integration requirements. If you are working through a similar problem, [see how we approach data pipelines](/services/airflow-data-pipelines) or [get in touch](/contact).
+We design and maintain Airflow pipelines for clients with complex data integration requirements. If you are working through a similar problem, [see how we approach data pipelines](/services/airflow-data-pipelines/) or [get in touch](/contact/).

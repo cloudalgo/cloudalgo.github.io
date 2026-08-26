@@ -64,8 +64,34 @@ for (const claim of CLAIMS) {
     }
   }
 }
+import { orgRef, breadcrumbs, abs } from '@/data/schema';
+
+const schema = [
+  {
+    '@type': 'CollectionPage',
+    '@id': abs('/case-studies/'),
+    url: abs('/case-studies/'),
+    name: 'CloudAlgo case studies',
+    isPartOf: { '@id': abs('/') + '#website' },
+    publisher: orgRef,
+    inLanguage: 'en',
+    mainEntity: {
+      '@type': 'ItemList',
+      numberOfItems: caseStudies.length,
+      itemListElement: caseStudies.map((c, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        url: abs(`/case-studies/${c.id}/`),
+        name: `${c.company} — ${c.headline}`,
+      })),
+    },
+  },
+  breadcrumbs([{ label: 'Home', href: '/' }, { label: 'Case studies' }], abs('/case-studies/')),
+];
+
 ---
 <Page
+  {schema}
   title="Case studies — CloudAlgo | Five things that are no longer true"
   description="Five Salesforce, MuleSoft and Heroku engagements stated as a change of state: what was true before, what is true now, and the one number that settles each of them."
 >

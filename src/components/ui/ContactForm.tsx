@@ -166,7 +166,7 @@ export default function ContactForm() {
         </button>
         <p className="ca-form__note">
           No mailing list, no sequence, no chatbot &mdash; just a reply.{' '}
-          <a href="/page/privacy-policy">What we do with it</a>.
+          <a href="/page/privacy-policy/">What we do with it</a>.
         </p>
       </div>
     </form>

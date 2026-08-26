@@ -36,12 +36,12 @@ import type { Crumb } from '@/components/ui/PageMasthead.astro';
 import SectionRail from '@/components/ui/SectionRail.astro';
 import Instruments from '@/components/sections/Instruments.astro';
 import { instrumentFor, siblingsOf, registerLabel, ISSUER } from '@/data/legal';
+import { organization, orgRef, breadcrumbs, abs, SITE_ID } from '@/data/schema';
 
 interface Props {
   /** The document's route -- its key in the register. */
   href: string;
   description: string;
-  canonicalURL: string;
   /** The standfirst beside the title: what this document is for, in a
       sentence a reader who is not counsel can act on. */
   lede: string;
@@ -49,7 +49,7 @@ interface Props {
   crumbs?: Crumb[];
 }
 
-const { href, description, canonicalURL, lede, crumbs } = Astro.props;
+const { href, description, lede, crumbs } = Astro.props;
 
 const doc = instrumentFor(href);
 if (!doc) {
@@ -65,18 +65,36 @@ const trails: Record<typeof doc.register, Crumb[]> = {
   site: [{ label: 'Home', href: '/' }],
   orgvitals: [
     { label: 'Home', href: '/' },
-    { label: 'Products', href: '/products' },
-    { label: 'OrgVitals', href: '/products/orgvitals' },
-    { label: 'Legal', href: '/products/orgvitals/legal' },
+    { label: 'Products', href: '/products/' },
+    { label: 'OrgVitals', href: '/products/orgvitals/' },
+    { label: 'Legal', href: '/products/orgvitals/legal/' },
   ],
   insurealgo: [
     { label: 'Home', href: '/' },
-    { label: 'Products', href: '/products' },
-    { label: 'InsureAlgo', href: '/products/insurealgo' },
+    { label: 'Products', href: '/products/' },
+    { label: 'InsureAlgo', href: '/products/insurealgo/' },
   ],
 };
 
 const trail: Crumb[] = crumbs ?? [...trails[doc.register], { label: doc.title }];
+
+/* The trail is rendered and declared from the same array, so the two cannot
+   disagree -- a BreadcrumbList that does not match the visible one is the
+   mismatch that gets the whole rich result dropped. */
+const schema = [
+  {
+    '@type': 'WebPage',
+    '@id': abs(href),
+    url: abs(href),
+    name: `${doc.title} — ${registerLabel[doc.register]}`,
+    description,
+    isPartOf: { '@id': SITE_ID },
+    publisher: orgRef,
+    inLanguage: 'en',
+  },
+  organization,
+  breadcrumbs(trail, abs(href)),
+];
 
 /* ── Parsing the slot ────────────────────────────────────── */
 
@@ -129,9 +147,10 @@ const family = registerLabel[doc.register];
 ---
 
 <Page
+  {schema}
   title={`${doc.title}${doc.register === 'site' ? '' : ` — ${family}`} | CloudAlgo`}
   description={description}
-  canonicalURL={canonicalURL}
+  canonicalURL={abs(href)}
 >
   <PageMasthead crumbs={trail} standClass="docket">
     <Fragment slot="title">{doc.title}</Fragment>

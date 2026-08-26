@@ -102,4 +102,4 @@ Whichever you pick, do the conversion once at the boundary. An enum that only ex
 
 ---
 
-If your team is working through complex Salesforce business logic and you want an experienced set of eyes on the design, [we are happy to talk](/contact).
+If your team is working through complex Salesforce business logic and you want an experienced set of eyes on the design, [we are happy to talk](/contact/).

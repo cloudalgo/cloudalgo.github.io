@@ -133,4 +133,4 @@ Two limits are worth keeping in view while you build on this: 100 callouts per t
 
 ---
 
-If you are working on asynchronous integration between Salesforce and Heroku or AWS and want to talk through the right approach for your situation, [get in touch](/contact).
+If you are working on asynchronous integration between Salesforce and Heroku or AWS and want to talk through the right approach for your situation, [get in touch](/contact/).

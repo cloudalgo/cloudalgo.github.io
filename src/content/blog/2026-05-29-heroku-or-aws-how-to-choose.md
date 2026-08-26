@@ -55,4 +55,4 @@ They stayed on Heroku.
 
 ---
 
-If you are working through a similar decision, we are happy to talk it through. We do this assessment as part of most Heroku engagements. [Get in touch](/contact) or [see how we work with Heroku and Salesforce](/services/salesforce-consulting).
+If you are working through a similar decision, we are happy to talk it through. We do this assessment as part of most Heroku engagements. [Get in touch](/contact/) or [see how we work with Heroku and Salesforce](/services/salesforce-consulting/).

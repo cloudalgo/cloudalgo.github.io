@@ -54,4 +54,4 @@ Where it falls short: real-time requirements, non-standard objects, and high-fre
 
 ---
 
-If you are designing a Salesforce-Heroku integration and want to talk through the architecture before you build it, we are happy to help. [Get in touch](/contact) or [see how we approach these projects](/services/salesforce-consulting).
+If you are designing a Salesforce-Heroku integration and want to talk through the architecture before you build it, we are happy to help. [Get in touch](/contact/) or [see how we approach these projects](/services/salesforce-consulting/).

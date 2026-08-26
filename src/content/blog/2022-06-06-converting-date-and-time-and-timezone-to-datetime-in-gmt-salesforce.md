@@ -70,4 +70,4 @@ Use case 2 :  Non Daylight saving testing
 
 ---
 
-If you are working with time formatting in the same codebase, [How to Format an Apex Time Value as a Readable String](/blog/format-apex-time-as-string) covers the display side of the same problem.
+If you are working with time formatting in the same codebase, [How to Format an Apex Time Value as a Readable String](/blog/format-apex-time-as-string/) covers the display side of the same problem.

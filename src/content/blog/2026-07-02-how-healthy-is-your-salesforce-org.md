@@ -114,4 +114,4 @@ Point it at the org you're most afraid of. That's genuinely the fastest way to u
 
 ---
 
-It runs on macOS, Windows, and Linux, it's free, and you'll have your first grade in about five minutes. [Download OrgVitals](https://github.com/cloudalgo/orgvitals-releases/releases) [Read the full guide](/products/orgvitals/guide) [Talk to us about fixing what it finds](/contact)
+It runs on macOS, Windows, and Linux, it's free, and you'll have your first grade in about five minutes. [Download OrgVitals](https://github.com/cloudalgo/orgvitals-releases/releases) [Read the full guide](/products/orgvitals/guide/) [Talk to us about fixing what it finds](/contact/)

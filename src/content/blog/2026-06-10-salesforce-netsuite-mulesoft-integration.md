@@ -90,4 +90,4 @@ The integration handles both new record creation and updates to existing records
 
 ---
 
-We built this integration for a specialty wholesale distributor using MuleSoft Anypoint Platform on CloudHub. [See the full case study](/case-studies/salesforce-netsuite-sync), or [get in touch](/contact) if you're connecting Salesforce to NetSuite — or any other ERP.
+We built this integration for a specialty wholesale distributor using MuleSoft Anypoint Platform on CloudHub. [See the full case study](/case-studies/salesforce-netsuite-sync/), or [get in touch](/contact/) if you're connecting Salesforce to NetSuite — or any other ERP.

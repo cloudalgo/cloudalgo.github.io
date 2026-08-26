@@ -92,8 +92,50 @@ const rows = posts.map((p, i) => ({
   post: p,
   opensYear: i === 0 || year(p.data.date) !== year(posts[i - 1].data.date),
 }));
+import { orgRef, breadcrumbs, abs } from '@/data/schema';
+
+// The page shows the whole run in reverse chronology, so the ItemList says
+// so -- positions are the order a reader actually meets them, and every
+// entry is listed rather than the first ten. Nothing here is a claim the
+// page does not already make in words.
+const schema = [
+  {
+    '@type': 'Blog',
+    '@id': abs('/blog/'),
+    url: abs('/blog/'),
+    name: 'CloudAlgo Journal',
+    description: 'Write-ups on Salesforce, Heroku, MuleSoft and AWS integration work.',
+    isPartOf: { '@id': abs('/') + '#website' },
+    publisher: orgRef,
+    inLanguage: 'en',
+    blogPost: posts.map((p) => ({
+      '@type': 'BlogPosting',
+      '@id': abs(`/blog/${p.id}/`),
+      url: abs(`/blog/${p.id}/`),
+      headline: p.data.title,
+      datePublished: p.data.date.toISOString(),
+      author: { '@type': 'Person', name: p.data.author ?? 'CloudAlgo' },
+      publisher: orgRef,
+    })),
+  },
+  {
+    '@type': 'ItemList',
+    '@id': abs('/blog/') + '#index',
+    itemListOrder: 'https://schema.org/ItemListOrderDescending',
+    numberOfItems: n,
+    itemListElement: posts.map((p, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      url: abs(`/blog/${p.id}/`),
+      name: p.data.title,
+    })),
+  },
+  breadcrumbs([{ label: 'Home', href: '/' }, { label: 'Journal' }], abs('/blog/')),
+];
+
 ---
 <Page
+  {schema}
   title="Journal — CloudAlgo | Everything here came out of a job we were actually doing"
   description={`${n} write-ups on Salesforce, Heroku, MuleSoft and AWS integration work, newest first `
     + '— each one a problem that cost us an afternoon, and the fix that ended it.'}

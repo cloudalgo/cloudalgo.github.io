@@ -12,11 +12,11 @@ import BrandLockup from '@/components/ui/BrandLockup.astro';
 // it and does not need it -- five words across a bar are self-evident; five
 // words down a phone screen are a list, and a list wants departments.
 const navLinks = [
-  { href: '/products',      label: 'Products',     cat: 'Catalogue'   },
-  { href: '/services',      label: 'Services',     cat: 'Engagements' },
-  { href: '/case-studies',  label: 'Case studies', cat: 'Evidence'    },
-  { href: '/blog',          label: 'Journal',      cat: 'Writing'     },
-  { href: '/about',         label: 'About',        cat: 'The firm'    },
+  { href: '/products/',      label: 'Products',     cat: 'Catalogue'   },
+  { href: '/services/',      label: 'Services',     cat: 'Engagements' },
+  { href: '/case-studies/',  label: 'Case studies', cat: 'Evidence'    },
+  { href: '/blog/',          label: 'Journal',      cat: 'Writing'     },
+  { href: '/about/',         label: 'About',        cat: 'The firm'    },
 ];
 const currentPath = Astro.url.pathname;
 const isActive = (href: string) =>

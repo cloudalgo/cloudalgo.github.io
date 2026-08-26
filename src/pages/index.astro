@@ -8,23 +8,25 @@ import ProductsSection from '../components/sections/ProductsSection.astro';
 import CaseStudies from '../components/sections/CaseStudies.astro';
 import BlogPreview from '../components/sections/BlogPreview.astro';
 
-const schema = {
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  "name": "CloudAlgo",
-  "url": "https://cloudalgo.com",
-  "logo": "https://cloudalgo.com/logo.svg",
-  "foundingDate": "2019",
-  "description": "CloudAlgo is a certified Salesforce & Heroku consulting firm. 70+ projects delivered, 12 years of combined experience.",
-  "email": "sales@cloudalgo.com",
-  "sameAs": [
-    "https://www.linkedin.com/company/cloudalgo",
-    "https://github.com/cloudalgo",
-    "https://twitter.com/cloudalgo"
-  ],
-  "knowsAbout": ["Salesforce", "Heroku", "MuleSoft", "Salesforce AppExchange", "CRM Consulting"],
-  "areaServed": "Worldwide"
-};
+import { organization, website, orgRef, abs } from '@/data/schema';
+
+// The home page carries the canonical copy of both entity nodes: it is the
+// URL every other page's `@id` resolves against, and the one a crawler
+// reaches first.
+const schema = [
+  organization,
+  website,
+  {
+    '@type': 'WebPage',
+    '@id': abs('/'),
+    url: abs('/'),
+    name: 'CloudAlgo — Salesforce & Heroku Consulting',
+    isPartOf: { '@id': website['@id'] },
+    about: orgRef,
+    publisher: orgRef,
+    inLanguage: 'en',
+  },
+];
 ---
 <Page
   title="CloudAlgo — Salesforce & Heroku Consulting"

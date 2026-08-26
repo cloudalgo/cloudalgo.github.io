@@ -24,8 +24,8 @@ const RENAMED = {
 
 const renamedRedirects = Object.fromEntries(
   Object.entries(RENAMED).flatMap(([dated, slug]) => [
-    [`/blog/${dated}`, `/blog/${slug}`],
-    [`/blog/${dated.replace(/^\d{4}-\d{2}-\d{2}-/, '')}`, `/blog/${slug}`],
+    [`/blog/${dated}`, `/blog/${slug}/`],
+    [`/blog/${dated.replace(/^\d{4}-\d{2}-\d{2}-/, '')}`, `/blog/${slug}/`],
   ]),
 );
 
@@ -34,7 +34,25 @@ const blogRedirects = Object.fromEntries(
     .filter(f => /^\d{4}-\d{2}-\d{2}-.+\.md$/.test(f))
     .map(f => {
       const dated = f.replace(/\.md$/, '');
-      return [`/blog/${dated}`, `/blog/${dated.replace(/^\d{4}-\d{2}-\d{2}-/, '')}`];
+      return [`/blog/${dated}`, `/blog/${dated.replace(/^\d{4}-\d{2}-\d{2}-/, '')}/`];
+    }),
+);
+
+// The journal's filenames carry the publication date, and the frontmatter
+// `date` agrees with them, so the sitemap can state a lastmod for every post
+// without parsing a single frontmatter block.
+//
+// Only the journal gets one. A crawler that finds a lastmod it cannot trust
+// stops reading the field across the whole site, so the pages whose last
+// change nobody records -- the static ones -- say nothing rather than
+// claiming the build date.
+const blogLastmod = Object.fromEntries(
+  readdirSync('./src/content/blog')
+    .filter(f => /^\d{4}-\d{2}-\d{2}-.+\.md$/.test(f))
+    .map(f => {
+      const [date] = f.match(/^\d{4}-\d{2}-\d{2}/);
+      const slug = f.replace(/\.md$/, '').replace(/^\d{4}-\d{2}-\d{2}-/, '');
+      return [`https://cloudalgo.com/blog/${slug}/`, new Date(`${date}T00:00:00Z`).toISOString()];
     }),
 );
 
@@ -99,6 +117,8 @@ export default defineConfig({
   markdown: { processor: satteri({ hastPlugins: [satteriFigures] }) },
   integrations: [
     react(),
-    sitemap(),
+    sitemap({
+      serialize: item => (blogLastmod[item.url] ? { ...item, lastmod: blogLastmod[item.url] } : item),
+    }),
   ],
 });

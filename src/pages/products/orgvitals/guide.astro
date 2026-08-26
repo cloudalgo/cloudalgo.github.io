@@ -30,13 +30,14 @@ import Proc from '@/components/ui/Proc.astro';
 import ScreenPanel from '@/components/ui/ScreenPanel.astro';
 import Instruments from '@/components/sections/Instruments.astro';
 import type { Row } from '@/components/sections/Instruments.astro';
+import { organization, orgRef, breadcrumbs, abs } from '@/data/schema';
 
 const RELEASES = 'https://github.com/cloudalgo/orgvitals-releases/releases';
 
 const crumbs: Crumb[] = [
   { label: 'Home', href: '/' },
-  { label: 'Products', href: '/products' },
-  { label: 'OrgVitals', href: '/products/orgvitals' },
+  { label: 'Products', href: '/products/' },
+  { label: 'OrgVitals', href: '/products/orgvitals/' },
   { label: 'User guide' },
 ];
 
@@ -109,12 +110,32 @@ const elsewhere: Row[] = [
     external: true,
   },
 ];
+/* A manual, declared as one: TechArticle is what a how-to guide is, and it
+   is what lets the thirteen sections below be found as instructions rather
+   than as marketing copy about a product. */
+const schema = [
+  {
+    '@type': 'TechArticle',
+    '@id': abs('/products/orgvitals/guide/'),
+    url: abs('/products/orgvitals/guide/'),
+    headline: 'OrgVitals user guide',
+    description:
+      'Everything OrgVitals does, in the order you meet it: connect an org, run a read-only scan, read the grade, and work the findings down.',
+    about: { '@id': abs('/products/orgvitals/') + '#software' },
+    publisher: orgRef,
+    author: orgRef,
+    inLanguage: 'en',
+  },
+  organization,
+  breadcrumbs(crumbs, abs('/products/orgvitals/guide/')),
+];
+
 ---
 
 <Page
+  {schema}
   title="OrgVitals user guide — CloudAlgo"
   description="Everything OrgVitals does, in the order you meet it: connect an org, run a read-only scan, read the grade, and work the findings down. Thirteen sections and sixteen screens."
-  canonicalURL="https://cloudalgo.com/products/orgvitals/guide"
 >
   <PageMasthead crumbs={crumbs} facts={facts}>
     <Fragment slot="title">OrgVitals user guide</Fragment>

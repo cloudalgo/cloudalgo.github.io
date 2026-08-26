@@ -164,4 +164,4 @@ Works on bash 3.2+ so the macOS default shell is fine. No packages, no org confi
 
 ---
 
-We've run this on every schema cleanup engagement since we built it. If you're heading into a migration or just trying to get a handle on field debt, [get in touch](/contact) or [see how we approach Salesforce architecture](/services/salesforce-consulting).
+We've run this on every schema cleanup engagement since we built it. If you're heading into a migration or just trying to get a handle on field debt, [get in touch](/contact/) or [see how we approach Salesforce architecture](/services/salesforce-consulting/).

@@ -77,4 +77,4 @@ The integration pattern — Salesforce Apex → RabbitMQ → Heroku worker → P
 
 ---
 
-We built this integration for a healthcare client using Heroku as the middleware layer. [See the full case study](/case-studies/salesforce-emr-sync), or [get in touch](/contact) if you're facing a similar problem.
+We built this integration for a healthcare client using Heroku as the middleware layer. [See the full case study](/case-studies/salesforce-emr-sync/), or [get in touch](/contact/) if you're facing a similar problem.

@@ -28,6 +28,7 @@
  * the contents rail is built from the entry's own h2s.
  */
 import { getCollection, render } from 'astro:content';
+import { organization, orgRef, breadcrumbs, abs } from '@/data/schema';
 import Page from '@/layouts/Page.astro';
 import PageMasthead from '@/components/ui/PageMasthead.astro';
 import ArchivePlate from '@/components/ui/ArchivePlate.astro';
@@ -123,24 +124,55 @@ const archiveLink = {
   shape: `${total} entries, newest first`,
 };
 
-const schema = {
-  '@context': 'https://schema.org',
-  '@type': 'Article',
-  headline: post.data.title,
-  description: post.data.excerpt,
-  datePublished: post.data.date.toISOString(),
-  author: { '@type': 'Organization', name: 'CloudAlgo', url: 'https://cloudalgo.com' },
-  publisher: {
-    '@type': 'Organization',
-    name: 'CloudAlgo',
-    logo: { '@type': 'ImageObject', url: 'https://cloudalgo.com/logo.svg' },
-  },
-  url: postUrl,
-  image: post.data.image
+/* An entry's `image` is also its Article image, and Google will only take a
+   crawlable bitmap for that slot. Three entries are headed by a drawing, so
+   those fall back to the site card rather than naming an SVG the rich-result
+   pipeline will reject. Same rule as the social card in Base.astro. */
+const articleImage =
+  post.data.image && !/\.svg$/i.test(post.data.image)
     ? `https://cloudalgo.com${post.data.image}`
-    : 'https://cloudalgo.com/og-default.jpg',
-  mainEntityOfPage: { '@type': 'WebPage', '@id': postUrl },
-};
+    : 'https://cloudalgo.com/og-default.jpg';
+
+const schema = [
+  {
+    '@type': 'BlogPosting',
+    '@id': postUrl,
+    headline: post.data.title,
+    description: post.data.excerpt,
+    datePublished: post.data.date.toISOString(),
+    /* The byline the page prints, credited to the person who wrote it. It
+       used to say the author was the company, which is the one thing the
+       masthead never claims. */
+    author: post.data.author
+      ? {
+          '@type': 'Person',
+          name: post.data.author,
+          ...(post.data.authorDesignation ? { jobTitle: post.data.authorDesignation } : {}),
+          worksFor: orgRef,
+        }
+      : orgRef,
+    publisher: orgRef,
+    url: postUrl,
+    image: articleImage,
+    isPartOf: { '@id': abs('/blog/') },
+    inLanguage: 'en',
+    timeRequired: `PT${post.data.readTime}M`,
+    articleSection: post.data.category,
+    mainEntityOfPage: { '@type': 'WebPage', '@id': postUrl },
+  },
+  organization,
+  /* The same three crumbs the masthead prints, ending on the subject
+     rather than the title -- a declared trail that does not match the
+     rendered one is what gets the rich result dropped. */
+  breadcrumbs(
+    [
+      { label: 'Home', href: '/' },
+      { label: 'Journal', href: '/blog/' },
+      { label: post.data.category },
+    ],
+    postUrl,
+  ),
+];
 ---
 <Page
   title={`${post.data.title} — CloudAlgo Journal`}

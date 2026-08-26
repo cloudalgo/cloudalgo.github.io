@@ -9,20 +9,45 @@ import Page from '@/layouts/Page.astro';
 import PageMasthead from '@/components/ui/PageMasthead.astro';
 import Instruments from '@/components/sections/Instruments.astro';
 import { instruments, ISSUER } from '@/data/legal';
+import { organization, orgRef, breadcrumbs, abs } from '@/data/schema';
 
 const docs = instruments.filter((i) => i.register === 'orgvitals');
 
 const crumbs = [
   { label: 'Home', href: '/' },
-  { label: 'Products', href: '/products' },
-  { label: 'OrgVitals', href: '/products/orgvitals' },
+  { label: 'Products', href: '/products/' },
+  { label: 'OrgVitals', href: '/products/orgvitals/' },
   { label: 'Legal' },
 ];
+/* The register lists; each instrument describes itself on its own page. */
+const schema = [
+  {
+    '@type': 'CollectionPage',
+    '@id': abs('/products/orgvitals/legal/'),
+    url: abs('/products/orgvitals/legal/'),
+    name: 'OrgVitals legal',
+    publisher: orgRef,
+    inLanguage: 'en',
+    mainEntity: {
+      '@type': 'ItemList',
+      numberOfItems: docs.length,
+      itemListElement: docs.map((d, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        url: abs(d.href),
+        name: d.title,
+      })),
+    },
+  },
+  organization,
+  breadcrumbs(crumbs, abs('/products/orgvitals/legal/')),
+];
+
 ---
 <Page
+  {schema}
   title="OrgVitals legal — CloudAlgo"
   description="The four instruments governing OrgVitals by CloudAlgo: Privacy Policy, Terms of Service, Data Processing and Usage, and the Acceptable Use Policy."
-  canonicalURL="https://cloudalgo.com/products/orgvitals/legal"
 >
   <PageMasthead
     crumbs={crumbs}

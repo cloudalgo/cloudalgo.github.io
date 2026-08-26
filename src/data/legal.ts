@@ -35,7 +35,7 @@ export const ISSUER = 'CloudAlgo Private Limited';
 export const instruments: Instrument[] = [
   // ── The site's own instruments ──────────────────────────
   {
-    href: '/page/privacy-policy',
+    href: '/page/privacy-policy/',
     title: 'Privacy Policy',
     what: 'What we collect through the site, why, and the rights you hold over it.',
     register: 'site',
@@ -44,7 +44,7 @@ export const instruments: Instrument[] = [
     clauses: 11,
   },
   {
-    href: '/page/disclaimer',
+    href: '/page/disclaimer/',
     title: 'Disclaimer',
     what: 'The limits of what the site says — no professional advice, no warranty on code samples.',
     register: 'site',
@@ -55,7 +55,7 @@ export const instruments: Instrument[] = [
 
   // ── OrgVitals ───────────────────────────────────────────
   {
-    href: '/products/orgvitals/legal/privacy',
+    href: '/products/orgvitals/legal/privacy/',
     title: 'Privacy Policy',
     what: 'What stays on your device, what reaches us, and the rights you hold over it.',
     register: 'orgvitals',
@@ -65,7 +65,7 @@ export const instruments: Instrument[] = [
     governingLaw: 'India',
   },
   {
-    href: '/products/orgvitals/legal/terms',
+    href: '/products/orgvitals/legal/terms/',
     title: 'Terms of Service',
     what: 'The licence and the agreement — your responsibilities, warranties, liability.',
     register: 'orgvitals',
@@ -75,7 +75,7 @@ export const instruments: Instrument[] = [
     governingLaw: 'India',
   },
   {
-    href: '/products/orgvitals/legal/data-processing',
+    href: '/products/orgvitals/legal/data-processing/',
     title: 'Data Processing and Usage',
     what: 'How data flows, what stays local, and the three sub-processors involved.',
     register: 'orgvitals',
@@ -85,7 +85,7 @@ export const instruments: Instrument[] = [
     governingLaw: 'India',
   },
   {
-    href: '/products/orgvitals/legal/acceptable-use',
+    href: '/products/orgvitals/legal/acceptable-use/',
     title: 'Acceptable Use Policy',
     what: 'Scan only the orgs you own, administer, or are authorised in writing to assess.',
     register: 'orgvitals',
@@ -97,7 +97,7 @@ export const instruments: Instrument[] = [
 
   // ── InsureAlgo ──────────────────────────────────────────
   {
-    href: '/apps/insurealgo/privacy',
+    href: '/apps/insurealgo/privacy/',
     title: 'Privacy Policy',
     what: 'Everything stays on the device. No account, no tracking, no servers.',
     register: 'insurealgo',

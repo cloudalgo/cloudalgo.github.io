@@ -16,6 +16,9 @@ export interface Props {
   section?: string;
   /** Structured-data JSON-LD blob — pass from individual pages */
   schema?: object | object[];
+  /** Keep the page out of the index. For pages that answer a request but
+   *  are not a destination — the 404, chiefly. */
+  noindex?: boolean;
 }
 
 const {
@@ -28,6 +31,7 @@ const {
   author,
   section,
   schema,
+  noindex = false,
 } = Astro.props;
 
 const schemaJson: string | null = !schema
@@ -37,7 +41,42 @@ const schemaJson: string | null = !schema
     : JSON.stringify(schema);
 
 const imageHost = 'https://cloudalgo.com';
-const ogImage = image.startsWith('http') ? image : `${imageHost}${image}`;
+
+// ── The social card ────────────────────────────────────────
+// Every crawler that renders a card fetches og:image as a BITMAP. None of
+// them rasterise SVG, so a post whose hero is a drawing used to ship a card
+// that silently failed to render anywhere. Those posts fall back to the site
+// card, which is a card, rather than to nothing.
+const OG_DEFAULT = '/og-default.jpg';
+const cardSource = /\.svg(\?|$)/i.test(image) ? OG_DEFAULT : image;
+
+// Declared type and size have to match the bytes served, or the card is
+// rejected before it is drawn. Both were hard-coded to `image/jpeg` at
+// 1200x630 for every page on the site: true of nothing, including the
+// default, which is 2400x1260. The blog's assets are .webp and .jpg at
+// eight different sizes.
+const OG_MIME: Record<string, string> = {
+  jpg: 'image/jpeg',
+  jpeg: 'image/jpeg',
+  png: 'image/png',
+  webp: 'image/webp',
+  gif: 'image/gif',
+};
+const extension = cardSource.split(/[?#]/)[0].split('.').pop()?.toLowerCase() ?? '';
+const ogImageType = OG_MIME[extension] ?? 'image/jpeg';
+
+// The asset pipeline names files with their intrinsic size
+// (`...-1200x600.jpg`), so where the name carries it, it is declared. Where
+// it does not, the dimensions are omitted rather than guessed -- the tags
+// are optional, and a wrong one is worse than an absent one.
+const measured = cardSource.match(/-(\d{2,5})x(\d{2,5})\.[a-z]+(?:[?#]|$)/i);
+const cardSize = measured
+  ? { w: measured[1], h: measured[2] }
+  : cardSource === OG_DEFAULT
+    ? { w: '2400', h: '1260' }
+    : null;
+
+const ogImage = cardSource.startsWith('http') ? cardSource : `${imageHost}${cardSource}`;
 ---
 <!doctype html>
 <html lang="en">
@@ -68,7 +107,7 @@ const ogImage = image.startsWith('http') ? image : `${imageHost}${image}`;
 
     <title>{title}</title>
     <meta name="description" content={description} />
-    <meta name="robots" content="index, follow" />
+    <meta name="robots" content={noindex ? 'noindex, follow' : 'index, follow'} />
 
     <!-- Open Graph -->
     <meta property="og:site_name" content="CloudAlgo" />
@@ -79,9 +118,9 @@ const ogImage = image.startsWith('http') ? image : `${imageHost}${image}`;
     <meta property="og:description" content={description} />
     <meta property="og:url"       content={canonicalURL} />
     <meta property="og:image"     content={ogImage} />
-    <meta property="og:image:type"   content="image/jpeg" />
-    <meta property="og:image:width"  content="1200" />
-    <meta property="og:image:height" content="630" />
+    <meta property="og:image:type"   content={ogImageType} />
+    {cardSize && <meta property="og:image:width"  content={cardSize.w} />}
+    {cardSize && <meta property="og:image:height" content={cardSize.h} />}
     <meta property="og:image:alt"    content={title} />
     {publishedTime && <meta property="article:published_time" content={publishedTime} />}
     {author    && <meta property="article:author"  content={author} />}
@@ -149,7 +188,7 @@ const ogImage = image.startsWith('http') ? image : `${imageHost}${image}`;
         let railLen = 0;
         let thumbLen = 0;
         let travel = 0;
-        let marks: Array<{ top: number; name: string }> = [];
+        let marks: Array<{ top: number; at: number; name: string }> = [];
         let shownName = '';
         let dragging = false;
         let grabOffset = 0;
@@ -189,14 +228,55 @@ const ogImage = image.startsWith('http') ? image : `${imageHost}${image}`;
           return `${name.slice(0, cut > 0 ? cut : NAME_MAX - 1).replace(/[.,;:]$/, '')}\u2026`;
         };
 
+        // How far short of a section the page must stop for the section to
+        // arrive in the open. The header is fixed, so scrolling to a section's
+        // raw top parks that top underneath it -- measured on /about/, every
+        // tick landed the section at y=0 behind a 73px header and clipped one
+        // heading by 19px. `_header.scss` already answers this for in-page
+        // anchors with `scroll-margin-top: calc(var(--header-h) + 1.5rem)`;
+        // the rail lands things in the same place, so a tick and an anchor to
+        // the same section agree. Measured rather than hard-coded, because the
+        // header's height is its own business and the root font-size drops to
+        // 85% under 1200px, which moves the 1.5rem with it.
+        const clearance = () => {
+          const bar = document.querySelector<HTMLElement>('.header');
+          const rootPx = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+          return (bar ? bar.getBoundingClientRect().height : 0) + rootPx * 1.5;
+        };
+
+        // Where a section SITS, not where it is currently PAINTED.
+        // `getBoundingClientRect` includes transforms, and every section
+        // starts life at `translateY(28px)` under `.anim-fade-up`
+        // (base/_motion.scss) until the observer lets it up. Marks read
+        // before that -- which is most of them, since the marks are read on
+        // load and the entrances fire on approach -- came out 28px low, so
+        // the rail landed 28px past each section and put the heading back
+        // under the header: measured on the home page, every tick landed its
+        // section at y=64 against a header bottom of 73. `offsetTop` is the
+        // layout position and ignores transforms, so a mark is where the
+        // section will settle rather than where it happens to be mid-flight.
+        const layoutTop = (el: HTMLElement) => {
+          let y = 0;
+          let node: HTMLElement | null = el;
+          while (node) {
+            y += node.offsetTop;
+            node = node.offsetParent as HTMLElement | null;
+          }
+          return y;
+        };
+
         const readMarks = () => {
-          const found: Array<{ top: number; name: string }> = [];
+          const found: Array<{ top: number; at: number; name: string }> = [];
+          const clear = clearance();
           document.querySelectorAll<HTMLElement>('section[aria-labelledby]').forEach(section => {
             const id = section.getAttribute('aria-labelledby');
             const heading = id ? document.getElementById(id)?.textContent : '';
             const name = heading ? shortName(heading) : '';
             if (!name) return;
-            found.push({ top: section.getBoundingClientRect().top + window.scrollY, name });
+            // `top` is where the section IS, and names the rule as you pass it.
+            // `at` is where the page STOPS to show it, and places the tick.
+            const top = layoutTop(section);
+            found.push({ top, at: Math.max(0, top - clear), name });
           });
           return found.sort((a, b) => a.top - b.top);
         };
@@ -207,11 +287,13 @@ const ogImage = image.startsWith('http') ? image : `${imageHost}${image}`;
           if (marks.length < 3 || travel <= 0 || scrollableHeight <= 0) return;
           const frag = document.createDocumentFragment();
           for (const mark of marks) {
-            const pct = Math.min(Math.max(mark.top / scrollableHeight, 0), 1);
+            const pct = Math.min(Math.max(mark.at / scrollableHeight, 0), 1);
             const tick = document.createElement('span');
             tick.className = 'margin-rule__tick';
-            // Aligned to where the rule's CENTRE lands when that section is at
-            // the top of the viewport, so a tick is an honest drag target.
+            // Aligned to where the rule's CENTRE lands when the page has
+            // stopped on that section, so a tick is an honest drag target:
+            // put the rule on the tick and the section is under the header,
+            // not behind it.
             tick.style.top = `${thumbLen / 2 + travel * pct}px`;
             frag.appendChild(tick);
           }
@@ -279,15 +361,29 @@ const ogImage = image.startsWith('http') ? image : `${imageHost}${image}`;
         // Maps a pointer's y to a scroll position. `offset` is where inside the
         // rule the pointer took hold, so a drag does not jump the rule's top
         // under the cursor on the first move.
-        const scrollFromPointer = (clientY: number, offset: number) => {
+        //
+        // A click and a drag want opposite things here, so `travelling` picks:
+        //   a click on the track is a JUMP to somewhere else on the page, and
+        //     riding there keeps the reader's place -- you see what you passed.
+        //   a drag is a SCRUB, and the page has to stay under the cursor. An
+        //     animated scroll per pointermove leaves it trailing several
+        //     hundred ms behind the hand, which is the whole reason this uses
+        //     `instant` rather than `auto`: `auto` DEFERS to the element's
+        //     computed scroll-behavior, and this site sets `scroll-behavior:
+        //     smooth` on <html>, so `auto` animates. Measured, not assumed.
+        //
+        // The ride is dropped under prefers-reduced-motion. That has to be
+        // checked here rather than left to the CSS, because the site's
+        // `scroll-behavior: smooth` is unconditional -- naming 'smooth'
+        // explicitly would animate for people who asked us not to.
+        const scrollFromPointer = (clientY: number, offset: number, travelling = false) => {
           if (travel <= 0) return;
           const top = clientY - rule.getBoundingClientRect().top - offset;
           const pct = Math.min(Math.max(top / travel, 0), 1);
-          // `instant`, not `auto`: `auto` DEFERS to the element's computed
-          // scroll-behavior, and this site sets `scroll-behavior: smooth` on
-          // <html>, which would animate every drag frame and leave the page
-          // trailing several hundred ms behind the cursor.
-          window.scrollTo({ top: pct * scrollableHeight, behavior: 'instant' });
+          window.scrollTo({
+            top: pct * scrollableHeight,
+            behavior: travelling && !stillness.matches ? 'smooth' : 'instant',
+          });
         };
 
         rule.addEventListener('pointerenter', engage);
@@ -304,7 +400,9 @@ const ogImage = image.startsWith('http') ? image : `${imageHost}${image}`;
           dragging = true;
           rule.classList.add('is-awake', 'is-engaged');
           rule.setPointerCapture(event.pointerId);
-          scrollFromPointer(event.clientY, grabOffset);
+          // Taking hold of the rule scrolls nowhere -- the grab offset holds it
+          // where it is -- so only a click on the track is a journey.
+          scrollFromPointer(event.clientY, grabOffset, !onRule);
         });
 
         rule.addEventListener('pointermove', (event: PointerEvent) => {

@@ -95,9 +95,31 @@ const Word = (n: number) => {
   const w = word(n);
   return w.charAt(0).toUpperCase() + w.slice(1);
 };
+
+import { organization, orgRef, breadcrumbs, abs } from '@/data/schema';
+
+const schema = [
+  {
+    '@type': 'AboutPage',
+    '@id': abs('/about/'),
+    url: abs('/about/'),
+    name: 'About CloudAlgo',
+    // An AboutPage's subject IS the organisation; saying so is what lets a
+    // crawler treat this page as the company's own account of itself
+    // rather than as one more page that mentions it.
+    mainEntity: orgRef,
+    isPartOf: { '@id': abs('/') + '#website' },
+    publisher: orgRef,
+    inLanguage: 'en',
+  },
+  organization,
+  breadcrumbs([{ label: 'Home', href: '/' }, { label: 'About' }], abs('/about/')),
+];
+
 ---
 
 <Page
+  {schema}
   title="About CloudAlgo — small on purpose since 2019"
   description="A Salesforce and Heroku consulting partner in Jaipur. Two co-founders, one rule we build against, the work we turn down to hold it, and how long our engagements actually last."
 >

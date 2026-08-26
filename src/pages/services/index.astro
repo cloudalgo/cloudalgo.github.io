@@ -9,6 +9,7 @@ import SlaWindows from '@/components/ui/SlaWindows.astro';
 import RouteTable from '@/components/ui/RouteTable.astro';
 import ClosingManifest from '@/components/sections/ClosingManifest.astro';
 import { ENGAGEMENTS, WINDOWS } from '@/data/engagements';
+import { organization, orgRef, breadcrumbs, abs, SITE_ID } from '@/data/schema';
 
 // Seven engagements: a figure that draws them all against a calendar, a
 // spread each, a table that routes a symptom to one of them, and the
@@ -172,18 +173,44 @@ const contents = [
   },
 ];
 
-const servicesSchema = {
-  '@context': 'https://schema.org',
-  '@type':    'ItemList',
-  name:       'CloudAlgo Services',
-  url:        'https://cloudalgo.com/services',
-  itemListElement: ENGAGEMENTS.map((e, i) => ({
-    '@type':  'ListItem',
-    position: i + 1,
-    name:     bySlug.get(e.slug)!.data.title,
-    url:      `https://cloudalgo.com/services/${e.slug}`,
-  })),
-};
+// Seven engagements as a graph rather than a bare list. Each entry is a
+// Service with a named provider -- the same `@id` the rest of the site
+// resolves the firm to -- so the list describes seven things CloudAlgo
+// does, not seven links that happen to sit together. Trailing slashes
+// throughout: the site serves directories, and a ListItem URL that 301s
+// is a hop nobody needs.
+const crumbs = [{ label: 'Home', href: '/' }, { label: 'Services' }];
+
+const servicesSchema = [
+  {
+    '@type': 'CollectionPage',
+    '@id': abs('/services/'),
+    url: abs('/services/'),
+    name: 'Services — seven engagements, and what each one ends with',
+    isPartOf: { '@id': SITE_ID },
+    publisher: orgRef,
+    inLanguage: 'en',
+    mainEntity: {
+      '@type': 'ItemList',
+      name: 'CloudAlgo Services',
+      numberOfItems: ENGAGEMENTS.length,
+      itemListElement: ENGAGEMENTS.map((e, i) => ({
+        '@type':  'ListItem',
+        position: i + 1,
+        item: {
+          '@type': 'Service',
+          name: bySlug.get(e.slug)!.data.title,
+          description: bySlug.get(e.slug)!.data.excerpt,
+          url: abs(`/services/${e.slug}/`),
+          provider: orgRef,
+          areaServed: 'Worldwide',
+        },
+      })),
+    },
+  },
+  organization,
+  breadcrumbs(crumbs, abs('/services/')),
+];
 ---
 <Page
   title="Services — seven engagements, and what each one ends with | CloudAlgo"
@@ -191,7 +218,7 @@ const servicesSchema = {
   schema={servicesSchema}
 >
   <PageMasthead
-    crumbs={[{ label: 'Home', href: '/' }, { label: 'Services' }]}
+    {crumbs}
     facts={[
       { term: 'Engagements', detail: '7' },
       { term: 'Platforms',   detail: 'Salesforce · MuleSoft · AWS' },

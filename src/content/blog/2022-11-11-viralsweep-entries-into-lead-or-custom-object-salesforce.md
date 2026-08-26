@@ -41,4 +41,4 @@ Test with real submissions through the live form before the campaign opens. Test
 
 ---
 
-Connecting marketing tools to Salesforce is one of the most common projects we take on. If your data is not flowing the way it should, [get in touch](/contact) and we can help you work through it.
+Connecting marketing tools to Salesforce is one of the most common projects we take on. If your data is not flowing the way it should, [get in touch](/contact/) and we can help you work through it.

@@ -46,4 +46,4 @@ A regular review of the Connect field mapping against the Salesforce object sche
 
 ---
 
-We work with teams on Heroku Connect setup, recovery, and ongoing maintenance. If your sync is not behaving the way it should, [see how we approach it](/services/salesforce-consulting) or [get in touch](/contact).
+We work with teams on Heroku Connect setup, recovery, and ongoing maintenance. If your sync is not behaving the way it should, [see how we approach it](/services/salesforce-consulting/) or [get in touch](/contact/).

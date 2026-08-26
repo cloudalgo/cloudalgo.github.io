@@ -133,4 +133,4 @@ Refresh tokens do not last forever either. They are revoked when the user change
 
 ---
 
-If you are building a connected app and need help with OAuth configuration, integration architecture, or security review, [see how we approach Salesforce integrations](/services/salesforce-consulting).
+If you are building a connected app and need help with OAuth configuration, integration architecture, or security review, [see how we approach Salesforce integrations](/services/salesforce-consulting/).

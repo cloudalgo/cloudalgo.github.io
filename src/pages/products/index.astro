@@ -7,6 +7,7 @@ import ProductEntry from '@/components/sections/ProductEntry.astro';
 import EvidenceStrip from '@/components/ui/EvidenceStrip.astro';
 import CompareTable from '@/components/ui/CompareTable.astro';
 import CtaBand from '@/components/ui/CtaBand.astro';
+import { organization, orgRef, breadcrumbs, abs, SITE_ID } from '@/data/schema';
 
 // The catalogue. Four entries printed as specimen plates, a contents
 // strip that indexes them, one table that answers the questions people
@@ -21,18 +22,37 @@ import CtaBand from '@/components/ui/CtaBand.astro';
 const allProducts = await getCollection('products', ({ data }) => data.published);
 const products = allProducts.sort((a, b) => a.data.order - b.data.order);
 
-const catalogSchema = {
-  '@context': 'https://schema.org',
-  '@type':    'ItemList',
-  name:       'CloudAlgo Products',
-  url:        'https://cloudalgo.com/products',
-  itemListElement: products.map((p, i) => ({
-    '@type':  'ListItem',
-    position: i + 1,
-    name:     p.data.title,
-    url:      `https://cloudalgo.com/products/${p.id}`,
-  })),
-};
+// The catalogue as one graph rather than a bare list: a CollectionPage
+// the ItemList hangs off, the organisation that publishes it, and the
+// trail the masthead above already prints. A ListItem `url` that 301s is
+// a ListItem a crawler follows one hop further than it needs to, so
+// every URL here carries the trailing slash the site serves.
+const crumbs = [{ label: 'Home', href: '/' }, { label: 'Products' }];
+
+const catalogSchema = [
+  {
+    '@type': 'CollectionPage',
+    '@id': abs('/products/'),
+    url: abs('/products/'),
+    name: 'Products — four Salesforce tools we built and run',
+    isPartOf: { '@id': SITE_ID },
+    publisher: orgRef,
+    inLanguage: 'en',
+    mainEntity: {
+      '@type':  'ItemList',
+      name:     'CloudAlgo Products',
+      numberOfItems: products.length,
+      itemListElement: products.map((p, i) => ({
+        '@type':  'ListItem',
+        position: i + 1,
+        name:     p.data.title,
+        url:      abs(`/products/${p.id}/`),
+      })),
+    },
+  },
+  organization,
+  breadcrumbs(crumbs, abs('/products/')),
+];
 
 // Page copy, the arrangement CaseStudies and ProductsSection already
 // use: the content file stays the source of truth for the product page,
@@ -70,7 +90,7 @@ const COPY = {
     chips: ['49 scanners', 'A–F grade', 'Findings triage', 'Dependency graph', 'Cross-org compare', 'Ask Vita'],
     actions: [
       { label: 'Download OrgVitals — free', href: 'https://github.com/cloudalgo/orgvitals-releases/releases', primary: true },
-      { label: 'Read the guide', href: '/products/orgvitals/guide' },
+      { label: 'Read the guide', href: '/products/orgvitals/guide/' },
     ],
     spec: [
       { term: 'Runs on',    detail: 'macOS · Windows · Linux (Electron)' },
@@ -218,7 +238,7 @@ const COMPARE_ROWS = [
   schema={catalogSchema}
 >
   <PageMasthead
-    crumbs={[{ label: 'Home', href: '/' }, { label: 'Products' }]}
+    {crumbs}
     facts={[
       { term: 'Titles',              detail: '4' },
       { term: 'Generally available', detail: 'AlgoBridge · InsureAlgo' },

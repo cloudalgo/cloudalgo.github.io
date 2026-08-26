@@ -95,4 +95,4 @@ Eight MuleSoft applications. Zero manual handoffs.
 
 ---
 
-We built this integration for a digital health client using MuleSoft Anypoint Platform on CloudHub. [See the full case study](/case-studies/health-portal-mulesoft-integration), or [get in touch](/contact) if you're connecting a custom health or logistics platform to Salesforce.
+We built this integration for a digital health client using MuleSoft Anypoint Platform on CloudHub. [See the full case study](/case-studies/health-portal-mulesoft-integration/), or [get in touch](/contact/) if you're connecting a custom health or logistics platform to Salesforce.
