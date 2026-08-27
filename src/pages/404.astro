@@ -142,6 +142,18 @@ const CELLS = 9;
 </Page>
 
 <script>
+  import { track } from '@/lib/analytics';
+
+  /* A 404 is a broken link somewhere -- ours, or an inbound one worth a
+     redirect. GitHub Pages serves this file under the requested address
+     without a redirect, so GA4 records the miss as a pageview of a page
+     that does not exist. This names it, and carries the referrer, which
+     is the half that says whose link to fix. */
+  track('page_not_found', {
+    missing_path: location.pathname,
+    referrer: document.referrer || '(direct)',
+  });
+
   /* The board, and the two lines of the slip only the browser knows.
 
      GitHub Pages serves this file at whatever address was asked for, so

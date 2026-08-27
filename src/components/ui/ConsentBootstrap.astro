@@ -1,0 +1,76 @@
+---
+/**
+ * The consent declaration, and the only analytics code in a layout.
+ *
+ * ── Why this exists at all ──
+ * The site used to measure only the traffic that clicked Accept.
+ * `injectTrackers()` was a switch: all three trackers or none. Everyone
+ * who declined, and everyone who ignored the notice, was not
+ * under-counted but absent.
+ *
+ * The switch is gone. Measurement now runs for every visitor, and the
+ * notice informs rather than gates -- see CookieConsent.astro, whose
+ * copy was rewritten to say so plainly.
+ *
+ * ── Why a consent declaration at all, if it is always granted ──
+ * Because gtag.js asks. With no `consent default` on the page, Google
+ * Ads and GA4 fall back to an undeclared state (`gcs=G1--`), which
+ * degrades conversion modelling on the linked Ads account. Declaring
+ * granted is a statement, not a gate: it costs one call, it is the
+ * honest description of what this site does, and it is the single line
+ * to edit if a jurisdiction ever has to be carved out. The `region`
+ * parameter is how that carve-out would be written.
+ *
+ * ── Why it is `is:inline` and in the head ──
+ * Astro defers processed <script> tags. A consent default that arrives
+ * after the tag it governs is not a consent default. This must execute
+ * during head parse, before gtag.js runs, which `is:inline` guarantees
+ * and a processed script does not.
+ *
+ * ── What does NOT live here ──
+ * HubSpot and Clarity. They load from CookieConsent.astro, which owns
+ * tracker injection. This file declares consent and loads exactly one
+ * Google tag. Nothing may add a second.
+ */
+const GA4_ID = 'G-5WYSWY2G6Z';
+---
+<script is:inline define:vars={{ GA4_ID }}>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { window.dataLayer.push(arguments); }
+  window.gtag = gtag;
+
+  // Granted, for everyone, immediately. There is deliberately no
+  // `wait_for_update` here: that parameter exists to hold the tag while
+  // an answer is fetched, and we are not waiting for one. Verified in a
+  // browser against the live property -- a default carrying
+  // `wait_for_update` with no update ever arriving suppresses the
+  // collect request outright, so the parameter is not free.
+  gtag('consent', 'default', {
+    ad_storage: 'granted',
+    ad_user_data: 'granted',
+    ad_personalization: 'granted',
+    analytics_storage: 'granted',
+  });
+
+  gtag('js', new Date());
+  gtag('config', GA4_ID);
+
+  // ── Clarity session recordings, findable from a GA4 report ──
+  //
+  // The two tools record the same visit under different ids, so a
+  // striking number in GA4 -- a page everyone abandons, a form nobody
+  // finishes -- cannot be turned into "show me somebody doing that".
+  // Writing GA4's session id onto the Clarity session makes it a filter.
+  //
+  // Waits for ca:trackers-ready because Clarity is injected from
+  // CookieConsent.astro after this file has run. The queueing shim it
+  // installs means the call is safe the instant that event fires.
+  window.addEventListener('ca:trackers-ready', function () {
+    gtag('get', GA4_ID, 'session_id', function (sessionId) {
+      if (sessionId && window.clarity) {
+        window.clarity('set', 'ga4_session_id', String(sessionId));
+      }
+    });
+  });
+</script>
+<script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${GA4_ID}`}></script>

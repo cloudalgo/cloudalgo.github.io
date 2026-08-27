@@ -13,6 +13,8 @@ function useIsMobile() {
   }, []);
   return isMobile;
 }
+import { track } from '@/lib/analytics';
+import { pageType } from '@/lib/engagement';
 import { AiFillSchedule } from 'react-icons/ai';
 import { IoCloseOutline } from 'react-icons/io5';
 import { FiClock, FiVideo, FiCalendar, FiGlobe, FiArrowLeft, FiCheck } from 'react-icons/fi';
@@ -230,6 +232,17 @@ function StepDatePicker({
   userTimezone, onPrevMonth, onNextMonth, onSelectDate, onSelectSlot, onClose,
   mobileShowCalendar, onMobileBackToCalendar,
 }: StepDatePickerProps) {
+  // Picking a time here does not advance the dialog -- it marks the slot
+  // pending and offers a Next. Someone who picks a time and then does not
+  // press Next has told us more than someone who never picked one, and
+  // until this event the two were the same reader in the reports.
+  const considerSlot = (slot: string) => {
+    track('schedule_step', {
+      step: 'slot_considered',
+      page_type: pageType(window.location.pathname),
+    });
+    setPendingSlot(slot);
+  };
   const [pendingSlot, setPendingSlot] = useState<string | null>(null);
   const year = currentMonth.getFullYear();
   const month = currentMonth.getMonth();
@@ -367,7 +380,7 @@ function StepDatePicker({
                     key={slot}
                     className="sw-slot-btn"
                     disabled={!isAvailable}
-                    onClick={() => setPendingSlot(slot)}
+                    onClick={() => considerSlot(slot)}
                   >
                     {istSlotToLocal(selectedDate!, slot, userTimezone)}
                   </button>
@@ -440,7 +453,7 @@ function StepDatePicker({
                   </button>
                 </div>
               ) : (
-                <button key={slot} className="sw-slot-btn" disabled={!isAvailable} onClick={() => setPendingSlot(slot)}>
+                <button key={slot} className="sw-slot-btn" disabled={!isAvailable} onClick={() => considerSlot(slot)}>
                   {istSlotToLocal(selectedDate!, slot, userTimezone)}
                 </button>
               );
@@ -507,6 +520,16 @@ function StepDetails({
     if (!allEmails.length) return;
     setSubmitting(true);
     setErrorMsg('');
+    // Reported before the request, and paired with 'failed' below. Without
+    // it a broken booking endpoint is indistinguishable in the reports from
+    // a reader who changed their mind at the last field.
+    const funnelStep = (step: string, extra: Record<string, unknown> = {}) =>
+      track('schedule_step', {
+        step,
+        page_type: pageType(window.location.pathname),
+        ...extra,
+      });
+    funnelStep('submit', { guests: allEmails.length });
     try {
       const params = new URLSearchParams({
         action: 'book',
@@ -524,10 +547,12 @@ function StepDetails({
       if (data.success) {
         onConfirmed(allEmails[0]);
       } else {
+        funnelStep('failed', { reason: 'rejected' });
         setErrorMsg(data.error ?? 'Something went wrong. Please try again.');
         setSubmitting(false);
       }
     } catch {
+      funnelStep('failed', { reason: 'network' });
       setErrorMsg('Network error. Please try again.');
       setSubmitting(false);
     }
@@ -551,7 +576,10 @@ function StepDetails({
 
       <div className="sw-step-right">
         <h3 className="sw-form-heading">Enter Details</h3>
-        <form onSubmit={handleSubmit} noValidate>
+        {/* Named so the form_start event can tell this form from the one
+          on /contact/. An id is the only thing that distinguishes them in
+          a report -- see initEngagement() in lib/engagement.ts. */}
+      <form id="scheduleForm" onSubmit={handleSubmit} noValidate>
           <div className="sw-field">
             <label htmlFor="sw-name">Name <span aria-hidden="true">*</span></label>
             <input
@@ -690,6 +718,40 @@ export default function ScheduleWidget() {
     Intl.DateTimeFormat().resolvedOptions().timeZone
   );
 
+  // ── The booking funnel ──
+  //
+  // Five sixths of the people who open this dialog never finish it, and
+  // until now every one of those was indistinguishable from someone who
+  // never opened it. `schedule_step` reports each rung, so the drop-off
+  // has a shape: readers who never pick a date are a calendar problem,
+  // readers who pick one and stop at the form are a form problem.
+  //
+  // `step` lives in a ref as well as in state because handleClose reads it
+  // from inside a callback that must not be rebuilt on every step change.
+  const stepRef = useRef(step);
+  stepRef.current = step;
+  const announcedOpen = useRef(false);
+  const funnel = useCallback(
+    (name: string, extra: Record<string, unknown> = {}) => {
+      track('schedule_step', {
+        step: name,
+        page_type: pageType(window.location.pathname),
+        ...extra,
+      });
+    },
+    []
+  );
+
+  useEffect(() => {
+    if (!isOpen) {
+      announcedOpen.current = false;
+      return;
+    }
+    if (announcedOpen.current) return;
+    announcedOpen.current = true;
+    funnel('open', { entry: openFromUrl ? 'shared_link' : 'launcher' });
+  }, [isOpen, openFromUrl, funnel]);
+
   useEffect(() => {
     if (openFromUrl) return; // already open, no fade-in delay needed
     const t = setTimeout(() => {
@@ -812,6 +874,7 @@ export default function ScheduleWidget() {
   }, [deepLinkedTime, slotsLoading, availableSlots, selectedDate]);
 
   const handleSelectDate = (date: Date) => {
+    funnel('date_selected');
     setSelectedDate(date);
     setScheduleHash(true, date, null);
     fetchSlots(date);
@@ -819,6 +882,7 @@ export default function ScheduleWidget() {
   };
 
   const handleSelectSlot = (slot: string) => {
+    funnel('slot_selected');
     setSelectedTime(slot);
     setScheduleHash(true, selectedDate, slot);
     setStep('details');
@@ -831,12 +895,23 @@ export default function ScheduleWidget() {
   };
 
   const handleConfirmed = (email: string) => {
+    funnel('confirmed');
+    // The one event on this site that means a stranger became a
+    // conversation. It carries no value: the site publishes no rate, and
+    // a made-up number would poison every report built on it.
+    track('generate_lead', { method: 'schedule_call' });
     setConfirmedEmail(email);
     setStep('confirmed');
   };
 
   const handleClose = useCallback(() => {
     if (isClosing) return;
+    // Which rung they were standing on when they left. A close from
+    // 'confirmed' is the dialog being dismissed after a successful
+    // booking, which is not an abandonment.
+    if (stepRef.current !== 'confirmed') {
+      funnel('abandoned', { last_step: stepRef.current });
+    }
     setIsClosing(true);
     closeTimerRef.current = setTimeout(() => {
       setIsClosing(false);
@@ -851,7 +926,7 @@ export default function ScheduleWidget() {
       setMobileShowCalendar(false);
       setScheduleHash(false);
     }, 300);
-  }, [isClosing, defaultDate]);
+  }, [isClosing, defaultDate, funnel]);
 
   useEffect(() => {
     if (!isOpen) return;

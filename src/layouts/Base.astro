@@ -1,5 +1,6 @@
 ---
 import CookieConsent from '../components/ui/CookieConsent.astro';
+import ConsentBootstrap from '../components/ui/ConsentBootstrap.astro';
 
 export interface Props {
   title: string;
@@ -137,6 +138,7 @@ const ogImage = cardSource.startsWith('http') ? cardSource : `${imageHost}${card
     <!-- JSON-LD structured data -->
     {schemaJson && <script is:inline type="application/ld+json" set:html={schemaJson} />}
 
+    <ConsentBootstrap />
   </head>
   <body>
     <div id="margin-rule" class="margin-rule" aria-hidden="true">
@@ -145,6 +147,19 @@ const ogImage = cardSource.startsWith('http') ? cardSource : `${imageHost}${card
     </div>
     <slot />
     <script>
+      import { captureFirstTouch } from '@/lib/analytics';
+      import { classifyLink, initEngagement } from '@/lib/engagement';
+
+      // The campaign a visit arrived on, recorded before anything else can
+      // navigate away from it. Written once per visitor and never
+      // overwritten -- see the first-touch section of lib/analytics.ts.
+      captureFirstTouch();
+
+      // Link clicks, sections reached, disclosures opened, forms started.
+      // See lib/engagement.ts: this is the half of the picture the
+      // conversion events cannot give, because almost no visit converts.
+      initEngagement();
+
       // Scrollable page height, measured once and refreshed when the layout
       // actually changes. Reading scrollHeight inside a scroll handler forces a
       // synchronous layout on every event, which is the expensive part.
@@ -488,11 +503,11 @@ const ogImage = cardSource.startsWith('http') ? cardSource : `${imageHost}${card
 
       // GA4: scroll depth (25 / 50 / 75 / 100%)
       //
-      // gtag only exists once the visitor has accepted cookies, which may well
-      // be after they have already scrolled. So depth is tracked as a
-      // high-water mark and the milestones are only *consumed* when there is
-      // something to send them to — otherwise a pre-consent scroll would burn
-      // all four as no-ops and the visit would report no depth at all.
+      // `gtag` exists from the head now (ConsentBootstrap.astro), so the
+      // race this guarded against is largely gone. Depth stays a high-water
+      // mark rather than a set of one-shot triggers because gtag.js is loaded
+      // `async`: a fast scroll can still outrun it, and a milestone consumed
+      // before the tag answers would be lost for the whole visit.
       const MILESTONES = [25, 50, 75, 100];
       const sentMilestones = new Set<number>();
       let deepestPct = 0;
@@ -523,18 +538,27 @@ const ogImage = cardSource.startsWith('http') ? cardSource : `${imageHost}${card
         flushScrollDepth();
       };
       window.addEventListener('scroll', reportScrollDepth, { passive: true });
-      // Consent can land long after the scrolling did; catch up when it does
+      // Belt and braces: flush again once the other trackers are in.
       window.addEventListener('ca:trackers-ready', flushScrollDepth);
 
-      // GA4: CTA button clicks
+      // GA4: outbound and CTA clicks
+      //
+      // initEngagement() above already reports every click as `link_click`
+      // with a `link_kind`. These two events are kept because they carry
+      // years of GA4 history under these names, and renaming an event
+      // orphans the reports built on it. They are the same clicks, counted
+      // twice, deliberately.
       document.addEventListener('click', (e) => {
         const el = (e.target as Element).closest('a, button');
         if (!el) return;
         const text = el.textContent?.trim().slice(0, 50);
         const href = (el as HTMLAnchorElement).href || '';
 
-        // Outbound links
-        if (href && !href.includes('cloudalgo.com') && href.startsWith('http')) {
+        // Outbound links. Classified by parsed origin rather than by
+        // `!href.includes('cloudalgo.com')`, which counted a link to
+        // cloudalgo.com.example.test as our own traffic and, worse, counted
+        // any URL with our name in a query string the same way.
+        if (href && classifyLink(href, window.location.origin) === 'outbound') {
           (window as any).gtag?.('event', 'outbound_click', {
             event_category: 'Outbound',
             event_label: href,

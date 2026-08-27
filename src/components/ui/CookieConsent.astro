@@ -1,26 +1,30 @@
 ---
 /**
- * The consent notice -- the site's one piece of chrome that asks the
- * reader for something, and the last surface still wearing the old
- * costume: frosted glass, a blurred shadow, an iOS toggle and 900 words
- * of policy dumped above the buttons.
+ * The tracking notice. It informs; it does not ask.
  *
- * It is drawn as a notice posted at the desk now. Appearance lives in
- * styles/components/_notice.scss; the reasoning is in that file's
- * header, including why it is not called a slip.
+ * Appearance lives in styles/components/_notice.scss; the reasoning is
+ * in that file's header, including why it is not called a slip.
  *
- * ── What did NOT change ──
- * The consent contract. Three actions in, three actions out (accept
- * all, customise/reject, accept selected), the same localStorage key
- * and values, the same trackers behind the same gate, and every word of
- * the long-form notice, verbatim. A cookie panel is a legal surface:
- * this pass moves copy and repaints it, it does not edit it. The one
- * sentence dropped from the opening notice told the reader which button
- * to click, which the buttons now do themselves.
+ * ── Why it stopped asking ──
+ * It was a gate: three buttons, a toggle, and analytics that ran only
+ * for the readers who clicked the right one. The site's owner decided
+ * measurement should cover every visitor instead, so the gate came out.
+ * What remains is a statement of what this site records, acknowledged
+ * with one button.
  *
- * ── Why the trackers are injected from here ──
- * Unchanged and load-bearing: GA4, HubSpot and Clarity exist nowhere
- * else in the codebase. Nothing in a layout may add a fourth.
+ * A notice is still a legal surface, and an honest one is the whole
+ * point of keeping it: every sentence here now describes what actually
+ * happens. Nothing offers the reader a choice this page does not
+ * honour. The register below the fold is retained in full as the
+ * detailed disclosure -- minus its toggle, which controlled something
+ * that no longer exists -- and the reader's real remaining control,
+ * their browser, is named where the toggle used to be.
+ *
+ * ── Why HubSpot and Clarity are injected from here ──
+ * Because tracker loading lives in one file, and this is it. GA4 is the
+ * exception and loads from ConsentBootstrap.astro, which must run
+ * during head parse to carry the consent declaration. Nothing in a
+ * layout may add a fourth tracker.
  */
 import Badge from '@/components/ui/Badge.astro';
 // The controller is named from the register, not retyped here. This
@@ -33,46 +37,45 @@ import { ISSUER } from '@/data/legal';
 
 <div id="ca-cookie-popup" class="notice ca-hidden" role="region" aria-label="Cookie preferences">
 
-  <!-- ── The ask ── -->
+  <!-- ── The statement ── -->
   <div class="notice__ask">
     <span class="pip notice__pip">
-      <b class="pip__dot" aria-hidden="true"></b>No trackers loaded
+      <b class="pip__dot" aria-hidden="true"></b>Analytics active
     </span>
     <h3 class="notice__title">We use cookies</h3>
     <p class="notice__body">
       We use cookies, including third-party tools (Google Analytics, HubSpot, Microsoft Clarity),
       to understand how visitors engage with our site and to improve our content and services.
-      No personal data is sold to third parties.
+      They run on every visit. No personal data is sold to third parties, and you can clear or
+      block them in your browser at any time.
     </p>
     <div class="notice__acts">
-      <button id="ca-btn-customise" class="btn btn-outline notice__btn">Customise&nbsp;/&nbsp;reject</button>
-      <button id="ca-btn-accept-s1" class="btn btn-primary notice__btn">Accept all</button>
+      <button id="ca-btn-detail" class="btn btn-outline notice__btn">What we record</button>
+      <button id="ca-btn-ack-s1" class="btn btn-primary notice__btn">Got it</button>
     </div>
   </div>
 
   <!-- ── The register ── -->
   <div class="notice__register">
     <div class="notice__head">
-      <span class="notice__label">Modifications and details</span>
+      <span class="notice__label">Details</span>
       <h3 class="notice__title">What this site records</h3>
-      <p class="notice__sub">Essential cookies are always active. Analytics cookies load only if you allow them here.</p>
+      <p class="notice__sub">Essential and analytics cookies are both active on every visit. Your browser settings are where you turn them off.</p>
     </div>
 
     <div class="notice__scroll">
 
       <div class="notice__row">
         <div class="notice__row-top">
-          <label class="notice__row-name" for="ca-analytics-cb">Analytics &amp; marketing cookies</label>
+          <span class="notice__row-name">Analytics &amp; marketing cookies</span>
           <div class="notice__control">
-            <input type="checkbox" id="ca-analytics-cb" class="notice__input" />
-            <label for="ca-analytics-cb" class="notice__switch" aria-hidden="true"><span class="notice__knob"></span></label>
-            <Badge id="ca-analytics-badge" tone="outline" context="consent">Prohibited</Badge>
+            <Badge tone="solid" context="consent">Always on</Badge>
           </div>
         </div>
         <p class="notice__row-desc">
           Measure site traffic, understand user behaviour, and surface relevant content about
-          CloudAlgo's Salesforce, Heroku, and AWS services. Unchecked by default;
-          enable only if you consent.
+          CloudAlgo's Salesforce, Heroku, and AWS services. These load on every visit. To stop
+          them, block or clear cookies for this site in your browser.
         </p>
         <ul class="notice__parties">
           <li class="notice__party">Google Analytics</li>
@@ -104,8 +107,8 @@ import { ISSUER } from '@/data/legal';
           <h4>Cookies and Modifications</h4>
           <p>
             In the following paragraphs, we'll explain our purposes for using cookies and similar
-            technologies on our websites. We also offer you the opportunity to modify your consent
-            to our use or to revoke your consent at any time.
+            technologies on our websites, which cookies we place, and how you can remove or block
+            them through your browser.
           </p>
 
           <h4>What are Cookies?</h4>
@@ -153,7 +156,7 @@ import { ISSUER } from '@/data/legal';
             Both data processing and associated cookies may be deployed on our websites. Depending
             on function and purpose, we have divided data processing into different categories.
             Please find further information on the various cookie categories at the start of this
-            panel, under "Modifications and details".
+            panel, under "Details".
           </p>
 
           <h4>What do you need to know about cookies?</h4>
@@ -178,18 +181,19 @@ import { ISSUER } from '@/data/legal';
             who possibly use their own cookies. Third-party providers may place cookies during your
             visit to our websites that request information like, for example, whether you loaded one
             of our websites. Please go to the website of the third-party provider to learn more
-            about their use of cookies. You can reject cookies from third-party providers at any
-            time by using the corresponding function on our websites.
+            about their use of cookies. Cookies from third-party providers are blocked and deleted
+            through your browser's settings, not through this panel.
           </p>
 
-          <h4>Rejecting Cookies</h4>
+          <h4>Removing Cookies</h4>
           <p>
-            When you reject cookies that require your consent, we'll duly accept your decision and
-            refrain from placing the respective cookies. If you revoke your consent, we'll stop
-            placing cookies that require consent starting from your visit to the next page. We'll
-            delete any first-party cookies, insofar as this is technically possible. Please note
-            that we cannot delete third-party cookies. If you would like to delete all third-party
-            cookies, please go to your browser settings.
+            The cookies described here are placed on every visit to our websites. We do not operate
+            a per-visitor opt-out, so the control that matters is your browser's: it can block
+            cookies for this site, delete the ones already stored, or refuse third-party cookies
+            outright, and any of those decisions is honoured immediately because it takes effect
+            before our code runs. Blocking them does not affect your access to any part of this
+            site. If you would prefer we erase data we have already collected about your visits,
+            write to us and we will do so.
           </p>
 
           <h4>Cookie Management in your browser</h4>
@@ -207,28 +211,33 @@ import { ISSUER } from '@/data/legal';
     </div><!-- /.notice__scroll -->
 
     <div class="notice__foot">
-      <button id="ca-btn-accept-selected" class="btn btn-outline notice__btn">Accept selected</button>
-      <button id="ca-btn-accept-s2" class="btn btn-primary notice__btn">Accept all</button>
+      <button id="ca-btn-ack-s2" class="btn btn-primary notice__btn">Got it</button>
     </div>
   </div><!-- /.notice__register -->
 
 </div><!-- /#ca-cookie-popup -->
 
 <script>
+  /** The key records that the notice has been READ, nothing more. It is
+   *  deliberately not the old `ca_cookie_consent`: that key stored an
+   *  answer to a question this panel no longer asks, and reusing it
+   *  would silently reinterpret a stored "declined" as acknowledgement
+   *  of a statement its owner never saw. A new key also means every
+   *  returning visitor is shown the new wording once, which is the
+   *  point of having rewritten it. */
+  const ACK_KEY = 'ca_notice_ack';
+
   let trackersInjected = false;
 
+  /** HubSpot and Clarity, on every visit.
+   *
+   *  GA4 is not here: it loads from ConsentBootstrap.astro, which has to
+   *  run during head parse to carry the consent declaration. These two
+   *  have no such constraint, so they stay in the file that owns tracker
+   *  injection. */
   function injectTrackers(): void {
     if (trackersInjected) return;
     trackersInjected = true;
-    // Google Analytics GA4
-    const ga = document.createElement('script');
-    ga.async = true;
-    ga.src = 'https://www.googletagmanager.com/gtag/js?id=G-5WYSWY2G6Z';
-    document.head.appendChild(ga);
-    (window as any).dataLayer = (window as any).dataLayer || [];
-    (window as any).gtag = function () { (window as any).dataLayer.push(arguments); };
-    (window as any).gtag('js', new Date());
-    (window as any).gtag('config', 'G-5WYSWY2G6Z');
 
     // HubSpot
     const hs = document.createElement('script');
@@ -244,13 +253,27 @@ import { ISSUER } from '@/data/legal';
     ct.src = 'https://www.clarity.ms/tag/wqcruv2yej';
     document.head.appendChild(ct);
 
-    // Analytics that ran before consent (scroll depth, for one) hold their
-    // measurements back until gtag exists. Tell them it now does.
     window.dispatchEvent(new Event('ca:trackers-ready'));
   }
 
-  function setConsent(value: 'accepted' | 'declined'): void {
-    localStorage.setItem('ca_cookie_consent', value);
+  /** Storage throws outright in some privacy modes rather than returning
+   *  null, and this script block owns the notice: an uncaught throw here
+   *  means the notice never renders at all. Both accessors swallow. */
+  function wasAcknowledged(): boolean {
+    try {
+      return localStorage.getItem(ACK_KEY) === '1';
+    } catch {
+      // Unreadable storage means we cannot know they have seen it. Show it.
+      return false;
+    }
+  }
+
+  function acknowledge(): void {
+    try {
+      localStorage.setItem(ACK_KEY, '1');
+    } catch {
+      // They will see the notice again next visit. Better than a dead handler.
+    }
   }
 
   function hidePopup(): void {
@@ -258,56 +281,22 @@ import { ISSUER } from '@/data/legal';
   }
 
   // ── On page load ──
-  const consent = localStorage.getItem('ca_cookie_consent');
-  if (consent === 'accepted') {
-    injectTrackers();
-  } else if (!consent) {
-    // First visit: remove ca-hidden to show the notice
+  // Trackers run regardless. The notice is shown until it is read.
+  injectTrackers();
+  if (!wasAcknowledged()) {
     document.getElementById('ca-cookie-popup')?.classList.remove('ca-hidden');
   }
-  // If 'declined', the notice stays hidden (ca-hidden remains), no trackers.
 
-  // ── The notice: "Customise / reject" opens the register ──
-  document.getElementById('ca-btn-customise')?.addEventListener('click', () => {
+  // ── "What we record" opens the register ──
+  document.getElementById('ca-btn-detail')?.addEventListener('click', () => {
     document.getElementById('ca-cookie-popup')?.classList.add('notice--open');
   });
 
-  // ── The notice: "Accept all" ──
-  document.getElementById('ca-btn-accept-s1')?.addEventListener('click', () => {
-    setConsent('accepted');
-    injectTrackers();
-    hidePopup();
-  });
-
-  // ── The register: the switch states itself twice, in shape and in a word ──
-  const cb = document.getElementById('ca-analytics-cb') as HTMLInputElement | null;
-  const badge = document.getElementById('ca-analytics-badge');
-
-  cb?.addEventListener('change', () => {
-    if (cb.checked) {
-      badge?.classList.replace('badge--outline', 'badge--solid');
-      if (badge) badge.textContent = 'Allowed';
-    } else {
-      badge?.classList.replace('badge--solid', 'badge--outline');
-      if (badge) badge.textContent = 'Prohibited';
-    }
-  });
-
-  // ── The register: "Accept selected" ──
-  document.getElementById('ca-btn-accept-selected')?.addEventListener('click', () => {
-    if (cb?.checked) {
-      setConsent('accepted');
-      injectTrackers();
-    } else {
-      setConsent('declined');
-    }
-    hidePopup();
-  });
-
-  // ── The register: "Accept all" ──
-  document.getElementById('ca-btn-accept-s2')?.addEventListener('click', () => {
-    setConsent('accepted');
-    injectTrackers();
-    hidePopup();
-  });
+  // ── "Got it", from either the statement or the register ──
+  for (const id of ['ca-btn-ack-s1', 'ca-btn-ack-s2']) {
+    document.getElementById(id)?.addEventListener('click', () => {
+      acknowledge();
+      hidePopup();
+    });
+  }
 </script>
