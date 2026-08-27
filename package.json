@@ -13,10 +13,10 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@astrojs/markdown-satteri": "^0.3.7",
+    "@astrojs/markdown-satteri": "^0.3.8",
     "@astrojs/react": "^6.0.4",
     "@astrojs/sitemap": "^3.7.2",
-    "astro": "^7.2.4",
+    "astro": "^7.2.6",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
     "react-hook-form": "^7.75.0",
