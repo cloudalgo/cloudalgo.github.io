@@ -20,24 +20,26 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  animation: swFadeIn var(--duration-slow) var(--ease-out) 2s backwards;
-}
-
-@keyframes swFadeIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
 }
 
 .sw-launcher-btn-wrap { display: flex; justify-content: flex-end; }
 
 /* Ink slab, not a glass pill. The ember lives on the leading edge, the way
    it does on a pull-quote rule, so the button reads as brand at a glance
-   without spending the accent on the whole fill. */
+   without spending the accent on the whole fill.
+
+   The slab is PAINTED on rather than faded in -- see the parts below. The
+   button box itself therefore carries no fill, no shadow and no visible
+   border; each of those is a painted layer instead. The borders stay in the
+   box as `transparent` rather than being removed, because box-sizing is
+   border-box here and dropping them would quietly resize the button. */
 .sw-launcher-btn {
-  background: var(--surface-inverse);
+  position: relative;
+  isolation: isolate;          /* keeps the grain's blend inside the button */
+  background: transparent;
   color: var(--color-on-inverse);
-  border: 1px solid var(--surface-inverse);
-  border-left: 3px solid var(--color-accent);
+  border: 1px solid transparent;
+  border-left: 3px solid transparent;
   border-radius: var(--radius-sm);
   height: 48px;
   padding: 0 20px 0 15px;
@@ -50,30 +52,293 @@
   align-items: center;
   gap: 8px;
   white-space: nowrap;
-  box-shadow: 0 6px 24px var(--color-shadow-a15);
-  transition: background var(--duration-fast) var(--ease-out),
-              color var(--duration-fast) var(--ease-out),
-              border-color var(--duration-fast) var(--ease-out),
-              transform var(--duration-fast) var(--ease-out);
+  transition: transform var(--duration-fast) var(--ease-out);
 }
-.sw-launcher-btn:hover {
-  background: var(--color-accent);
-  border-color: var(--color-accent);
-  color: var(--color-on-accent);
-  transform: translateY(-2px);
-}
+.sw-launcher-btn:hover { transform: translateY(-2px); }
 .sw-launcher-btn:active { transform: translateY(0); }
-.sw-launcher-btn svg { font-size: 18px; flex-shrink: 0; }
 
-/* The attention cue is a nudge, not a spring with a halo. */
-@keyframes swLauncherAttention {
-  0%, 100% { transform: translateY(0); }
-  30%      { transform: translateY(-6px); }
-  60%      { transform: translateY(-2px); }
+/* A button that is halfway through being unpainted is not a target: the
+   pointer must not lift it, and a click on a stroke that is already gone
+   would open the dialog the reader just scrolled away from. */
+.sw-launcher-btn--exit { pointer-events: none; }
+
+/* Hover repaints the coat rather than the button, since the coat is what
+   carries the fill now. */
+.sw-launcher-btn__fill,
+.sw-launcher-btn__label,
+.sw-launcher-btn__ico {
+  transition: background var(--duration-fast) var(--ease-out),
+              color var(--duration-fast) var(--ease-out);
+}
+.sw-launcher-btn:hover .sw-launcher-btn__fill { background: var(--color-accent); }
+.sw-launcher-btn:hover .sw-launcher-btn__label,
+.sw-launcher-btn:hover .sw-launcher-btn__ico { color: var(--color-on-accent); }
+
+/* ── The painted entrance ─────────────────────────────────────────────────
+   Timing tokens live in tokens/_components.scss; --fab-paint-k retimes the
+   whole gesture from one number.
+
+   EVERY PART BELOW IS AUTHORED AT ITS END STATE and animated `backwards`,
+   which is this file's convention and load-bearing twice over here. It means
+   the static rule is the painted button, so if the animation never runs --
+   reduced motion, print, a stylesheet that fails to apply -- the launcher
+   still renders finished rather than invisible. It also keeps the paint from
+   outliving itself and beating the `:active` press state.
+
+   Delays are `lead + phase * k`: the lead is dead time before the first
+   stroke and is deliberately NOT scaled, because it is a pause, not motion.
+
+   The exit under `--exit` is the same gesture run backwards -- same
+   keyframes, `direction: reverse`, and a delay mirrored about
+   --fab-paint-total so the stroke that went on last is the first to lift.
+   Three details make it work:
+
+   * It uses a SEPARATE SET OF KEYFRAME NAMES (the `Off` suffix, emitted
+     from the same bodies below). Changing only the delay and direction of
+     a running animation retimes it in place -- the browser has no reason
+     to restart something whose animation-name never changed -- so the
+     exit would jump to wherever the entrance's clock had already reached
+     instead of playing. A different name is a different animation.
+   * It fills `forwards`, not `backwards`: reversed, the keyframes' `from`
+     is the end state, and the end state here is a blank button that has
+     to stay blank until React unmounts it.
+   * No lead. The reader is already back at the top; the pause belongs to
+     an arrival, not to a departure. */
+@mixin sw-paint($name, $delay, $dur, $ease: var(--ease-out)) {
+  animation-name: $name;
+  animation-duration: calc(#{$dur} * var(--fab-paint-k));
+  animation-delay: calc(var(--fab-paint-lead) + #{$delay} * var(--fab-paint-k));
+  animation-timing-function: $ease;
+  animation-fill-mode: backwards;
+
+  .sw-launcher-btn--exit & {
+    animation-name: #{$name}Off;
+    animation-duration: calc(#{$dur} * var(--fab-paint-k-out));
+    animation-delay:
+      calc((var(--fab-paint-total) - #{$delay} - #{$dur}) * var(--fab-paint-k-out));
+    animation-direction: reverse;
+    animation-fill-mode: forwards;
+  }
 }
 
-.sw-launcher-btn--bounce {
-  animation: swLauncherAttention 0.6s var(--ease-out);
+/* 1 -- the drop shadow, which only exists once there is something to cast it */
+.sw-launcher-btn__shade {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: var(--radius-sm);
+  box-shadow: 0 6px 24px var(--color-shadow-a15);
+  @include sw-paint(swPaintFade, var(--fab-paint-shade-d), var(--fab-paint-shade-t));
+}
+
+/* 2 -- the ember edge: one upward flick of a loaded brush */
+.sw-launcher-btn__edge {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  z-index: 4;
+  background: var(--color-accent);
+  transform: scaleY(1);
+  transform-origin: bottom;
+  @include sw-paint(swPaintFlick, var(--fab-paint-edge-d), var(--fab-paint-edge-t));
+}
+
+/* 3 -- the outline, drawn as one continuous pen stroke.
+   preserveAspectRatio="none" stretches the viewBox to whatever width the
+   label needs, and non-scaling-stroke keeps the line 1px through it. Safe
+   here precisely because --radius-sm is 0: there is no rx to distort. */
+.sw-launcher-btn__outline {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  overflow: visible;
+  pointer-events: none;
+}
+.sw-launcher-btn__outline path {
+  fill: none;
+  stroke: var(--surface-inverse);
+  stroke-dasharray: 100;
+  stroke-dashoffset: 0;
+  @include sw-paint(swPaintDraw, var(--fab-paint-out-d), var(--fab-paint-out-t),
+                    var(--fab-paint-ease-pen));
+}
+
+/* 4 -- the coat */
+.sw-launcher-btn__body {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+}
+.sw-launcher-btn__fill {
+  position: absolute;
+  inset: 0;
+  background: var(--surface-inverse);
+  clip-path: inset(0 0 0 0);
+  @include sw-paint(swPaintSweep, var(--fab-paint-fill-d), var(--fab-paint-fill-t),
+                    var(--fab-paint-ease-brush));
+}
+/* bristle streaks that level out as the paint settles */
+.sw-launcher-btn__grain {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  mix-blend-mode: overlay;
+  background: var(--fab-paint-grain);
+  @include sw-paint(swPaintSettle, var(--fab-paint-grain-d), var(--fab-paint-grain-t), linear);
+}
+/* The wet leading edge. Driven by background-position rather than a transform
+   so it tracks the fill boundary at any button width: at 0% the band's left
+   edge sits one band-width off the left, at 100% its leading edge is exactly
+   at the right edge -- the same span the clip travels. */
+.sw-launcher-btn__wet {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0;
+  filter: blur(3px);
+  background-image: var(--fab-paint-wet);
+  background-size: var(--fab-paint-wet-w) 100%;
+  background-repeat: no-repeat;
+  background-position-x: 100%;
+  @include sw-paint(swPaintWet, var(--fab-paint-wet-d), var(--fab-paint-wet-t),
+                    var(--fab-paint-ease-brush));
+}
+
+/* 5 -- the icon, drawn rather than placed. This is why the launcher no longer
+   uses react-icons' AiFillSchedule: a filled glyph is a single path with
+   nothing to stroke, and the whole point here is watching the pen make it. */
+.sw-launcher-btn__ico {
+  position: relative;
+  z-index: 5;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+.sw-launcher-btn__ico .sw-ico-line {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 100;
+  stroke-dashoffset: 0;
+  @include sw-paint(swPaintDraw,
+    calc(var(--fab-paint-icon-d) + var(--j) * var(--fab-paint-icon-step)),
+    var(--fab-paint-icon-t), var(--fab-paint-ease-pen));
+}
+.sw-launcher-btn__ico .sw-ico-dots circle {
+  opacity: 1;
+  transform-box: fill-box;
+  transform-origin: center;
+  transform: scale(1);
+  @include sw-paint(swPaintDab,
+    calc(var(--fab-paint-dot-d) + var(--j) * var(--fab-paint-dot-step)),
+    var(--fab-paint-dot-t), var(--ease-out));
+}
+/* The last stroke: ember floods the calendar's head band, left to right.
+   On hover the coat is already ember, so the band would flood invisibly --
+   there it inherits the icon's own colour and reads as a solid header instead. */
+.sw-launcher-btn__ico .sw-ico-band {
+  fill: var(--color-accent);
+  transform-box: fill-box;
+  transform-origin: left center;
+  transform: scaleX(1);
+  @include sw-paint(swPaintFlood, var(--fab-paint-flood-d), var(--fab-paint-flood-t));
+}
+.sw-launcher-btn:hover .sw-launcher-btn__ico .sw-ico-band { fill: currentColor; }
+
+/* 6 -- the lettering, soaking into the stock one character at a time */
+.sw-launcher-btn__label {
+  position: relative;
+  z-index: 5;
+  white-space: pre;
+  display: inline-flex;
+}
+.sw-launcher-btn__label span {
+  display: inline-block;
+  opacity: 1;
+  @include sw-paint(swPaintInk,
+    calc(var(--fab-paint-char-d) + var(--i) * var(--fab-paint-char-step)),
+    var(--fab-paint-char-t));
+}
+
+/* Emitted twice, under `swPaint*` for the entrance and `swPaint*Off` for the
+   exit, because an animation only restarts when its NAME changes -- see the
+   mixin. The bodies are identical; `animation-direction: reverse` is what
+   turns the second set into an unpainting. */
+@mixin sw-paint-frames($s) {
+  @keyframes swPaintFade#{$s}  { from { opacity: 0; } }
+  @keyframes swPaintDraw#{$s}  { from { stroke-dashoffset: 100; } }
+  @keyframes swPaintFlick#{$s} { from { transform: scaleY(0); } }
+  @keyframes swPaintSweep#{$s} { from { clip-path: inset(0 100% 0 0); } }
+  @keyframes swPaintFlood#{$s} { from { transform: scaleX(0); } }
+  @keyframes swPaintDab#{$s}   { from { opacity: 0; transform: scale(0.2); } }
+  @keyframes swPaintSettle#{$s} {
+    0%   { opacity: 0; }
+    18%  { opacity: 0.85; }
+    55%  { opacity: 0.6; }
+    100% { opacity: 0; }
+  }
+  @keyframes swPaintWet#{$s} {
+    0%   { background-position-x: calc(var(--fab-paint-wet-w) * -1); opacity: 0; }
+    10%  { opacity: 0.95; }
+    80%  { opacity: 0.95; }
+    100% { background-position-x: 100%; opacity: 0; }
+  }
+  /* ink soaking into stock: the letter resolves out of a bleed */
+  @keyframes swPaintInk#{$s} {
+    0%   { opacity: 0; transform: translateY(4px); filter: blur(4px); }
+    60%  { opacity: 1; }
+    100% { opacity: 1; transform: translateY(0); filter: blur(0); }
+  }
+}
+@include sw-paint-frames('');
+@include sw-paint-frames('Off');
+
+/* ── The attention cue ────────────────────────────────────────────────────
+   Light crossing wet paint, not a hop. The sheen sweeps the slab while the
+   drop shadow deepens under it, so the button reads as lifting without any
+   geometry moving — which is what lets the cue fire over a reader who is
+   mid-scroll without shoving anything, and what keeps it clear of the hover
+   translate and the press state that share the button's transform.
+
+   Both parts override an animation-name that has already finished painting.
+   The cue is never scheduled until the entrance is done (LAUNCHER_PAINT_MS
+   in ScheduleWidget.tsx), so nothing is cut short. */
+.sw-launcher-btn__sheen {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  opacity: 0;
+  pointer-events: none;
+  background-image: var(--fab-sheen);
+  background-size: var(--fab-sheen-w) 100%;
+  background-repeat: no-repeat;
+  background-position-x: calc(var(--fab-sheen-w) * -1);
+}
+.sw-launcher-btn--attention .sw-launcher-btn__sheen {
+  /* linear: a highlight crossing a surface travels at one speed. The soft
+     ends come from the opacity ramps in the keyframes, not from the curve. */
+  animation: swLauncherSheen var(--fab-sheen-t) linear;
+}
+.sw-launcher-btn--attention .sw-launcher-btn__shade {
+  animation: swLauncherLift var(--fab-sheen-t) var(--ease-out);
+}
+
+@keyframes swLauncherSheen {
+  0%   { opacity: 0; background-position-x: calc(var(--fab-sheen-w) * -1); }
+  15%  { opacity: 1; }
+  85%  { opacity: 1; }
+  100% { opacity: 0; background-position-x: calc(100% + var(--fab-sheen-w)); }
+}
+@keyframes swLauncherLift {
+  0%, 100% { box-shadow: 0 6px 24px var(--color-shadow-a15); }
+  50%      { box-shadow: 0 14px 34px var(--color-shadow-a28); }
 }
 
 /* ── Motion ───────────────────────────────────────────────────────────────
@@ -810,8 +1075,21 @@
    that fill forwards: the exits end invisible, and the drawn check ends at a
    dash offset of zero. The slot spinner is not here -- see its note. */
 @media (prefers-reduced-motion: reduce) {
-  .sw-launcher,
-  .sw-launcher-btn--bounce,
+  /* The painted entrance is the clearest case of the rule above: every part
+     of it is authored at its finished state, so switching the animation off
+     leaves the launcher fully painted rather than blank. */
+  .sw-launcher-btn__shade,
+  .sw-launcher-btn__edge,
+  .sw-launcher-btn__outline path,
+  .sw-launcher-btn__fill,
+  .sw-launcher-btn__grain,
+  .sw-launcher-btn__wet,
+  .sw-launcher-btn__ico .sw-ico-line,
+  .sw-launcher-btn__ico .sw-ico-dots circle,
+  .sw-launcher-btn__ico .sw-ico-band,
+  .sw-launcher-btn__label span,
+  .sw-launcher-btn--attention .sw-launcher-btn__sheen,
+  .sw-launcher-btn--attention .sw-launcher-btn__shade,
   .sw-overlay--enter,
   .sw-modal--enter,
   .sw-step-left,
@@ -830,6 +1108,23 @@
   .sw-confirmed-detail,
   .sw-confirmed-email,
   .sw-step--confirmed .sw-submit-btn { animation: none; }
+
+  /* The unpainting has to be listed separately. Its rules carry the --exit
+     class on top of each part's own selector, so they are one class more
+     specific than the entrance rules above and would survive them being
+     switched off. Switching it off leaves the launcher painted until React
+     unmounts it, which is the right reading of the preference: the button
+     goes away, it just does not perform its departure. */
+  .sw-launcher-btn--exit .sw-launcher-btn__shade,
+  .sw-launcher-btn--exit .sw-launcher-btn__edge,
+  .sw-launcher-btn--exit .sw-launcher-btn__outline path,
+  .sw-launcher-btn--exit .sw-launcher-btn__fill,
+  .sw-launcher-btn--exit .sw-launcher-btn__grain,
+  .sw-launcher-btn--exit .sw-launcher-btn__wet,
+  .sw-launcher-btn--exit .sw-launcher-btn__ico .sw-ico-line,
+  .sw-launcher-btn--exit .sw-launcher-btn__ico .sw-ico-dots circle,
+  .sw-launcher-btn--exit .sw-launcher-btn__ico .sw-ico-band,
+  .sw-launcher-btn--exit .sw-launcher-btn__label span { animation: none; }
 
   .sw-overlay--exit,
   .sw-modal--exit { animation: none; opacity: 0; }

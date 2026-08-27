@@ -1,4 +1,12 @@
-import { useState, useEffect, useCallback, useRef, useMemo, type SubmitEvent } from 'react';
+import {
+  useState,
+  useEffect,
+  useCallback,
+  useRef,
+  useMemo,
+  type CSSProperties,
+  type SubmitEvent,
+} from 'react';
 
 function useIsMobile() {
   const [isMobile, setIsMobile] = useState(
@@ -15,7 +23,6 @@ function useIsMobile() {
 }
 import { track } from '@/lib/analytics';
 import { pageType } from '@/lib/engagement';
-import { AiFillSchedule } from 'react-icons/ai';
 import { IoCloseOutline } from 'react-icons/io5';
 import { FiClock, FiVideo, FiCalendar, FiGlobe, FiArrowLeft, FiCheck } from 'react-icons/fi';
 
@@ -36,8 +43,30 @@ const LOCALE = typeof navigator !== 'undefined' ? navigator.language : undefined
 
 // Monday-first short weekday names, to match getFirstDayOffset(). 2024-01-01
 // was a Monday, so seven days from there cover the week in display order.
-// How many attention bounces the launcher gets before it settles for good.
-const MAX_BOUNCES = 3;
+// How many attention cues the launcher gets before it settles for good.
+const MAX_CUES = 3;
+
+// Where the launcher paints itself on, and where it unpaints. The two numbers
+// are deliberately different: a single threshold flips the button on and off
+// around one pixel every time a trackpad drifts across it, and this entrance
+// is five seconds long — half-painted, reversed, half-painted again is not a
+// button, it is a flicker.
+const LAUNCHER_SHOW_Y = 320;
+const LAUNCHER_HIDE_Y = 80;
+
+// How long the reversed paint takes to lift, after which the launcher
+// unmounts. MUST equal --fab-paint-total × --fab-paint-k-out in
+// tokens/_components.scss — the CSS runs the strokes, this runs the timer,
+// and if they disagree the button either vanishes mid-stroke or sits blank.
+const LAUNCHER_EXIT_MS = 5200 * 0.45;
+
+// How long the entrance takes end to end: --fab-paint-lead + --fab-paint-total,
+// at --fab-paint-k. Nothing may schedule an animation over the launcher before
+// this has elapsed.
+const LAUNCHER_PAINT_MS = 600 + 5200;
+
+// One pass of the attention sheen — --fab-sheen-t.
+const LAUNCHER_CUE_MS = 1150;
 
 const WEEKDAY_LABELS = (() => {
   const fmt = new Intl.DateTimeFormat(LOCALE, { weekday: 'short' });
@@ -188,20 +217,89 @@ function setScheduleHash(open: boolean, date?: Date | null, time?: string | null
 
 interface LauncherProps {
   onOpen: () => void;
-  bouncing: boolean;
+  attention: boolean;
+  exiting: boolean;
 }
 
-function ScheduleLauncher({ onOpen, bouncing }: LauncherProps) {
+const LAUNCHER_LABEL = 'Schedule a Call';
+
+/* The launcher paints itself on rather than fading in, so the button's parts
+   are separate elements the stylesheet can time independently: the ember edge,
+   the drawn outline, the coat, the wet leading edge, the drawn icon and one
+   span per character. All of it is decorative -- the button carries its own
+   aria-label, so every painted part is hidden from assistive tech and the
+   split lettering is never announced letter by letter.
+   Timings live in tokens/_components.scss as --fab-paint-*. */
+function ScheduleLauncher({ onOpen, attention, exiting }: LauncherProps) {
   return (
     <div className="sw-launcher">
       <div className="sw-launcher-btn-wrap">
         <button
-          className={`sw-launcher-btn${bouncing ? ' sw-launcher-btn--bounce' : ''}`}
+          className={
+            'sw-launcher-btn' +
+            (exiting ? ' sw-launcher-btn--exit' : '') +
+            (attention ? ' sw-launcher-btn--attention' : '')
+          }
           onClick={onOpen}
           aria-label="Schedule a meeting"
+          // Out of the tab order while it is being unpainted: it is on its
+          // way off the page, and pointer-events cannot reach the keyboard.
+          tabIndex={exiting ? -1 : undefined}
         >
-          <AiFillSchedule />
-          Schedule a Call
+          <span className="sw-launcher-btn__shade" aria-hidden="true" />
+          <span className="sw-launcher-btn__body" aria-hidden="true">
+            <span className="sw-launcher-btn__fill">
+              <span className="sw-launcher-btn__grain" />
+            </span>
+            <span className="sw-launcher-btn__wet" />
+            <span className="sw-launcher-btn__sheen" />
+          </span>
+          <svg
+            className="sw-launcher-btn__outline"
+            viewBox="0 0 178 48"
+            preserveAspectRatio="none"
+            aria-hidden="true"
+          >
+            <path
+              pathLength={100}
+              vectorEffect="non-scaling-stroke"
+              d="M0.5 0.5 H177.5 V47.5 H0.5 Z"
+            />
+          </svg>
+          <span className="sw-launcher-btn__edge" aria-hidden="true" />
+          <svg className="sw-launcher-btn__ico" viewBox="0 0 24 24" aria-hidden="true">
+            <rect className="sw-ico-band" x="3.5" y="6.5" width="17" height="4.5" />
+            <g>
+              <path className="sw-ico-line" style={{ '--j': 0 } as CSSProperties}
+                pathLength={100} d="M8 2.4V6.5" />
+              <path className="sw-ico-line" style={{ '--j': 1 } as CSSProperties}
+                pathLength={100} d="M16 2.4V6.5" />
+              <path className="sw-ico-line" style={{ '--j': 2 } as CSSProperties}
+                pathLength={100} d="M3.5 6.5H20.5V20.5H3.5Z" />
+              <path className="sw-ico-line" style={{ '--j': 3 } as CSSProperties}
+                pathLength={100} d="M3.5 11H20.5" />
+            </g>
+            <g className="sw-ico-dots" fill="currentColor">
+              {[[8, 14.6], [12, 14.6], [16, 14.6], [8, 17.9], [12, 17.9]].map(
+                ([cx, cy], j) => (
+                  <circle
+                    key={`${cx}-${cy}`}
+                    style={{ '--j': j } as CSSProperties}
+                    cx={cx}
+                    cy={cy}
+                    r={1.15}
+                  />
+                ),
+              )}
+            </g>
+          </svg>
+          <span className="sw-launcher-btn__label" aria-hidden="true">
+            {[...LAUNCHER_LABEL].map((ch, i) => (
+              <span key={`${ch}-${i}`} style={{ '--i': i } as CSSProperties}>
+                {ch}
+              </span>
+            ))}
+          </span>
         </button>
       </div>
     </div>
@@ -706,7 +804,15 @@ export default function ScheduleWidget() {
   const [slotsError, setSlotsError] = useState<string | null>(null);
   const [mobileShowCalendar, setMobileShowCalendar] = useState(false);
   const [visible, setVisible] = useState(openFromUrl);
-  const [bouncing, setBouncing] = useState(false);
+  const [exiting, setExiting] = useState(false);
+  const [paintKey, setPaintKey] = useState(0);
+  // Where the launcher is in its paint cycle. A ref rather than state because
+  // the scroll listener reads it on every frame and must not be rebuilt when
+  // it changes — and because the render only cares about the two booleans.
+  const launcherPhase = useRef<'hidden' | 'shown' | 'exiting'>(
+    openFromUrl ? 'shown' : 'hidden'
+  );
+  const [attention, setAttention] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const modalRef = useRef<HTMLDivElement>(null);
@@ -730,6 +836,9 @@ export default function ScheduleWidget() {
   // from inside a callback that must not be rebuilt on every step change.
   const stepRef = useRef(step);
   stepRef.current = step;
+  // Same reason, for the scroll listener: it must not rebuild on every open.
+  const isOpenRef = useRef(isOpen);
+  isOpenRef.current = isOpen;
   const announcedOpen = useRef(false);
   const funnel = useCallback(
     (name: string, extra: Record<string, unknown> = {}) => {
@@ -752,52 +861,103 @@ export default function ScheduleWidget() {
     funnel('open', { entry: openFromUrl ? 'shared_link' : 'launcher' });
   }, [isOpen, openFromUrl, funnel]);
 
+  // The launcher is tied to the scroll rather than to a timer. It paints
+  // itself on once the reader has committed to the page, and unpaints when
+  // they come back to the top — where the masthead already carries a call to
+  // action and a floating second one is just in the way.
+  //
+  // Coming back is the same gesture reversed (see --exit in the stylesheet),
+  // so it needs an unmount at the end rather than a class that stops
+  // mattering: a fully unpainted button is still a focusable, hit-testable
+  // 178×48 rectangle sitting over the footer.
+  //
+  // paintKey remounts the button on every entrance. Nothing else replays the
+  // animation — the CSS animations on those nodes have already run to
+  // completion, and re-adding a class the browser is already applying does
+  // not restart them. Fresh nodes are the only reliable restart, and they
+  // also make an interrupted exit (scroll up, change your mind, scroll down)
+  // repaint properly instead of snapping back.
   useEffect(() => {
-    if (openFromUrl) return; // already open, no fade-in delay needed
-    const t = setTimeout(() => {
+    let exitTimer: ReturnType<typeof setTimeout> | null = null;
+
+    const paintOn = () => {
+      if (exitTimer) {
+        clearTimeout(exitTimer);
+        exitTimer = null;
+      }
+      if (launcherPhase.current === 'shown') return;
+      launcherPhase.current = 'shown';
+      setExiting(false);
+      setPaintKey(k => k + 1);
       setVisible(true);
-    }, 2000);
-    return () => clearTimeout(t);
-  }, [openFromUrl]);
+    };
+
+    const paintOff = () => {
+      // Never pull the launcher out from under an open dialog
+      if (launcherPhase.current !== 'shown' || isOpenRef.current) return;
+      launcherPhase.current = 'exiting';
+      setExiting(true);
+      exitTimer = setTimeout(() => {
+        exitTimer = null;
+        launcherPhase.current = 'hidden';
+        setVisible(false);
+        setExiting(false);
+      }, LAUNCHER_EXIT_MS);
+    };
+
+    const sync = () => {
+      if (window.scrollY > LAUNCHER_SHOW_Y) paintOn();
+      else if (window.scrollY < LAUNCHER_HIDE_Y) paintOff();
+    };
+
+    sync(); // a restored scroll position, or a #anchor, is already past it
+    window.addEventListener('scroll', sync, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', sync);
+      if (exitTimer) clearTimeout(exitTimer);
+    };
+  }, []);
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
   }, [isOpen]);
 
-  // Attention bounce — a handful of nudges every 6–14s while the launcher is
-  // visible and the modal is closed, then it settles. Looping for the whole
-  // visit re-renders forever without adding any signal: a visitor who has
-  // ignored three bounces is not going to notice the fourth.
+  // Attention cue — light crosses the slab a handful of times every 6–14s
+  // while the launcher is up and the modal is closed, then it settles.
+  // Looping for the whole visit re-renders forever without adding any signal:
+  // a visitor who has ignored three passes is not going to notice the fourth.
   useEffect(() => {
-    if (!visible || isOpen) return;
+    if (!visible || isOpen || exiting) return;
     // Under reduced motion the CSS suppresses the animation anyway, so the
     // state churn would buy nothing at all
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-    let remaining = MAX_BOUNCES;
+    let remaining = MAX_CUES;
     let nextTimer: ReturnType<typeof setTimeout>;
     let resetTimer: ReturnType<typeof setTimeout>;
 
-    const bounce = () => {
-      // A bounce in a backgrounded tab is spent unseen; wait for it to come back
+    const cue = () => {
+      // A cue in a backgrounded tab is spent unseen; wait for it to come back
       if (document.hidden) {
-        nextTimer = setTimeout(bounce, 6000);
+        nextTimer = setTimeout(cue, 6000);
         return;
       }
-      setBouncing(true);
-      resetTimer = setTimeout(() => setBouncing(false), 950);
-      if (--remaining > 0) nextTimer = setTimeout(bounce, 6000 + Math.random() * 8000);
+      setAttention(true);
+      resetTimer = setTimeout(() => setAttention(false), LAUNCHER_CUE_MS + 50);
+      if (--remaining > 0) nextTimer = setTimeout(cue, 6000 + Math.random() * 8000);
     };
-    // First bounce 4–7s after widget appears
-    nextTimer = setTimeout(bounce, 4000 + Math.random() * 3000);
+    // The first cue waits out the entrance. Both the sheen and the shadow
+    // lift override an animation-name the paint is still using, so a cue
+    // that lands early does not decorate the entrance — it truncates it.
+    nextTimer = setTimeout(cue, LAUNCHER_PAINT_MS + 2000 + Math.random() * 3000);
 
     return () => {
       clearTimeout(nextTimer);
       clearTimeout(resetTimer);
-      setBouncing(false);
+      setAttention(false);
     };
-  }, [visible, isOpen]);
+  }, [visible, isOpen, exiting]);
 
   const abortRef = useRef<AbortController | null>(null);
 
@@ -843,6 +1003,11 @@ export default function ScheduleWidget() {
         return;
       }
       setIsOpen(true);
+      // A #schedule link shows the launcher wherever the reader is on the
+      // page, scroll gate included; the phase has to be told, or the next
+      // scroll to the top would think there was nothing to unpaint.
+      launcherPhase.current = 'shown';
+      setExiting(false);
       setVisible(true);
       if (date) {
         setSelectedDate(date);
@@ -1015,8 +1180,10 @@ export default function ScheduleWidget() {
   return (
     <>
       <ScheduleLauncher
+        key={paintKey}
         onOpen={handleOpen}
-        bouncing={bouncing}
+        attention={attention}
+        exiting={exiting}
       />
       {(isOpen || isClosing) && (
         <div className={`sw-overlay ${isClosing ? 'sw-overlay--exit' : 'sw-overlay--enter'}`}>

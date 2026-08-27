@@ -560,6 +560,97 @@
      the last entry would have, so the CTA is not the sixth beat of
      a five-beat list. */
   --menu-foot-delay: 0.38s;
+
+  /* ── The launcher's painted entrance ──────────────────────────
+     The floating call button is not faded in, it is PAINTED: the
+     ember edge flicks up, a pen carries one unbroken stroke around
+     the slab, the fill drags in behind it while the paint is still
+     wet, the lettering soaks in and the icon is drawn last. One
+     loaded brush that never lifts -- which is why every phase below
+     overlaps its neighbour rather than waiting for it.
+
+     --fab-paint-k IS THE ONLY NUMBER TO TOUCH to retime the whole
+     thing. Every delay and every duration is multiplied by it in
+     one shared rule, so the choreography holds its proportions at
+     any speed. 1 is the authored pace (5.2s, chosen deliberately
+     for a slow deliberate hand); 0.5 gives the identical gesture in
+     2.6s. Scaling only the delays would stretch the gaps while each
+     stroke still painted at full speed, which is a different
+     animation rather than a slower one -- hence both.
+
+     The lead is dead time before the first stroke, so the button
+     does not start painting itself while the page is still landing.
+     It replaces the 2s delay the old swFadeIn entrance carried.
+
+     The launcher UNPAINTS when the reader returns to the top of the
+     page: the same strokes, the same keyframes, run backwards, so
+     the ember edge that went on first is the last thing to leave.
+     --fab-paint-total is the span the exit mirrors delays about and
+     MUST equal the end of the last stroke (flood-d + flood-t); it is
+     stated rather than derived because CSS cannot max() a list.
+
+     The exit runs on its own multiplier, and deliberately faster.
+     The entrance is the gesture -- it is the thing worth watching --
+     while the exit is only the button getting out of the reader's
+     way, and a five-second retreat from a scroll they have already
+     finished reads as the page being slow. 0.45 puts it at ~2.3s.
+     LAUNCHER_EXIT_MS in ScheduleWidget.tsx is total * this, and the
+     two have to move together: it is the timer that unmounts the
+     button once the last stroke has lifted. */
+  --fab-paint-k: 1;
+  --fab-paint-k-out: 0.45;
+  --fab-paint-lead: 600ms;
+  --fab-paint-total: 5200ms;
+
+  --fab-paint-shade-d: 2240ms; --fab-paint-shade-t: 1360ms;
+  --fab-paint-edge-d:     0ms; --fab-paint-edge-t:   880ms;
+  --fab-paint-out-d:    600ms; --fab-paint-out-t:   1680ms;
+  --fab-paint-fill-d:  1880ms; --fab-paint-fill-t:  1600ms;
+  --fab-paint-wet-d:   1880ms; --fab-paint-wet-t:   1720ms;
+  --fab-paint-grain-d: 1880ms; --fab-paint-grain-t: 2080ms;
+  --fab-paint-char-d:  3040ms; --fab-paint-char-t:  1040ms;
+  --fab-paint-char-step:  80ms;
+  --fab-paint-icon-d:  2800ms; --fab-paint-icon-t:  1120ms;
+  --fab-paint-icon-step: 220ms;
+  --fab-paint-dot-d:   3760ms; --fab-paint-dot-t:    720ms;
+  --fab-paint-dot-step:  180ms;
+  --fab-paint-flood-d: 4000ms; --fab-paint-flood-t:  600ms;
+
+  /* A hand starting a stroke, and paint dragging then laying down.
+     The theme's --ease-out is the shape of something arriving and
+     settling, which is not what a brush does; these two are named
+     here for the same reason --menu-wipe-ease is. */
+  --fab-paint-ease-pen: cubic-bezier(0.45, 0.05, 0.25, 1);
+  --fab-paint-ease-brush: cubic-bezier(0.3, 0.72, 0.2, 1);
+
+  /* The bristle streaks that level out as the coat settles, and the
+     wet leading edge that rides the fill boundary across. Both are
+     named here rather than at the point of use because a component
+     partial may not name a colour. */
+  /* The attention cue. The launcher used to hop 6px and settle, which is the
+     generic floating-button nudge and says nothing about this button; what it
+     does now is let the light travel across the slab once, the way it would
+     across paint that has not finished drying. The gesture belongs to the
+     entrance rather than interrupting it, and — this is the practical half —
+     it moves no geometry, so a cue that fires three times cannot fight the
+     hover lift, the press state, or the reader's scroll. */
+  --fab-sheen-w: 72px;
+  --fab-sheen-t: 1150ms;
+  --fab-sheen: linear-gradient(105deg,
+    var(--color-paper-a00) 0%,
+    var(--color-paper-a12) 34%,
+    var(--color-paper-a40) 50%,
+    var(--color-paper-a12) 66%,
+    var(--color-paper-a00) 100%);
+
+  --fab-paint-wet-w: 26px;
+  --fab-paint-grain:
+    repeating-linear-gradient(90deg, var(--color-paper-a10) 0 1px, transparent 1px 4px),
+    repeating-linear-gradient(90deg, var(--color-ink-a35) 0 1px, transparent 1px 9px);
+  --fab-paint-wet: linear-gradient(90deg,
+    rgba(var(--accent-500-rgb), 0) 0%,
+    rgba(var(--accent-500-rgb), 0.55) 55%,
+    var(--color-paper-a30) 100%);
 }
 
 @media (max-width: 991px) {
