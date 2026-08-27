@@ -109,6 +109,45 @@
   --card-border: var(--border-default);
   --card-border-hover: var(--border-strong);
   --card-shadow-hover: 0 16px 32px var(--color-ink-a08);
+
+  /* The founders' plate on /about/ -- the site's only photograph, and
+     the only surface on which a bitmap has to sit on printed stock.
+
+     A card's 1px --border-default is paper-200, which is the right
+     rule between two paper surfaces and the wrong one against a
+     photograph: half the image's own edge is brighter than the border,
+     so the plate dissolves into the page along its top and left. The
+     keyline is ink at an alpha instead -- it holds against a bright
+     edge and a dark one, and it is the same ink every other rule on
+     the page is drawn in.
+
+     The ember under it is the fold's one accent gesture on the
+     picture, and it is a RULE rather than a frame on purpose: this
+     site says things with rules, and an ember box around a
+     photograph would be the only enclosed shape on any page.
+
+     The plate holds two exposures of the same frame -- the office
+     desaturated at rest, in colour on hover -- and the hover does two
+     things at once on purpose: the colour comes up while the picture
+     leans in. They share --plate-duration and --plate-ease so it
+     reads as one gesture rather than two effects racing. A draft also
+     washed the frame with a soft-light veil of page stock; that went,
+     because a third thing on the same pointer is a template.
+
+     Hover-only, which is what keeps it inside the page's
+     no-entrance-motion rule: nothing here hides content until it is
+     scrolled to, and nothing here needs an observer. */
+  --plate-keyline: var(--color-ink-a15);
+  --plate-rule: var(--color-accent);
+  --plate-rule-height: 3px;
+  /* Kept to a hair over 1. The source is 880px into a 352px column, so
+     there is resolution to spend, but the move is meant to read as the
+     photograph leaning in rather than as a slideshow transition --
+     1.04 over --duration-slow is about as far as a still portrait of
+     two people goes before it looks like stock. */
+  --plate-zoom: 1.04;
+  --plate-duration: var(--duration-slow);
+  --plate-ease: var(--ease-out);
   /* The two-layer lift shared by the case-study and product cards:
      a wide ambient shadow plus a tight contact shadow underneath. */
   --card-shadow-lift: 0 12px 40px var(--color-ink-a10),

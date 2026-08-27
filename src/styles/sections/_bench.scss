@@ -2,14 +2,52 @@
 
    The only fold on the site with faces in it, and the reason it exists:
    a page arguing that the studio is small on purpose has to be willing
-   to name who "small" is. Two people, two portraits, and each one's
+   to name who "small" is. Two people, one photograph, and each one's
    certifications with the year they were taken -- a dated list is
    checkable in a way a wall of badge chips is not.
 
-   Image-led two-up, which is a layout family nothing else on this page
-   or on any page above it uses. */
+   Image-led, which is a layout family nothing else on this page or on
+   any page above it uses: one standing photograph hung off the same
+   rule as the claim it illustrates, rather than the ruled rows every
+   other index page runs.
 
-.bench__head { margin-bottom: 2rem; }
+   Three rule weights carry the whole fold, and the hierarchy is the
+   point: --color-heading opens it and closes it, --border-default
+   separates the two people inside it, and nothing else is ruled. */
+
+/* Photograph left, the claim and both names right, both hanging from
+   one rule. The photograph is beside the sentence it is evidence for
+   rather than below it, which is the only arrangement in which a
+   picture of two people is doing work on a fold that says there are
+   two of them.
+
+   The column is capped at 22rem rather than given a fraction of the
+   grid. The cap is a proportion, not a resolution ceiling -- the
+   source is 880px into a 352px column, so it could be wider -- but a
+   standing portrait given half the fold starts competing with the
+   sentence it is evidence for, and the argument here is the sentence.
+   The short left column that leaves under the plate is the fold's
+   white space, not a gap waiting to be filled. */
+.bench {
+  display: grid;
+  grid-template-columns: minmax(0, 22rem) minmax(0, 1fr);
+  gap: 2.25rem 3.5rem;
+  align-items: start;
+}
+
+/* Explicit placement so the heading can lead in source order -- a
+   screen reader should reach the claim before the photograph of the
+   people making it -- while the plate still sits left of both bands. */
+.bench__head  { grid-area: 1 / 2 / 2 / 3; }
+.bench__plate { grid-area: 1 / 1 / 3 / 2; }
+.bench__list  { grid-area: 2 / 2 / 3 / 3; }
+.bench__foot  { grid-area: 3 / 1 / 4 / -1; }
+
+.bench__head,
+.bench__plate {
+  border-top: 1px solid var(--color-heading);
+  padding-top: 1.125rem;
+}
 
 .bench__lead {
   margin: 0;
@@ -30,54 +68,93 @@
   color: var(--color-text);
 }
 
-.bench {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0 3.5rem;
+/* No caption. The alt text identifies the photograph for anyone who
+   cannot see it, the names are a column away for everyone who can, and
+   a line of mono under a picture naming the city it was taken in is
+   decoration pretending to be a credit.
+
+   The frame is a separate element from the plate because the plate is
+   hung off the fold's opening rule and the frame is not: the keyline,
+   the ember rule, the clip the zoom runs inside and the box the
+   second exposure is pinned to all have to register on the image's
+   own box, not on the box plus the rule above it. */
+.bench__frame {
+  position: relative;
+  display: block;
+  border: 1px solid var(--plate-keyline);
+  /* The ember rule, drawn as a shadow rather than a border so it sits
+     outside the keyline instead of eating into it. The matching margin
+     is the room it needs; without it the rule overlaps whatever
+     follows. A shadow is also outside the clip below, so the rule
+     survives the overflow the zoom needs. */
+  box-shadow: 0 var(--plate-rule-height) 0 var(--plate-rule);
+  margin-bottom: var(--plate-rule-height);
+  overflow: hidden;
 }
 
-.bench__who {
-  border-top: 1px solid var(--color-heading);
-  padding-top: 1.125rem;
-}
+/* Two exposures of the same frame, stacked. The resting one is the
+   office desaturated behind the two of them; the hover one is the
+   same second with the corridor's colour in it. Both are cropped and
+   graded to register exactly, so the swap reads as the room
+   colouring in rather than as two pictures cutting.
 
-/* The portrait slot. Deliberately drawn as an empty frame with its own
-   spec written inside it rather than filled with stock or with an
-   initials disc: a placeholder that looks like a design decision is a
-   placeholder that ships by accident. Ratio is held by aspect-ratio so
-   the real photograph drops in without reflowing anything under it. */
+   The resting shot is in flow and sets the box. The colour one is
+   taken out of flow on top of it -- which is why the frame is
+   `position: relative` -- so the plate never reserves height for two
+   images. */
 .bench__shot {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.3rem;
+  display: block;
   width: 100%;
-  max-width: 15rem;
+  height: auto;
   aspect-ratio: 4 / 5;
-  background: var(--surface-sunk);
-  border: 1px dashed var(--border-strong);
-  font-family: var(--font-mono);
-  font-size: 0.625rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--color-text-faint);
-  text-align: center;
-}
-
-.bench__shot b {
-  font-weight: var(--weight-regular);
-  color: var(--color-text-muted);
-}
-
-.bench__shot img {
-  width: 100%;
-  height: 100%;
   object-fit: cover;
+  background: var(--surface-sunk);
+  transition: transform var(--plate-duration) var(--plate-ease),
+              opacity var(--plate-duration) var(--plate-ease);
+}
+
+.bench__shot--hover {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  opacity: 0;
+}
+
+/* One hover, one gesture: the colour comes up and the frame leans in
+   on the same clock. Both shots scale together, so nothing slides
+   against anything else while the crossfade runs. The keyline and the
+   ember rule stay exactly where they are -- the plate's edge does not
+   move, only what is inside it does. */
+.bench__plate:hover .bench__shot { transform: scale(var(--plate-zoom)); }
+.bench__plate:hover .bench__shot--hover { opacity: 1; }
+
+/* The crossfade stays -- a change of colour is not motion, and it is
+   the whole point of the pair. The zoom is dropped entirely rather
+   than made instant: a photograph that jumps a step larger under the
+   pointer is worse than one that does not move at all. */
+@media (prefers-reduced-motion: reduce) {
+  .bench__shot { transition: opacity var(--plate-duration) var(--plate-ease); }
+  .bench__plate:hover .bench__shot { transform: none; }
+}
+
+/* The two bios stack rather than sitting side by side: split in two
+   they are 340px wide, and eight dated certifications against three
+   would rag badly at that measure. Stacked, both runs read as runs. */
+.bench__list {
+  display: grid;
+  gap: 2.25rem;
+}
+
+/* The hairline, not the heavy rule: these two separate peers inside the
+   fold, where the rule above opens the fold itself. */
+.bench__who + .bench__who {
+  border-top: 1px solid var(--border-default);
+  padding-top: 2.25rem;
+  margin-top: 0;
 }
 
 .bench__name {
-  margin: 1.25rem 0 0;
+  margin: 0;
   font-family: var(--font-heading);
   font-size: var(--size-body-lg);
   font-weight: var(--weight-bold);
@@ -97,19 +174,21 @@
 }
 
 .bench__role {
-  margin: 0.75rem 0 1.125rem;
-  max-width: 42ch;
+  margin: 0.75rem 0 1rem;
+  max-width: 62ch;
   font-size: var(--size-body-sm);
   color: var(--color-text);
 }
 
 /* Certifications as a middot run rather than a stack of chips: eight
    rounded badges and three rounded badges side by side would read as a
-   scoreboard, and the count is not the argument -- the dates are. */
+   scoreboard, and the count is not the argument -- the dates are.
+
+   Unruled. The switch to mono already separates the run from the
+   sentence above it, and a hairline here would put two rules inside
+   every bio, which is the look of a spec table. */
 .bench__certs {
   margin: 0;
-  padding-top: 0.75rem;
-  border-top: 1px solid var(--border-default);
   font-family: var(--font-mono);
   font-size: 0.75rem;
   line-height: 1.85;
@@ -130,10 +209,9 @@
 
 /* The stack list, demoted to a footnote. It was a fold of its own in an
    earlier draft, which gave ten tool names the same weight as the four
-   refusals. */
+   refusals. The heavy rule closes the fold the same rule opened it. */
 .bench__foot {
-  grid-column: 1 / -1;
-  margin-top: 2.75rem;
+  margin-top: 0.5rem;
   padding-top: 0.875rem;
   border-top: 1px solid var(--color-heading);
   display: grid;
@@ -165,15 +243,31 @@
 }
 
 @media (max-width: 900px) {
-  .bench { grid-template-columns: minmax(0, 1fr); gap: 2.25rem; }
+  /* One column, and the placement above is dropped so the fold falls
+     back to source order: the claim, then the faces, then the names. */
+  .bench {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2rem;
+  }
+
+  .bench__head,
+  .bench__plate,
+  .bench__list,
+  .bench__foot { grid-area: auto; }
+
+  /* The rule over the plate was there to hang it level with the
+     heading. With nothing beside it there is nothing to level it to. */
+  .bench__plate {
+    border-top: 0;
+    padding-top: 0;
+    max-width: 22rem;
+  }
 
   .bench__foot {
     grid-template-columns: minmax(0, 1fr);
     gap: 0.5rem;
-    margin-top: 2rem;
+    margin-top: 0;
   }
-
-  .bench__shot { max-width: 11rem; font-size: 0.75rem; }
 
   /* The root font-size drops to 85% below 1200px, so a 0.75rem cert run
      lands at 10.2px on a phone. That is fine for a three-word eyebrow and
