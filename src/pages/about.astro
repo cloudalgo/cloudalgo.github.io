@@ -10,7 +10,7 @@
  *
  *   .page-head  paper  masthead + standing data column
  *   .oath       ink    one sentence, full bleed, nothing else
- *   .bench      paper  image-led two-up, the only faces on the site
+ *   .bench      paper  image-led, the only faces on the site
  *   .wontdo     paper  hanging heading, display type, no rules
  *   .tenure     sunk   a measured chart, not a list
  *
@@ -159,49 +159,79 @@ const schema = [
   </section>
 
   <section class="section-press" aria-labelledby="bench-heading">
-    <div class="bench__head">
-      <h2 id="bench-heading" class="bench__lead">Two people sign the work.</h2>
-      <p class="bench__note">
-        CloudAlgo has two co-founders, and both of them are on the build. Whoever you speak to on
-        the first call is one of the two people who will be in your org, and neither of us has
-        stopped writing Apex.
-      </p>
-    </div>
-
     <div class="bench">
-      <div class="bench__who">
-        {/* The portrait is a specified empty frame, not stock and not an
-            initials disc: a placeholder that looks finished is a
-            placeholder that ships by accident. */}
-        <div class="bench__shot" role="img" aria-label="Portrait of Sandeep Kumar to be supplied">
-          <span>Portrait</span>
-          <b>4:5 &middot; to supply</b>
-        </div>
-        <h3 class="bench__name">Sandeep Kumar
-          <span class="bench__since">Co-founder &middot; certified since 2014</span>
-        </h3>
-        <p class="bench__role">
-          Fifteen-plus years in software, based in Jaipur. Holds the architect-track certifications
-          the integration work leans on &mdash; integration architecture, and sharing and
-          visibility. Writes apex-lint, and builds OrgVitals.
+      <div class="bench__head">
+        <h2 id="bench-heading" class="bench__lead">Two people sign the work.</h2>
+        <p class="bench__note">
+          CloudAlgo has two co-founders, and both of them are on the build. Whoever you speak to on
+          the first call is one of the two people who will be in your org, and neither of us has
+          stopped writing Apex.
         </p>
-        <p class="bench__certs">Integration Architecture Designer<em>2019</em><i>&middot;</i>Sharing and Visibility Designer<em>2019</em><i>&middot;</i>Platform App Builder<em>2018</em><i>&middot;</i>Administrator<em>2014</em><i>&middot;</i>Force.com Developer<em>2014</em><i>&middot;</i>Force.com Advanced Developer<i>&middot;</i>Sales Cloud Consultant<i>&middot;</i>Service Cloud Consultant</p>
       </div>
 
-      <div class="bench__who">
-        <div class="bench__shot" role="img" aria-label="Portrait of Vikash Agarwal to be supplied">
-          <span>Portrait</span>
-          <b>4:5 &middot; to supply</b>
+      {/* One photograph of both of them rather than two cut-out
+          portraits: the fold's argument is that the studio is two
+          people, and a single frame with both of them in it states
+          that in a way two separate headshots do not. It hangs off the
+          same rule as the sentence, because a picture of two people is
+          only evidence while it is beside the claim.
+
+          No caption, and deliberately no left-to-right identification:
+          the names are a column away, and a photograph does not need
+          to do the identifying that the bios already do. */}
+      <div class="bench__plate">
+        <span class="bench__frame">
+          <img
+            class="bench__shot bench__shot--rest"
+            src="/about/founders.webp"
+            alt="The two CloudAlgo co-founders, standing together in the office in Jaipur."
+            width="880"
+            height="1100"
+            loading="lazy"
+            decoding="async"
+          />
+          {/* The same frame with the office in colour, laid over the
+              first and revealed on hover. Same two people, same
+              second, same crop -- so it carries no information the
+              alt text above has not already given, and is hidden from
+              assistive tech rather than described twice. */}
+          <img
+            class="bench__shot bench__shot--hover"
+            src="/about/founders-colour.webp"
+            alt=""
+            aria-hidden="true"
+            width="880"
+            height="1100"
+            loading="lazy"
+            decoding="async"
+          />
+        </span>
+      </div>
+
+      <div class="bench__list">
+        <div class="bench__who">
+          <h3 class="bench__name">Sandeep Kumar
+            <span class="bench__since">Co-founder &middot; certified since 2014</span>
+          </h3>
+          <p class="bench__role">
+            Fifteen-plus years in software, based in Jaipur. Holds the architect-track certifications
+            the integration work leans on &mdash; integration architecture, and sharing and
+            visibility. Writes apex-lint, and builds OrgVitals.
+          </p>
+          <p class="bench__certs">Integration Architecture Designer<em>2019</em><i>&middot;</i>Sharing and Visibility Designer<em>2019</em><i>&middot;</i>Platform App Builder<em>2018</em><i>&middot;</i>Administrator<em>2014</em><i>&middot;</i>Force.com Developer<em>2014</em><i>&middot;</i>Force.com Advanced Developer<i>&middot;</i>Sales Cloud Consultant<i>&middot;</i>Service Cloud Consultant</p>
         </div>
-        <h3 class="bench__name">Vikash Agarwal
-          <span class="bench__since">Co-founder &middot; certified since 2016</span>
-        </h3>
-        <p class="bench__role">
-          Fifteen-plus years in software, also in Jaipur. Holds the mobile solutions architecture
-          certification, and writes on Apex and on Salesforce security. Builds OrgVitals and
-          Pledgivo.
-        </p>
-        <p class="bench__certs">Mobile Solutions Architecture Designer<em>2017</em><i>&middot;</i>Administrator<em>2017</em><i>&middot;</i>Platform Developer I<em>2016</em></p>
+
+        <div class="bench__who">
+          <h3 class="bench__name">Vikash Agarwal
+            <span class="bench__since">Co-founder &middot; certified since 2016</span>
+          </h3>
+          <p class="bench__role">
+            Fifteen-plus years in software, also in Jaipur. Holds the mobile solutions architecture
+            certification, and writes on Apex and on Salesforce security. Builds OrgVitals and
+            Pledgivo.
+          </p>
+          <p class="bench__certs">Mobile Solutions Architecture Designer<em>2017</em><i>&middot;</i>Administrator<em>2017</em><i>&middot;</i>Platform Developer I<em>2016</em></p>
+        </div>
       </div>
 
       <div class="bench__foot">
