@@ -1,0 +1,55 @@
+# Dependency updates.
+#
+# The alert backlog this file was written against was entirely phantom: all 26
+# advisories named packages the lockfile had already moved past, because the
+# repository's dependency graph was switched off and Dependabot could no longer
+# read package-lock.json. Keeping the graph enabled is what makes alerts close
+# themselves; this file is the other half -- it keeps the lockfile moving, so
+# there is less for an advisory to catch.
+version: 2
+
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: Asia/Kolkata
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: chore(deps)
+      prefix-development: chore(deps-dev)
+
+    # Minors and patches arrive as one PR a week. Majors are deliberately left
+    # out of the group: an Astro or React major is a reading job, not a merge
+    # job, and it deserves its own diff.
+    groups:
+      minor-and-patch:
+        patterns:
+          - "*"
+        update-types:
+          - minor
+          - patch
+
+    ignore:
+      # TypeScript 7 is not upgradable here. @astrojs/check peer-caps at
+      # `typescript ^5 || ^6`, and `npm run astro check` is the only type gate
+      # this project has -- see CLAUDE.md. Revisit when @astrojs/check ships
+      # TS 7 support, then delete this entry rather than working around it.
+      - dependency-name: typescript
+        update-types:
+          - version-update:semver-major
+
+  # deploy.yml pins four actions at their major. Without this they stay at that
+  # major forever, which is how a workflow ends up on a runner image that no
+  # longer exists.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: Asia/Kolkata
+    commit-message:
+      prefix: chore(ci)
