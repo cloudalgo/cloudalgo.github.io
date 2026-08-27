@@ -40,6 +40,35 @@ does not touch that. It fills four holes around it.
 
 ## A. Consent Mode v2
 
+> **SUPERSEDED, 2026-08-27, by the site's owner mid-implementation.**
+>
+> This section was written around a consent gate: measurement for the readers
+> who clicked Accept, Consent Mode signalling for the rest. The owner's
+> instruction was that every visitor is measured and the notice informs rather
+> than asks — "it desnot meter user is rejecting or accepting. if user is using
+> our site we should track him" — with scope confirmed as everywhere, no
+> jurisdiction carve-out.
+>
+> **What shipped instead:** `ConsentBootstrap.astro` declares all four Consent
+> Mode v2 signals `granted` for every visitor and carries no `wait_for_update`.
+> The declaration is kept, despite gating nothing, because an undeclared state
+> (`gcs=G1--`) degrades conversion modelling on the linked Ads account, and
+> because `region` is then the single line to edit if a carve-out is ever
+> wanted. Browser evidence against the live property: `wait_for_update` with no
+> update ever arriving suppresses the collect request outright, so it was
+> removed rather than paired with a restating update.
+>
+> The notice was rewritten so that no sentence offers a choice the page does
+> not honour, and its storage key changed to `ca_notice_ack`. The EU/UK
+> ePrivacy exposure was raised once and the owner decided; that is theirs to
+> decide.
+>
+> Read the rest of this section as the argument that was made, not as the
+> design that is live. `CLAUDE.md` describes what actually ships. The rulings
+> are in the ledger at
+> `.superpowers/sdd/2026-08-27-tracking-consent-mode-v2/progress.md`.
+
+
 ### What changes
 
 The three trackers stop being one undifferentiated block, because they do not
@@ -129,6 +158,14 @@ The design is verified in a browser, not by reading the diff:
 | Returning accepted visitor | `gcs=G111` on the first request, no 500ms stall |
 
 ## B. Conversion coverage
+
+> **EXTENDED, 2026-08-27.** The owner added a second requirement mid-flight —
+> "we need to track each action user is taking on website to see intrest" —
+> which this section does not cover. It shipped as `src/lib/engagement.ts`
+> (link clicks classified by kind and page location, sections reached,
+> disclosures opened, forms started) and as the `schedule_step` booking funnel.
+> The event vocabulary that resulted is tabulated in `CLAUDE.md`.
+
 
 A new `src/lib/analytics.ts` — a small typed façade over `gtag`, so that no
 component reaches for `window.gtag` directly and every event name is declared in
