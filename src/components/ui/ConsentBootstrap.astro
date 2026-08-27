@@ -3,16 +3,23 @@
  * The consent declaration, and the only analytics code in a layout.
  *
  * ── Why this exists at all ──
- * Until now the site measured only the traffic that clicked Accept.
+ * The site used to measure only the traffic that clicked Accept.
  * `injectTrackers()` was a switch: all three trackers or none. Everyone
  * who declined, and everyone who ignored the notice, was not
  * under-counted but absent.
  *
- * Consent Mode v2 replaces the switch with a signal. GA4 loads for
- * everyone under a DENIED state, in which it sets no cookies, reads no
- * identifiers and writes nothing to the device -- it sends an anonymous
- * ping that a page was viewed, which Google models into sessions. The
- * notice's copy says exactly this; see CookieConsent.astro.
+ * The switch is gone. Measurement now runs for every visitor, and the
+ * notice informs rather than gates -- see CookieConsent.astro, whose
+ * copy was rewritten to say so plainly.
+ *
+ * ── Why a consent declaration at all, if it is always granted ──
+ * Because gtag.js asks. With no `consent default` on the page, Google
+ * Ads and GA4 fall back to an undeclared state (`gcs=G1--`), which
+ * degrades conversion modelling on the linked Ads account. Declaring
+ * granted is a statement, not a gate: it costs one call, it is the
+ * honest description of what this site does, and it is the single line
+ * to edit if a jurisdiction ever has to be carved out. The `region`
+ * parameter is how that carve-out would be written.
  *
  * ── Why it is `is:inline` and in the head ──
  * Astro defers processed <script> tags. A consent default that arrives
@@ -21,10 +28,9 @@
  * and a processed script does not.
  *
  * ── What does NOT live here ──
- * HubSpot and Clarity. Both set identifying storage, neither is governed
- * by Consent Mode, and both stay gated in CookieConsent.astro. This file
- * declares consent and loads exactly one Google tag. Nothing may add a
- * second.
+ * HubSpot and Clarity. They load from CookieConsent.astro, which owns
+ * tracker injection. This file declares consent and loads exactly one
+ * Google tag. Nothing may add a second.
  */
 const GA4_ID = 'G-5WYSWY2G6Z';
 ---
@@ -33,30 +39,18 @@ const GA4_ID = 'G-5WYSWY2G6Z';
   function gtag() { window.dataLayer.push(arguments); }
   window.gtag = gtag;
 
-  // Denied first, always. `wait_for_update` holds the tag for 500ms so a
-  // visitor who accepts immediately is not measured as a decliner.
+  // Granted, for everyone, immediately. There is deliberately no
+  // `wait_for_update` here: that parameter exists to hold the tag while
+  // an answer is fetched, and we are not waiting for one. Verified in a
+  // browser against the live property -- a default carrying
+  // `wait_for_update` with no update ever arriving suppresses the
+  // collect request outright, so the parameter is not free.
   gtag('consent', 'default', {
-    ad_storage: 'denied',
-    ad_user_data: 'denied',
-    ad_personalization: 'denied',
-    analytics_storage: 'denied',
-    wait_for_update: 500,
+    ad_storage: 'granted',
+    ad_user_data: 'granted',
+    ad_personalization: 'granted',
+    analytics_storage: 'granted',
   });
-
-  // A returning visitor who already accepted should not pay the 500ms
-  // stall. Their answer is on file; give it now.
-  try {
-    if (localStorage.getItem('ca_cookie_consent') === 'accepted') {
-      gtag('consent', 'update', {
-        ad_storage: 'granted',
-        ad_user_data: 'granted',
-        ad_personalization: 'granted',
-        analytics_storage: 'granted',
-      });
-    }
-  } catch (e) {
-    // Storage blocked. Denied stands, which is the safe direction.
-  }
 
   gtag('js', new Date());
   gtag('config', GA4_ID);

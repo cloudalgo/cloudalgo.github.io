@@ -59,11 +59,12 @@ export function readHubspotCookie(cookieString: string): string | undefined {
 // the booking arrives at a different endpoint from a different component.
 // This is the record that travels with the lead.
 //
-// Two-stage storage is deliberate and is the arguable part of the design.
-// Attribution is not strictly necessary, and pre-consent device storage is
-// the exact thing the cookie notice governs -- so before consent this lives
-// in sessionStorage and dies with the visit. On consent it is promoted to
-// localStorage, which is what makes the Thursday booking attributable.
+// It lives in localStorage, so it survives the days between the campaign
+// click and the booking -- which is the only span over which it is worth
+// anything. There is no consent gate in front of it: the notice informs
+// rather than asks, so there is no second storage tier and no promotion
+// step. The record is written once and never overwritten; "first touch"
+// means the first one, not the most recent.
 
 export const FIRST_TOUCH_KEY = 'ca_first_touch';
 
@@ -102,15 +103,16 @@ export function buildFirstTouch(url: URL, referrer: string, now: Date): FirstTou
  *  returning null. Every caller here treats that as "no attribution",
  *  which is a worse answer than the truth but a better one than a
  *  broken page. */
-function store(which: 'sessionStorage' | 'localStorage'): Storage | null {
+function store(): Storage | null {
   try {
-    return typeof window === 'undefined' ? null : window[which];
+    return typeof window === 'undefined' ? null : window.localStorage;
   } catch {
     return null;
   }
 }
 
-function readFrom(s: Storage | null): FirstTouch | null {
+export function readFirstTouch(): FirstTouch | null {
+  const s = store();
   if (!s) return null;
   try {
     const raw = s.getItem(FIRST_TOUCH_KEY);
@@ -120,38 +122,17 @@ function readFrom(s: Storage | null): FirstTouch | null {
   }
 }
 
-/** The promoted record wins: it is the older of the two, and older is
- *  what "first touch" means. */
-export function readFirstTouch(): FirstTouch | null {
-  return readFrom(store('localStorage')) ?? readFrom(store('sessionStorage'));
-}
-
-/** Call once per page load. Does nothing if a record already exists in
- *  either store. */
+/** Call once per page load. Does nothing if a record already exists. */
 export function captureFirstTouch(): void {
   if (typeof window === 'undefined') return;
   if (readFirstTouch()) return;
-  const session = store('sessionStorage');
-  if (!session) return;
+  const s = store();
+  if (!s) return;
   try {
     const url = new URL(String(window.location));
     const record = buildFirstTouch(url, window.document?.referrer ?? '', new Date());
-    session.setItem(FIRST_TOUCH_KEY, JSON.stringify(record));
+    s.setItem(FIRST_TOUCH_KEY, JSON.stringify(record));
   } catch {
     // A visit we cannot attribute is still a visit. Never break the page.
-  }
-}
-
-/** Call when consent is granted: the record earns the right to outlive
- *  the session. */
-export function promoteFirstTouch(): void {
-  const session = store('sessionStorage');
-  const local = store('localStorage');
-  if (!session || !local) return;
-  try {
-    const raw = session.getItem(FIRST_TOUCH_KEY);
-    if (raw) local.setItem(FIRST_TOUCH_KEY, raw);
-  } catch {
-    // ignore
   }
 }

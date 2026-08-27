@@ -192,20 +192,33 @@ Because a green build no longer implies a working page, load the built site befo
 ### Third-party integrations (all live — no placeholders left)
 
 - **ContactForm** (`src/components/ui/ContactForm.tsx`) — posts to the HubSpot Forms API (`api.hsforms.com/submissions/v3/integration/submit/<portal>/<form>`). Portal and form IDs are real constants at the top of the file. Not Formspree.
-- **Analytics — Consent Mode v2, Advanced.** The consent *declaration* lives in
+- **Analytics — unconditional, with an explicit consent declaration.** Every
+  visitor is measured. There is no consent gate in front of any tracker, and
+  the cookie notice informs rather than asks — a decision taken deliberately by
+  the site's owner on 2026-08-27, replacing the accept-only measurement this
+  file used to document. Do not reintroduce a gate without being asked to.
+- **The consent *declaration*** lives in
   `src/components/ui/ConsentBootstrap.astro`, rendered into `Base.astro`'s
   `<head>`. It is the ONLY analytics code permitted in a layout, it must stay
   `is:inline` (a deferred consent default is not a consent default), and it
-  loads exactly one Google tag: GA4 (`G-5WYSWY2G6Z`), for every visitor, under
-  `analytics_storage: 'denied'`. Denied GA4 sets no cookies and sends an
-  anonymous ping — that is what makes declining visitors measurable at all.
-- **Tracker *loading* still lives in `injectConsentedTrackers()` in
-  `CookieConsent.astro` and nowhere else**: the HubSpot script and Microsoft
-  Clarity, both gated on an actual accept, because both set identifying
-  storage and neither is governed by Consent Mode. Nothing may add a fourth
-  tracker, and nothing may move GA4 back behind the gate without also
-  rewriting the notice copy, which is a legal surface.
-- `Base.astro` only *emits* events (`scroll_depth`, `outbound_click`, `cta_click`) via `gtag?.(…)`. The optional call is deliberate: before consent `gtag` is undefined and the events are no-ops. Any new tracker goes in `injectTrackers()`, never in a layout.
+  loads exactly one Google tag: GA4 (`G-5WYSWY2G6Z`). It declares all four
+  Consent Mode v2 signals `granted` — not because anything is being gated, but
+  because an undeclared state (`gcs=G1--`) degrades conversion modelling on the
+  linked Google Ads account `AW-18354965185`. It carries no `wait_for_update`:
+  verified in a browser, that parameter with no update ever arriving suppresses
+  the collect request entirely.
+- **Tracker *loading* lives in `injectTrackers()` in `CookieConsent.astro` and
+  nowhere else**: the HubSpot script and Microsoft Clarity, both on every page
+  load. Nothing may add a fourth tracker.
+- **The notice is a legal surface and its copy is load-bearing.** It states
+  that analytics run on every visit and that the browser is where the reader
+  turns them off. `ca_notice_ack` records only that it has been read. If you
+  ever put a tracker back behind a gate, the copy has to move with it in the
+  same commit — and vice versa.
+- `Base.astro` only *emits* events (`scroll_depth`, `outbound_click`,
+  `cta_click`) via `gtag?.(…)`. `gtag` exists from the head for every visitor,
+  courtesy of `ConsentBootstrap.astro`. Any new tracker goes in
+  `injectTrackers()`, never in a layout.
 
 ### Deployment
 

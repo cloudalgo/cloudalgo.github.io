@@ -1,5 +1,5 @@
 import { describe, it, expect, afterEach } from 'vitest';
-import { track, readHubspotCookie, buildFirstTouch, readFirstTouch, captureFirstTouch, promoteFirstTouch, FIRST_TOUCH_KEY } from './analytics';
+import { track, readHubspotCookie, buildFirstTouch, readFirstTouch, captureFirstTouch, FIRST_TOUCH_KEY } from './analytics';
 
 afterEach(() => {
   delete (globalThis as Record<string, unknown>).window;
@@ -68,16 +68,14 @@ class FakeStorage {
   removeItem(k: string) { this.map.delete(k); }
 }
 
-const withStorage = (fn: (s: { session: FakeStorage; local: FakeStorage }) => void) => {
-  const session = new FakeStorage();
+const withStorage = (fn: (s: { local: FakeStorage }) => void) => {
   const local = new FakeStorage();
   (globalThis as Record<string, unknown>).window = {
-    sessionStorage: session,
     localStorage: local,
     location: new URL('https://cloudalgo.com/services/?utm_source=linkedin&utm_medium=social'),
     document: { referrer: 'https://www.linkedin.com/' },
   };
-  fn({ session, local });
+  fn({ local });
 };
 
 describe('buildFirstTouch', () => {
@@ -114,70 +112,52 @@ describe('buildFirstTouch', () => {
 describe('first-touch storage', () => {
   afterEach(() => { delete (globalThis as Record<string, unknown>).window; });
 
-  it('captures into sessionStorage, not localStorage', () => {
-    withStorage(({ session, local }) => {
+  it('captures the landing visit into localStorage', () => {
+    withStorage(({ local }) => {
       captureFirstTouch();
-      expect(session.getItem(FIRST_TOUCH_KEY)).not.toBeNull();
-      expect(local.getItem(FIRST_TOUCH_KEY)).toBeNull();
+      const stored = JSON.parse(local.getItem(FIRST_TOUCH_KEY)!);
+      expect(stored.utm_source).toBe('linkedin');
+      expect(stored.landing_page).toBe('/services/');
     });
   });
 
-  it('does not overwrite an existing record — it is FIRST touch', () => {
-    withStorage(({ session }) => {
-      session.setItem(FIRST_TOUCH_KEY, JSON.stringify({ landing_page: '/original/', ts: 'x' }));
+  it('does not overwrite an existing record \u2014 it is FIRST touch', () => {
+    withStorage(({ local }) => {
+      local.setItem(FIRST_TOUCH_KEY, JSON.stringify({ landing_page: '/original/', ts: 'x' }));
       captureFirstTouch();
-      expect(JSON.parse(session.getItem(FIRST_TOUCH_KEY)!).landing_page).toBe('/original/');
+      expect(JSON.parse(local.getItem(FIRST_TOUCH_KEY)!).landing_page).toBe('/original/');
     });
   });
 
-  it('does not overwrite a promoted record held in localStorage', () => {
-    withStorage(({ session, local }) => {
+  it('keeps a record written on an earlier visit, days later', () => {
+    withStorage(({ local }) => {
       local.setItem(FIRST_TOUCH_KEY, JSON.stringify({ landing_page: '/from-last-week/', ts: 'x' }));
       captureFirstTouch();
-      expect(session.getItem(FIRST_TOUCH_KEY)).toBeNull();
+      expect(readFirstTouch()?.landing_page).toBe('/from-last-week/');
     });
   });
 
-  it('prefers the localStorage record when reading', () => {
-    withStorage(({ session, local }) => {
-      session.setItem(FIRST_TOUCH_KEY, JSON.stringify({ landing_page: '/session/', ts: 'x' }));
-      local.setItem(FIRST_TOUCH_KEY, JSON.stringify({ landing_page: '/local/', ts: 'x' }));
-      expect(readFirstTouch()?.landing_page).toBe('/local/');
-    });
-  });
-
-  it('promotes the session record to localStorage on consent', () => {
-    withStorage(({ session, local }) => {
-      captureFirstTouch();
-      const captured = session.getItem(FIRST_TOUCH_KEY);
-      promoteFirstTouch();
-      expect(local.getItem(FIRST_TOUCH_KEY)).toBe(captured);
-    });
-  });
-
-  it('promoting with nothing captured does not throw or write', () => {
+  it('reads back what capture wrote', () => {
     withStorage(({ local }) => {
-      expect(() => promoteFirstTouch()).not.toThrow();
-      expect(local.getItem(FIRST_TOUCH_KEY)).toBeNull();
+      captureFirstTouch();
+      expect(readFirstTouch()).toEqual(JSON.parse(local.getItem(FIRST_TOUCH_KEY)!));
     });
   });
 
   it('returns null on unparseable stored JSON rather than throwing', () => {
-    withStorage(({ session }) => {
-      session.setItem(FIRST_TOUCH_KEY, 'not json');
+    withStorage(({ local }) => {
+      local.setItem(FIRST_TOUCH_KEY, 'not json');
       expect(readFirstTouch()).toBeNull();
     });
   });
 
   it('survives storage being unavailable entirely', () => {
     (globalThis as Record<string, unknown>).window = {
-      get sessionStorage(): never { throw new Error('blocked'); },
       get localStorage(): never { throw new Error('blocked'); },
       location: new URL('https://cloudalgo.com/'),
       document: { referrer: '' },
     };
     expect(() => captureFirstTouch()).not.toThrow();
     expect(readFirstTouch()).toBeNull();
-    expect(() => promoteFirstTouch()).not.toThrow();
   });
 });

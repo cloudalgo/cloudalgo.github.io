@@ -490,11 +490,11 @@ const ogImage = cardSource.startsWith('http') ? cardSource : `${imageHost}${card
 
       // GA4: scroll depth (25 / 50 / 75 / 100%)
       //
-      // gtag only exists once the visitor has accepted cookies, which may well
-      // be after they have already scrolled. So depth is tracked as a
-      // high-water mark and the milestones are only *consumed* when there is
-      // something to send them to — otherwise a pre-consent scroll would burn
-      // all four as no-ops and the visit would report no depth at all.
+      // `gtag` exists from the head now (ConsentBootstrap.astro), so the
+      // race this guarded against is largely gone. Depth stays a high-water
+      // mark rather than a set of one-shot triggers because gtag.js is loaded
+      // `async`: a fast scroll can still outrun it, and a milestone consumed
+      // before the tag answers would be lost for the whole visit.
       const MILESTONES = [25, 50, 75, 100];
       const sentMilestones = new Set<number>();
       let deepestPct = 0;
@@ -525,7 +525,7 @@ const ogImage = cardSource.startsWith('http') ? cardSource : `${imageHost}${card
         flushScrollDepth();
       };
       window.addEventListener('scroll', reportScrollDepth, { passive: true });
-      // Consent can land long after the scrolling did; catch up when it does
+      // Belt and braces: flush again once the other trackers are in.
       window.addEventListener('ca:trackers-ready', flushScrollDepth);
 
       // GA4: CTA button clicks
