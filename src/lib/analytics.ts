@@ -26,6 +26,10 @@ export type AnalyticsEvent =
   | 'content_view'
   | 'expand_content'
   | 'form_start'
+  // One name with a `step` parameter, not six names: GA4 caps a property
+  // at 500 distinct event names, and a funnel exploration wants step as a
+  // dimension it can order, which separate names cannot give it.
+  | 'schedule_step'
   | 'video_start'
   | 'video_progress'
   | 'video_complete';

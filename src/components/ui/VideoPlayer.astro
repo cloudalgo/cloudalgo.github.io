@@ -390,6 +390,7 @@ const isCrossOrigin = /^https?:\/\//.test(src) || (captions ? /^https?:\/\//.tes
 </style>
 
 <script>
+  import { track } from '@/lib/analytics';
   // One initialiser for every player on the page. All DOM is authored in the
   // markup above so Astro's scoped styles apply; nothing is created here.
   type Player = HTMLElement;
@@ -439,7 +440,38 @@ const isCrossOrigin = /^https?:\/\//.test(src) || (captions ? /^https?:\/\//.tes
     toggle?.addEventListener('click', flip);
     video.addEventListener('click', flip);
 
+    // ── Measurement ──
+    //
+    // A film on a consultancy's site is a claim that takes two minutes to
+    // read. Whether anyone watches it, and where they stop, is the only
+    // way to know whether the two minutes were worth making. Quartiles
+    // rather than a timer: they compare across films of different lengths.
+    //
+    // The title is read from the video's aria-label, which the component
+    // already sets from its `title` prop -- so there is no second place
+    // for a film's name to be spelled differently.
+    const videoTitle = video.getAttribute('aria-label') || 'untitled';
+    let started = false;
+    const quartilesSent = new Set<number>();
+
+    const reportProgress = () => {
+      const d = video.duration;
+      if (!Number.isFinite(d) || d <= 0) return;
+      const pct = (video.currentTime / d) * 100;
+      for (const q of [25, 50, 75]) {
+        if (pct >= q && !quartilesSent.has(q)) {
+          quartilesSent.add(q);
+          track('video_progress', { video_title: videoTitle, percent: q });
+        }
+      }
+    };
+    video.addEventListener('timeupdate', reportProgress);
+
     video.addEventListener('play', () => {
+      if (!started) {
+        started = true;
+        track('video_start', { video_title: videoTitle });
+      }
       root.dataset.playing = 'true';
       root.dataset.started = 'true';
       seal.hidden = true;
@@ -452,6 +484,7 @@ const isCrossOrigin = /^https?:\/\//.test(src) || (captions ? /^https?:\/\//.tes
       wake();
     });
     video.addEventListener('ended', () => {
+      track('video_complete', { video_title: videoTitle });
       seal.hidden = false;
       root.dataset.idle = 'false';
     });

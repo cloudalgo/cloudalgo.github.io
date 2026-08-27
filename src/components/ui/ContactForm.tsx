@@ -1,5 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
+import { readHubspotCookie, readFirstTouch, track } from '@/lib/analytics';
 
 interface FormData {
   firstName: string;
@@ -34,8 +35,19 @@ export default function ContactForm() {
             { name: 'message', value: data.message },
           ],
           context: {
-            pageUri: 'cloudalgo.com/contact',
-            pageName: 'CloudAlgo Contact Form',
+            // HubSpot's own visitor token, handed back so this submission
+            // joins the browsing history HubSpot already recorded for this
+            // person. Without it every lead arrives as a first-time
+            // anonymous visitor, and the pages they read before writing to
+            // us are stranded on a contact record nothing links to.
+            //
+            // Undefined until their script has loaded and set the cookie,
+            // which is async on every page. JSON.stringify drops the key
+            // in that case, which is what HubSpot wants -- an empty string
+            // is rejected as malformed.
+            hutk: readHubspotCookie(document.cookie),
+            pageUri: window.location.href,
+            pageName: document.title,
           },
         }),
       });
@@ -43,13 +55,19 @@ export default function ContactForm() {
       if (res.ok) {
         setStatus('sent');
         reset();
-        // GA4 event
-        if (typeof window !== 'undefined' && (window as any).gtag) {
-          (window as any).gtag('event', 'form_submit', {
-            event_category: 'Contact',
-            event_label: 'HubSpot Contact Form',
-          });
-        }
+        track('form_submit', {
+          event_category: 'Contact',
+          event_label: 'HubSpot Contact Form',
+        });
+        // The campaign that brought them here, which may have been weeks
+        // ago and on a different page. GA4's own attribution covers its
+        // side; this is the same record that HubSpot cannot see, reported
+        // against the conversion it actually produced. No value: the site
+        // publishes no rate.
+        track('generate_lead', {
+          method: 'contact_form',
+          ...(readFirstTouch() ?? {}),
+        });
       } else {
         setStatus('error');
       }

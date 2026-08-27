@@ -54,5 +54,23 @@ const GA4_ID = 'G-5WYSWY2G6Z';
 
   gtag('js', new Date());
   gtag('config', GA4_ID);
+
+  // ── Clarity session recordings, findable from a GA4 report ──
+  //
+  // The two tools record the same visit under different ids, so a
+  // striking number in GA4 -- a page everyone abandons, a form nobody
+  // finishes -- cannot be turned into "show me somebody doing that".
+  // Writing GA4's session id onto the Clarity session makes it a filter.
+  //
+  // Waits for ca:trackers-ready because Clarity is injected from
+  // CookieConsent.astro after this file has run. The queueing shim it
+  // installs means the call is safe the instant that event fires.
+  window.addEventListener('ca:trackers-ready', function () {
+    gtag('get', GA4_ID, 'session_id', function (sessionId) {
+      if (sessionId && window.clarity) {
+        window.clarity('set', 'ga4_session_id', String(sessionId));
+      }
+    });
+  });
 </script>
 <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${GA4_ID}`}></script>

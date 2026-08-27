@@ -220,6 +220,18 @@ export function initEngagement(): void {
         page_type,
       });
 
+      // Reaching for the phone or an email client is a different act
+      // from following a link, and it is the one this site most wants
+      // marked as a key event in GA4. `link_click` above still counts it;
+      // this is the name a conversion report can be built on.
+      if (link_kind === 'mailto' || link_kind === 'tel') {
+        track('contact_click', {
+          method: link_kind,
+          link_location,
+          page_type,
+        });
+      }
+
       // A click on a card is also a statement about which of several
       // things on the page the reader chose. GA4 gives `select_item` its
       // own reporting surface, so it is worth the second event.
