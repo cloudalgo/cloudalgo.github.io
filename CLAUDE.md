@@ -215,10 +215,54 @@ Because a green build no longer implies a working page, load the built site befo
   turns them off. `ca_notice_ack` records only that it has been read. If you
   ever put a tracker back behind a gate, the copy has to move with it in the
   same commit — and vice versa.
-- `Base.astro` only *emits* events (`scroll_depth`, `outbound_click`,
-  `cta_click`) via `gtag?.(…)`. `gtag` exists from the head for every visitor,
-  courtesy of `ConsentBootstrap.astro`. Any new tracker goes in
-  `injectTrackers()`, never in a layout.
+- `Base.astro` only *emits* events, never loads a tracker. It calls
+  `captureFirstTouch()` and `initEngagement()` from `src/lib/`, and emits
+  `scroll_depth`, `outbound_click` and `cta_click` inline. `gtag` exists from
+  the head for every visitor, courtesy of `ConsentBootstrap.astro`. Any new
+  tracker goes in `injectTrackers()`, never in a layout.
+
+#### The event vocabulary
+
+**Every event name is a member of the `AnalyticsEvent` union in
+`src/lib/analytics.ts`, and every call goes through `track()`.** A stringly
+typed `gtag('event', …)` typo is not an error — it is an event landing in GA4
+under a name nobody reports on, which is indistinguishable from the visit
+never happening. The union makes it a build failure. GA4 caps a property at
+500 distinct names and truncates parameter values at 100 characters; `clean()`
+in `engagement.ts` does the truncation, backing up to a word boundary because
+a person reads these in a report.
+
+| Group | Events | Emitted from |
+|---|---|---|
+| Conversion | `generate_lead`, `form_submit`, `contact_click` | `ContactForm.tsx`, `ScheduleWidget.tsx`, `engagement.ts` |
+| Booking funnel | `schedule_step` | `ScheduleWidget.tsx` |
+| Engagement | `link_click`, `select_item`, `content_view`, `expand_content`, `form_start` | `engagement.ts` |
+| Video | `video_start`, `video_progress`, `video_complete` | `VideoPlayer.astro` |
+| Page | `scroll_depth`, `outbound_click`, `cta_click`, `page_not_found` | `Base.astro`, `404.astro` |
+
+- **`schedule_step` is one name with a `step` parameter**, not eight names:
+  `open` · `date_selected` · `slot_considered` · `slot_selected` · `submit` ·
+  `confirmed` · `failed` · `abandoned` (carrying `last_step`). A funnel
+  exploration wants step as an orderable dimension, which separate names
+  cannot give it. Do not split it.
+- **`outbound_click` and `cta_click` duplicate clicks that `link_click`
+  already reports.** They are kept because GA4 history is built on those
+  names, and renaming an event orphans the reports built on it. The
+  duplication is deliberate.
+- **`generate_lead` carries no `value` or `currency`.** The site publishes no
+  rate; a made-up number would poison every report built on it.
+- **Same-origin is tested by parsing, never by `href.startsWith(origin)`** —
+  the latter reads `cloudalgo.com.evil.test` as our own traffic. `classifyLink`
+  and `itemFromHref` in `engagement.ts` are the shared helpers; the legacy
+  `outbound_click` handler uses them too.
+- **First-touch attribution** (`captureFirstTouch` / `readFirstTouch`) is a
+  localStorage record written once per visitor and never overwritten — it has
+  to survive the days between a campaign click and a booking. `ContactForm`
+  sends it with `generate_lead`; it is deliberately NOT sent to HubSpot, which
+  rejects a submission carrying a field the portal has not defined.
+- **HubSpot's `hutk`**: HubSpot sets the cookie as `hubspotutk` and expects it
+  back as `hutk`. The two names differ, they are both theirs, and unifying
+  them de-attributes every lead. `readHubspotCookie()` exists for exactly this.
 
 ### Deployment
 
