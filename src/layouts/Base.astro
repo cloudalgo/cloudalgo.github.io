@@ -147,6 +147,19 @@ const ogImage = cardSource.startsWith('http') ? cardSource : `${imageHost}${card
     </div>
     <slot />
     <script>
+      import { captureFirstTouch } from '@/lib/analytics';
+      import { classifyLink, initEngagement } from '@/lib/engagement';
+
+      // The campaign a visit arrived on, recorded before anything else can
+      // navigate away from it. Written once per visitor and never
+      // overwritten -- see the first-touch section of lib/analytics.ts.
+      captureFirstTouch();
+
+      // Link clicks, sections reached, disclosures opened, forms started.
+      // See lib/engagement.ts: this is the half of the picture the
+      // conversion events cannot give, because almost no visit converts.
+      initEngagement();
+
       // Scrollable page height, measured once and refreshed when the layout
       // actually changes. Reading scrollHeight inside a scroll handler forces a
       // synchronous layout on every event, which is the expensive part.
@@ -528,15 +541,24 @@ const ogImage = cardSource.startsWith('http') ? cardSource : `${imageHost}${card
       // Belt and braces: flush again once the other trackers are in.
       window.addEventListener('ca:trackers-ready', flushScrollDepth);
 
-      // GA4: CTA button clicks
+      // GA4: outbound and CTA clicks
+      //
+      // initEngagement() above already reports every click as `link_click`
+      // with a `link_kind`. These two events are kept because they carry
+      // years of GA4 history under these names, and renaming an event
+      // orphans the reports built on it. They are the same clicks, counted
+      // twice, deliberately.
       document.addEventListener('click', (e) => {
         const el = (e.target as Element).closest('a, button');
         if (!el) return;
         const text = el.textContent?.trim().slice(0, 50);
         const href = (el as HTMLAnchorElement).href || '';
 
-        // Outbound links
-        if (href && !href.includes('cloudalgo.com') && href.startsWith('http')) {
+        // Outbound links. Classified by parsed origin rather than by
+        // `!href.includes('cloudalgo.com')`, which counted a link to
+        // cloudalgo.com.example.test as our own traffic and, worse, counted
+        // any URL with our name in a query string the same way.
+        if (href && classifyLink(href, window.location.origin) === 'outbound') {
           (window as any).gtag?.('event', 'outbound_click', {
             event_category: 'Outbound',
             event_label: href,

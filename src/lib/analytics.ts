@@ -16,7 +16,19 @@ export type AnalyticsEvent =
   | 'page_not_found'
   | 'scroll_depth'
   | 'outbound_click'
-  | 'cta_click';
+  | 'cta_click'
+  // ── Engagement: what the reader looked at and reached for ──
+  // These answer "was this visit interested?", which the conversion
+  // events above cannot: a reader who never books still tells us which
+  // service they read to the end of.
+  | 'link_click'
+  | 'select_item'
+  | 'content_view'
+  | 'expand_content'
+  | 'form_start'
+  | 'video_start'
+  | 'video_progress'
+  | 'video_complete';
 
 type Gtag = (...args: unknown[]) => void;
 
@@ -44,8 +56,8 @@ export function track(
  * "unifying" them silently de-attributes every lead -- which is the bug
  * this function exists to fix.
  *
- * Absent when the visitor declined consent, since the HubSpot script only
- * loads on accept. That is correct, and callers must treat it as normal.
+ * Absent until the HubSpot script has loaded and set it, which is async
+ * on every page. That is normal and callers must treat it as such.
  */
 export function readHubspotCookie(cookieString: string): string | undefined {
   const match = cookieString.match(/(?:^|;\s*)hubspotutk=([^;]*)/);
