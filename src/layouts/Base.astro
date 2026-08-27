@@ -1,5 +1,6 @@
 ---
 import CookieConsent from '../components/ui/CookieConsent.astro';
+import ConsentBootstrap from '../components/ui/ConsentBootstrap.astro';
 
 export interface Props {
   title: string;
@@ -137,6 +138,7 @@ const ogImage = cardSource.startsWith('http') ? cardSource : `${imageHost}${card
     <!-- JSON-LD structured data -->
     {schemaJson && <script is:inline type="application/ld+json" set:html={schemaJson} />}
 
+    <ConsentBootstrap />
   </head>
   <body>
     <div id="margin-rule" class="margin-rule" aria-hidden="true">

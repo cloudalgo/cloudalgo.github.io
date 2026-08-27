@@ -215,20 +215,19 @@ import { ISSUER } from '@/data/legal';
 </div><!-- /#ca-cookie-popup -->
 
 <script>
+  import { promoteFirstTouch } from '@/lib/analytics';
+
   let trackersInjected = false;
 
-  function injectTrackers(): void {
+  /** HubSpot and Clarity only.
+   *
+   *  GA4 is NOT here any more: it loads from ConsentBootstrap.astro for
+   *  every visitor under a denied consent state. These two are not
+   *  governed by Consent Mode and both set identifying storage, so they
+   *  remain gated on an actual answer to the notice. */
+  function injectConsentedTrackers(): void {
     if (trackersInjected) return;
     trackersInjected = true;
-    // Google Analytics GA4
-    const ga = document.createElement('script');
-    ga.async = true;
-    ga.src = 'https://www.googletagmanager.com/gtag/js?id=G-5WYSWY2G6Z';
-    document.head.appendChild(ga);
-    (window as any).dataLayer = (window as any).dataLayer || [];
-    (window as any).gtag = function () { (window as any).dataLayer.push(arguments); };
-    (window as any).gtag('js', new Date());
-    (window as any).gtag('config', 'G-5WYSWY2G6Z');
 
     // HubSpot
     const hs = document.createElement('script');
@@ -244,9 +243,18 @@ import { ISSUER } from '@/data/legal';
     ct.src = 'https://www.clarity.ms/tag/wqcruv2yej';
     document.head.appendChild(ct);
 
-    // Analytics that ran before consent (scroll depth, for one) hold their
-    // measurements back until gtag exists. Tell them it now does.
     window.dispatchEvent(new Event('ca:trackers-ready'));
+  }
+
+  /** Lift the denied state declared in the head. */
+  function grantConsent(): void {
+    (window as any).gtag?.('consent', 'update', {
+      ad_storage: 'granted',
+      ad_user_data: 'granted',
+      ad_personalization: 'granted',
+      analytics_storage: 'granted',
+    });
+    promoteFirstTouch();
   }
 
   function setConsent(value: 'accepted' | 'declined'): void {
@@ -260,7 +268,8 @@ import { ISSUER } from '@/data/legal';
   // ── On page load ──
   const consent = localStorage.getItem('ca_cookie_consent');
   if (consent === 'accepted') {
-    injectTrackers();
+    // The bootstrap already issued the consent update for this visitor.
+    injectConsentedTrackers();
   } else if (!consent) {
     // First visit: remove ca-hidden to show the notice
     document.getElementById('ca-cookie-popup')?.classList.remove('ca-hidden');
@@ -275,7 +284,8 @@ import { ISSUER } from '@/data/legal';
   // ── The notice: "Accept all" ──
   document.getElementById('ca-btn-accept-s1')?.addEventListener('click', () => {
     setConsent('accepted');
-    injectTrackers();
+    grantConsent();
+    injectConsentedTrackers();
     hidePopup();
   });
 
@@ -297,7 +307,8 @@ import { ISSUER } from '@/data/legal';
   document.getElementById('ca-btn-accept-selected')?.addEventListener('click', () => {
     if (cb?.checked) {
       setConsent('accepted');
-      injectTrackers();
+      grantConsent();
+      injectConsentedTrackers();
     } else {
       setConsent('declined');
     }
@@ -307,7 +318,8 @@ import { ISSUER } from '@/data/legal';
   // ── The register: "Accept all" ──
   document.getElementById('ca-btn-accept-s2')?.addEventListener('click', () => {
     setConsent('accepted');
-    injectTrackers();
+    grantConsent();
+    injectConsentedTrackers();
     hidePopup();
   });
 </script>

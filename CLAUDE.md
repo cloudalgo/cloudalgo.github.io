@@ -192,7 +192,19 @@ Because a green build no longer implies a working page, load the built site befo
 ### Third-party integrations (all live — no placeholders left)
 
 - **ContactForm** (`src/components/ui/ContactForm.tsx`) — posts to the HubSpot Forms API (`api.hsforms.com/submissions/v3/integration/submit/<portal>/<form>`). Portal and form IDs are real constants at the top of the file. Not Formspree.
-- **Analytics** — every tracker is injected from `injectTrackers()` in `src/components/ui/CookieConsent.astro`, and **only after consent**: GA4 (`G-5WYSWY2G6Z`), the HubSpot tracking script, and Microsoft Clarity. Nothing loads from `Base.astro`.
+- **Analytics — Consent Mode v2, Advanced.** The consent *declaration* lives in
+  `src/components/ui/ConsentBootstrap.astro`, rendered into `Base.astro`'s
+  `<head>`. It is the ONLY analytics code permitted in a layout, it must stay
+  `is:inline` (a deferred consent default is not a consent default), and it
+  loads exactly one Google tag: GA4 (`G-5WYSWY2G6Z`), for every visitor, under
+  `analytics_storage: 'denied'`. Denied GA4 sets no cookies and sends an
+  anonymous ping — that is what makes declining visitors measurable at all.
+- **Tracker *loading* still lives in `injectConsentedTrackers()` in
+  `CookieConsent.astro` and nowhere else**: the HubSpot script and Microsoft
+  Clarity, both gated on an actual accept, because both set identifying
+  storage and neither is governed by Consent Mode. Nothing may add a fourth
+  tracker, and nothing may move GA4 back behind the gate without also
+  rewriting the notice copy, which is a legal surface.
 - `Base.astro` only *emits* events (`scroll_depth`, `outbound_click`, `cta_click`) via `gtag?.(…)`. The optional call is deliberate: before consent `gtag` is undefined and the events are no-ops. Any new tracker goes in `injectTrackers()`, never in a layout.
 
 ### Deployment
