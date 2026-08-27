@@ -114,14 +114,14 @@ const CELLS = 9;
   </PageMasthead>
 
   <section class="section-press" aria-labelledby="dir-heading">
-    <div class="section-press__head anim-fade-up">
+    <div class="section-press__head">
       <h2 id="dir-heading" class="section-title section-press__title">What is filed</h2>
       <span class="dir__meta">{onFile} items on file</span>
     </div>
 
     <ul class="dir">
-      {register.map((r, i) => (
-        <li class="dir__row anim-fade-up" style={`--i:${i}`}>
+      {register.map((r) => (
+        <li class="dir__row">
           <a class="dir__link" href={r.href}>
             <span class="dir__n">{pad(r.count)}</span>
             <span class="dir__name link-draw">{r.name}</span>
@@ -130,7 +130,7 @@ const CELLS = 9;
           </a>
         </li>
       ))}
-      <li class="dir__foot anim-fade-up" style={`--i:${register.length}`}>
+      <li class="dir__foot">
         <span>Or read who does the work, or send us a line.</span>
         <span class="dir__foot-links">
           <a class="link-draw" href="/about/">About the firm</a>

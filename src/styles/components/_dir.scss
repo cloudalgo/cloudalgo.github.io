@@ -25,11 +25,6 @@
 
 .dir__row { border-bottom: 1px solid var(--border-default); }
 
-/* The rows come in on Base.astro's observer; the delay is the
-   only part that is per-row, and it is set from --i in markup. */
-.dir__row.anim-fade-up,
-.dir__foot.anim-fade-up { transition-delay: calc(var(--i) * 70ms); }
-
 /* Count / name / what / arrow. The negative margin lets the hover
    fill run past the text into the row's own gutter without
    widening the rule above it. */

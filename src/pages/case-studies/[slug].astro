@@ -112,12 +112,12 @@ const schema: object[] = [
   {/* ── The change, in one band ─────────────────────────────────── */}
   <section class="state" aria-labelledby="state-heading">
     <div class="state__inner">
-      <div class="state__head anim-fade-up">
+      <div class="state__head">
         <h2 id="state-heading" class="state__title">{cs.stateTitle}</h2>
         <span class="state__note">Struck through: the way it used to work</span>
       </div>
 
-      <div class="state__table anim-fade-up">
+      <div class="state__table">
         <div class="state__row state__row--head" aria-hidden="true">
           <span class="state__what">{cs.stateWhat}</span>
           <span class="state__key">Was</span>
@@ -136,14 +136,14 @@ const schema: object[] = [
 
   {/* ── Why it stayed that way ──────────────────────────────────── */}
   <section class="section-press" aria-labelledby="impasse-heading">
-    <div class="section-press__head anim-fade-up">
+    <div class="section-press__head">
       <h2 id="impasse-heading" class="section-title section-title--xs section-title--tighter section-press__title">Why it stayed that way.</h2>
       <span class="section-press__note">{constraints}</span>
     </div>
 
-    <p class="section-press__lede anim-fade-up">{cs.challenge}</p>
+    <p class="section-press__lede">{cs.challenge}</p>
 
-    <ol class="impasse anim-fade-up">
+    <ol class="impasse">
       {cs.challengePoints.map((point, i) => (
         <li class:list={['impasse__item', i === cs.decisivePoint && 'impasse__item--decisive']}>
           <span class="impasse__n">{String(i + 1).padStart(2, '0')}</span>
@@ -162,14 +162,14 @@ const schema: object[] = [
       the section is absent rather than padded. */}
   {cs.toolComparison && (
     <section class="section-press" aria-labelledby="ruledout-heading">
-      <div class="section-press__head anim-fade-up">
+      <div class="section-press__head">
         <h2 id="ruledout-heading" class="section-title section-title--xs section-title--tighter section-press__title">What we ruled out first.</h2>
         <span class="section-press__note">{cs.ruledoutNote}</span>
       </div>
 
-      {cs.whyNotOffShelf && <p class="section-press__lede anim-fade-up">{cs.whyNotOffShelf}</p>}
+      {cs.whyNotOffShelf && <p class="section-press__lede">{cs.whyNotOffShelf}</p>}
 
-      <div class="ruledout anim-fade-up">
+      <div class="ruledout">
         {cs.toolComparison.map((t) => (
           <div class="ruledout__row">
             <div class="ruledout__who">
@@ -196,14 +196,14 @@ const schema: object[] = [
       parallel flows of one build, where a numeral would only decorate.
       Same reasoning as the engineering notes below. */}
   <section class="section-press" aria-labelledby="build-heading">
-    <div class="section-press__head anim-fade-up">
+    <div class="section-press__head">
       <h2 id="build-heading" class="section-title section-title--xs section-title--tighter section-press__title">What we built instead.</h2>
       <span class="section-press__note">{cs.buildNote}</span>
     </div>
 
-    <p class="section-press__lede anim-fade-up">{cs.solution}</p>
+    <p class="section-press__lede">{cs.solution}</p>
 
-    <ol class:list={['build', 'anim-fade-up', !cs.buildChain && 'build--parts']}>
+    <ol class:list={['build', !cs.buildChain && 'build--parts']}>
       {cs.solutionSteps.map((step, i) => (
         <li class="build__stage">
           <span class="build__mark">{cs.buildChain && <span class="build__n">{String(i + 1).padStart(2, '0')}</span>}</span>
@@ -218,7 +218,7 @@ const schema: object[] = [
       ))}
     </ol>
 
-    <div class="stack anim-fade-up">
+    <div class="stack">
       <div class="stack__head">
         <span class="stack__label">What it is made of</span>
         <span class="stack__count">{components}</span>
@@ -233,12 +233,12 @@ const schema: object[] = [
 
   {/* ── Engineering notes ───────────────────────────────────────── */}
   <section class="section-press" aria-labelledby="notes-heading">
-    <div class="section-press__head anim-fade-up">
+    <div class="section-press__head">
       <h2 id="notes-heading" class="section-title section-title--xs section-title--tighter section-press__title">Engineering notes.</h2>
       <span class="section-press__note">{cs.notesNote}</span>
     </div>
 
-    <div class="notes anim-fade-up">
+    <div class="notes">
       {cs.technicalHighlights.map((note) => (
         <div class="notes__item">
           <h3 class="notes__title">{note.title}</h3>
@@ -250,12 +250,12 @@ const schema: object[] = [
 
   {/* ── What it settled ─────────────────────────────────────────── */}
   <section class="section-press" aria-labelledby="tally-heading">
-    <div class="section-press__head anim-fade-up">
+    <div class="section-press__head">
       <h2 id="tally-heading" class="section-title section-title--xs section-title--tighter section-press__title">What it settled.</h2>
       <span class="section-press__note">Three figures, still true</span>
     </div>
 
-    <div class="tally anim-fade-up">
+    <div class="tally">
       {cs.outcomes.map((o) => (
         <div class="tally__cell">
           <span class="tally__fig stat-num stat-num--fluid stat-num--tight">{o.metric}</span>
@@ -266,7 +266,6 @@ const schema: object[] = [
   </section>
 
   <ClosingManifest
-    class="anim-fade-up"
     labelledby="manifest-heading"
     kicker="What this one shows"
     items={cs.whatDemonstrates.map((d) => ({ title: d.title, detail: d.body }))}
@@ -280,7 +279,6 @@ const schema: object[] = [
       before it and 05 nothing after, and a reader who has run out of
       studies in one direction wants the list, not a dead half-row. */}
   <EngagementPager
-    class="anim-fade-up"
     prev={prev
       ? { href: `/case-studies/${prev.id}/`, n: prev.index, name: prev.ledger.client, shape: prev.pagerNote }
       : { href: '/case-studies/', name: '← All five studies', shape: 'The index' }}

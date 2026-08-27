@@ -245,16 +245,12 @@ const ogImage = cardSource.startsWith('http') ? cardSource : `${imageHost}${card
         };
 
         // Where a section SITS, not where it is currently PAINTED.
-        // `getBoundingClientRect` includes transforms, and every section
-        // starts life at `translateY(28px)` under `.anim-fade-up`
-        // (base/_motion.scss) until the observer lets it up. Marks read
-        // before that -- which is most of them, since the marks are read on
-        // load and the entrances fire on approach -- came out 28px low, so
-        // the rail landed 28px past each section and put the heading back
-        // under the header: measured on the home page, every tick landed its
-        // section at y=64 against a header bottom of 73. `offsetTop` is the
-        // layout position and ignores transforms, so a mark is where the
-        // section will settle rather than where it happens to be mid-flight.
+        // `getBoundingClientRect` includes transforms, so anything the page
+        // moves -- a parallax figure, a section mid-transition -- reads at
+        // its painted position rather than its resting one, and the rail
+        // then lands that far past the section. `offsetTop` is the layout
+        // position and ignores transforms, so a mark is where the section
+        // sits regardless of what is being animated over it.
         const layoutTop = (el: HTMLElement) => {
           let y = 0;
           let node: HTMLElement | null = el;
@@ -437,20 +433,6 @@ const ogImage = cardSource.startsWith('http') ? cardSource : `${imageHost}${card
         onRelayout.push(syncRule);
         syncRule();
       }
-
-      // Scroll animations
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('in-view');
-            observer.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-
-      document.querySelectorAll('.anim-fade-up, .anim-scale-pop').forEach(el => {
-        observer.observe(el);
-      });
 
       // Scroll parallax for [data-parallax] elements
       const noMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;

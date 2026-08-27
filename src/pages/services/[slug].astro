@@ -142,7 +142,7 @@ const serviceSchema: object[] = [
       is the thing being argued about. */}
   <section class="spine" aria-labelledby="spine-heading">
     <div class="spine__inner">
-      <div class="section-press__head anim-fade-up">
+      <div class="section-press__head">
         <h2 id="spine-heading" class="section-title section-title--xs section-title--tighter section-press__title">
           {detail.spine.title}
         </h2>
@@ -150,7 +150,6 @@ const serviceSchema: object[] = [
       </div>
 
       <ServiceSchedule
-        class="anim-fade-up"
         axis={detail.spine.axis}
         cols={detail.spine.cols}
         keys={detail.spine.legend}
@@ -172,7 +171,7 @@ const serviceSchema: object[] = [
   </section>
 
   <section class="section-press" aria-labelledby="scope-heading">
-    <div class="section-press__head anim-fade-up">
+    <div class="section-press__head">
       <h2 id="scope-heading" class="section-title section-title--xs section-title--tighter section-press__title">
         {detail.scope.title}
       </h2>
@@ -180,7 +179,6 @@ const serviceSchema: object[] = [
     </div>
 
     <ScopeDoc
-      class="anim-fade-up"
       label="In this scope"
       items={rail}
       lede={detail.scope.lede}
@@ -224,7 +222,6 @@ const serviceSchema: object[] = [
   </section>
 
   <ClosingManifest
-    class="anim-fade-up"
     labelledby="manifest-heading"
     kicker={detail.manifest.kicker}
     items={detail.manifest.items}
@@ -244,7 +241,6 @@ const serviceSchema: object[] = [
       before it and 07 nothing after, and a reader who has run out of
       engagements in one direction wants the list, not a dead half-row. */}
   <EngagementPager
-    class="anim-fade-up"
     prev={prev
       ? { href: `/services/${prev.slug}/`, n: prev.n, name: prev.name, shape: prev.shape }
       : { href: '/services/', name: '\u2190 All seven engagements', shape: 'The index' }}

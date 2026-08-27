@@ -239,10 +239,10 @@ const servicesSchema = [
     </Fragment>
   </PageMasthead>
 
-  <ContentsBar items={contents} label="Services" class="contents-bar--8 anim-fade-up" />
+  <ContentsBar items={contents} label="Services" class="contents-bar--8" />
 
   <section class="section-press" aria-labelledby="shapes-heading">
-    <div class="section-press__head anim-fade-up">
+    <div class="section-press__head">
       <h2 id="shapes-heading" class="section-title section-title--xs section-title--tighter section-press__title">
         Seven shapes, drawn to scale.
       </h2>
@@ -254,7 +254,6 @@ const servicesSchema = [
         the plot on it -- which is where the retainer's rolling ticks
         run, and the room a six-month bar needs to read as a bar. */}
     <ServiceSchedule
-      class="anim-fade-up"
       cols={7}
       axis={[
         { at: 0, mark: 'Month 0' }, { at: 1, mark: '01' }, { at: 2, mark: '02' },
@@ -274,7 +273,7 @@ const servicesSchema = [
   </section>
 
   <section class="section-press" aria-labelledby="engagements-heading">
-    <div class="section-press__head anim-fade-up">
+    <div class="section-press__head">
       <h2 id="engagements-heading" class="section-title section-title--xs section-title--tighter section-press__title">
         What each one actually involves.
       </h2>
@@ -283,7 +282,6 @@ const servicesSchema = [
 
     {ENGAGEMENTS.map((e) => (
       <ServiceSpread
-        class="anim-fade-up"
         id={e.id}
         n={e.n}
         name={e.name}
@@ -313,7 +311,7 @@ const servicesSchema = [
   </section>
 
   <section class="section-press" aria-labelledby="route-heading">
-    <div class="section-press__head anim-fade-up">
+    <div class="section-press__head">
       <h2 id="route-heading" class="section-title section-title--xs section-title--tighter section-press__title">
         Start here if this is you.
       </h2>
@@ -321,13 +319,12 @@ const servicesSchema = [
     </div>
 
     <RouteTable
-      class="anim-fade-up"
       corner="On the call"
       destination="Where that goes"
       rows={ROUTES}
       caption="Common problems and which engagement handles each one."
     >
-      <p class="compare-note anim-fade-up" slot="footnote">
+      <p class="compare-note" slot="footnote">
         One answer is the same in every row: the first call is about your org, not our engagement
         types. We do not publish rates — the number comes after that call, once there is a scope to
         put one against. If none of the seven fits, we will say so and point you at whoever does it
@@ -337,7 +334,6 @@ const servicesSchema = [
   </section>
 
   <ClosingManifest
-    class="anim-fade-up"
     labelledby="manifest-heading"
     kicker="The last week of every engagement"
     items={MANIFEST}

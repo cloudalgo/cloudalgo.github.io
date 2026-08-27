@@ -222,14 +222,14 @@ const schema: object[] = [softwareApp, organization, breadcrumbs(crumbs, product
 
   {/* ── 1 · The transit ─────────────────────────────────── */}
   <section class="section-press" aria-labelledby="transit-heading">
-    <div class="section-press__head anim-fade-up">
+    <div class="section-press__head">
       <h2 id="transit-heading" class="section-title section-title--xs section-title--tighter section-press__title">
         {page.folds.transit.title}
       </h2>
       <span class="section-press__note">{page.folds.transit.note}</span>
     </div>
 
-    <div class="transit anim-fade-up">
+    <div class="transit">
       <div class="transit__port transit__port--in">
         <span class="transit__port-label">{page.transit.source.label}</span>
         <span class="transit__port-name">{page.transit.source.name}</span>
@@ -244,7 +244,7 @@ const schema: object[] = [softwareApp, organization, breadcrumbs(crumbs, product
         <span class="transit__estate-label">{page.transit.estate}</span>
         <ol class="transit__stages">
           {page.transit.stages.map((s, i) => (
-            <li class="transit__stage anim-fade-up" style={`--i:${i}`}>
+            <li class="transit__stage">
               <span class="transit__n">{pad(i + 1)}</span>
               <span class="transit__name">{s.name}</span>
               <span class="transit__what">{s.what}</span>
@@ -274,7 +274,7 @@ const schema: object[] = [softwareApp, organization, breadcrumbs(crumbs, product
     {/* The boundary claim is authored here and set above the prose; the
         prose itself is the collection file's own body, rendered rather
         than restated, so an edit to the markdown lands on the page. */}
-    <div class="brief anim-fade-up">
+    <div class="brief">
       <p class="brief__lead">{page.claim}</p>
       <Content />
       {legal.length > 0 && (
@@ -289,7 +289,7 @@ const schema: object[] = [softwareApp, organization, breadcrumbs(crumbs, product
 
   {/* ── 2 · Capabilities ────────────────────────────────── */}
   <section class="section-press" aria-labelledby="cap-heading">
-    <div class="section-press__head anim-fade-up">
+    <div class="section-press__head">
       <h2 id="cap-heading" class="section-title section-title--xs section-title--tighter section-press__title">
         {page.folds.cap.title}
       </h2>
@@ -298,7 +298,7 @@ const schema: object[] = [softwareApp, organization, breadcrumbs(crumbs, product
 
     <ol class="cap">
       {data.features.map((f, i) => (
-        <li class="cap__row anim-fade-up" style={`--i:${i}`}>
+        <li class="cap__row">
           <span class="cap__n">{pad(i + 1)}</span>
           <h3 class="cap__name">{f.title}</h3>
           <p class="cap__what">{f.description}</p>
@@ -310,7 +310,7 @@ const schema: object[] = [softwareApp, organization, breadcrumbs(crumbs, product
   {/* ── 3 · The viewer ──────────────────────────────────── */}
   {page.folds.viewer && (shots.length > 0 || video) && (
     <section class="section-press" id="tour" aria-labelledby="view-heading">
-      <div class="section-press__head anim-fade-up">
+      <div class="section-press__head">
         <h2 id="view-heading" class="section-title section-title--xs section-title--tighter section-press__title">
           {page.folds.viewer.title}
         </h2>
@@ -318,7 +318,7 @@ const schema: object[] = [softwareApp, organization, breadcrumbs(crumbs, product
       </div>
 
       {shots.length > 0 ? (
-        <figure class="viewer anim-fade-up" id="viewer" style={`--shots:${shots.length}`}>
+        <figure class="viewer" id="viewer" style={`--shots:${shots.length}`}>
           <div class="viewer__frame">
             <div class="viewer__bar">
               <span class="viewer__bar-n">01 / {pad(shots.length)}</span>
@@ -376,7 +376,7 @@ const schema: object[] = [softwareApp, organization, breadcrumbs(crumbs, product
           </noscript>
         </figure>
       ) : video && (
-        <figure class="viewer anim-fade-up">
+        <figure class="viewer">
           <div class="viewer__frame">
             <div class="viewer__bar">
               {video.duration && <span class="viewer__bar-n">{video.duration}</span>}
@@ -398,7 +398,7 @@ const schema: object[] = [softwareApp, organization, breadcrumbs(crumbs, product
   {/* ── 4 · The readout ─────────────────────────────────── */}
   {page.folds.readout && data.techStack && data.techStack.length > 0 && (
     <section class="section-press" aria-labelledby="spec-heading">
-      <div class="section-press__head anim-fade-up">
+      <div class="section-press__head">
         <h2 id="spec-heading" class="section-title section-title--xs section-title--tighter section-press__title">
           {page.folds.readout.title}
         </h2>
@@ -406,8 +406,8 @@ const schema: object[] = [softwareApp, organization, breadcrumbs(crumbs, product
       </div>
 
       <dl class="readout">
-        {data.techStack.map((row, i) => (
-          <div class="readout__cell anim-fade-up" style={`--i:${i}`}>
+        {data.techStack.map((row) => (
+          <div class="readout__cell">
             <dt>{row.label}</dt>
             <dd>{row.value}</dd>
           </div>
@@ -418,7 +418,7 @@ const schema: object[] = [softwareApp, organization, breadcrumbs(crumbs, product
 
   {/* ── 5 · Terms ───────────────────────────────────────── */}
   <section class="section-press" aria-labelledby="terms-heading">
-    <div class="section-press__head anim-fade-up">
+    <div class="section-press__head">
       <h2 id="terms-heading" class="section-title section-title--xs section-title--tighter section-press__title">
         {page.folds.terms.title}
       </h2>
@@ -426,7 +426,7 @@ const schema: object[] = [softwareApp, organization, breadcrumbs(crumbs, product
     </div>
 
     <div class="terms">
-      <div class="terms__price anim-fade-up">
+      <div class="terms__price">
         <span class="terms__label">Price</span>
         <p class="terms__figure">{page.price.figure}</p>
         <p class="terms__gloss">{page.price.gloss}</p>
@@ -442,7 +442,7 @@ const schema: object[] = [softwareApp, organization, breadcrumbs(crumbs, product
         )}
       </div>
 
-      <div class="terms__needs anim-fade-up">
+      <div class="terms__needs">
         <span class="terms__label">Before you install</span>
         <ol class="terms__list">
           {(data.requirements ?? []).map(r => (
@@ -459,7 +459,7 @@ const schema: object[] = [softwareApp, organization, breadcrumbs(crumbs, product
   {/* ── 6 · Ahead ───────────────────────────────────────── */}
   {page.folds.ahead && data.roadmap && data.roadmap.length > 0 && (
     <section class="section-press" aria-labelledby="ahead-heading">
-      <div class="section-press__head anim-fade-up">
+      <div class="section-press__head">
         <h2 id="ahead-heading" class="section-title section-title--xs section-title--tighter section-press__title">
           {page.folds.ahead.title}
         </h2>
@@ -468,7 +468,7 @@ const schema: object[] = [softwareApp, organization, breadcrumbs(crumbs, product
 
       <ol class="ahead">
         {data.roadmap.map((r, i) => (
-          <li class:list={['ahead__row', 'anim-fade-up', i === 0 && 'is-shipped']} style={`--i:${i}`}>
+          <li class:list={['ahead__row', i === 0 && 'is-shipped']}>
             <span class="ahead__v">{r.version}</span>
             <span class="ahead__state">{i === 0 ? 'Shipped' : i === 1 ? 'In build' : 'Planned'}</span>
             <h3 class="ahead__theme">{r.theme}</h3>
@@ -481,14 +481,14 @@ const schema: object[] = [softwareApp, organization, breadcrumbs(crumbs, product
 
   {/* ── 7 · Colophon ────────────────────────────────────── */}
   <section class="section-press" aria-labelledby="colo-heading">
-    <div class="section-press__head anim-fade-up">
+    <div class="section-press__head">
       <h2 id="colo-heading" class="section-title section-title--xs section-title--tighter section-press__title">
         {page.folds.colophon.title}
       </h2>
       <span class="section-press__note">{page.folds.colophon.note}</span>
     </div>
 
-    <div class="colophon anim-fade-up">
+    <div class="colophon">
       {columns.map(col => (
         <div class="colophon__col">
           <span class="colophon__label">{col.label}</span>
@@ -511,7 +511,7 @@ const schema: object[] = [softwareApp, organization, breadcrumbs(crumbs, product
   {/* The one place this page breaks the site's no-closing-CTA rule. A
       product page ends on a thing the reader can download by themselves,
       and the band is what says the harder half is still a conversation. */}
-  <CtaBand class="anim-fade-up" labelledby="band-ask">
+  <CtaBand labelledby="band-ask">
     <div>
       <h2 id="band-ask" class="band-press__ask">
         {page.band.ask} <em>{page.band.emphasis}</em>

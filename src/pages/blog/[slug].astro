@@ -195,7 +195,7 @@ const schema = [
 >
   {/* ── 1. The head ─────────────────────────────────────── */}
   <PageMasthead
-    class="page-head--entry anim-fade-up"
+    class="page-head--entry"
     crumbs={[
       { label: 'Home', href: '/' },
       { label: 'Journal', href: '/blog/' },
@@ -213,7 +213,6 @@ const schema = [
       <figure
         class:list={[
           'plate-hero',
-          'anim-fade-up',
           plate ? 'plate-hero--drawn' : 'plate-hero--photo',
         ]}
       >
@@ -221,7 +220,7 @@ const schema = [
         {caption && <figcaption>{caption}</figcaption>}
       </figure>
 
-      <article class="prose anim-fade-up">
+      <article class="prose">
         <Content />
         <div class="record__end">
           <span>End of entry</span>
@@ -267,18 +266,18 @@ const schema = [
   {/* ── 3. The pair ─────────────────────────────────────── */}
   {study && (
     <section class="section-press" aria-labelledby="pair-heading">
-      <div class="section-press__head anim-fade-up">
+      <div class="section-press__head">
         <h2 id="pair-heading" class="section-title section-title--xs section-title--tighter section-press__title">
           The other side of this one.
         </h2>
         <span class="section-press__note">Same job, written twice</span>
       </div>
 
-      <p class="section-press__lede anim-fade-up">
+      <p class="section-press__lede">
         This entry is how it was built. The study is what it changed, and who for.
       </p>
 
-      <ul class="pairs anim-fade-up">
+      <ul class="pairs">
         <li class="pairs__row">
           <div class="pairs__half">
             <span class="pairs__key">This entry &mdash; how it was built</span>
@@ -304,7 +303,7 @@ const schema = [
   )}
 
   {/* ── 4. The close ────────────────────────────────────── */}
-  <section class="entry-close anim-fade-up" aria-labelledby="close-heading">
+  <section class="entry-close" aria-labelledby="close-heading">
     <div class="entry-close__inner">
       <div class="entry-close__body">
         <p class="entry-close__kicker">{servicePage.data.title}</p>
@@ -327,7 +326,6 @@ const schema = [
   </section>
 
   <EngagementPager
-    class="anim-fade-up"
     prev={newer ? entryLink(newer) : archiveLink}
     next={older ? entryLink(older) : archiveLink}
   />

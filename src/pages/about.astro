@@ -150,7 +150,7 @@ const schema = [
   </PageMasthead>
 
   <section class="oath" aria-labelledby="oath-heading">
-    <div class="oath__inner anim-fade-up">
+    <div class="oath__inner">
       <h2 id="oath-heading" class="oath__say">
         Every org we hand back is one your own admin can change <em>without calling us</em>.
       </h2>
@@ -159,7 +159,7 @@ const schema = [
   </section>
 
   <section class="section-press" aria-labelledby="bench-heading">
-    <div class="bench__head anim-fade-up">
+    <div class="bench__head">
       <h2 id="bench-heading" class="bench__lead">Two people sign the work.</h2>
       <p class="bench__note">
         CloudAlgo has two co-founders, and both of them are on the build. Whoever you speak to on
@@ -168,7 +168,7 @@ const schema = [
       </p>
     </div>
 
-    <div class="bench anim-fade-up">
+    <div class="bench">
       <div class="bench__who">
         {/* The portrait is a specified empty frame, not stock and not an
             initials disc: a placeholder that looks finished is a
@@ -212,7 +212,7 @@ const schema = [
   </section>
 
   <section class="section-press" aria-labelledby="wontdo-heading">
-    <div class="wontdo anim-fade-up">
+    <div class="wontdo">
       <h2 id="wontdo-heading" class="wontdo__lead">
         Four things we will not do, and what each one costs us.
       </h2>
@@ -239,7 +239,7 @@ const schema = [
 
   <section class="tenure" aria-labelledby="tenure-heading">
     <div class="tenure__inner">
-      <div class="section-press__head anim-fade-up">
+      <div class="section-press__head">
         <h2 id="tenure-heading" class="section-title section-title--xs section-title--tighter section-press__title">
           How long the work actually lasts.
         </h2>
@@ -248,7 +248,7 @@ const schema = [
         </span>
       </div>
 
-      <div class="tenure__chart anim-fade-up">
+      <div class="tenure__chart">
         {rows.map((r) => (
           <a class:list={['tenure__row', r.open && 'tenure__row--open']} href={r.href}>
             <span class="tenure__name">
@@ -270,7 +270,7 @@ const schema = [
         </div>
       </div>
 
-      <p class="tenure__foot anim-fade-up">
+      <p class="tenure__foot">
         {Word(closed.length)} of the {word(rows.length)} closed inside {word(longestClosed)} months.
         {' '}{Word(openRows.length)} are still open &mdash; one of them past {stated.span?.replace(/^2\+ /, 'two ')},
         still shipping against the architecture we put in.

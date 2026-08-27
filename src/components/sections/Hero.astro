@@ -13,7 +13,7 @@ const products = await getCollection('products');
 const ga = products.filter((p) => p.data.status === 'ga').length;
 const preview = products.length - ga;
 ---
-<section class="hero-press anim-fade-up">
+<section class="hero-press">
   <div>
     <h1 class="hero-press__title">
       Salesforce work your team can{' '}

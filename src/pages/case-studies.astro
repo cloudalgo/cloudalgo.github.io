@@ -119,14 +119,14 @@ const schema = [
   </PageMasthead>
 
   <section class="section-press" aria-labelledby="ledger-heading">
-    <div class="section-press__head anim-fade-up">
+    <div class="section-press__head">
       <h2 id="ledger-heading" class="section-title section-title--xs section-title--tighter section-press__title">
         What stopped being true.
       </h2>
       <span class="section-press__note">Struck through: the way it used to work</span>
     </div>
 
-    <div class="ledger anim-fade-up">
+    <div class="ledger">
       {caseStudies.map((cs) => (
         <a class="ledger__row" id={`cs-${cs.index}`} href={`/case-studies/${cs.id}/`}>
           <span class="ledger__n">{cs.index}</span>
@@ -153,14 +153,14 @@ const schema = [
   </section>
 
   <section class="section-press" aria-labelledby="common-heading">
-    <div class="section-press__head anim-fade-up">
+    <div class="section-press__head">
       <h2 id="common-heading" class="section-title section-title--xs section-title--tighter section-press__title">
         What the five have in common.
       </h2>
       <span class="section-press__note">Four claims, and who carries them</span>
     </div>
 
-    <ul class="claims anim-fade-up">
+    <ul class="claims">
       {CLAIMS.map((claim) => (
         <li class="claims__row">
           <p class="claims__text">{claim.text}</p>

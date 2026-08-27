@@ -60,10 +60,10 @@ const schema = [
       </nav>
 
       <div class="desk__grid">
-        {/* The entrance animation stays on this Astro wrapper. The
-            island is inside it, and `anim-fade-up` on a node React
-            owns is a hydration race -- see StatsBar.astro. */}
-        <div class="desk__col anim-fade-up">
+        {/* The ContactForm island sits inside this Astro wrapper; any
+            class the page needs goes here rather than on a node React
+            owns, which is a hydration race -- see StatsBar.astro. */}
+        <div class="desk__col">
           <h1 id="desk-heading" class="desk__title">Start with the sentence you are <span class="mark mark--draw">tired of saying</span>.</h1>
           <p class="desk__lede">
             &ldquo;We re-key that by hand.&rdquo; &ldquo;The data is a day old.&rdquo; &ldquo;That system
@@ -74,7 +74,7 @@ const schema = [
           <ContactForm client:load />
         </div>
 
-        <aside class="slip anim-fade-up" aria-labelledby="slip-heading">
+        <aside class="slip" aria-labelledby="slip-heading">
           <h2 id="slip-heading" class="slip__title">Where this lands</h2>
 
           <dl class="slip__rows">
@@ -102,14 +102,14 @@ const schema = [
 
   <!-- ── Fold 2: the reply, as an exhibit ──────────────────── -->
   <section class="section-press" aria-labelledby="reply-heading">
-    <div class="section-press__head anim-fade-up">
+    <div class="section-press__head">
       <h2 id="reply-heading" class="section-title section-title--xs section-title--tighter section-press__title">
         What comes back.
       </h2>
       <span class="section-press__note">A template of the first reply, not a real thread</span>
     </div>
 
-    <div class="reply__spread anim-fade-up">
+    <div class="reply__spread">
       <figure class="reply">
         <div class="reply__head">
           <span class="reply__key">From</span><span class="reply__val">Sandeep Kumar or Vikash Agarwal &middot; sales@cloudalgo.com</span>
@@ -146,14 +146,14 @@ const schema = [
 
   <!-- ── Fold 3: the questions ─────────────────────────────── -->
   <section class="section-press" aria-labelledby="asks-heading">
-    <div class="section-press__head anim-fade-up">
+    <div class="section-press__head">
       <h2 id="asks-heading" class="section-title section-title--xs section-title--tighter section-press__title">
         What we will ask on the call.
       </h2>
       <span class="section-press__note">Five questions &middot; bring the answers and half an hour is enough</span>
     </div>
 
-    <ul class="asks anim-fade-up">
+    <ul class="asks">
       <li class="asks__row">
         <p class="asks__q">What does the person doing this by hand actually do, step by step?</p>
         <p class="asks__why"><span>Why we ask</span>The step that hurts is rarely the one on the process diagram.</p>

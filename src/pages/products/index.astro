@@ -258,17 +258,17 @@ const COMPARE_ROWS = [
     </Fragment>
   </PageMasthead>
 
-  <ContentsBar items={contents} label="Products" class="anim-fade-up" />
+  <ContentsBar items={contents} label="Products" />
 
   <section class="section-press" aria-labelledby="catalogue-heading">
-    <div class="section-press__head anim-fade-up">
+    <div class="section-press__head">
       <h2 id="catalogue-heading" class="section-title section-title--xs section-title--tighter section-press__title">
         The catalogue, in order of depth.
       </h2>
       <span class="section-press__note">Specifications as of Aug 2026</span>
     </div>
 
-    <ProductEntry {...entries[0]} class="anim-fade-up">
+    <ProductEntry {...entries[0]}>
       <EvidenceStrip
         slot="evidence"
         n="01"
@@ -289,7 +289,7 @@ const COMPARE_ROWS = [
       </EvidenceStrip>
     </ProductEntry>
 
-    <ProductEntry {...entries[1]} class="anim-fade-up">
+    <ProductEntry {...entries[1]}>
       <EvidenceStrip
         slot="evidence"
         n="02"
@@ -319,9 +319,9 @@ const COMPARE_ROWS = [
       </EvidenceStrip>
     </ProductEntry>
 
-    <ProductEntry {...entries[2]} class="anim-fade-up" />
+    <ProductEntry {...entries[2]} />
 
-    <ProductEntry {...entries[3]} class="anim-fade-up">
+    <ProductEntry {...entries[3]}>
       <EvidenceStrip
         slot="evidence"
         n="03"
@@ -338,7 +338,7 @@ const COMPARE_ROWS = [
   </section>
 
   <section class="section-press" aria-labelledby="compare-heading">
-    <div class="section-press__head anim-fade-up">
+    <div class="section-press__head">
       <h2 id="compare-heading" class="section-title section-title--xs section-title--tighter section-press__title">
         All four, side by side.
       </h2>
@@ -346,20 +346,19 @@ const COMPARE_ROWS = [
     </div>
 
     <CompareTable
-      class="anim-fade-up"
       corner="Compare"
       columns={entries.map((e) => e.title)}
       rows={COMPARE_ROWS}
       caption="The four CloudAlgo products compared by what they are, where they run, what they touch in Salesforce, who they are for, how they are set up, what they cost and their ship status."
     >
-      <p class="compare-note anim-fade-up" slot="footnote">
+      <p class="compare-note" slot="footnote">
         Two answers are the same in every column: none of the four sends your data to us, and all
         four are free to start. Three of them never ask for a card at all.
       </p>
     </CompareTable>
   </section>
 
-  <CtaBand class="anim-fade-up" labelledby="band-which">
+  <CtaBand labelledby="band-which">
     <div>
       <h2 id="band-which" class="band-press__ask">
         Not sure which one you need? <em>That is usually a services question.</em>

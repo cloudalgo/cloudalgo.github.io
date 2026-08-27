@@ -164,14 +164,14 @@ const schema = [
   </PageMasthead>
 
   <section class="section-press" aria-labelledby="standing-heading">
-    <div class="section-press__head anim-fade-up">
+    <div class="section-press__head">
       <h2 id="standing-heading" class="section-title section-title--xs section-title--tighter section-press__title">
         Start here.
       </h2>
       <span class="section-press__note">The one we would hand you first</span>
     </div>
 
-    <div class="standing anim-fade-up">
+    <div class="standing">
       <div class="standing__body">
         <p class="standing__meta">
           <span>{stamp(standing.data.date)}</span><i>&middot;</i>
@@ -201,7 +201,7 @@ const schema = [
   </section>
 
   <section class="section-press" aria-labelledby="run-heading">
-    <div class="section-press__head anim-fade-up">
+    <div class="section-press__head">
       <h2 id="run-heading" class="section-title section-title--xs section-title--tighter section-press__title">
         The archive.
       </h2>
@@ -211,7 +211,7 @@ const schema = [
     {/* Every count here is read off the collection, so a subject with
         nothing filed under it cannot appear and the bar doubles as the
         breakdown. */}
-    <div class="sift anim-fade-up" role="group" aria-label="Filter entries by subject">
+    <div class="sift" role="group" aria-label="Filter entries by subject">
       <button type="button" class="sift__btn is-on" data-cat="all" aria-pressed="true">
         All<span class="sift__n">{n}</span>
       </button>
@@ -223,7 +223,7 @@ const schema = [
       <span class="sift__count" role="status" data-total={n}>Showing all {n}</span>
     </div>
 
-    <div class="run anim-fade-up">
+    <div class="run">
       {rows.map(({ post, opensYear }) => (
         <>
           {opensYear && (
@@ -256,14 +256,14 @@ const schema = [
   </section>
 
   <section class="section-press" aria-labelledby="pairs-heading">
-    <div class="section-press__head anim-fade-up">
+    <div class="section-press__head">
       <h2 id="pairs-heading" class="section-title section-title--xs section-title--tighter section-press__title">
         {words(paired.length, true)} of them have a client behind them.
       </h2>
       <span class="section-press__note">The write-up, and the outcome it produced</span>
     </div>
 
-    <ul class="pairs anim-fade-up">
+    <ul class="pairs">
       {paired.map((p) => {
         const cs = studies.get(p.data.relatedCaseStudy!)!;
         return (

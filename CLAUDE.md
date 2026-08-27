@@ -43,7 +43,7 @@ The rule is purely interactive vs static:
 
 Testimonials used to be a Swiper React slider; it is now static markup in `src/components/sections/Testimonials.astro`. Do not reintroduce a carousel for a single quote.
 
-**Keep entrance animations outside the island.** `anim-fade-up` belongs on an Astro wrapper around the island, never on a node inside the React tree — `Base.astro`'s observer writes `in-view` onto it, and if React owns that node it is a hydration race. See `StatsBar.astro`.
+**Keep any wrapper class outside the island.** A class a script writes onto a node inside the React tree is a hydration race; put it on the Astro wrapper around the island instead. See `StatsBar.astro`.
 
 ### Content collections (Astro content layer v2)
 
@@ -168,7 +168,15 @@ comment. Those numbers are load-bearing — if you retune a value, re-measure it
   installed; those class names do nothing.
 ### Scroll animations
 
-`Base.astro` registers a single `IntersectionObserver` that adds `.in-view` to any element with class `anim-fade-up` or `anim-scale-pop`. Transitions are CSS-only and respect `prefers-reduced-motion`.
+**There are none, deliberately.** Sections used to start at `opacity: 0` and fade
+up as an `IntersectionObserver` in `Base.astro` reached them; that was removed —
+the observer, `base/_motion.scss`, the `anim-fade-up` / `anim-scale-pop` classes
+and the `--i` stagger vars that fed it. Content paints where it sits. Do not
+reintroduce an entrance that hides content until scroll.
+
+`SectionRail` and `StatsCounter` still run their own observers, for the margin
+rail's active tick and the counter's start — both are about *when a thing acts*,
+not about whether copy is visible.
 
 ### Astro 7 gotchas
 

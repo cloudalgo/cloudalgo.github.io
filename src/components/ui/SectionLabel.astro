@@ -4,11 +4,6 @@
  *
  * Always a <p> -- all 33 call sites were. Appearance lives in
  * styles/components/_section-label.scss.
- *
- * Most call sites also carry `anim-fade-up`, which Base.astro's
- * IntersectionObserver keys on; that stays a caller concern and composes
- * through `class` rather than becoming a prop, because whether an eyebrow
- * animates depends on the section around it, not on the eyebrow.
  */
 import type { HTMLAttributes } from 'astro/types';
 
