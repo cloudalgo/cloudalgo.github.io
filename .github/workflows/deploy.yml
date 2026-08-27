@@ -35,7 +35,7 @@ jobs:
           PUBLIC_SCHEDULE_API_URL: ${{ secrets.PUBLIC_SCHEDULE_API_URL }}
 
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: dist/
 
