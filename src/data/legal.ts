@@ -40,8 +40,9 @@ export const instruments: Instrument[] = [
     what: 'What we collect through the site, why, and the rights you hold over it.',
     register: 'site',
     appliesTo: 'cloudalgo.com',
-    inForce: 'May 2026',
-    clauses: 11,
+    inForce: 'August 2026',
+    clauses: 12,
+    governingLaw: 'India',
   },
   {
     href: '/page/disclaimer/',
@@ -49,8 +50,9 @@ export const instruments: Instrument[] = [
     what: 'The limits of what the site says — no professional advice, no warranty on code samples.',
     register: 'site',
     appliesTo: 'cloudalgo.com',
-    inForce: 'May 2026',
-    clauses: 8,
+    inForce: 'August 2026',
+    clauses: 9,
+    governingLaw: 'India',
   },
 
   // ── OrgVitals ───────────────────────────────────────────
@@ -60,7 +62,7 @@ export const instruments: Instrument[] = [
     what: 'What stays on your device, what reaches us, and the rights you hold over it.',
     register: 'orgvitals',
     appliesTo: 'OrgVitals',
-    inForce: '1 July 2026',
+    inForce: '29 August 2026',
     clauses: 11,
     governingLaw: 'India',
   },
@@ -102,8 +104,9 @@ export const instruments: Instrument[] = [
     what: 'Everything stays on the device. No account, no tracking, no servers.',
     register: 'insurealgo',
     appliesTo: 'InsureAlgo',
-    inForce: '29 May 2025',
-    clauses: 9,
+    inForce: '29 August 2026',
+    clauses: 10,
+    governingLaw: 'India',
   },
 ];
 

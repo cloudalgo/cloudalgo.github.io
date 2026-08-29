@@ -4,7 +4,7 @@ import LegalDoc from '@/layouts/LegalDoc.astro';
 <LegalDoc
   href="/apps/insurealgo/privacy/"
   description="InsureAlgo stores all data on your device. We collect zero personal data — no account, no tracking, no servers. The full privacy policy for InsureAlgo by CloudAlgo."
-  lede="InsureAlgo has no backend, no accounts, and no analytics. This policy exists mainly to say what does not happen, and to be precise about the one thing that does: optional iCloud backup."
+  lede="InsureAlgo has no backend, no accounts, and no analytics. This policy exists mainly to say what does not happen, and to be precise about the one thing that does: optional iCloud backup on iOS."
 >
 
   <div class="precis">
@@ -13,16 +13,18 @@ import LegalDoc from '@/layouts/LegalDoc.astro';
       <li>InsureAlgo stores all your data <strong>on your device only</strong>.</li>
       <li>We collect <strong>zero personal data</strong> — no account, no tracking, no servers.</li>
       <li>No ads, no analytics, and <strong>no third-party SDKs</strong> of any kind.</li>
-      <li>Optional iCloud backup goes directly to <strong>your own Apple account</strong>, which we cannot read.</li>
+      <li>On iOS, optional iCloud backup goes directly to <strong>your own Apple account</strong>, which we cannot read. On Android there is no cloud backup at all — your data stays on the device.</li>
     </ul>
-    <p class="precis__note">This summary is not the policy. Clauses 1 to 9 are.</p>
+    <p class="precis__note">This summary is not the policy. Clauses 1 to 10 are.</p>
   </div>
 
   <h2>What data we collect</h2>
   <p><strong>Nothing.</strong> InsureAlgo is published by <strong>CloudAlgo Private Limited</strong> ("CloudAlgo"), and it does not collect, transmit, or store any data on external servers.</p>
   <p>All information you enter — policy details, vehicle information, documents, reminders, and settings — is stored exclusively in your device's local storage. It never leaves your device unless you explicitly use the iCloud backup feature.</p>
 
-  <h2>iCloud backup</h2>
+  <h2>Backup, on each platform</h2>
+  <p>InsureAlgo runs on iOS and Android from a single Flutter codebase, but the backup feature is not the same on both.</p>
+  <h3>iOS — optional iCloud backup</h3>
   <p>If you use the optional Backup and Restore feature, your policy data is uploaded to <strong>your personal iCloud account</strong> under your own Apple ID.</p>
   <ul>
     <li>The backup file is stored in your private iCloud Drive storage.</li>
@@ -30,14 +32,16 @@ import LegalDoc from '@/layouts/LegalDoc.astro';
     <li>You can delete backups at any time via the iOS Files app.</li>
     <li>Apple's privacy policy governs iCloud storage — see <a href="https://www.apple.com/legal/privacy/" target="_blank" rel="noopener">apple.com/legal/privacy</a>.</li>
   </ul>
+  <h3>Android — no cloud backup</h3>
+  <p>The Android build offers <strong>no cloud backup feature</strong>. Your policy data is written only to the app's own storage on the device, and InsureAlgo uploads it nowhere. If Android's own system backup is enabled on your device, that is a setting between you and Google, governed by <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google's privacy policy</a> — CloudAlgo neither operates it nor can read anything it stores. Uninstalling the app removes the data it holds on the device.</p>
 
   <h2>Permissions we request</h2>
   <p>InsureAlgo requests only the permissions listed below, each only when you use the relevant feature:</p>
   <ul>
     <li><strong>Notifications</strong> — to deliver the renewal reminders you configure in Settings.</li>
-    <li><strong>Face ID / Touch ID</strong> — to protect your data with a biometric lock (optional).</li>
+    <li><strong>Biometrics</strong> — Face ID or Touch ID on iOS, fingerprint or face unlock on Android, to protect your data with a biometric lock (optional).</li>
     <li><strong>Camera</strong> — to photograph insurance documents and attach them to policies.</li>
-    <li><strong>Photo Library</strong> — to select existing document images from your photo library.</li>
+    <li><strong>Photos and media</strong> — to select existing document images from your device's photo library.</li>
   </ul>
   <p>None of these permissions result in data being transmitted externally. All captured content stays on your device.</p>
 
@@ -50,7 +54,7 @@ import LegalDoc from '@/layouts/LegalDoc.astro';
   <p>Since no data is transmitted to any server, there is no risk of a server-side breach affecting your policy information.</p>
 
   <h2>Children's privacy</h2>
-  <p>InsureAlgo is rated <strong>4+</strong> on the Apple App Store and is appropriate for all ages. We do not knowingly collect any personal information from anyone, including children under 13.</p>
+  <p>InsureAlgo is rated <strong>4+</strong> on the Apple App Store and carries the equivalent general rating on Google Play. It is appropriate for all ages. We collect no personal information from anyone, so we collect none from children either — including, as India's Digital Personal Data Protection Act, 2023 defines them, anyone <strong>under 18</strong>. Because nothing is collected, no verifiable parental consent is required for a child to use the app.</p>
 
   <h2>Changes to this policy</h2>
   <p>We may update this Privacy Policy from time to time. Changes will be reflected on this page with a revised date in force. Continued use of InsureAlgo after any change constitutes your acceptance of the updated policy.</p>
@@ -60,6 +64,10 @@ import LegalDoc from '@/layouts/LegalDoc.astro';
   <p>InsureAlgo is provided <strong>"as is"</strong> and <strong>"as available"</strong> without warranties of any kind, express or implied. CloudAlgo expressly disclaims all liability for any direct, indirect, incidental, consequential, or special damages arising out of or in connection with your use of the application, including but not limited to missed policy renewals, incorrect expiry data, data loss, notification failures, or reliance on any information stored in the app.</p>
   <p>InsureAlgo is a personal organisational tool designed to help you track insurance policy dates. <strong>It is not an insurance broker, agent, or advisor.</strong> You remain solely responsible for verifying the accuracy of your policy information directly with your insurance provider, and for ensuring your policies are renewed on time.</p>
   <p>CloudAlgo's total liability to you for any claim arising from your use of InsureAlgo shall not exceed zero, as the application is offered entirely free of charge.</p>
+
+  <h2>Governing law and grievances</h2>
+  <p>InsureAlgo is published by CloudAlgo Private Limited, incorporated in India. This policy is governed by the laws of India, including the Digital Personal Data Protection Act, 2023, and the courts at <strong>Jaipur, Rajasthan</strong> have exclusive jurisdiction over any dispute arising from it.</p>
+  <p>Any grievance about this policy may be addressed to our Grievance Officer, <strong>Sandeep Kumar</strong>, at <a href="mailto:contact@cloudalgo.com">contact@cloudalgo.com</a> or by post to CloudAlgo Private Limited, 115 Irish, Manglam Aananda, Jaipur, Rajasthan, India. If you are not satisfied with our response you may complain to the Data Protection Board of India.</p>
 
   <h2>Contact</h2>
   <p>Questions about this policy go to <a href="mailto:contact@cloudalgo.com">contact@cloudalgo.com</a>. We reply within two working days.</p>

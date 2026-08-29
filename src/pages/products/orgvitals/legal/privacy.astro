@@ -76,11 +76,13 @@ import LegalDoc from '@/layouts/LegalDoc.astro';
   <p>OrgVitals also reads a remote configuration document (via Firebase) to display maintenance or deprecation notices. This is a read on our side and does not send your data.</p>
 
   <h2>5. Legal bases</h2>
-  <p>We process personal data in line with India's Digital Personal Data Protection Act, 2023 (DPDP Act). Our legal bases are:</p>
+  <p>We process personal data in line with India's Digital Personal Data Protection Act, 2023 (DPDP Act). The Act does not offer a general "legitimate interest" basis of the kind found in the GDPR — its legitimate uses are a closed list that none of our processing falls within — so <strong>consent is the basis for everything in clause 3</strong>:</p>
   <ul>
-    <li><strong>Consent</strong> — for your account profile (given when you sign in) and for product analytics (explicit opt-in).</li>
-    <li><strong>Legitimate interest</strong> — for crash and error diagnostics, to keep the app stable and secure. You can opt out at any time.</li>
+    <li><strong>Account profile</strong> — consent given when you sign in with Google. Without it the app cannot authenticate you.</li>
+    <li><strong>Crash and error diagnostics</strong> — consent given when you install and run the app, which is enabled from the outset and which you can <strong>withdraw at any time</strong> in the in-app "Privacy &amp; Data" dialog. Withdrawal stops all further collection.</li>
+    <li><strong>Product analytics</strong> — explicit opt-in, off until you turn it on.</li>
   </ul>
+  <p>Withdrawing consent is as straightforward as giving it: both toggles sit in the same dialog, and neither withdrawal costs you access to any feature of the app.</p>
 
   <h2>6. Data retention</h2>
   <p>Your local database and encrypted API key remain on your device until you delete them or uninstall the app. We retain your account profile for as long as your account is active. Diagnostics and analytics data are retained only for as long as needed for the purposes above, after which they are deleted or aggregated. You may request deletion of your account data at any time.</p>
@@ -99,5 +101,6 @@ import LegalDoc from '@/layouts/LegalDoc.astro';
 
   <h2>11. Contact</h2>
   <p>Questions about this Privacy Policy or your data can be sent to <a href="mailto:contact@cloudalgo.com">contact@cloudalgo.com</a>.</p>
+  <p>A grievance about how we have handled your personal data may be addressed to our Grievance Officer, <strong>Sandeep Kumar</strong>, at the same address, or by post to CloudAlgo Private Limited, 115 Irish, Manglam Aananda, Jaipur, Rajasthan, India. We acknowledge every grievance on receipt and respond substantively within 30 days. If you are not satisfied with our response, you may complain to the <strong>Data Protection Board of India</strong>.</p>
 
 </LegalDoc>
