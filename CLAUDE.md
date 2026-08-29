@@ -32,7 +32,7 @@ Every page imports `Page` (not `Base` directly) and passes `title`, `description
 
 The rule is purely interactive vs static:
 
-- **`.astro` components** — all layout and section components (`src/components/layout/`, `src/components/sections/`), plus the `src/components/ui/` widgets whose interactivity is small enough for an inline `<script>` (`CookieConsent`, `VideoPlayer`, `BlogCard`, `ProductCard`); they own copy, structure, and static markup
+- **`.astro` components** — all layout and section components (`src/components/layout/`, `src/components/sections/`), plus the `src/components/ui/` widgets whose interactivity is small enough for an inline `<script>` (`CookieConsent`, `VideoPlayer`, `BlogCard`, `ProductCard`, `SubscribeBlock`); they own copy, structure, and static markup
 - **`.tsx` React components** — only the three hydrated islands, all in `src/components/ui/`:
 
 | Island | Mounted by | Directive |
@@ -218,7 +218,15 @@ Because a green build no longer implies a working page, load the built site befo
 
 ### Third-party integrations (all live — no placeholders left)
 
-- **ContactForm** (`src/components/ui/ContactForm.tsx`) — posts to the HubSpot Forms API (`api.hsforms.com/submissions/v3/integration/submit/<portal>/<form>`). Portal and form IDs are real constants at the top of the file. Not Formspree.
+- **HubSpot Forms API** — two forms, one portal, and the ids live in
+  `src/data/forms.ts` rather than in either component. `ContactForm.tsx`
+  (`/contact/`) posts a message that gets a written reply; `SubscribeBlock.astro`
+  (foot of every journal entry) posts an address to the journal list. Not
+  Formspree. **`HUBSPOT_SUBSCRIBE_FORM_ID` is empty until the form exists in
+  HubSpot, and `SubscribeBlock` renders nothing while it is** — a subscribe box
+  that drops addresses is worse than no box. The two are deliberately separate:
+  the contact form's own note promises no mailing list, so a contact submission
+  must never be added to one.
 - **Analytics — unconditional, with an explicit consent declaration.** Every
   visitor is measured. There is no consent gate in front of any tracker, and
   the cookie notice informs rather than asks — a decision taken deliberately by

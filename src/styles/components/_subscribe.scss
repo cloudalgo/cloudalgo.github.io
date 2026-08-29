@@ -1,0 +1,97 @@
+/* ─── The subscribe block ──────────────────────────────────
+   The small ask at the foot of an entry, under `_entry-close`.
+
+   It borrows rather than restates: the field is `.ca-field__input`
+   from `components/forms`, and the button is `.btn-secondary`. What
+   is here is the block's own arrangement and nothing else, so a
+   change to the site's inputs reaches this one too.
+
+   Ruled, not filled. `_entry-close` directly above is the fold the
+   entry ends on and carries its own surface; a second filled box
+   under it would read as two closes rather than one close and a
+   footnote. */
+
+.subscribe {
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-strong);
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 1.875rem 3rem;
+  align-items: start;
+}
+
+.subscribe__kicker {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.subscribe__title {
+  margin: 0.5rem 0 0;
+  font-family: var(--font-heading);
+  font-weight: var(--weight-bold);
+  font-size: 1.5rem;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--color-heading);
+  text-wrap: balance;
+}
+
+.subscribe__note {
+  margin: 0.6875rem 0 0;
+  font-size: var(--size-body-sm);
+  color: var(--color-prose);
+  line-height: 1.6;
+}
+
+.subscribe__form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  /* The field and the button sit on the title's baseline rather than
+     the kicker's, so the two columns start at the same line of type. */
+  margin-top: 1.75rem;
+}
+
+.subscribe__label {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.subscribe__btn { align-self: start; }
+
+.subscribe__status {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.03em;
+  color: var(--color-prose);
+}
+
+.subscribe__status:empty { display: none; }
+.subscribe__status.is-bad { color: var(--input-message-invalid); }
+
+.subscribe__fine {
+  margin: 0;
+  font-size: var(--size-label);
+  line-height: 1.5;
+  color: var(--color-text-muted);
+}
+
+@media (max-width: 860px) {
+  .subscribe {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .subscribe__form { margin-top: 0; }
+}

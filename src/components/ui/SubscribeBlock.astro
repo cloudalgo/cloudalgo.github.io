@@ -1,0 +1,145 @@
+---
+/**
+ * The one place on the site that asks for an email without asking for a
+ * conversation.
+ *
+ * Every other call to action here books a call. That is a large ask of
+ * somebody who has just finished one entry at eleven at night, and until
+ * this block existed there was nothing smaller for them to say yes to,
+ * so they left and the visit ended.
+ *
+ * What it promises is only what already happens: entries get filed, and
+ * OrgVitals ships builds. There is no gated asset behind this and no
+ * sequence, because neither exists, and a form that promises one would
+ * be the first thing on the site that is not true.
+ *
+ * It renders NOTHING while `HUBSPOT_SUBSCRIBE_FORM_ID` is empty. A
+ * subscribe box that silently drops addresses is worse than no box, so
+ * the guard is the component's first statement rather than a runtime
+ * check inside the script.
+ *
+ * Not a React island. The three hydrated islands are the ones whose
+ * interactivity does not fit in a script tag; this is a form, a fetch
+ * and four states, which does.
+ */
+import { HUBSPOT_SUBSCRIBE_FORM_ID } from '@/data/forms';
+
+interface Props {
+  /** Where the address came from, sent to GA4 with the submission so a
+      list signup can be traced back to the entry that earned it. */
+  source: string;
+}
+const { source } = Astro.props;
+const enabled = HUBSPOT_SUBSCRIBE_FORM_ID.length > 0;
+---
+{enabled && (
+  <section class="subscribe" aria-labelledby="subscribe-heading">
+    <div class="subscribe__body">
+      <p class="subscribe__kicker">The journal</p>
+      <h2 id="subscribe-heading" class="subscribe__title">
+        One email when there is something to read.
+      </h2>
+      <p class="subscribe__note">
+        We file about two entries a month, and OrgVitals ships a build every few
+        weeks. Subscribe and you get a short note when either happens. Nothing
+        else, and one click to stop.
+      </p>
+    </div>
+
+    <form class="subscribe__form" data-subscribe data-source={source} novalidate>
+      <div class="subscribe__row">
+        <label class="subscribe__label" for="sub-email">Work email</label>
+        <input
+          id="sub-email"
+          name="email"
+          type="email"
+          class="ca-field__input subscribe__input"
+          autocomplete="email"
+          inputmode="email"
+          spellcheck="false"
+          autocapitalize="none"
+          required
+          aria-describedby="sub-status"
+        />
+      </div>
+      <button type="submit" class="btn btn-secondary subscribe__btn" data-subscribe-btn>
+        Subscribe<span aria-hidden="true"> &rarr;</span>
+      </button>
+      <p class="subscribe__status" id="sub-status" role="status" aria-live="polite" data-subscribe-status></p>
+      <p class="subscribe__fine">
+        Separate from the contact form, which still goes nowhere near a mailing
+        list. <a href="/page/privacy-policy/">What we do with it</a>.
+      </p>
+    </form>
+  </section>
+)}
+
+<script>
+  import { track, readHubspotCookie } from '@/lib/analytics';
+  import { hubspotEndpoint, HUBSPOT_SUBSCRIBE_FORM_ID } from '@/data/forms';
+
+  const form = document.querySelector<HTMLFormElement>('[data-subscribe]');
+
+  if (form) {
+    const input  = form.querySelector<HTMLInputElement>('#sub-email')!;
+    const button = form.querySelector<HTMLButtonElement>('[data-subscribe-btn]')!;
+    const status = form.querySelector<HTMLParagraphElement>('[data-subscribe-status]')!;
+    const source = form.dataset.source ?? 'unknown';
+
+    /* Reported once, on the first keystroke rather than on focus: a tab
+       through the page is not an intention to subscribe. */
+    let started = false;
+    input.addEventListener('input', () => {
+      if (started) return;
+      started = true;
+      track('form_start', { event_category: 'Subscribe', event_label: source });
+    });
+
+    const say = (message: string, bad: boolean) => {
+      status.textContent = message;
+      status.classList.toggle('is-bad', bad);
+    };
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const email = input.value.trim();
+
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        say('That does not look like an email address.', true);
+        input.focus();
+        return;
+      }
+
+      button.disabled = true;
+      say('Sending\u2026', false);
+
+      try {
+        const res = await fetch(hubspotEndpoint(HUBSPOT_SUBSCRIBE_FORM_ID), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            fields: [{ name: 'email', value: email }],
+            context: {
+              // Same reason as the contact form: without the token this
+              // address arrives as a stranger, and the entries they read
+              // before subscribing are stranded on a record nothing links to.
+              hutk: readHubspotCookie(document.cookie),
+              pageUri: window.location.href,
+              pageName: document.title,
+            },
+          }),
+        });
+
+        if (!res.ok) throw new Error(String(res.status));
+
+        form.querySelector<HTMLDivElement>('.subscribe__row')!.hidden = true;
+        button.hidden = true;
+        say('Done. You will get a note when the next entry is filed.', false);
+        track('form_submit', { event_category: 'Subscribe', event_label: source });
+      } catch {
+        button.disabled = false;
+        say('That did not send. Write to sales@cloudalgo.com and we will add you.', true);
+      }
+    });
+  }
+</script>

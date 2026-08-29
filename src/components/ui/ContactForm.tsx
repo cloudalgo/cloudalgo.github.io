@@ -1,6 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
 import { readHubspotCookie, readFirstTouch, track } from '@/lib/analytics';
+import { HUBSPOT_CONTACT_FORM_ID, hubspotEndpoint } from '@/data/forms';
 
 interface FormData {
   firstName: string;
@@ -9,9 +10,7 @@ interface FormData {
   message: string;
 }
 
-const HUBSPOT_PORTAL_ID = '21905808';
-const HUBSPOT_FORM_ID = 'bdb87791-63e2-42ac-87b4-a6afa5675e4a';
-const HUBSPOT_URL = `https://api.hsforms.com/submissions/v3/integration/submit/${HUBSPOT_PORTAL_ID}/${HUBSPOT_FORM_ID}`;
+const HUBSPOT_URL = hubspotEndpoint(HUBSPOT_CONTACT_FORM_ID);
 
 /* The four field names below are HubSpot's, not ours -- `firstname` and
    `lastname` are one word on their side. Renaming them silently drops

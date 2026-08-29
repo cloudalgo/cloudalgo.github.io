@@ -32,6 +32,7 @@ import { organization, orgRef, breadcrumbs, abs } from '@/data/schema';
 import Page from '@/layouts/Page.astro';
 import PageMasthead from '@/components/ui/PageMasthead.astro';
 import ArchivePlate from '@/components/ui/ArchivePlate.astro';
+import SubscribeBlock from '@/components/ui/SubscribeBlock.astro';
 import EngagementPager from '@/components/sections/EngagementPager.astro';
 import { BLOG_PLATES, plateCaption } from '@/data/blog-plates';
 import { getEntryService } from '@/data/blog-services';
@@ -324,6 +325,8 @@ const schema = [
       </dl>
     </div>
   </section>
+
+  <SubscribeBlock source={`blog:${post.id}`} />
 
   <EngagementPager
     prev={newer ? entryLink(newer) : archiveLink}
