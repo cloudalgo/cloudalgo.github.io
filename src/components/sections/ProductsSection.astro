@@ -14,6 +14,9 @@
 // fifth product still renders the day it is added.
 import { getCollection } from 'astro:content';
 import StatusPip from '@/components/ui/StatusPip.astro';
+import VitalsReadout from '@/components/ui/VitalsReadout.astro';
+import WeightBars from '@/components/ui/WeightBars.astro';
+import VideoReel from '@/components/ui/VideoReel.astro';
 import { TYPE_LABEL } from '@/data/product-labels';
 
 const products = (await getCollection('products', ({ data }) => data.published))
@@ -58,25 +61,29 @@ const HOME: Record<string, HomeCopy> = {
   },
 };
 
-// The screenshot and the scoring weights belong to OrgVitals, not to
-// "whatever sorts first" -- the five weights are quoted from its own
-// feature copy. Guarded on the id so a reorder drops the panel rather
-// than captioning another product with OrgVitals' numbers.
-const SHOT = {
-  src: '/products/orgvitals/guide/posters/03-dashboard.webp',
-  alt:
-    'The OrgVitals dashboard after scanning an org: an overall A-to-F grade with its ' +
-    'score, the trend across previous scans, the five category scores, and a ranked ' +
-    'list of what to fix first.',
+// The reel, the readout and the scoring weights belong to OrgVitals,
+// not to "whatever sorts first". Guarded on the id below so a reorder
+// drops the panel rather than captioning another product with
+// OrgVitals' grade.
+//
+// The weights and the scan both come from data/orgvitals-scan.ts, which
+// the catalogue plate reads too. They were typed out here once and read
+// from the file now, because a grade of C on one page and a B on the
+// other is exactly the kind of thing a reader notices and nobody
+// catches.
+// A film rather than a frame. The fold's claim is that it finds what
+// is wrong with an org in seconds; a still can show the result but not
+// the thing happening, and the result is already set in type above it.
+// The reel is silent, loops, fetches only when scrolled to and carries
+// its own pause -- VideoReel, the same component the catalogue uses.
+const REEL = {
+  src: '/products/orgvitals/scan-run.mp4',
+  poster: '/products/orgvitals/scan-run-poster.webp',
+  label:
+    'OrgVitals running a scan: the dashboard with its A-to-F grade, then 49 checks ' +
+    'working through security, code quality, automation, tech debt and performance ' +
+    'against a connected org.',
 };
-
-const WEIGHTS: Array<[string, number]> = [
-  ['Security', 30],
-  ['Code quality', 20],
-  ['Automation', 20],
-  ['Tech debt', 20],
-  ['Performance', 10],
-];
 
 const featuredCopy = HOME[featured.id];
 const showScoring = featured.id === 'orgvitals';
@@ -112,36 +119,36 @@ const showScoring = featured.id === 'orgvitals';
         )}
         <a class="btn btn-outline" href={`/products/${featured.id}/`}>See what it checks</a>
       </div>
-    </div>
 
-    <div class="products-press__featr">
-      <figure class="products-press__shot">
-        <img src={SHOT.src} alt={SHOT.alt} width="1000" height="627" loading="lazy" decoding="async" />
-        <figcaption class="products-press__caption">
-          Dashboard v{featured.data.version} &middot; scan of a demo org
-        </figcaption>
-      </figure>
-
+      {/* What stands behind the grade printed opposite. It sits under
+          the buttons rather than beside the screenshot because the
+          screenshot's column is already carrying the grade, and because
+          this column otherwise ended at the button row and left a third
+          of the panel empty below it. */}
       {showScoring && (
         <>
-          <p class="products-press__wtlab">Category weight</p>
-          <dl class="products-press__wt">
-            {WEIGHTS.map(([label, pct]) => (
-              <div>
-                <dt>{label}</dt>
-                <dd>
-                  <span class="products-press__wbar" aria-hidden="true"><i style={`width:${pct}%`}></i></span>
-                  <b>{pct}%</b>
-                </dd>
-              </div>
-            ))}
-          </dl>
+          <WeightBars class="products-press__weights" />
           <p class="products-press__wtnote">
             Each finding carries a severity and subtracts from its category base. The five
             categories then roll up by these weights into the single grade.
           </p>
         </>
       )}
+    </div>
+
+    <div class="products-press__featr">
+      {/* The grade, set in type above the scan it was read off. The
+          screenshot is 1000px wide and prints here at under half that
+          -- sharp, but far too small for anyone to read the letter off
+          it, which is the one thing this fold is claiming. */}
+      {showScoring && <VitalsReadout class="products-press__vitals" />}
+
+      <figure class="products-press__shot">
+        <VideoReel src={REEL.src} poster={REEL.poster} label={REEL.label} ratio="1280 / 802" />
+        <figcaption class="products-press__caption">
+          v{featured.data.version} &middot; 49 checks against a demo org
+        </figcaption>
+      </figure>
     </div>
   </article>
 
