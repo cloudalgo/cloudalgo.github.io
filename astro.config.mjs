@@ -1,6 +1,9 @@
 // astro.config.mjs
 // Note: Requires Node >=22.12.0 (set node-version: 22 in GitHub Actions)
 import { readdirSync } from 'node:fs';
+import { readdir, readFile, writeFile } from 'node:fs/promises';
+import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
@@ -38,14 +41,6 @@ const blogRedirects = Object.fromEntries(
     }),
 );
 
-// The journal's filenames carry the publication date, and the frontmatter
-// `date` agrees with them, so the sitemap can state a lastmod for every post
-// without parsing a single frontmatter block.
-//
-// Only the journal gets one. A crawler that finds a lastmod it cannot trust
-// stops reading the field across the whole site, so the pages whose last
-// change nobody records -- the static ones -- say nothing rather than
-// claiming the build date.
 // Paths that predate this site and still arrive from Google and from links we
 // do not control. Each one was 404ing with real traffic on it -- a 404 spends
 // the link equity of every page that points at it and returns nothing.
@@ -53,6 +48,12 @@ const blogRedirects = Object.fromEntries(
 // Two shapes, both from the previous site:
 //   * camelCase pages, before the move to lowercase directories
 //   * /blog/YYYY/MM/<slug>, before posts moved to a flat /blog/<slug>/
+//
+// A third shape is not here and cannot be: the oldest posts used the raw
+// title as the slug, so the path carries spaces, parentheses and an
+// unencoded "/" that Astro's router reads as more path segments. The one
+// such URL still drawing impressions is a hand-written stub under
+// public/blog/2022/05/, copied verbatim into the build.
 const LEGACY = {
   '/aboutUs': '/about/',
   '/contactUs': '/contact/',
@@ -76,6 +77,14 @@ const datedDirRedirects = Object.fromEntries(
     }),
 );
 
+// The journal's filenames carry the publication date, and the frontmatter
+// `date` agrees with them, so the sitemap can state a lastmod for every post
+// without parsing a single frontmatter block.
+//
+// Only the journal gets one. A crawler that finds a lastmod it cannot trust
+// stops reading the field across the whole site, so the pages whose last
+// change nobody records -- the static ones -- say nothing rather than
+// claiming the build date.
 const blogLastmod = Object.fromEntries(
   readdirSync('./src/content/blog')
     .filter(f => /^\d{4}-\d{2}-\d{2}-.+\.md$/.test(f))
@@ -140,12 +149,42 @@ const satteriFigures = defineHastPlugin({
   },
 });
 
+import { unblockRedirectStub } from './src/build/redirect-stubs.ts';
+
+/**
+ * Take the `noindex` back off every generated redirect stub.
+ *
+ * See src/build/redirect-stubs.ts for why it must come off. This runs as a
+ * post-build pass because Astro hardcodes the tag in its redirect template
+ * and exposes no option to change it.
+ */
+const indexableRedirects = {
+  name: 'cloudalgo-indexable-redirects',
+  hooks: {
+    'astro:build:done': async ({ dir, logger }) => {
+      const root = fileURLToPath(dir);
+      const files = await readdir(root, { recursive: true });
+      let freed = 0;
+      for (const name of files) {
+        if (!name.endsWith('.html')) continue;
+        const path = join(root, name);
+        const rewritten = unblockRedirectStub(await readFile(path, 'utf8'));
+        if (rewritten === null) continue;
+        await writeFile(path, rewritten);
+        freed += 1;
+      }
+      logger.info(`${freed} redirect stubs may now pass their ranking on`);
+    },
+  },
+};
+
 export default defineConfig({
   site: 'https://cloudalgo.com',
   output: 'static',
   redirects: { ...blogRedirects, ...renamedRedirects, ...datedDirRedirects, ...LEGACY },
   markdown: { processor: satteri({ hastPlugins: [satteriFigures] }) },
   integrations: [
+    indexableRedirects,
     react(),
     sitemap({
       serialize: item => (blogLastmod[item.url] ? { ...item, lastmod: blogLastmod[item.url] } : item),
