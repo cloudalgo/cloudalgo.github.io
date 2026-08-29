@@ -23,6 +23,15 @@ import { caseStudies } from '../../data/case-studies';
 
 const featured = caseStudies.slice(0, 2);
 
+// The other three. They were written to the same standard as the two above
+// and then never reached this page, because the fold takes the first two and
+// stops. A ledger row is the cheapest honest fix: it is not a third and
+// fourth column competing with the two in full, and it costs no new copy --
+// `pagerNote` is already a one-line statement of what each engagement
+// changed, written for the neighbouring-page links, and `metric` is the
+// figure the record leads with.
+const rest = caseStudies.slice(2);
+
 // Home-page copy, the same arrangement ProductsSection and Services use: the
 // record stays the source of truth for the detail page, and the mock's
 // approved wording sits in the section that has 30 words to spend.
@@ -123,4 +132,22 @@ const shortLabel = (label: string) => label.split(/\s+[—(]/)[0].trim();
       </article>
     ))}
   </div>
+
+  {rest.length > 0 && (
+    <div class="cases-more">
+      <h3 class="cases-more__title">The rest, in short.</h3>
+      <ul class="cases-more__list">
+        {rest.map((c) => (
+          <li class="cases-more__item">
+            <span class="cases-more__ind">{c.industry}</span>
+            <a class="cases-more__name" href={`/case-studies/${c.id}/`}>{c.pagerNote}</a>
+            <span class="cases-more__fig">
+              <b>{c.metric}</b>
+              <span>{shortLabel(c.metricLabel)}</span>
+            </span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )}
 </section>

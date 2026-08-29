@@ -118,3 +118,92 @@
     gap: 1.375rem;
   }
 }
+
+/* ─── The rest of the register ─────────────────────────────
+   Five studies exist; the fold above shows two in full. These are the
+   other three, stated once each.
+
+   Deliberately NOT a third and fourth column of the block above: the
+   two in full are the argument, and three more of the same weight
+   would flatten them into a list of five. So this row is quieter --
+   no shot, no ember chip, mono industry label, one figure. The ember
+   on this fold stays on the two chips above.
+
+   Every string here is quoted from the record: `pagerNote` is already
+   a one-line statement of the change, and `metric` the figure the
+   study leads with. Nothing on this row is copy that has to be kept
+   in step with anything. */
+
+.cases-more {
+  margin-top: 2.25rem;
+  border-top: 1px solid var(--border-strong);
+  padding-top: 1rem;
+}
+
+.cases-more__title {
+  margin: 0 0 0.875rem;
+  font-family: var(--font-heading);
+  font-weight: var(--weight-bold);
+  font-size: 1rem;
+  letter-spacing: -0.01em;
+  color: var(--color-heading);
+}
+
+.cases-more__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.875rem;
+}
+
+.cases-more__item {
+  border-top: 1px solid var(--border-default);
+  padding-top: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4375rem;
+}
+
+.cases-more__ind {
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.cases-more__name {
+  font-family: var(--font-heading);
+  font-weight: var(--weight-bold);
+  font-size: 1rem;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: var(--color-heading);
+}
+
+.cases-more__name:hover { color: var(--color-accent-hover); }
+
+.cases-more__fig b {
+  font-family: var(--font-mono);
+  font-weight: var(--weight-medium);
+  font-size: 1.05rem;
+  color: var(--color-heading);
+  font-variant-numeric: tabular-nums;
+}
+
+.cases-more__fig span {
+  display: block;
+  margin-top: 0.1875rem;
+  font-size: var(--size-label);
+  color: var(--color-text-muted);
+  line-height: 1.4;
+}
+
+@media (max-width: 860px) {
+  .cases-more__list {
+    grid-template-columns: 1fr;
+    gap: 1.375rem;
+  }
+}
