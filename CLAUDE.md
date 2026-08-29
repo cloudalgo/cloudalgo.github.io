@@ -72,6 +72,33 @@ Never widen a title by pasting a full sentence into a template. That is how five
 
 `src/data/schema.ts` holds the entity facts once. Every page emits `organization` plus a `breadcrumbs(crumbs, url)` built from **the same array the masthead renders**, and refers to the org elsewhere by `orgRef` (`@id`) rather than restating it. Build page URLs with `abs('/path/')` — trailing slash included, since the site is served as directories. Do not hand-roll an `Organization` node in a page.
 
+#### Legacy URLs
+
+`astro.config.mjs` derives most redirects from the blog filenames, which is
+right for the two renames this repo performed. It is wrong for anything the
+*previous* site published, and the difference has bitten once already: the
+posts were imported with their filenames cut to 80 characters, so every
+derived redirect used a cut slug while Google went on ranking the uncut
+original. Four posts served the 404 page for months while holding page-one
+positions — 31,682 impressions and 251 clicks.
+
+So: **a URL the old site published is a fact about history, not about this
+repo, and cannot be derived from it.** Those live in
+`src/build/legacy-redirects.ts`, each line carrying the Search Console
+impressions that justify it. Its tests resolve every target to the file that
+builds it, so renaming a post fails the suite instead of the redirect.
+
+Before assuming a legacy path is covered, check it — the 16-month page report
+in Search Console lists every URL Google still has, and `curl -o /dev/null -w
+'%{http_code}'` says whether we still answer it.
+
+Astro also hardcodes `<meta name="robots" content="noindex">` into every
+redirect stub it generates (`core/routing/3xx.js`), with no config option.
+That contradicts the canonical it emits on the same page, and on GitHub Pages
+— where there is no server-side 301 — the meta refresh and the canonical are
+the entire signal. The `cloudalgo-indexable-redirects` integration strips it
+back off after the build; see `src/build/redirect-stubs.ts`.
+
 ### Styling
 
 **There is no Tailwind.** It was removed along with `src/styles/global.css`; the

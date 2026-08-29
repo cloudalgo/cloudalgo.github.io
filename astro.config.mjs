@@ -9,6 +9,8 @@ import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 import { satteri } from '@astrojs/markdown-satteri';
 import { defineHastPlugin } from 'satteri';
+import { unblockRedirectStub } from './src/build/redirect-stubs.ts';
+import { legacyRedirects } from './src/build/legacy-redirects.ts';
 
 // Blog slugs dropped their YYYY-MM-DD- filename prefix (see src/content.config.ts).
 // Anything already indexed at the dated path is redirected to the clean one.
@@ -42,22 +44,14 @@ const blogRedirects = Object.fromEntries(
 );
 
 // Paths that predate this site and still arrive from Google and from links we
-// do not control. Each one was 404ing with real traffic on it -- a 404 spends
-// the link equity of every page that points at it and returns nothing.
+// do not control, listed in src/build/legacy-redirects.ts with the Search
+// Console impressions that earned each one its line.
 //
-// Two shapes, both from the previous site:
-//   * camelCase pages, before the move to lowercase directories
-//   * /blog/YYYY/MM/<slug>, before posts moved to a flat /blog/<slug>/
-//
-// A third shape is not here and cannot be: the oldest posts used the raw
-// title as the slug, so the path carries spaces, parentheses and an
-// unencoded "/" that Astro's router reads as more path segments. The one
-// such URL still drawing impressions is a hand-written stub under
-// public/blog/2022/05/, copied verbatim into the build.
-const LEGACY = {
-  '/aboutUs': '/about/',
-  '/contactUs': '/contact/',
-};
+// One shape is not there and cannot be: the oldest posts used the raw title as
+// the slug, so the path carries spaces, parentheses and an unencoded "/" that
+// Astro's router reads as more path segments. The one such URL still drawing
+// impressions is a hand-written stub under public/blog/2022/05/, copied
+// verbatim into the build.
 
 // The dated-directory blog URLs, generated rather than listed: every post gets
 // one, and a post that was also retitled gets a second under its old slug, so
@@ -149,8 +143,6 @@ const satteriFigures = defineHastPlugin({
   },
 });
 
-import { unblockRedirectStub } from './src/build/redirect-stubs.ts';
-
 /**
  * Take the `noindex` back off every generated redirect stub.
  *
@@ -181,7 +173,7 @@ const indexableRedirects = {
 export default defineConfig({
   site: 'https://cloudalgo.com',
   output: 'static',
-  redirects: { ...blogRedirects, ...renamedRedirects, ...datedDirRedirects, ...LEGACY },
+  redirects: { ...blogRedirects, ...renamedRedirects, ...datedDirRedirects, ...legacyRedirects },
   markdown: { processor: satteri({ hastPlugins: [satteriFigures] }) },
   integrations: [
     indexableRedirects,
