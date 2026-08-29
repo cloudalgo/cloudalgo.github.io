@@ -1,0 +1,44 @@
+---
+/**
+ * The grade a scan returned, set in type.
+ *
+ * This exists because the dashboard poster is 1000px wide and no larger
+ * original was ever taken. Printing it at the width it needs to be
+ * legible is a ~3x upscale, which on a retina display is mush -- so the
+ * one thing a reader has to be able to read is drawn here instead, and
+ * the screenshot runs beside it at native scale where it is evidence
+ * rather than reading matter.
+ *
+ * Every figure comes from `data/orgvitals-scan.ts`, so this and the
+ * home page's copy of it cannot drift apart.
+ */
+import { SCAN } from '@/data/orgvitals-scan';
+
+interface Props {
+  class?: string;
+}
+const { class: className } = Astro.props;
+---
+<div class:list={['vitals', className]}>
+  <p class="vitals__head">
+    <span>Health report &middot; {SCAN.scanners} scanners</span>
+    <span>{SCAN.date}</span>
+  </p>
+
+  <p class="vitals__grade">
+    <span class="vitals__letter">{SCAN.grade}</span>
+    <span>
+      <span class="vitals__score">{SCAN.score}</span>
+      <span class="vitals__state">{SCAN.state}</span>
+    </span>
+  </p>
+
+  <div class="vitals__sev">
+    {SCAN.severities.map((s) => (
+      <div>
+        <b>{s.count}</b>
+        <span>{s.label}</span>
+      </div>
+    ))}
+  </div>
+</div>

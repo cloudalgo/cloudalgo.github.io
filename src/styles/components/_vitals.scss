@@ -1,0 +1,110 @@
+/* The grade a scan returned, set in type.
+
+   Structure follows docs/superpowers/specs/assets/products-mock.html
+   (`.vitals`). It reads as an instrument panel rather than a card: a
+   ruled head, one enormous letter, and the severities as a row of
+   counts along the bottom, because that is the order a reader takes
+   them in -- what grade, out of what, and how bad is the worst of it.
+
+   The ember is on the letter and on the critical count and nowhere
+   else. Those are the two figures that mean act now; spending the
+   accent on the other three would say the same thing four times and
+   mean it none of them. */
+
+.vitals {
+  border: 1px solid var(--vitals-border);
+  background: var(--vitals-bg);
+}
+
+.vitals__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin: 0;
+  padding: var(--vitals-head-pad);
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--color-text-faint);
+}
+
+.vitals__grade {
+  display: flex;
+  align-items: center;
+  gap: 1.125rem;
+  margin: 0;
+  padding: var(--vitals-grade-pad);
+}
+
+/* Set at a size nothing else on the plate reaches, because the whole
+   entry exists to produce this one character. */
+.vitals__letter {
+  font-family: var(--font-heading);
+  font-weight: var(--weight-black);
+  font-size: var(--vitals-letter-size);
+  line-height: 0.8;
+  letter-spacing: -0.045em;
+  color: var(--color-accent);
+}
+
+.vitals__score {
+  font-family: var(--font-heading);
+  font-weight: var(--weight-bold);
+  font-size: 1.75rem;
+  line-height: 1;
+  letter-spacing: -0.025em;
+  color: var(--color-heading);
+}
+
+.vitals__state {
+  display: block;
+  margin-top: 0.3125rem;
+  font-size: var(--size-body-sm);
+  color: var(--color-text-muted);
+}
+
+.vitals__sev {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-top: 1px solid var(--vitals-border);
+}
+
+.vitals__sev > div {
+  padding: var(--vitals-sev-pad);
+  border-left: 1px solid var(--vitals-rule);
+}
+
+.vitals__sev > div:first-child { border-left: 0; }
+
+.vitals__sev b {
+  display: block;
+  font-family: var(--font-heading);
+  font-weight: var(--weight-bold);
+  font-size: 1.375rem;
+  line-height: 1;
+  color: var(--color-heading);
+}
+
+/* Critical, and only critical. */
+.vitals__sev > div:first-child b { color: var(--color-accent); }
+
+.vitals__sev span {
+  display: block;
+  margin-top: 0.25rem;
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-text-faint);
+}
+
+/* Both halves of the head wrap at this width, which reads as a mistake.
+   Stacked, they read as two lines that were always meant to be two. */
+@media (max-width: 560px) {
+  .vitals__head {
+    flex-direction: column;
+    gap: 0.125rem;
+  }
+}

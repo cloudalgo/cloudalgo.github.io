@@ -5,6 +5,9 @@ import PageMasthead from '@/components/ui/PageMasthead.astro';
 import ContentsBar from '@/components/ui/ContentsBar.astro';
 import ProductEntry from '@/components/sections/ProductEntry.astro';
 import EvidenceStrip from '@/components/ui/EvidenceStrip.astro';
+import VitalsReadout from '@/components/ui/VitalsReadout.astro';
+import WeightBars from '@/components/ui/WeightBars.astro';
+import VideoReel from '@/components/ui/VideoReel.astro';
 import CompareTable from '@/components/ui/CompareTable.astro';
 import CtaBand from '@/components/ui/CtaBand.astro';
 import { organization, orgRef, breadcrumbs, abs, SITE_ID } from '@/data/schema';
@@ -62,13 +65,20 @@ const catalogSchema = [
 //
 // The spec rows are authored here rather than read from each file's
 // `techStack`. That field is written for the detail page -- ten rows
-// deep on Pledgivo, absent entirely on InsureAlgo -- and this panel is
-// the six answers a buyer needs before they download anything. Two
+// deep on Pledgivo, absent entirely on InsureAlgo -- and this strip is
+// the five answers a buyer needs before they download anything. Two
 // different jobs, so two different lists.
+//
+// Five, exactly. The strip is a five-column band and a sixth row wraps
+// to a row of one; the price that used to be the sixth is on the bar.
 type EntryCopy = {
   /** One line for the contents strip. It has to survive a quarter width. */
   contents: string;
-  /** The mono line closing the header bar. */
+  /** Printed on the header bar. It was the last row of the spec panel
+      until the panel became a strip; it is one of the two things a
+      reader came to find out, and it belongs where they look first. */
+  price: string;
+  /** The mono line under the price on the header bar. */
   meta: string;
   tagline: string;
   description: string;
@@ -79,7 +89,8 @@ type EntryCopy = {
 
 const COPY = {
   orgvitals: {
-    contents: 'Health scanner for Salesforce orgs',
+    contents: 'You inherited an org and nobody can tell you what is in it.',
+    price: 'Free',
     meta: 'v1.1.1 · Desktop',
     tagline: 'A health scanner for Salesforce orgs that runs on your machine, not ours.',
     description:
@@ -98,11 +109,11 @@ const COPY = {
       { term: 'Storage',    detail: 'Local SQLite snapshot, stays on device' },
       { term: 'Scan time',  detail: 'A full org scans in minutes' },
       { term: 'AI',         detail: 'Opt-in, your own Anthropic key' },
-      { term: 'Price',      detail: 'Free' },
     ],
   },
   algobridge: {
-    contents: 'Salesforce ⇄ PostgreSQL sync engine',
+    contents: 'Your reporting stack needs Salesforce data in a real database.',
+    price: 'Free — MIT',
     meta: 'v1.0 · Self-hosted',
     tagline: 'Your Salesforce data in PostgreSQL, ten seconds behind.',
     description:
@@ -125,12 +136,12 @@ const COPY = {
       { term: 'Database',    detail: 'PostgreSQL 14+ with hstore' },
       { term: 'Org access',  detail: 'SOAP API + Bulk API v2, chosen per batch' },
       { term: 'Audit',       detail: '31-day column-level diff log' },
-      { term: 'Price',       detail: 'Free — MIT. Support contracts on request' },
     ],
   },
   pledgivo: {
-    contents: 'Fundraising, native to your org',
-    meta: '2GP managed package · API 67.0',
+    contents: 'You raise money, and it is not allowed to leave Salesforce.',
+    price: 'Free to 200 gifts/yr',
+    meta: '2GP package · API 67.0',
     tagline: 'Fundraising that never leaves Salesforce.',
     description:
       'The donation form, the payment and the donor record all live in your org, so a gift is a ' +
@@ -154,12 +165,15 @@ const COPY = {
       { term: 'Editions',    detail: 'Enterprise · Unlimited · Performance · Developer' },
       { term: 'Donor pages', detail: 'Enhanced LWR Experience Cloud site, LWC only' },
       { term: 'Payments',    detail: 'Stripe — card tokenised in the browser, never in Apex' },
-      { term: 'Coverage',    detail: '90% Apex, gated on every change' },
-      { term: 'Price',       detail: 'Free to 200 gifts/yr, then $299/mo · no cut of what you raise' },
+      // Reads on from the bar, which states the free tier. The rate
+      // itself is a shipped fact and stays on the page; only the half
+      // of the sentence the bar already carries came off this row.
+      { term: 'Then',        detail: '$299/mo · no cut of what you raise' },
     ],
   },
   insurealgo: {
-    contents: 'Insurance policy tracker, iOS & Android',
+    contents: 'You hold five insurance policies and miss the renewals.',
+    price: 'Free',
     meta: 'v1.0.0 · iOS & Android',
     tagline: 'Every policy you hold, and the date each one lapses.',
     description:
@@ -179,7 +193,6 @@ const COPY = {
       { term: 'Storage',   detail: 'Encrypted Hive store on device' },
       { term: 'Backup',    detail: 'Optional, to your own iCloud' },
       { term: 'Telemetry', detail: 'None. No tracking, no ads' },
-      { term: 'Price',     detail: 'Free, all features' },
     ],
   },
 } satisfies Record<string, EntryCopy>;
@@ -196,6 +209,7 @@ function record(id: (typeof ORDER)[number]) {
   if (!p) throw new Error(`products/index.astro: no published product "${id}"`);
   return {
     id,
+    href: `/products/${id}/`,
     n: String(p.data.order).padStart(2, '0'),
     title: p.data.title,
     status: p.data.status,
@@ -269,69 +283,109 @@ const COMPARE_ROWS = [
     </div>
 
     <ProductEntry {...entries[0]}>
+      {/* The weights are the method note behind the grade the figure
+          prints. They sit in the copy column directly opposite the
+          readout, which is the same argument arriving from the other
+          end -- and they fill a column that used to end level with the
+          button and leave a third of the plate empty under it. */}
+      <WeightBars slot="aside" class="entry__weights" />
+
       <EvidenceStrip
-        slot="evidence"
+        slot="figure"
         n="01"
-        caption="the dashboard after a full scan. Grade, category breakdown, trend against every prior run."
+        caption="49 checks running against a live org, and the dashboard they produce. The grade above is that scan's, set in type because a reader should not have to squint at a recording to read the one number the product exists to give them."
       >
-        {/* One frame, not the recording. The moving version of this view
-            lives on the product page's viewer and in the guide, where a
-            reader has asked for it; here it is evidence, and evidence
-            does not need to loop. Same poster the viewer opens on. */}
-        <img
-          src="/products/orgvitals/guide/posters/03-dashboard.webp"
-          alt="The OrgVitals dashboard: an overall health grade with per-category scores and a trend chart across previous scans."
-          width="1000"
-          height="628"
-          loading="lazy"
-          decoding="async"
-        />
+        <div class="evidence__stack">
+          <VitalsReadout />
+          {/* A reel rather than a still. The claim is that it scans an
+              org in seconds, and a screenshot cannot show a thing
+              happening -- the film goes dashboard, live scan, back.
+              1280x802 from the source recording, not the 1000px poster
+              the guide carries. */}
+          <VideoReel
+            src="/products/orgvitals/scan-run.mp4"
+            poster="/products/orgvitals/scan-run-poster.webp"
+            ratio="1280 / 802"
+            label="OrgVitals running a scan: the dashboard, then 49 checks working through security, code quality, automation, tech debt and performance against a connected org."
+          />
+        </div>
       </EvidenceStrip>
     </ProductEntry>
 
-    <ProductEntry {...entries[1]}>
+    <ProductEntry {...entries[1]} figure="below">
       <EvidenceStrip
-        slot="evidence"
+        slot="figure"
         n="02"
-        caption="there is no screenshot because there is no interface. AlgoBridge is a daemon; this is the whole of it."
+        caption="both arrows point both ways. There is no screenshot because there is no interface: AlgoBridge is a daemon, and this is the whole of it."
       >
+        {/* Three nodes, not four. The fourth used to be "and back",
+            which drew the return leg as a separate stage arriving after
+            PostgreSQL -- it is the same two hops in the other
+            direction, and a two-headed arrow says so in one glyph. */}
         <div class="evidence__flow">
           <div class="evidence__node">
             <b>Salesforce</b>
             <span>trigger fires on change</span>
           </div>
-          <span class="evidence__arrow" aria-hidden="true">&rarr;</span>
+          <span class="evidence__arrow" aria-hidden="true">&#8644;</span>
           <div class="evidence__node evidence__node--self">
             <b>AlgoBridge</b>
             <span>10s batch · SOAP / Bulk v2</span>
           </div>
-          <span class="evidence__arrow" aria-hidden="true">&rarr;</span>
+          <span class="evidence__arrow" aria-hidden="true">&#8644;</span>
           <div class="evidence__node">
             <b>PostgreSQL 14+</b>
             <span>hstore column diff, 31 days</span>
-          </div>
-          <span class="evidence__arrow" aria-hidden="true">&crarr;</span>
-          <div class="evidence__node">
-            <b>and back</b>
-            <span>writes replay to the org</span>
           </div>
         </div>
       </EvidenceStrip>
     </ProductEntry>
 
-    <ProductEntry {...entries[2]} />
+    <ProductEntry {...entries[2]} figure="below">
+      {/* The one entry that had no figure at all. The console is the
+          claim -- gifts as standard Opportunities, in the org -- and the
+          film is what the donor sees; neither one on its own is the
+          product, which is why they are one figure. */}
+      <EvidenceStrip
+        slot="figure"
+        n="03"
+        caption="the fundraiser console in the org, and the donor's fifty seconds beside it. The film is silent, stops when it leaves the screen, and never starts for a reader who has asked for less motion."
+      >
+        <div class="evidence__pair">
+          <div class="evidence__shot">
+            <img
+              src="/products/pledgivo/01-fundraisers-console.webp"
+              alt="The Pledgivo fundraiser console in Salesforce: campaigns with amounts raised, donor counts and progress against goal."
+              width="1400"
+              height="1050"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+          <VideoReel
+            src="/products/pledgivo/tour-vertical.mp4"
+            poster="/products/pledgivo/tour-vertical-poster.webp"
+            label="A donor opening the Pledgivo giving page, choosing an amount and paying by card."
+          />
+        </div>
+      </EvidenceStrip>
+    </ProductEntry>
 
     <ProductEntry {...entries[3]}>
       <EvidenceStrip
-        slot="evidence"
-        n="03"
-        caption="dashboard, policy list, add a policy, settings. Four screens is the whole app."
+        slot="figure"
+        n="04"
+        caption="what expires soonest, and the minute it takes to add a policy."
       >
-        <div class="evidence__row">
-          <img src="/products/insurealgo/02_dashboard.webp"  alt="InsureAlgo dashboard listing policies with days remaining until each renewal." width="1170" height="2532" loading="lazy" decoding="async" />
-          <img src="/products/insurealgo/03_policy_list.webp" alt="The full policy list, grouped by type." width="1170" height="2532" loading="lazy" decoding="async" />
-          <img src="/products/insurealgo/04_add_policy.webp"  alt="The add-a-policy form: type, provider, number, premium and renewal date." width="1170" height="2532" loading="lazy" decoding="async" />
-          <img src="/products/insurealgo/05_settings.webp"    alt="Settings: biometric lock, reminder schedule and iCloud backup." width="1170" height="2532" loading="lazy" decoding="async" />
+        {/* Two screens at a size you can read, not four at thumbnail
+            size. A 1170x2532 store capture is three times the height of
+            the copy beside it, so both are cropped from the top to one
+            height: the phones end level and the plate closes on a line
+            rather than on 900px of dead column. The two dropped -- the
+            policy list and settings -- are on the product's own page. */}
+        <div class="evidence__phones">
+          <img src="/products/insurealgo/02_dashboard.webp" alt="InsureAlgo dashboard listing policies with days remaining until each renewal." width="1170" height="2532" loading="lazy" decoding="async" />
+          <img src="/products/insurealgo/04_add_policy.webp" alt="The add-a-policy form: type, provider, number, premium and renewal date." width="1170" height="2532" loading="lazy" decoding="async" />
         </div>
       </EvidenceStrip>
     </ProductEntry>

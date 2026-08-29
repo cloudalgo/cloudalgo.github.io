@@ -1,0 +1,37 @@
+---
+/**
+ * How the A-F grade is weighted: five categories, fixed shares, one
+ * number. It stands behind the grade the way a method note stands
+ * behind a statistic, which is why it sits opposite VitalsReadout --
+ * the same argument arriving from the other end.
+ *
+ * The bars are scaled against the LARGEST weight, not against 100. A
+ * 30% share drawn as 30% of the track reads as a progress bar stuck
+ * near empty; drawn as a full track with 20% at two thirds of it, the
+ * five bars read as what they are -- shares of each other.
+ */
+import { WEIGHTS } from '@/data/orgvitals-scan';
+
+interface Props {
+  /** The mono line above the rows. */
+  label?: string;
+  class?: string;
+}
+const { label = 'How the grade is weighted', class: className } = Astro.props;
+
+const max = Math.max(...WEIGHTS.map(([, pct]) => pct));
+---
+<div class:list={['weights', className]}>
+  {label && <p class="weights__lab">{label}</p>}
+  <ul class="weights__rows">
+    {WEIGHTS.map(([name, pct]) => (
+      <li>
+        <span class="weights__name">{name}</span>
+        <span class="weights__bar" aria-hidden="true">
+          <i style={`width:${Math.round((pct / max) * 100)}%`}></i>
+        </span>
+        <span class="weights__pct">{pct}%</span>
+      </li>
+    ))}
+  </ul>
+</div>

@@ -7,6 +7,16 @@
  * of comparable rows. The comparison grid is CompareTable, and the two
  * are deliberately different components because they are different
  * reading tasks.
+ *
+ * Two layouts of the same list. `panel` is the tall two-column sheet
+ * that stands beside a body of copy. `strip` lays the same rows out
+ * across five columns as a band, which is what a catalogue plate wants
+ * along its bottom edge -- the figure takes the column the panel used
+ * to have, and the specification reads as the plate's footer rather
+ * than as a sidebar competing with the picture.
+ *
+ * The strip prints no label. Its terms are already the label, one per
+ * cell, and a heading over a band of headings is a heading too many.
  */
 export interface SpecRow {
   term: string;
@@ -15,14 +25,16 @@ export interface SpecRow {
 
 interface Props {
   rows: SpecRow[];
-  /** The panel's own label. Omit for an unlabelled sheet. */
+  /** The panel's own label. Omit for an unlabelled sheet. Ignored by
+      the strip, which never prints one. */
   label?: string;
+  layout?: 'panel' | 'strip';
   class?: string;
 }
-const { rows, label, class: className } = Astro.props;
+const { rows, label, layout = 'panel', class: className } = Astro.props;
 ---
-<div class:list={['spec-sheet', className]}>
-  {label && <p class="spec-sheet__label">{label}</p>}
+<div class:list={['spec-sheet', layout === 'strip' && 'spec-sheet--strip', className]}>
+  {label && layout === 'panel' && <p class="spec-sheet__label">{label}</p>}
   <dl class="spec-sheet__list">
     {rows.map((row) => (
       <div>

@@ -445,7 +445,15 @@
      plate spends -- accent-500 itself sits at 2.6:1 there, so this
      reads the lighter rung the inverse ramp is measured against. */
   --entry-n-color: var(--accent-200);
+  /* Paper, not the ember: the counter above already spends the bar's
+     one accent, and a price in the same colour would make the plate
+     look like it was pointing at two things at once. */
+  --entry-price-color: var(--color-on-inverse);
   --entry-meta-color: var(--color-on-inverse-faint);
+  /* The figure band. Roomier than the copy's padding because a picture
+     needs a mount, and the mount is what stops a screenshot of a light
+     UI reading as a bleed off the plate. */
+  --entry-fig-pad: 2rem;
   /* The chip row under the description. An outline, not a badge: these
      are capability labels a reader skims, and eight filled pills would
      out-shout the tagline above them. */
@@ -470,6 +478,10 @@
   --spec-term-width: 9.5ch;
   --spec-gap: 0.875rem;
   --spec-row-pad: 0.5rem;
+  /* The strip's cell. Deeper than the panel's row because the cell
+     stacks its label over its value rather than setting them side by
+     side, and a two-line cell in a one-line box reads as cramped. */
+  --spec-strip-pad: 1rem 1.25rem;
 
   /* ── Evidence strip (.evidence) ───────────────────────────
      The figure under an entry: a screenshot, a set of them, or a
@@ -482,6 +494,63 @@
   --evidence-shot-border: var(--border-default);
   --evidence-gap: 0.875rem;
   --evidence-caption-color: var(--color-text-muted);
+  /* The console-and-film pair. The reel's width is the row's height
+     times 9/16 -- change one and the other has to move with it, or the
+     film letterboxes inside its own frame. */
+  /* 340px. Tall enough that a policy row and a form field are both
+     legible, short enough that two of them do not out-run the copy
+     column they sit beside. */
+  --evidence-phone-height: 21.25rem;
+  --evidence-pair-height: 34rem;
+  --evidence-pair-reel: 19.125rem;
+
+  /* ── Health readout (.vitals) ─────────────────────────────
+     The grade an OrgVitals scan returned, set in type beside the
+     screenshot it was read off. It exists because the only dashboard
+     capture that was ever taken is 1000px wide, and printing it large
+     enough for the grade to be legible is a 3x upscale -- mush on a
+     retina display. Setting the number in type instead lets the
+     screenshot run at native scale, where it is sharp and doing the
+     job of evidence rather than the job of reading matter.
+
+     Ruled and white rather than washed: the spec strip below it is
+     already the ember-washed surface on the plate, and a second washed
+     panel would read as the same device saying a different thing. */
+  --vitals-border: var(--color-heading);
+  --vitals-rule: var(--border-default);
+  --vitals-bg: var(--surface-card);
+  --vitals-head-pad: 0.8125rem 1.125rem 0;
+  --vitals-grade-pad: 0.5rem 1.125rem 1rem;
+  --vitals-sev-pad: 0.6875rem 0.875rem;
+  /* Larger than any heading on the page, deliberately. The whole entry
+     exists to produce this one character. */
+  --vitals-letter-size: 4.25rem;
+
+  /* ── Weight bars (.weights) ───────────────────────────────
+     The method note under a grade. Its track is the recessed tint and
+     its fill the faintest ink, so the row reads as a measure rather
+     than as five things competing for the accent -- only the heaviest
+     category takes the ember, and it takes it alone. */
+  --weights-rule: var(--border-default);
+  --weights-gap: 0.5625rem;
+  --weights-name-width: 9.5em;
+  --weights-bar-height: 6px;
+  --weights-track: var(--surface-tint);
+  --weights-fill: var(--color-text-faintest);
+  --weights-fill-lead: var(--color-accent);
+
+  /* ── Ambient reel (.reel) ─────────────────────────────────
+     A silent film running beside a screenshot. The ground is ink
+     because a film's own letterboxing has to meet something, and a
+     paper ground behind a dark frame reads as a rendering fault.
+
+     The control's scrim is ink-at-alpha rather than a solid: it sits
+     over moving picture, and a solid chip would read as a hole
+     punched in the film. */
+  --reel-border: var(--border-default);
+  --reel-bg: var(--surface-inverse);
+  --reel-btn-bg: var(--color-ink-a75);
+  --reel-btn-border: var(--color-paper-a30);
 
   /* ── Comparison table (.compare) ──────────────────────────
      Four products against seven questions. The head is the entry

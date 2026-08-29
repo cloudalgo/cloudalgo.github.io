@@ -21,6 +21,29 @@
   border: 1px solid var(--evidence-shot-border);
 }
 
+/* Two store captures, cropped to one height.
+
+   A 1170x2532 phone screen printed whole is three times the height of
+   the copy beside it, and four of them at a quarter of a column each
+   are 90px wide -- a thumbnail of a screenshot rather than a
+   screenshot. Cropped from the top, two of them at a readable width
+   end level and the plate closes on a line.
+
+   Top centre, not top left: a phone screen is a centred column of UI,
+   and cropping it left would slice the content off one edge. */
+.evidence__phones {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--evidence-gap);
+  align-items: start;
+}
+
+.evidence__phones img {
+  height: var(--evidence-phone-height);
+  object-fit: cover;
+  object-position: top center;
+}
+
 /* A set of shots read as one figure -- four phone screens, three states
    of a page. Wide enough to scroll rather than crush below the
    breakpoint, since four 4:9 screens at a third of a phone's width are
@@ -53,6 +76,66 @@
 
 @media (max-width: 620px) {
   .evidence__row { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ── A screenshot at native scale ─────────────────────────
+   The frame crops rather than the picture scaling to fill it. Every
+   product capture the site holds is a fixed width -- 1000px for the
+   OrgVitals dashboard, and no larger original exists -- so a frame
+   that stretched to its column would upscale, and an upscaled UI
+   screenshot on a retina display is mush. Cropping keeps the pixels
+   at or under 1:1, which is the only way a screenshot reads sharp.
+
+   Top left, because that is where a UI puts the thing it is about. */
+.evidence__shot {
+  aspect-ratio: var(--evidence-shot-ratio, 16 / 10);
+  border: 1px solid var(--evidence-shot-border);
+  overflow: hidden;
+}
+
+.evidence__shot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top left;
+  border: 0;
+}
+
+/* Two artefacts read as one figure: a readout above the scan it was
+   taken from, a console beside the film of it. */
+.evidence__stack {
+  display: grid;
+  gap: var(--evidence-gap);
+}
+
+/* A screenshot and a vertical film, ending level. One fixed height on
+   the row and each child filling it is the only arrangement that gets
+   that -- a 16:10 console and a 9:16 reel have no width at which their
+   natural heights agree. The reel's column is that height times 9/16,
+   so the film is never letterboxed inside its own frame. */
+.evidence__pair {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--evidence-pair-reel);
+  gap: var(--evidence-gap);
+  height: var(--evidence-pair-height);
+}
+
+.evidence__pair > .evidence__shot { aspect-ratio: auto; height: 100%; }
+.evidence__pair > .reel { aspect-ratio: auto; height: 100%; }
+
+/* Stacked, the film is capped. A 9:16 frame at full column width is a
+   whole screen of one thing, which is a player, not a figure. */
+@media (max-width: 900px) {
+  .evidence__pair {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+  .evidence__pair > .evidence__shot { aspect-ratio: 16 / 10; height: auto; }
+  .evidence__pair > .reel {
+    aspect-ratio: 9 / 16;
+    height: auto;
+    max-width: var(--evidence-pair-reel);
+  }
 }
 
 /* ── The drawn figure ─────────────────────────────────────

@@ -1,0 +1,866 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Products page mock — CloudAlgo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600..900&family=Geist:wght@400..900&family=Geist+Mono:wght@400..500&display=swap">
+<style>
+/* ─────────────────────────────────────────────────────────────
+   MOCK ONLY. Values are inlined from the press-room theme so the
+   file stands alone; in the real page every one of these is a
+   semantic token and nothing here names a colour.
+   ───────────────────────────────────────────────────────────── */
+:root{
+  --ink-900:#131110; --ink-880:#1B1916; --ink-870:#34302D; --ink-860:#231F1D;
+  --ink-500:#494440; --ink-400:#57504B; --ink-300:#6C645E;
+  --paper-000:#FFFFFF; --paper-050:#F2EEEB; --paper-100:#F7F4F2;
+  --paper-150:#EAE5E1; --paper-200:#E0D9D4; --paper-400:#756D66;
+  --accent-050:#FDF1F0; --accent-200:#EDC1BB; --accent-400:#F66953;
+  --accent-500:#F75A41; --accent-600:#E9553D; --accent-on:#110605;
+
+  --font-heading:'Archivo',system-ui,sans-serif;
+  --font-body:'Geist',system-ui,sans-serif;
+  --font-mono:'Geist Mono',ui-monospace,monospace;
+
+  --container:1240px;
+  --rule:1px solid var(--paper-200);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--paper-000); color:var(--ink-500);
+  font-family:var(--font-body); font-size:16px; line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+img{max-width:100%; display:block}
+a{color:inherit}
+h1,h2,h3{font-family:var(--font-heading); color:var(--ink-900); margin:0; line-height:1.15; letter-spacing:-.02em}
+p{margin:0}
+.wrap{max-width:var(--container); margin-inline:auto; padding-inline:24px}
+
+/* ── Chrome (mock approximation of the real header) ─────────── */
+.chrome{
+  position:sticky; top:0; z-index:20; height:72px;
+  display:flex; align-items:center; gap:32px;
+  background:rgba(255,255,255,.86); backdrop-filter:blur(10px);
+  border-bottom:var(--rule);
+}
+.chrome .wrap{display:flex; align-items:center; gap:40px; width:100%}
+.brand{font-family:var(--font-heading); font-weight:800; font-size:1.35rem; color:var(--ink-900); letter-spacing:-.03em}
+.brand b{font-weight:900}
+.chrome nav{display:flex; gap:28px; margin-left:auto; font-size:.9375rem; font-weight:500}
+.chrome nav a{text-decoration:none; color:var(--ink-500); padding-block:4px}
+.chrome nav a[aria-current]{color:var(--ink-900); font-weight:700; box-shadow:inset 0 -2px 0 var(--accent-500)}
+.chrome .btn{margin-left:24px}
+
+/* ── Buttons ────────────────────────────────────────────────── */
+.btn{
+  display:inline-flex; align-items:center; gap:.5em; white-space:nowrap;
+  font-family:var(--font-body); font-weight:700; font-size:.875rem; line-height:1;
+  padding:.75rem 1.125rem; border-radius:100px; border:1.5px solid transparent;
+  text-decoration:none; cursor:pointer;
+  transition:background-color .18s ease, border-color .18s ease, transform .08s ease;
+}
+.btn:active{transform:translateY(1px)}
+.btn-primary{background:var(--accent-500); color:var(--accent-on); border-color:var(--accent-500)}
+.btn-primary:hover{background:var(--accent-600); border-color:var(--accent-600)}
+.btn-outline{background:transparent; color:var(--ink-900); border-color:var(--ink-900)}
+.btn-outline:hover{background:var(--ink-900); color:var(--paper-000)}
+.btn-ink{background:var(--ink-900); color:var(--paper-000); border-color:var(--ink-900)}
+.btn-ink:hover{background:var(--ink-860); border-color:var(--ink-860)}
+.btn-light{background:var(--paper-000); color:var(--ink-900); border-color:var(--paper-000)}
+.btn-light:hover{background:var(--paper-050); border-color:var(--paper-050)}
+
+/* ── Masthead ───────────────────────────────────────────────── */
+.masthead{padding-block:56px 0}
+.crumbs{
+  font-family:var(--font-mono); font-size:.6875rem; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--ink-400); margin-bottom:28px;
+}
+.crumbs a{text-decoration:none}
+.crumbs a:hover{color:var(--ink-900)}
+.masthead__grid{display:grid; grid-template-columns:minmax(0,1.35fr) minmax(0,1fr); gap:64px; align-items:end}
+.masthead h1{font-size:clamp(2.75rem,5.2vw,4.25rem); font-weight:900; letter-spacing:-.03em}
+.mark{position:relative; white-space:nowrap}
+.mark::after{
+  content:''; position:absolute; left:0; right:0; bottom:.02em; height:.14em;
+  background:var(--accent-500); z-index:-1;
+}
+.masthead__lede{margin-top:24px; max-width:56ch; font-size:1.0625rem; color:var(--ink-500)}
+.facts{border-left:2px solid var(--ink-900); padding-left:20px}
+.facts__row{
+  display:flex; justify-content:space-between; gap:24px; align-items:baseline;
+  padding-block:9px; border-bottom:var(--rule); font-size:.8125rem;
+}
+.facts__row:last-child{border-bottom:0}
+.facts__row dt{color:var(--ink-400)}
+.facts__row dd{margin:0; font-family:var(--font-mono); color:var(--ink-900); text-align:right}
+
+/* ── Section furniture ──────────────────────────────────────── */
+.sect{padding-block:72px}
+.sect__head{
+  display:flex; align-items:flex-end; justify-content:space-between; gap:40px;
+  padding-bottom:18px; border-bottom:2px solid var(--ink-900); margin-bottom:36px;
+}
+.sect__head h2{font-size:clamp(1.5rem,2.6vw,2rem); font-weight:800}
+.sect__note{
+  font-family:var(--font-mono); font-size:.6875rem; letter-spacing:.09em;
+  text-transform:uppercase; color:var(--ink-400); white-space:nowrap; padding-bottom:.35em;
+}
+
+/* ── NEW: the chooser. Replaces the thin contents strip. ─────
+   Same anchors, but each cell answers "is this one mine?"
+   instead of restating the product's category. ─────────────── */
+.chooser{
+  display:grid; grid-template-columns:repeat(4,1fr);
+  border-top:2px solid var(--ink-900); border-bottom:2px solid var(--ink-900);
+}
+.chooser__cell{
+  display:flex; flex-direction:column; gap:14px;
+  padding:26px 24px 24px; text-decoration:none;
+  border-left:var(--rule); transition:background-color .18s ease;
+}
+.chooser__cell:first-child{border-left:0}
+.chooser__cell:hover{background:var(--paper-050)}
+.chooser__n{font-family:var(--font-mono); font-size:.6875rem; color:var(--paper-400)}
+.chooser__q{
+  font-size:.9375rem; line-height:1.45; color:var(--ink-860); font-weight:500;
+  flex:1; max-width:26ch;
+}
+.chooser__ans{
+  display:flex; align-items:center; gap:10px;
+  font-family:var(--font-heading); font-weight:800; font-size:1.0625rem;
+  color:var(--ink-900); letter-spacing:-.01em;
+}
+.chooser__cell:hover .chooser__ans{color:var(--accent-600)}
+.chooser__ans span{
+  font-family:var(--font-body); font-weight:400; font-size:1rem;
+  color:var(--paper-400); transition:transform .18s ease;
+}
+.chooser__cell:hover .chooser__ans span{transform:translateX(3px); color:var(--accent-500)}
+
+/* ── Status pip ─────────────────────────────────────────────── */
+.pip{
+  display:inline-flex; align-items:center; gap:7px;
+  font-family:var(--font-mono); font-size:.6875rem; letter-spacing:.1em; text-transform:uppercase;
+}
+.pip::before{content:''; width:7px; height:7px; flex:none}
+.pip--ga::before{background:currentColor}
+.pip--preview::before{border:1.5px solid var(--accent-500)}
+
+/* ── THE PLATE ──────────────────────────────────────────────── */
+.plate{
+  border:1px solid var(--ink-900); margin-bottom:40px; scroll-margin-top:96px;
+  background:var(--paper-000);
+}
+
+/* Header bar. Price and ship status are promoted here out of the
+   spec sheet: they are the two rows every visitor reads first and
+   they were sitting at row six of a six-row table. */
+.plate__bar{
+  display:flex; align-items:center; gap:20px; flex-wrap:wrap;
+  background:var(--ink-900); color:var(--paper-000);
+  padding:14px 24px;
+}
+.plate__n{font-family:var(--font-mono); font-size:.8125rem; color:rgba(255,255,255,.55)}
+.plate__name{
+  font-family:var(--font-heading); font-weight:800; font-size:1.3125rem;
+  color:var(--paper-000); text-decoration:none; letter-spacing:-.02em;
+  display:inline-flex; align-items:center; gap:8px;
+}
+.plate__name:hover{color:var(--accent-400)}
+.plate__name em{font-style:normal; font-size:.8em; opacity:.55; transition:transform .18s ease}
+.plate__name:hover em{transform:translate(2px,-2px); opacity:1}
+.plate__bar .pip--ga{color:rgba(255,255,255,.72)}
+.plate__bar .pip--preview{color:var(--accent-400)}
+.plate__price{
+  margin-left:auto; display:flex; align-items:baseline; gap:10px;
+  font-family:var(--font-mono); font-size:.8125rem; color:rgba(255,255,255,.88);
+}
+.plate__price b{
+  font-family:var(--font-body); font-weight:700; font-size:.875rem;
+  color:var(--paper-000);
+}
+.plate__meta{
+  font-family:var(--font-mono); font-size:.75rem; color:rgba(255,255,255,.55);
+  padding-left:20px; border-left:1px solid var(--ink-870);
+}
+
+/* Body. The evidence now sits BESIDE the pitch instead of in a
+   band underneath it: same information, roughly 420px less
+   scroll per entry, and the picture argues for the sentence it
+   is next to. */
+.plate__body{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:0}
+.plate__copy{padding:36px 32px 32px; border-right:var(--rule)}
+.plate__tag{
+  font-family:var(--font-heading); font-weight:800; color:var(--ink-900);
+  font-size:clamp(1.375rem,2.1vw,1.6875rem); line-height:1.2; letter-spacing:-.02em;
+  max-width:22ch;
+}
+.plate__desc{margin-top:16px; font-size:.9375rem; line-height:1.65; color:var(--ink-500); max-width:52ch}
+.chips{display:flex; flex-wrap:wrap; gap:7px; margin:22px 0 0; padding:0; list-style:none}
+.chips li{
+  font-family:var(--font-mono); font-size:.6875rem; letter-spacing:.02em;
+  color:var(--ink-400); background:var(--paper-050);
+  padding:5px 10px; border-radius:3px;
+}
+.plate__actions{display:flex; flex-wrap:wrap; gap:10px; margin-top:26px}
+
+/* Figure column */
+.plate__fig{padding:32px; display:flex; flex-direction:column; gap:14px; justify-content:center; background:var(--paper-100)}
+.shot{
+  border:1px solid var(--paper-200); background:var(--paper-000);
+  overflow:hidden; position:relative;
+}
+/* The dashboard poster is 1000px wide and no larger original exists.
+   Enlarging it to make the grade legible is exactly what made it
+   mushy, so the grade is SET IN TYPE from that same scan and the
+   screenshot runs at native scale beneath it -- downscaled, therefore
+   sharp, and doing the job of evidence rather than reading matter. */
+.shot--native{aspect-ratio:16/10}
+.shot--native img{width:100%; height:100%; object-fit:cover; object-position:top left}
+
+/* The readout. Every figure here is from the scan in the shot below. */
+.vitals{border:1px solid var(--ink-900); background:var(--paper-000)}
+.vitals__head{
+  display:flex; align-items:baseline; justify-content:space-between; gap:12px;
+  padding:13px 18px 0; font-family:var(--font-mono); font-size:.625rem;
+  letter-spacing:.11em; text-transform:uppercase; color:var(--ink-300);
+}
+.vitals__grade{display:flex; align-items:center; gap:18px; padding:8px 18px 16px}
+.vitals__letter{
+  font-family:var(--font-heading); font-weight:900; font-size:4.25rem;
+  line-height:.8; letter-spacing:-.045em; color:var(--accent-500);
+}
+.vitals__score{
+  font-family:var(--font-heading); font-weight:800; font-size:1.75rem;
+  line-height:1; letter-spacing:-.025em; color:var(--ink-900);
+}
+.vitals__state{
+  display:block; margin-top:5px; font-family:var(--font-body);
+  font-size:.8125rem; font-weight:400; color:var(--ink-400);
+}
+.vitals__sev{display:grid; grid-template-columns:repeat(4,1fr); border-top:1px solid var(--ink-900)}
+.vitals__sev div{padding:11px 14px; border-left:var(--rule)}
+.vitals__sev div:first-child{border-left:0}
+.vitals__sev b{
+  display:block; font-family:var(--font-heading); font-weight:800;
+  font-size:1.375rem; line-height:1; color:var(--ink-900);
+}
+.vitals__sev div:first-child b{color:var(--accent-500)}
+.vitals__sev span{
+  display:block; margin-top:4px; font-family:var(--font-mono); font-size:.5625rem;
+  letter-spacing:.1em; text-transform:uppercase; color:var(--ink-300);
+}
+
+/* The A-F grade is this entry's whole claim, and these are what stand
+   behind it: five categories, fixed weights, one number. It sits in the
+   copy column directly opposite the readout, which is the same argument
+   arriving from the other end. */
+.weights{margin:26px 0 8px; border-top:var(--rule); padding-top:16px}
+.weights__lab{
+  font-family:var(--font-mono); font-size:.625rem; letter-spacing:.11em;
+  text-transform:uppercase; color:var(--ink-300); margin:0 0 13px;
+}
+.weights__rows{list-style:none; margin:0; padding:0; display:grid; gap:9px}
+.weights__rows li{display:grid; grid-template-columns:9.5em 1fr 2.6em; gap:14px; align-items:center}
+.weights__name{font-size:.8125rem; color:var(--ink-500)}
+.weights__bar{height:6px; background:var(--paper-150); display:block}
+/* Ember on Security only. It is the heaviest weight, and the plate
+   already spends its accent on the grade, the button and the spec
+   strip -- five saturated bars would be the fourth claim on it. */
+.weights__bar i{display:block; height:100%; background:var(--paper-400)}
+.weights__rows li:first-child .weights__bar i{background:var(--accent-500)}
+.weights__rows li:first-child .weights__name{color:var(--ink-900)}
+.weights__pct{
+  font-family:var(--font-mono); font-size:.6875rem;
+  color:var(--ink-400); text-align:right;
+}
+/* Full-length store screenshots are three times the height of the copy
+   beside them. Cropped from the top, both phones end level and the
+   plate closes on one line. */
+.phones{display:grid; grid-template-columns:1fr 1fr; gap:16px; align-items:start}
+.phones img{
+  border:1px solid var(--paper-200); border-radius:12px;
+  width:100%; height:340px; object-fit:cover; object-position:top center;
+}
+.cap{
+  font-family:var(--font-mono); font-size:.6875rem; line-height:1.55;
+  color:var(--ink-400); letter-spacing:.01em;
+}
+.cap b{color:var(--ink-900); letter-spacing:.06em; text-transform:uppercase; font-weight:500}
+
+/* Spec strip. Was a six-row table stacked in a pink panel whose
+   height never matched the copy beside it, leaving a dead ember
+   rectangle on two of the four entries. Now one row along the
+   plate's bottom edge, label over value, which is also how the
+   site sets every other form of key/value. */
+.spec{
+  display:grid; grid-template-columns:repeat(5,1fr);
+  border-top:1px solid var(--ink-900); background:var(--accent-050);
+}
+.spec div{padding:16px 20px; border-left:1px solid var(--accent-200)}
+.spec div:first-child{border-left:0}
+.spec dt{
+  font-family:var(--font-mono); font-size:.625rem; letter-spacing:.11em;
+  text-transform:uppercase; color:var(--ink-400); margin-bottom:6px;
+}
+.spec dd{margin:0; font-size:.8125rem; line-height:1.45; color:var(--ink-860)}
+
+/* The one variant, and it is earned: AlgoBridge has no interface
+   to screenshot. Its figure is a four-node flow that wants the
+   full width, which also breaks the page's rhythm at entry two. */
+.plate--flow .plate__body{grid-template-columns:1fr}
+.plate--flow .plate__copy{border-right:0; border-bottom:var(--rule); padding-bottom:30px}
+.plate--flow .plate__desc,.plate--flow .plate__tag{max-width:64ch}
+.plate--flow .plate__fig{background:var(--paper-000)}
+.flow{display:flex; align-items:stretch; gap:14px; flex-wrap:wrap}
+.flow__node{
+  flex:1 1 220px; border:1px solid var(--paper-200); padding:18px 20px; background:var(--paper-000);
+}
+.flow__node--self{border-color:var(--accent-500)}
+.flow__node b{display:block; font-family:var(--font-mono); font-size:.875rem; color:var(--ink-900); font-weight:500}
+.flow__node span{display:block; margin-top:4px; font-size:.75rem; color:var(--ink-400)}
+.flow__arrow{align-self:center; color:var(--accent-500); font-size:1.125rem}
+
+/* Pledgivo carries two artefacts: the console that proves the claim, and
+   the fifty-second film. Both take the full width so they end level --
+   the pair is one fixed height and each child fills it, which is why the
+   video column is 315px (560 x 9/16). */
+.plate--pair .plate__fig{background:var(--paper-100)}
+.pair{display:grid; grid-template-columns:minmax(0,1fr) 315px; gap:18px; height:560px}
+.pair .shot{height:100%}
+.pair .shot img{width:100%; height:100%; object-fit:cover; object-position:top left}
+.reel{
+  position:relative; height:100%; overflow:hidden;
+  border:1px solid var(--paper-200); background:var(--ink-900);
+}
+.reel video{display:block; width:100%; height:100%; object-fit:cover}
+.reel__btn{
+  position:absolute; left:10px; bottom:10px;
+  font-family:var(--font-mono); font-size:.625rem; letter-spacing:.08em;
+  text-transform:uppercase; color:var(--paper-000); cursor:pointer;
+  background:color-mix(in srgb, var(--ink-900) 74%, transparent);
+  border:1px solid color-mix(in srgb, var(--paper-000) 30%, transparent);
+  border-radius:100px; padding:7px 13px; backdrop-filter:blur(6px);
+}
+.reel__btn:hover{background:var(--ink-900)}
+
+/* ── Compare table ──────────────────────────────────────────── */
+.cmp{width:100%; border-collapse:collapse; font-size:.8125rem}
+.cmp th,.cmp td{text-align:left; padding:13px 16px; border-bottom:var(--rule); vertical-align:top}
+.cmp thead th{
+  background:var(--ink-900); color:var(--paper-000); border-bottom:0;
+  font-family:var(--font-heading); font-weight:800; font-size:.9375rem; letter-spacing:-.01em;
+}
+.cmp thead th:first-child{
+  font-family:var(--font-mono); font-weight:400; font-size:.6875rem;
+  letter-spacing:.11em; text-transform:uppercase; color:rgba(255,255,255,.55);
+}
+.cmp tbody th{
+  font-family:var(--font-mono); font-weight:400; font-size:.6875rem; letter-spacing:.09em;
+  text-transform:uppercase; color:var(--ink-400); white-space:nowrap; width:1%;
+}
+.cmp tbody td{font-family:var(--font-mono); color:var(--ink-860)}
+.cmp tbody tr:hover{background:var(--paper-050)}
+.cmp .muted{color:var(--paper-400)}
+.cmp__note{
+  padding:16px 20px; background:var(--accent-050);
+  font-size:.875rem; color:var(--ink-860); border:1px solid var(--accent-200); border-top:0;
+}
+
+/* ── CTA band ───────────────────────────────────────────────── */
+/* Two columns, because at one the headline wrapped to four lines and
+   the buttons floated in half a screen of empty ember. */
+.band{background:var(--accent-500); color:var(--accent-on); padding-block:72px; margin-top:24px}
+.band .wrap{display:grid; grid-template-columns:minmax(0,1.05fr) minmax(0,1fr); gap:56px; align-items:end}
+.band h2{
+  color:var(--accent-on); font-size:clamp(1.75rem,3.2vw,2.375rem); font-weight:900;
+  letter-spacing:-.025em; line-height:1.12;
+}
+.band h2 em{font-style:italic; font-weight:800; color:#fff; line-height:1.15; padding-bottom:.08em; display:inline-block}
+.band p{font-size:1rem; color:rgba(17,6,5,.82)}
+.band__actions{display:flex; flex-wrap:wrap; gap:12px; margin-top:26px}
+@media (max-width:900px){ .band .wrap{grid-template-columns:1fr; gap:28px; align-items:start} }
+
+/* ── Responsive ─────────────────────────────────────────────── */
+@media (max-width:1024px){
+  .masthead__grid{grid-template-columns:1fr; gap:36px; align-items:start}
+  .chooser{grid-template-columns:1fr 1fr}
+  .chooser__cell:nth-child(3){border-left:0}
+  .chooser__cell:nth-child(-n+2){border-bottom:var(--rule)}
+  .spec{grid-template-columns:repeat(3,1fr)}
+  .spec div:nth-child(4){border-left:0}
+  .spec div:nth-child(-n+3){border-bottom:1px solid var(--accent-200)}
+}
+@media (max-width:900px){
+  /* Stacked, the film is capped: a 9:16 at full width is a whole screen. */
+  .pair{grid-template-columns:1fr; height:auto; gap:14px}
+  .pair .shot{height:auto}
+  .pair .shot img{height:auto; aspect-ratio:16/10}
+  .reel{height:auto; aspect-ratio:9/16; max-width:270px}
+}
+@media (max-width:767px){
+  /* Both halves of the head wrap at this width; stack them instead. */
+  .vitals__head{flex-direction:column; gap:2px}
+  .weights__rows li{grid-template-columns:8em 1fr 2.6em; gap:10px}
+  .wrap{padding-inline:16px}
+  .chrome nav{display:none}
+  .masthead h1{font-size:2.5rem}
+  .chooser{grid-template-columns:1fr}
+  .chooser__cell{border-left:0; border-bottom:var(--rule)}
+  .chooser__cell:last-child{border-bottom:0}
+  .plate__body{grid-template-columns:1fr}
+  .plate__copy{border-right:0; border-bottom:var(--rule); padding:28px 20px}
+  .plate__fig{padding:24px 20px}
+  .spec{grid-template-columns:1fr 1fr}
+  .spec div{border-left:0; border-bottom:1px solid var(--accent-200)}
+  .spec div:nth-child(2n){border-left:1px solid var(--accent-200)}
+  /* Five items into two columns leaves one alone; let it take the row. */
+  .spec div:last-child:nth-child(odd){grid-column:1/-1; border-bottom:0}
+  .plate__price{margin-left:0; width:100%}
+  .plate__meta{padding-left:0; border-left:0}
+  .cmp-scroll{overflow-x:auto}
+  .cmp{min-width:720px}
+  .sect__head{flex-direction:column; align-items:flex-start; gap:12px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition-duration:.01ms !important}
+}
+</style>
+</head>
+<body>
+
+<header class="chrome">
+  <div class="wrap">
+    <span class="brand">Cloud<b>Algo</b></span>
+    <nav>
+      <a href="#" aria-current="page">Products</a>
+      <a href="#">Services</a>
+      <a href="#">Case studies</a>
+      <a href="#">Journal</a>
+      <a href="#">About</a>
+    </nav>
+    <a class="btn btn-primary" href="#">Book a consultation</a>
+  </div>
+</header>
+
+<!-- ── Masthead. Unchanged in substance; the facts table is
+     tightened and the lede pulled to a 56ch measure. ─────────── -->
+<section class="masthead">
+  <div class="wrap">
+    <p class="crumbs"><a href="#">Home</a> / Products</p>
+    <div class="masthead__grid">
+      <div>
+        <h1>Four tools we needed,<br>so we <span class="mark">built them</span>.</h1>
+        <p class="masthead__lede">
+          Three came out of client work — an org we had to audit before we could quote it, a sync
+          no connector covered, a fundraising stack that was not allowed to leave Salesforce. The
+          fourth we wrote for ourselves and gave away. Two are generally available; two are in
+          preview and you can use them today.
+        </p>
+      </div>
+      <dl class="facts">
+        <div class="facts__row"><dt>Titles</dt><dd>4</dd></div>
+        <div class="facts__row"><dt>Generally available</dt><dd>AlgoBridge · InsureAlgo</dd></div>
+        <div class="facts__row"><dt>In preview</dt><dd>OrgVitals · Pledgivo</dd></div>
+        <div class="facts__row"><dt>Open source</dt><dd>AlgoBridge — MIT</dd></div>
+        <div class="facts__row"><dt>Support</dt><dd>contact@cloudalgo.com</dd></div>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<!-- ── The chooser. Same four anchors the contents strip carried,
+     but each cell states the situation the product is for. The
+     page's first job is "which of these is mine", and that was
+     previously answered by a table 4,000px down. ──────────────── -->
+<section class="sect" style="padding-bottom:0">
+  <div class="wrap">
+    <nav class="chooser" aria-label="Products contents">
+      <a class="chooser__cell" href="#orgvitals">
+        <span class="chooser__n">01</span>
+        <span class="chooser__q">You inherited an org and nobody can tell you what is in it.</span>
+        <span class="chooser__ans">OrgVitals <span aria-hidden="true">&rarr;</span></span>
+      </a>
+      <a class="chooser__cell" href="#algobridge">
+        <span class="chooser__n">02</span>
+        <span class="chooser__q">Your reporting stack needs Salesforce data in a real database.</span>
+        <span class="chooser__ans">AlgoBridge <span aria-hidden="true">&rarr;</span></span>
+      </a>
+      <a class="chooser__cell" href="#pledgivo">
+        <span class="chooser__n">03</span>
+        <span class="chooser__q">You raise money, and it is not allowed to leave Salesforce.</span>
+        <span class="chooser__ans">Pledgivo <span aria-hidden="true">&rarr;</span></span>
+      </a>
+      <a class="chooser__cell" href="#insurealgo">
+        <span class="chooser__n">04</span>
+        <span class="chooser__q">You hold five insurance policies and miss the renewals.</span>
+        <span class="chooser__ans">InsureAlgo <span aria-hidden="true">&rarr;</span></span>
+      </a>
+    </nav>
+  </div>
+</section>
+
+<!-- ── The catalogue ──────────────────────────────────────────── -->
+<section class="sect" aria-labelledby="catalogue-heading">
+  <div class="wrap">
+    <div class="sect__head">
+      <h2 id="catalogue-heading">The catalogue, in order of depth.</h2>
+      <span class="sect__note">Specifications as of Aug 2026</span>
+    </div>
+
+    <!-- 01 ─ OrgVitals ─────────────────────────────────────── -->
+    <article class="plate" id="orgvitals">
+      <header class="plate__bar">
+        <span class="plate__n">01</span>
+        <a class="plate__name" href="/products/orgvitals/">OrgVitals <em aria-hidden="true">&#8599;</em></a>
+        <span class="pip pip--preview">Preview</span>
+        <span class="plate__price"><b>Free</b>
+          <span class="plate__meta">v1.1.1 · Desktop</span>
+        </span>
+      </header>
+
+      <div class="plate__body">
+        <div class="plate__copy">
+          <p class="plate__tag">A health scanner for Salesforce orgs that runs on your machine, not ours.</p>
+          <p class="plate__desc">
+            Point it at any org you have already authenticated with the Salesforce CLI. It pulls a
+            read-only metadata snapshot and runs 49 scanners across Security, Code Quality,
+            Automation, Tech Debt and Performance, then grades the org A–F and ranks what to fix
+            first. Nothing is written back to Salesforce, and the snapshot never leaves your disk.
+          </p>
+          <div class="weights">
+            <p class="weights__lab">How the grade is weighted</p>
+            <ul class="weights__rows">
+              <li><span class="weights__name">Security</span>
+                <span class="weights__bar"><i style="width:100%"></i></span>
+                <span class="weights__pct">30%</span></li>
+              <li><span class="weights__name">Code quality</span>
+                <span class="weights__bar"><i style="width:67%"></i></span>
+                <span class="weights__pct">20%</span></li>
+              <li><span class="weights__name">Automation</span>
+                <span class="weights__bar"><i style="width:67%"></i></span>
+                <span class="weights__pct">20%</span></li>
+              <li><span class="weights__name">Tech debt</span>
+                <span class="weights__bar"><i style="width:67%"></i></span>
+                <span class="weights__pct">20%</span></li>
+              <li><span class="weights__name">Performance</span>
+                <span class="weights__bar"><i style="width:33%"></i></span>
+                <span class="weights__pct">10%</span></li>
+            </ul>
+          </div>
+          <ul class="chips">
+            <li>49 scanners</li><li>A–F grade</li><li>Findings triage</li>
+            <li>Dependency graph</li><li>Cross-org compare</li><li>Ask Vita</li>
+          </ul>
+          <div class="plate__actions">
+            <a class="btn btn-primary" href="#">Download OrgVitals — free</a>
+            <a class="btn btn-outline" href="#">Read the guide</a>
+          </div>
+        </div>
+
+        <figure class="plate__fig" style="margin:0">
+          <div class="vitals">
+            <p class="vitals__head"><span>Health report &middot; 49 scanners</span><span>Jun 25, 2026</span></p>
+            <p class="vitals__grade">
+              <span class="vitals__letter">C</span>
+              <span><span class="vitals__score">69/100</span>
+                <span class="vitals__state">Needs attention</span></span>
+            </p>
+            <div class="vitals__sev">
+              <div><b>2</b><span>Critical</span></div>
+              <div><b>8</b><span>High</span></div>
+              <div><b>3</b><span>Med</span></div>
+              <div><b>3</b><span>Low</span></div>
+            </div>
+          </div>
+          <div class="shot shot--native">
+            <img src="../../../../public/products/orgvitals/guide/posters/03-dashboard.webp"
+                 alt="The OrgVitals dashboard for an org called AcmeProduction: the health report down the left, a score trend of 68, 67, 68, 69, 69 across the last five scans, and the results of all 49 scanners grouped by Tech Debt, Automation and Code Quality."
+                 loading="lazy" decoding="async">
+          </div>
+          <figcaption class="cap"><b>Fig. 01</b> the grade the scan returned, and the run it came from. Sixteen findings open, none new since the last scan.</figcaption>
+        </figure>
+      </div>
+
+      <dl class="spec">
+        <div><dt>Runs on</dt><dd>macOS · Windows · Linux (Electron)</dd></div>
+        <div><dt>Org access</dt><dd>Salesforce CLI — read-only, no write scopes</dd></div>
+        <div><dt>Storage</dt><dd>Local SQLite snapshot, stays on device</dd></div>
+        <div><dt>Scan time</dt><dd>A full org scans in minutes</dd></div>
+        <div><dt>AI</dt><dd>Opt-in, your own Anthropic key</dd></div>
+      </dl>
+    </article>
+
+    <!-- 02 ─ AlgoBridge. The one variant: no interface to shoot,
+         and a four-node flow that wants the full width. ─────── -->
+    <article class="plate plate--flow" id="algobridge">
+      <header class="plate__bar">
+        <span class="plate__n">02</span>
+        <a class="plate__name" href="/products/algobridge/">AlgoBridge <em aria-hidden="true">&#8599;</em></a>
+        <span class="pip pip--ga">Generally available</span>
+        <span class="plate__price"><b>Free — MIT</b>
+          <span class="plate__meta">v1.0 · Self-hosted</span>
+        </span>
+      </header>
+
+      <div class="plate__body">
+        <div class="plate__copy">
+          <p class="plate__tag">Your Salesforce data in PostgreSQL, ten seconds behind.</p>
+          <p class="plate__desc">
+            A bidirectional sync engine with trigger-based change detection. Changes move in both
+            directions on a fixed ten-second batch — no polling, no queue to babysit — and every
+            column edit is kept for 31 days so you can answer who changed what. MIT-licensed, runs
+            on your own Docker or ECS, priced at nothing per record.
+          </p>
+          <ul class="chips">
+            <li>Bidirectional</li><li>10-second batches</li><li>31-day column diffs</li>
+            <li>Bulk API v2</li><li>MIT licence</li>
+          </ul>
+          <div class="plate__actions">
+            <a class="btn btn-primary" href="#">Try the hosted demo &rarr;</a>
+            <a class="btn btn-outline" href="#">Read the guide</a>
+          </div>
+        </div>
+
+        <figure class="plate__fig" style="margin:0">
+          <div class="flow">
+            <div class="flow__node"><b>Salesforce</b><span>a trigger fires on every change</span></div>
+            <span class="flow__arrow" aria-hidden="true">&#8644;</span>
+            <div class="flow__node flow__node--self"><b>AlgoBridge</b><span>10-second batch · SOAP + Bulk v2</span></div>
+            <span class="flow__arrow" aria-hidden="true">&#8644;</span>
+            <div class="flow__node"><b>PostgreSQL 14+</b><span>hstore column diff, kept 31 days</span></div>
+          </div>
+          <figcaption class="cap"><b>Fig. 02</b> both arrows point both ways. There is no screenshot because there is no interface: AlgoBridge is a daemon, and this is the whole of it.</figcaption>
+        </figure>
+      </div>
+
+      <dl class="spec">
+        <div><dt>Runs on</dt><dd>Docker Compose or AWS ECS</dd></div>
+        <div><dt>Written in</dt><dd>Python 3, async I/O</dd></div>
+        <div><dt>Database</dt><dd>PostgreSQL 14+ with hstore</dd></div>
+        <div><dt>Org access</dt><dd>SOAP API + Bulk API v2, per batch</dd></div>
+        <div><dt>Audit</dt><dd>31-day column-level diff log</dd></div>
+      </dl>
+    </article>
+
+    <!-- 03 ─ Pledgivo. Currently the only entry with no figure at
+         all, which reads as a hole rather than as intent. The slot
+         is flagged below; it needs one real screenshot. ───────── -->
+    <article class="plate plate--flow plate--pair" id="pledgivo">
+      <header class="plate__bar">
+        <span class="plate__n">03</span>
+        <a class="plate__name" href="/products/pledgivo/">Pledgivo <em aria-hidden="true">&#8599;</em></a>
+        <span class="pip pip--preview">Preview</span>
+        <span class="plate__price"><b>Free to 200 gifts/yr</b>
+          <span class="plate__meta">2GP package · API 67.0</span>
+        </span>
+      </header>
+
+      <div class="plate__body">
+        <div class="plate__copy">
+          <p class="plate__tag">Fundraising that never leaves Salesforce.</p>
+          <p class="plate__desc">
+            The donation form, the payment and the donor record all live in your org, so a gift is a
+            standard Opportunity the instant it is taken — no external platform, no nightly sync, no
+            second permission model to keep in step. Recurring giving, campaigns and ticketed events
+            run on standard objects, which means the reports and sharing rules you already have keep
+            working.
+          </p>
+          <ul class="chips">
+            <li>Standard objects</li><li>Stripe Payment Element</li><li>Recurring &amp; dunning</li>
+            <li>Events &amp; ticketing</li><li>Passwordless donor portal</li><li>Multi-Stripe routing</li>
+          </ul>
+          <div class="plate__actions">
+            <a class="btn btn-primary" href="#">See a live donation form &rarr;</a>
+            <a class="btn btn-outline" href="#">Read the guide</a>
+            <a class="btn btn-outline" href="#">Watch the tour · 2:54</a>
+          </div>
+        </div>
+
+        <figure class="plate__fig" style="margin:0">
+          <div class="pair" data-reel>
+            <div class="shot">
+              <img src="../../../../public/products/pledgivo/01-fundraisers-console.webp"
+                   alt="The Pledgivo Fundraisers console open inside Salesforce, under a navigation bar of standard Campaigns, Contacts, Opportunities and Recurring Donations tabs, listing twelve active fundraisers with their fund, progress and status."
+                   loading="lazy" decoding="async">
+            </div>
+            <div class="reel">
+              <video data-src="../../../../public/products/pledgivo/tour-vertical.mp4"
+                     poster="../../../../public/products/pledgivo/tour-vertical-poster.webp"
+                     muted loop playsinline preload="none"
+                     aria-label="A silent fifty-two second tour: a donor completes a gift on the public form, and the Opportunity appears on the Contact record in Salesforce."></video>
+              <button class="reel__btn" type="button">Play</button>
+            </div>
+          </div>
+          <figcaption class="cap"><b>Fig. 03</b> left, the console and the row of standard Salesforce tabs above it &mdash; that bar is the claim. Right, the same gift taken end to end, silent, 0:52.</figcaption>
+        </figure>
+      </div>
+
+      <dl class="spec">
+        <div><dt>Runs in</dt><dd>Your Salesforce org — 2GP managed package</dd></div>
+        <div><dt>Editions</dt><dd>Enterprise · Unlimited · Performance · Developer</dd></div>
+        <div><dt>Donor pages</dt><dd>Enhanced LWR Experience Cloud site, LWC only</dd></div>
+        <div><dt>Payments</dt><dd>Stripe — tokenised in the browser, never in Apex</dd></div>
+        <div><dt>Coverage</dt><dd>90% Apex, gated on every change</dd></div>
+      </dl>
+    </article>
+
+    <!-- 04 ─ InsureAlgo. Two screens at a size you can read, not
+         four at thumbnail size. ─────────────────────────────── -->
+    <article class="plate" id="insurealgo">
+      <header class="plate__bar">
+        <span class="plate__n">04</span>
+        <a class="plate__name" href="/products/insurealgo/">InsureAlgo <em aria-hidden="true">&#8599;</em></a>
+        <span class="pip pip--ga">Generally available</span>
+        <span class="plate__price"><b>Free</b>
+          <span class="plate__meta">v1.0.0 · iOS &amp; Android</span>
+        </span>
+      </header>
+
+      <div class="plate__body">
+        <div class="plate__copy">
+          <p class="plate__tag">Every policy you hold, and the date each one lapses.</p>
+          <p class="plate__desc">
+            Vehicle, health, life, home and anything else you want to name, with a countdown to each
+            renewal and reminders ten, five and three days out. There is no account to create and no
+            server to send anything to — policies live on the phone behind a biometric lock, and the
+            only copy that leaves is the one you choose to put in your own iCloud.
+          </p>
+          <ul class="chips">
+            <li>Offline by default</li><li>No account</li><li>Biometric lock</li>
+            <li>Document vault</li><li>One-tap renewal</li>
+          </ul>
+          <div class="plate__actions">
+            <a class="btn btn-primary" href="#">Get it on the App Store &rarr;</a>
+          </div>
+        </div>
+
+        <figure class="plate__fig" style="margin:0">
+          <div class="phones">
+            <img src="../../../../public/products/insurealgo/02_dashboard.webp"
+                 alt="The InsureAlgo dashboard listing policies with days remaining until each renewal."
+                 loading="lazy" decoding="async">
+            <img src="../../../../public/products/insurealgo/04_add_policy.webp"
+                 alt="The add-a-policy form: type, provider, number, premium and renewal date."
+                 loading="lazy" decoding="async">
+          </div>
+          <figcaption class="cap"><b>Fig. 04</b> what expires soonest, and the minute it takes to add a policy.</figcaption>
+        </figure>
+      </div>
+
+      <dl class="spec">
+        <div><dt>Runs on</dt><dd>iOS 15+ · Android 8+ (Flutter)</dd></div>
+        <div><dt>Account</dt><dd>None — nothing to sign up for</dd></div>
+        <div><dt>Storage</dt><dd>Encrypted Hive store on device</dd></div>
+        <div><dt>Backup</dt><dd>Optional, to your own iCloud</dd></div>
+        <div><dt>Telemetry</dt><dd>None. No tracking, no ads</dd></div>
+      </dl>
+    </article>
+  </div>
+</section>
+
+<!-- ── Compare ────────────────────────────────────────────────── -->
+<section class="sect" aria-labelledby="compare-heading" style="padding-top:0">
+  <div class="wrap">
+    <div class="sect__head">
+      <h2 id="compare-heading">All four, side by side.</h2>
+      <span class="sect__note">The questions people actually ask</span>
+    </div>
+
+    <div class="cmp-scroll">
+      <table class="cmp">
+        <caption class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">
+          The four CloudAlgo products compared by what they are, where they run, what they touch in
+          Salesforce, who they are for, how they are set up, what they cost and their ship status.
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col">Compare</th>
+            <th scope="col">OrgVitals</th>
+            <th scope="col">AlgoBridge</th>
+            <th scope="col">Pledgivo</th>
+            <th scope="col">InsureAlgo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">What it is</th><td>Desktop app</td><td>Sync service</td><td>Managed package</td><td>Mobile app</td></tr>
+          <tr><th scope="row">Where it runs</th><td>Your machine</td><td>Your server</td><td>Your Salesforce org</td><td>Your phone</td></tr>
+          <tr><th scope="row">Salesforce access</th><td>Read-only, via sf CLI</td><td>Read and write, API</td><td>Native — it is the org</td><td class="muted">None</td></tr>
+          <tr><th scope="row">Who it is for</th><td>Architects &amp; admins</td><td>Data &amp; platform teams</td><td>Nonprofits</td><td>Anyone with a policy</td></tr>
+          <tr><th scope="row">Set-up</th><td>Install and authenticate</td><td>Docker Compose or ECS</td><td>Install package, connect Stripe</td><td>Download and open</td></tr>
+          <tr><th scope="row">Price</th><td>Free</td><td>Free — MIT</td><td>Free to 200 gifts/yr</td><td>Free</td></tr>
+          <tr><th scope="row">Status</th><td>Preview</td><td>Generally available</td><td>Preview</td><td>Generally available</td></tr>
+        </tbody>
+      </table>
+      <p class="cmp__note">
+        Two answers are the same in every column: none of the four sends your data to us, and all
+        four are free to start. Three of them never ask for a card at all.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA band. Was headline-left with the two buttons floating in
+     an empty ember field to the right. Now one column, actions
+     directly under the copy they belong to. ──────────────────── -->
+<section class="band" aria-labelledby="band-which">
+  <div class="wrap">
+    <h2 id="band-which">Not sure which one you need?<br><em>That is usually a services question.</em></h2>
+    <div>
+      <p>
+        Some of what people come here looking for is not a download at all — it is a week of our
+        time. Tell us the org and the problem, and we will say plainly whether a product covers it.
+      </p>
+      <div class="band__actions">
+        <a class="btn btn-ink" href="#">See the services &rarr;</a>
+        <a class="btn btn-light" href="#">Email contact@cloudalgo.com</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<script>
+/* The film is 1.7 MB, so nothing is fetched until the plate is on
+   screen, and it stops again when it leaves. It never starts by
+   itself for a reader who has asked for less motion, and the button
+   is not decoration: WCAG 2.2.2 requires a stop for anything that
+   moves for more than five seconds, and this moves for fifty-two. */
+(function () {
+  var reel = document.querySelector('.reel');
+  if (!reel) return;
+  var video = reel.querySelector('video');
+  var btn = reel.querySelector('.reel__btn');
+  var wanted = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function label() { btn.textContent = video.paused ? 'Play' : 'Pause'; }
+  function stop() { video.pause(); label(); }
+  function start() {
+    if (!video.src) video.src = video.dataset.src;
+    var p = video.play();
+    /* A browser that refuses to autoplay is not an error -- the poster
+       stays up and the button still works. */
+    if (p && p.then) { p.then(label, label); } else { label(); }
+  }
+
+  btn.addEventListener('click', function () {
+    wanted = video.paused;
+    if (wanted) { start(); } else { stop(); }
+  });
+
+  new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) { if (wanted) start(); } else { stop(); }
+    });
+  }, { threshold: 0.35 }).observe(reel);
+
+  label();
+})();
+</script>
+</body>
+</html>

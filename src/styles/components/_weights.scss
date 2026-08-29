@@ -1,0 +1,78 @@
+/* How a grade is weighted: five categories, fixed shares, one number.
+
+   The bars are drawn against the LARGEST weight, not against 100 --
+   WeightBars.astro does that arithmetic. A 30% share drawn as 30% of
+   its track reads as a progress bar stuck near empty; drawn full, with
+   20% at two thirds of it, the five read as what they are, which is
+   shares of each other.
+
+   One bar is ember and the other four are not. The heaviest category
+   is the one a reader should take away, and the plate around this has
+   already spent its accent on the grade, the primary button and the
+   spec strip -- five saturated bars would be a fourth claim on it. */
+
+.weights {
+  border-top: 1px solid var(--weights-rule);
+  padding-top: 1rem;
+}
+
+.weights__lab {
+  margin: 0 0 0.8125rem;
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.weights__rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--weights-gap);
+}
+
+/* An em measure on the name column, not a fraction: these are five
+   fixed labels, and a fractional column would re-wrap "Code quality"
+   every time the copy column changed width. */
+.weights__rows li {
+  display: grid;
+  grid-template-columns: var(--weights-name-width) 1fr 2.6em;
+  gap: 0.875rem;
+  align-items: center;
+}
+
+.weights__name {
+  font-size: var(--size-body-sm);
+  color: var(--color-text);
+}
+
+.weights__bar {
+  display: block;
+  height: var(--weights-bar-height);
+  background: var(--weights-track);
+}
+
+.weights__bar i {
+  display: block;
+  height: 100%;
+  background: var(--weights-fill);
+}
+
+.weights__rows li:first-child .weights__bar i { background: var(--weights-fill-lead); }
+.weights__rows li:first-child .weights__name { color: var(--color-heading); }
+
+.weights__pct {
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  color: var(--color-text-muted);
+  text-align: right;
+}
+
+@media (max-width: 560px) {
+  .weights__rows li {
+    grid-template-columns: 8em 1fr 2.6em;
+    gap: 0.625rem;
+  }
+}

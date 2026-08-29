@@ -1,0 +1,110 @@
+---
+/**
+ * An ambient reel: a short silent film that runs beside a figure the
+ * way a screenshot would, rather than a film a reader sits down to
+ * watch. VideoPlayer is the one you watch -- it has a seal, a scrubber
+ * and a duration, and it reports what was watched. This one has a
+ * single control and reports nothing.
+ *
+ * That silence is deliberate. `video_start` / `video_progress` /
+ * `video_complete` are VideoPlayer's names and they mean "a person
+ * chose to watch this". An ambient loop that fired them would file a
+ * view every time anyone scrolled past, and the numbers those events
+ * exist to produce would stop meaning anything.
+ *
+ * Three things the markup has to get right, none of them optional:
+ *
+ *  - `muted` + `playsinline` are what make autoplay legal at all. A
+ *    browser that still refuses is handled, not assumed away: the
+ *    poster stays up and the button works.
+ *  - the file is fetched on FIRST INTERSECTION, never at page load --
+ *    these are megabytes, and most readers never reach the fold.
+ *  - the pause control is visible and permanent. WCAG 2.2.2 requires a
+ *    stop for anything that moves for more than five seconds, and a
+ *    reel is by definition longer than that.
+ *
+ * Under `prefers-reduced-motion: reduce` nothing is fetched and nothing
+ * starts; the poster stands in and the button still works for a reader
+ * who wants it after all.
+ */
+interface Props {
+  src: string;
+  /** Stands in before first play, and for a reader who never starts it.
+      Effectively required: without one the frame is a black rectangle. */
+  poster: string;
+  /** What the film shows, for a reader who cannot watch it. */
+  label: string;
+  /** CSS aspect-ratio for the frame, e.g. "9 / 16". */
+  ratio?: string;
+  class?: string;
+}
+const { src, poster, label, ratio = '9 / 16', class: className } = Astro.props;
+---
+<div class:list={['reel', className]} style={`--reel-ratio:${ratio};`} data-reel>
+  <video
+    class="reel__video"
+    data-src={src}
+    poster={poster}
+    aria-label={label}
+    preload="none"
+    muted
+    loop
+    playsinline
+  ></video>
+  <button class="reel__btn" type="button" data-reel-btn>Play</button>
+</div>
+
+<script>
+  /* One handler per reel on the page, so a second one can be added
+     without this becoming a singleton that quietly drives the first. */
+  document.querySelectorAll<HTMLElement>('[data-reel]').forEach((reel) => {
+    const video = reel.querySelector('video');
+    const btn = reel.querySelector<HTMLButtonElement>('[data-reel-btn]');
+    if (!video || !btn) return;
+
+    /* Whether the reader wants it running at all. It starts false for
+       anyone who has asked for less motion, and every press of the
+       button sets it -- which is why scrolling away and back does not
+       override a deliberate pause. */
+    let wanted = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const label = () => {
+      btn.textContent = video.paused ? 'Play' : 'Pause';
+    };
+
+    const stop = () => {
+      video.pause();
+      label();
+    };
+
+    const start = () => {
+      if (!video.src) video.src = video.dataset.src ?? '';
+      /* A refused autoplay is a state, not an error: the poster stays
+         and the button still works. */
+      void video.play().then(label, label);
+    };
+
+    btn.addEventListener('click', () => {
+      wanted = video.paused;
+      if (wanted) start();
+      else stop();
+    });
+
+    new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            if (wanted) start();
+          } else {
+            /* Off screen it stops: no decode budget, no data spent on a
+               film nobody is looking at. */
+            stop();
+          }
+        });
+      },
+      { threshold: 0.35 },
+    ).observe(reel);
+
+    label();
+  });
+</script>

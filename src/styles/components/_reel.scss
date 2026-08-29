@@ -1,0 +1,49 @@
+/* The ambient film that runs beside a figure. VideoReel.astro owns the
+   behaviour -- fetch on intersection, pause off screen, never start
+   under reduced motion -- and this owns the frame.
+
+   The frame is an aspect-ratio rather than a height so a vertical film
+   keeps its shape at any column width. Inside a fixed-height pair the
+   ratio is overridden to `auto` and the height is taken from the row,
+   which is the only way the film and the screenshot beside it end on
+   the same line.
+
+   The control is a floating chip rather than a button in the flow. It
+   has to sit over the picture -- a control below the frame is a control
+   a reader has to look for -- and it has to stay legible over whatever
+   frame happens to be under it, which is what the scrim and the blur
+   are for. */
+
+.reel {
+  position: relative;
+  aspect-ratio: var(--reel-ratio, 9 / 16);
+  overflow: hidden;
+  border: 1px solid var(--reel-border);
+  background: var(--reel-bg);
+}
+
+.reel__video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.reel__btn {
+  position: absolute;
+  left: 0.625rem;
+  bottom: 0.625rem;
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-on-inverse);
+  cursor: pointer;
+  background: var(--reel-btn-bg);
+  border: 1px solid var(--reel-btn-border);
+  border-radius: var(--radius-pill);
+  padding: 0.4375rem 0.8125rem;
+  backdrop-filter: blur(6px);
+}
+
+.reel__btn:hover { background: var(--surface-inverse); }
