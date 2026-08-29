@@ -15,7 +15,7 @@
 // any collection field -- so they live in HOME below, keyed by id.
 //
 // EVERY SERVICE APPEARS. The fold was four rows for as long as four was
-// the whole practice; it is seven now because the practice is, and a
+// the whole practice; it is eight now because the practice is, and a
 // home page that shows a subset makes the reader guess which subset. So
 // HOME is a copy table, not a guest list -- and a service with no row
 // written for it would render undefined, which is why the loop below
@@ -37,7 +37,13 @@ const HOME: Record<string, HomeCopy> = {
     name: 'Consulting & Implementation',
     blurb:
       'The build, done so your admins can still change it. CRM configuration, ' +
-      'Experience Cloud, custom Platform development, MuleSoft and Heroku.',
+      'Experience Cloud, custom Platform development, integrations and migrations.',
+  },
+  'heroku-consulting': {
+    type: 'Platform',
+    blurb:
+      'The Heroku side, built so it outlasts the roadmap. Connect at volume, Postgres as ' +
+      'the scale tier, and the jobs Apex was never going to run.',
   },
   'product-development': {
     type: 'Product',
@@ -98,7 +104,7 @@ for (const s of services) {
 // the schema allows at most one, and permits neither. Resolve the reference
 // where there is one so the row can link to the product; otherwise carry the
 // claim as text, and where a practice has no proof yet print no line at all.
-// Four of the seven have proof; the other three leave the cell empty rather
+// Four of the eight have proof; the other four leave the cell empty rather
 // than reach for a sentence, and an empty fourth cell in a fixed four-column
 // grid costs the row nothing but the whitespace.
 const proofs = new Map(

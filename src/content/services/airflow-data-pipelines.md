@@ -1,7 +1,7 @@
 ---
 title: "Airflow Data Pipelines"
 shortTitle: "Data pipelines"
-order: 6
+order: 7
 icon: "⚡"
 excerpt: "Apache Airflow orchestration for enterprise data integration — connecting Salesforce, ERP systems, databases, and APIs at large scale."
 proves: algobridge

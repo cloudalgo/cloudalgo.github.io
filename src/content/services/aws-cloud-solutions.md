@@ -1,7 +1,7 @@
 ---
 title: "AWS Cloud Solutions"
 shortTitle: "AWS"
-order: 5
+order: 6
 icon: "🏗️"
 excerpt: "AWS architecture for the workloads that do not belong inside Salesforce — VPC and IAM as code, serverless processing, analytics, and cost work in the design."
 ---

@@ -30,7 +30,13 @@ const SERVICES = {
     id: 'salesforce-consulting',
     does:
       'CRM customisation, Experience Cloud, custom platform development, MuleSoft '
-      + 'integrations and Heroku solutions',
+      + 'integrations and data migration',
+  },
+  heroku: {
+    id: 'heroku-consulting',
+    does:
+      'Heroku Connect at volume, Postgres as the scale tier, and the long-running jobs '
+      + 'Apex was never going to run',
   },
   product: {
     id: 'product-development',
@@ -65,7 +71,7 @@ type ServiceKey = keyof typeof SERVICES;
 /** The default answer, one per category in the blog schema's enum. */
 const BY_CATEGORY: Record<string, ServiceKey> = {
   Salesforce: 'consulting',
-  Heroku: 'consulting',
+  Heroku: 'heroku',
   MuleSoft: 'mulesoft',
   AWS: 'aws',
   Product: 'product',
@@ -76,8 +82,12 @@ const OVERRIDES: Record<string, ServiceKey> = {
   /* Filed under Heroku because that is where the scheduler runs; the work
      is a data pipeline. */
   'apache-airflow-on-heroku-salesforce-data': 'airflow',
-  /* A comparison, not a Heroku build -- the reader is choosing a platform. */
-  'heroku-or-aws-how-to-choose': 'aws',
+  /* A comparison, not a Heroku build. It used to route to AWS, back when the
+     Heroku entry only meant "we build Heroku apps" and had nothing to say to a
+     reader still deciding. The estate review answers exactly this question --
+     and says AWS out loud when AWS is the answer -- so the decision, not one
+     of the two destinations, is what the band should offer. */
+  'heroku-or-aws-how-to-choose': 'heroku',
   /* Three write-ups of tools we built ourselves. */
   'salesforce-field-impact-analyser': 'product',
   'apex-lint-offline-apex-analysis-without-java': 'product',

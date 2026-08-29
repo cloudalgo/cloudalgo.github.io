@@ -57,7 +57,7 @@ const services = defineCollection({
     icon:    z.string(),
     excerpt: z.string(),
     // What demonstrates this service. At most one of these two, enforced
-    // below. The slot is optional because proof is: four of the seven
+    // below. The slot is optional because proof is: four of the eight
     // practices have a product or a counted figure behind them, and three
     // -- MuleSoft integration, RPA, AWS -- have neither yet.
     //

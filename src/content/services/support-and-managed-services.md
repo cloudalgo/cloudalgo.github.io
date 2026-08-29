@@ -1,7 +1,7 @@
 ---
 title: "Support & Managed Services"
 shortTitle: "Support"
-order: 7
+order: 8
 icon: "🔧"
 excerpt: "A rolling monthly retainer for an org already in production: Salesforce support, maintenance, enhancements, org health reviews and security recommendations."
 proves: orgvitals

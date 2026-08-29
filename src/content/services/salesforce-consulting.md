@@ -3,7 +3,7 @@ title: "Salesforce Consulting & Implementation"
 shortTitle: "Consulting"
 order: 1
 icon: "☁️"
-excerpt: "CRM customization, Experience Cloud, custom Salesforce Platform development, MuleSoft integrations, and Heroku solutions."
+excerpt: "CRM customization, Experience Cloud, custom Salesforce Platform development, MuleSoft integrations, and data migration."
 provenBy: "70+ projects"
 ---
 
@@ -23,7 +23,7 @@ The right connector for each job, and a written reason for the choice.
 - **REST & SOAP callouts** — named credentials, connected apps, OAuth 2.0
 - **Platform Events & Change Data Capture** — event-driven patterns for real-time downstream updates
 - **External Services** — declarative integration with OpenAPI endpoints, callable from Flow
-- **Heroku Connect** — bi-directional PostgreSQL ↔ Salesforce sync, with field mapping that survives a schema change
+- **Heroku Connect** — when the org needs its data in Postgres; scoped and run under [02 — Heroku consulting](/services/heroku-consulting/)
 
 ### Lightning Web Components
 
@@ -36,7 +36,7 @@ When declarative tools hit their limit, we write the component — and we write 
 
 ### AppExchange development
 
-End-to-end managed package delivery. If this is the whole engagement rather than part of it, [02 — Product development](/services/product-development/) is the shape you want.
+End-to-end managed package delivery. If this is the whole engagement rather than part of it, [03 — Product development](/services/product-development/) is the shape you want.
 
 - **1GP packages** — namespace management, patch releases, push upgrades
 - **2GP packages** — unlocked package architecture and scratch-org CI/CD

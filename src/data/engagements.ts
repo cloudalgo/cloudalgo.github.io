@@ -1,5 +1,5 @@
 /**
- * The seven engagements, as data.
+ * The eight engagements, as data.
  *
  * Both services pages read from here: the index draws all seven against one
  * calendar and gives each a spread, and `/services/<slug>/` opens one of them
@@ -155,16 +155,17 @@ export type Engagement = {
   stackLabel?: string;
   stack: string;
   terms: Term[];
-  /** The first step THIS engagement asks for. Seven engagements had
-      seven identical "Book a consultation" buttons in an early draft,
-      which is the same ask printed seven times rather than seven
-      different first meetings. */
+  /** The first step THIS engagement asks for. Every engagement carried
+      an identical "Book a consultation" button in an early draft, which
+      is the same ask printed once per row rather than one first meeting
+      per engagement. */
   cta: string;
   detail: Detail;
 };
 
 export const TYPICAL: Record<string, { range: string; qualifier?: string }> = {
   'salesforce-consulting':  { range: '6–12 weeks' },
+  'heroku-consulting':      { range: '8–16 weeks' },
   'product-development':    { range: '12–24 weeks' },
   'mulesoft-integration':   { range: '8–16 weeks' },
   'mulesoft-rpa':           { range: '4–8 weeks', qualifier: 'per process' },
@@ -236,7 +237,7 @@ export const ENGAGEMENTS: Engagement[] = [
     ],
     stack:
       'CRM customisation · Flows & automation · Lightning Web Components · ' +
-      'REST / SOAP / Platform Events · Heroku Connect · Data migration',
+      'REST / SOAP / Platform Events · Data migration',
     terms: [
       { term: 'Shape',          detail: 'Fixed-scope project' },
       { term: 'Typical length', detail: lengthOf('salesforce-consulting') },
@@ -315,8 +316,153 @@ export const ENGAGEMENTS: Engagement[] = [
     },
   },
   {
-    slug: 'product-development',
+    slug: 'heroku-consulting',
     n: '02',
+    id: 'heroku',
+    name: 'Heroku consulting',
+    contents: 'The Heroku estate beside the org',
+    shape: runs('heroku-consulting'),
+    bar: { from: 0, typical: 2, most: 4 },
+    stamp: { shape: 'Fixed-scope project', note: 'Migration review included' },
+    tagline: 'The Heroku side, built so it outlasts the roadmap.',
+    lead:
+      'Heroku Connect at the volume you actually have, Postgres as the scale tier, and the ' +
+      'long-running jobs Apex was never going to run. We build that side and we hand back the ' +
+      'mappings, the runbook and the cost baseline. Since February 2026 the platform ships no ' +
+      'new features, which changes nothing about whether your app works and everything about ' +
+      'how long you should expect to own it — so every engagement here ends with that question ' +
+      'answered in writing rather than left for a board meeting.',
+    track: [
+      {
+        n: '01',
+        name: 'Estate review',
+        when: 'Weeks 1–2',
+        bar: { from: 0, typical: 2, most: 2 },
+        detail:
+          'What runs, what it costs, what it syncs, and which part of it is one traffic spike ' +
+          'away from a bad afternoon.',
+      },
+      {
+        n: '02',
+        name: 'Integration design',
+        when: 'Weeks 3–4',
+        bar: { from: 2, typical: 4, most: 4 },
+        detail:
+          'REST, Platform Events, RabbitMQ or Heroku Connect — chosen per workload, with the ' +
+          'reason written down and the failure mode named.',
+      },
+      {
+        n: '03',
+        name: 'Build',
+        when: 'Weeks 5–11',
+        bar: { from: 4, typical: 10, most: 11 },
+        detail:
+          'Dynos, workers and the queue between them; Connect mappings with external IDs chosen ' +
+          'before the first sync; Postgres indexed for the reads you will actually make.',
+      },
+      {
+        n: '04',
+        name: 'Scale & cost pass',
+        when: 'Weeks 12–14',
+        bar: { from: 11, typical: 14, most: 14 },
+        detail:
+          'Run it under load, then size it. Dyno plans and add-ons reviewed against real usage, ' +
+          'sync lag and error counts put on a dashboard.',
+      },
+      {
+        n: '05',
+        name: 'Handover',
+        when: 'Weeks 15–16',
+        bar: { from: 14, typical: 16, most: 16 },
+        end: true,
+        detail:
+          'Repository, runbook, the Connect mapping document, and the written answer on whether ' +
+          'to stay, invest or plan the move.',
+      },
+    ],
+    stack:
+      'Heroku Connect · Heroku Postgres · Web & worker dynos · RabbitMQ / Redis · ' +
+      'Platform Events · Node.js / Java · Puppeteer',
+    terms: [
+      { term: 'Shape',          detail: 'Fixed-scope project' },
+      { term: 'Typical length', detail: lengthOf('heroku-consulting') },
+      { term: 'Priced',         detail: 'Fixed scope, or time & materials' },
+      { term: 'Starts with',    detail: 'An estate review' },
+      { term: 'You keep',       detail: 'Repository, runbook, Connect mappings, cost baseline' },
+    ],
+    cta: 'Book an estate review',
+    detail: {
+      title:
+        'The Heroku side, built so it ' +
+        '<span class="mark mark--draw">outlasts the roadmap</span>.',
+      lede:
+        'Heroku Connect at the volume you actually have, Postgres as the scale tier, and the ' +
+        'long-running jobs Apex was never going to run. We build that side and hand back the ' +
+        'mappings, the runbook and the cost baseline. Since February 2026 the platform ships ' +
+        'no new features — which changes nothing about whether your app works, and everything ' +
+        'about how long you should expect to own it.',
+      spine: {
+        title: 'Sixteen weeks at the long end, and the first two decide the rest.',
+        note: 'Drawn to scale',
+        cols: 16,
+        axis: [
+          { at: 0, mark: 'Week 0' }, { at: 4, mark: '04' }, { at: 8, mark: '08' },
+          { at: 12, mark: '12' }, { at: 16, mark: '16' },
+        ],
+        legend: [
+          { mod: 'min',   label: 'Committed' },
+          { mod: 'range', label: 'Where the range moves' },
+          { mod: 'cap',   label: 'Handover' },
+        ],
+        caption:
+          'Drawn at the long end: sixteen weeks. An eight-week engagement is usually the review ' +
+          'and one integration, which is a legitimate place to stop. <b>The estate review is ' +
+          'scoped on its own, so stopping there costs you nothing you did not want.</b>',
+      },
+      scope: {
+        title: 'What we do on the Heroku side.',
+        lede:
+          'The review comes first and it decides the rest — including, on occasion, that the ' +
+          'app is fine where it is and the honest recommendation is to leave it alone.',
+      },
+      manifest: {
+        kicker: 'The handover',
+        title: 'What you are left holding.',
+        note:
+          'A Heroku estate nobody can redeploy or price is a liability, and a frozen platform ' +
+          'roadmap makes it a slower-burning one. These four are what not having that looks like.',
+        items: [
+          {
+            title: 'The repository',
+            detail:
+              'Apps, workers and pipelines in your git, with the deploy documented. Not an ' +
+              'account somebody set up once and left.',
+          },
+          {
+            title: 'The Connect mapping document',
+            detail:
+              'Every mapped object, its external ID, its write direction and its known limits — ' +
+              'the thing nobody writes down until the sync breaks.',
+          },
+          {
+            title: 'The cost baseline',
+            detail:
+              'What each dyno and add-on costs against what it actually uses, measured after a ' +
+              'month of real traffic rather than guessed at setup.',
+          },
+          {
+            title: 'The stay-or-move note',
+            detail:
+              'What a migration would cost, what it would break, and the conditions that should ' +
+              'trigger it. Written whether or not you plan to act on it.',
+          },
+        ],
+      },
+    },
+  },
+  {
+    slug: 'product-development',
+    n: '03',
     id: 'product',
     name: 'Product development',
     contents: 'Managed packages through Security Review',
@@ -461,7 +607,7 @@ export const ENGAGEMENTS: Engagement[] = [
   },
   {
     slug: 'mulesoft-integration',
-    n: '03',
+    n: '04',
     id: 'mulesoft',
     name: 'MuleSoft integration',
     contents: 'One API layer instead of six point-to-point links',
@@ -603,7 +749,7 @@ export const ENGAGEMENTS: Engagement[] = [
   },
   {
     slug: 'mulesoft-rpa',
-    n: '04',
+    n: '05',
     id: 'rpa',
     name: 'MuleSoft RPA',
     contents: 'Bots for the systems that never got an API',
@@ -750,7 +896,7 @@ export const ENGAGEMENTS: Engagement[] = [
   },
   {
     slug: 'aws-cloud-solutions',
-    n: '05',
+    n: '06',
     id: 'aws',
     name: 'AWS cloud solutions',
     contents: 'The workloads that do not belong in Salesforce',
@@ -892,7 +1038,7 @@ export const ENGAGEMENTS: Engagement[] = [
   },
   {
     slug: 'airflow-data-pipelines',
-    n: '06',
+    n: '07',
     id: 'pipelines',
     name: 'Airflow data pipelines',
     contents: 'Bulk movement between Salesforce and the warehouse',
@@ -1031,7 +1177,7 @@ export const ENGAGEMENTS: Engagement[] = [
   },
   {
     slug: 'support-and-managed-services',
-    n: '07',
+    n: '08',
     id: 'support',
     name: 'Support & managed services',
     contents: 'A retainer with named response times',

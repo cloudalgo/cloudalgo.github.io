@@ -11,7 +11,7 @@ import ClosingManifest from '@/components/sections/ClosingManifest.astro';
 import { ENGAGEMENTS, WINDOWS } from '@/data/engagements';
 import { organization, orgRef, breadcrumbs, abs, SITE_ID } from '@/data/schema';
 
-// Seven engagements: a figure that draws them all against a calendar, a
+// Eight engagements: a figure that draws them all against a calendar, a
 // spread each, a table that routes a symptom to one of them, and the
 // checklist every one of them ends on.
 //
@@ -49,9 +49,9 @@ const proofStamp = new Map(
   )
 );
 
-// The seven engagements themselves live in `src/data/engagements.ts`,
+// The eight engagements themselves live in `src/data/engagements.ts`,
 // along with the typical lengths and the retainer's response windows.
-// This page prints those records as a figure and seven spreads; each
+// This page prints those records as a figure and eight spreads; each
 // /services/<slug>/ page prints the SAME records as a spine and a scope
 // document, one zoom level in. Two pages, one set of facts.
 //
@@ -83,39 +83,45 @@ const ROUTES = [
     gloss: 'Automation debt is a build problem. It gets untangled, not patched.',
   },
   {
+    symptom: 'The Heroku sync is behind and nobody can say why',
+    href: '#heroku',
+    label: '02 — Heroku consulting',
+    gloss: 'Heroku Connect fails quietly. The review starts at the mappings, not the dynos.',
+  },
+  {
     symptom: 'A product, and a Security Review date',
     href: '#product',
-    label: '02 — Product development',
+    label: '03 — Product development',
     gloss: 'Bring the packaging decision too, even if you think it is settled.',
   },
   {
     symptom: 'Six systems, and none of them agree',
     href: '#mulesoft',
-    label: '03 — MuleSoft integration',
+    label: '04 — MuleSoft integration',
     gloss: 'Point-to-point integration is not a bug count, it is an architecture bill.',
   },
   {
     symptom: 'Somebody rekeys a portal into Salesforce every morning',
     href: '#rpa',
-    label: '04 — MuleSoft RPA',
-    gloss: 'If that system has an API you want 03. If it never will, you want this.',
+    label: '05 — MuleSoft RPA',
+    gloss: 'If that system has an API you want 04. If it never will, you want this.',
   },
   {
     symptom: 'The AWS bill grew and nobody can say why',
     href: '#aws',
-    label: '05 — AWS cloud solutions',
+    label: '06 — AWS cloud solutions',
     gloss: 'Starts with a review, so the first answer is what to switch off.',
   },
   {
     symptom: 'The warehouse is a day behind',
     href: '#pipelines',
-    label: '06 — Airflow data pipelines',
+    label: '07 — Airflow data pipelines',
     gloss: 'Usually an API-limit problem wearing a scheduling costume.',
   },
   {
     symptom: 'Tickets pile up, nobody owns the org',
     href: '#support',
-    label: '07 — Support & managed services',
+    label: '08 — Support & managed services',
     gloss: 'Starts with a health review, so the first month is diagnosis.',
   },
   {
@@ -154,10 +160,10 @@ const MANIFEST = [
   },
 ];
 
-// Seven service cells and one that is not a service. The eighth fills the
-// second row of a four-across grid, which a seven-item set would otherwise
-// leave ragged, and it earns the space: the commonest state a reader
-// arrives in is not knowing which of the seven is theirs.
+// Eight service cells and one that is not a service. Nine is an exact
+// three-across grid rather than the ragged row a four-across one would
+// leave, and the ninth earns its place: the commonest state a reader
+// arrives in is not knowing which of the eight is theirs.
 const contents = [
   ...ENGAGEMENTS.map((e) => ({
     n: e.n,
@@ -173,10 +179,10 @@ const contents = [
   },
 ];
 
-// Seven engagements as a graph rather than a bare list. Each entry is a
+// Eight engagements as a graph rather than a bare list. Each entry is a
 // Service with a named provider -- the same `@id` the rest of the site
-// resolves the firm to -- so the list describes seven things CloudAlgo
-// does, not seven links that happen to sit together. Trailing slashes
+// resolves the firm to -- so the list describes eight things CloudAlgo
+// does, not eight links that happen to sit together. Trailing slashes
 // throughout: the site serves directories, and a ListItem URL that 301s
 // is a hop nobody needs.
 const crumbs = [{ label: 'Home', href: '/' }, { label: 'Services' }];
@@ -186,7 +192,7 @@ const servicesSchema = [
     '@type': 'CollectionPage',
     '@id': abs('/services/'),
     url: abs('/services/'),
-    name: 'Services — seven engagements, and what each one ends with',
+    name: 'Services — eight engagements, and what each one ends with',
     isPartOf: { '@id': SITE_ID },
     publisher: orgRef,
     inLanguage: 'en',
@@ -213,15 +219,18 @@ const servicesSchema = [
 ];
 ---
 <Page
-  title="Services — seven engagements, and what each one ends with"
-  description="Salesforce consulting, AppExchange product development, MuleSoft integration and RPA, AWS architecture, Airflow pipelines and a support retainer — seven in all."
+  title="Services — eight engagements, and what each one ends with"
+  description="Salesforce consulting, Heroku, AppExchange product development, MuleSoft integration and RPA, AWS architecture, Airflow pipelines and a support retainer."
   schema={servicesSchema}
 >
   <PageMasthead
     {crumbs}
     facts={[
-      { term: 'Engagements', detail: '7' },
-      { term: 'Platforms',   detail: 'Salesforce · MuleSoft · AWS' },
+      /* Read, not written: a count of the collection is a fact about the
+         collection, and a hand-kept copy of it goes stale the moment an
+         engagement is added -- as this one did. */
+      { term: 'Engagements', detail: String(ENGAGEMENTS.length) },
+      { term: 'Platforms',   detail: 'Salesforce · Heroku · MuleSoft · AWS' },
       { term: 'Delivered',   detail: '70+ projects' },
       { term: 'Smallest',    detail: '10 hrs / month' },
       { term: 'Emergency',   detail: 'Unlimited P1, every tier' },
@@ -230,21 +239,21 @@ const servicesSchema = [
     ]}
   >
     <Fragment slot="title">
-      Seven engagements. You end up <span class="mark mark--draw">owning it</span>, every time.
+      Eight engagements. You end up <span class="mark mark--draw">owning it</span>, every time.
     </Fragment>
     <Fragment slot="lede">
-      Six of the seven end with the repository, the runbook and a session with your admins. The
-      seventh is a retainer you can stop the month it stops earning its place. Either way, nothing
+      Seven of the eight end with the repository, the runbook and a session with your admins. The
+      eighth is a retainer you can stop the month it stops earning its place. Either way, nothing
       we leave behind needs us on call to keep running.
     </Fragment>
   </PageMasthead>
 
-  <ContentsBar items={contents} label="Services" class="contents-bar--8" />
+  <ContentsBar items={contents} label="Services" class="contents-bar--9" />
 
   <section class="section-press" aria-labelledby="shapes-heading">
     <div class="section-press__head">
       <h2 id="shapes-heading" class="section-title section-title--xs section-title--tighter section-press__title">
-        Seven shapes, drawn to scale.
+        Eight shapes, drawn to scale.
       </h2>
       <span class="section-press__note">Six months, left to right</span>
     </div>
@@ -268,7 +277,7 @@ const servicesSchema = [
         bar: e.bar,
         roll: e.roll,
       }))}
-      caption="six of the seven end, and the ember mark is that ending — repository, runbook, admin session. The seventh is a retainer, and runs until you stop it. Lengths are typical, not contractual."
+      caption="seven of the eight end, and the ember mark is that ending — repository, runbook, admin session. The eighth is a retainer, and runs until you stop it. Lengths are typical, not contractual."
     />
   </section>
 
@@ -315,7 +324,7 @@ const servicesSchema = [
       <h2 id="route-heading" class="section-title section-title--xs section-title--tighter section-press__title">
         Start here if this is you.
       </h2>
-      <span class="section-press__note">Eight symptoms, one row each</span>
+      <span class="section-press__note">Nine symptoms, one row each</span>
     </div>
 
     <RouteTable
@@ -327,7 +336,7 @@ const servicesSchema = [
       <p class="compare-note" slot="footnote">
         One answer is the same in every row: the first call is about your org, not our engagement
         types. We do not publish rates — the number comes after that call, once there is a scope to
-        put one against. If none of the seven fits, we will say so and point you at whoever does it
+        put one against. If none of the eight fits, we will say so and point you at whoever does it
         properly.
       </p>
     </RouteTable>
@@ -340,9 +349,9 @@ const servicesSchema = [
   >
     <Fragment slot="title">Owning it is a checklist, not a promise.</Fragment>
     <Fragment slot="note">
-      Seven shapes, one ending. Whichever of them you buy, the closing week is the same four items,
+      Eight shapes, one ending. Whichever of them you buy, the closing week is the same four items,
       and none of them needs us on call afterwards. That is the test we build against — and the
-      reason three of the seven are proven by software we run ourselves.
+      reason three of the eight are proven by software we run ourselves.
     </Fragment>
     <a class="btn btn-light btn-sm" slot="actions" href="/case-studies/">Read the case studies &rarr;</a>
   </ClosingManifest>

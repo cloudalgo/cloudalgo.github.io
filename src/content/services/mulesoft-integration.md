@@ -1,7 +1,7 @@
 ---
 title: "MuleSoft Integration"
 shortTitle: "MuleSoft"
-order: 3
+order: 4
 icon: "🔗"
 excerpt: "API-led connectivity on Anypoint Platform — one reusable API layer between Salesforce, ERP and everything else, instead of point-to-point links nobody can map."
 ---

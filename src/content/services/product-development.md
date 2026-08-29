@@ -1,7 +1,7 @@
 ---
 title: "Product Development"
 shortTitle: "Product development"
-order: 2
+order: 3
 icon: "📦"
 excerpt: "AppExchange product development end to end: 1GP and 2GP managed packages, security review readiness, ISV strategy, and the listing that comes after it."
 proves: pledgivo
