@@ -46,6 +46,36 @@ const blogRedirects = Object.fromEntries(
 // stops reading the field across the whole site, so the pages whose last
 // change nobody records -- the static ones -- say nothing rather than
 // claiming the build date.
+// Paths that predate this site and still arrive from Google and from links we
+// do not control. Each one was 404ing with real traffic on it -- a 404 spends
+// the link equity of every page that points at it and returns nothing.
+//
+// Two shapes, both from the previous site:
+//   * camelCase pages, before the move to lowercase directories
+//   * /blog/YYYY/MM/<slug>, before posts moved to a flat /blog/<slug>/
+const LEGACY = {
+  '/aboutUs': '/about/',
+  '/contactUs': '/contact/',
+};
+
+// The dated-directory blog URLs, generated rather than listed: every post gets
+// one, and a post that was also retitled gets a second under its old slug, so
+// an old link survives both moves. Built from the same filenames the flat
+// redirects above are built from, so the two cannot drift apart.
+const datedDirRedirects = Object.fromEntries(
+  readdirSync('./src/content/blog')
+    .filter(f => /^\d{4}-\d{2}-\d{2}-.+\.md$/.test(f))
+    .flatMap(f => {
+      const dated = f.replace(/\.md$/, '');
+      const [, year, month] = dated.match(/^(\d{4})-(\d{2})/);
+      const slug = dated.replace(/^\d{4}-\d{2}-\d{2}-/, '');
+      const old = Object.entries(RENAMED)
+        .filter(([, to]) => to === slug)
+        .map(([from]) => from.replace(/^\d{4}-\d{2}-\d{2}-/, ''));
+      return [slug, ...old].map(s => [`/blog/${year}/${month}/${s}`, `/blog/${slug}/`]);
+    }),
+);
+
 const blogLastmod = Object.fromEntries(
   readdirSync('./src/content/blog')
     .filter(f => /^\d{4}-\d{2}-\d{2}-.+\.md$/.test(f))
@@ -113,7 +143,7 @@ const satteriFigures = defineHastPlugin({
 export default defineConfig({
   site: 'https://cloudalgo.com',
   output: 'static',
-  redirects: { ...blogRedirects, ...renamedRedirects },
+  redirects: { ...blogRedirects, ...renamedRedirects, ...datedDirRedirects, ...LEGACY },
   markdown: { processor: satteri({ hastPlugins: [satteriFigures] }) },
   integrations: [
     react(),
