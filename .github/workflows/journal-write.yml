@@ -121,6 +121,17 @@ jobs:
               - anything you were unsure about
 
             Then close the issue.
+          # Turn budget, not wall-clock, is what this job runs out of. The run
+          # that hit 60 was still writing at the ceiling and shipped nothing,
+          # and the prose gate only lengthens the job -- a failed check costs a
+          # rewrite and a re-run. timeout-minutes above is the real backstop.
+          #
+          # Every denied tool call also costs a turn. One run spent 11 of ~60
+          # that way, so the allowlist has to cover what the skills literally
+          # tell the model to type: the de-AI grep pipes to `head`, the report
+          # needs a word count, and prose-check is run under `node`. A pipeline
+          # is checked segment by segment, so `grep | head` needs both. curl is
+          # gone: nothing here used it, and WebFetch already covers research.
           claude_args: |
-            --max-turns 60
-            --allowedTools "Read,Write,Edit,Glob,Grep,WebSearch,WebFetch,Bash(curl:*),Bash(node scripts/prose-check.mjs:*),Bash(npm run build),Bash(npm ci),Bash(ls:*),Bash(grep:*),Bash(git:*),Bash(python3:*),Bash(date:*),Bash(gh issue view:*),Bash(gh issue comment:*),Bash(gh issue close:*)"
+            --max-turns 120
+            --allowedTools "Read,Write,Edit,Glob,Grep,WebSearch,WebFetch,Bash(node scripts/:*),Bash(node scripts/prose-check.mjs:*),Bash(npm run build),Bash(npm ci),Bash(ls:*),Bash(cat:*),Bash(head:*),Bash(wc:*),Bash(mkdir:*),Bash(grep:*),Bash(git:*),Bash(python3:*),Bash(date:*),Bash(gh issue view:*),Bash(gh issue comment:*),Bash(gh issue close:*)"

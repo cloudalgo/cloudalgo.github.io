@@ -145,8 +145,16 @@ behaves in the action.
 ## Cost
 
 One radar run and one write run per weekday. `--max-turns` caps each (40 and
-60) and both jobs carry a timeout. The radar runs even on days nobody picks a
+120) and both jobs carry a timeout. The radar runs even on days nobody picks a
 candidate, so the floor is about 20 radar runs a month.
+
+The write cap started at 60 and a real run hit it mid-draft: 61 turns, ten
+minutes, $2.65, and nothing committed -- the action exits non-zero on
+`error_max_turns`, so a run that runs out is a run you pay for and throw away.
+Eleven of those turns were permission denials. A denied tool call costs a turn
+exactly like a real one, which makes the allowlist a cost control and not only
+a safety one: if the skills tell the model to type a command, the allowlist has
+to contain it, including every segment of a pipeline.
 
 ## Changing the schedule
 
