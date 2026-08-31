@@ -29,9 +29,41 @@ Two properties worth keeping:
 - **Nothing publishes without a human.** The radar opens an issue and stops. If
   nobody comments, the day passes with nothing written. That is the correct
   outcome, not a failure.
-- **The build is the gate.** `journal-write.yml` runs `npm run build` before it
-  commits. A schema violation in the frontmatter fails there, not on the live
-  site.
+- **Two gates before anything commits.** `journal-write.yml` runs
+  `node scripts/prose-check.mjs` on the draft and then `npm run build`. The
+  first catches prose that reads as machine-written; the second catches a
+  frontmatter schema violation. Both fail in CI rather than on the live site.
+
+## The prose gate
+
+`scripts/prose-check.mjs` is the answer to "make sure it doesn't read like AI
+wrote it". Asking a model to check its own prose is weak, so this checks it
+mechanically instead:
+
+- banned vocabulary and phrases, the ones a model reaches for
+- paragraph openers no person uses ("Moreover", "In conclusion")
+- sentence-length variance, because flat rhythm is the real tell
+- how much of the post sits in the 15-25 word band a model defaults to
+- em-dash density against the house preference
+
+Thresholds were set by running `--calibrate` across the whole published
+Journal and picking values that **every existing post passes**. The bar is
+"reads like the rest of this Journal", not an abstract standard. Errors block a
+commit. Warnings print and do not.
+
+```bash
+node scripts/prose-check.mjs src/content/blog/2026-09-01-slug.md   # gate
+node scripts/prose-check.mjs --calibrate src/content/blog/*.md     # corpus table
+```
+
+Posts under 400 words skip the rhythm statistics, since two early entries are
+short code notes where the numbers mean nothing. Vocabulary checks apply at any
+length.
+
+The workflow prompt tells Claude not to edit the thresholds to make a draft
+pass. If a future post genuinely needs a threshold moved, move it in its own
+commit with the `--calibrate` output that justifies it, not silently inside a
+publish run.
 
 ## One-time setup
 

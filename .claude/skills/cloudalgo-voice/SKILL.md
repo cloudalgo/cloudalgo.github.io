@@ -97,11 +97,28 @@ writing.
    corpus land on an offer or a flat statement of fact: "In the meantime, the
    linter is there."
 
-8. **Grep the banned list.** Literally:
+8. **Run the checker.** It is mechanical and it does not flatter you:
+
    ```bash
-   grep -n -i -E "leverage|game.chang|seamless|robust|cutting.edge|delve|unlock|supercharge|empower|elevate|holistic|synergy|plethora|myriad|tapestry|testament|in today's|let's dive|bottom line|not just.*it's" <file>
+   node scripts/prose-check.mjs src/content/blog/<file>.md
    ```
-   Every hit gets rewritten, not softened.
+
+   It catches banned vocabulary, banned paragraph openers, flat sentence
+   rhythm, and em-dash density. Errors must be fixed. Warnings are advisory
+   and some published posts trip them.
+
+   The thresholds are calibrated so that all 23 posts already published here
+   pass. That is deliberate: the bar is "reads like the rest of this Journal",
+   not an abstract standard. **Never loosen a threshold to make a draft pass.**
+   The draft is the thing that is wrong.
+
+   To see how the corpus scores, and where a new post sits against it:
+
+   ```bash
+   node scripts/prose-check.mjs --calibrate src/content/blog/*.md
+   ```
+
+   A hit gets rewritten, not softened.
 
 ## The honesty rule
 

@@ -83,7 +83,19 @@ jobs:
                  1200 to 2000 words, following the journal-post skill's
                  frontmatter schema exactly and the voice skill throughout.
               2. Run the de-AI pass in the voice skill as a separate read after
-                 drafting. Actually run the grep it specifies and fix every hit.
+                 drafting, not while writing.
+
+            The prose gate. After the de-AI pass, run:
+
+              node scripts/prose-check.mjs src/content/blog/<your-file>.md
+
+            It must exit 0. It is calibrated against every post already
+            published here, so a failure means the draft is outside anything
+            this Journal has shipped, not that the bar is unreasonable. Fix the
+            prose and run it again. Do not edit scripts/prose-check.mjs or its
+            thresholds to make a draft pass; that is the one change that would
+            make this gate worthless. Warnings do not block, but read them and
+            fix them where the fix improves the writing.
               3. A hero at public/blog-images/<slug>-hero.svg per the hero-svg
                  skill, showing real content from this post, and reference it
                  from the frontmatter image field.
@@ -111,4 +123,4 @@ jobs:
             Then close the issue.
           claude_args: |
             --max-turns 60
-            --allowedTools "Read,Write,Edit,Glob,Grep,WebSearch,WebFetch,Bash(curl:*),Bash(npm run build),Bash(npm ci),Bash(ls:*),Bash(grep:*),Bash(git:*),Bash(python3:*),Bash(date:*),Bash(gh issue view:*),Bash(gh issue comment:*),Bash(gh issue close:*)"
+            --allowedTools "Read,Write,Edit,Glob,Grep,WebSearch,WebFetch,Bash(curl:*),Bash(node scripts/prose-check.mjs:*),Bash(npm run build),Bash(npm ci),Bash(ls:*),Bash(grep:*),Bash(git:*),Bash(python3:*),Bash(date:*),Bash(gh issue view:*),Bash(gh issue comment:*),Bash(gh issue close:*)"
