@@ -215,8 +215,16 @@ The checker cannot see commands no skill documents, and the model reaches for
 `journal-write.yml` for that reason: being refused `sed` costs exactly what
 running it costs.
 
-`npm test` is not wired into any workflow -- neither are the redirect tests --
-so this gates a human, not a push.
+It also reads each workflow's own `prompt:` block, which issues commands of its
+own. What it cannot tell you is whether an allowed rule is still *needed*: read
+next to its skills, `journal-radar.yml`'s `Bash(curl:*)` looks dead, because no
+skill mentions curl. The prompt does, in prose, and the seven feeds curl pulls
+are the entire job. An unused-looking rule has to be read for, not inferred
+from silence.
+
+`npm test` runs in `deploy.yml` now, before the build, so a red suite blocks a
+publish -- including a Journal entry whose issue comment has already advertised
+its URL. That is the intended order.
 
 ## Changing the schedule
 
