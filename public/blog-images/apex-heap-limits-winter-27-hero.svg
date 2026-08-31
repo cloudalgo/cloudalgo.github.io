@@ -1,0 +1,126 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" aria-hidden="true">
+  <!-- Background -->
+  <rect width="1200" height="600" fill="#F7F4F2"/>
+
+  <!-- Vertical separator -->
+  <line x1="578" y1="40" x2="578" y2="560" stroke="#F75A41" stroke-opacity="0.34" stroke-width="1"/>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- LEFT: the constant, before and after           -->
+  <!-- ══════════════════════════════════════════════ -->
+
+  <rect x="38" y="40" width="514" height="520" rx="12" fill="#FFFFFF" stroke="#131110" stroke-opacity="0.15" stroke-width="1.5"/>
+
+  <!-- Window chrome -->
+  <circle cx="64" cy="68" r="5" fill="#131110" fill-opacity="0.21"/>
+  <circle cx="82" cy="68" r="5" fill="#131110" fill-opacity="0.21"/>
+  <circle cx="100" cy="68" r="5" fill="#131110" fill-opacity="0.21"/>
+  <text x="295" y="73" text-anchor="middle" font-family="'Courier New', Courier, monospace" font-size="12.5" font-weight="700" letter-spacing="0.04em" fill="#131110" fill-opacity="0.68">ChunkedWriter.cls</text>
+  <line x1="38" y1="92" x2="552" y2="92" stroke="#F75A41" stroke-opacity="0.34" stroke-width="1"/>
+
+  <!-- BEFORE -->
+  <text x="62" y="122" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="12" font-weight="700" letter-spacing="0.12em" fill="#131110" fill-opacity="0.68">BEFORE &#183; SUMMER &#8217;26</text>
+
+  <text x="62" y="150" font-family="'Courier New', Courier, monospace" font-size="13" fill="#131110" fill-opacity="0.62">// 6 MB ceiling, minus a margin</text>
+
+  <!-- flagged line -->
+  <rect x="52" y="162" width="486" height="28" rx="4" fill="#131110" fill-opacity="0.06"/>
+  <rect x="52" y="162" width="4" height="28" rx="2" fill="#F75A41" fill-opacity="0.58"/>
+  <text x="66" y="182" font-family="'Courier New', Courier, monospace" font-size="13" fill="#131110" fill-opacity="0.88">if (Limits.getHeapSize() &gt; 5000000) {</text>
+
+  <g font-family="'Courier New', Courier, monospace" font-size="13" fill="#131110">
+    <text x="66" y="208" fill-opacity="0.88">    flushBuffer();</text>
+    <text x="66" y="228" fill-opacity="0.88">}</text>
+  </g>
+
+  <line x1="62" y1="252" x2="528" y2="252" stroke="#F75A41" stroke-opacity="0.34" stroke-width="1"/>
+
+  <!-- AFTER -->
+  <text x="62" y="282" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="12" font-weight="700" letter-spacing="0.12em" fill="#131110" fill-opacity="0.68">AFTER &#183; WINTER &#8217;27</text>
+
+  <g font-family="'Courier New', Courier, monospace" font-size="13" fill="#131110">
+    <text x="62" y="310" fill-opacity="0.88">Integer cap = Limits.getLimitHeapSize();</text>
+    <text x="62" y="330" fill-opacity="0.88">Integer flushAt = (cap / 4) * 3;</text>
+    <text x="62" y="356" fill-opacity="0.88">if (Limits.getHeapSize() &gt; flushAt) {</text>
+    <text x="62" y="376" fill-opacity="0.88">    flushBuffer();</text>
+    <text x="62" y="396" fill-opacity="0.88">}</text>
+  </g>
+
+  <line x1="62" y1="424" x2="528" y2="424" stroke="#F75A41" stroke-opacity="0.34" stroke-width="1"/>
+
+  <!-- Resolves to -->
+  <text x="62" y="454" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="12" font-weight="700" letter-spacing="0.12em" fill="#131110" fill-opacity="0.68">RESOLVES TO</text>
+
+  <g font-family="'Courier New', Courier, monospace" font-size="12.5" fill="#131110">
+    <text x="62" y="482" fill-opacity="0.86">sync    cap 10 MB   flush at 7.5 MB</text>
+    <text x="62" y="504" fill-opacity="0.86">async   cap 25 MB   flush at 18.75 MB</text>
+    <text x="62" y="532" fill-opacity="0.62">// one class, both contexts</text>
+  </g>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- RIGHT: what moved and what did not             -->
+  <!-- ══════════════════════════════════════════════ -->
+
+  <text x="668" y="90" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="15" font-weight="700" letter-spacing="0.14em" fill="#131110" fill-opacity="0.74">PER-TRANSACTION LIMITS &#183; WINTER &#8217;27</text>
+
+  <g font-family="Archivo, Outfit, system-ui, sans-serif" font-size="12" font-weight="700" letter-spacing="0.08em" fill="#131110" fill-opacity="0.68">
+    <text x="690" y="122">LIMIT</text>
+    <text x="1000" y="122" text-anchor="end">SUMMER &#8217;26</text>
+    <text x="1160" y="122" text-anchor="end">WINTER &#8217;27</text>
+  </g>
+  <line x1="668" y1="134" x2="1160" y2="134" stroke="#F75A41" stroke-opacity="0.34" stroke-width="1"/>
+
+  <g font-family="Archivo, Outfit, system-ui, sans-serif">
+    <!-- row 1 — moved -->
+    <rect x="668" y="150" width="4" height="30" rx="2" fill="#F75A41" fill-opacity="0.70"/>
+    <text x="690" y="172" font-size="17" font-weight="600" fill="#131110" fill-opacity="0.92">Apex heap &#183; sync</text>
+    <text x="1000" y="172" text-anchor="end" font-size="15" fill="#131110" fill-opacity="0.62">6 MB</text>
+    <line x1="1014" y1="166" x2="1046" y2="166" stroke="#F75A41" stroke-opacity="0.70" stroke-width="2"/>
+    <path d="M 1046 160 L 1056 166 L 1046 172 Z" fill="#F75A41" fill-opacity="0.70"/>
+    <text x="1160" y="172" text-anchor="end" font-size="17" font-weight="700" fill="#131110">10 MB</text>
+
+    <!-- row 2 — moved -->
+    <rect x="668" y="196" width="4" height="30" rx="2" fill="#F75A41" fill-opacity="0.70"/>
+    <text x="690" y="218" font-size="17" font-weight="600" fill="#131110" fill-opacity="0.92">Apex heap &#183; async</text>
+    <text x="1000" y="218" text-anchor="end" font-size="15" fill="#131110" fill-opacity="0.62">12 MB</text>
+    <line x1="1014" y1="212" x2="1046" y2="212" stroke="#F75A41" stroke-opacity="0.70" stroke-width="2"/>
+    <path d="M 1046 206 L 1056 212 L 1046 218 Z" fill="#F75A41" fill-opacity="0.70"/>
+    <text x="1160" y="218" text-anchor="end" font-size="17" font-weight="700" fill="#131110">25 MB</text>
+
+    <!-- row 3 — unchanged -->
+    <rect x="668" y="242" width="4" height="30" rx="2" fill="#131110" fill-opacity="0.14"/>
+    <text x="690" y="264" font-size="17" font-weight="600" fill="#131110" fill-opacity="0.80">Callout body &#183; sync</text>
+    <text x="1000" y="264" text-anchor="end" font-size="15" fill="#131110" fill-opacity="0.62">6 MB</text>
+    <line x1="1014" y1="258" x2="1046" y2="258" stroke="#131110" stroke-opacity="0.22" stroke-width="2"/>
+    <text x="1160" y="264" text-anchor="end" font-size="17" font-weight="700" fill="#131110" fill-opacity="0.80">6 MB</text>
+
+    <!-- row 4 — unchanged -->
+    <rect x="668" y="288" width="4" height="30" rx="2" fill="#131110" fill-opacity="0.14"/>
+    <text x="690" y="310" font-size="17" font-weight="600" fill="#131110" fill-opacity="0.80">SOQL rows</text>
+    <text x="1000" y="310" text-anchor="end" font-size="15" fill="#131110" fill-opacity="0.62">50,000</text>
+    <line x1="1014" y1="304" x2="1046" y2="304" stroke="#131110" stroke-opacity="0.22" stroke-width="2"/>
+    <text x="1160" y="310" text-anchor="end" font-size="17" font-weight="700" fill="#131110" fill-opacity="0.80">50,000</text>
+
+    <!-- row 5 — unchanged -->
+    <rect x="668" y="334" width="4" height="30" rx="2" fill="#131110" fill-opacity="0.14"/>
+    <text x="690" y="356" font-size="17" font-weight="600" fill="#131110" fill-opacity="0.80">DML rows</text>
+    <text x="1000" y="356" text-anchor="end" font-size="15" fill="#131110" fill-opacity="0.62">10,000</text>
+    <line x1="1014" y1="350" x2="1046" y2="350" stroke="#131110" stroke-opacity="0.22" stroke-width="2"/>
+    <text x="1160" y="356" text-anchor="end" font-size="17" font-weight="700" fill="#131110" fill-opacity="0.80">10,000</text>
+
+    <!-- row 6 — unchanged -->
+    <rect x="668" y="380" width="4" height="30" rx="2" fill="#131110" fill-opacity="0.14"/>
+    <text x="690" y="402" font-size="17" font-weight="600" fill="#131110" fill-opacity="0.80">CPU time &#183; sync</text>
+    <text x="1000" y="402" text-anchor="end" font-size="15" fill="#131110" fill-opacity="0.62">10,000 ms</text>
+    <line x1="1014" y1="396" x2="1046" y2="396" stroke="#131110" stroke-opacity="0.22" stroke-width="2"/>
+    <text x="1160" y="402" text-anchor="end" font-size="17" font-weight="700" fill="#131110" fill-opacity="0.80">10,000 ms</text>
+  </g>
+
+  <!-- Footer: the rollout -->
+  <line x1="668" y1="444" x2="1160" y2="444" stroke="#F75A41" stroke-opacity="0.34" stroke-width="1"/>
+
+  <text x="668" y="474" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="14" font-weight="700" letter-spacing="0.1em" fill="#131110" fill-opacity="0.68">PRODUCTION WAVES</text>
+  <text x="668" y="502" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="19" font-weight="600" fill="#131110" fill-opacity="0.92">29 Aug &#183; 3 Oct &#183; 10 Oct</text>
+  <text x="668" y="530" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="14" font-weight="600" fill="#131110" fill-opacity="0.74">Preview sandboxes upgraded 28 Aug</text>
+  <text x="668" y="552" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="14" font-weight="600" fill="#131110" fill-opacity="0.74">Six weeks where the two disagree</text>
+</svg>
