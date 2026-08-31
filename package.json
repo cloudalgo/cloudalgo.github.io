@@ -13,10 +13,10 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@astrojs/markdown-satteri": "^0.3.7",
+    "@astrojs/markdown-satteri": "^0.3.8",
     "@astrojs/react": "^6.0.4",
     "@astrojs/sitemap": "^3.7.2",
-    "astro": "^7.2.4",
+    "astro": "^7.2.9",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
     "react-hook-form": "^7.75.0",
@@ -27,7 +27,7 @@
     "@astrojs/check": "^0.9.9",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
-    "happy-dom": "^20.11.10",
+    "happy-dom": "^20.11.12",
     "sass": "^1.103.1",
     "typescript": "^6.0.3",
     "vitest": "^4.1.11"
