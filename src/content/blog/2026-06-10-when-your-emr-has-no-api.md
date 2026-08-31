@@ -8,7 +8,6 @@ readTime: 5
 published: true
 author: "Sandeep Kumar"
 authorDesignation: "Technical Architect"
-authorPhoto: "/blog-images/a0bac224191c550df6e3a1f8ade4206b0927cbfb-515x515.jpg"
 relatedCaseStudy: salesforce-emr-sync
 image: /blog-images/when-your-emr-has-no-api-hero.svg
 ---

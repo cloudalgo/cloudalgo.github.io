@@ -8,7 +8,6 @@ image: /blog-images/navigation-in-salesforce-digital-experiences-sites-communiti
 published: true
 author: "Vikash Agarwal"
 authorDesignation: "Technical Architect"
-authorPhoto: "/blog-images/32c050b8f0ed847ec0b34f5144d2fa6b03a40888-200x200.jpg"
 ---
 
 `NavigationMixin.Navigate` fails silently in Experience Cloud when the page's API name doesn't match exactly. The name is case-sensitive, and custom site pages carry a `__c` suffix that is easy to leave off.

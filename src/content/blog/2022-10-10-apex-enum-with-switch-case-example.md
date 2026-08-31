@@ -8,7 +8,6 @@ image: /blog-images/apex-enum-with-switch-case-example-hero.svg
 published: true
 author: "Vikash Agarwal"
 authorDesignation: "Technical Architect"
-authorPhoto: "/blog-images/32c050b8f0ed847ec0b34f5144d2fa6b03a40888-200x200.jpg"
 ---
 
 Apex code that branches on a picklist string tends to rot in a predictable way. Someone compares against `'In Progress'` in one class and `'In progress'` in another, a typo in a rarely-hit branch sits there for a year, and renaming a stage means grepping for quoted strings and hoping you found them all.

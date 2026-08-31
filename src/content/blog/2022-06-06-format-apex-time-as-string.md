@@ -8,7 +8,6 @@ image: /blog-images/format-apex-time-as-string-hero.svg
 published: true
 author: "Vikash Agarwal"
 authorDesignation: "Technical Architect"
-authorPhoto: "/blog-images/32c050b8f0ed847ec0b34f5144d2fa6b03a40888-200x200.jpg"
 ---
 
 Since as on today we don’t have any inbuilt method which can format this type of String “ *14:00:00.000Z*” like “2:00 PM” So wrote a snippet for this and may be useful.

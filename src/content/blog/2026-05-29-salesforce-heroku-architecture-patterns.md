@@ -8,7 +8,6 @@ readTime: 4
 published: true
 author: "Sandeep Kumar"
 authorDesignation: "Technical Architect"
-authorPhoto: "/blog-images/a0bac224191c550df6e3a1f8ade4206b0927cbfb-515x515.jpg"
 image: /blog-images/salesforce-heroku-architecture-patterns-hero.svg
 ---
 

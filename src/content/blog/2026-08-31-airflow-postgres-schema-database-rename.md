@@ -10,7 +10,6 @@ published: true
 image: /blog-images/airflow-postgres-schema-database-rename-hero.svg
 author: "Sandeep Kumar"
 authorDesignation: "Founder, CloudAlgo"
-authorPhoto: "/blog-images/a0bac224191c550df6e3a1f8ade4206b0927cbfb-515x515.jpg"
 relatedCaseStudy: enterprise-data-pipeline
 ---
 

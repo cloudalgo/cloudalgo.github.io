@@ -1,0 +1,1123 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Journal reading area, four variations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600..900&family=Geist:wght@400..900&family=Geist+Mono:wght@400..500&display=swap">
+<style>
+/* ==========================================================
+   MOCK ONLY. Values are inlined from the press-room theme so
+   the file stands alone; in the real page every one of these
+   is a semantic token and nothing here names a colour.
+
+   Redesign mode: PRESERVE. Type stack, palette, radius scale
+   and the ruled-strip identity are the existing site's and do
+   not change. Only the reading mechanics move.
+
+   The page is light-locked on purpose: press-room ships one
+   skin and _monochrome is dormant, so there is no dark palette
+   to resolve against. A dark block here would be invented.
+   ========================================================== */
+:root{
+  --ink-900:#131110; --ink-880:#1B1916; --ink-870:#34302D; --ink-860:#231F1D;
+  --ink-500:#494440; --ink-400:#57504B; --ink-300:#6C645E;
+  --paper-000:#FFFFFF; --paper-050:#F2EEEB; --paper-100:#F7F4F2;
+  --paper-150:#EAE5E1; --paper-200:#E0D9D4; --paper-400:#756D66;
+  --accent-050:#FDF1F0; --accent-200:#EDC1BB; --accent-400:#F66953;
+  --accent-500:#F75A41; --accent-600:#E9553D; --accent-on:#110605;
+
+  --font-heading:'Archivo',system-ui,sans-serif;
+  --font-body:'Geist',system-ui,sans-serif;
+  --font-mono:'Geist Mono',ui-monospace,monospace;
+
+  --container:1240px;
+  --rule:1px solid var(--paper-200);
+  --rule-ink:1px solid var(--ink-900);
+  --header-h:64px;
+  --ease:cubic-bezier(0.16,1,0.3,1);
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--paper-000); color:var(--ink-500);
+  font-family:var(--font-body); font-size:16px; -webkit-font-smoothing:antialiased;
+}
+:focus-visible{outline:2px solid var(--accent-500); outline-offset:3px}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.001ms !important; transition-duration:.001ms !important}
+}
+
+/* ---------- Mock chrome ---------- */
+.chrome{position:sticky; top:0; z-index:60; background:var(--ink-900); color:var(--paper-000); border-bottom:3px solid var(--accent-500)}
+.chrome__in{max-width:var(--container); margin-inline:auto; padding:.7rem 2rem; display:flex; align-items:center; gap:1.5rem; flex-wrap:wrap}
+.chrome__tag{font-family:var(--font-mono); font-size:.6875rem; letter-spacing:.14em; text-transform:uppercase; color:var(--accent-400)}
+.tabs{display:flex; gap:.375rem; flex-wrap:wrap; margin-left:auto}
+.tab{
+  font-family:var(--font-mono); font-size:.6875rem; letter-spacing:.06em; text-transform:uppercase;
+  padding:.5rem .85rem; cursor:pointer; background:transparent; color:var(--paper-200);
+  border:1px solid rgb(255 255 255 / .22); border-radius:100px;
+  transition:color .18s var(--ease), border-color .18s var(--ease), background-color .18s var(--ease);
+}
+.tab:hover{color:#fff; border-color:rgb(255 255 255 / .55)}
+.tab:active{transform:translateY(1px)}
+.tab[aria-selected="true"]{background:var(--accent-500); border-color:var(--accent-500); color:var(--accent-on); font-weight:500}
+
+/* ---------- Findings panel ---------- */
+.findings{max-width:var(--container); margin-inline:auto; padding:3.5rem 2rem 5rem}
+.findings h1{font-family:var(--font-heading); font-weight:900; font-size:3rem; letter-spacing:-.032em; line-height:1.06; color:var(--ink-900); margin:0 0 1rem; max-width:20ch}
+.findings__lede{max-width:60ch; font-size:1.0625rem; line-height:1.65; color:var(--ink-500); margin:0 0 3rem}
+
+.finding{display:grid; grid-template-columns:2.5rem 1fr 15rem; gap:0 1.75rem; padding:1.75rem 0; border-top:var(--rule); align-items:start}
+.finding:first-of-type{border-top:var(--rule-ink)}
+.finding__n{font-family:var(--font-mono); font-size:.6875rem; color:var(--accent-500); padding-top:.3rem; font-variant-numeric:tabular-nums}
+.finding__h{font-family:var(--font-heading); font-size:1.25rem; font-weight:700; letter-spacing:-.022em; line-height:1.2; color:var(--ink-900); margin:0 0 .5rem}
+.finding__b{margin:0; font-size:.9375rem; line-height:1.65; color:var(--ink-500); max-width:40em}
+.finding__b+.finding__b{margin-top:.875rem}
+.finding__num{text-align:right; font-family:var(--font-mono); font-size:.75rem; line-height:1.9; color:var(--ink-300)}
+.finding__num b{display:block; font-size:1.75rem; line-height:1.15; font-weight:500; color:var(--accent-600); letter-spacing:-.02em}
+.finding__num i{font-style:normal; color:var(--ink-900)}
+
+.ruler{margin-top:1rem; font-family:var(--font-mono); font-size:.75rem; line-height:1.55; color:var(--ink-300); white-space:nowrap; overflow-x:auto}
+.ruler span{display:block}
+.ruler b{color:var(--ink-900); font-weight:400}
+.ruler em{font-style:normal; color:var(--accent-600)}
+
+.reference{margin-top:3.5rem; padding-top:1.75rem; border-top:var(--rule-ink)}
+.reference h2{font-family:var(--font-heading); font-size:1.5rem; font-weight:800; letter-spacing:-.025em; color:var(--ink-900); margin:0 0 1.5rem}
+.refgrid{display:grid; grid-template-columns:repeat(3,1fr); gap:1.25rem}
+.refcard{padding:1.375rem; border:var(--rule); background:var(--paper-100)}
+.refcard--now{background:var(--accent-050); border-color:var(--accent-200)}
+.refcard h3{font-family:var(--font-heading); font-size:1.0625rem; font-weight:700; letter-spacing:-.015em; color:var(--ink-900); margin:0 0 .875rem}
+.refcard dl{margin:0; display:grid; gap:.4rem}
+.refcard div{display:flex; justify-content:space-between; gap:1rem; font-size:.8125rem}
+.refcard dt{color:var(--ink-300)}
+.refcard dd{margin:0; font-family:var(--font-mono); font-size:.75rem; color:var(--ink-900)}
+.refcard--now dd{color:var(--accent-600)}
+.refnote{margin:1.5rem 0 0; max-width:78ch; font-size:.9375rem; line-height:1.7; color:var(--ink-500)}
+
+/* ---------- Panel scaffolding ---------- */
+.panel{display:none}
+.panel.is-on{display:block}
+.panel__bar{background:var(--paper-100); border-bottom:var(--rule)}
+.panel__in{max-width:var(--container); margin-inline:auto; padding:1.25rem 2rem; display:grid; grid-template-columns:auto 1fr; gap:.25rem 1.25rem; align-items:baseline}
+.panel__name{font-family:var(--font-heading); font-weight:800; font-size:1.0625rem; letter-spacing:-.02em; color:var(--ink-900)}
+.panel__name i{font-style:normal; color:var(--accent-600); font-weight:600}
+.panel__what{grid-column:2; font-size:.875rem; color:var(--ink-400); max-width:76ch; line-height:1.6}
+.panel__n{font-family:var(--font-mono); font-size:.75rem; color:var(--accent-500)}
+
+/* ---------- Shared page furniture ---------- */
+.hdr{position:sticky; top:44px; z-index:20; background:var(--paper-000); border-bottom:var(--rule); height:var(--header-h); display:flex; align-items:center}
+.hdr__in{max-width:var(--container); margin-inline:auto; padding:0 2rem; width:100%; display:flex; align-items:center; gap:2rem}
+.hdr__logo{font-family:var(--font-heading); font-weight:900; font-size:1.15rem; color:var(--ink-900); letter-spacing:-.025em}
+.hdr__logo b{color:var(--accent-500)}
+.hdr__nav{margin-left:auto; display:flex; gap:1.5rem; font-size:.875rem; font-weight:500; color:var(--ink-500)}
+.crumbs{font-family:var(--font-mono); font-size:.6875rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-300); margin-bottom:1.5rem}
+.crumbs b{color:var(--ink-900); font-weight:500}
+
+.head{display:grid; grid-template-columns:1.35fr 1fr; gap:0 2.75rem; align-items:start; margin-bottom:2.75rem}
+.title{font-family:var(--font-heading); font-weight:900; font-size:3.25rem; line-height:1.06; letter-spacing:-.032em; color:var(--ink-900); margin:0 0 1.25rem; text-wrap:balance}
+.lede{font-size:1.1875rem; line-height:1.55; color:var(--ink-900); font-weight:500; margin:0; max-width:56ch}
+.slip{border-left:var(--rule-ink); padding-left:1.75rem}
+.slip div{display:flex; justify-content:space-between; gap:1rem; padding:.5rem 0; border-bottom:var(--rule); font-size:.8125rem}
+.slip dt{color:var(--ink-300)}
+.slip dd{margin:0; color:var(--ink-900); font-family:var(--font-mono); font-size:.75rem}
+
+/* The byline. New: authorPhoto is in the schema and on 24 of 25
+   entries, and no template has ever rendered it. */
+.byline{display:flex; align-items:center; gap:.875rem; padding:1rem 0; border-top:var(--rule); border-bottom:var(--rule); margin:1.75rem 0 0; max-width:56ch}
+.byline img{width:44px; height:44px; border-radius:50%; object-fit:cover; flex:none; background:var(--paper-150)}
+.byline__who{font-size:.9375rem; font-weight:600; color:var(--ink-900); line-height:1.3}
+.byline__role{font-size:.8125rem; color:var(--ink-300); line-height:1.45}
+.byline__when{margin-left:auto; font-family:var(--font-mono); font-size:.6875rem; letter-spacing:.05em; text-transform:uppercase; color:var(--ink-300); text-align:right; line-height:1.7}
+
+.body{display:grid; grid-template-columns:1.35fr 1fr; gap:0 2.75rem; align-items:start}
+.doc{min-width:0}
+
+/* ---------- The corrected prose ----------
+   max-width sits on .prose itself, so ch resolves against the
+   prose font size instead of the inherited 16px. That single
+   move is the 84-to-68 character correction. */
+/* The reading size is set on the CONTAINER, so the measure resolves
+   against it rather than against the inherited 16px, and 33em is
+   really 33 x 18px. 68ch was neither: ch is 45% wider than the average
+   Geist letter, and it was resolving one size too small on top. */
+.prose{font-size:1.125rem; max-width:33em}
+.prose>*{margin:0}
+/* 32px, which clears the 30.96px line. See finding 02. */
+.prose>*+*{margin-top:2rem}
+.prose p{font-size:inherit; line-height:1.72; color:var(--ink-860); text-wrap:pretty}
+.prose>p:first-child{font-size:1.167em; line-height:1.5; color:var(--ink-900); font-weight:500; letter-spacing:-.008em}
+.prose h2{margin-top:3.25rem; padding-top:1.25rem; border-top:var(--rule-ink); font-family:var(--font-heading); font-size:1.625rem; font-weight:700; line-height:1.14; letter-spacing:-.03em; color:var(--ink-900); text-wrap:balance; scroll-margin-top:calc(var(--header-h) + 4rem)}
+.prose strong{color:var(--ink-900); font-weight:700}
+.prose code{font-family:var(--font-mono); font-size:.875em; background:var(--paper-100); border:var(--rule); padding:.08em .32em; color:var(--ink-900)}
+.prose pre{background:var(--ink-900); color:#EDE7E3; padding:1.25rem 1.375rem; overflow-x:auto; font-size:.8125rem; line-height:1.65; font-family:var(--font-mono)}
+.prose pre code{background:none; border:0; padding:0; color:inherit; font-size:inherit}
+.prose ol{padding-left:0; list-style:none; counter-reset:step}
+.prose ol>li{counter-increment:step; position:relative; padding-left:2.25rem; font-size:inherit; line-height:1.68; color:var(--ink-860)}
+.prose ol>li+li{margin-top:.75rem}
+.prose ol>li::before{content:counter(step,decimal-leading-zero); position:absolute; left:0; top:.4em; font-family:var(--font-mono); font-size:.6875rem; color:var(--accent-500); font-variant-numeric:tabular-nums}
+
+/* ---------- The rail ---------- */
+.rail{position:sticky; top:calc(44px + var(--header-h) + 1.75rem); padding-left:1.75rem; border-left:var(--rule-ink)}
+.rail__label{display:block; font-family:var(--font-mono); font-size:.6875rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-400); padding-bottom:.5rem; border-bottom:var(--rule)}
+.toc{list-style:none; margin:0; padding:0}
+.toc a{position:relative; display:grid; grid-template-columns:1.5rem minmax(0,1fr); gap:0 .5rem; padding:.5rem 0 .5rem .625rem; margin-left:-.625rem; border-bottom:var(--rule); text-decoration:none; color:inherit}
+.toc a::before{content:''; position:absolute; inset-block:0; left:0; width:2px; background:var(--accent-500); transform:scaleY(0); transition:transform .3s var(--ease)}
+.toc a:hover::before,.toc a:focus-visible::before,.toc a.is-here::before{transform:scaleY(1)}
+.toc i{font-style:normal; font-family:var(--font-mono); font-size:.6875rem; color:var(--paper-400); font-variant-numeric:tabular-nums; padding-top:.15rem; transition:color .18s var(--ease)}
+.toc span{font-size:.875rem; line-height:1.35; color:var(--ink-400); text-wrap:pretty; transition:color .18s var(--ease)}
+.toc a:hover span{color:var(--ink-900)}
+.toc a.is-here span{color:var(--ink-900); font-weight:600}
+.toc a.is-here i{color:var(--accent-500)}
+.share{margin-top:1.5rem}
+.share .rail__label{border-bottom:0; padding-bottom:.375rem}
+.share p{margin:0; display:flex; gap:0 .5rem; font-family:var(--font-mono); font-size:.6875rem; letter-spacing:.04em; text-transform:uppercase; color:var(--ink-400)}
+.share a{color:var(--ink-400); text-decoration:none}
+.share a:hover{color:var(--ink-900)}
+.share i{font-style:normal; color:var(--paper-400)}
+
+.dead{margin-top:2rem; padding:1rem; border:1px dashed var(--accent-200); background:var(--accent-050); font-family:var(--font-mono); font-size:.6875rem; line-height:1.75; color:var(--ink-400)}
+
+/* ==========================================================
+   B, single column. The rail is dropped and the contents move
+   above the entry, where a table of contents is still a table
+   of contents. Reading size goes to 19px in Geist. No serif is
+   introduced: family is a theme token here and a swap would
+   also have to move the head of Base.astro, for a gain the
+   measure correction already delivers.
+   ========================================================== */
+.col-wrap{max-width:1080px; margin-inline:auto; padding:3.5rem 2rem 5rem}
+.col-head{max-width:42rem; margin:0 auto 2.5rem}
+.col-title{font-family:var(--font-heading); font-weight:900; font-size:3.5rem; line-height:1.04; letter-spacing:-.035em; color:var(--ink-900); margin:0 0 1.25rem; text-wrap:balance}
+.col-lede{font-size:1.3125rem; line-height:1.5; color:var(--ink-400); margin:0 0 2rem; font-weight:400}
+.col-byline{display:flex; align-items:center; gap:.875rem; padding:1.25rem 0; border-top:var(--rule); border-bottom:var(--rule)}
+.col-byline img{width:52px; height:52px; border-radius:50%; object-fit:cover; flex:none}
+.col-byline strong{display:block; font-size:1rem; font-weight:600; color:var(--ink-900)}
+.col-byline span{font-size:.875rem; color:var(--ink-300); line-height:1.5}
+.col-cta{margin-left:auto; font-family:var(--font-mono); font-size:.6875rem; letter-spacing:.08em; text-transform:uppercase; font-weight:500; padding:.6rem 1rem; background:var(--ink-900); color:var(--paper-000); border:0; border-radius:100px; cursor:pointer; white-space:nowrap}
+.col-cta:hover{background:var(--accent-500); color:var(--accent-on)}
+.col-cta:active{transform:translateY(1px)}
+.col-fig{max-width:42rem; margin:0 auto 2.5rem; border:var(--rule); background:var(--paper-100); padding:1.25rem}
+.col-fig img{display:block; width:100%; height:auto; border:var(--rule); background:var(--paper-000)}
+.col-fig figcaption{margin-top:.875rem; font-family:var(--font-mono); font-size:.6875rem; letter-spacing:.03em; line-height:1.55; color:var(--ink-300)}
+.col-toc{max-width:42rem; margin:0 auto 3rem; padding:1.25rem 0; border-top:var(--rule-ink); border-bottom:var(--rule)}
+.col-toc ol{margin:.75rem 0 0; padding:0; list-style:none; columns:2; column-gap:2rem}
+.col-toc li{break-inside:avoid; padding:.3rem 0}
+.col-toc a{font-size:.9375rem; line-height:1.4; color:var(--ink-500); text-decoration:none}
+.col-toc a:hover{color:var(--accent-600)}
+.col-prose{font-size:1.1875rem; max-width:33em; margin-inline:auto}
+.col-prose>*{margin:0}
+.col-prose>*+*{margin-top:2.125rem}
+.col-prose p{font-size:inherit; line-height:1.7; color:var(--ink-870); text-wrap:pretty}
+.col-prose h2{font-family:var(--font-heading); font-size:1.875rem; font-weight:800; line-height:1.12; letter-spacing:-.03em; color:var(--ink-900); margin-top:3.25rem; text-wrap:balance}
+.col-prose strong{font-weight:700; color:var(--ink-900)}
+.col-prose code{font-family:var(--font-mono); font-size:.84em; background:var(--paper-100); border:var(--rule); padding:.08em .32em; color:var(--ink-900)}
+.pull{border-left:3px solid var(--accent-500); padding:.25rem 0 .25rem 1.75rem; margin:2.75rem 0}
+.pull p{font-family:var(--font-heading); font-size:1.625rem; line-height:1.24; letter-spacing:-.025em; color:var(--ink-900); font-weight:700; margin:0}
+
+/* ==========================================================
+   C, quiet document. No rule over a heading, lighter weights,
+   properties instead of a filing slip, and the passages that
+   carry a warning become blocks rather than bold runs inside a
+   paragraph.
+   ========================================================== */
+.doc-wrap{max-width:44rem; margin-inline:auto; padding:4rem 2rem 5rem}
+.doc-title{font-family:var(--font-heading); font-weight:800; font-size:2.75rem; line-height:1.1; letter-spacing:-.028em; color:var(--ink-900); margin:0 0 1.5rem}
+.props{margin:0 0 2.5rem; display:grid; gap:.125rem}
+.props div{display:grid; grid-template-columns:8.5rem 1fr; gap:1rem; align-items:center; padding:.4rem 0}
+.props dt{font-size:.8125rem; color:var(--ink-300)}
+.props dd{margin:0; font-size:.875rem; color:var(--ink-900)}
+.chip{display:inline-block; padding:.15rem .55rem; background:var(--paper-100); border-radius:100px; font-size:.8125rem}
+.person{display:inline-flex; align-items:center; gap:.5rem}
+.person img{width:22px; height:22px; border-radius:50%; object-fit:cover}
+.doc-prose{font-size:1.0625rem; max-width:33em}
+.doc-prose>*{margin:0}
+.doc-prose>*+*{margin-top:1.875rem}
+.doc-prose p{font-size:inherit; line-height:1.75; color:var(--ink-870)}
+.doc-prose h2{font-family:var(--font-heading); font-size:1.5rem; font-weight:700; line-height:1.25; letter-spacing:-.02em; color:var(--ink-900); margin-top:2.75rem}
+.doc-prose strong{font-weight:600; color:var(--ink-900)}
+.doc-prose code{font-family:var(--font-mono); font-size:.85em; background:var(--paper-100); padding:.12em .35em; border-radius:3px; color:var(--accent-600)}
+.block{padding:1.125rem 1.25rem; background:var(--paper-100); border-radius:4px; border-left:3px solid var(--paper-400)}
+.block--warn{background:var(--accent-050); border-left-color:var(--accent-500)}
+.block p{margin:0 !important; font-size:1rem; line-height:1.65; color:var(--ink-860)}
+.block strong{display:block; margin-bottom:.25rem; color:var(--ink-900); font-weight:600}
+.toggle{border-top:var(--rule); border-bottom:var(--rule); padding:.875rem 0}
+.toggle summary{cursor:pointer; font-size:.9375rem; font-weight:600; color:var(--ink-900); list-style:none; display:flex; gap:.5rem; align-items:center}
+.toggle summary::-webkit-details-marker{display:none}
+.toggle summary::before{content:'+'; font-family:var(--font-mono); color:var(--accent-500); width:1rem}
+.toggle[open] summary::before{content:'\2212'}
+.toggle ol{margin:.875rem 0 0; padding-left:1.35rem; font-size:1rem; line-height:1.7; color:var(--ink-860)}
+.toggle li+li{margin-top:.5rem}
+
+/* ==========================================================
+   D, working rail. The record is kept whole. What changes: the
+   type is corrected as in A, the entry opens on its hero plate,
+   the headline takes the ember mark every other hero already
+   has, code blocks get their language and a copy control, and
+   the right column earns the whole scroll instead of 337px.
+   ========================================================== */
+/* Progress rides the rule the rail already draws, and is driven
+   by the scroll timeline rather than a scroll listener. */
+@supports (animation-timeline:scroll()){
+  /* The column names the timeline and the grid around both publishes it.
+     `timeline-scope` is not optional here: a named timeline is visible to
+     the declaring element and its DESCENDANTS only, and the rail is a
+     sibling of the column, not a child of it. Without this line the
+     animation resolves to a null timeline, which does not throw and does
+     not warn -- it simply reports `finished`, and the rule paints itself
+     full before the reader has read a word. Verified in the browser, not
+     assumed from the build passing. */
+  .body{timeline-scope:--entry}
+  .doc{view-timeline-name:--entry; view-timeline-axis:block}
+  .d-rail::after{
+    content:''; position:absolute; left:-1px; top:0; bottom:0; width:3px;
+    background:var(--accent-500); transform-origin:top center; transform:scaleY(0);
+    animation:railfill linear both;
+    /* Progress through THE ENTRY, not through the document. `scroll(root)`
+       counts the masthead, the byline and the footer as reading, so the
+       rule was already 61% full before the first paragraph. A view
+       timeline on the document column measures the only thing the reader
+       cares about: `contain` runs from the column's top meeting the top of
+       the viewport to its bottom meeting the bottom. */
+    animation-timeline:--entry; animation-range:contain 0% contain 100%;
+  }
+  @keyframes railfill{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+  @media (prefers-reduced-motion:reduce){ .d-rail::after{display:none} }
+}
+.meter{display:flex; justify-content:space-between; align-items:baseline; font-family:var(--font-mono); font-size:.6875rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-300); padding-bottom:.75rem; border-bottom:var(--rule); margin-bottom:.25rem}
+.meter b{color:var(--accent-500); font-weight:500; font-variant-numeric:tabular-nums}
+
+.code{margin-top:1.75rem; border:1px solid var(--ink-900)}
+.code__bar{display:flex; align-items:center; gap:.75rem; padding:.5rem .875rem; background:var(--ink-900); border-bottom:1px solid rgb(255 255 255 / .14); font-family:var(--font-mono); font-size:.6875rem; letter-spacing:.08em; text-transform:uppercase}
+.code__lang{color:var(--accent-400); font-weight:500}
+.code__file{color:var(--paper-400)}
+.code__copy{margin-left:auto; background:transparent; border:1px solid rgb(255 255 255 / .3); color:var(--paper-200); font:inherit; padding:.2rem .6rem; border-radius:100px; cursor:pointer; transition:border-color .18s var(--ease), color .18s var(--ease)}
+.code__copy:hover{border-color:var(--accent-500); color:var(--accent-400)}
+.code__copy:active{transform:translateY(1px)}
+.code pre{margin:0; background:var(--ink-900); color:#EDE7E3; padding:1.125rem 1.375rem; overflow-x:auto; font-size:.8125rem; line-height:1.65; font-family:var(--font-mono)}
+.code .k{color:#F79B8A} .code .n{color:#9FD3C7}
+
+.figs{margin-top:1.75rem; padding-top:1rem; border-top:var(--rule)}
+.figs .rail__label{border-bottom:0; padding-bottom:.5rem}
+.figs div{display:flex; justify-content:space-between; gap:1rem; padding:.5rem 0; border-bottom:var(--rule); font-size:.8125rem; align-items:baseline}
+.figs dt{color:var(--ink-400)}
+.figs dd{margin:0; font-family:var(--font-mono); font-size:.75rem; color:var(--ink-900); font-weight:500}
+.figs em{font-style:normal; color:var(--accent-600)}
+.marker{position:relative; padding:.65rem 0 .65rem 1.25rem; margin:2.5rem 0; border-left:3px solid var(--accent-500); background:linear-gradient(90deg,var(--accent-050),transparent 72%)}
+.marker p{margin:0 !important; font-family:var(--font-heading); font-size:1.375rem; line-height:1.25; letter-spacing:-.022em; color:var(--ink-900); font-weight:700}
+
+/* ---------- Mobile ----------
+   The live site scales the root to 85% below 1200px, so this mock does
+   too: without it the mobile finding cannot be reproduced or the fix
+   proven. Note what it means for the correction. A reading size stated
+   in rem is still multiplied by 0.85 here, which is how the body text
+   arrived at 14.45px in the first place. So the phone size below is
+   set in px, deliberately: the furniture may shrink with the root, the
+   thing being read may not. */
+@media (max-width:1200px){ html{font-size:85%} }
+
+@media (max-width:1000px){
+  .head,.body{grid-template-columns:1fr; gap:2.25rem}
+  .rail{position:static; order:-1; border-left:0; border-top:var(--rule-ink); padding-left:0; padding-top:1.25rem}
+  .d-rail::after{display:none}
+  .prose{max-width:none}
+  .finding{grid-template-columns:2.5rem 1fr; gap:0 1.25rem}
+  .finding__num{grid-column:2; text-align:left; margin-top:.75rem}
+  .refgrid{grid-template-columns:1fr}
+}
+@media (max-width:767px){
+  .findings,.col-wrap,.doc-wrap{padding-left:1.25rem; padding-right:1.25rem}
+  .hdr__in,.chrome__in,.panel__in{padding-left:1.25rem; padding-right:1.25rem}
+  .hdr__nav{display:none}
+  .findings h1{font-size:2.25rem}
+  .title{font-size:2.375rem}
+  .col-title{font-size:2.375rem}
+  .doc-title{font-size:2rem}
+  /* The measured mobile defect: 14.45px body. Corrected in px so the
+     85% root cannot take it back. */
+  .prose{font-size:17px}
+  .col-prose{font-size:17px}
+  .doc-prose{font-size:17px}
+  .col-toc ol{columns:1}
+  .byline__when{margin-left:0; width:100%; text-align:left; padding-top:.5rem}
+  .byline{flex-wrap:wrap}
+}
+
+/* ---------- The hero plate ----------
+   Every entry in the archive has one, so D opens on it rather than on
+   the first paragraph. A drawing is a diagram and gets mounted: rule,
+   sunk ground, and air between the ground and the ink; a photograph
+   would take the rule and nothing between it and the picture. Same
+   treatment as the live `.plate-hero`, reproduced so the mock is honest
+   about what the reader actually meets first. It sits in the DOCUMENT
+   column, not across the page, so the stand above it and the rail
+   beside it stay one unbroken ruled strip. */
+.plate{margin:0 0 2.25rem; padding:1.5rem; border:var(--rule); background:var(--paper-050)}
+.plate img{display:block; width:100%; height:auto}
+.plate figcaption{margin-top:.875rem; font-family:var(--font-mono); font-size:.6875rem;
+  line-height:1.5; letter-spacing:.04em; color:var(--ink-300)}
+
+/* ---------- The emphasis mark ----------
+   The ember rule under the words a headline turns on. Every other hero
+   on the site has one and the journal entry did not, which is the whole
+   of the finding: the one page a reader arrives on from search was the
+   one page whose headline stated nothing.
+
+   It is a background gradient rather than a text-decoration for the
+   same three reasons the live `.mark` gives: the rule sits at a
+   controlled height instead of wherever the font's underline metric
+   lands, it survives a line wrap intact, and background-size can be
+   animated where text-decoration cannot. */
+.mark{color:var(--ink-900); text-decoration:none;
+  background-image:linear-gradient(transparent 78%, var(--accent-500) 78%,
+    var(--accent-500) 99%, transparent 99%);
+  background-repeat:no-repeat; background-size:100% 100%;
+  -webkit-box-decoration-break:clone; box-decoration-break:clone}
+/* Each fragment of a wrapped mark strokes its own rule, left to right,
+   on the x axis only so the gradient's stops keep placing the rule
+   under the baseline at every frame. `both` holds the 0% start through
+   the delay, which is the entire point of having one. */
+.mark--draw{animation:mark-draw .7s var(--ease) .35s both}
+@keyframes mark-draw{from{background-size:0 100%}to{background-size:100% 100%}}
+/* The rule is emphasis, not decoration: it is the only thing marking
+   which words the sentence turns on, so reduced motion drops the draw
+   and keeps the mark. */
+@media (prefers-reduced-motion:reduce){
+  .mark--draw{animation:none; background-size:100% 100%}
+}
+/* In running prose the same mark is thinner, because a paragraph is
+   read at speed and a headline is looked at. */
+.prose .mark{background-image:linear-gradient(transparent 84%, var(--accent-500) 84%,
+  var(--accent-500) 97%, transparent 97%)}
+
+/* ---------- Links ----------
+   One underline, thin and offset, drawn in ink rather than in a link
+   colour: inside a 66 character measure a blue word is a hole in the
+   paragraph. The ember arrives on hover, which is the only moment the
+   link is being asked about. */
+.prose a{color:var(--ink-900); text-decoration:underline; text-decoration-thickness:1px;
+  text-underline-offset:.18em; text-decoration-color:rgb(19 17 16 / .35);
+  transition:text-decoration-color .18s var(--ease)}
+.prose a:hover{text-decoration-color:var(--accent-500)}
+
+/* An OUTBOUND link says so, because the reader is about to leave the
+   site. The same parse that decides this mark decides whether the click
+   is an `outbound_click`, so the mark and the analytics can never
+   disagree. `nowrap` keeps the arrow on the last word rather than alone
+   at the start of the next line. */
+.prose a[data-ext]{white-space:nowrap}
+.prose a[data-ext]::after{content:'\2197'; display:inline-block; margin-left:.15em;
+  font-size:.82em; line-height:1; vertical-align:.08em; color:var(--ink-300);
+  text-decoration:none; transition:color .18s var(--ease)}
+.prose a[data-ext]:hover::after{color:var(--accent-500)}
+
+/* An INTERNAL link is a cross reference to another entry, so it takes
+   the mark the archive already uses for one of its own things: a short
+   ember rule, the same mark on the rail and the list items. Its
+   underline is lighter, because it is not asking you to leave. */
+.prose a[data-ref]{text-decoration-color:var(--paper-200)}
+.prose a[data-ref]::before{content:''; display:inline-block; width:.5rem; height:1px;
+  margin-right:.4em; vertical-align:.28em; background:var(--accent-500)}
+.prose a[data-ref]:hover{text-decoration-color:var(--accent-500)}
+
+/* ---------- Lists ----------
+   An unordered item points AT something: a place to look, a thing to
+   change. So it takes an arrow rather than a dot, drawn in the ember
+   that already numbers the ordered list, which keeps one accent doing
+   the marking across both kinds of list.
+
+   The glyph is set in the mono face rather than in Geist so it keeps a
+   fixed advance width: every arrow then lands on the same vertical, and
+   the wrapped second line of one item aligns with the first line of the
+   next. `top` is stated in `em` so it tracks the item's own size rather
+   than the root, which is what keeps it on the first line's baseline at
+   the 85% root scale below 1200px. */
+.prose ul{padding-left:0; list-style:none}
+.prose ul>li{position:relative; padding-left:2.25rem; font-size:inherit; line-height:1.68;
+  color:var(--ink-860)}
+.prose ul>li+li{margin-top:.75rem}
+.prose ul>li::before{content:'\2192'; position:absolute; left:0; top:0;
+  font-family:var(--font-mono); font-size:.9375em; line-height:1.79;
+  color:var(--accent-500)}
+.prose li>strong:first-child{color:var(--ink-900)}
+
+/* ---------- Figure ----------
+   The caption is the alt text moved rather than copied, so the picture
+   is described once and read twice. */
+.prose figure{padding:1.25rem; border:var(--rule); background:var(--paper-050)}
+.prose figure img{display:block; width:100%; height:auto; border:var(--rule);
+  background:var(--paper-000)}
+.prose figcaption{margin-top:.875rem; font-family:var(--font-mono); font-size:.6875rem;
+  line-height:1.5; letter-spacing:.03em; color:var(--ink-300)}
+
+/* ---------- Video ----------
+   A video wears the same chrome as a code block, because it is the same
+   kind of object: a thing quoted into the argument and named before it
+   is opened. Nothing autoplays, and the length is stated up front so
+   the reader can decide whether they have four minutes before they
+   spend the first one. */
+.vid{border:1px solid var(--ink-900)}
+.vid__bar{display:flex; align-items:center; gap:.75rem; padding:.5rem .875rem;
+  background:var(--ink-900); border-bottom:1px solid rgb(255 255 255 / .14);
+  font-family:var(--font-mono); font-size:.6875rem; letter-spacing:.08em;
+  text-transform:uppercase}
+.vid__kind{color:var(--accent-400); font-weight:500; margin-right:auto}
+.vid__len{color:var(--paper-400); font-variant-numeric:tabular-nums}
+.vid__frame{position:relative; background:var(--paper-050); display:grid; place-items:center}
+.vid__frame img{display:block; width:100%; height:auto; opacity:.55}
+.vid__play{position:absolute; width:64px; height:64px; border-radius:50%; border:0;
+  cursor:pointer; background:var(--accent-500); color:var(--accent-on); display:grid;
+  place-items:center; box-shadow:0 .5rem 1.5rem rgb(19 17 16 / .28);
+  transition:transform .2s var(--ease)}
+.vid__play svg{width:30px; height:30px; fill:currentColor; margin-left:3px}
+.vid__play:hover{transform:scale(1.06)}
+.vid figcaption{margin:0; padding:.875rem 1rem; border-top:1px solid var(--ink-900);
+  font-family:var(--font-mono); font-size:.6875rem; line-height:1.5; letter-spacing:.03em;
+  color:var(--ink-300)}
+
+/* ---------- Table ----------
+   Ruled under the head and under each row, and nowhere else. No zebra,
+   no outer box: the numbers are the content and the lines exist only to
+   let the eye cross a row. The one figure the paragraph turns on takes
+   the same ember mark the headline does. */
+.prose table{width:100%; border-collapse:collapse; font-size:.9375rem}
+.prose thead th{text-align:left; font-family:var(--font-mono); font-size:.6875rem;
+  letter-spacing:.06em; text-transform:uppercase; font-weight:700; color:var(--ink-900);
+  border-bottom:1px solid var(--ink-900); padding:0 1rem .5rem 0}
+.prose tbody td{padding:.6875rem 1rem .6875rem 0; border-bottom:var(--rule);
+  color:var(--ink-860); vertical-align:top}
+.prose tbody td em{font-style:normal; font-weight:600; color:var(--ink-900);
+  background-image:linear-gradient(transparent 82%, var(--accent-500) 82%,
+    var(--accent-500) 97%, transparent 97%)}
+
+/* ---------- Notes ----------
+   An aside is set OUTSIDE the measure, hanging into the gutter, so it
+   reads as an interruption rather than as another paragraph. Two kinds
+   only: something to keep, and something to watch. The warning is the
+   only one that gets the ember. */
+.note{position:relative; margin-left:-1.375rem;
+  padding:1rem 1.25rem 1rem 1.375rem; border-left:2px solid var(--paper-200);
+  background:var(--paper-050)}
+.note__k{display:block; font-family:var(--font-mono); font-size:.6875rem; font-weight:500;
+  letter-spacing:.1em; text-transform:uppercase; color:var(--ink-300); margin-bottom:.375rem}
+.note p{margin:0 !important; font-size:1rem; line-height:1.65; color:var(--ink-860)}
+.note p+p{margin-top:.75rem !important}
+.note--warn{border-left-color:var(--accent-500); background:var(--accent-050)}
+.note--warn .note__k{color:var(--accent-600)}
+
+/* The note hangs into the rail's gutter, and below the stack
+   breakpoint there is no gutter: the rail has moved above the text and
+   the column runs to the page padding. Measured at 390px the hang put
+   the note's left edge at -2px, clipping the ember rule that marks it.
+   It stops hanging where it stops having somewhere to hang.
+
+   This block sits BELOW the rules it overrides rather than in the
+   1000px section further up, because the two selectors have equal
+   specificity and a media query grants none: the first attempt was
+   written up there and lost to the base rule by source order. */
+@media (max-width:1000px){
+  .note{margin-left:0; padding-left:1.25rem}
+}
+
+/* ---------- Listen ----------
+   A seven minute entry read aloud, for the reader who is driving to a
+   client or has the release notes open on the other screen. It sits at
+   the head of the rail rather than floating over the text, because it
+   is a property of the entry and the rail is where this page states
+   those. The time reads `01:38 of 07:04`, not a bare bar: somebody
+   deciding whether to start is deciding about seven minutes. Speech is
+   a browser API, so this costs no vendor and no fourth tracker. */
+.listen{border:1px solid var(--ink-900); margin-bottom:1.25rem}
+.listen__top{display:flex; align-items:center; gap:.75rem; padding:.625rem .75rem;
+  background:var(--ink-900)}
+.listen__play{flex:none; width:34px; height:34px; border-radius:50%; border:0; cursor:pointer;
+  background:var(--accent-500); color:var(--accent-on); display:grid; place-items:center;
+  transition:transform .2s var(--ease)}
+.listen__play svg{width:18px; height:18px; fill:currentColor; margin-left:2px}
+.listen__play:hover{transform:scale(1.07)}
+.listen__meta{margin-right:auto; min-width:0}
+.listen__title{font-family:var(--font-mono); font-size:.6875rem; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--paper-100); font-weight:500}
+.listen__sub{font-family:var(--font-mono); font-size:.6875rem; color:var(--paper-400);
+  font-variant-numeric:tabular-nums; margin-top:.15rem}
+.listen__rate{flex:none; border:1px solid rgb(255 255 255 / .3); background:none;
+  color:var(--paper-200); font-family:var(--font-mono); font-size:.6875rem;
+  letter-spacing:.04em; padding:.25em .5em; border-radius:100px; cursor:pointer;
+  transition:border-color .18s var(--ease), color .18s var(--ease)}
+.listen__rate:hover{border-color:var(--accent-500); color:var(--accent-400)}
+.listen__track{height:3px; background:var(--paper-150)}
+.listen__track i{display:block; height:100%; width:23%; background:var(--accent-500)}
+/* The sentence being spoken, marked in the text itself. This is the
+   whole reason to build the control into the page rather than hand the
+   entry to a podcast app: the reader can follow it, stop it, and carry
+   on reading from where the voice was. */
+.is-speaking{background:var(--accent-050); box-shadow:0 0 0 .28em var(--accent-050)}
+
+</style>
+</head>
+<body>
+
+<div class="chrome">
+  <div class="chrome__in">
+    <span class="chrome__tag">Mock, journal reading area</span>
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" aria-selected="true"  data-p="f">Findings</button>
+      <button class="tab" role="tab" aria-selected="false" data-p="a">A Type fixed</button>
+      <button class="tab" role="tab" aria-selected="false" data-p="b">B Single column</button>
+      <button class="tab" role="tab" aria-selected="false" data-p="c">C Quiet document</button>
+      <button class="tab" role="tab" aria-selected="false" data-p="d">D Working rail</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ FINDINGS ============ -->
+<section class="panel is-on" data-panel="f">
+<div class="findings">
+  <h1>What the reading area is actually doing</h1>
+  <p class="findings__lede">
+    Measured on the live page at 1440 by 1000 and 390 by 844, with computed styles rather than
+    by eye. Four defects, one omission. Every variation that follows fixes all five; they differ
+    only in how much structure moves.
+  </p>
+
+  <article class="finding">
+    <span class="finding__n">01</span>
+    <div>
+      <h2 class="finding__h">The column asks for 68 characters and serves 89, and <code>ch</code> is why</h2>
+      <p class="finding__b">
+        <code>max-width: 68ch</code> is the rule, in two places. It does not do what it reads like.
+        The <code>ch</code> unit is the advance width of the digit zero, and in Geist that is
+        11.93px against an average prose character of 8.25px, so <code>ch</code> overstates the
+        measure by about 45%. Ask for 68 and you are asking for roughly 98. On top of that the rule
+        sits on <code>.record__doc</code>, where <code>ch</code> resolves against the inherited
+        16px rather than the 17px the paragraphs render at.
+      </p>
+      <p class="finding__b">
+        In practice neither matters, because the rule never binds: 68ch resolves to 721px and the
+        grid column is 711px, so the width you actually read is the grid, by ten pixels of
+        accident. Above roughly 75 characters the eye starts losing its place on the return sweep,
+        which is felt as tiredness rather than seen as width.
+      </p>
+      <p class="finding__b">
+        So the fix is not to move the <code>ch</code> rule, it is to stop using <code>ch</code>.
+        And swapping the unit alone does not fix it, because <code>em</code> on a container
+        resolves against that container’s own font-size, which is the inherited 16px: exactly the
+        trap <code>ch</code> was already in. So these mocks set the reading size on
+        <code>.prose</code> itself and the measure in <code>em</code> beside it. The constraint and
+        the type now resolve against the same number, 33 of them is 72 real characters, and the
+        rule stays true if the size is ever retuned.
+      </p>
+      <p class="ruler">
+        <span><b>Asked for</b>&nbsp; 68ch</span>
+        <span><em>Delivered</em>&nbsp; 89 characters, because ch is 45% wider than the average letter</span>
+      </p>
+    </div>
+    <p class="finding__num"><b>89</b>characters per line<br><i>66 to 72 is healthy</i></p>
+  </article>
+
+  <article class="finding">
+    <span class="finding__n">02</span>
+    <div>
+      <h2 class="finding__h">Paragraphs are packed tighter than their own lines</h2>
+      <p class="finding__b">
+        The gap between paragraphs is 22px while a line of body text occupies 29.2px. The space
+        that separates two thoughts is therefore smaller than the space inside one of them, so a
+        seven minute entry reads as a single grey slab. A paragraph break has to be the largest
+        vertical gap in the run or it is not a break.
+      </p>
+    </div>
+    <p class="finding__num"><b>22 / 29.2</b>gap against line<br><i>gap must be the larger</i></p>
+  </article>
+
+  <article class="finding">
+    <span class="finding__n">03</span>
+    <div>
+      <h2 class="finding__h">On a phone the body text is 14.45px</h2>
+      <p class="finding__b">
+        The root font-size drops to 85% below 1200px, and everything set in <code>rem</code> goes
+        with it, including the one thing on the page nobody is skimming. Furniture can shrink on a
+        small screen; the article body is why the reader opened the page.
+      </p>
+    </div>
+    <p class="finding__num"><b>14.45px</b>body, at 390px wide<br><i>16 to 17 is readable</i></p>
+  </article>
+
+  <article class="finding">
+    <span class="finding__n">04</span>
+    <div>
+      <h2 class="finding__h">The right column stops working after 6% of the scroll</h2>
+      <p class="finding__b">
+        The contents rail is 337px tall and sticks inside a 5,363px document. For the remaining
+        94% of the read, a 459px column, more than a third of the page, is empty. It is the most
+        valuable idle space on the site: it sits at eye level, it is already ruled, and it is
+        beside the paragraph the reader is on.
+      </p>
+    </div>
+    <p class="finding__num"><b>459px</b>idle for 94% of scroll<br><i>rail is 337 of 5,363</i></p>
+  </article>
+
+  <article class="finding">
+    <span class="finding__n">05</span>
+    <div>
+      <h2 class="finding__h">Three frontmatter fields are declared, set, and rendered by nothing</h2>
+      <p class="finding__b">
+        <code>author</code>, <code>authorDesignation</code> and <code>authorPhoto</code> are
+        declared in <code>content.config.ts</code> and set in the frontmatter of 24 of the 25
+        entries. A grep across <code>src/</code> finds them in the schema and in the markdown, and
+        nowhere else.
+      </p>
+      <p class="finding__b">
+        This was first written up as a gap to fill. It is not: the entry already states its date
+        and its length in the filing slip, and a portrait plus a name plus a role plus the same
+        date again is the same four facts twice, spending 90 vertical pixels between the standfirst
+        and the picture the entry actually opens on. The finding stands as a measurement and the
+        decision goes the other way. <b>Drop the fields</b> rather than render them, so the schema
+        stops promising something the site has decided not to say.
+      </p>
+    </div>
+    <p class="finding__num"><b>3 fields</b>declared and set<br><i>rendered by nothing</i></p>
+  </article>
+
+  <div class="reference">
+    <h2>What the two obvious references actually do</h2>
+    <div class="refgrid">
+      <div class="refcard">
+        <h3>Medium</h3>
+        <dl>
+          <div><dt>Body size</dt><dd>21px</dd></div>
+          <div><dt>Line height</dt><dd>1.58</dd></div>
+          <div><dt>Column</dt><dd>680px</dd></div>
+          <div><dt>Per line</dt><dd>about 70</dd></div>
+          <div><dt>Author</dt><dd>photo, bio, follow</dd></div>
+        </dl>
+      </div>
+      <div class="refcard">
+        <h3>Notion</h3>
+        <dl>
+          <div><dt>Body size</dt><dd>16px</dd></div>
+          <div><dt>Line height</dt><dd>1.5</dd></div>
+          <div><dt>Column</dt><dd>708px</dd></div>
+          <div><dt>Per line</dt><dd>about 85</dd></div>
+          <div><dt>Author</dt><dd>person property</dd></div>
+        </dl>
+      </div>
+      <div class="refcard refcard--now">
+        <h3>CloudAlgo today</h3>
+        <dl>
+          <div><dt>Body size</dt><dd>17px</dd></div>
+          <div><dt>Line height</dt><dd>1.72</dd></div>
+          <div><dt>Column</dt><dd>711px</dd></div>
+          <div><dt>Per line</dt><dd>89</dd></div>
+          <div><dt>Author</dt><dd>not rendered</dd></div>
+        </dl>
+      </div>
+    </div>
+    <p class="refnote">
+      The useful detail is that Medium and Notion land on almost the same column width and on
+      completely different character counts. Medium sets 21px to reach 70 characters in 680px;
+      Notion sets 16px and accepts 85 in 708px, because Notion is styling a document you write in
+      and Medium an article you read. CloudAlgo runs past both, at 89, with Medium's job to do. Closing that gap takes both moves at once: the type goes up to 18px so it reads
+      like something written to be read, and the measure comes in to 594px so eighteen point type
+      does not simply buy a longer line.
+    </p>
+    <p class="refnote">
+      What neither reference argues for here is a serif. Family is a theme token in this codebase
+      and the webfont link lives in the head of <code>Base.astro</code>, so a reading face is a
+      two file change to the whole site, and the comfort it would buy is the comfort the measure
+      correction already buys. Geist stays.
+    </p>
+  </div>
+</div>
+</section>
+
+<!-- ============ A ============ -->
+<section class="panel" data-panel="a">
+  <div class="panel__bar"><div class="panel__in">
+    <span class="panel__n">A</span><span class="panel__name">Type fixed</span>
+    <p class="panel__what">Today's page with the five findings addressed and nothing else moved. Measure corrected to 68 real characters, paragraph gap raised above the line, body held at 17px on a phone, byline rendered. Two files change and the whole archive lifts. The right column is still idle, which is what B and D take differently.</p>
+  </div></div>
+
+  <div class="hdr"><div class="hdr__in">
+    <span class="hdr__logo">Cloud<b>Algo</b></span>
+    <nav class="hdr__nav"><span>Products</span><span>Services</span><span>Case studies</span><span>Journal</span><span>About</span></nav>
+  </div></div>
+
+  <div class="findings" style="padding-top:3rem">
+    <div class="head">
+      <div>
+        <p class="crumbs">Home / Journal / <b>Salesforce</b></p>
+        <h1 class="title">Apex heap went to 10 MB, and your hardcoded chunk size did not</h1>
+        <p class="lede">Winter 27 raises the synchronous Apex heap limit from 6 MB to 10 MB and the asynchronous limit from 12 MB to 25 MB. The interesting part is the limit that did not move.</p>
+        <div class="byline">
+          <img src="../../../../public/blog-images/a0bac224191c550df6e3a1f8ade4206b0927cbfb-515x515.jpg" alt="Sandeep Kumar">
+          <div><div class="byline__who">Sandeep Kumar</div><div class="byline__role">Founder, CloudAlgo</div></div>
+          <p class="byline__when">31 Aug 2026<br>7 min read</p>
+        </div>
+      </div>
+      <dl class="slip">
+        <div><dt>Filed</dt><dd>31 Aug 2026</dd></div>
+        <div><dt>Subject</dt><dd>Salesforce</dd></div>
+        <div><dt>Length</dt><dd>7 minutes</dd></div>
+        <div><dt>Release</dt><dd>Winter 27</dd></div>
+      </dl>
+    </div>
+
+    <div class="body">
+      <div class="doc"><article class="prose">
+        <p>Wave one of Winter 27 went to production on 29 August. If your org was in it, the synchronous Apex heap ceiling moved from 6 MB to 10 MB two days ago, and none of your code knows.</p>
+        <p>Most orgs were not in wave one. They go on 3 October or 10 October. Sandboxes on the preview instances upgraded on 28 August. So for roughly the next six weeks a lot of teams sit in the position where the sandbox they test in and the org they deploy to enforce different heap limits, and the gap is four megabytes.</p>
+        <h2 id="a2">The number that did not move is the interesting one</h2>
+        <p>The maximum size of an HTTP callout request or response in Apex is 6 MB synchronous and 12 MB asynchronous. Those figures are not a coincidence. They were set to match the heap limit, because a callout body counts against heap the moment it arrives.</p>
+        <p>Which meant the documented 6 MB ceiling was, for years, fiction. Pull a 6 MB response in a synchronous context and you had spent the whole heap holding a string you had not looked at yet. <code>JSON.deserializeUntyped</code> on that string needs room for the string and the object graph at the same time, so the practical ceiling was far below the published one.</p>
+        <h2 id="a3">Your constants are wrong in the safe direction</h2>
+        <p>Large data Apex is full of lines like this one:</p>
+        <pre><code>if (Limits.getHeapSize() &gt; 5000000) {
+    flushBuffer();
+    buffer.clear();
+}</code></pre>
+        <p>We wrote about the same shape of problem in <a href="#d2" data-ref>the governor limits that moved in Spring 26</a>, and the lesson repeats. Five megabytes, picked because six was the ceiling and you wanted a margin for the flush itself. On a Winter 27 org that guard fires with almost half the budget unspent. Nothing breaks. You just do twice the DML you need to, in the job that was already the slowest thing in the nightly window.</p>
+      </article></div>
+
+      <aside class="rail">
+        <span class="rail__label">In this entry</span>
+        <ul class="toc">
+          <li><a href="#a2"><i>01</i><span>What actually changed</span></a></li>
+          <li><a class="is-here" href="#a2"><i>02</i><span>The number that did not move is the interesting one</span></a></li>
+          <li><a href="#a3"><i>03</i><span>Your constants are wrong in the safe direction</span></a></li>
+          <li><a href="#a3"><i>04</i><span>The six weeks where two orgs disagree</span></a></li>
+          <li><a href="#a3"><i>05</i><span>What to do this week</span></a></li>
+        </ul>
+        <div class="share">
+          <span class="rail__label">Send it on</span>
+          <p><a href="#a2">X</a> <i>/</i> <a href="#a2">LinkedIn</a> <i>/</i> <a href="#a2">Copy link</a></p>
+        </div>
+        <p class="dead">Finding 04, left in place.<br>Empty from here to the foot of a 5,363px document.</p>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ============ B ============ -->
+<section class="panel" data-panel="b">
+  <div class="panel__bar"><div class="panel__in">
+    <span class="panel__n">B</span><span class="panel__name">Single column</span>
+    <p class="panel__what">Medium's answer to finding 04: if the second column cannot earn its width, do not draw one. The entry runs down the middle at 19px, the author is given real presence at the top, the hero art comes up above the text, and the contents sit above the entry where a table of contents is still useful. The furthest departure from the archive's ruled identity.</p>
+  </div></div>
+
+  <div class="hdr"><div class="hdr__in">
+    <span class="hdr__logo">Cloud<b>Algo</b></span>
+    <nav class="hdr__nav"><span>Products</span><span>Services</span><span>Case studies</span><span>Journal</span><span>About</span></nav>
+  </div></div>
+
+  <div class="col-wrap">
+    <header class="col-head">
+      <p class="crumbs">Home / Journal / <b>Salesforce</b></p>
+      <h1 class="col-title">Apex heap went to 10 MB, and your hardcoded chunk size did not</h1>
+      <p class="col-lede">Winter 27 raises the synchronous Apex heap limit from 6 MB to 10 MB and the asynchronous limit from 12 MB to 25 MB. The interesting part is the limit that did not move.</p>
+      <div class="col-byline">
+        <img src="../../../../public/blog-images/a0bac224191c550df6e3a1f8ade4206b0927cbfb-515x515.jpg" alt="Sandeep Kumar">
+        <div><strong>Sandeep Kumar</strong><span>Founder, CloudAlgo. 31 Aug 2026, 7 min read</span></div>
+        <button class="col-cta">Book a call</button>
+      </div>
+    </header>
+
+    <figure class="col-fig">
+      <img src="../../../../public/blog-images/apex-heap-limits-winter-27-hero.svg" alt="Per transaction limits in Summer 26 against Winter 27, and the two that did not move">
+      <figcaption>Per transaction limits, Summer 26 against Winter 27, and the two that did not move.</figcaption>
+    </figure>
+
+    <nav class="col-toc">
+      <span class="rail__label" style="border:0;padding:0">In this entry</span>
+      <ol>
+        <li><a href="#b2">01 What actually changed</a></li>
+        <li><a href="#b2">02 The number that did not move</a></li>
+        <li><a href="#b3">03 Your constants are wrong in the safe direction</a></li>
+        <li><a href="#b3">04 The six weeks where two orgs disagree</a></li>
+        <li><a href="#b3">05 Where the heap actually goes</a></li>
+        <li><a href="#b3">06 What to do this week</a></li>
+      </ol>
+    </nav>
+
+    <article class="col-prose">
+      <p>Wave one of Winter 27 went to production on 29 August. If your org was in it, the synchronous Apex heap ceiling moved from 6 MB to 10 MB two days ago, and none of your code knows.</p>
+      <p>Most orgs were not in wave one. They go on 3 October or 10 October. Sandboxes on the preview instances upgraded on 28 August. So for roughly the next six weeks a lot of teams sit in the position where the sandbox they test in and the org they deploy to enforce different heap limits, and the gap is four megabytes.</p>
+      <h2 id="b2">The number that did not move is the interesting one</h2>
+      <p>The maximum size of an HTTP callout request or response in Apex is 6 MB synchronous and 12 MB asynchronous. Those figures are not a coincidence. They were set to match the heap limit, because a callout body counts against heap the moment it arrives.</p>
+      <div class="pull"><p>The documented 6 MB ceiling was, for years, fiction.</p></div>
+      <p>Pull a 6 MB response in a synchronous context and you had spent the whole heap holding a string you had not looked at yet. <code>JSON.deserializeUntyped</code> on that string needs room for the string and the object graph at the same time, so the practical ceiling was far below the published one.</p>
+      <p id="b3">Now the body cap is still 6 MB and the heap is 10 MB, which is four megabytes of room to parse in. Asynchronously it is better still: a 12 MB body against a 25 MB heap leaves thirteen megabytes of working space.</p>
+    </article>
+  </div>
+</section>
+
+<!-- ============ C ============ -->
+<section class="panel" data-panel="c">
+  <div class="panel__bar"><div class="panel__in">
+    <span class="panel__n">C</span><span class="panel__name">Quiet document</span>
+    <p class="panel__what">Notion's answer: take the rules off the headings, drop the weights, and let the warnings become blocks instead of bold runs buried in a paragraph. The calmest of the four to read and the easiest to skim. It also gives up almost all of the press room identity, which for a consultancy whose archive is its argument is a real cost.</p>
+  </div></div>
+
+  <div class="hdr"><div class="hdr__in">
+    <span class="hdr__logo">Cloud<b>Algo</b></span>
+    <nav class="hdr__nav"><span>Products</span><span>Services</span><span>Case studies</span><span>Journal</span><span>About</span></nav>
+  </div></div>
+
+  <div class="doc-wrap">
+    <h1 class="doc-title">Apex heap went to 10 MB, and your hardcoded chunk size did not</h1>
+    <dl class="props">
+      <div><dt>Author</dt><dd><span class="person"><img src="../../../../public/blog-images/a0bac224191c550df6e3a1f8ade4206b0927cbfb-515x515.jpg" alt="Sandeep Kumar">Sandeep Kumar</span></dd></div>
+      <div><dt>Published</dt><dd>31 August 2026</dd></div>
+      <div><dt>Subject</dt><dd><span class="chip">Salesforce</span></dd></div>
+      <div><dt>Reading time</dt><dd>7 minutes</dd></div>
+    </dl>
+
+    <article class="doc-prose">
+      <p>Wave one of Winter 27 went to production on 29 August. If your org was in it, the synchronous Apex heap ceiling moved from 6 MB to 10 MB two days ago, and none of your code knows.</p>
+
+      <div class="block"><p><strong>Two numbers, and that is the entire change.</strong>Synchronous transactions go from 6 MB to 10 MB, asynchronous from 12 MB to 25 MB. No new methods, no new exception type, nothing to opt into.</p></div>
+
+      <h2>The number that did not move</h2>
+      <p>The maximum size of an HTTP callout request or response in Apex is 6 MB synchronous and 12 MB asynchronous. Those figures are not a coincidence. They were set to match the heap limit, because a callout body counts against heap the moment it arrives.</p>
+      <p>Which meant the documented 6 MB ceiling was, for years, fiction. <code>JSON.deserializeUntyped</code> on a 6 MB string needs room for the string and the object graph at the same time.</p>
+
+      <div class="block block--warn"><p><strong>The six weeks where two orgs disagree.</strong>Your preview sandbox upgraded on 28 August and allows 25 MB. A production org in wave three is still on Summer 26 and allows 12 MB. A batch job peaking at 18 MB passes in one and dies in the other, and the diff contains nothing that touches memory.</p></div>
+
+      <details class="toggle" open>
+        <summary>The two line runbook</summary>
+        <ol>
+          <li>Find your production org's upgrade date. Setup, then Company Information, gives you the instance name; the Trust status page gives you the date.</li>
+          <li>Until production has passed it, tick "Enforce the Summer 26 Apex heap limit" in every sandbox that upgraded ahead of it.</li>
+        </ol>
+      </details>
+
+      <p>Sandbox refresh timing matters here too, and it catches people. A full copy sandbox refreshed before the production upgrade comes back on the old ceiling; refreshed after, it comes back on the new one.</p>
+    </article>
+  </div>
+</section>
+
+<!-- ============ D ============ -->
+<section class="panel" data-panel="d">
+  <div class="panel__bar"><div class="panel__in">
+    <span class="panel__n">D</span><span class="panel__name">Working rail <i>recommended</i></span>
+    <p class="panel__what">The record kept whole, and finding 04 answered by making the column work rather than removing it. The entry opens on its hero plate, as every entry in the archive does, and the headline takes the ember mark every other hero on the site already carries and this page did not. Type corrected as in A, the byline dropped so the standfirst runs straight into the plate, progress drawn on the rule the rail already has using a scroll timeline and no scroll listener, the figures parked under the contents so the numbers stay in view while the argument uses them, and a listen control at the head of the rail with the spoken sentence marked in the text. Every content device the archive uses is set here rather than described: arrow list, numbered runbook, figure, table, video, two kinds of note, inline code, a code block carrying its language and a copy control, and the two kinds of link. The hero and the in-body figure share one asset only because the mock has one to hand.</p>
+  </div></div>
+
+  <div class="hdr"><div class="hdr__in">
+    <span class="hdr__logo">Cloud<b>Algo</b></span>
+    <nav class="hdr__nav"><span>Products</span><span>Services</span><span>Case studies</span><span>Journal</span><span>About</span></nav>
+  </div></div>
+
+  <div class="findings" style="padding-top:3rem">
+    <div class="head">
+      <div>
+        <p class="crumbs">Home / Journal / <b>Salesforce</b></p>
+        <h1 class="title">Apex heap went to 10 MB, and your hardcoded chunk size <span class="mark mark--draw">did not</span></h1>
+        <p class="lede">Winter 27 raises the synchronous Apex heap limit from 6 MB to 10 MB and the asynchronous limit from 12 MB to 25 MB. The interesting part is the limit that did not move.</p>
+      </div>
+      <dl class="slip">
+        <div><dt>Filed</dt><dd>31 Aug 2026</dd></div>
+        <div><dt>Subject</dt><dd>Salesforce</dd></div>
+        <div><dt>Length</dt><dd>7 minutes</dd></div>
+        <div><dt>Release</dt><dd>Winter 27</dd></div>
+      </dl>
+    </div>
+
+    <div class="body">
+      <div class="doc">
+        <figure class="plate">
+          <img src="../../../../public/blog-images/apex-heap-limits-winter-27-hero.svg" alt="Per transaction limits in Summer 26 against Winter 27, and the two that did not move">
+          <figcaption>Per transaction limits, Summer 26 against Winter 27. The two that did not move are what the entry is about.</figcaption>
+        </figure>
+        <article class="prose">
+        <p>Wave one of Winter 27 went to production on 29 August. If your org was in it, the synchronous Apex heap ceiling moved from 6 MB to 10 MB two days ago, and <span class="mark">none of your code knows</span>.</p>
+        <p>Most orgs were not in wave one. They go on 3 October or 10 October. Sandboxes on the preview instances upgraded on 28 August. So for roughly the next six weeks a lot of teams sit in the position where the sandbox they test in and the org they deploy to enforce different heap limits, and the gap is four megabytes.</p>
+
+        <h2 id="d2">The number that did not move is the interesting one</h2>
+        <p>The maximum size of an HTTP callout request or response in Apex is 6 MB synchronous and 12 MB asynchronous. <a href="https://developer.salesforce.com/docs/atlas.en-us.apexref.meta/apexref/apex_methods_system_limits.htm" data-ext>Those figures</a> are not a coincidence. <span class="is-speaking">They were set to match the heap limit, because a callout body counts against heap the moment it arrives, and <code>Limits.getHeapSize()</code> counts it whether or not you have parsed it yet.</span></p>
+
+        <div class="marker"><p>The documented 6 MB ceiling was, for years, fiction.</p></div>
+
+        <p>Pull a 6 MB response in a synchronous context and you had spent the whole heap holding a string you had not looked at yet. <code>JSON.deserializeUntyped</code> on that string needs room for the string and the object graph at the same time, so the practical ceiling was far below the published one.</p>
+
+        <h2 id="d3">Your constants are wrong in the safe direction</h2>
+        <p>Large data Apex is full of lines like this one:</p>
+
+        <div class="code">
+          <div class="code__bar">
+            <span class="code__lang">Apex</span>
+            <span class="code__file">ChunkedWriter.cls</span>
+            <button class="code__copy" type="button">Copy</button>
+          </div>
+<pre><code><span class="k">if</span> (Limits.<span class="n">getHeapSize</span>() &gt; 5000000) {
+    <span class="n">flushBuffer</span>();
+    buffer.<span class="n">clear</span>();
+}</code></pre>
+        </div>
+
+        <p>We wrote about the same shape of problem in <a href="#d2" data-ref>the governor limits that moved in Spring 26</a>, and the lesson repeats. Five megabytes, picked because six was the ceiling and you wanted a margin for the flush itself. On a Winter 27 org that guard fires with almost half the budget unspent. Nothing breaks. You just do twice the DML you need to, in the job that was already the slowest thing in the nightly window.</p>
+
+        <table>
+          <thead><tr><th>Limit</th><th>Summer 26</th><th>Winter 27</th></tr></thead>
+          <tbody>
+            <tr><td>Heap, synchronous</td><td>6 MB</td><td><em>10 MB</em></td></tr>
+            <tr><td>Heap, asynchronous</td><td>12 MB</td><td><em>25 MB</em></td></tr>
+            <tr><td>Callout body, synchronous</td><td>6 MB</td><td>6 MB</td></tr>
+            <tr><td>Callout body, asynchronous</td><td>12 MB</td><td>12 MB</td></tr>
+          </tbody>
+        </table>
+
+        <h2 id="d4">The six weeks where two orgs disagree</h2>
+        <p>Your preview sandbox upgraded on 28 August and allows 25 MB asynchronously. A production org in wave three is still on Summer 26 and allows 12 MB. A batch job peaking at 18 MB passes in one and dies in the other, and the diff contains nothing that touches memory.</p>
+
+        <div class="note note--warn">
+          <span class="note__k">Watch</span>
+          <p>Check your instance on <a href="https://status.salesforce.com" data-ext>the Trust status page</a> before you trust a sandbox. A full copy sandbox refreshed before the production upgrade comes back on the old ceiling. Refreshed after, it comes back on the new one. The refresh date, not the org, decides which limit you are testing against.</p>
+        </div>
+
+        <p>Three places carry a number that Winter 27 has made wrong, and all three are grep-able:</p>
+
+        <ul>
+          <li><strong>Chunk guards.</strong> Any comparison against <code>Limits.getHeapSize()</code> with a literal near 5,000,000 or 10,000,000.</li>
+          <li><strong>Batch scope sizes.</strong> A scope tuned down to 50 or 100 to stay inside 6 MB is now leaving most of the budget on the floor.</li>
+          <li><strong>Retry ceilings.</strong> Anything that catches a heap exception and halves the batch is now halving from the wrong starting point.</li>
+        </ul>
+
+        <figure>
+          <img src="../../../../public/blog-images/apex-heap-limits-winter-27-hero.svg" alt="Per transaction limits in Summer 26 against Winter 27, and the two that did not move">
+          <figcaption>Per transaction limits, Summer 26 against Winter 27, and the two that did not move.</figcaption>
+        </figure>
+
+        <h2 id="d5">What to do this week</h2>
+
+        <div class="vid">
+          <div class="vid__bar"><span class="vid__kind">Walkthrough</span><span class="vid__len">4:12</span></div>
+          <div class="vid__frame">
+            <img src="../../../../public/blog-images/apex-heap-limits-winter-27-hero.svg" alt="">
+            <button class="vid__play" type="button" aria-label="Play the walkthrough"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></button>
+          </div>
+          <figcaption>Finding and retuning the guards in a real org, on a sandbox already upgraded to Winter 27.</figcaption>
+        </div>
+
+        <p>The grep that finds all three, across a source tree:</p>
+
+        <div class="code">
+          <div class="code__bar">
+            <span class="code__lang">Shell</span>
+            <span class="code__file">force-app/</span>
+            <button class="code__copy" type="button">Copy</button>
+          </div>
+<pre><code>grep -rn <span class="k">--include</span>=<span class="n">'*.cls'</span> <span class="n">-E</span> \
+  <span class="n">'getHeapSize|scopeSize|[0-9]{6,8}'</span> force-app/</code></pre>
+        </div>
+
+        <p>The whole job is two steps, and the first one is the one people skip:</p>
+
+        <ol>
+          <li>Find your production org&rsquo;s upgrade date. Setup, then Company Information, gives you the instance name; the Trust status page gives you the date it moves.</li>
+          <li>Until production has passed that date, tick <strong>Enforce the Summer 26 Apex heap limit</strong> in every sandbox that upgraded ahead of it, so the sandbox fails the way production would.</li>
+          <li>After it has passed, drop the guards&rsquo; literals and let the job run to the real ceiling. Measure the DML count before and after; that is where the nightly window comes back.</li>
+        </ol>
+
+        <div class="note">
+          <span class="note__k">Note</span>
+          <p>None of this is urgent in the sense that anything breaks. It is urgent in the sense that the window to fix it quietly closes when the first batch job dies in production and somebody has to find out why at two in the morning.</p>
+        </div>
+      </article></div>
+
+      <aside class="rail d-rail">
+        <div class="listen">
+          <div class="listen__top">
+            <button class="listen__play" type="button" aria-label="Play this entry aloud"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></button>
+            <div class="listen__meta">
+              <div class="listen__title">Listen</div>
+              <div class="listen__sub">01:38 of 07:04</div>
+            </div>
+            <button class="listen__rate" type="button">1.0x</button>
+          </div>
+          <div class="listen__track"><i></i></div>
+        </div>
+        <p class="meter"><span>In this entry</span><span><b id="d-pct">01</b> / 05</span></p>
+        <ul class="toc" id="d-toc">
+          <li><a href="#d2"><i>01</i><span>What actually changed</span></a></li>
+          <li><a href="#d2"><i>02</i><span>The number that did not move is the interesting one</span></a></li>
+          <li><a href="#d3"><i>03</i><span>Your constants are wrong in the safe direction</span></a></li>
+          <li><a href="#d4"><i>04</i><span>The six weeks where two orgs disagree</span></a></li>
+          <li><a href="#d5"><i>05</i><span>What to do this week</span></a></li>
+        </ul>
+
+        <dl class="figs">
+          <span class="rail__label">The figures in play</span>
+          <div><dt>Heap, sync</dt><dd>6 to <em>10 MB</em></dd></div>
+          <div><dt>Heap, async</dt><dd>12 to <em>25 MB</em></dd></div>
+          <div><dt>Callout body</dt><dd>6 MB, unmoved</dd></div>
+          <div><dt>Most orgs upgrade</dt><dd>3 or 10 Oct</dd></div>
+        </dl>
+
+        <div class="share">
+          <span class="rail__label">Send it on</span>
+          <p><a href="#d2">X</a> <i>/</i> <a href="#d2">LinkedIn</a> <i>/</i> <a href="#d2">Copy link</a></p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<script>
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab'));
+  var panels = Array.prototype.slice.call(document.querySelectorAll('.panel'));
+  function show(key, scroll) {
+    if (!panels.some(function (p) { return p.dataset.panel === key; })) key = 'f';
+    tabs.forEach(function (x) { x.setAttribute('aria-selected', String(x.dataset.p === key)); });
+    panels.forEach(function (p) { p.classList.toggle('is-on', p.dataset.panel === key); });
+    if (scroll) window.scrollTo(0, 0);
+  }
+  tabs.forEach(function (t) {
+    t.addEventListener('click', function () {
+      history.replaceState(null, '', '#' + t.dataset.p);
+      show(t.dataset.p, true);
+    });
+  });
+  /* The panel is addressable, so a given variation can be linked,
+     reloaded, and screenshotted without clicking through to it. */
+  show((location.hash || '#f').slice(1), false);
+  addEventListener('hashchange', function () { show(location.hash.slice(1), true); });
+
+  /* Tab switching only. The rail's active mark and the reader
+     position live in the observer below. */
+</script>
+<script>
+  /* The section readout. It counts sections rather than percent,
+     because an IntersectionObserver watching five headings knows
+     which heading you are under and nothing more precise than that
+     -- and stating that as a percentage put "100%" beside a progress
+     rule drawn at 85%, two readings of one thing disagreeing in the
+     same 200px of rail. The ember rule is the continuous measure;
+     this is the discrete one, and they cannot contradict because
+     they are not in the same unit. */
+  (function () {
+    var toc = document.querySelectorAll('#d-toc a');
+    var pct = document.getElementById('d-pct');
+    var heads = document.querySelectorAll('[data-panel="d"] .prose h2');
+    if (!toc.length || !heads.length) return;
+    var obs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        var idx = 0;
+        toc.forEach(function (a, i) {
+          var on = a.getAttribute('href') === '#' + e.target.id;
+          a.classList.toggle('is-here', on);
+          if (on) idx = i;
+        });
+        if (pct) pct.textContent = ('0' + (idx + 1)).slice(-2);
+      });
+    }, { rootMargin: '-15% 0px -55% 0px' });
+    heads.forEach(function (h) { obs.observe(h); });
+  })();
+</script>
+</body>
+</html>

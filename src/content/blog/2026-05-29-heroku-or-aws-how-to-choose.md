@@ -8,7 +8,6 @@ published: true
 featured: editors-pick
 author: "Sandeep Kumar"
 authorDesignation: "Technical Architect"
-authorPhoto: "/blog-images/a0bac224191c550df6e3a1f8ade4206b0927cbfb-515x515.jpg"
 image: /blog-images/heroku-or-aws-how-to-choose-hero.svg
 ---
 

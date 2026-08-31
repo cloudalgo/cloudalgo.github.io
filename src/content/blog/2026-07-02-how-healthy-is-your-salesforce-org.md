@@ -11,7 +11,6 @@ featured: editors-pick
 image: /blog-images/orgvitals-hero.svg
 author: "Sandeep Kumar"
 authorDesignation: "Founder, CloudAlgo"
-authorPhoto: "/blog-images/a0bac224191c550df6e3a1f8ade4206b0927cbfb-515x515.jpg"
 ---
 
 Here's a question every Salesforce team gets asked eventually, usually by someone senior, usually at the worst possible moment: **how healthy is our org?**

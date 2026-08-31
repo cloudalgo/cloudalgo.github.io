@@ -9,7 +9,6 @@ image: /blog-images/async-heroku-processes-from-salesforce-apex-hero.svg
 published: true
 author: "Vikash Agarwal"
 authorDesignation: "Technical Architect"
-authorPhoto: "/blog-images/32c050b8f0ed847ec0b34f5144d2fa6b03a40888-200x200.jpg"
 ---
 
 When Salesforce needs to kick off work on Heroku or AWS, the default move is to stand up a REST endpoint on the other side and call it from Apex. That works, but you now own an API: authentication, versioning, uptime, and a caller that sits waiting for a response it does not need.

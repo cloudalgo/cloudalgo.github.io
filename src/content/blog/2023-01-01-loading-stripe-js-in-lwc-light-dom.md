@@ -9,7 +9,6 @@ image: /blog-images/loading-stripe-js-in-lwc-light-dom-hero.svg
 published: true
 author: "Vikash Agarwal"
 authorDesignation: "Technical Architect"
-authorPhoto: "/blog-images/32c050b8f0ed847ec0b34f5144d2fa6b03a40888-200x200.jpg"
 ---
 
 Drop Stripe Elements into a Lightning Web Component the obvious way and the card field never appears. No error, no exception — the script loads, `mount()` returns, and the placeholder stays empty.

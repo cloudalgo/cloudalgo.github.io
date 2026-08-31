@@ -8,7 +8,7 @@ import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 import { satteri } from '@astrojs/markdown-satteri';
-import { defineHastPlugin } from 'satteri';
+import { defineHastPlugin, defineMdastPlugin } from 'satteri';
 import { unblockRedirectStub } from './src/build/redirect-stubs.ts';
 import { legacyRedirects } from './src/build/legacy-redirects.ts';
 
@@ -144,6 +144,190 @@ const satteriFigures = defineHastPlugin({
 });
 
 /**
+ * The site's own origin, named once.
+ *
+ * It is `site:` below and it is the test the link pass runs, and those two
+ * had better not drift: a mismatch would silently mark every internal link
+ * external and open the whole archive in new tabs.
+ */
+const SITE_ORIGIN = 'https://cloudalgo.com';
+
+/** Is this href somewhere on this site? */
+const isOurs = (host) => host === 'cloudalgo.com' || host.endsWith('.cloudalgo.com');
+
+/**
+ * Mark every link in an entry as leading away or leading deeper.
+ *
+ * A reader deciding whether to follow a link is asking one question -- does
+ * this take me out of what I am reading -- and the answer costs a glyph.
+ * External links get `data-ext`, which the prose styles with a trailing
+ * arrow bound to the last word by a non-breaking space, so the arrow cannot
+ * orphan onto a line of its own; internal ones get `data-ref` and a quieter
+ * underline, because a cross-reference into our own archive should not
+ * shout.
+ *
+ * SAME-ORIGIN IS TESTED BY PARSING, never by `href.startsWith(origin)`.
+ * That comparison reads `https://cloudalgo.com.evil.test/` as our own site
+ * and hands it the trusted treatment -- it is the identical mistake
+ * `classifyLink` in src/lib/engagement.ts exists to avoid, and the two must
+ * keep agreeing about what "ours" means.
+ */
+const satteriLinks = defineHastPlugin({
+  name: 'cloudalgo-markdown-links',
+  element: {
+    filter: ['a'],
+    /* Every write goes through `ctx.setProperty`. The node handed to a
+       visitor is a Readonly view of a tree that lives on the Rust side of
+       satteri, so assigning to `node.properties` mutates a copy and is
+       thrown away without a word -- which is exactly what it did: a build
+       that stayed green and shipped an archive where no link was
+       marked. */
+    visit(node, ctx) {
+      const href = node.properties?.href;
+      if (typeof href !== 'string' || !href) return;
+      // A jump inside the page is neither: it goes nowhere.
+      if (href.startsWith('#')) return;
+
+      let url;
+      try {
+        url = new URL(href, `${SITE_ORIGIN}/`);
+      } catch {
+        return;
+      }
+      // mailto:, tel: and friends are actions, not destinations.
+      if (url.protocol !== 'http:' && url.protocol !== 'https:') return;
+
+      if (isOurs(url.hostname)) {
+        ctx.setProperty(node, 'data-ref', '');
+        return;
+      }
+
+      ctx.setProperty(node, 'data-ext', '');
+      ctx.setProperty(node, 'target', '_blank');
+      // `noopener` is the security half (the opened tab cannot reach back
+      // through `window.opener`); `noreferrer` keeps our reader's path off
+      // somebody else's analytics.
+      ctx.setProperty(node, 'rel', 'noopener noreferrer');
+    },
+  },
+});
+
+/**
+ * Turn a blockquote that opens `**Keep.**` or `**Watch.**` into a note.
+ *
+ * Markdown has one aside and the entries need two: the thing to remember
+ * and the thing that will bite you. Rather than invent a fence syntax that
+ * renders as garbage anywhere else -- GitHub, an RSS reader, a plain text
+ * editor -- the entry writes an ordinary blockquote whose first words say
+ * which kind it is. Everywhere but here it reads as a quotation with a bold
+ * lead-in, which is exactly what it is.
+ *
+ * Every other blockquote stays a blockquote.
+ */
+/* `null` prototype, so the lookup below can only ever find a kind we put
+   here. A plain object literal inherits `constructor`, `toString` and the
+   rest, and the label being looked up is the first bold run of a
+   blockquote -- author input. `NOTE_KINDS['constructor']` on a literal
+   returns a function, which is truthy, and the build then dies on
+   `.split` of it. */
+const NOTE_KINDS = Object.assign(Object.create(null), {
+  'Keep.': 'note',
+  'Watch.': 'note note--warn',
+});
+
+const satteriNotes = defineHastPlugin({
+  name: 'cloudalgo-markdown-notes',
+  element: {
+    filter: ['blockquote'],
+    visit(node, ctx) {
+      const kids = (node.children ?? []).filter(
+        (c) => !(c.type === 'text' && !c.value.trim()),
+      );
+      const lead = kids[0];
+      if (!lead || lead.type !== 'element' || lead.tagName !== 'p') return;
+
+      const first = (lead.children ?? [])[0];
+      if (!first || first.type !== 'element' || first.tagName !== 'strong') return;
+
+      const label = (first.children ?? [])
+        .map((c) => (c.type === 'text' ? c.value : ''))
+        .join('')
+        .trim();
+      const className = NOTE_KINDS[label];
+      if (!className) return;
+
+      // The keyword moves out of the paragraph and becomes the note's own
+      // head, so it is not read twice.
+      const rest = (lead.children ?? []).slice(1);
+      // Markdown leaves the space that followed the bold run; without this
+      // every note would open on an indent.
+      if (rest[0]?.type === 'text') rest[0] = { ...rest[0], value: rest[0].value.replace(/^\s+/, '') };
+
+      ctx.replaceNode(node, {
+        type: 'element',
+        tagName: 'div',
+        properties: { className: className.split(' ') },
+        children: [
+          {
+            type: 'element',
+            tagName: 'b',
+            properties: { className: ['note__k'] },
+            children: [{ type: 'text', value: label.replace(/\.$/, '') }],
+          },
+          { ...lead, children: rest },
+          ...kids.slice(1),
+        ],
+      });
+    },
+  },
+});
+
+/**
+ * Wrap a code block in a bar that names its language.
+ *
+ * The language exists in the markup already -- as the `language-*` class
+ * markdown puts on the <code> -- but only a syntax highlighter ever reads
+ * it, and a reader who cannot tell Apex from shell at a glance pastes the
+ * wrong thing into the wrong window. This lifts it into something a person
+ * can see. The copy button is NOT rendered here: it is added by the entry's
+ * own script, so it exists only where it would work.
+ *
+ */
+const satteriCode = defineMdastPlugin({
+  name: 'cloudalgo-markdown-code',
+
+  /* IT IS AN MDAST PLUGIN, NOT A HAST ONE, and that is not a style choice.
+     Astro pushes its own Shiki highlighter into the hast plugin list AHEAD
+     of ours (see @astrojs/markdown-satteri's satteri-processor), and that
+     plugin's <pre> visitor RETURNS a replacement -- Shiki's own freshly
+     built <pre>. A node handed back by one visitor is not re-offered to the
+     visitors that follow it, so a `pre` filter downstream matched nothing
+     whatsoever, and an `after` hook could see the finished tree but not
+     change it. Nothing said so either way: the build stayed green, the page
+     still had code on it, and the bar simply was not there.
+
+     Upstream of all of that, the block is still a markdown fence with its
+     language on it, and the bar can be laid down beside it as raw HTML that
+     the highlighter never touches. */
+  code(node, ctx) {
+    const lang = (node.lang ?? '').trim().toLowerCase();
+    // An unlabelled block gets no bar. A chip reading "CODE" tells the
+    // reader nothing they could not already see.
+    if (!lang || lang === 'plaintext') return;
+
+    // Escaped, because a fence's info string is author input and this is
+    // being written into markup.
+    const safe = lang.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+    ctx.insertBefore(node, {
+      type: 'html',
+      value: `<div class="code"><div class="code__bar"><span class="code__lang">${safe}</span></div>`,
+    });
+    ctx.insertAfter(node, { type: 'html', value: '</div>' });
+  },
+});
+
+/**
  * Take the `noindex` back off every generated redirect stub.
  *
  * See src/build/redirect-stubs.ts for why it must come off. This runs as a
@@ -171,10 +355,15 @@ const indexableRedirects = {
 };
 
 export default defineConfig({
-  site: 'https://cloudalgo.com',
+  site: SITE_ORIGIN,
   output: 'static',
   redirects: { ...blogRedirects, ...renamedRedirects, ...datedDirRedirects, ...legacyRedirects },
-  markdown: { processor: satteri({ hastPlugins: [satteriFigures] }) },
+  markdown: {
+    processor: satteri({
+      mdastPlugins: [satteriCode],
+      hastPlugins: [satteriFigures, satteriLinks, satteriNotes],
+    }),
+  },
   integrations: [
     indexableRedirects,
     react(),

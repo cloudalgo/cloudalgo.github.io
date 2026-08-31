@@ -140,6 +140,10 @@
 @use 'components/plate-hero';
 @use 'components/record';
 @use 'components/prose';
+// The rail's spoken-word control. After `_record` because it sits in the
+// rail and takes its width from it, and after `_prose` because the mark
+// it puts on the sentence being read is a `.prose` rule.
+@use 'components/listen';
 @use 'sections/entry-close';
 // The subscribe block sits under `_entry-close` on the same fold and
 // borrows `components/forms` for its field, so it loads after both.

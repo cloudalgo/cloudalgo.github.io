@@ -1,0 +1,122 @@
+/* ─── The listen bar ──────────────────────────────────────
+   A journal entry read aloud, for the reader who is driving to a client
+   or has the release notes open on the other screen.
+
+   It sits at the head of the contents rail rather than floating over
+   the text. A floating control is a thing that follows you; this is a
+   thing the entry HAS, and the rail is where the entry states what it
+   has -- its sections, its figures, where to send it.
+
+   The voice is the browser's own (`speechSynthesis`), so there is no
+   audio file per entry and nothing to draw or pay for. The cost of that
+   is a voice we do not choose: it is whatever the reader's OS ships,
+   and it varies from good to robotic. The bar is built so that swapping
+   in pre-rendered audio later changes the script and nothing here.
+
+   The whole thing is rendered by its own script and absent without JS,
+   which is correct rather than lazy: a play button that cannot play is
+   worse than no play button.
+   ══════════════════════════════════════════════════ */
+
+.listen {
+  border: 1px solid var(--surface-inverse);
+  border-radius: var(--listen-radius);
+  margin-bottom: 1.25rem;
+}
+
+.listen__top {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.625rem 0.75rem;
+  background-color: var(--surface-inverse);
+}
+
+/* The ember is spent here and nowhere else in the bar. It is the only
+   control on the page that starts something, and one accent is how the
+   reader knows which shape does that. */
+.listen__play {
+  flex: none;
+  width: var(--listen-btn);
+  height: var(--listen-btn);
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: var(--listen-radius);
+  background-color: var(--color-accent);
+  color: var(--color-on-accent);
+  cursor: pointer;
+  transition:
+    background-color var(--duration-fast) var(--ease-out),
+    transform var(--duration-fast) var(--ease-out);
+}
+.listen__play:hover { background-color: var(--color-accent-hover); }
+.listen__play:active { transform: scale(0.96); }
+.listen__play svg { width: 0.875rem; height: 0.875rem; fill: currentColor; }
+
+.listen__text { min-width: 0; margin-right: auto; }
+
+.listen__title {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  font-weight: var(--weight-medium);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-on-inverse);
+}
+
+/* Tabular figures, because this is a clock: proportional digits make
+   the elapsed time jitter sideways once a second, which is the most
+   distracting thing a small readout can do. */
+.listen__sub {
+  display: block;
+  margin-top: 0.15rem;
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  color: var(--color-on-inverse-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.listen__rate {
+  flex: none;
+  border: 1px solid var(--color-paper-a30);
+  border-radius: var(--listen-radius);
+  background: none;
+  color: var(--color-on-inverse-strong);
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.04em;
+  padding: 0.25em 0.5em;
+  cursor: pointer;
+  font-variant-numeric: tabular-nums;
+  transition:
+    color var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out);
+}
+.listen__rate:hover {
+  color: var(--color-on-inverse);
+  border-color: var(--color-accent-inverse);
+}
+
+/* The track reports position through the entry, and it is driven by
+   which sentence is being spoken rather than by a timer: the browser's
+   speech engine gives no duration up front and no progress event, so a
+   clock here would be a guess presented as a measurement. Counting
+   sentences is a fact we actually have. */
+.listen__track {
+  height: var(--listen-track-h);
+  background-color: var(--surface-tint);
+}
+.listen__track i {
+  display: block;
+  height: 100%;
+  width: 0;
+  background-color: var(--color-accent);
+  transition: width var(--duration-base) var(--ease-out);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .listen__play:active { transform: none; }
+  .listen__track i { transition: none; }
+}

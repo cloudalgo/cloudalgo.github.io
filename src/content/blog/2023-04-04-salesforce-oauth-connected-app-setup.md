@@ -9,7 +9,6 @@ image: /blog-images/salesforce-oauth-connected-app-setup-hero.svg
 published: true
 author: "Sandeep Kumar"
 authorDesignation: "Technical Architect"
-authorPhoto: "/blog-images/a0bac224191c550df6e3a1f8ade4206b0927cbfb-515x515.jpg"
 ---
 
 OAuth is how an external application gets permission to act in Salesforce on a user's behalf, without ever handling that user's password. The setup is short. The parts that cost people time are three details the walkthroughs tend to skip: PKCE, which is on by default and will reject a request that omits it; `instance_url`, which you must use for API calls afterwards; and the callback URL, which has to match exactly.

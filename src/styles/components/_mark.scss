@@ -11,15 +11,19 @@
  * csd-hero, prod-hero...), so this is the piece they share.
  */
 
-.mark {
-  text-decoration: none;
-  color: var(--color-heading);
+/* The rule itself, as a mixin, because three places draw it and they are
+   not all `.mark`: a headline's marked words, a `<mark>` in the body of a
+   journal entry, and the bolded cell a table row exists to carry. They
+   have to be the SAME device -- one emphasis the reader learns once --
+   and three hand-copied gradients would drift the first time the height
+   is retuned. `_prose.scss` reaches it with `@use 'mark'`.
 
-  /* A background gradient, not text-decoration. Three reasons, and the
-     third is the one that matters most here: the rule sits at a
-     controlled height rather than wherever the font's underline metric
-     puts it; it survives a line wrap intact; and background-size can be
-     animated, which text-decoration cannot. */
+   A background gradient, not text-decoration. Three reasons, and the
+   third is the one that matters most here: the rule sits at a controlled
+   height rather than wherever the font's underline metric puts it; it
+   survives a line wrap intact; and background-size can be animated,
+   which text-decoration cannot. */
+@mixin rule {
   background-image: linear-gradient(
     transparent var(--mark-top),
     var(--mark-color) var(--mark-top),
@@ -27,13 +31,23 @@
     transparent var(--mark-bottom)
   );
   background-repeat: no-repeat;
-  background-size: 100% 100%;
 
   /* Each line of a wrapped mark gets its own rule rather than one box
      stretched across both. Also what makes --draw size its stroke per
      fragment. */
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
+}
+
+.mark {
+  text-decoration: none;
+  color: var(--color-heading);
+
+  @include rule;
+
+  /* Stated rather than left to `auto`, because `--draw` animates this
+     property and needs a resting value to animate back to. */
+  background-size: 100% 100%;
 }
 
 /* The stroke is painted left to right by growing background-size on the

@@ -10,7 +10,6 @@ published: true
 image: /blog-images/salesforce-soap-login-retirement-audit-hero.svg
 author: "Sandeep Kumar"
 authorDesignation: "Founder, CloudAlgo"
-authorPhoto: "/blog-images/a0bac224191c550df6e3a1f8ade4206b0927cbfb-515x515.jpg"
 ---
 
 There is a version of this story going around that is wrong, and it is wrong in a way that will cost somebody a weekend.

@@ -7,7 +7,15 @@
    the markdown comes out of a content file and carries no classes.
    ══════════════════════════════════════════════════ */
 
-.prose { max-width: 68ch; }
+/* The marked phrase and a table's bolded cell both draw the headline
+   rule, so they include it from the file that owns it rather than
+   copying the gradient. `components/mark` is already loaded ahead of
+   this file in main.scss, and Sass emits a module once at its FIRST
+   load position -- so this line reaches the mixin without moving
+   anything in the cascade. */
+@use 'mark';
+
+.prose { max-width: var(--prose-measure); }
 
 .prose > * { margin: 0; }
 .prose > * + * { margin-top: 1.375rem; }
@@ -71,22 +79,33 @@
 
 .prose li {
   position: relative;
-  padding-left: 2.25rem;
+  padding-left: var(--prose-marker-indent);
   font-size: 1.0625rem;
   line-height: 1.68;
   color: var(--color-prose);
 }
 
-/* An unordered item is a component of one architecture: it gets a rule,
-   not a bullet. */
+/* An unordered item gets an arrow, not a rule and not a bullet. The
+   lists in this archive are nearly all consequences -- three places a
+   number is now wrong, two things to check before Tuesday -- and an
+   arrow says "this follows" where a disc says only "another one".
+
+   It is aligned by line-height rather than by an offset. The glyph sits
+   at `top: 0` in the item's own padding box and takes 1.79, which is the
+   item's 1.68 divided by the marker's own 0.9375em -- so the two first
+   lines resolve to the same box height and the arrow lands on the
+   baseline of the first word. Both numbers are relative to the item, so
+   the pairing survives the 85% root the stylesheet drops to below
+   1200px; an offset in rem would not. Retune one and you retune both. */
 .prose ul > li::before {
-  content: '';
+  content: var(--prose-marker);
   position: absolute;
   left: 0;
-  top: 0.85em;
-  width: 1.25rem;
-  height: 1px;
-  background-color: var(--color-heading);
+  top: 0;
+  font-family: var(--prose-marker-font);
+  font-size: 0.9375em;
+  line-height: 1.79;
+  color: var(--prose-marker-color);
 }
 .prose ul > li > strong:first-child { color: var(--color-heading); }
 
@@ -115,6 +134,48 @@
 }
 .prose a:hover { text-decoration-color: var(--color-accent); }
 
+/* A link that leaves the site says so before it is clicked, not after.
+   `data-ext` is set at build time by the `cloudalgo-markdown-links`
+   pass in astro.config.mjs, which decides by PARSING the href and
+   comparing hostnames -- never by `href.startsWith(origin)`, which
+   reads cloudalgo.com.evil.test as our own. The same rule the analytics
+   helpers use, for the same reason.
+
+   The arrow is bound to the last word by a NON-BREAKING SPACE inside an
+   INLINE `::after`, which is the only version of this that behaves. The
+   first attempt held the whole anchor on one line, which stops the arrow
+   orphaning and also stops a long link text wrapping at all -- one
+   sentence-length external link would then push the page sideways on a
+   phone. An inline-block arrow with a margin is no better: the block
+   wraps as a unit and takes its own space with it. `\00a0` in an inline
+   box binds to the word before it and nothing else. */
+.prose a[data-ext]::after {
+  content: var(--prose-ext-glyph);
+  display: inline;
+  font-size: 0.82em;
+  line-height: 1;
+  vertical-align: 0.08em;
+  color: var(--color-text-faint);
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--ease-out);
+}
+.prose a[data-ext]:hover::after { color: var(--color-accent); }
+
+/* A link that stays inside the archive gets the opposite treatment: a
+   short ember tick before it, and a quieter underline. The pair reads
+   as one distinction -- going out, or going deeper. */
+.prose a[data-ref] { text-decoration-color: var(--border-default); }
+.prose a[data-ref]::before {
+  content: '';
+  display: inline-block;
+  width: 0.5rem;
+  height: 1px;
+  margin-right: 0.4em;
+  vertical-align: 0.28em;
+  background-color: var(--color-accent);
+}
+.prose a[data-ref]:hover { text-decoration-color: var(--color-accent); }
+
 .prose code {
   font-family: var(--font-mono);
   font-size: 0.875em;
@@ -122,6 +183,13 @@
   border: 1px solid var(--border-default);
   padding: 0.08em 0.32em;
   color: var(--color-heading);
+  /* A named API is one word to a line-breaker: no space, no hyphen, and
+     `ApexPages.currentPage().getParameters().get('id')` is 382px of it.
+     At 390px that is a paragraph the reader has to scroll sideways to
+     finish, and it takes the whole page with it. `break-word` breaks
+     only the word that will not fit, so ordinary short spans -- which is
+     nearly all of them -- still wrap between words as before. */
+  overflow-wrap: break-word;
 }
 
 .prose pre {
@@ -176,6 +244,38 @@
   vertical-align: top;
 }
 
+/* ─── The marked phrase ───────────────────────────────────
+   `<mark>` in the body of an entry, carrying the ember rule the rest of
+   the site puts under a headline's key words.
+
+   HTML rather than a new markdown syntax, and `<mark>` rather than a
+   class, because it is the element that already MEANS this: relevance
+   marked by the author, which is what a highlighter is. It degrades to a
+   yellow wash in a reader that never sees this stylesheet, which is the
+   right failure.
+
+   The default UA style is a solid yellow block behind black text, so
+   both are overridden -- the rule comes from `mark.rule`, the same
+   mixin a headline's `.mark` includes, so all three read as one device
+   rather than three highlighters. */
+.prose mark {
+  background-color: transparent;
+  color: inherit;
+  font-weight: var(--weight-semibold);
+  @include mark.rule;
+}
+
+/* The cell the row is about. A table in this archive nearly always
+   exists to carry one number per row that moved, and bolding it is what
+   the author already writes; this reads that as the mark rather than
+   asking for a second syntax. The same mixin again, so the emphasis in a
+   table and the emphasis in a headline are one device. */
+.prose tbody td strong {
+  font-weight: var(--weight-semibold);
+  color: var(--color-heading);
+  @include mark.rule;
+}
+
 /* ─── Figures ─────────────────────────────────────────────
    Markdown hands us an image and its alt text. The rehype pass in
    `astro.config.mjs` lifts a lone image out of its paragraph into a
@@ -221,4 +321,140 @@
   font-size: var(--size-body-sm);
   line-height: 1.7;
   color: var(--color-text-muted);
+}
+
+/* ─── The note ────────────────────────────────────────────
+   An aside set OUTSIDE the measure, hanging into the rail's gutter, so
+   it reads as an interruption rather than as another paragraph. Two
+   kinds only, and the constraint is the point: something to keep, and
+   something to watch. A third kind would make the reader learn a
+   vocabulary instead of reading an entry.
+
+   Authored as a blockquote opening on a bold `Keep.` or `Watch.` --
+   see `cloudalgo-markdown-notes` in astro.config.mjs. Any other
+   blockquote is left as a blockquote, which is why the pull quote above
+   still works.
+
+   The ember is spent on `--warn` only. If both kinds carried it, it
+   would stop meaning "this one will bite you". */
+.prose .note {
+  position: relative;
+  margin-left: calc(var(--note-hang) * -1);
+  padding: 1rem 1.25rem 1rem var(--note-hang);
+  border-left: var(--note-rule) solid var(--border-default);
+  background-color: var(--surface-wash);
+}
+
+.prose .note__k {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  font-weight: var(--weight-medium);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-text-faint);
+  margin-bottom: 0.375rem;
+}
+
+/* The note's own paragraphs, not the prose ramp: an aside that matched
+   the body copy exactly would not read as an aside. */
+.prose .note p {
+  margin: 0;
+  font-size: var(--size-body);
+  line-height: 1.65;
+  color: var(--color-prose);
+}
+.prose .note p + p { margin-top: 0.75rem; }
+
+.prose .note--warn {
+  border-left-color: var(--color-accent);
+  background-color: var(--surface-wash-accent);
+}
+.prose .note--warn .note__k { color: var(--color-accent-hover); }
+
+/* Below the record's stack breakpoint the rail has moved above the text
+   and the column runs to the page padding, so there is no gutter left to
+   hang into: measured at 390px the hang put the note's left edge at
+   -2px and the viewport clipped the ember rule that marks it. It stops
+   hanging where it stops having somewhere to hang.
+
+   This block sits below the rules it overrides rather than up with the
+   record's own breakpoint, because the selectors have equal specificity
+   and a media query grants none -- source order is the whole tiebreak. */
+@media (max-width: 1000px) {
+  .prose .note { margin-left: 0; padding-left: 1.25rem; }
+}
+
+/* ─── The code block ──────────────────────────────────────
+   `<pre>` wrapped in a bar that names the language and offers a copy.
+
+   Both halves are worth their pixels for the same reason: the code in
+   this archive is meant to be RUN. A reader who cannot tell Apex from
+   shell at a glance pastes the wrong thing into the wrong window, and a
+   reader who has to select eight lines by hand across a scroll usually
+   gets nine.
+
+   Wrapped by `cloudalgo-markdown-code` in astro.config.mjs rather than
+   by hand, because the markdown gives us a bare <pre><code> and the
+   language only ever exists as the `language-*` class on the <code>. */
+.prose .code {
+  margin-top: 1.75rem;
+  border: 1px solid var(--surface-inverse);
+}
+
+.prose .code__bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.875rem;
+  background-color: var(--surface-inverse);
+  border-bottom: 1px solid var(--color-paper-a15);
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.prose .code__lang {
+  color: var(--color-accent-inverse);
+  font-weight: var(--weight-medium);
+  margin-right: auto;
+}
+
+/* A button, not an anchor: unlike "copy link" in the rail there is no
+   URL this could fall back to, so with no JS there is nothing to
+   offer. It is rendered by the script that gives it its behaviour, for
+   that reason -- see the entry template. */
+.prose .code__copy {
+  flex: none;
+  border: 1px solid var(--color-paper-a30);
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--color-on-inverse-strong);
+  font: inherit;
+  letter-spacing: 0.04em;
+  padding: 0.25em 0.6em;
+  cursor: pointer;
+  transition:
+    color var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out);
+}
+.prose .code__copy:hover {
+  color: var(--color-on-inverse);
+  border-color: var(--color-accent-inverse);
+}
+
+/* The <pre> inside the bar has already been given its ground by the
+   wrapper, so it drops the margin the standalone rule sets. */
+.prose .code pre { margin-top: 0; }
+
+/* ─── The sentence being spoken ───────────────────────────
+   Marked while the listen bar reads it. A background wash rather than a
+   border or an underline, because nothing on the line may MOVE as the
+   highlight steps through the paragraph -- a mark that reflows the text
+   it marks is unreadable at speaking speed. The box-shadow does the
+   work a padding would otherwise do, for the same reason. */
+.prose .is-speaking {
+  background-color: var(--speaking-wash);
+  box-shadow: 0 0 0 0.28em var(--speaking-wash);
 }

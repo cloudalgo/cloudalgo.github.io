@@ -234,7 +234,17 @@ const schema = [
     <aside class="record__rail" aria-label="About this entry">
       {toc.length > 0 && (
         <nav aria-labelledby="rail-contents">
-          <span class="rail__label" id="rail-contents">In this entry</span>
+          {/* The meter carries the rail's own label as well as the count,
+              so the heading is stated once. The number is set by the same
+              observer that moves the pencil mark, and it counts sections
+              rather than reporting a percentage -- see _record.scss. */}
+          <p class="rail__meter">
+            <span id="rail-contents">In this entry</span>
+            <span>
+              <b data-rail-n>01</b>
+              <span class="rail__meter-total"> / {String(toc.length).padStart(2, '0')}</span>
+            </span>
+          </p>
           <ul class="rail__toc">
             {toc.map((h, i) => (
               <li>
@@ -337,42 +347,66 @@ const schema = [
 
 <script>
   /* The rail follows the reader.
-     One observer over the entry's h2s marks the section currently under
-     the top of the viewport, and the pencil mark moves to its row. The
-     mark is the archive's, kept: on the index it followed the pointer
-     down the run, here it follows the reader down the entry. */
+     The entry's h2s are measured against a reading line a little above
+     the middle of the viewport; the last one to have passed it is the
+     section you are in, and the pencil mark moves to its row. The mark
+     is the archive's, kept: on the index it followed the pointer down
+     the run, here it follows the reader down the entry. */
   const links = [...document.querySelectorAll<HTMLAnchorElement>('.rail__link')];
+  /* `getElementById`, not `querySelector('#' + id)`. A heading that opens
+     with a numeral -- "1. You need an external id" -- slugs to an id that
+     opens with one too, and an id is free to do that while a CSS selector
+     is not: `#1-you-need...` is a parse error, and querySelector THROWS on
+     it. Thrown here it took the whole module with it, so on those entries
+     the rail, the listen bar and every copy button were simply absent.
+     getElementById takes a plain string and never parses. */
   const sections = links
-    .map((a) => document.querySelector(a.hash))
-    .filter((el): el is Element => el instanceof Element);
+    .map((a) => document.getElementById(decodeURIComponent(a.hash.slice(1))))
+    .filter((el): el is HTMLElement => el instanceof HTMLElement);
 
   if (sections.length > 0) {
-    const seen = new Set<Element>();
+    const meter = document.querySelector<HTMLElement>('[data-rail-n]');
 
+    /* MEASURED, NOT REMEMBERED, and that is a correction rather than a
+       preference. This was an IntersectionObserver over a band, adding a
+       heading to a set as it entered and dropping it as it left. An
+       observer reports a CHANGE of state, though, and a heading that
+       crosses the whole band between two frames never changes one: it is
+       outside the band before and outside it after, so nothing is
+       delivered and the set keeps an answer from further up the page.
+       The everyday way to trigger that is to click a link in this very
+       rail -- the jump lands you in section five with the mark still on
+       section one. Reading the positions each time cannot go stale.
+
+       The line sits at 45% of the viewport: the foot of the band the
+       observer used, so the section changes at the same place it always
+       did. */
     const mark = () => {
-      /* The last section whose head has passed the reading line, so a
-         long section stays marked all the way down rather than clearing
-         the moment its heading scrolls away. */
+      const line = window.innerHeight * 0.45;
       let current = -1;
       sections.forEach((el, i) => {
-        if (seen.has(el)) current = i;
+        if (el.getBoundingClientRect().top < line) current = i;
       });
       links.forEach((a, i) => a.classList.toggle('is-here', i === current));
+      /* The same fact in words, for the reader who wants a position
+         rather than a place. It is driven from here rather than from a
+         second watcher because two readings of one set of headings would
+         eventually disagree about which section you are in. */
+      if (meter) meter.textContent = String(Math.max(current, 0) + 1).padStart(2, '0');
     };
 
-    const io = new IntersectionObserver(
-      (entries) => {
-        for (const e of entries) {
-          if (e.boundingClientRect.top < 0 || e.isIntersecting) seen.add(e.target);
-          else seen.delete(e.target);
-        }
-        mark();
-      },
-      /* The reading line: a band from just under the fixed header down to
-         the middle of the viewport. */
-      { rootMargin: '-15% 0px -55% 0px', threshold: 0 }
-    );
-    sections.forEach((el) => io.observe(el));
+    /* Coalesced into one frame: a scroll fires far faster than the page
+       can paint, and the answer only changes once per painted frame. */
+    let queued = false;
+    const schedule = () => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(() => { queued = false; mark(); });
+    };
+
+    addEventListener('scroll', schedule, { passive: true });
+    addEventListener('resize', schedule, { passive: true });
+    mark();
   }
 
   /* Copy link. The anchor is a working link to this entry without JS;
@@ -390,4 +424,278 @@ const schema = [
     }
     window.setTimeout(() => { copy.textContent = label; }, 2000);
   });
+
+  /* Copy, on a code block.
+     Added here rather than by the markdown pass that builds the bar,
+     because a copy button with no clipboard behind it is a lie. The bar
+     itself is worth rendering without JS -- it names the language -- and
+     this is the half that is not. */
+  if (navigator.clipboard) {
+    for (const bar of document.querySelectorAll<HTMLElement>('.code__bar')) {
+      const block = bar.parentElement?.querySelector('pre');
+      if (!block) continue;
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'code__copy';
+      btn.textContent = 'Copy';
+      btn.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText((block.textContent ?? '').replace(/\n+$/, ''));
+          btn.textContent = 'Copied';
+        } catch {
+          btn.textContent = 'Blocked';
+        }
+        window.setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
+      });
+      bar.append(btn);
+    }
+  }
+
+  /* ── Listen to the entry ───────────────────────────────
+     The entry read aloud, in the browser's own voice.
+
+     `speechSynthesis` rather than an audio file per entry: nothing to
+     render, nothing to host, and it works on an entry published five
+     minutes ago. The cost is a voice we do not choose -- it is whichever
+     one the reader's OS ships. If pre-rendered audio ever arrives, it
+     replaces this script and leaves the bar's markup and styles alone.
+
+     The whole control is built here, so it does not exist where it
+     cannot work. */
+  const prose = document.querySelector<HTMLElement>('.prose');
+  const rail = document.querySelector<HTMLElement>('.record__rail');
+  const synth = window.speechSynthesis;
+
+  if (prose && rail && synth) {
+    const RATES = [1, 1.25, 1.5, 0.75];
+    const PLAY = '<svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 0l10 7-10 7z"/></svg>';
+    const PAUSE = '<svg viewBox="0 0 14 14" aria-hidden="true"><path d="M1 0h4v14H1zM9 0h4v14H9z"/></svg>';
+
+    const bar = document.createElement('div');
+    bar.className = 'listen';
+    bar.innerHTML = `
+      <div class="listen__top">
+        <button type="button" class="listen__play" aria-label="Read this entry aloud">${PLAY}</button>
+        <span class="listen__text">
+          <span class="listen__title">Listen</span>
+          <span class="listen__sub">00:00</span>
+        </span>
+        <button type="button" class="listen__rate">1&times;</button>
+      </div>
+      <div class="listen__track"><i></i></div>`;
+    rail.prepend(bar);
+
+    const play = bar.querySelector<HTMLButtonElement>('.listen__play')!;
+    const rateBtn = bar.querySelector<HTMLButtonElement>('.listen__rate')!;
+    const sub = bar.querySelector<HTMLElement>('.listen__sub')!;
+    const track = bar.querySelector<HTMLElement>('.listen__track i')!;
+
+    /* Cut the entry into sentences, once, on the first press.
+       Every sentence is wrapped so it can be marked while it is spoken,
+       and that costs a few hundred DOM nodes -- so a reader who never
+       presses play never pays for it.
+
+       Inline elements are not split. A sentence running through a link
+       comes back as two pieces carrying the SAME index, which is why the
+       mark is applied to every element with the index rather than to
+       one: a highlight that stopped at a link would look like a bug. */
+    const BLOCK = 'p, h2, h3, li, figcaption';
+    const says: string[] = [];
+
+    const split = () => {
+      if (says.length) return;
+      let i = 0;
+      const blocks = [...prose.querySelectorAll<HTMLElement>(BLOCK)].filter(
+        /* A block holding another block is a container, not a paragraph;
+           reading both would read its words twice. Code is skipped
+           outright -- an Apex snippet read aloud is noise. */
+        (b) => !b.querySelector(BLOCK) && !b.closest('pre, .code'),
+      );
+
+      for (const block of blocks) {
+        const walker = document.createTreeWalker(block, NodeFilter.SHOW_TEXT);
+        const texts: Text[] = [];
+        for (let n = walker.nextNode(); n; n = walker.nextNode()) {
+          if (n.nodeValue && n.nodeValue.trim()) texts.push(n as Text);
+        }
+
+        let open = false;
+        for (const node of texts) {
+          const parts = (node.nodeValue ?? '').match(/[^.!?]+[.!?]*\s*/g) ?? [];
+          const frag = document.createDocumentFragment();
+          for (const part of parts) {
+            if (!open) { i += 1; says.push(''); open = true; }
+            says[i - 1] += part;
+            const span = document.createElement('span');
+            span.dataset.say = String(i);
+            span.textContent = part;
+            frag.append(span);
+            if (/[.!?]["')\]]?\s*$/.test(part)) open = false;
+          }
+          node.replaceWith(frag);
+        }
+      }
+    };
+
+    let at = 0;
+    let playing = false;
+    let began = false;
+    let rate = 0;
+    let ticker = 0;
+    let since = 0;
+    let banked = 0;
+
+    /* Which run of the reading an utterance belongs to. Every
+       `synth.cancel()` bumps it, and an utterance captures it when it is
+       created, so a callback arriving from a cancelled run can tell that
+       it is stale. A boolean cannot do this job: `cancel()` fires the
+       outstanding utterance's `onerror` ASYNCHRONOUSLY, so a flag dropped
+       and restored around the call is already back to `true` by the time
+       the callback reads it, and the dead utterance advances the index --
+       a sentence skipped, and two voices over each other. */
+    let run = 0;
+
+    const still = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    const clear = () => {
+      for (const el of prose.querySelectorAll('.is-speaking')) el.classList.remove('is-speaking');
+    };
+
+    const mark = (n: number) => {
+      clear();
+      const parts = prose.querySelectorAll<HTMLElement>(`[data-say="${n}"]`);
+      parts.forEach((el) => el.classList.add('is-speaking'));
+      track.style.width = `${Math.round((n / says.length) * 100)}%`;
+
+      /* Follow along, but only when the sentence has left the window.
+         Scrolling on every sentence would take the page away from a
+         reader who is following the text with their eyes. */
+      const first = parts[0];
+      if (!first) return;
+      const box = first.getBoundingClientRect();
+      if (box.top > 0 && box.bottom < window.innerHeight) return;
+      first.scrollIntoView({ block: 'center', behavior: still.matches ? 'auto' : 'smooth' });
+    };
+
+    const tick = () => {
+      const secs = Math.floor((banked + (playing ? Date.now() - since : 0)) / 1000);
+      const pad = (n: number) => String(n).padStart(2, '0');
+      sub.textContent = `${pad(Math.floor(secs / 60))}:${pad(secs % 60)}`;
+    };
+
+    const say = () => {
+      /* Skip whitespace-only runs without speaking them; the indices have
+         to stay aligned with the spans, so nothing is filtered out of the
+         list, only passed over. */
+      while (at < says.length && !says[at].trim()) at += 1;
+      if (at >= says.length) { done(); return; }
+
+      const u = new SpeechSynthesisUtterance(says[at]);
+      const mine = run;
+      u.rate = RATES[rate];
+      u.onstart = () => { if (mine === run) mark(at + 1); };
+      const next = () => { if (mine === run && playing) { at += 1; say(); } };
+      u.onend = next;
+      u.onerror = next;
+      synth.speak(u);
+    };
+
+    const beat = () => {
+      ticker = window.setInterval(() => {
+        tick();
+        /* Chrome stops speaking after about fifteen seconds unless
+           something pokes it. `resume()` on a synth that is not paused is
+           a no-op, so this is safe to run every second. */
+        synth.resume();
+      }, 1000);
+    };
+
+    const showPlay = (label: string) => {
+      play.innerHTML = PLAY;
+      play.setAttribute('aria-label', label);
+    };
+
+    const hold = () => {
+      playing = false;
+      banked += Date.now() - since;
+      window.clearInterval(ticker);
+      synth.pause();
+      showPlay('Resume reading');
+    };
+
+    /* `finished` is the difference between the end of the entry and a
+       stop, and only the track can tell them apart: a read that ran out
+       of sentences leaves it full, a read that was stopped empties it and
+       puts the clock back to zero. Everything else about the two is the
+       same -- the bar goes back to Play, and no state survives. */
+    const done = (finished = true) => {
+      playing = false;
+      began = false;
+      at = 0;
+      banked = 0;
+      run += 1;
+      window.clearInterval(ticker);
+      synth.cancel();
+      clear();
+      track.style.width = finished ? '100%' : '0%';
+      if (!finished) tick();
+      showPlay('Read this entry aloud');
+    };
+
+    play.addEventListener('click', () => {
+      if (playing) { hold(); return; }
+
+      play.innerHTML = PAUSE;
+      play.setAttribute('aria-label', 'Pause reading');
+      playing = true;
+      since = Date.now();
+      beat();
+
+      if (began) { synth.resume(); return; }
+      split();
+      began = true;
+      banked = 0;
+      at = 0;
+      track.style.width = '0%';
+      say();
+    });
+
+    /* The label carries the speed, because the button's visible text IS
+       the speed and an `aria-label` REPLACES that text rather than adding
+       to it. Labelled only "Reading speed", the one control whose whole
+       job is to report the current rate would announce everything about
+       itself except the rate. */
+    const showRate = () => {
+      rateBtn.textContent = `${RATES[rate]}×`;
+      rateBtn.setAttribute('aria-label', `Reading speed, ${RATES[rate]} times`);
+    };
+    showRate();
+
+    rateBtn.addEventListener('click', () => {
+      rate = (rate + 1) % RATES.length;
+      showRate();
+      /* An utterance's rate is fixed once it is speaking, so the current
+         sentence is cancelled and started again at the new speed. The
+         cancel is what `run` exists for: it will fire the outstanding
+         utterance's `onerror`, after this handler has returned, and
+         without the bump that callback would advance past the sentence
+         we are restarting. */
+      if (!playing) return;
+      run += 1;
+      synth.cancel();
+      say();
+    });
+
+    /* Speech outlives the page in several browsers: leave the entry mid
+       sentence and it keeps reading into whatever you opened next. So the
+       reading is stopped on the way out -- and stopped THROUGH `done`,
+       because a bare `cancel()` silences the voice while leaving a bar
+       that still says Pause and a track still part-full. A page restored
+       from the back/forward cache is not reloaded and its script does not
+       run again, so the reader would come back to a paused-looking
+       control over silence; `pageshow` puts it right for the case where
+       the browser restored a page `pagehide` had already reset. */
+    window.addEventListener('pagehide', () => done(false));
+    window.addEventListener('pageshow', (e) => { if (e.persisted) done(false); });
+  }
 </script>

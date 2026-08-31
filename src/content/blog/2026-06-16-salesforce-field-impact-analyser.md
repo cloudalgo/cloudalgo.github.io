@@ -10,7 +10,6 @@ published: true
 image: /blog-images/salesforce-field-impact-hero.svg
 author: "Sandeep Kumar"
 authorDesignation: "Founder, CloudAlgo"
-authorPhoto: "/blog-images/a0bac224191c550df6e3a1f8ade4206b0927cbfb-515x515.jpg"
 ---
 
 A client asked us to help prep their Salesforce org for a data migration. Eight years of history — product pivots, reorgs, features that got halfway built and then quietly abandoned. The schema had somewhere north of 800 custom fields on Account alone. Nobody on their team could tell you with confidence which ones were actually being used.

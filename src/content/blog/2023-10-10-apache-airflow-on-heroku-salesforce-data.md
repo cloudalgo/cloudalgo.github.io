@@ -9,7 +9,6 @@ image: /blog-images/apache-airflow-on-heroku-salesforce-data-hero.svg
 published: true
 author: "Vikash Agarwal"
 authorDesignation: "Technical Architect"
-authorPhoto: "/blog-images/32c050b8f0ed847ec0b34f5144d2fa6b03a40888-200x200.jpg"
 ---
 
 When data from half a dozen systems has to end up in Salesforce, the tempting shortcut is to sync it all in and clean it up afterwards. That falls apart fast. Bad records reach the people using them, every correction means another round of syncing, and nobody can tell which system a wrong value came from.

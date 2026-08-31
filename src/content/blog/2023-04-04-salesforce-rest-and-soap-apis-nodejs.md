@@ -8,7 +8,6 @@ image: /blog-images/salesforce-rest-and-soap-apis-nodejs-hero.svg
 published: true
 author: "Sandeep Kumar"
 authorDesignation: "Technical Architect"
-authorPhoto: "/blog-images/a0bac224191c550df6e3a1f8ade4206b0927cbfb-515x515.jpg"
 ---
 
 Salesforce exposes the same data through both a REST and a SOAP API. For a new Node.js integration, use REST. It speaks JSON, it needs no WSDL, and every recent platform feature lands there first.

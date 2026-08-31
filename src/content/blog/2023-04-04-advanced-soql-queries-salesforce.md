@@ -9,7 +9,6 @@ image: /blog-images/advanced-soql-queries-salesforce-hero.svg
 published: true
 author: "Sandeep Kumar"
 authorDesignation: "Technical Architect"
-authorPhoto: "/blog-images/a0bac224191c550df6e3a1f8ade4206b0927cbfb-515x515.jpg"
 ---
 
 Most SOQL that hits governor limits does so because it asks the database for too little, not too much. A query returns raw rows, Apex loops over them, and a second query runs inside the loop. Four features let you push that work down into the query itself.

@@ -8,7 +8,6 @@ image: /blog-images/viralsweep-entries-into-lead-or-custom-object-salesforce-her
 published: true
 author: "Vikash Agarwal"
 authorDesignation: "Technical Architect"
-authorPhoto: "/blog-images/32c050b8f0ed847ec0b34f5144d2fa6b03a40888-200x200.jpg"
 ---
 
 A contest that collected four thousand entries is worth nothing while those entries sit in ViralSweep and your sales team works out of Salesforce. The question is only how the data gets across — and the three available routes differ enough that picking the wrong one is expensive to undo.

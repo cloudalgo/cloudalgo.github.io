@@ -9,7 +9,6 @@ published: true
 featured: bottom-pick
 author: "Vikash Agarwal"
 authorDesignation: "Technical Architect"
-authorPhoto: "/blog-images/32c050b8f0ed847ec0b34f5144d2fa6b03a40888-200x200.jpg"
 ---
 
 Some time we have to give ability to user to choose date and time and timezone separately and basis on that we have to calculate gmt value of them. Just one use case that a person define an event on Oct 8, 2020 at sharp 9:00 AM in PST. And basis on this we have to show event information on public site where any user can come and see ongoing or upcoming events in their timezone or other timezone as well. So in this case we required GMT conversion. One small function will do all the things.

@@ -35,9 +35,14 @@ const blog = defineCollection({
     seoDescription:     z.string().optional(),
     featured:           z.enum(['editors-pick', 'bottom-pick']).optional(),
     image:              z.string().optional(),
+    /* The byline, and the two fields that make it. There is no
+       `authorPhoto`: the entry used to open on a portrait beside the
+       name, and when that opening was replaced by the filing slip the
+       field went on being declared and set on 24 entries while nothing
+       on the site read it. A schema field nothing renders is a standing
+       invitation to fill it in. */
     author:             z.string().optional(),
     authorDesignation:  z.string().optional(),
-    authorPhoto:        z.string().optional(),
     relatedCaseStudy:   z.string().optional(),
   }),
 });

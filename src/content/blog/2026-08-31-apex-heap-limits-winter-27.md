@@ -10,12 +10,11 @@ published: true
 image: /blog-images/apex-heap-limits-winter-27-hero.svg
 author: "Sandeep Kumar"
 authorDesignation: "Founder, CloudAlgo"
-authorPhoto: "/blog-images/a0bac224191c550df6e3a1f8ade4206b0927cbfb-515x515.jpg"
 ---
 
 Wave one of Winter '27 went to production on 29 August. If your org was in it, the synchronous Apex heap ceiling moved from 6 MB to 10 MB two days ago, and none of your code knows.
 
-Most orgs were not in wave one. They go on 3 October or 10 October. Sandboxes on the preview instances upgraded on 28 August. So for roughly the next six weeks a lot of teams sit in the position where the sandbox they test in and the org they deploy to enforce different heap limits, and the gap is four megabytes.
+Most orgs were not in wave one. They go on 3 October or 10 October. Sandboxes on the preview instances upgraded on 28 August. So for roughly the next six weeks a lot of teams sit in the position where the sandbox they test in and the org they deploy to enforce different heap limits, and <mark>the gap is four megabytes</mark>.
 
 ## What actually changed
 
@@ -29,7 +28,7 @@ There is one control, a checkbox in Apex Settings named "Enforce the Summer '26 
 
 The maximum size of an HTTP callout request or response in Apex is 6 MB synchronous and 12 MB asynchronous. Those figures are not a coincidence. They were set to match the heap limit, because a callout body counts against heap the moment it arrives.
 
-Which meant the documented 6 MB ceiling was, for years, fiction. Pull a 6 MB response in a synchronous context and you had spent the whole heap holding a string you had not looked at yet. `JSON.deserializeUntyped` on that string needs room for the string and the object graph at the same time, so the practical ceiling was far lower than the published one. Ask anyone who has tried to accept a bulk payload from a partner endpoint in a single sync callout. The number they landed on was somewhere under 2 MB, and they got there by bisection rather than by reading a limits page.
+Which meant the documented 6 MB ceiling was, for years, fiction. Pull a 6 MB response in a synchronous context and you had spent the whole heap holding a string you had not looked at yet. `JSON.deserializeUntyped` on that string needs room for the string and the object graph at the same time, so <mark>the practical ceiling was far lower than the published one</mark>. Ask anyone who has tried to accept a bulk payload from a partner endpoint in a single sync callout. The number they landed on was somewhere under 2 MB, and they got there by bisection rather than by reading a limits page.
 
 Now the body cap is still 6 MB and the heap is 10 MB. That is four megabytes of room to parse in. Asynchronously it is better: a 12 MB body against a 25 MB heap leaves you thirteen megabytes of working space, which is the first time that limit has been usable as documented.
 
@@ -68,7 +67,7 @@ public class ChunkedWriter {
 
 `Limits.getLimitHeapSize()` returns the ceiling for the transaction you are currently in, so the same class gets 10 MB when a controller calls it and 25 MB when a batch does. Apex statics initialise once per transaction rather than persisting between them, which is usually a nuisance and here is exactly what you want. The constant resolves fresh against whichever context is running.
 
-Three quarters is a starting point, not a law. If a single element in your buffer can be a megabyte, leave more room.
+> **Keep.** Three quarters is a starting point, not a law. If a single element in your buffer can be a megabyte, leave more room.
 
 ## The six weeks where two orgs disagree
 
@@ -81,7 +80,7 @@ That is the entire reason the compatibility checkbox exists, and the mitigation 
 1. Find your production org's upgrade date. Setup → Company Information gives you the instance name; the Salesforce Trust status page gives you the date for that instance.
 2. Until production has passed it, tick "Enforce the Summer '26 Apex heap limit" in every sandbox that has upgraded ahead of it. Untick it the week after production goes.
 
-Sandbox refresh timing matters here too, and it catches people. A full copy sandbox refreshed before the production upgrade comes back on the old ceiling; refreshed after, it comes back on the new one. Two sandboxes off the same production org can disagree with each other, on the same day, for a reason nobody wrote down.
+> **Watch.** Sandbox refresh timing catches people here too. A full copy sandbox refreshed before the production upgrade comes back on the old ceiling; refreshed after, it comes back on the new one. Two sandboxes off the same production org can disagree with each other, on the same day, for a reason nobody wrote down.
 
 ## What did not move
 

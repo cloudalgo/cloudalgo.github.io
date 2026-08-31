@@ -24,7 +24,7 @@
 /* The document column holds the plate and the prose, and it is the
    measure that sets both -- otherwise the picture hangs 70px past the
    last word of the paragraph beside it. */
-.record__doc { min-width: 0; max-width: 68ch; }
+.record__doc { min-width: 0; max-width: var(--prose-measure); }
 .record__doc .prose { max-width: none; }
 
 .record__rail {
@@ -33,6 +33,100 @@
   padding-left: var(--hero-rule-gap);
   border-left: 1px solid var(--color-heading);
 }
+
+/* ─── The reading-progress rule ───────────────────────────
+   The rail's own left border, filling as the entry scrolls past. The
+   reader's scroll IS the timeline, so there is no listener and no
+   duration -- the browser drives it off the document column's position
+   in the viewport, off the main thread.
+
+   `timeline-scope` on the grid is not optional. A named view timeline
+   is visible to the element that DECLARES it and to that element's
+   DESCENDANTS, and the rail is the column's sibling, not its child.
+   Without this line the lookup resolves to a null timeline, and that
+   neither throws nor warns. Measured with the line deleted in a live
+   page: `animation.timeline` is null, `playState` is "paused", and the
+   `both` fill paints the to-state -- a computed `scaleY(1)`, so the rule
+   ships FULL before the reader has read a word. Which is the failure to
+   watch for, because it is the one that looks deliberate. A green build
+   cannot see any of it. */
+@supports (animation-timeline: scroll()) {
+  .record { timeline-scope: --entry; }
+  .record__doc { view-timeline-name: --entry; view-timeline-axis: block; }
+
+  .record__rail::after {
+    content: '';
+    position: absolute;
+    left: -1px;
+    top: 0;
+    bottom: 0;
+    width: var(--rail-progress-w);
+    background-color: var(--rail-progress-color);
+    transform: scaleY(0);
+    transform-origin: top center;
+    /* LONGHANDS, NOT `animation: rail-fill linear both`, and that is
+       load-bearing. Written as a shorthand, every animation longhand is set,
+       and Lightning CSS re-serialises the whole set -- timeline included --
+       back into one declaration: `animation: linear both rail-fill --entry`.
+       No engine accepts a timeline in that shorthand, so the browser drops
+       the declaration entire and the name resolves to `none`: no animation,
+       no warning, and a rule that sits at scaleY(0) for the whole read.
+       Setting only the three longhands we mean leaves the set incomplete, so
+       there is no shorthand for the minifier to build. */
+    animation-name: rail-fill;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
+    animation-timeline: --entry;
+    animation-range: contain 0% contain 100%;
+  }
+
+  @keyframes rail-fill {
+    from { transform: scaleY(0); }
+    to   { transform: scaleY(1); }
+  }
+
+  /* The rule reports position, and position is the one thing a reader
+     who has turned motion off still needs. But it can only report it BY
+     moving, so there is nothing to hold still: it goes, and the section
+     meter below carries the same fact in words. */
+  @media (prefers-reduced-motion: reduce) {
+    .record__rail::after { display: none; }
+  }
+}
+
+/* ─── The section meter ───────────────────────────────────
+   Which of the entry's sections you are in, as a count.
+
+   It counts rather than reporting a percentage, and that is a
+   correction rather than a preference: the script behind it measures
+   the entry's h2s against a line across the viewport, so it knows which
+   heading you are under and nothing finer. Stated as a percentage it
+   put "100%" beside a progress rule drawn at 85% -- two readings of one
+   fact disagreeing inside 200px of rail. A count and a rule cannot
+   contradict each other, because they are not in the same unit. */
+.rail__meter {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  margin: 0 0 0.25rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-default);
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+/* Tabular figures so the count does not shift the rule beside it as it
+   steps from 01 to 02. */
+.rail__meter b {
+  color: var(--color-accent);
+  font-weight: var(--weight-medium);
+  font-variant-numeric: tabular-nums;
+}
+.rail__meter-total { font-variant-numeric: tabular-nums; }
 
 .rail__label {
   display: block;
@@ -162,5 +256,12 @@
      text: a contents list under the entry is a table of contents for
      something you have already read. */
   .record__rail { position: static; order: -1; }
+  /* The progress rule goes with the sticky. It is absolutely positioned
+     against the rail, and a static rail is not a containing block --
+     the rule would resolve against the page and draw itself somewhere
+     else entirely. It also has nothing left to report: the rail now
+     sits ABOVE the entry and scrolls away with it, so a line tracking
+     the reader would be off screen for the whole read. */
+  .record__rail::after { display: none; }
   .record__doc { max-width: none; }
 }

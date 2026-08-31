@@ -720,6 +720,79 @@
     rgba(var(--accent-500-rgb), 0) 0%,
     rgba(var(--accent-500-rgb), 0.55) 55%,
     var(--color-paper-a30) 100%);
+
+  /* ── The reading area ──────────────────────────────────
+     /blog/[slug]: the knobs the entry's body reads.
+
+     THE MEASURE, and why it is not stated in `ch`.
+
+     `ch` is the advance width of the digit zero, which in Geist is
+     11.93px against an average prose character of 8.25px. It overstates
+     a measure by about 45%: the `68ch` this replaces resolved to 811px
+     and, once the grid had taken its share, still printed 89 characters
+     to the line where the target was seventy. `em` on the CONTAINER has
+     the identical bug, because the container is set at 1rem and the
+     prose inside it is not.
+
+     So the measure is stated in rem, calibrated against the face
+     actually in use: 37.5rem is 600px, which at the 1.0625rem body size
+     is a shade under seventy characters -- the span every study of
+     continuous reading puts the optimum inside. Nothing here divides by
+     a zero. */
+  --prose-measure: 37.5rem;
+
+  /* The unordered item's marker. An arrow, not a rule and not a bullet:
+     the lists in this archive are almost always consequences rather than
+     an unordered set, and an arrow says "this follows" where a disc says
+     only "another one". Mono because a fixed advance width lands every
+     arrow on the same vertical; the ember because it is the only mark in
+     the body copy and it should read as one. */
+  --prose-marker: '\2192';
+  --prose-marker-color: var(--color-accent);
+  --prose-marker-font: var(--font-mono);
+  --prose-marker-indent: 2.25rem;
+
+  /* The external-link arrow, glyph and its space in one string. The
+     space is non-breaking and comes first, which is the whole reason
+     the two are stated together: it binds the arrow to the last word of
+     the link, so a link that wraps cannot leave the arrow sitting alone
+     at the head of the next line. The rule that emits it is in
+     _prose.scss. */
+  --prose-ext-glyph: '\00a0\2197';
+
+  /* The note -- an aside set outside the measure, hanging into the
+     rail's gutter so it reads as an interruption rather than as another
+     paragraph. The hang is the same gap the rail uses, so the note's
+     rule lands on the rail's rule. */
+  --note-hang: var(--hero-rule-gap);
+  --note-rule: 2px;
+
+  /* The reading-progress rule on the contents rail. It is drawn by a
+     scroll-driven animation, so there is no duration to set: the
+     reader's scroll IS the timeline.
+
+     Wider than the 1px border it is drawn over, and centred on it: the
+     rule is offset `left: -1px` in _record.scss, so 3px covers the
+     border and overhangs it by exactly one pixel each side. It reads as
+     that edge thickening in ember rather than as a second line beside
+     it, and at 1px it read as nothing at all. Change one of the two
+     numbers and the other has to move with it. */
+  --rail-progress-w: 3px;
+  --rail-progress-color: var(--color-accent);
+
+  /* The listen bar. An inverse panel, because it is a control rather
+     than a piece of the document, and the archive's controls are ink.
+     Square, like everything else in this theme -- the radius comes
+     through the token so a round theme gets a round one. */
+  --listen-radius: var(--radius-sm);
+  --listen-btn: 2.125rem;
+  --listen-track-h: 3px;
+
+  /* The sentence being spoken. An ember wash rather than a border, so
+     nothing on the line moves as the highlight steps through the
+     paragraph -- a mark that reflows the text it marks is unreadable at
+     speaking speed. */
+  --speaking-wash: var(--surface-wash-accent);
 }
 
 @media (max-width: 991px) {

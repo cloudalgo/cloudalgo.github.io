@@ -9,7 +9,6 @@ image: /blog-images/heroku-connect-lessons-learned-hero.svg
 published: true
 author: "Vikash Agarwal"
 authorDesignation: "Technical Architect"
-authorPhoto: "/blog-images/32c050b8f0ed847ec0b34f5144d2fa6b03a40888-200x200.jpg"
 ---
 
 Heroku Connect is genuinely point-and-click: map a Salesforce object to a Postgres table in the UI and data starts moving both ways within minutes. That is the pitch, and it is accurate.
