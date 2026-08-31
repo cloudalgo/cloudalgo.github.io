@@ -1,0 +1,95 @@
+# Daily topic radar for the CloudAlgo Journal.
+#
+# Runs every weekday at 02:30 UTC (08:00 IST), researches what is new in the
+# areas CloudAlgo works in, and opens a GitHub issue with five candidate posts.
+# It publishes nothing. A human picks one by commenting "/write N" on that
+# issue, which triggers journal-write.yml.
+#
+# Silence is a valid outcome: if nobody comments, nothing is published.
+name: Journal topic radar
+
+on:
+  schedule:
+    # 02:30 UTC = 08:00 IST, Monday through Friday.
+    - cron: "30 2 * * 1-5"
+  workflow_dispatch:
+
+concurrency:
+  group: journal-radar
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  issues: write
+  id-token: write
+
+jobs:
+  radar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+
+      - uses: anthropics/claude-code-action@v1
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          prompt: |
+            You are running the daily topic radar for the CloudAlgo Journal.
+
+            First, read and follow these files in the checked-out repository.
+            They are the authoritative instructions for this task:
+              - .claude/skills/cloudalgo-topic-radar/SKILL.md
+              - .claude/skills/cloudalgo-voice/SKILL.md
+
+            Research method. Use WebSearch and WebFetch if they are available to
+            you. Whether or not they are, also pull these feeds directly with
+            curl, because they are the reliable source and they work regardless
+            of which web tools this runner grants you:
+
+              https://devcenter.heroku.com/changelog.atom
+              https://developer.salesforce.com/blogs/feed
+              https://www.salesforceben.com/feed/
+              https://www.apexhours.com/feed/
+              https://blogs.mulesoft.com/feed/
+              https://salesforce.stackexchange.com/feeds/tag/apex
+              https://github.com/apache/airflow/releases.atom
+
+            Read the last 7 days from each, and go back 30 days if the week is
+            thin. Prefer retirements, breaking changes, deprecations and
+            documented limits over feature announcements: a change that creates
+            work someone must pay for is worth more than a new button.
+
+            Deduplicate against what is already published. List
+            src/content/blog/ and grep it for your candidate keywords before
+            proposing anything. Do not propose a topic an existing post covers.
+
+            Every candidate must be technical, per the "technical, not business"
+            section of the radar skill. If a candidate would not contain
+            something a developer would copy, drop it and find another.
+
+            Output. Create ONE GitHub issue using the gh CLI:
+
+              gh issue create \
+                --title "Journal candidates — <today's date, YYYY-MM-DD>" \
+                --label journal-candidates \
+                --body-file <a file you write>
+
+            The body must contain exactly five candidates, numbered 1 to 5, each
+            in the format the radar skill specifies (headline, category and read
+            time, why now with a source link, the angle, and the CTA target).
+            After the five, add one sentence naming which you would pick and why.
+
+            End the issue body with exactly this line:
+
+              ---
+              Reply `/write N` on this issue to publish candidate N. Nothing is published until you do.
+
+            Publish nothing. Write no blog post. Commit nothing to the
+            repository. Creating the issue is the entire job.
+          claude_args: |
+            --max-turns 40
+            --allowedTools "WebSearch,WebFetch,Read,Glob,Grep,Write,Bash(curl:*),Bash(gh issue create:*),Bash(gh issue list:*),Bash(ls:*),Bash(grep:*),Bash(date:*)"

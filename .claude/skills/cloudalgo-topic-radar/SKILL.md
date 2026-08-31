@@ -134,8 +134,14 @@ CTA: <which product, case study or service page this post lands on>
 Then state plainly which one you would pick and why, in one sentence. Then ask
 for a decision and stop.
 
-Use `AskUserQuestion` with the five headlines as options where it is available.
-Otherwise post the list and wait for a reply.
+How you ask depends on where you are running.
+
+- **In a Claude session**, use `AskUserQuestion` with the five headlines as
+  options. If that tool is unavailable, post the list and wait for a reply.
+- **In GitHub Actions**, open one issue labelled `journal-candidates`
+  containing the five candidates, and end the body with the line telling the
+  reader to reply `/write N`. The `journal-write.yml` workflow picks it up from
+  there. Do not write, commit or publish anything in the radar run.
 
 **Do not proceed on silence.** If no answer comes, the run ends having
 published nothing. That is the correct outcome, not a failure.
