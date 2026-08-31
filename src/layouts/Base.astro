@@ -1,7 +1,7 @@
 ---
 import CookieConsent from '../components/ui/CookieConsent.astro';
 import ConsentBootstrap from '../components/ui/ConsentBootstrap.astro';
-import { socialCard } from '../build/social-cards';
+import { socialCard, CARD_WIDTH, CARD_HEIGHT } from '../build/social-cards';
 
 export interface Props {
   title: string;
@@ -62,7 +62,7 @@ const cardSource =
 // Declared type and size have to match the bytes served, or the card is
 // rejected before it is drawn. Both were hard-coded to `image/jpeg` at
 // 1200x630 for every page on the site: true of nothing, including the
-// default, which is 2400x1260. The blog's assets are .webp and .jpg at
+// default. The blog's assets are .webp and .jpg at
 // eight different sizes.
 const OG_MIME: Record<string, string> = {
   jpg: 'image/jpeg',
@@ -82,7 +82,10 @@ const measured = cardSource.match(/-(\d{2,5})x(\d{2,5})\.[a-z]+(?:[?#]|$)/i);
 const cardSize = measured
   ? { w: measured[1], h: measured[2] }
   : cardSource === OG_DEFAULT
-    ? { w: '2400', h: '1260' }
+    // The generic card carries no size in its name, because renaming it would
+    // orphan every share already scraped from the old one. It is drawn by the
+    // same script at the same size as the rest, so it is declared from there.
+    ? { w: String(CARD_WIDTH), h: String(CARD_HEIGHT) }
     : null;
 
 const ogImage = cardSource.startsWith('http') ? cardSource : `${imageHost}${cardSource}`;

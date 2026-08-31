@@ -21,7 +21,16 @@ import { basename, join } from 'node:path';
 import satori from 'satori';
 import sharp from 'sharp';
 import { socialCard, CARD_WIDTH, CARD_HEIGHT } from '../src/build/social-cards.ts';
-import { cardTree, palette, fonts, markSvg, ART, MARK_HEIGHT } from '../src/build/og-card.ts';
+import {
+  cardTree,
+  defaultCardTree,
+  palette,
+  fonts,
+  markSvg,
+  ART,
+  MARK_HEIGHT,
+} from '../src/build/og-card.ts';
+import { organization } from '../src/data/schema.ts';
 
 const POSTS = 'src/content/blog';
 const PUBLIC = 'public';
@@ -132,6 +141,33 @@ async function slice(hero) {
     .toBuffer();
 }
 
+/**
+ * The card every page with no drawing of its own carries -- named by
+ * Base.astro's OG_DEFAULT, so the path is a contract and the extension with
+ * it: the `og:image:type` a page declares is read off this filename.
+ *
+ * The facts are the four the home page's own hero states, in its order. The
+ * founding year comes from the schema rather than from here, so the card and
+ * the structured data cannot disagree about it.
+ */
+const SITE_CARD = {
+  eyebrow: `Salesforce Consulting Partner since ${organization.foundingDate}`,
+  title: 'Salesforce work your team can still maintain after we leave.',
+  titleSize: 52,
+  standfirst:
+    'Certified architects and developers, the Heroku estate that sits beside the org, '
+    + 'and four products we build, run and support ourselves.',
+  facts: [
+    { label: 'Founded', value: organization.foundingDate },
+    { label: 'Practices', value: 'Consulting · Heroku · MuleSoft · Data' },
+    { label: 'Products', value: 'Two GA, two in preview' },
+    { label: 'Enquiries', value: organization.email },
+  ],
+  domain: 'cloudalgo.com',
+};
+
+const DEFAULT_CARD = 'public/og-default.jpg';
+
 async function main() {
   const picked = process.argv.slice(2).map((a) => basename(a));
   const files = (await readdir(POSTS))
@@ -189,6 +225,24 @@ async function main() {
     );
     console.log(`${out}  <-  ${file}`);
     drawn += 1;
+  }
+
+  // The generic card is the whole site's, not any one entry's, so it is drawn
+  // on a full run and left alone when the call names particular entries.
+  if (!picked.length) {
+    const svg = await satori(defaultCardTree({ ...SITE_CARD, mark, markWidth }, colours), {
+      width: CARD_WIDTH,
+      height: CARD_HEIGHT,
+      fonts,
+    });
+    await writeFile(
+      DEFAULT_CARD,
+      await sharp(Buffer.from(svg), { density: 144 })
+        .resize(CARD_WIDTH, CARD_HEIGHT)
+        .jpeg({ quality: 92, chromaSubsampling: '4:4:4' })
+        .toBuffer(),
+    );
+    console.log(`${DEFAULT_CARD}  <-  the site itself`);
   }
 
   console.log(`\n${drawn} social ${drawn === 1 ? 'card' : 'cards'} drawn.`);

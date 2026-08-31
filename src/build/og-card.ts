@@ -143,6 +143,198 @@ const el = (type: string, style: Record<string, unknown>, children?: unknown): E
   props: children === undefined ? { style } : { style, children },
 });
 
+/**
+ * The card the 34 pages with no drawing of their own carry: every service,
+ * product, case study and legal page, and the home page.
+ *
+ * It is the same plate as an entry's card -- ember ground, white panel, hard
+ * ink shadow -- because a reader who has seen one of these in a timeline
+ * should recognise the next. What changes is the right column: an entry
+ * shows a slice of its own diagram, and the site shows the four facts its
+ * own home page leads with.
+ *
+ * The one it replaced was drawn against the monochrome skin this site no
+ * longer wears, and carried a 92% success rate that appears nowhere else on
+ * the site and answers to no definition. Every figure here is stated in words
+ * a reader can check on the page it links to.
+ */
+export interface DefaultCardContent {
+  /** The ember pill. Where an entry names its category, the site names itself. */
+  eyebrow: string;
+  title: string;
+  standfirst: string;
+  /** Label and value, in the order the home page's own fact list runs. */
+  facts: { label: string; value: string }[];
+  /** Set larger than the ladder would: this standfirst is two lines, not four,
+   *  so the column has the room and the site's own promise should use it. */
+  titleSize?: number;
+  domain: string;
+  mark: string;
+  markWidth: number;
+}
+
+export function defaultCardTree(c: DefaultCardContent, p: Palette): El {
+  const text = el(
+    'div',
+    {
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'space-between',
+      width: COL_TEXT,
+      height: COL_HEIGHT,
+    },
+    [
+      el('div', { display: 'flex', flexDirection: 'column' }, [
+        el(
+          'div',
+          {
+            display: 'flex',
+            alignSelf: 'flex-start',
+            backgroundColor: p['accent-500'],
+            color: p['accent-on'],
+            fontFamily: 'Geist',
+            fontWeight: 600,
+            fontSize: 13,
+            letterSpacing: 1.4,
+            padding: '7px 13px',
+            borderRadius: 7,
+          },
+          c.eyebrow.toUpperCase(),
+        ),
+        el(
+          'div',
+          {
+            display: 'block',
+            marginTop: 22,
+            fontFamily: 'Archivo',
+            fontWeight: 900,
+            fontSize: c.titleSize ?? headlineSize(c.title),
+            lineHeight: 1.04,
+            letterSpacing: -1.6,
+            color: p['ink-900'],
+            lineClamp: 4,
+          },
+          c.title,
+        ),
+        el(
+          'div',
+          {
+            display: 'block',
+            marginTop: 18,
+            fontFamily: 'Geist',
+            fontWeight: 400,
+            fontSize: 16,
+            lineHeight: 1.45,
+            color: p['ink-500'],
+            lineClamp: 3,
+          },
+          c.standfirst,
+        ),
+      ]),
+      el('div', { display: 'flex', flexDirection: 'column' }, [
+        el('div', { display: 'flex', width: 300, height: 4 }, [
+          el('div', {
+            display: 'flex',
+            width: 84,
+            height: 4,
+            borderRadius: '2px 0 0 2px',
+            backgroundColor: p['accent-500'],
+          }),
+          el('div', {
+            display: 'flex',
+            width: 216,
+            height: 4,
+            borderRadius: '0 2px 2px 0',
+            backgroundColor: p['paper-200'],
+          }),
+        ]),
+        el(
+          'div',
+          {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            marginTop: 18,
+            width: '100%',
+          },
+          [
+            el(
+              'div',
+              {
+                display: 'flex',
+                fontFamily: 'Geist',
+                fontWeight: 600,
+                fontSize: 13,
+                letterSpacing: 0.2,
+                color: p['ink-400'],
+              },
+              c.domain,
+            ),
+            { type: 'img', props: { src: c.mark, width: c.markWidth, height: MARK_HEIGHT } },
+          ],
+        ),
+      ]),
+    ],
+  );
+
+  const plate = el(
+    'div',
+    {
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      width: ART.width,
+      height: ART.height,
+      marginLeft: COL_GAP,
+      padding: '4px 26px',
+      borderRadius: ART.radius,
+      backgroundColor: p['paper-100'],
+      border: `1px solid ${p['paper-200']}`,
+    },
+    c.facts.map((fact, i) =>
+      el(
+        'div',
+        {
+          display: 'flex',
+          flexDirection: 'column',
+          width: '100%',
+          padding: '17px 0',
+          ...(i === 0 ? {} : { borderTop: `1px solid ${p['paper-200']}` }),
+        },
+        [
+          el(
+            'div',
+            {
+              display: 'flex',
+              fontFamily: 'Geist',
+              fontWeight: 600,
+              fontSize: 11,
+              letterSpacing: 1.3,
+              color: p['ink-400'],
+            },
+            fact.label.toUpperCase(),
+          ),
+          el(
+            'div',
+            {
+              display: 'block',
+              marginTop: 7,
+              fontFamily: 'Geist',
+              fontWeight: 600,
+              fontSize: 17,
+              lineHeight: 1.25,
+              color: p['ink-900'],
+            },
+            fact.value,
+          ),
+        ],
+      ),
+    ),
+  );
+
+  return frame([text, plate], p);
+}
+
 export function cardTree(c: CardContent, p: Palette): El {
   const text = el(
     'div',
@@ -264,6 +456,15 @@ export function cardTree(c: CardContent, p: Palette): El {
     [{ type: 'img', props: { src: c.art, width: ART.width, height: ART.height } }],
   );
 
+  return frame([text, art], p);
+}
+
+/**
+ * The plate itself: an inset white panel on the ember ground, offset from a
+ * hard ink shadow so the card still reads as a card against a white timeline
+ * or a black one. Both cards are built on this, so neither can drift.
+ */
+function frame(columns: El[], p: Palette): El {
   const panel = el(
     'div',
     {
@@ -278,7 +479,7 @@ export function cardTree(c: CardContent, p: Palette): El {
       borderRadius: PANEL.radius,
       boxShadow: `${PANEL.shadow}px ${PANEL.shadow}px 0 ${p['ink-900']}`,
     },
-    [text, art],
+    columns,
   );
 
   return el(

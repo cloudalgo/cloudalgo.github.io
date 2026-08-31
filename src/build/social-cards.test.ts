@@ -57,3 +57,27 @@ describe('every published entry has the card its tags name', () => {
     expect(existsSync(join('public', card!.slice(1)))).toBe(true);
   });
 });
+
+/**
+ * The generic card is named in one place and drawn in another, and 34 pages
+ * carry it -- every service, product, case study and legal page, and the home
+ * page. A rename on either side is a 404 og:image on all of them.
+ */
+describe('the card every page without a drawing falls back to', () => {
+  const layout = readFileSync('src/layouts/Base.astro', 'utf8');
+  const declared = /^const OG_DEFAULT = '([^']+)';$/m.exec(layout)?.[1];
+
+  it('is named by the layout', () => {
+    expect(declared).toBeDefined();
+  });
+
+  it('is committed at the path the layout names', () => {
+    expect(existsSync(join('public', declared!.slice(1)))).toBe(true);
+  });
+
+  it('is drawn by the script that draws the rest', () => {
+    // `npm run og` writes this path verbatim. If it stops, the card silently
+    // stops tracking the theme it is painted from.
+    expect(readFileSync('scripts/og-cards.mjs', 'utf8')).toContain(`public${declared}`);
+  });
+});
