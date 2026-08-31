@@ -81,14 +81,21 @@ category. Do not invent branded hashtags.
 ## Image
 
 Attach the post's hero SVG rendered to PNG at 1200×627, or the short video if
-one was made. LinkedIn does not render SVG:
+one was made. LinkedIn does not render SVG.
 
-```bash
-npx --yes sharp-cli -i public/blog-images/<slug>-hero.svg -o /tmp/<slug>-li.png resize 1200 627
-```
+**This is a step for whoever posts, on their own machine — not for CI.** The
+publishing job writes the post text into an issue comment and never uploads
+anything to LinkedIn, so a render inside it produces a PNG in a container that
+is thrown away. It also costs a turn to be refused: the renders below all pull
+a package or a browser off the network, and the job that can push to `main`
+does not get to do that.
 
-If `sharp-cli` is unavailable, `rsvg-convert -w 1200 -h 627` or a headless
-Chromium screenshot both work.
+Locally, any of these:
+
+    npx --yes sharp-cli -i public/blog-images/SLUG-hero.svg -o /tmp/SLUG-li.png resize 1200 627
+    rsvg-convert -w 1200 -h 627 public/blog-images/SLUG-hero.svg -o /tmp/SLUG-li.png
+
+or a headless Chromium screenshot.
 
 ## Timing
 

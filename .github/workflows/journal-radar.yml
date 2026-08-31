@@ -92,4 +92,4 @@ jobs:
             repository. Creating the issue is the entire job.
           claude_args: |
             --max-turns 40
-            --allowedTools "WebSearch,WebFetch,Read,Glob,Grep,Write,Bash(curl:*),Bash(gh issue create:*),Bash(gh issue list:*),Bash(ls:*),Bash(grep:*),Bash(date:*)"
+            --allowedTools "WebSearch,WebFetch,Read,Glob,Grep,Write,Bash(curl:*),Bash(gh issue create:*),Bash(gh issue list:*),Bash(ls:*),Bash(grep:*),Bash(head:*),Bash(node scripts/:*),Bash(date:*)"

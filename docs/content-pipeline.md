@@ -186,6 +186,38 @@ Leave it off otherwise. This repository is public, so the full transcript --
 every file read, every tool argument -- would be world-readable in the Actions
 log permanently.
 
+## The allowlist is checked, not guessed
+
+A denied tool call is not an error. The model is told no, adapts, and carries
+on -- one turn poorer. Two runs on 2026-08-31 spent 11 and 17 turns that way,
+around a fifth of the budget each, and the log gives you only the count.
+
+So `src/build/agent-allowlist.test.ts` closes the loop statically. For each of
+`journal-write.yml` and `journal-radar.yml` it reads the `.claude/skills/.../SKILL.md`
+paths the prompt names, pulls every shell command those skills document, splits
+each on `|`, `&&`, `||` and `;` the way the permission check does, and fails if
+any segment is not covered by that workflow's `--allowedTools`. Run it with
+`npm test`.
+
+It found three real gaps on its first run: the hero-svg skill's
+`python3 ... && echo "well formed"` (the `echo` half was denied), and the
+LinkedIn skill's two PNG renders.
+
+The renders were the interesting one, and the fix was not a wider allowlist.
+The write job produces the LinkedIn post as *text* in an issue comment and
+never touches LinkedIn, so a PNG rendered inside it lands in a container that
+is discarded. Both renders also pull something off the network -- `npx --yes`
+fetches and executes an arbitrary package -- inside the one job that can push
+to `main`. The skill now marks that section as a local step for whoever posts.
+
+The checker cannot see commands no skill documents, and the model reaches for
+`sed`, `echo` and friends regardless. Those inert text utilities are listed in
+`journal-write.yml` for that reason: being refused `sed` costs exactly what
+running it costs.
+
+`npm test` is not wired into any workflow -- neither are the redirect tests --
+so this gates a human, not a push.
+
 ## Changing the schedule
 
 The cron in `journal-radar.yml` is UTC. 02:30 UTC is 08:00 IST. If you move it,

@@ -138,15 +138,23 @@ jobs:
           # and the prose gate only lengthens the job -- a failed check costs a
           # rewrite and a re-run. timeout-minutes above is the real backstop.
           #
-          # Every denied tool call also costs a turn. One run spent 11 of ~60
-          # that way, so the allowlist has to cover what the skills literally
-          # tell the model to type: the de-AI grep pipes to `head`, the report
-          # needs a word count, and prose-check is run under `node`. A pipeline
-          # is checked segment by segment, so `grep | head` needs both. curl is
-          # gone: nothing here used it, and WebFetch already covers research.
+          # Every denied tool call also costs a turn, and the log says only how
+          # many, never which. So the list below is checked rather than guessed:
+          # src/build/agent-allowlist.test.ts reads the commands out of the
+          # skills this prompt names and fails when one of them is not permitted
+          # here. A pipeline is checked segment by segment, so `grep | head`
+          # needs a rule for both halves.
+          #
+          # The inert text utilities are listed because the model reaches for
+          # them whether or not a skill says to, and being refused `sed` costs
+          # exactly as much as running it. `npm run astro check` is here because
+          # CLAUDE.md calls it this repo's only type gate. curl is not: nothing
+          # uses it, and WebFetch already covers research. Nor is npx, which
+          # would fetch and run an arbitrary package inside a job that can push
+          # to main -- see the linkedin-post skill for where that came up.
           claude_args: |
             --max-turns 120
-            --allowedTools "Read,Write,Edit,Glob,Grep,WebSearch,WebFetch,Bash(node scripts/:*),Bash(node scripts/prose-check.mjs:*),Bash(npm run build),Bash(npm ci),Bash(ls:*),Bash(cat:*),Bash(head:*),Bash(wc:*),Bash(mkdir:*),Bash(grep:*),Bash(git:*),Bash(python3:*),Bash(date:*),Bash(gh issue view:*),Bash(gh issue comment:*),Bash(gh issue close:*)"
+            --allowedTools "Read,Write,Edit,Glob,Grep,WebSearch,WebFetch,Bash(node scripts/:*),Bash(node scripts/prose-check.mjs:*),Bash(npm run build),Bash(npm ci),Bash(ls:*),Bash(cat:*),Bash(head:*),Bash(wc:*),Bash(mkdir:*),Bash(grep:*),Bash(sed:*),Bash(awk:*),Bash(tail:*),Bash(sort:*),Bash(uniq:*),Bash(tr:*),Bash(find:*),Bash(diff:*),Bash(echo:*),Bash(npm run astro check),Bash(git:*),Bash(python3:*),Bash(date:*),Bash(gh issue view:*),Bash(gh issue comment:*),Bash(gh issue close:*)"
 
       # A push made with GITHUB_TOKEN does not trigger other workflows. GitHub
       # does this on purpose, to stop a workflow re-triggering itself forever.
