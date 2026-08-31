@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" aria-hidden="true">
+  <rect width="1200" height="600" fill="#F7F4F2"/>
+  <line x1="578" y1="40" x2="578" y2="560" stroke="#F75A41" stroke-opacity="0.34" stroke-width="1"/>
+
+  <!-- LEFT: the callout Apex can actually make -->
+  <rect x="38" y="40" width="514" height="520" rx="12" fill="#FFFFFF" stroke="#131110" stroke-opacity="0.15" stroke-width="1.5"/>
+  <rect x="38" y="40" width="514" height="40" rx="12" fill="#131110" fill-opacity="0.08"/>
+  <rect x="38" y="68" width="514" height="12" fill="#131110" fill-opacity="0.08"/>
+  <line x1="38" y1="80" x2="552" y2="80" stroke="#F75A41" stroke-opacity="0.34" stroke-width="1"/>
+  <circle cx="66" cy="60" r="6" fill="#131110" fill-opacity="0.16"/>
+  <circle cx="88" cy="60" r="6" fill="#131110" fill-opacity="0.16"/>
+  <circle cx="110" cy="60" r="6" fill="#131110" fill-opacity="0.16"/>
+  <text x="295" y="64" text-anchor="middle" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="11" fill="#131110" fill-opacity="0.62" letter-spacing="0.06em">Apex makes HTTP callouts and nothing else</text>
+
+  <text x="60" y="110" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="10" font-weight="700" fill="#131110" fill-opacity="0.68" letter-spacing="0.12em">THE MANAGEMENT PLUGIN&#8217;S PUBLISH ENDPOINT</text>
+  <g font-family="'Courier New', Courier, monospace" font-size="13.5" fill="#131110" fill-opacity="0.86">
+    <text x="60" y="138"><tspan font-weight="700" fill-opacity="0.92">POST</tspan> callout:CloudAMQP_SERVICE</text>
+    <text x="98" y="160">/api/exchanges/{vhost}/{exchange}/publish</text>
+  </g>
+
+  <text x="60" y="204" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="10" font-weight="700" fill="#131110" fill-opacity="0.68" letter-spacing="0.12em">THE ENVELOPE THAT WRAPS YOUR PAYLOAD</text>
+  <g font-family="'Courier New', Courier, monospace" font-size="13" fill="#131110" fill-opacity="0.86">
+    <text x="60" y="230">{</text>
+    <text x="80" y="252">"routing_key": "orders.sync",</text>
+    <text x="80" y="274">"properties": {},</text>
+  </g>
+
+  <rect x="66" y="288" width="464" height="34" rx="8" fill="#F75A41" fill-opacity="0.12"/>
+  <rect x="66" y="288" width="4" height="34" rx="2" fill="#F75A41" fill-opacity="0.70"/>
+  <text x="82" y="311" font-family="'Courier New', Courier, monospace" font-size="13" font-weight="700" fill="#131110" fill-opacity="0.92">"payload": "{ ... , requestId: a0X... }",</text>
+
+  <g font-family="'Courier New', Courier, monospace" font-size="13" fill="#131110" fill-opacity="0.86">
+    <text x="80" y="344">"payload_encoding": "string"</text>
+    <text x="60" y="366">}</text>
+  </g>
+  <text x="60" y="392" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="13" fill="#131110" fill-opacity="0.80">The record id rides along, so the consumer can answer on the same record.</text>
+
+  <text x="60" y="436" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="10" font-weight="700" fill="#131110" fill-opacity="0.68" letter-spacing="0.12em">NOTHING THAT VARIES LIVES IN THE CLASS</text>
+  <g font-family="'Courier New', Courier, monospace" font-size="13">
+    <text x="60" y="462" fill="#131110" fill-opacity="0.86">Generic_Service_Setting__mdt</text>
+    <text x="530" y="462" text-anchor="end" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="12.5" fill="#131110" fill-opacity="0.74">username &#183; exchange &#183; binding key</text>
+    <line x1="60" y1="476" x2="530" y2="476" stroke="#131110" stroke-opacity="0.10" stroke-width="1"/>
+    <text x="60" y="502" fill="#131110" fill-opacity="0.86">Named Credential</text>
+    <text x="530" y="502" text-anchor="end" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="12.5" fill="#131110" fill-opacity="0.74">Generate Authorization Header</text>
+  </g>
+  <text x="60" y="536" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="13" fill="#131110" fill-opacity="0.74">Promoting between sandboxes stops meaning editing Apex.</text>
+
+  <!-- RIGHT: the failure that reads as success -->
+  <text x="618" y="64" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="15" font-weight="700" fill="#131110" fill-opacity="0.68" letter-spacing="0.14em">A 200 IS NOT A DELIVERY</text>
+
+  <rect x="618" y="84" width="542" height="132" rx="12" fill="#FFFFFF" stroke="#F75A41" stroke-opacity="0.50" stroke-width="1.5"/>
+  <text x="642" y="118" font-family="'Courier New', Courier, monospace" font-size="15" fill="#131110" fill-opacity="0.86">HTTP/1.1 200 OK</text>
+  <rect x="642" y="132" width="494" height="36" rx="8" fill="#F75A41" fill-opacity="0.12"/>
+  <rect x="642" y="132" width="4" height="36" rx="2" fill="#F75A41" fill-opacity="0.70"/>
+  <text x="664" y="157" font-family="'Courier New', Courier, monospace" font-size="15" font-weight="700" fill="#131110" fill-opacity="0.92">{"routed": false}</text>
+  <text x="642" y="188" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="13" fill="#131110" fill-opacity="0.80">Accepted by the exchange. Matched no bound queue.</text>
+  <text x="642" y="208" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="13" fill="#131110" fill-opacity="0.80">A mistyped binding key looks exactly like success from Salesforce.</text>
+
+  <text x="618" y="260" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="15" font-weight="700" fill="#131110" fill-opacity="0.68" letter-spacing="0.14em">WHAT STAGING THE MESSAGE ON A RECORD BUYS</text>
+
+  <g font-family="Archivo, Outfit, system-ui, sans-serif">
+    <rect x="618" y="280" width="4" height="48" rx="2" fill="#F75A41" fill-opacity="0.70"/>
+    <text x="640" y="300" font-size="18" font-weight="600" fill="#131110" fill-opacity="0.92">A failed publish is a record</text>
+    <text x="640" y="320" font-size="13" fill="#131110" fill-opacity="0.74">In an error state you can query, report on, and retry</text>
+    <text x="1160" y="300" text-anchor="end" font-size="12" font-weight="700" letter-spacing="0.06em" fill="#131110" fill-opacity="0.68">RETRYABLE</text>
+
+    <rect x="618" y="348" width="4" height="48" rx="2" fill="#F75A41" fill-opacity="0.58"/>
+    <text x="640" y="368" font-size="18" font-weight="600" fill="#131110" fill-opacity="0.92">The future method takes only an id</text>
+    <text x="640" y="388" font-family="'Courier New', Courier, monospace" font-size="12.5" fill="#131110" fill-opacity="0.74">@future(callout = true) &#8212; outside the trigger context</text>
+    <text x="1160" y="368" text-anchor="end" font-size="12" font-weight="700" letter-spacing="0.06em" fill="#131110" fill-opacity="0.68">ASYNC</text>
+
+    <rect x="618" y="416" width="4" height="48" rx="2" fill="#F75A41" fill-opacity="0.46"/>
+    <text x="640" y="436" font-size="18" font-weight="600" fill="#131110" fill-opacity="0.92">The consumer answers on the same row</text>
+    <text x="640" y="456" font-size="13" fill="#131110" fill-opacity="0.74">Heroku writes the status back against the requestId it was handed</text>
+    <text x="1160" y="436" text-anchor="end" font-size="12" font-weight="700" letter-spacing="0.06em" fill="#131110" fill-opacity="0.68">CALLBACK</text>
+  </g>
+
+  <rect x="618" y="486" width="542" height="72" rx="12" fill="#131110" fill-opacity="0.92"/>
+  <rect x="642" y="502" width="200" height="20" rx="10" fill="#F7F4F2" fill-opacity="0.16"/>
+  <text x="654" y="516" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="9.5" font-weight="700" fill="#F7F4F2" fill-opacity="0.90" letter-spacing="0.12em">KEEP THESE THREE IN VIEW</text>
+  <g font-family="'Courier New', Courier, monospace" font-size="14" font-weight="700" fill="#F7F4F2" fill-opacity="0.95">
+    <text x="642" y="546">100 callouts</text>
+    <text x="812" y="546">120 seconds</text>
+    <text x="982" y="546">32,768 characters</text>
+  </g>
+</svg>

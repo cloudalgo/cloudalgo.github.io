@@ -5,7 +5,7 @@ category: Salesforce
 excerpt: "The four core Salesforce integration patterns — REST, SOAP, Platform Events, and Change Data Capture — with a decision framework for choosing the right one."
 readTime: 4
 published: true
-image: /blog-images/870f59fff70dbc1fc789c519719f547d9151d3e6-1200x600.jpg
+image: /blog-images/salesforce-integration-patterns-a-practical-guide-hero.svg
 author: "CloudAlgo Team"
 authorDesignation: "Salesforce Architects"
 ---

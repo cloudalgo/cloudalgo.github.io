@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" aria-hidden="true">
+  <!-- Background -->
+  <rect width="1200" height="600" fill="#F7F4F2"/>
+
+  <!-- Vertical separator -->
+  <line x1="578" y1="40" x2="578" y2="560" stroke="#F75A41" stroke-opacity="0.34" stroke-width="1"/>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- LEFT: the call that works                       -->
+  <!-- ══════════════════════════════════════════════ -->
+
+  <rect x="38" y="78" width="514" height="482" rx="12" fill="#FFFFFF" stroke="#131110" stroke-opacity="0.15" stroke-width="1.5"/>
+  <rect x="38" y="78" width="514" height="40" rx="12" fill="#131110" fill-opacity="0.08"/>
+  <rect x="38" y="106" width="514" height="12" fill="#131110" fill-opacity="0.08"/>
+  <line x1="38" y1="118" x2="552" y2="118" stroke="#F75A41" stroke-opacity="0.34" stroke-width="1"/>
+  <circle cx="66" cy="98" r="6" fill="#131110" fill-opacity="0.16"/>
+  <circle cx="88" cy="98" r="6" fill="#131110" fill-opacity="0.16"/>
+  <circle cx="110" cy="98" r="6" fill="#131110" fill-opacity="0.16"/>
+  <text x="295" y="102" text-anchor="middle" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="11" fill="#131110" fill-opacity="0.62" letter-spacing="0.06em">siteNavigator.js</text>
+
+  <!-- the one attribute that decides it -->
+  <rect x="56" y="278" width="478" height="32" rx="6" fill="#F75A41" fill-opacity="0.10"/>
+  <rect x="56" y="278" width="4" height="32" rx="2" fill="#F75A41" fill-opacity="0.70"/>
+
+  <g font-family="'Courier New', Courier, monospace" font-size="14" fill="#131110">
+    <text x="76" y="170" fill-opacity="0.86">this[NavigationMixin.Navigate]({</text>
+    <text x="76" y="204" fill-opacity="0.86">  type: "comm__namedPage",</text>
+    <text x="76" y="238" fill-opacity="0.86">  attributes: {</text>
+    <text x="76" y="300" fill-opacity="0.92">    name: "Sample1__c"</text>
+    <text x="76" y="340" fill-opacity="0.86">  }</text>
+    <text x="76" y="374" fill-opacity="0.86">});</text>
+  </g>
+
+  <line x1="56" y1="440" x2="534" y2="440" stroke="#F75A41" stroke-opacity="0.40" stroke-width="1"/>
+  <text x="56" y="470" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="17" font-weight="700" fill="#131110" fill-opacity="0.92">One attribute decides it.</text>
+  <text x="56" y="496" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="14" fill="#131110" fill-opacity="0.80">Copy the API name out of Experience Builder.</text>
+  <text x="56" y="518" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="14" fill="#131110" fill-opacity="0.80">Do not retype it.</text>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- RIGHT: three names, one of them navigates       -->
+  <!-- ══════════════════════════════════════════════ -->
+
+  <text x="618" y="64" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="15" font-weight="700" fill="#131110" fill-opacity="0.68" letter-spacing="0.14em">THREE NAMES FOR THE SAME PAGE</text>
+
+  <rect x="618" y="94" width="542" height="66" rx="10" fill="#131110" fill-opacity="0.05"/>
+  <text x="642" y="126" font-family="'Courier New', Courier, monospace" font-size="17" fill="#131110" fill-opacity="0.80">"Sample1"</text>
+  <text x="642" y="148" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="13" fill="#131110" fill-opacity="0.74">the suffix left off</text>
+  <text x="1136" y="130" text-anchor="end" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="13" font-weight="700" letter-spacing="0.06em" fill="#131110" fill-opacity="0.68">NOTHING HAPPENS</text>
+
+  <rect x="618" y="176" width="542" height="66" rx="10" fill="#131110" fill-opacity="0.05"/>
+  <text x="642" y="208" font-family="'Courier New', Courier, monospace" font-size="17" fill="#131110" fill-opacity="0.80">"sample1__c"</text>
+  <text x="642" y="230" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="13" fill="#131110" fill-opacity="0.74">one character in the wrong case</text>
+  <text x="1136" y="212" text-anchor="end" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="13" font-weight="700" letter-spacing="0.06em" fill="#131110" fill-opacity="0.68">NOTHING HAPPENS</text>
+
+  <rect x="618" y="258" width="542" height="66" rx="10" fill="#F75A41" fill-opacity="0.10"/>
+  <rect x="618" y="258" width="4" height="66" rx="2" fill="#F75A41" fill-opacity="0.70"/>
+  <text x="642" y="290" font-family="'Courier New', Courier, monospace" font-size="17" font-weight="700" fill="#131110" fill-opacity="0.92">"Sample1__c"</text>
+  <text x="642" y="312" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="13" fill="#131110" fill-opacity="0.74">character for character, suffix included</text>
+  <text x="1136" y="294" text-anchor="end" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="13" font-weight="700" letter-spacing="0.06em" fill="#131110" fill-opacity="0.92">NAVIGATES</text>
+
+  <!-- what makes it expensive -->
+  <rect x="618" y="376" width="542" height="164" rx="12" fill="#131110" fill-opacity="0.92"/>
+  <rect x="642" y="398" width="180" height="22" rx="11" fill="#F7F4F2" fill-opacity="0.16"/>
+  <text x="656" y="413" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="10" font-weight="700" fill="#F7F4F2" fill-opacity="0.90" letter-spacing="0.12em">WHY IT COSTS AN HOUR</text>
+  <text x="642" y="452" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="19" font-weight="700" fill="#F7F4F2" fill-opacity="0.95">No error. No console warning.</text>
+  <text x="642" y="478" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="19" font-weight="700" fill="#F7F4F2" fill-opacity="0.95">The click simply does nothing.</text>
+  <text x="642" y="512" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="14" fill="#F7F4F2" fill-opacity="0.80">So you go looking at the mixin, the import, the</text>
+  <text x="642" y="532" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="14" fill="#F7F4F2" fill-opacity="0.80">page type &#8212; anywhere but the string.</text>
+</svg>

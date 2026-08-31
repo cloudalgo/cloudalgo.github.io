@@ -4,7 +4,7 @@ date: 2022-10-10
 category: Salesforce
 excerpt: "Using Apex enums with switch-case statements to manage support ticket states cleanly — a practical example with a real object model."
 readTime: 3
-image: /blog-images/1f0b08180cd64c7cf5f4004d8bfd1168a682b61a-1200x600.jpg
+image: /blog-images/apex-enum-with-switch-case-example-hero.svg
 published: true
 author: "Vikash Agarwal"
 authorDesignation: "Technical Architect"

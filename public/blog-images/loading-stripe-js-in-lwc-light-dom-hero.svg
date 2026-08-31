@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" aria-hidden="true">
+  <rect width="1200" height="600" fill="#F7F4F2"/>
+  <line x1="578" y1="40" x2="578" y2="560" stroke="#F75A41" stroke-opacity="0.34" stroke-width="1"/>
+
+  <!-- LEFT: both files, or neither works -->
+  <rect x="38" y="40" width="514" height="520" rx="12" fill="#FFFFFF" stroke="#131110" stroke-opacity="0.15" stroke-width="1.5"/>
+  <rect x="38" y="40" width="514" height="40" rx="12" fill="#131110" fill-opacity="0.08"/>
+  <rect x="38" y="68" width="514" height="12" fill="#131110" fill-opacity="0.08"/>
+  <line x1="38" y1="80" x2="552" y2="80" stroke="#F75A41" stroke-opacity="0.34" stroke-width="1"/>
+  <circle cx="66" cy="60" r="6" fill="#131110" fill-opacity="0.16"/>
+  <circle cx="88" cy="60" r="6" fill="#131110" fill-opacity="0.16"/>
+  <circle cx="110" cy="60" r="6" fill="#131110" fill-opacity="0.16"/>
+  <text x="295" y="64" text-anchor="middle" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="11" fill="#131110" fill-opacity="0.62" letter-spacing="0.06em">stripeComponent &#183; two files, both required</text>
+
+  <text x="60" y="108" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="10" font-weight="700" fill="#131110" fill-opacity="0.68" letter-spacing="0.12em">STRIPECOMPONENT.HTML</text>
+  <rect x="60" y="118" width="470" height="34" rx="8" fill="#F75A41" fill-opacity="0.12"/>
+  <rect x="60" y="118" width="4" height="34" rx="2" fill="#F75A41" fill-opacity="0.70"/>
+  <text x="84" y="141" font-family="'Courier New', Courier, monospace" font-size="13.5" font-weight="700" fill="#131110" fill-opacity="0.92">&lt;template lwc:render-mode="light"&gt;</text>
+  <text x="84" y="176" font-family="'Courier New', Courier, monospace" font-size="13.5" fill="#131110" fill-opacity="0.86">&lt;div id="stripe-card-element"&gt;&lt;/div&gt;</text>
+  <text x="60" y="200" font-family="'Courier New', Courier, monospace" font-size="13.5" fill="#131110" fill-opacity="0.86">&lt;/template&gt;</text>
+
+  <text x="60" y="244" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="10" font-weight="700" fill="#131110" fill-opacity="0.68" letter-spacing="0.12em">STRIPECOMPONENT.JS</text>
+  <rect x="60" y="254" width="470" height="34" rx="8" fill="#F75A41" fill-opacity="0.12"/>
+  <rect x="60" y="254" width="4" height="34" rx="2" fill="#F75A41" fill-opacity="0.70"/>
+  <text x="84" y="277" font-family="'Courier New', Courier, monospace" font-size="13.5" font-weight="700" fill="#131110" fill-opacity="0.92">static renderMode = 'light';</text>
+
+  <g font-family="'Courier New', Courier, monospace" font-size="13.5" fill="#131110" fill-opacity="0.86">
+    <text x="60" y="316">async renderedCallback() {</text>
+    <text x="84" y="338">if (this.stripeLoaded) { return; }</text>
+    <text x="84" y="360">this.stripeLoaded = true;</text>
+    <text x="84" y="394">await loadScript(this, STRIPE_JS);</text>
+    <text x="84" y="428">const card = stripe.elements().create('card');</text>
+    <text x="84" y="450">card.mount('#stripe-card-element');</text>
+    <text x="60" y="472">}</text>
+  </g>
+
+  <line x1="60" y1="498" x2="530" y2="498" stroke="#F75A41" stroke-opacity="0.40" stroke-width="1"/>
+  <text x="60" y="522" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="15" font-weight="700" fill="#131110" fill-opacity="0.92">The flag flips before the await, not after it.</text>
+  <text x="60" y="544" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="13" fill="#131110" fill-opacity="0.74">Otherwise a second render appends the script tag again.</text>
+
+  <!-- RIGHT: why the field never appears -->
+  <text x="618" y="64" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="15" font-weight="700" fill="#131110" fill-opacity="0.68" letter-spacing="0.14em">WHY THE FIELD NEVER APPEARS</text>
+
+  <rect x="618" y="84" width="542" height="128" rx="12" fill="#FFFFFF" stroke="#131110" stroke-opacity="0.15" stroke-width="1.5"/>
+  <text x="642" y="116" font-family="'Courier New', Courier, monospace" font-size="15" fill="#131110" fill-opacity="0.86">card.mount('#stripe-card-element')</text>
+  <line x1="660" y1="126" x2="660" y2="146" stroke="#F75A41" stroke-opacity="0.70" stroke-width="2"/>
+  <path d="M660 150 L656 142 L664 142 Z" fill="#F75A41" fill-opacity="0.70"/>
+  <text x="642" y="174" font-family="'Courier New', Courier, monospace" font-size="15" fill="#131110" fill-opacity="0.86">document.querySelector(...)</text>
+  <text x="1136" y="174" text-anchor="end" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="13" font-weight="700" fill="#131110" fill-opacity="0.92">stops at the shadow root</text>
+  <text x="642" y="198" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="13" fill="#131110" fill-opacity="0.80">No error, no exception. mount() returns and the placeholder stays empty.</text>
+
+  <text x="618" y="252" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="15" font-weight="700" fill="#131110" fill-opacity="0.68" letter-spacing="0.14em">THREE THINGS THAT COST AN AFTERNOON</text>
+
+  <g font-family="Archivo, Outfit, system-ui, sans-serif">
+    <rect x="618" y="276" width="4" height="48" rx="2" fill="#F75A41" fill-opacity="0.70"/>
+    <text x="640" y="296" font-size="18" font-weight="600" fill="#131110" fill-opacity="0.92">Render mode does not inherit</text>
+    <text x="640" y="316" font-size="13" fill="#131110" fill-opacity="0.74">A light parent around a shadow child leaves the div where it was</text>
+    <text x="1160" y="296" text-anchor="end" font-size="12" font-weight="700" letter-spacing="0.06em" fill="#131110" fill-opacity="0.68">PER COMPONENT</text>
+
+    <rect x="618" y="344" width="4" height="48" rx="2" fill="#F75A41" fill-opacity="0.58"/>
+    <text x="640" y="364" font-size="18" font-weight="600" fill="#131110" fill-opacity="0.92">CSP Trusted Sites</text>
+    <text x="640" y="384" font-family="'Courier New', Courier, monospace" font-size="13" fill="#131110" fill-opacity="0.80">https://js.stripe.com &#183; allow-scripts</text>
+    <text x="1160" y="364" text-anchor="end" font-size="12" font-weight="700" letter-spacing="0.06em" fill="#131110" fill-opacity="0.68">SETUP</text>
+
+    <rect x="618" y="412" width="4" height="48" rx="2" fill="#F75A41" fill-opacity="0.46"/>
+    <text x="640" y="432" font-size="18" font-weight="600" fill="#131110" fill-opacity="0.92">Lightning Web Security</text>
+    <text x="640" y="452" font-size="13" fill="#131110" fill-opacity="0.74">Light DOM is unavailable on an org still running Locker Service</text>
+    <text x="1160" y="432" text-anchor="end" font-size="12" font-weight="700" letter-spacing="0.06em" fill="#131110" fill-opacity="0.68">ORG STATE</text>
+  </g>
+
+  <rect x="618" y="474" width="542" height="86" rx="12" fill="#131110" fill-opacity="0.92"/>
+  <rect x="642" y="490" width="176" height="20" rx="10" fill="#F7F4F2" fill-opacity="0.16"/>
+  <text x="654" y="504" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="9.5" font-weight="700" fill="#F7F4F2" fill-opacity="0.90" letter-spacing="0.12em">WHAT YOU GIVE UP</text>
+  <text x="642" y="532" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="16" font-weight="700" fill="#F7F4F2" fill-opacity="0.95">Page CSS now reaches inside the component.</text>
+  <text x="642" y="552" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="13" fill="#F7F4F2" fill-opacity="0.80">Keep the light surface to the one component that owns the mount point.</text>
+</svg>

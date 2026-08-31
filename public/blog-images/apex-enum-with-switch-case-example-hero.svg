@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" aria-hidden="true">
+  <!-- Background -->
+  <rect width="1200" height="600" fill="#F7F4F2"/>
+
+  <!-- Vertical separator -->
+  <line x1="578" y1="40" x2="578" y2="560" stroke="#F75A41" stroke-opacity="0.34" stroke-width="1"/>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- LEFT: the enum and the branch table             -->
+  <!-- ══════════════════════════════════════════════ -->
+
+  <rect x="38" y="78" width="514" height="482" rx="12" fill="#FFFFFF" stroke="#131110" stroke-opacity="0.15" stroke-width="1.5"/>
+  <rect x="38" y="78" width="514" height="40" rx="12" fill="#131110" fill-opacity="0.08"/>
+  <rect x="38" y="106" width="514" height="12" fill="#131110" fill-opacity="0.08"/>
+  <line x1="38" y1="118" x2="552" y2="118" stroke="#F75A41" stroke-opacity="0.34" stroke-width="1"/>
+  <circle cx="66" cy="98" r="6" fill="#131110" fill-opacity="0.16"/>
+  <circle cx="88" cy="98" r="6" fill="#131110" fill-opacity="0.16"/>
+  <circle cx="110" cy="98" r="6" fill="#131110" fill-opacity="0.16"/>
+  <text x="295" y="102" text-anchor="middle" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="11" fill="#131110" fill-opacity="0.62" letter-spacing="0.06em">TicketProcessor.cls</text>
+
+  <g font-family="'Courier New', Courier, monospace" font-size="13" fill="#131110">
+    <text x="76" y="156" fill-opacity="0.86">public enum TicketStage {</text>
+    <text x="76" y="182" fill-opacity="0.86">  OPEN, IN_PROGRESS, RESOLVED, CLOSED</text>
+    <text x="76" y="208" fill-opacity="0.86">}</text>
+
+    <text x="76" y="264" fill-opacity="0.86">switch on stage {</text>
+    <text x="76" y="292" fill-opacity="0.86">  when OPEN         { ... }</text>
+    <text x="76" y="320" fill-opacity="0.86">  when IN_PROGRESS  { ... }</text>
+    <text x="76" y="348" fill-opacity="0.86">  when RESOLVED     { ... }</text>
+    <text x="76" y="376" fill-opacity="0.86">  when CLOSED       { ... }</text>
+  </g>
+
+  <!-- the branch you keep even when every case is covered -->
+  <rect x="56" y="386" width="478" height="32" rx="6" fill="#F75A41" fill-opacity="0.10"/>
+  <rect x="56" y="386" width="4" height="32" rx="2" fill="#F75A41" fill-opacity="0.70"/>
+  <text x="76" y="408" font-family="'Courier New', Courier, monospace" font-size="13" fill="#131110" fill-opacity="0.92">  when else        { ... }</text>
+  <text x="514" y="408" text-anchor="end" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#131110" fill-opacity="0.74">KEEP THIS</text>
+
+  <text x="76" y="444" font-family="'Courier New', Courier, monospace" font-size="13" fill="#131110" fill-opacity="0.86">}</text>
+
+  <line x1="56" y1="478" x2="534" y2="478" stroke="#F75A41" stroke-opacity="0.40" stroke-width="1"/>
+  <text x="56" y="506" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="14" fill="#131110" fill-opacity="0.80">It catches a null stage &#8212; and it catches the fifth</text>
+  <text x="56" y="528" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="14" fill="#131110" fill-opacity="0.80">constant somebody adds without reading this class.</text>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- RIGHT: where the pattern bites                  -->
+  <!-- ══════════════════════════════════════════════ -->
+
+  <text x="618" y="64" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="15" font-weight="700" fill="#131110" fill-opacity="0.68" letter-spacing="0.14em">WHERE IT BITES</text>
+
+  <rect x="618" y="88" width="542" height="70" rx="12" fill="#FFFFFF" stroke="#131110" stroke-opacity="0.15" stroke-width="1.5"/>
+  <text x="642" y="122" font-family="'Courier New', Courier, monospace" font-size="15" fill="#131110" fill-opacity="0.92">TicketStage.valueOf('In Progress')</text>
+  <text x="642" y="144" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="13" fill="#131110" fill-opacity="0.74">A picklist value has a space. A constant cannot.</text>
+
+  <line x1="889" y1="158" x2="889" y2="184" stroke="#F75A41" stroke-opacity="0.70" stroke-width="2"/>
+  <path d="M889 188 L885 180 L893 180 Z" fill="#F75A41" fill-opacity="0.70"/>
+
+  <rect x="618" y="196" width="542" height="70" rx="12" fill="#F75A41" fill-opacity="0.10"/>
+  <rect x="618" y="196" width="4" height="70" rx="2" fill="#F75A41" fill-opacity="0.70"/>
+  <text x="642" y="230" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="18" font-weight="700" fill="#131110" fill-opacity="0.92">A runtime exception</text>
+  <text x="642" y="252" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="13" fill="#131110" fill-opacity="0.74">Thrown at the conversion &#8212; not routed to</text>
+  <text x="906" y="252" font-family="'Courier New', Courier, monospace" font-size="13" fill="#131110" fill-opacity="0.86">when else</text>
+
+  <text x="618" y="314" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="15" font-weight="700" fill="#131110" fill-opacity="0.68" letter-spacing="0.14em">TWO WAYS OUT</text>
+
+  <g font-family="Archivo, Outfit, system-ui, sans-serif">
+    <rect x="618" y="342" width="4" height="50" rx="2" fill="#F75A41" fill-opacity="0.70"/>
+    <text x="640" y="362" font-size="18" font-weight="600" fill="#131110" fill-opacity="0.92">Constrain the API values</text>
+    <text x="640" y="384" font-size="13" fill="#131110" fill-opacity="0.74">Labels stay however the business wants to read them</text>
+    <text x="1160" y="362" text-anchor="end" font-size="12" font-weight="700" letter-spacing="0.06em" fill="#131110" fill-opacity="0.68">METADATA</text>
+
+    <rect x="618" y="410" width="4" height="50" rx="2" fill="#F75A41" fill-opacity="0.58"/>
+    <text x="640" y="430" font-size="18" font-weight="600" fill="#131110" fill-opacity="0.92">Or map it explicitly, once</text>
+    <text x="640" y="452" font-size="13" fill="#131110" fill-opacity="0.74">An unmapped value returns null and lands in the else</text>
+    <text x="1160" y="430" text-anchor="end" font-size="12" font-weight="700" letter-spacing="0.06em" fill="#131110" fill-opacity="0.68">APEX</text>
+  </g>
+
+  <line x1="618" y1="492" x2="1160" y2="492" stroke="#F75A41" stroke-opacity="0.40" stroke-width="1"/>
+  <text x="618" y="518" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="17" font-weight="700" fill="#131110" fill-opacity="0.92">Convert once, at the boundary.</text>
+  <text x="618" y="542" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="14" fill="#131110" fill-opacity="0.80">Everything downstream takes TicketStage, not String.</text>
+</svg>

@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" aria-hidden="true">
+  <rect width="1200" height="600" fill="#F7F4F2"/>
+  <line x1="578" y1="40" x2="578" y2="560" stroke="#F75A41" stroke-opacity="0.34" stroke-width="1"/>
+
+  <!-- LEFT: the four patterns -->
+  <text x="38" y="60" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="15" font-weight="700" fill="#131110" fill-opacity="0.68" letter-spacing="0.14em">FOUR PATTERNS, AND WHAT EACH IS FOR</text>
+  <rect x="38" y="78" width="514" height="482" rx="12" fill="#FFFFFF" stroke="#131110" stroke-opacity="0.15" stroke-width="1.5"/>
+
+  <g font-family="Archivo, Outfit, system-ui, sans-serif">
+    <!-- 1 -->
+    <text x="66" y="138" font-size="20" font-weight="800" fill="#131110" fill-opacity="0.92">REST API</text>
+    <text x="66" y="160" font-size="13" fill="#131110" fill-opacity="0.74">Synchronous, stateless, and where most integrations should start</text>
+    <text x="524" y="138" text-anchor="end" font-family="'Courier New', Courier, monospace" font-size="12" font-weight="700" fill="#131110" fill-opacity="0.74">&lt;1s &#183; 200 PER CALL</text>
+    <line x1="66" y1="172" x2="524" y2="172" stroke="#131110" stroke-opacity="0.10" stroke-width="1"/>
+
+    <!-- 2 -->
+    <text x="66" y="220" font-size="20" font-weight="800" fill="#131110" fill-opacity="0.92">SOAP &#183; Bulk API</text>
+    <text x="66" y="242" font-size="13" fill="#131110" fill-opacity="0.74">ERP systems that speak WSDL, and upsert on an external id at volume</text>
+    <text x="524" y="220" text-anchor="end" font-family="'Courier New', Courier, monospace" font-size="12" font-weight="700" fill="#131110" fill-opacity="0.74">MILLIONS PER JOB</text>
+    <line x1="66" y1="254" x2="524" y2="254" stroke="#131110" stroke-opacity="0.10" stroke-width="1"/>
+
+    <!-- 3 -->
+    <text x="66" y="302" font-size="20" font-weight="800" fill="#131110" fill-opacity="0.92">Platform Events</text>
+    <text x="66" y="324" font-size="13" fill="#131110" fill-opacity="0.74">Broadcast without caring who is listening &#8212; 72 hours of replay</text>
+    <text x="524" y="302" text-anchor="end" font-family="'Courier New', Courier, monospace" font-size="12" font-weight="700" fill="#131110" fill-opacity="0.74">FIRE AND FORGET</text>
+    <line x1="66" y1="336" x2="524" y2="336" stroke="#131110" stroke-opacity="0.10" stroke-width="1"/>
+
+    <!-- 4 : the one the post treats as different in kind -->
+    <rect x="66" y="350" width="458" height="66" rx="10" fill="#F75A41" fill-opacity="0.12"/>
+    <rect x="66" y="350" width="4" height="66" rx="2" fill="#F75A41" fill-opacity="0.70"/>
+    <text x="88" y="380" font-size="20" font-weight="800" fill="#131110" fill-opacity="0.92">Change Data Capture</text>
+    <text x="88" y="402" font-family="'Courier New', Courier, monospace" font-size="12.5" fill="#131110" fill-opacity="0.80">insert &#183; update &#183; delete &#183; undelete</text>
+    <text x="504" y="380" text-anchor="end" font-family="'Courier New', Courier, monospace" font-size="12" font-weight="700" fill="#131110" fill-opacity="0.92">EVERY CHANGE</text>
+  </g>
+
+  <text x="66" y="448" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="15" font-weight="700" fill="#131110" fill-opacity="0.92">The fourth is the only one that reports a delete.</text>
+  <text x="66" y="470" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="13" fill="#131110" fill-opacity="0.74">Polling cannot see a record that is no longer there.</text>
+
+  <line x1="66" y1="496" x2="524" y2="496" stroke="#F75A41" stroke-opacity="0.40" stroke-width="1"/>
+  <text x="66" y="522" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="15" font-weight="700" fill="#131110" fill-opacity="0.92">Two or three of these. Rarely one.</text>
+  <text x="66" y="544" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="13" fill="#131110" fill-opacity="0.74">Bolting them on one at a time is what forces the rewrite.</text>
+
+  <!-- RIGHT: the question that settles it -->
+  <text x="618" y="64" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="15" font-weight="700" fill="#131110" fill-opacity="0.68" letter-spacing="0.14em">THE QUESTION THAT SETTLES IT</text>
+
+  <rect x="618" y="84" width="542" height="146" rx="12" fill="#FFFFFF" stroke="#131110" stroke-opacity="0.15" stroke-width="1.5"/>
+  <text x="642" y="120" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="19" font-weight="700" fill="#131110" fill-opacity="0.92">Does the caller have to wait for an answer?</text>
+
+  <text x="642" y="164" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="14" font-weight="700" fill="#131110" fill-opacity="0.68" letter-spacing="0.1em">YES</text>
+  <line x1="690" y1="159" x2="736" y2="159" stroke="#F75A41" stroke-opacity="0.70" stroke-width="2"/>
+  <path d="M736 159 L728 155 L728 163 Z" fill="#F75A41" fill-opacity="0.70"/>
+  <text x="750" y="164" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="16" font-weight="600" fill="#131110" fill-opacity="0.92">REST, or SOAP where the volume demands it</text>
+
+  <text x="642" y="204" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="14" font-weight="700" fill="#131110" fill-opacity="0.68" letter-spacing="0.1em">NO</text>
+  <line x1="690" y1="199" x2="736" y2="199" stroke="#F75A41" stroke-opacity="0.70" stroke-width="2"/>
+  <path d="M736 199 L728 195 L728 203 Z" fill="#F75A41" fill-opacity="0.70"/>
+  <text x="750" y="204" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="16" font-weight="600" fill="#131110" fill-opacity="0.92">Platform Events, or CDC for a replica</text>
+
+  <text x="618" y="272" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="15" font-weight="700" fill="#131110" fill-opacity="0.68" letter-spacing="0.14em">WHAT EACH ANSWER COSTS YOU</text>
+
+  <g font-family="Archivo, Outfit, system-ui, sans-serif">
+    <rect x="618" y="292" width="4" height="48" rx="2" fill="#F75A41" fill-opacity="0.70"/>
+    <text x="640" y="312" font-size="18" font-weight="600" fill="#131110" fill-opacity="0.92">Waiting couples your uptime to theirs</text>
+    <text x="640" y="332" font-size="13" fill="#131110" fill-opacity="0.74">If the other system is slow, the Salesforce transaction is slow</text>
+    <text x="1160" y="312" text-anchor="end" font-size="12" font-weight="700" letter-spacing="0.06em" fill="#131110" fill-opacity="0.68">SYNCHRONOUS</text>
+
+    <rect x="618" y="360" width="4" height="48" rx="2" fill="#F75A41" fill-opacity="0.58"/>
+    <text x="640" y="380" font-size="18" font-weight="600" fill="#131110" fill-opacity="0.92">A subscriber down for 72 hours</text>
+    <text x="640" y="400" font-size="13" fill="#131110" fill-opacity="0.74">Past the replay window, the event is simply gone</text>
+    <text x="1160" y="380" text-anchor="end" font-size="12" font-weight="700" letter-spacing="0.06em" fill="#131110" fill-opacity="0.68">EVENTS</text>
+
+    <rect x="618" y="428" width="4" height="48" rx="2" fill="#F75A41" fill-opacity="0.46"/>
+    <text x="640" y="448" font-size="18" font-weight="600" fill="#131110" fill-opacity="0.92">CDC sends changed fields, not records</text>
+    <text x="640" y="468" font-size="13" fill="#131110" fill-opacity="0.74">Cheap over the wire, and your consumer has to merge rather than replace</text>
+    <text x="1160" y="448" text-anchor="end" font-size="12" font-weight="700" letter-spacing="0.06em" fill="#131110" fill-opacity="0.68">CDC</text>
+  </g>
+
+  <rect x="618" y="492" width="542" height="68" rx="12" fill="#131110" fill-opacity="0.92"/>
+  <rect x="642" y="506" width="196" height="20" rx="10" fill="#F7F4F2" fill-opacity="0.16"/>
+  <text x="654" y="520" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="9.5" font-weight="700" fill="#F7F4F2" fill-opacity="0.90" letter-spacing="0.12em">A COMMON STACK IN PRODUCTION</text>
+  <text x="642" y="547" font-family="'Courier New', Courier, monospace" font-size="14" font-weight="700" fill="#F7F4F2" fill-opacity="0.95">REST for orders &#183; CDC for the replica &#183; Events for async</text>
+</svg>

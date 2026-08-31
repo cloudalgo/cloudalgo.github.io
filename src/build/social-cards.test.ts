@@ -1,10 +1,12 @@
 import { describe, it, expect } from 'vitest';
-import { socialCard, cardHero, declaredCards, CARD_WIDTH, CARD_HEIGHT } from './social-cards';
+import { readdirSync, readFileSync, existsSync } from 'node:fs';
+import { join } from 'node:path';
+import { socialCard, CARD_WIDTH, CARD_HEIGHT } from './social-cards';
 
 describe('socialCard', () => {
   it('names a bitmap card for an SVG hero', () => {
     expect(socialCard('/blog-images/apex-lint-hero.svg')).toBe(
-      '/blog-images/apex-lint-hero-1200x600.png',
+      '/blog-images/apex-lint-hero-1200x630.png',
     );
   });
 
@@ -23,44 +25,35 @@ describe('socialCard', () => {
   });
 
   it('strips a query or hash, as the layout does', () => {
-    expect(socialCard('/blog-images/hero.svg?v=2')).toBe('/blog-images/hero-1200x600.png');
-    expect(socialCard('/blog-images/hero.svg#top')).toBe('/blog-images/hero-1200x600.png');
+    expect(socialCard('/blog-images/hero.svg?v=2')).toBe('/blog-images/hero-1200x630.png');
+    expect(socialCard('/blog-images/hero.svg#top')).toBe('/blog-images/hero-1200x630.png');
   });
 });
 
-describe('cardHero', () => {
-  it('round-trips with socialCard', () => {
-    const hero = '/blog-images/orgvitals-hero.svg';
-    expect(cardHero(socialCard(hero)!)).toBe(hero);
+/**
+ * The card is drawn by a script and committed, not drawn during the build, so
+ * the one thing that can go wrong is somebody publishing an entry and not
+ * running `npm run og`. Nothing downstream would say so: the tags would point
+ * at a file that is not there, and a 404 og:image is reported by no crawler.
+ * So it is said here.
+ */
+describe('every published entry has the card its tags name', () => {
+  const POSTS = 'src/content/blog';
+  const entries = readdirSync(POSTS)
+    .filter((f) => f.endsWith('.md'))
+    .map((f) => ({ file: f, md: readFileSync(join(POSTS, f), 'utf8') }))
+    .filter(({ md }) => /^published:\s*true\s*$/m.test(md))
+    .map(({ file, md }) => ({
+      file,
+      card: socialCard(/^image:\s*(\S+)\s*$/m.exec(md)?.[1] ?? ''),
+    }))
+    .filter((e) => e.card !== null);
+
+  it('finds entries to check, so a broken parse cannot pass silently', () => {
+    expect(entries.length).toBeGreaterThan(0);
   });
 
-  it('refuses a path it did not generate, rather than guessing at one', () => {
-    expect(() => cardHero('/blog-images/photo.jpg')).toThrow();
-  });
-});
-
-describe('declaredCards', () => {
-  const page = (card: string) => `<!doctype html><html><head>
-<meta property="og:image" content="https://cloudalgo.com${card}" />
-<meta name="twitter:image" content="https://cloudalgo.com${card}" />
-</head><body></body></html>`;
-
-  it('finds the card a page declares, once', () => {
-    expect(declaredCards(page('/blog-images/apex-lint-hero-1200x600.png'))).toEqual([
-      '/blog-images/apex-lint-hero-1200x600.png',
-    ]);
-  });
-
-  it('reads a root-relative reference too', () => {
-    const html = '<meta property="og:image" content="/blog-images/x-1200x600.png">';
-    expect(declaredCards(html)).toEqual(['/blog-images/x-1200x600.png']);
-  });
-
-  it('finds nothing on a page carrying the default card', () => {
-    expect(declaredCards(page('/og-default.jpg'))).toEqual([]);
-  });
-
-  it('does not mistake another size for one of ours', () => {
-    expect(declaredCards(page('/blog-images/photo-2400x1260.png'))).toEqual([]);
+  it.each(entries)('$file', ({ card }) => {
+    expect(existsSync(join('public', card!.slice(1)))).toBe(true);
   });
 });

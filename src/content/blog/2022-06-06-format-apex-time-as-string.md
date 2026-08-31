@@ -4,7 +4,7 @@ date: 2022-06-06
 category: Salesforce
 excerpt: "Salesforce has no built-in method to format a Time value as a human-readable string. Here is a short Apex utility that does it."
 readTime: 1
-image: /blog-images/f4996321c58486dc7be36f56159974a5ee7ed576-1200x600.jpg
+image: /blog-images/format-apex-time-as-string-hero.svg
 published: true
 author: "Vikash Agarwal"
 authorDesignation: "Technical Architect"

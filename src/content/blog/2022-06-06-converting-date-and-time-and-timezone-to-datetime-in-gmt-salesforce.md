@@ -4,7 +4,7 @@ date: 2022-06-06
 category: Salesforce
 excerpt: "A single Apex function that converts a user-supplied date, time, and timezone string into a GMT DateTime value — with a note on daylight saving."
 readTime: 2
-image: /blog-images/d1803b192e6851dc7fb5fc43ddb8f61a3934fb15-1400x563.jpg
+image: /blog-images/converting-date-and-time-and-timezone-to-datetime-in-gmt-salesforce-hero.svg
 published: true
 featured: bottom-pick
 author: "Vikash Agarwal"

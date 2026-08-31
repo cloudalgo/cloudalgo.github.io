@@ -111,7 +111,18 @@ jobs:
               3. A hero at public/blog-images/<slug>-hero.svg per the hero-svg
                  skill, showing real content from this post, and reference it
                  from the frontmatter image field.
-              4. The CTA block the journal-post skill describes, with links that
+              4. The social card, by running:
+
+                   npm run og -- src/content/blog/<your-file>.md
+
+                 It writes public/blog-images/<slug>-hero-1200x630.png, which
+                 is what every crawler fetches for og:image -- no crawler
+                 rasterises the SVG hero. The card is composed from the
+                 frontmatter you already wrote, so there is nothing to design
+                 and nothing to pass it. Do not hand-draw one, do not skip it,
+                 and commit the PNG with the post: without it, sharing the
+                 entry anywhere previews a 404.
+              5. The CTA block the journal-post skill describes, with links that
                  match what the post is about.
 
             Verify before committing. Run `npm run build`. It must pass. If it
@@ -119,8 +130,8 @@ jobs:
             built. Confirm dist/blog/<slug>/index.html exists and that the slug
             appears in dist/blog/index.html.
 
-            Then commit and push to main. One commit for the post and its hero,
-            message "Add journal entry: <title>". Push to main. Do not open a
+            Then commit and push to main. One commit for the post, its hero
+            and its card, message "Add journal entry: <title>". Push to main. Do not open a
             pull request. Do not touch any file outside src/content/blog/ and
             public/blog-images/.
 
@@ -154,7 +165,7 @@ jobs:
           # to main -- see the linkedin-post skill for where that came up.
           claude_args: |
             --max-turns 120
-            --allowedTools "Read,Write,Edit,Glob,Grep,WebSearch,WebFetch,Bash(node scripts/:*),Bash(node scripts/prose-check.mjs:*),Bash(npm run build),Bash(npm ci),Bash(ls:*),Bash(cat:*),Bash(head:*),Bash(wc:*),Bash(mkdir:*),Bash(grep:*),Bash(sed:*),Bash(awk:*),Bash(tail:*),Bash(sort:*),Bash(uniq:*),Bash(tr:*),Bash(find:*),Bash(diff:*),Bash(echo:*),Bash(npm run astro check),Bash(git:*),Bash(python3:*),Bash(date:*),Bash(gh issue view:*),Bash(gh issue comment:*),Bash(gh issue close:*)"
+            --allowedTools "Read,Write,Edit,Glob,Grep,WebSearch,WebFetch,Bash(node scripts/:*),Bash(node scripts/prose-check.mjs:*),Bash(npm run build),Bash(npm run og:*),Bash(npm ci),Bash(ls:*),Bash(cat:*),Bash(head:*),Bash(wc:*),Bash(mkdir:*),Bash(grep:*),Bash(sed:*),Bash(awk:*),Bash(tail:*),Bash(sort:*),Bash(uniq:*),Bash(tr:*),Bash(find:*),Bash(diff:*),Bash(echo:*),Bash(npm run astro check),Bash(git:*),Bash(python3:*),Bash(date:*),Bash(gh issue view:*),Bash(gh issue comment:*),Bash(gh issue close:*)"
 
       # A push made with GITHUB_TOKEN does not trigger other workflows. GitHub
       # does this on purpose, to stop a workflow re-triggering itself forever.

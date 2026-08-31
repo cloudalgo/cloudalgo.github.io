@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" aria-hidden="true">
+  <!-- Background -->
+  <rect width="1200" height="600" fill="#F7F4F2"/>
+
+  <!-- Vertical separator -->
+  <line x1="578" y1="40" x2="578" y2="560" stroke="#F75A41" stroke-opacity="0.34" stroke-width="1"/>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- LEFT: the method                                -->
+  <!-- ══════════════════════════════════════════════ -->
+
+  <rect x="38" y="78" width="514" height="482" rx="12" fill="#FFFFFF" stroke="#131110" stroke-opacity="0.15" stroke-width="1.5"/>
+  <rect x="38" y="78" width="514" height="40" rx="12" fill="#131110" fill-opacity="0.08"/>
+  <rect x="38" y="106" width="514" height="12" fill="#131110" fill-opacity="0.08"/>
+  <line x1="38" y1="118" x2="552" y2="118" stroke="#F75A41" stroke-opacity="0.34" stroke-width="1"/>
+  <circle cx="66" cy="98" r="6" fill="#131110" fill-opacity="0.16"/>
+  <circle cx="88" cy="98" r="6" fill="#131110" fill-opacity="0.16"/>
+  <circle cx="110" cy="98" r="6" fill="#131110" fill-opacity="0.16"/>
+  <text x="295" y="102" text-anchor="middle" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="11" fill="#131110" fill-opacity="0.62" letter-spacing="0.06em">TimeUtils.cls</text>
+
+  <!-- the line that does the work -->
+  <rect x="56" y="272" width="478" height="30" rx="6" fill="#F75A41" fill-opacity="0.10"/>
+  <rect x="56" y="272" width="4" height="30" rx="2" fill="#F75A41" fill-opacity="0.70"/>
+
+  <g font-family="'Courier New', Courier, monospace" font-size="13" fill="#131110">
+    <text x="76" y="158" fill-opacity="0.86">public static String getFormattedTime(String s) {</text>
+    <text x="76" y="188" fill-opacity="0.86">  List&lt;String&gt; t = s.split(':');</text>
+    <text x="76" y="218" fill-opacity="0.86">  Integer hr = Integer.valueOf(t[0]);</text>
+    <text x="76" y="248" fill-opacity="0.86">  String ampm = hr &gt; 12 ? ' PM' : ' AM';</text>
+    <text x="76" y="292" fill-opacity="0.92">  hr = Math.mod(hr, 12);</text>
+    <text x="76" y="322" fill-opacity="0.86">  hr = hr == 0 ? 12 : hr;</text>
+    <text x="76" y="352" fill-opacity="0.86">  return hr.format().leftPad(2, '0')</text>
+    <text x="76" y="378" fill-opacity="0.86">         + ':' + t[1] + ampm;</text>
+    <text x="76" y="408" fill-opacity="0.86">}</text>
+  </g>
+
+  <line x1="56" y1="452" x2="534" y2="452" stroke="#F75A41" stroke-opacity="0.40" stroke-width="1"/>
+  <text x="56" y="482" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="15" font-weight="700" fill="#131110" fill-opacity="0.92">Nine lines, one modulo.</text>
+  <text x="56" y="506" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="13" fill="#131110" fill-opacity="0.74">Twelve-hour clocks wrap at 12, not at 0 &#8212; which is what</text>
+  <text x="56" y="526" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="13" fill="#131110" fill-opacity="0.74">the highlighted line and the one after it are for.</text>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- RIGHT: in, and out                              -->
+  <!-- ══════════════════════════════════════════════ -->
+
+  <text x="618" y="64" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="15" font-weight="700" fill="#131110" fill-opacity="0.68" letter-spacing="0.14em">WHAT SALESFORCE HANDS YOU</text>
+
+  <rect x="618" y="88" width="542" height="72" rx="12" fill="#FFFFFF" stroke="#131110" stroke-opacity="0.15" stroke-width="1.5"/>
+  <text x="642" y="134" font-family="'Courier New', Courier, monospace" font-size="26" fill="#131110" fill-opacity="0.92">14:00:00.000Z</text>
+
+  <line x1="889" y1="160" x2="889" y2="188" stroke="#F75A41" stroke-opacity="0.70" stroke-width="2"/>
+  <path d="M889 192 L885 184 L893 184 Z" fill="#F75A41" fill-opacity="0.70"/>
+
+  <text x="618" y="220" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="15" font-weight="700" fill="#131110" fill-opacity="0.68" letter-spacing="0.14em">WHAT A PERSON CAN READ</text>
+
+  <rect x="618" y="240" width="542" height="88" rx="12" fill="#F75A41" fill-opacity="0.10"/>
+  <rect x="618" y="240" width="4" height="88" rx="2" fill="#F75A41" fill-opacity="0.70"/>
+  <text x="642" y="300" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="44" font-weight="900" fill="#131110" fill-opacity="0.92" letter-spacing="-0.02em">02:00 PM</text>
+
+  <text x="618" y="376" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="15" font-weight="700" fill="#131110" fill-opacity="0.68" letter-spacing="0.14em">AND THE REST OF THE DAY</text>
+
+  <g font-family="'Courier New', Courier, monospace" font-size="15">
+    <text x="618" y="414" fill="#131110" fill-opacity="0.80">00:30:00.000Z</text>
+    <text x="820" y="414" fill="#131110" fill-opacity="0.62">&#8594;</text>
+    <text x="880" y="414" font-weight="700" fill="#131110" fill-opacity="0.92">12:30 AM</text>
+    <line x1="618" y1="430" x2="1160" y2="430" stroke="#131110" stroke-opacity="0.10" stroke-width="1"/>
+
+    <text x="618" y="460" fill="#131110" fill-opacity="0.80">09:05:00.000Z</text>
+    <text x="820" y="460" fill="#131110" fill-opacity="0.62">&#8594;</text>
+    <text x="880" y="460" font-weight="700" fill="#131110" fill-opacity="0.92">09:05 AM</text>
+    <line x1="618" y1="476" x2="1160" y2="476" stroke="#131110" stroke-opacity="0.10" stroke-width="1"/>
+
+    <text x="618" y="506" fill="#131110" fill-opacity="0.80">23:45:00.000Z</text>
+    <text x="820" y="506" fill="#131110" fill-opacity="0.62">&#8594;</text>
+    <text x="880" y="506" font-weight="700" fill="#131110" fill-opacity="0.92">11:45 PM</text>
+  </g>
+
+  <line x1="618" y1="528" x2="1160" y2="528" stroke="#F75A41" stroke-opacity="0.40" stroke-width="1"/>
+  <text x="618" y="552" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="15" font-weight="700" fill="#131110" fill-opacity="0.92">Apex ships no formatter for this. So: write one.</text>
+</svg>

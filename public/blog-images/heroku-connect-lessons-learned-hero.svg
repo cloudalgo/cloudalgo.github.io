@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" aria-hidden="true">
+  <!-- Background -->
+  <rect width="1200" height="600" fill="#F7F4F2"/>
+
+  <!-- Vertical separator -->
+  <line x1="578" y1="40" x2="578" y2="560" stroke="#F75A41" stroke-opacity="0.34" stroke-width="1"/>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- LEFT: the four conditions for the Bulk API      -->
+  <!-- ══════════════════════════════════════════════ -->
+
+  <text x="38" y="60" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="15" font-weight="700" fill="#131110" fill-opacity="0.68" letter-spacing="0.14em">WHEN CONNECT USES THE BULK API</text>
+
+  <rect x="38" y="78" width="514" height="482" rx="12" fill="#FFFFFF" stroke="#131110" stroke-opacity="0.15" stroke-width="1.5"/>
+
+  <text x="66" y="114" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="13" fill="#131110" fill-opacity="0.74">All four have to hold at once.</text>
+
+  <rect x="66" y="134" width="458" height="60" rx="10" fill="#131110" fill-opacity="0.07"/>
+  <text x="88" y="170" font-family="'Courier New', Courier, monospace" font-size="12.5" fill="#131110" fill-opacity="0.86">Salesforce API version v39 or higher</text>
+
+  <rect x="66" y="206" width="458" height="60" rx="10" fill="#131110" fill-opacity="0.07"/>
+  <text x="88" y="242" font-family="'Courier New', Courier, monospace" font-size="12.5" fill="#131110" fill-opacity="0.86">the Ordered Writes algorithm</text>
+
+  <rect x="66" y="278" width="458" height="60" rx="10" fill="#131110" fill-opacity="0.07"/>
+  <text x="88" y="314" font-family="'Courier New', Courier, monospace" font-size="12.5" fill="#131110" fill-opacity="0.86">a mapping with a unique identifier</text>
+
+  <!-- the subtle one -->
+  <rect x="66" y="350" width="458" height="76" rx="10" fill="#F75A41" fill-opacity="0.10"/>
+  <rect x="66" y="350" width="4" height="76" rx="2" fill="#F75A41" fill-opacity="0.70"/>
+  <text x="88" y="382" font-family="'Courier New', Courier, monospace" font-size="12.5" fill="#131110" fill-opacity="0.92">2,000+ contiguous changes, one object</text>
+  <text x="88" y="406" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="12" fill="#131110" fill-opacity="0.74">Interleave a second object and the run is broken</text>
+
+  <line x1="66" y1="460" x2="524" y2="460" stroke="#F75A41" stroke-opacity="0.40" stroke-width="1"/>
+  <text x="66" y="490" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="17" font-weight="700" fill="#131110" fill-opacity="0.92">Miss one and you are on SOAP,</text>
+  <text x="66" y="516" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="15" fill="#131110" fill-opacity="0.80">at SOAP speed, wondering why the sync is slow.</text>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- RIGHT: eight mistakes, three of them silent     -->
+  <!-- ══════════════════════════════════════════════ -->
+
+  <text x="618" y="64" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="15" font-weight="700" fill="#131110" fill-opacity="0.68" letter-spacing="0.14em">EIGHT THINGS WE GOT WRONG</text>
+
+  <g font-family="Archivo, Outfit, system-ui, sans-serif">
+    <rect x="618" y="96" width="4" height="38" rx="2" fill="#131110" fill-opacity="0.14"/>
+    <text x="640" y="121" font-family="'Courier New', Courier, monospace" font-size="13" font-weight="700" fill="#131110" fill-opacity="0.74">1</text>
+    <text x="668" y="121" font-size="16" font-weight="600" fill="#131110" fill-opacity="0.92">No external ID of your own making</text>
+    <text x="1160" y="121" text-anchor="end" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#131110" fill-opacity="0.68">MATCHING</text>
+
+    <rect x="618" y="152" width="4" height="38" rx="2" fill="#F75A41" fill-opacity="0.70"/>
+    <text x="640" y="177" font-family="'Courier New', Courier, monospace" font-size="13" font-weight="700" fill="#131110" fill-opacity="0.74">2</text>
+    <text x="668" y="177" font-size="16" font-weight="600" fill="#131110" fill-opacity="0.92">Formula fields that stop syncing</text>
+    <text x="1160" y="177" text-anchor="end" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#131110" fill-opacity="0.68">SILENT</text>
+
+    <rect x="618" y="208" width="4" height="38" rx="2" fill="#F75A41" fill-opacity="0.70"/>
+    <text x="640" y="233" font-family="'Courier New', Courier, monospace" font-size="13" font-weight="700" fill="#131110" fill-opacity="0.74">3</text>
+    <text x="668" y="233" font-size="16" font-weight="600" fill="#131110" fill-opacity="0.92">A reload deletes your own tables</text>
+    <text x="1160" y="233" text-anchor="end" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#131110" fill-opacity="0.68">SILENT</text>
+
+    <rect x="618" y="264" width="4" height="38" rx="2" fill="#131110" fill-opacity="0.14"/>
+    <text x="640" y="289" font-family="'Courier New', Courier, monospace" font-size="13" font-weight="700" fill="#131110" fill-opacity="0.74">4</text>
+    <text x="668" y="289" font-size="16" font-weight="600" fill="#131110" fill-opacity="0.92">Large writes back are slow, by design</text>
+    <text x="1160" y="289" text-anchor="end" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#131110" fill-opacity="0.68">CHUNKING</text>
+
+    <rect x="618" y="320" width="4" height="38" rx="2" fill="#F75A41" fill-opacity="0.58"/>
+    <text x="640" y="345" font-family="'Courier New', Courier, monospace" font-size="13" font-weight="700" fill="#131110" fill-opacity="0.74">5</text>
+    <text x="668" y="345" font-size="16" font-weight="600" fill="#131110" fill-opacity="0.92">A reload renumbers every row</text>
+    <text x="1160" y="345" text-anchor="end" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#131110" fill-opacity="0.68">SILENT</text>
+
+    <rect x="618" y="376" width="4" height="38" rx="2" fill="#131110" fill-opacity="0.14"/>
+    <text x="640" y="401" font-family="'Courier New', Courier, monospace" font-size="13" font-weight="700" fill="#131110" fill-opacity="0.74">6</text>
+    <text x="668" y="401" font-size="16" font-weight="600" fill="#131110" fill-opacity="0.92">Syncing as a real person&#8217;s account</text>
+    <text x="1160" y="401" text-anchor="end" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#131110" fill-opacity="0.68">OWNERSHIP</text>
+
+    <rect x="618" y="432" width="4" height="38" rx="2" fill="#131110" fill-opacity="0.14"/>
+    <text x="640" y="457" font-family="'Courier New', Courier, monospace" font-size="13" font-weight="700" fill="#131110" fill-opacity="0.74">7</text>
+    <text x="668" y="457" font-size="16" font-weight="600" fill="#131110" fill-opacity="0.92">Encrypted fields arrive as</text>
+    <text x="878" y="457" font-family="'Courier New', Courier, monospace" font-size="15" font-weight="700" fill="#131110" fill-opacity="0.92">*****</text>
+    <text x="1160" y="457" text-anchor="end" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#131110" fill-opacity="0.68">MASKED</text>
+
+    <rect x="618" y="488" width="4" height="38" rx="2" fill="#131110" fill-opacity="0.14"/>
+    <text x="640" y="513" font-family="'Courier New', Courier, monospace" font-size="13" font-weight="700" fill="#131110" fill-opacity="0.74">8</text>
+    <text x="668" y="513" font-size="16" font-weight="600" fill="#131110" fill-opacity="0.92">Not knowing what picks Bulk over SOAP</text>
+    <text x="1160" y="513" text-anchor="end" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#131110" fill-opacity="0.68">API CHOICE</text>
+  </g>
+</svg>

@@ -8,6 +8,7 @@ published: true
 author: "Sandeep Kumar"
 authorDesignation: "Technical Architect"
 authorPhoto: "/blog-images/a0bac224191c550df6e3a1f8ade4206b0927cbfb-515x515.jpg"
+image: /blog-images/heroku-connect-at-scale-hero.svg
 ---
 
 Heroku Connect is one of the most useful tools in the Salesforce ecosystem — and one of the easiest to misconfigure in ways that do not show up until you are processing real data at real volume.

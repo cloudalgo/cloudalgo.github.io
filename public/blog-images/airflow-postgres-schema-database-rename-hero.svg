@@ -1,115 +1,115 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" aria-hidden="true">
   <!-- Background -->
-  <rect width="1200" height="600" fill="#F5F5F2"/>
+  <rect width="1200" height="600" fill="#F7F4F2"/>
 
   <!-- Vertical separator -->
-  <line x1="578" y1="40" x2="578" y2="560" stroke="#0A0A0A" stroke-opacity="0.06" stroke-width="1"/>
+  <line x1="578" y1="40" x2="578" y2="560" stroke="#F75A41" stroke-opacity="0.34" stroke-width="1"/>
 
   <!-- ══════════════════════════════════════════════ -->
   <!-- LEFT: the DAG task, before and after            -->
   <!-- ══════════════════════════════════════════════ -->
 
-  <rect x="38" y="40" width="514" height="520" rx="12" fill="white" fill-opacity="0.50" stroke="#0A0A0A" stroke-opacity="0.09" stroke-width="1.5"/>
+  <rect x="38" y="40" width="514" height="520" rx="12" fill="#FFFFFF" stroke="#131110" stroke-opacity="0.15" stroke-width="1.5"/>
 
   <!-- Title bar -->
-  <rect x="38" y="40" width="514" height="40" rx="12" fill="#0A0A0A" fill-opacity="0.05"/>
-  <rect x="38" y="68" width="514" height="12" fill="#0A0A0A" fill-opacity="0.05"/>
-  <line x1="38" y1="80" x2="552" y2="80" stroke="#0A0A0A" stroke-opacity="0.07" stroke-width="1"/>
-  <circle cx="66" cy="60" r="6" fill="#0A0A0A" fill-opacity="0.12"/>
-  <circle cx="88" cy="60" r="6" fill="#0A0A0A" fill-opacity="0.12"/>
-  <circle cx="110" cy="60" r="6" fill="#0A0A0A" fill-opacity="0.12"/>
-  <text x="295" y="64" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="11" fill="#0A0A0A" fill-opacity="0.28" text-anchor="middle" letter-spacing="0.06em">postgres_gold_sync.py</text>
+  <rect x="38" y="40" width="514" height="40" rx="12" fill="#131110" fill-opacity="0.08"/>
+  <rect x="38" y="68" width="514" height="12" fill="#131110" fill-opacity="0.08"/>
+  <line x1="38" y1="80" x2="552" y2="80" stroke="#F75A41" stroke-opacity="0.34" stroke-width="1"/>
+  <circle cx="66" cy="60" r="6" fill="#131110" fill-opacity="0.16"/>
+  <circle cx="88" cy="60" r="6" fill="#131110" fill-opacity="0.16"/>
+  <circle cx="110" cy="60" r="6" fill="#131110" fill-opacity="0.16"/>
+  <text x="295" y="64" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="11" fill="#131110" fill-opacity="0.62" text-anchor="middle" letter-spacing="0.06em">postgres_gold_sync.py</text>
 
   <!-- Shell line -->
-  <text x="56" y="110" font-family="'Courier New', Courier, monospace" font-size="11" fill="#0A0A0A" fill-opacity="0.28">$</text>
-  <text x="68" y="110" font-family="'Courier New', Courier, monospace" font-size="11" fill="#0A0A0A" fill-opacity="0.52">airflow tasks test gold_sync publish 2026-08-31</text>
-  <text x="56" y="128" font-family="'Courier New', Courier, monospace" font-size="10" fill="#0A0A0A" fill-opacity="0.13">────────────────────────────────────────────────</text>
+  <text x="56" y="110" font-family="'Courier New', Courier, monospace" font-size="11" fill="#131110" fill-opacity="0.62">$</text>
+  <text x="68" y="110" font-family="'Courier New', Courier, monospace" font-size="11" fill="#131110" fill-opacity="0.74">airflow tasks test gold_sync publish 2026-08-31</text>
+  <text x="56" y="128" font-family="'Courier New', Courier, monospace" font-size="10" fill="#F75A41" fill-opacity="0.45">────────────────────────────────────────────────</text>
 
   <!-- provider < 6.0 block -->
-  <text x="56" y="152" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="9.5" font-weight="700" fill="#0A0A0A" fill-opacity="0.35" letter-spacing="0.1em">PROVIDER &lt; 6.0.0</text>
-  <rect x="50" y="164" width="502" height="60" rx="6" fill="#0A0A0A" fill-opacity="0.04" stroke="#0A0A0A" stroke-opacity="0.10" stroke-width="1"/>
-  <text x="66" y="188" font-family="'Courier New', Courier, monospace" font-size="10.5" fill="#0A0A0A" fill-opacity="0.55">PostgresHook(conn_id="heroku_pg",</text>
-  <text x="66" y="206" font-family="'Courier New', Courier, monospace" font-size="10.5" fill="#0A0A0A" fill-opacity="0.55">             schema="gold")</text>
+  <text x="56" y="152" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="9.5" font-weight="700" fill="#131110" fill-opacity="0.68" letter-spacing="0.1em">PROVIDER &lt; 6.0.0</text>
+  <rect x="50" y="164" width="502" height="60" rx="6" fill="#131110" fill-opacity="0.06" stroke="#131110" stroke-opacity="0.17" stroke-width="1"/>
+  <text x="66" y="188" font-family="'Courier New', Courier, monospace" font-size="10.5" fill="#131110" fill-opacity="0.80">PostgresHook(conn_id="heroku_pg",</text>
+  <text x="66" y="206" font-family="'Courier New', Courier, monospace" font-size="10.5" fill="#131110" fill-opacity="0.80">             schema="gold")</text>
 
   <!-- Arrow down -->
-  <line x1="301" y1="230" x2="301" y2="256" stroke="#0A0A0A" stroke-opacity="0.20" stroke-width="1.5" stroke-dasharray="4 3"/>
-  <path d="M297 252 L301 256 L305 252" stroke="#0A0A0A" stroke-opacity="0.28" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-  <rect x="252" y="234" width="98" height="16" rx="8" fill="#0A0A0A" fill-opacity="0.65"/>
-  <text x="301" y="245.5" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="8" font-weight="700" fill="#F5F5F2" text-anchor="middle" letter-spacing="0.06em">6.0.0 RENAME</text>
+  <line x1="301" y1="230" x2="301" y2="256" stroke="#F75A41" stroke-opacity="0.60" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <path d="M297 252 L301 256 L305 252" stroke="#F75A41" stroke-opacity="0.70" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="252" y="234" width="98" height="16" rx="8" fill="#131110" fill-opacity="0.85"/>
+  <text x="301" y="245.5" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="8" font-weight="700" fill="#F7F4F2" text-anchor="middle" letter-spacing="0.06em">6.0.0 RENAME</text>
 
   <!-- provider >= 6.0 block, now required -->
-  <text x="56" y="282" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="9.5" font-weight="700" fill="#0A0A0A" fill-opacity="0.35" letter-spacing="0.1em">PROVIDER 6.0.0+ (TODAY)</text>
-  <rect x="50" y="294" width="502" height="60" rx="6" fill="#0A0A0A" fill-opacity="0.83"/>
-  <text x="66" y="318" font-family="'Courier New', Courier, monospace" font-size="10.5" fill="#F5F5F2" fill-opacity="0.90">PostgresHook(conn_id="heroku_pg",</text>
-  <text x="66" y="336" font-family="'Courier New', Courier, monospace" font-size="10.5" fill="#F5F5F2" fill-opacity="0.55">             schema="gold")  <tspan fill="#F5F5F2" fill-opacity="0.90">← ignored</tspan></text>
+  <text x="56" y="282" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="9.5" font-weight="700" fill="#131110" fill-opacity="0.68" letter-spacing="0.1em">PROVIDER 6.0.0+ (TODAY)</text>
+  <rect x="50" y="294" width="502" height="60" rx="6" fill="#131110" fill-opacity="0.92"/>
+  <text x="66" y="318" font-family="'Courier New', Courier, monospace" font-size="10.5" fill="#F7F4F2" fill-opacity="0.92">PostgresHook(conn_id="heroku_pg",</text>
+  <text x="66" y="336" font-family="'Courier New', Courier, monospace" font-size="10.5" fill="#F7F4F2" fill-opacity="0.78">             schema="gold")  <tspan fill="#F7F4F2" fill-opacity="0.92">← ignored</tspan></text>
 
   <!-- Divider -->
-  <line x1="50" y1="374" x2="540" y2="374" stroke="#0A0A0A" stroke-opacity="0.08" stroke-width="1"/>
+  <line x1="50" y1="374" x2="540" y2="374" stroke="#F75A41" stroke-opacity="0.34" stroke-width="1"/>
 
   <!-- Task log -->
-  <text x="56" y="396" font-family="'Courier New', Courier, monospace" font-size="10.5" fill="#0A0A0A" fill-opacity="0.45">INFO - Dependencies all met</text>
-  <text x="56" y="414" font-family="'Courier New', Courier, monospace" font-size="10.5" fill="#0A0A0A" fill-opacity="0.45">INFO - Executing &lt;Task(publish)&gt;</text>
-  <text x="56" y="432" font-family="'Courier New', Courier, monospace" font-size="10.5" fill="#0A0A0A" fill-opacity="0.65">INFO - Task exited with return code 0</text>
+  <text x="56" y="396" font-family="'Courier New', Courier, monospace" font-size="10.5" fill="#131110" fill-opacity="0.74">INFO - Dependencies all met</text>
+  <text x="56" y="414" font-family="'Courier New', Courier, monospace" font-size="10.5" fill="#131110" fill-opacity="0.74">INFO - Executing &lt;Task(publish)&gt;</text>
+  <text x="56" y="432" font-family="'Courier New', Courier, monospace" font-size="10.5" fill="#131110" fill-opacity="0.86">INFO - Task exited with return code 0</text>
 
   <!-- Stats row -->
-  <rect x="50" y="460" width="152" height="80" rx="9" fill="#0A0A0A" fill-opacity="0.04" stroke="#0A0A0A" stroke-opacity="0.08" stroke-width="1"/>
-  <text x="72" y="508" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="34" font-weight="900" fill="#0A0A0A" fill-opacity="0.82">0</text>
-  <text x="72" y="524" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="9" font-weight="700" fill="#0A0A0A" fill-opacity="0.35" letter-spacing="0.06em">EXCEPTIONS</text>
+  <rect x="50" y="460" width="152" height="80" rx="9" fill="#131110" fill-opacity="0.06" stroke="#131110" stroke-opacity="0.14" stroke-width="1"/>
+  <text x="72" y="508" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="34" font-weight="900" fill="#131110" fill-opacity="0.92">0</text>
+  <text x="72" y="524" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="9" font-weight="700" fill="#131110" fill-opacity="0.68" letter-spacing="0.06em">EXCEPTIONS</text>
 
-  <rect x="212" y="460" width="152" height="80" rx="9" fill="#0A0A0A" fill-opacity="0.04" stroke="#0A0A0A" stroke-opacity="0.08" stroke-width="1"/>
-  <text x="234" y="508" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="34" font-weight="900" fill="#0A0A0A" fill-opacity="0.82">1</text>
-  <text x="234" y="524" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="9" font-weight="700" fill="#0A0A0A" fill-opacity="0.35" letter-spacing="0.06em">TASK, SUCCESS</text>
+  <rect x="212" y="460" width="152" height="80" rx="9" fill="#131110" fill-opacity="0.06" stroke="#131110" stroke-opacity="0.14" stroke-width="1"/>
+  <text x="234" y="508" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="34" font-weight="900" fill="#131110" fill-opacity="0.92">1</text>
+  <text x="234" y="524" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="9" font-weight="700" fill="#131110" fill-opacity="0.68" letter-spacing="0.06em">TASK, SUCCESS</text>
 
-  <rect x="374" y="460" width="178" height="80" rx="9" fill="#0A0A0A" fill-opacity="0.04" stroke="#0A0A0A" stroke-opacity="0.08" stroke-width="1"/>
-  <text x="392" y="496" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="13" font-weight="700" fill="#0A0A0A" fill-opacity="0.72">Wrong database</text>
-  <text x="392" y="514" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="10.5" fill="#0A0A0A" fill-opacity="0.38">written. No error.</text>
+  <rect x="374" y="460" width="178" height="80" rx="9" fill="#131110" fill-opacity="0.06" stroke="#131110" stroke-opacity="0.14" stroke-width="1"/>
+  <text x="392" y="496" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="13" font-weight="700" fill="#131110" fill-opacity="0.86">Wrong database</text>
+  <text x="392" y="514" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="10.5" fill="#131110" fill-opacity="0.68">written. No error.</text>
 
   <!-- ══════════════════════════════════════════════ -->
   <!-- RIGHT: where the fallback lands                 -->
   <!-- ══════════════════════════════════════════════ -->
 
-  <text x="618" y="70" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="9" font-weight="700" fill="#0A0A0A" fill-opacity="0.20" letter-spacing="0.16em">WHERE "GOLD" ACTUALLY GOES</text>
+  <text x="618" y="70" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="9" font-weight="700" fill="#131110" fill-opacity="0.62" letter-spacing="0.16em">WHERE "GOLD" ACTUALLY GOES</text>
 
   <!-- Step 1 -->
-  <rect x="638" y="88" width="500" height="70" rx="9" fill="#0A0A0A" fill-opacity="0.05" stroke="#0A0A0A" stroke-opacity="0.14" stroke-width="1"/>
-  <rect x="654" y="100" width="106" height="16" rx="8" fill="#0A0A0A" fill-opacity="0.82"/>
-  <text x="707" y="111.5" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="8" font-weight="700" fill="#F5F5F2" text-anchor="middle" letter-spacing="0.06em">SCHEMA="GOLD"</text>
-  <text x="654" y="140" font-family="'Courier New', Courier, monospace" font-size="11" fill="#0A0A0A" fill-opacity="0.60">kwargs.pop("database", None) → None</text>
+  <rect x="638" y="88" width="500" height="70" rx="9" fill="#131110" fill-opacity="0.08" stroke="#131110" stroke-opacity="0.24" stroke-width="1"/>
+  <rect x="654" y="100" width="106" height="16" rx="8" fill="#131110" fill-opacity="0.92"/>
+  <text x="707" y="111.5" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="8" font-weight="700" fill="#F7F4F2" text-anchor="middle" letter-spacing="0.06em">SCHEMA="GOLD"</text>
+  <text x="654" y="140" font-family="'Courier New', Courier, monospace" font-size="11" fill="#131110" fill-opacity="0.80">kwargs.pop("database", None) → None</text>
 
   <!-- Arrow -->
-  <line x1="888" y1="158" x2="888" y2="188" stroke="#0A0A0A" stroke-opacity="0.22" stroke-width="1.5" stroke-dasharray="4 3"/>
-  <path d="M884 184 L888 188 L892 184" stroke="#0A0A0A" stroke-opacity="0.30" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-  <rect x="822" y="164" width="132" height="16" rx="8" fill="#0A0A0A" fill-opacity="0.55"/>
-  <text x="888" y="175.5" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="8" font-weight="700" fill="#F5F5F2" text-anchor="middle" letter-spacing="0.06em">self.database = None</text>
+  <line x1="888" y1="158" x2="888" y2="188" stroke="#F75A41" stroke-opacity="0.66" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <path d="M884 184 L888 188 L892 184" stroke="#F75A41" stroke-opacity="0.70" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="822" y="164" width="132" height="16" rx="8" fill="#131110" fill-opacity="0.72"/>
+  <text x="888" y="175.5" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="8" font-weight="700" fill="#F7F4F2" text-anchor="middle" letter-spacing="0.06em">self.database = None</text>
 
   <!-- Step 2 -->
-  <rect x="638" y="196" width="500" height="70" rx="9" fill="#0A0A0A" fill-opacity="0.04" stroke="#0A0A0A" stroke-opacity="0.10" stroke-width="1"/>
-  <rect x="654" y="208" width="130" height="16" rx="8" fill="#0A0A0A" fill-opacity="0.70"/>
-  <text x="719" y="219.5" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="8" font-weight="700" fill="#F5F5F2" text-anchor="middle" letter-spacing="0.06em">GET_CONN() FALLS BACK</text>
-  <text x="654" y="248" font-family="'Courier New', Courier, monospace" font-size="11" fill="#0A0A0A" fill-opacity="0.55">"dbname": self.database or conn.schema</text>
+  <rect x="638" y="196" width="500" height="70" rx="9" fill="#131110" fill-opacity="0.06" stroke="#131110" stroke-opacity="0.17" stroke-width="1"/>
+  <rect x="654" y="208" width="130" height="16" rx="8" fill="#131110" fill-opacity="0.91"/>
+  <text x="719" y="219.5" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="8" font-weight="700" fill="#F7F4F2" text-anchor="middle" letter-spacing="0.06em">GET_CONN() FALLS BACK</text>
+  <text x="654" y="248" font-family="'Courier New', Courier, monospace" font-size="11" fill="#131110" fill-opacity="0.80">"dbname": self.database or conn.schema</text>
 
   <!-- Arrow -->
-  <line x1="888" y1="266" x2="888" y2="296" stroke="#0A0A0A" stroke-opacity="0.22" stroke-width="1.5" stroke-dasharray="4 3"/>
-  <path d="M884 292 L888 296 L892 292" stroke="#0A0A0A" stroke-opacity="0.30" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-  <rect x="794" y="272" width="188" height="16" rx="8" fill="#0A0A0A" fill-opacity="0.60"/>
-  <text x="888" y="283.5" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="8" font-weight="700" fill="#F5F5F2" text-anchor="middle" letter-spacing="0.06em">CONNECTION'S DEFAULT DB</text>
+  <line x1="888" y1="266" x2="888" y2="296" stroke="#F75A41" stroke-opacity="0.66" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <path d="M884 292 L888 296 L892 292" stroke="#F75A41" stroke-opacity="0.70" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="794" y="272" width="188" height="16" rx="8" fill="#131110" fill-opacity="0.78"/>
+  <text x="888" y="283.5" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="8" font-weight="700" fill="#F7F4F2" text-anchor="middle" letter-spacing="0.06em">CONNECTION'S DEFAULT DB</text>
 
   <!-- Sink -->
-  <rect x="638" y="304" width="500" height="86" rx="9" fill="#0A0A0A" fill-opacity="0.84"/>
-  <rect x="654" y="316" width="66" height="16" rx="8" fill="white" fill-opacity="0.15"/>
-  <text x="687" y="327.5" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="8" font-weight="700" fill="#F5F5F2" fill-opacity="0.90" text-anchor="middle" letter-spacing="0.08em">SILENT</text>
-  <text x="654" y="352" font-family="'Courier New', Courier, monospace" font-size="12" fill="#F5F5F2" fill-opacity="0.88">connects to "silver", not "gold"</text>
-  <text x="654" y="372" font-family="'Courier New', Courier, monospace" font-size="10" fill="#F5F5F2" fill-opacity="0.42">↳ Heroku Connect syncs whatever it finds there</text>
+  <rect x="638" y="304" width="500" height="86" rx="9" fill="#131110" fill-opacity="0.92"/>
+  <rect x="654" y="316" width="66" height="16" rx="8" fill="#F7F4F2" fill-opacity="0.15"/>
+  <text x="687" y="327.5" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="8" font-weight="700" fill="#F7F4F2" fill-opacity="0.92" text-anchor="middle" letter-spacing="0.08em">SILENT</text>
+  <text x="654" y="352" font-family="'Courier New', Courier, monospace" font-size="12" fill="#F7F4F2" fill-opacity="0.92">connects to "silver", not "gold"</text>
+  <text x="654" y="372" font-family="'Courier New', Courier, monospace" font-size="10" fill="#F7F4F2" fill-opacity="0.78">↳ Heroku Connect syncs whatever it finds there</text>
 
   <!-- Downstream note -->
-  <line x1="638" y1="414" x2="1138" y2="414" stroke="#0A0A0A" stroke-opacity="0.07" stroke-width="1"/>
-  <text x="638" y="440" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="9" font-weight="700" fill="#0A0A0A" fill-opacity="0.30" letter-spacing="0.1em">HOW IT SURFACES INSTEAD</text>
-  <text x="638" y="464" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="13" fill="#0A0A0A" fill-opacity="0.55">A support ticket. A record fixed weeks ago,</text>
-  <text x="638" y="484" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="13" fill="#0A0A0A" fill-opacity="0.55">still wrong in Salesforce.</text>
+  <line x1="638" y1="414" x2="1138" y2="414" stroke="#F75A41" stroke-opacity="0.34" stroke-width="1"/>
+  <text x="638" y="440" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="9" font-weight="700" fill="#131110" fill-opacity="0.62" letter-spacing="0.1em">HOW IT SURFACES INSTEAD</text>
+  <text x="638" y="464" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="13" fill="#131110" fill-opacity="0.80">A support ticket. A record fixed weeks ago,</text>
+  <text x="638" y="484" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="13" fill="#131110" fill-opacity="0.80">still wrong in Salesforce.</text>
 
   <!-- Fix line -->
-  <rect x="638" y="504" width="500" height="46" rx="9" fill="#0A0A0A" fill-opacity="0.04" stroke="#0A0A0A" stroke-opacity="0.08" stroke-width="1"/>
-  <text x="654" y="526" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="11" font-weight="700" fill="#0A0A0A" fill-opacity="0.55" letter-spacing="0.02em">FIX</text>
-  <text x="694" y="526" font-family="'Courier New', Courier, monospace" font-size="11.5" fill="#0A0A0A" fill-opacity="0.72">database="gold"</text>
-  <text x="654" y="542" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="10" fill="#0A0A0A" fill-opacity="0.38">plus a SELECT current_database() sanity check</text>
+  <rect x="638" y="504" width="500" height="46" rx="9" fill="#131110" fill-opacity="0.06" stroke="#131110" stroke-opacity="0.14" stroke-width="1"/>
+  <text x="654" y="526" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="11" font-weight="700" fill="#131110" fill-opacity="0.80" letter-spacing="0.02em">FIX</text>
+  <text x="694" y="526" font-family="'Courier New', Courier, monospace" font-size="11.5" fill="#131110" fill-opacity="0.86">database="gold"</text>
+  <text x="654" y="542" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="10" fill="#131110" fill-opacity="0.68">plus a SELECT current_database() sanity check</text>
 </svg>

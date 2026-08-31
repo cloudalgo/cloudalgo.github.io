@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" aria-hidden="true">
+  <!-- Background -->
+  <rect width="1200" height="600" fill="#F7F4F2"/>
+
+  <!-- Vertical separator -->
+  <line x1="578" y1="40" x2="578" y2="560" stroke="#F75A41" stroke-opacity="0.34" stroke-width="1"/>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- LEFT: three patterns, drawn as three flows      -->
+  <!-- ══════════════════════════════════════════════ -->
+
+  <text x="38" y="60" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="15" font-weight="700" fill="#131110" fill-opacity="0.68" letter-spacing="0.14em">THREE PATTERNS</text>
+
+  <!-- ── REST ───────────────────────────────────── -->
+  <rect x="38" y="86" width="514" height="140" rx="12" fill="#FFFFFF" stroke="#131110" stroke-opacity="0.15" stroke-width="1.5"/>
+  <text x="60" y="116" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="17" font-weight="800" fill="#131110" fill-opacity="0.92">REST API</text>
+  <text x="530" y="116" text-anchor="end" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="11" font-weight="700" fill="#131110" fill-opacity="0.68" letter-spacing="0.08em">SYNCHRONOUS</text>
+
+  <rect x="60" y="136" width="132" height="40" rx="8" fill="#131110" fill-opacity="0.07"/>
+  <text x="126" y="161" text-anchor="middle" font-family="'Courier New', Courier, monospace" font-size="12" fill="#131110" fill-opacity="0.86">Salesforce</text>
+  <line x1="196" y1="156" x2="256" y2="156" stroke="#F75A41" stroke-opacity="0.70" stroke-width="2"/>
+  <path d="M256 156 L248 152 L248 160 Z" fill="#F75A41" fill-opacity="0.70"/>
+  <text x="226" y="148" text-anchor="middle" font-family="'Courier New', Courier, monospace" font-size="10" fill="#131110" fill-opacity="0.68">callout</text>
+  <rect x="262" y="136" width="132" height="40" rx="8" fill="#131110" fill-opacity="0.07"/>
+  <text x="328" y="161" text-anchor="middle" font-family="'Courier New', Courier, monospace" font-size="12" fill="#131110" fill-opacity="0.86">Heroku</text>
+  <text x="530" y="161" text-anchor="end" font-family="'Courier New', Courier, monospace" font-size="12" fill="#131110" fill-opacity="0.74">waits</text>
+
+  <line x1="60" y1="190" x2="530" y2="190" stroke="#131110" stroke-opacity="0.10" stroke-width="1"/>
+  <text x="60" y="210" font-family="'Courier New', Courier, monospace" font-size="12" fill="#131110" fill-opacity="0.80">100 callouts per transaction · 120s hard timeout</text>
+
+  <!-- ── PLATFORM EVENTS ────────────────────────── -->
+  <rect x="38" y="240" width="514" height="140" rx="12" fill="#FFFFFF" stroke="#131110" stroke-opacity="0.15" stroke-width="1.5"/>
+  <text x="60" y="270" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="17" font-weight="800" fill="#131110" fill-opacity="0.92">Platform Events</text>
+  <text x="530" y="270" text-anchor="end" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="11" font-weight="700" fill="#131110" fill-opacity="0.68" letter-spacing="0.08em">DECOUPLED</text>
+
+  <rect x="60" y="290" width="118" height="40" rx="8" fill="#131110" fill-opacity="0.07"/>
+  <text x="119" y="315" text-anchor="middle" font-family="'Courier New', Courier, monospace" font-size="12" fill="#131110" fill-opacity="0.86">Salesforce</text>
+  <line x1="182" y1="310" x2="222" y2="310" stroke="#F75A41" stroke-opacity="0.70" stroke-width="2"/>
+  <path d="M222 310 L214 306 L214 314 Z" fill="#F75A41" fill-opacity="0.70"/>
+  <rect x="228" y="290" width="118" height="40" rx="8" fill="#131110" fill-opacity="0.07"/>
+  <text x="287" y="315" text-anchor="middle" font-family="'Courier New', Courier, monospace" font-size="12" fill="#131110" fill-opacity="0.86">CometD</text>
+  <line x1="350" y1="310" x2="390" y2="310" stroke="#F75A41" stroke-opacity="0.70" stroke-width="2"/>
+  <path d="M390 310 L382 306 L382 314 Z" fill="#F75A41" fill-opacity="0.70"/>
+  <rect x="396" y="290" width="118" height="40" rx="8" fill="#131110" fill-opacity="0.07"/>
+  <text x="455" y="315" text-anchor="middle" font-family="'Courier New', Courier, monospace" font-size="12" fill="#131110" fill-opacity="0.86">Heroku</text>
+
+  <line x1="60" y1="344" x2="530" y2="344" stroke="#131110" stroke-opacity="0.10" stroke-width="1"/>
+  <text x="60" y="364" font-family="'Courier New', Courier, monospace" font-size="12" fill="#131110" fill-opacity="0.80">replay window: 72h · older than that and the event is gone</text>
+
+  <!-- ── RABBITMQ ───────────────────────────────── -->
+  <rect x="38" y="394" width="514" height="140" rx="12" fill="#FFFFFF" stroke="#131110" stroke-opacity="0.15" stroke-width="1.5"/>
+  <text x="60" y="424" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="17" font-weight="800" fill="#131110" fill-opacity="0.92">RabbitMQ</text>
+  <text x="530" y="424" text-anchor="end" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="11" font-weight="700" fill="#131110" fill-opacity="0.68" letter-spacing="0.08em">DURABLE</text>
+
+  <rect x="60" y="444" width="118" height="40" rx="8" fill="#131110" fill-opacity="0.07"/>
+  <text x="119" y="469" text-anchor="middle" font-family="'Courier New', Courier, monospace" font-size="12" fill="#131110" fill-opacity="0.86">Salesforce</text>
+  <line x1="182" y1="464" x2="222" y2="464" stroke="#F75A41" stroke-opacity="0.70" stroke-width="2"/>
+  <path d="M222 464 L214 460 L214 468 Z" fill="#F75A41" fill-opacity="0.70"/>
+  <rect x="228" y="444" width="118" height="40" rx="8" fill="#F75A41" fill-opacity="0.14" stroke="#F75A41" stroke-opacity="0.50" stroke-width="1.5"/>
+  <text x="287" y="469" text-anchor="middle" font-family="'Courier New', Courier, monospace" font-size="12" fill="#131110" fill-opacity="0.92">queue</text>
+  <line x1="350" y1="464" x2="390" y2="464" stroke="#F75A41" stroke-opacity="0.70" stroke-width="2"/>
+  <path d="M390 464 L382 460 L382 468 Z" fill="#F75A41" fill-opacity="0.70"/>
+  <rect x="396" y="444" width="118" height="40" rx="8" fill="#131110" fill-opacity="0.07"/>
+  <text x="455" y="469" text-anchor="middle" font-family="'Courier New', Courier, monospace" font-size="12" fill="#131110" fill-opacity="0.86">Heroku</text>
+
+  <line x1="60" y1="498" x2="530" y2="498" stroke="#131110" stroke-opacity="0.10" stroke-width="1"/>
+  <text x="60" y="518" font-family="'Courier New', Courier, monospace" font-size="12" fill="#131110" fill-opacity="0.80">survives a dyno restart · and you now operate a broker</text>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- RIGHT: what breaks first, and the real question -->
+  <!-- ══════════════════════════════════════════════ -->
+
+  <text x="618" y="64" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="15" font-weight="700" fill="#131110" fill-opacity="0.68" letter-spacing="0.14em">WHAT BREAKS FIRST</text>
+
+  <g font-family="Archivo, Outfit, system-ui, sans-serif">
+    <rect x="618" y="104" width="4" height="48" rx="2" fill="#F75A41" fill-opacity="0.70"/>
+    <text x="640" y="124" font-size="18" font-weight="600" fill="#131110" fill-opacity="0.92">Callout timeouts under load</text>
+    <text x="640" y="144" font-size="13" fill="#131110" fill-opacity="0.74">A batch fires many callouts in one transaction and hits the limit</text>
+    <text x="1160" y="124" text-anchor="end" font-size="12" font-weight="700" letter-spacing="0.06em" fill="#131110" fill-opacity="0.68">REST</text>
+
+    <rect x="618" y="178" width="4" height="48" rx="2" fill="#F75A41" fill-opacity="0.70"/>
+    <text x="640" y="198" font-size="18" font-weight="600" fill="#131110" fill-opacity="0.92">A subscriber down for 72 hours</text>
+    <text x="640" y="218" font-size="13" fill="#131110" fill-opacity="0.74">A maintenance window, and afterwards a gap in the data</text>
+    <text x="1160" y="198" text-anchor="end" font-size="12" font-weight="700" letter-spacing="0.06em" fill="#131110" fill-opacity="0.68">EVENTS</text>
+
+    <rect x="618" y="252" width="4" height="48" rx="2" fill="#F75A41" fill-opacity="0.58"/>
+    <text x="640" y="272" font-size="18" font-weight="600" fill="#131110" fill-opacity="0.92">Queue depth, quietly climbing</text>
+    <text x="640" y="292" font-size="13" fill="#131110" fill-opacity="0.74">Consumers fall behind and connections drop across dyno restarts</text>
+    <text x="1160" y="272" text-anchor="end" font-size="12" font-weight="700" letter-spacing="0.06em" fill="#131110" fill-opacity="0.68">BROKER</text>
+
+    <rect x="618" y="326" width="4" height="48" rx="2" fill="#F75A41" fill-opacity="0.46"/>
+    <text x="640" y="346" font-size="18" font-weight="600" fill="#131110" fill-opacity="0.92">The pattern nobody on the team knows</text>
+    <text x="640" y="366" font-size="13" fill="#131110" fill-opacity="0.74">Chosen because it felt like the enterprise answer</text>
+    <text x="1160" y="346" text-anchor="end" font-size="12" font-weight="700" letter-spacing="0.06em" fill="#131110" fill-opacity="0.68">THE COMMON ONE</text>
+  </g>
+
+  <!-- The question that settles it -->
+  <rect x="618" y="418" width="542" height="122" rx="12" fill="#131110" fill-opacity="0.92"/>
+  <rect x="642" y="440" width="176" height="22" rx="11" fill="#F7F4F2" fill-opacity="0.16"/>
+  <text x="656" y="455" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="10" font-weight="700" fill="#F7F4F2" fill-opacity="0.90" letter-spacing="0.12em">ASK THIS ONE FIRST</text>
+  <text x="642" y="491" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="19" font-weight="700" fill="#F7F4F2" fill-opacity="0.95">Who owns this in 18 months —</text>
+  <text x="642" y="517" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="19" font-weight="700" fill="#F7F4F2" fill-opacity="0.95">and what can they debug at 2am?</text>
+</svg>

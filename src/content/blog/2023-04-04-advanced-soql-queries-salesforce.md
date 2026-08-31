@@ -5,7 +5,7 @@ category: Salesforce
 excerpt: "Four SOQL techniques that replace loops and extra queries — relationship traversal, aggregate functions, date literals, and semi-joins — plus the governor limits that constrain each one."
 seoDescription: "Four SOQL techniques that replace loops and extra queries: relationship traversal, aggregate functions, date literals and semi-joins — with the limits on each."
 readTime: 4
-image: /blog-images/eebb5692a5e0de7447173c9c2afc6beb91127699-1200x600.jpg
+image: /blog-images/advanced-soql-queries-salesforce-hero.svg
 published: true
 author: "Sandeep Kumar"
 authorDesignation: "Technical Architect"

@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CloudAlgo — generic social card, options</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600..900&family=Geist:wght@400..700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ─────────────────────────────────────────────────────────────
+   Mock only. Palette and families are copied from the live theme
+   (src/styles/themes/_press-room.scss) so what is judged here is
+   what would ship. Nothing in this file is loaded by the site.
+   ───────────────────────────────────────────────────────────── */
+:root{
+  --ink-900:#131110; --ink-860:#231F1D; --ink-500:#494440;
+  --ink-400:#57504B; --ink-300:#6C645E;
+  --paper-000:#FFFFFF; --paper-025:#F2EEEB; --paper-050:#F2EEEB;
+  --paper-100:#F7F4F2; --paper-150:#EAE5E1; --paper-200:#E0D9D4;
+  --paper-300:#CAC1BA; --paper-400:#756D66;
+  --accent-050:#FDF1F0; --accent-400:#F66953; --accent-500:#F75A41;
+  --accent-600:#E9553D; --accent-on:#110605;
+  --heading:'Archivo',system-ui,sans-serif;
+  --body:'Geist',system-ui,sans-serif;
+  --mono:'Geist Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;background:#2A2724;color:var(--paper-100);font-family:var(--body);padding:48px 32px 96px}
+
+/* ── page furniture ─────────────────────────────────────── */
+.doc{max-width:1330px;margin:0 auto}
+.doc h1{font-family:var(--heading);font-weight:900;font-size:2.5rem;letter-spacing:-.02em;margin:0 0 .4em;line-height:1.1}
+.doc .standfirst{color:#BDB4AE;max-width:70ch;line-height:1.6;margin:0 0 8px;font-size:.95rem}
+.doc .standfirst b{color:var(--paper-100);font-weight:600}
+.brief{border:1px solid #4A4540;background:#221F1D;border-radius:10px;padding:20px 24px;margin:24px 0 48px;max-width:70ch}
+.brief h2{font-family:var(--heading);font-size:.75rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent-400);margin:0 0 12px}
+.brief dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 18px;font-size:.86rem;line-height:1.5}
+.brief dt{color:#8F8880;font-family:var(--mono);font-size:.76rem;text-transform:uppercase;letter-spacing:.06em;padding-top:2px}
+.brief dd{margin:0;color:#DED7D2}
+.opt{margin:0 0 64px}
+.opt__bar{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin:0 0 14px}
+.opt__n{font-family:var(--mono);font-size:.78rem;color:var(--accent-400);letter-spacing:.08em}
+.opt__name{font-family:var(--heading);font-size:1.35rem;font-weight:800;letter-spacing:-.01em;margin:0}
+.opt__note{color:#9C948D;font-size:.85rem;line-height:1.5;max-width:78ch;margin:0 0 18px}
+.opt__note b{color:#DED7D2;font-weight:600}
+.row{display:flex;gap:28px;align-items:flex-start;flex-wrap:wrap}
+.hold{width:1200px;height:630px;transform-origin:top left;transform:scale(.6);margin-bottom:-252px;box-shadow:0 18px 50px rgba(0,0,0,.45)}
+.small{width:460px}
+.small .hold{transform:scale(.3833);margin-bottom:-389px;height:630px}
+.cap{font-family:var(--mono);font-size:.7rem;color:#8F8880;letter-spacing:.06em;text-transform:uppercase;margin:14px 0 0}
+
+/* ── the card, shared frame ─────────────────────────────── */
+.card{width:1200px;height:630px;position:relative;overflow:hidden;display:flex;flex-direction:column;
+      background:var(--paper-100);color:var(--ink-900);font-family:var(--body)}
+.card__pad{position:absolute;inset:56px 64px}
+.eyebrow{font-family:var(--heading);font-size:19px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-300)}
+.wordmark{display:flex;align-items:center;gap:14px}
+.wordmark img{height:38px;width:auto;display:block}
+.head{font-family:var(--heading);font-weight:900;letter-spacing:-.032em;line-height:1.04;margin:0}
+.mark{position:relative;white-space:nowrap}
+.mark::after{content:"";position:absolute;left:-.04em;right:-.04em;bottom:.06em;height:.30em;background:var(--accent-500);opacity:.32;z-index:-1;border-radius:2px}
+.facts{display:flex;gap:0;margin:0;font-family:var(--body)}
+.facts>div{padding-right:34px;margin-right:34px;border-right:1px solid var(--paper-200)}
+.facts>div:last-child{border-right:0;margin-right:0;padding-right:0}
+.facts dt{font-family:var(--mono);font-size:14px;letter-spacing:.09em;text-transform:uppercase;color:var(--paper-400);margin:0 0 6px}
+.facts dd{margin:0;font-size:21px;font-weight:600;color:var(--ink-860);white-space:nowrap}
+.foot{display:flex;justify-content:space-between;align-items:flex-end;gap:24px}
+.domain{font-family:var(--mono);font-size:19px;letter-spacing:.04em;color:var(--ink-400)}
+.rule{height:1px;background:var(--paper-200);width:100%}
+
+/* ══ Option 1 — Masthead ═══════════════════════════════════ */
+.c1 .card__pad{display:flex;flex-direction:column;justify-content:space-between}
+.c1 .top{display:flex;justify-content:space-between;align-items:center;padding-bottom:24px;border-bottom:2px solid var(--ink-900)}
+.c1 .head{font-size:72px;max-width:15ch}
+.c1 .facts{padding-top:26px;border-top:1px solid var(--paper-200)}
+
+/* ══ Option 2 — Ember band ═════════════════════════════════ */
+.c2{background:var(--paper-000)}
+.c2 .band{position:absolute;left:0;top:0;bottom:0;width:22px;background:var(--accent-500)}
+.c2 .card__pad{left:100px;display:flex;flex-direction:column;justify-content:space-between}
+.c2 .head{font-size:76px;max-width:14ch}
+.c2 .sub{font-size:25px;line-height:1.45;color:var(--ink-500);max-width:44ch;margin:22px 0 0}
+
+/* ══ Option 3 — Ink plate ══════════════════════════════════ */
+.c3{background:var(--ink-900);color:var(--paper-100)}
+.c3 .card__pad{display:flex;flex-direction:column;justify-content:space-between}
+.c3 .top{display:flex;justify-content:space-between;align-items:center}
+.c3 .eyebrow{color:var(--accent-400)}
+.c3 .head{font-size:74px;max-width:14ch;color:var(--paper-000)}
+.c3 .mark::after{opacity:1;height:.11em;bottom:0;background:var(--accent-500)}
+.c3 .facts>div{border-right-color:#3A3532}
+.c3 .facts dt{color:#8F8880}
+.c3 .facts dd{color:var(--paper-025)}
+.c3 .domain{color:#9C948D}
+.c3 .facts{padding-top:26px;border-top:1px solid #3A3532}
+
+/* ══ Option 4 — Filing slip (section-aware template) ═══════ */
+.c4{display:grid;grid-template-columns:1fr 372px}
+.c4 .l{padding:56px 48px 56px 64px;display:flex;flex-direction:column;justify-content:space-between}
+.c4 .r{background:var(--paper-050);border-left:1px solid var(--paper-200);padding:56px 44px;display:flex;flex-direction:column;justify-content:space-between}
+.c4 .head{font-size:60px;max-width:13ch}
+.c4 .slip{margin:0}
+.c4 .slip>div{padding:14px 0;border-bottom:1px solid var(--paper-200)}
+.c4 .slip>div:first-child{padding-top:0}
+.c4 .slip dt{font-family:var(--mono);font-size:13px;letter-spacing:.09em;text-transform:uppercase;color:var(--paper-400);margin:0 0 5px}
+.c4 .slip dd{margin:0;font-size:19px;font-weight:600;color:var(--ink-860);line-height:1.3}
+.c4 .stamp{font-family:var(--heading);font-size:15px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent-on);background:var(--accent-500);display:inline-block;padding:7px 14px;border-radius:3px}
+
+/* ══ Option 5 — Specimen ═══════════════════════════════════ */
+.c5{background:var(--paper-100);display:flex;align-items:center;justify-content:center}
+.c5 .card__pad{inset:44px;border:1px solid var(--paper-200);display:flex;flex-direction:column;justify-content:space-between;padding:44px 52px}
+.c5 .head{font-size:88px;letter-spacing:-.04em;max-width:12ch}
+.c5 .em{color:var(--accent-500)}
+.c5 .foot{border-top:1px solid var(--paper-200);padding-top:22px}
+</style>
+</head>
+<body>
+<div class="doc">
+
+<h1>The card 39 pages share</h1>
+<p class="standfirst">
+  Every page without artwork of its own unfurls as <b>/og-default.jpg</b> — services,
+  products, case studies, About, Contact, the legal pages, the Journal index, and six
+  Journal entries headed by a drawn plate. Five options below, all at the real
+  1200&times;630, in the live press-room palette and the live faces. Each is shown twice:
+  full size, and at the <b>~460px an unfurl actually renders</b>, which is the only size
+  that decides whether a card works.
+</p>
+
+<div class="brief">
+  <h2>What the current card gets wrong</h2>
+  <dl>
+    <dt>Palette</dt><dd>Black ground and the old display face — it is the retired <code>_monochrome</code> skin. The site has been Paper and Ember since the redesign.</dd>
+    <dt>Claim</dt><dd><b>&ldquo;92% success rate&rdquo; appears nowhere on the site.</b> StatsCounter publishes 1 day response, 15+ clients, 70+ projects, 12+ years combined. A number no page can support should not front 39 of them.</dd>
+    <dt>Badge</dt><dd>&ldquo;Salesforce Consulting Partner&rdquo; — kept off every option below until someone confirms the partner status is current and the badge is licensed for use.</dd>
+    <dt>Scope</dt><dd>Salesforce-only, while the card also fronts Heroku, MuleSoft, AWS, four products and five case studies.</dd>
+  </dl>
+</div>
+
+<!-- ══════════════ 1 ══════════════ -->
+<section class="opt">
+  <div class="opt__bar"><span class="opt__n">OPTION 1</span><h2 class="opt__name">Masthead</h2></div>
+  <p class="opt__note">The site's own page furniture, at card size: rule above, rule below, the homepage H1 between them, the filing-slip facts along the foot. <b>The most consistent with the site</b> — someone who clicks through lands on the same layout they just saw. Four facts is the most the small render will carry.</p>
+  <div class="row">
+    <div><div class="hold"><div class="card c1">
+      <div class="card__pad">
+        <div class="top">
+          <div class="wordmark"><img src="../../../../public/logo.svg" alt=""></div>
+          <div class="eyebrow">Since 2019</div>
+        </div>
+        <h2 class="head">Salesforce work your team can <span class="mark">still maintain</span> after we leave.</h2>
+        <dl class="facts">
+          <div><dt>Practices</dt><dd>Salesforce &middot; Heroku &middot; Data</dd></div>
+          <div><dt>Delivered</dt><dd>70+ projects</dd></div>
+          <div><dt>Products</dt><dd>Four, we run them</dd></div>
+          <div><dt>Reply</dt><dd>Within a day</dd></div>
+        </dl>
+      </div>
+    </div></div><p class="cap">1200 &times; 630</p></div>
+    <div class="small"><div class="hold"><div class="card c1">
+      <div class="card__pad">
+        <div class="top">
+          <div class="wordmark"><img src="../../../../public/logo.svg" alt=""></div>
+          <div class="eyebrow">Since 2019</div>
+        </div>
+        <h2 class="head">Salesforce work your team can <span class="mark">still maintain</span> after we leave.</h2>
+        <dl class="facts">
+          <div><dt>Practices</dt><dd>Salesforce &middot; Heroku &middot; Data</dd></div>
+          <div><dt>Delivered</dt><dd>70+ projects</dd></div>
+          <div><dt>Products</dt><dd>Four, we run them</dd></div>
+          <div><dt>Reply</dt><dd>Within a day</dd></div>
+        </dl>
+      </div>
+    </div></div><p class="cap">as an unfurl renders it</p></div>
+  </div>
+</section>
+
+<!-- ══════════════ 2 ══════════════ -->
+<section class="opt">
+  <div class="opt__bar"><span class="opt__n">OPTION 2</span><h2 class="opt__name">Ember band</h2></div>
+  <p class="opt__note">White stock, the ember down the left edge, headline and one sentence. <b>The most legible small</b> — the band is the only thing that has to survive at thumbnail size, and a 22px stripe does. Fewest words of any option.</p>
+  <div class="row">
+    <div><div class="hold"><div class="card c2">
+      <div class="band"></div>
+      <div class="card__pad">
+        <div class="wordmark"><img src="../../../../public/logo.svg" alt=""></div>
+        <div>
+          <h2 class="head">We build it, then hand it back.</h2>
+          <p class="sub">Certified Salesforce architects, the Heroku estate beside the org, and four products we run ourselves.</p>
+        </div>
+        <div class="foot"><div class="eyebrow">Consulting &middot; Heroku &middot; Products</div><div class="domain">cloudalgo.com</div></div>
+      </div>
+    </div></div><p class="cap">1200 &times; 630</p></div>
+    <div class="small"><div class="hold"><div class="card c2">
+      <div class="band"></div>
+      <div class="card__pad">
+        <div class="wordmark"><img src="../../../../public/logo.svg" alt=""></div>
+        <div>
+          <h2 class="head">We build it, then hand it back.</h2>
+          <p class="sub">Certified Salesforce architects, the Heroku estate beside the org, and four products we run ourselves.</p>
+        </div>
+        <div class="foot"><div class="eyebrow">Consulting &middot; Heroku &middot; Products</div><div class="domain">cloudalgo.com</div></div>
+      </div>
+    </div></div><p class="cap">as an unfurl renders it</p></div>
+  </div>
+</section>
+
+<!-- ══════════════ 3 ══════════════ -->
+<section class="opt">
+  <div class="opt__bar"><span class="opt__n">OPTION 3</span><h2 class="opt__name">Ink plate</h2></div>
+  <p class="opt__note">Near-black ground, ember rule under the phrase that carries the argument. <b>Keeps continuity with the card people have already seen</b>, retuned to press-room ink rather than the old pure black, and it is the option that stands out hardest in a light Slack channel. The cost: it is the one option that does not look like the page behind it.</p>
+  <div class="row">
+    <div><div class="hold"><div class="card c3">
+      <div class="card__pad">
+        <div class="top">
+          <div class="wordmark"><img src="../../../../public/logo-white.svg" alt=""></div>
+          <div class="eyebrow">Salesforce &middot; Heroku &middot; Data</div>
+        </div>
+        <h2 class="head">Salesforce work your team can <span class="mark">still maintain</span> after we leave.</h2>
+        <dl class="facts">
+          <div><dt>Founded</dt><dd>2019</dd></div>
+          <div><dt>Delivered</dt><dd>70+ projects</dd></div>
+          <div><dt>Products</dt><dd>Four, we run them</dd></div>
+          <div><dt>Reply</dt><dd>Within a day</dd></div>
+        </dl>
+      </div>
+    </div></div><p class="cap">1200 &times; 630</p></div>
+    <div class="small"><div class="hold"><div class="card c3">
+      <div class="card__pad">
+        <div class="top">
+          <div class="wordmark"><img src="../../../../public/logo-white.svg" alt=""></div>
+          <div class="eyebrow">Salesforce &middot; Heroku &middot; Data</div>
+        </div>
+        <h2 class="head">Salesforce work your team can <span class="mark">still maintain</span> after we leave.</h2>
+        <dl class="facts">
+          <div><dt>Founded</dt><dd>2019</dd></div>
+          <div><dt>Delivered</dt><dd>70+ projects</dd></div>
+          <div><dt>Products</dt><dd>Four, we run them</dd></div>
+          <div><dt>Reply</dt><dd>Within a day</dd></div>
+        </dl>
+      </div>
+    </div></div><p class="cap">as an unfurl renders it</p></div>
+  </div>
+</section>
+
+<!-- ══════════════ 4 ══════════════ -->
+<section class="opt">
+  <div class="opt__bar"><span class="opt__n">OPTION 4</span><h2 class="opt__name">Filing slip — one template, a card per page</h2></div>
+  <p class="opt__note">Not a generic card. <b>The same frame, filled from the page it fronts</b>, drawn at build time by the pass that already draws the Journal hero cards. A shared link then says what it links to instead of saying &ldquo;CloudAlgo&rdquo; 39 times. Two of the 39 shown below. This is more work than the other four, and it is the one that would actually earn a click.</p>
+  <div class="row">
+    <div><div class="hold"><div class="card c4">
+      <div class="l">
+        <div class="wordmark"><img src="../../../../public/logo.svg" alt=""></div>
+        <h2 class="head">Heroku consulting</h2>
+        <div class="domain">cloudalgo.com/services/</div>
+      </div>
+      <div class="r">
+        <div class="stamp">Service</div>
+        <dl class="slip">
+          <div><dt>Engagement</dt><dd>8&ndash;16 weeks</dd></div>
+          <div><dt>Sits beside</dt><dd>Salesforce, via Connect</dd></div>
+          <div><dt>Practice since</dt><dd>2019</dd></div>
+        </dl>
+        <div class="eyebrow">Reply within a day</div>
+      </div>
+    </div></div><p class="cap">a service page</p></div>
+    <div><div class="hold"><div class="card c4">
+      <div class="l">
+        <div class="wordmark"><img src="../../../../public/logo.svg" alt=""></div>
+        <h2 class="head">When the EMR has no API</h2>
+        <div class="domain">cloudalgo.com/case-studies/</div>
+      </div>
+      <div class="r">
+        <div class="stamp">Study 01</div>
+        <dl class="slip">
+          <div><dt>Sector</dt><dd>Healthcare</dd></div>
+          <div><dt>Built with</dt><dd>Salesforce, Puppeteer</dd></div>
+          <div><dt>Pairs with</dt><dd>A Journal entry</dd></div>
+        </dl>
+        <div class="eyebrow">Read the study</div>
+      </div>
+    </div></div><p class="cap">a case study</p></div>
+  </div>
+  <div class="row" style="margin-top:22px">
+    <div class="small"><div class="hold"><div class="card c4">
+      <div class="l">
+        <div class="wordmark"><img src="../../../../public/logo.svg" alt=""></div>
+        <h2 class="head">Heroku consulting</h2>
+        <div class="domain">cloudalgo.com/services/</div>
+      </div>
+      <div class="r">
+        <div class="stamp">Service</div>
+        <dl class="slip">
+          <div><dt>Engagement</dt><dd>8&ndash;16 weeks</dd></div>
+          <div><dt>Sits beside</dt><dd>Salesforce, via Connect</dd></div>
+          <div><dt>Practice since</dt><dd>2019</dd></div>
+        </dl>
+        <div class="eyebrow">Reply within a day</div>
+      </div>
+    </div></div><p class="cap">as an unfurl renders it</p></div>
+  </div>
+</section>
+
+<!-- ══════════════ 5 ══════════════ -->
+<section class="opt">
+  <div class="opt__bar"><span class="opt__n">OPTION 5</span><h2 class="opt__name">Specimen</h2></div>
+  <p class="opt__note">One ruled box, one sentence, nothing else. <b>The option that survives being shrunk furthest</b>, and the only one with no fact on it to go stale. It also says the least — fine for a legal page, thin as the front door for a services page.</p>
+  <div class="row">
+    <div><div class="hold"><div class="card c5">
+      <div class="card__pad">
+        <div class="eyebrow">CloudAlgo &middot; Since 2019</div>
+        <h2 class="head">We build Salesforce work that outlasts <span class="em">us.</span></h2>
+        <div class="foot"><div class="wordmark"><img src="../../../../public/logo.svg" alt=""></div><div class="domain">cloudalgo.com</div></div>
+      </div>
+    </div></div><p class="cap">1200 &times; 630</p></div>
+    <div class="small"><div class="hold"><div class="card c5">
+      <div class="card__pad">
+        <div class="eyebrow">CloudAlgo &middot; Since 2019</div>
+        <h2 class="head">We build Salesforce work that outlasts <span class="em">us.</span></h2>
+        <div class="foot"><div class="wordmark"><img src="../../../../public/logo.svg" alt=""></div><div class="domain">cloudalgo.com</div></div>
+      </div>
+    </div></div><p class="cap">as an unfurl renders it</p></div>
+  </div>
+</section>
+
+</div>
+</body>
+</html>

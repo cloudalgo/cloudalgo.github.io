@@ -1,42 +1,42 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" aria-hidden="true">
   <!-- Background -->
-  <rect width="1200" height="600" fill="#F5F5F2"/>
+  <rect width="1200" height="600" fill="#F7F4F2"/>
 
   <!-- Vertical separator -->
-  <line x1="578" y1="40" x2="578" y2="560" stroke="#0A0A0A" stroke-opacity="0.06" stroke-width="1"/>
+  <line x1="578" y1="40" x2="578" y2="560" stroke="#F75A41" stroke-opacity="0.34" stroke-width="1"/>
 
   <!-- ══════════════════════════════════════════════ -->
   <!-- LEFT: the audit query                         -->
   <!-- ══════════════════════════════════════════════ -->
 
-  <rect x="38" y="40" width="514" height="520" rx="12" fill="white" fill-opacity="0.50" stroke="#0A0A0A" stroke-opacity="0.09" stroke-width="1.5"/>
+  <rect x="38" y="40" width="514" height="520" rx="12" fill="#FFFFFF" stroke="#131110" stroke-opacity="0.15" stroke-width="1.5"/>
 
   <!-- Window chrome -->
-  <circle cx="64" cy="68" r="5" fill="#0A0A0A" fill-opacity="0.16"/>
-  <circle cx="82" cy="68" r="5" fill="#0A0A0A" fill-opacity="0.16"/>
-  <circle cx="100" cy="68" r="5" fill="#0A0A0A" fill-opacity="0.16"/>
-  <text x="295" y="73" text-anchor="middle" font-family="'Courier New', Courier, monospace" font-size="12.5" font-weight="700" letter-spacing="0.04em" fill="#0A0A0A" fill-opacity="0.42">EventLogFile — ApiTotalUsage</text>
-  <line x1="38" y1="92" x2="552" y2="92" stroke="#0A0A0A" stroke-opacity="0.08" stroke-width="1"/>
+  <circle cx="64" cy="68" r="5" fill="#131110" fill-opacity="0.21"/>
+  <circle cx="82" cy="68" r="5" fill="#131110" fill-opacity="0.21"/>
+  <circle cx="100" cy="68" r="5" fill="#131110" fill-opacity="0.21"/>
+  <text x="295" y="73" text-anchor="middle" font-family="'Courier New', Courier, monospace" font-size="12.5" font-weight="700" letter-spacing="0.04em" fill="#131110" fill-opacity="0.68">EventLogFile — ApiTotalUsage</text>
+  <line x1="38" y1="92" x2="552" y2="92" stroke="#F75A41" stroke-opacity="0.34" stroke-width="1"/>
 
   <!-- Command -->
-  <g font-family="'Courier New', Courier, monospace" font-size="13" fill="#0A0A0A">
+  <g font-family="'Courier New', Courier, monospace" font-size="13" fill="#131110">
     <text x="62" y="124"><tspan fill-opacity="0.35">$</tspan><tspan fill-opacity="0.88"> sf data query \</tspan></text>
     <text x="84" y="146" fill-opacity="0.88">-q "SELECT LogFile, LogDate</text>
     <text x="106" y="166" fill-opacity="0.88">FROM EventLogFile WHERE</text>
     <text x="106" y="186" fill-opacity="0.88">EventType = 'ApiTotalUsage'"</text>
   </g>
 
-  <line x1="62" y1="210" x2="528" y2="210" stroke="#0A0A0A" stroke-opacity="0.08" stroke-width="1"/>
+  <line x1="62" y1="210" x2="528" y2="210" stroke="#F75A41" stroke-opacity="0.34" stroke-width="1"/>
 
   <!-- Output header -->
-  <g font-family="'Courier New', Courier, monospace" font-size="11.5" font-weight="700" letter-spacing="0.06em" fill="#0A0A0A" fill-opacity="0.40">
+  <g font-family="'Courier New', Courier, monospace" font-size="11.5" font-weight="700" letter-spacing="0.06em" fill="#131110" fill-opacity="0.68">
     <text x="62" y="234">CLIENT_NAME</text>
     <text x="392" y="234">API</text>
     <text x="528" y="234" text-anchor="end">CALLS</text>
   </g>
 
   <!-- Output rows -->
-  <g font-family="'Courier New', Courier, monospace" font-size="13" fill="#0A0A0A">
+  <g font-family="'Courier New', Courier, monospace" font-size="13" fill="#131110">
     <text x="62" y="262" fill-opacity="0.85">Boomi AtomSphere</text>
     <text x="392" y="262" fill-opacity="0.55">38.0</text>
     <text x="528" y="262" text-anchor="end" fill-opacity="0.85">4,182</text>
@@ -59,17 +59,17 @@
   </g>
 
   <!-- Highlighted unknown row -->
-  <rect x="52" y="386" width="486" height="30" rx="4" fill="#0A0A0A" fill-opacity="0.055"/>
-  <rect x="52" y="386" width="3" height="30" rx="1.5" fill="#0A0A0A" fill-opacity="0.75"/>
-  <g font-family="'Courier New', Courier, monospace" font-size="13" fill="#0A0A0A">
+  <rect x="52" y="386" width="486" height="30" rx="4" fill="#131110" fill-opacity="0.09"/>
+  <rect x="52" y="386" width="3" height="30" rx="1.5" fill="#131110" fill-opacity="0.92"/>
+  <g font-family="'Courier New', Courier, monospace" font-size="13" fill="#131110">
     <text x="66" y="406" fill-opacity="0.9">(unidentified)</text>
     <text x="392" y="406" fill-opacity="0.55">31.0</text>
     <text x="528" y="406" text-anchor="end" fill-opacity="0.9">12</text>
   </g>
 
-  <line x1="62" y1="440" x2="528" y2="440" stroke="#0A0A0A" stroke-opacity="0.08" stroke-width="1"/>
+  <line x1="62" y1="440" x2="528" y2="440" stroke="#F75A41" stroke-opacity="0.34" stroke-width="1"/>
 
-  <g font-family="'Courier New', Courier, monospace" font-size="13" fill="#0A0A0A">
+  <g font-family="'Courier New', Courier, monospace" font-size="13" fill="#131110">
     <text x="62" y="470" fill-opacity="0.45"># 6 clients on SOAP login()</text>
     <text x="62" y="492" fill-opacity="0.45"># 0 on OAuth</text>
     <text x="62" y="522"><tspan fill-opacity="0.35">$</tspan><tspan fill-opacity="0.85"> _</tspan></text>
@@ -79,48 +79,48 @@
   <!-- RIGHT: what has to change                     -->
   <!-- ══════════════════════════════════════════════ -->
 
-  <text x="668" y="96" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="15" font-weight="700" letter-spacing="0.14em" fill="#0A0A0A" fill-opacity="0.5">login() CALLERS · RETIRES SUMMER &#8217;27</text>
+  <text x="668" y="96" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="15" font-weight="700" letter-spacing="0.14em" fill="#131110" fill-opacity="0.74">login() CALLERS · RETIRES SUMMER &#8217;27</text>
 
   <g font-family="Archivo, Outfit, system-ui, sans-serif">
     <!-- row 1 -->
-    <rect x="668" y="128" width="4" height="40" rx="2" fill="#0A0A0A" fill-opacity="0.85"/>
-    <text x="688" y="146" font-size="18" font-weight="600" fill="#0A0A0A">Boomi order sync</text>
-    <text x="1160" y="146" text-anchor="end" font-size="12" font-weight="700" letter-spacing="0.06em" fill="#0A0A0A" fill-opacity="0.4">SOAP PARTNER</text>
-    <text x="688" y="164" font-size="13" fill="#0A0A0A" fill-opacity="0.45">Production · owner unknown</text>
+    <rect x="668" y="128" width="4" height="40" rx="2" fill="#F75A41" fill-opacity="0.70"/>
+    <text x="688" y="146" font-size="18" font-weight="600" fill="#131110">Boomi order sync</text>
+    <text x="1160" y="146" text-anchor="end" font-size="12" font-weight="700" letter-spacing="0.06em" fill="#131110" fill-opacity="0.68">SOAP PARTNER</text>
+    <text x="688" y="164" font-size="13" fill="#131110" fill-opacity="0.74">Production · owner unknown</text>
 
     <!-- row 2 -->
-    <rect x="668" y="188" width="4" height="40" rx="2" fill="#0A0A0A" fill-opacity="0.85"/>
-    <text x="688" y="206" font-size="18" font-weight="600" fill="#0A0A0A">Nightly WSC export</text>
-    <text x="1160" y="206" text-anchor="end" font-size="12" font-weight="700" letter-spacing="0.06em" fill="#0A0A0A" fill-opacity="0.4">SOAP ENTERPRISE</text>
-    <text x="688" y="224" font-size="13" fill="#0A0A0A" fill-opacity="0.45">Password + security token in config</text>
+    <rect x="668" y="188" width="4" height="40" rx="2" fill="#F75A41" fill-opacity="0.70"/>
+    <text x="688" y="206" font-size="18" font-weight="600" fill="#131110">Nightly WSC export</text>
+    <text x="1160" y="206" text-anchor="end" font-size="12" font-weight="700" letter-spacing="0.06em" fill="#131110" fill-opacity="0.68">SOAP ENTERPRISE</text>
+    <text x="688" y="224" font-size="13" fill="#131110" fill-opacity="0.74">Password + security token in config</text>
 
     <!-- row 3 -->
-    <rect x="668" y="248" width="4" height="40" rx="2" fill="#0A0A0A" fill-opacity="0.55"/>
-    <text x="688" y="266" font-size="18" font-weight="600" fill="#0A0A0A">Ant deploy pipeline</text>
-    <text x="1160" y="266" text-anchor="end" font-size="12" font-weight="700" letter-spacing="0.06em" fill="#0A0A0A" fill-opacity="0.4">CI</text>
-    <text x="688" y="284" font-size="13" fill="#0A0A0A" fill-opacity="0.45">Replace with sf CLI + JWT</text>
+    <rect x="668" y="248" width="4" height="40" rx="2" fill="#F75A41" fill-opacity="0.58"/>
+    <text x="688" y="266" font-size="18" font-weight="600" fill="#131110">Ant deploy pipeline</text>
+    <text x="1160" y="266" text-anchor="end" font-size="12" font-weight="700" letter-spacing="0.06em" fill="#131110" fill-opacity="0.68">CI</text>
+    <text x="688" y="284" font-size="13" fill="#131110" fill-opacity="0.74">Replace with sf CLI + JWT</text>
 
     <!-- row 4 -->
-    <rect x="668" y="308" width="4" height="40" rx="2" fill="#0A0A0A" fill-opacity="0.55"/>
-    <text x="688" y="326" font-size="18" font-weight="600" fill="#0A0A0A">Data Loader on a laptop</text>
-    <text x="1160" y="326" text-anchor="end" font-size="12" font-weight="700" letter-spacing="0.06em" fill="#0A0A0A" fill-opacity="0.4">SOAP PARTNER</text>
-    <text x="688" y="344" font-size="13" fill="#0A0A0A" fill-opacity="0.45">Weekly export · not in any diagram</text>
+    <rect x="668" y="308" width="4" height="40" rx="2" fill="#F75A41" fill-opacity="0.58"/>
+    <text x="688" y="326" font-size="18" font-weight="600" fill="#131110">Data Loader on a laptop</text>
+    <text x="1160" y="326" text-anchor="end" font-size="12" font-weight="700" letter-spacing="0.06em" fill="#131110" fill-opacity="0.68">SOAP PARTNER</text>
+    <text x="688" y="344" font-size="13" fill="#131110" fill-opacity="0.74">Weekly export · not in any diagram</text>
 
     <!-- row 5 -->
-    <rect x="668" y="368" width="4" height="40" rx="2" fill="#0A0A0A" fill-opacity="0.55"/>
-    <text x="688" y="386" font-size="18" font-weight="600" fill="#0A0A0A">Reporting connector</text>
-    <text x="1160" y="386" text-anchor="end" font-size="12" font-weight="700" letter-spacing="0.06em" fill="#0A0A0A" fill-opacity="0.4">SOAP PARTNER</text>
-    <text x="688" y="404" font-size="13" fill="#0A0A0A" fill-opacity="0.45">Partner-built, 2019 · no contact</text>
+    <rect x="668" y="368" width="4" height="40" rx="2" fill="#F75A41" fill-opacity="0.58"/>
+    <text x="688" y="386" font-size="18" font-weight="600" fill="#131110">Reporting connector</text>
+    <text x="1160" y="386" text-anchor="end" font-size="12" font-weight="700" letter-spacing="0.06em" fill="#131110" fill-opacity="0.68">SOAP PARTNER</text>
+    <text x="688" y="404" font-size="13" fill="#131110" fill-opacity="0.74">Partner-built, 2019 · no contact</text>
 
     <!-- row 6 -->
-    <rect x="668" y="428" width="4" height="40" rx="2" fill="#0A0A0A" fill-opacity="0.30"/>
-    <text x="688" y="446" font-size="18" font-weight="600" fill="#0A0A0A" fill-opacity="0.6">(unidentified)</text>
-    <text x="1160" y="446" text-anchor="end" font-size="12" font-weight="700" letter-spacing="0.06em" fill="#0A0A0A" fill-opacity="0.4">v31.0</text>
-    <text x="688" y="464" font-size="13" fill="#0A0A0A" fill-opacity="0.45">12 calls in 30 days · source IP only</text>
+    <rect x="668" y="428" width="4" height="40" rx="2" fill="#F75A41" fill-opacity="0.46"/>
+    <text x="688" y="446" font-size="18" font-weight="600" fill="#131110" fill-opacity="0.80">(unidentified)</text>
+    <text x="1160" y="446" text-anchor="end" font-size="12" font-weight="700" letter-spacing="0.06em" fill="#131110" fill-opacity="0.68">v31.0</text>
+    <text x="688" y="464" font-size="13" fill="#131110" fill-opacity="0.74">12 calls in 30 days · source IP only</text>
   </g>
 
   <!-- Footer: the fix -->
-  <line x1="668" y1="500" x2="1160" y2="500" stroke="#0A0A0A" stroke-opacity="0.08" stroke-width="1"/>
-  <text x="668" y="528" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="14" font-weight="700" letter-spacing="0.1em" fill="#0A0A0A" fill-opacity="0.42">THE FIX</text>
-  <text x="668" y="552" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="17" font-weight="500" fill="#0A0A0A" fill-opacity="0.75">External Client App · OAuth 2.0 JWT bearer</text>
+  <line x1="668" y1="500" x2="1160" y2="500" stroke="#F75A41" stroke-opacity="0.34" stroke-width="1"/>
+  <text x="668" y="528" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="14" font-weight="700" letter-spacing="0.1em" fill="#131110" fill-opacity="0.68">THE FIX</text>
+  <text x="668" y="552" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="17" font-weight="500" fill="#131110" fill-opacity="0.92">External Client App · OAuth 2.0 JWT bearer</text>
 </svg>

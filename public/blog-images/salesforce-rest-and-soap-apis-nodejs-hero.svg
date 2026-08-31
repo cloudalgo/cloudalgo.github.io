@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" aria-hidden="true">
+  <rect width="1200" height="600" fill="#F7F4F2"/>
+  <line x1="578" y1="40" x2="578" y2="560" stroke="#F75A41" stroke-opacity="0.34" stroke-width="1"/>
+
+  <!-- LEFT: the page that everyone forgets -->
+  <rect x="38" y="40" width="514" height="520" rx="12" fill="#FFFFFF" stroke="#131110" stroke-opacity="0.15" stroke-width="1.5"/>
+  <rect x="38" y="40" width="514" height="40" rx="12" fill="#131110" fill-opacity="0.08"/>
+  <rect x="38" y="68" width="514" height="12" fill="#131110" fill-opacity="0.08"/>
+  <line x1="38" y1="80" x2="552" y2="80" stroke="#F75A41" stroke-opacity="0.34" stroke-width="1"/>
+  <circle cx="66" cy="60" r="6" fill="#131110" fill-opacity="0.16"/>
+  <circle cx="88" cy="60" r="6" fill="#131110" fill-opacity="0.16"/>
+  <circle cx="110" cy="60" r="6" fill="#131110" fill-opacity="0.16"/>
+  <text x="295" y="64" text-anchor="middle" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="11" fill="#131110" fill-opacity="0.62" letter-spacing="0.06em">query.js &#183; 2,000 records a page, by default</text>
+
+  <g font-family="'Courier New', Courier, monospace" font-size="12" fill="#131110" fill-opacity="0.86">
+    <text x="72" y="112">async function queryAll(soql) {</text>
+    <text x="88" y="140">let url = `${instance}/services/data/v57.0/query?q=${soql}`;</text>
+    <text x="88" y="162">const all = [];</text>
+    <text x="88" y="190">while (url) {</text>
+    <text x="104" y="212">const res = await fetch(url, { headers });</text>
+    <text x="104" y="234">const page = await res.json();</text>
+    <text x="104" y="256">all.push(...page.records);</text>
+  </g>
+
+  <rect x="90" y="270" width="440" height="32" rx="8" fill="#F75A41" fill-opacity="0.12"/>
+  <rect x="90" y="270" width="4" height="32" rx="2" fill="#F75A41" fill-opacity="0.70"/>
+  <text x="106" y="292" font-family="'Courier New', Courier, monospace" font-size="12" font-weight="700" fill="#131110" fill-opacity="0.92">url = page.done ? null : instance + page.nextRecordsUrl;</text>
+
+  <g font-family="'Courier New', Courier, monospace" font-size="12" fill="#131110" fill-opacity="0.86">
+    <text x="88" y="326">}</text>
+    <text x="88" y="354">return all;</text>
+    <text x="72" y="376">}</text>
+  </g>
+
+  <line x1="66" y1="404" x2="524" y2="404" stroke="#F75A41" stroke-opacity="0.40" stroke-width="1"/>
+  <text x="66" y="432" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="16" font-weight="700" fill="#131110" fill-opacity="0.92">Skip the loop and you read page one, silently.</text>
+  <text x="66" y="456" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="13" fill="#131110" fill-opacity="0.74">A query over the page size comes back with <tspan font-family="'Courier New', Courier, monospace" font-weight="700">done: false</tspan>.</text>
+
+  <rect x="66" y="478" width="458" height="62" rx="10" fill="#131110" fill-opacity="0.06"/>
+  <rect x="66" y="478" width="4" height="62" rx="2" fill="#131110" fill-opacity="0.14"/>
+  <text x="90" y="504" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="14" font-weight="700" fill="#131110" fill-opacity="0.92">It works in a sandbox holding fifty records.</text>
+  <text x="90" y="526" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="13" fill="#131110" fill-opacity="0.80">It truncates in production, and nothing says so.</text>
+
+  <!-- RIGHT: pick by volume, then read the reply -->
+  <text x="618" y="64" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="15" font-weight="700" fill="#131110" fill-opacity="0.68" letter-spacing="0.14em">PICK BY VOLUME</text>
+
+  <g font-family="Archivo, Outfit, system-ui, sans-serif">
+    <rect x="618" y="84" width="542" height="52" rx="10" fill="#131110" fill-opacity="0.06"/>
+    <rect x="618" y="84" width="4" height="52" rx="2" fill="#131110" fill-opacity="0.14"/>
+    <text x="642" y="106" font-size="16" font-weight="700" fill="#131110" fill-opacity="0.92">One record</text>
+    <text x="642" y="126" font-family="'Courier New', Courier, monospace" font-size="12.5" fill="#131110" fill-opacity="0.74">POST /sobjects/Account &#183; PATCH by external id</text>
+    <text x="1140" y="106" text-anchor="end" font-size="12" font-weight="700" letter-spacing="0.06em" fill="#131110" fill-opacity="0.68">IDEMPOTENT UPSERT</text>
+
+    <rect x="618" y="146" width="542" height="52" rx="10" fill="#131110" fill-opacity="0.06"/>
+    <rect x="618" y="146" width="4" height="52" rx="2" fill="#131110" fill-opacity="0.14"/>
+    <text x="642" y="168" font-size="16" font-weight="700" fill="#131110" fill-opacity="0.92">Up to 200</text>
+    <text x="642" y="188" font-family="'Courier New', Courier, monospace" font-size="12.5" fill="#131110" fill-opacity="0.74">POST /composite/sobjects</text>
+    <text x="1140" y="168" text-anchor="end" font-size="12" font-weight="700" letter-spacing="0.06em" fill="#131110" fill-opacity="0.68">ONE REQUEST</text>
+
+    <rect x="618" y="208" width="542" height="52" rx="10" fill="#F75A41" fill-opacity="0.12"/>
+    <rect x="618" y="208" width="4" height="52" rx="2" fill="#F75A41" fill-opacity="0.70"/>
+    <text x="642" y="230" font-size="16" font-weight="700" fill="#131110" fill-opacity="0.92">Above a few thousand</text>
+    <text x="642" y="250" font-family="'Courier New', Courier, monospace" font-size="12.5" fill="#131110" fill-opacity="0.80">Bulk API 2.0 &#183; asynchronous, job-based</text>
+    <text x="1140" y="230" text-anchor="end" font-size="12" font-weight="700" letter-spacing="0.06em" fill="#131110" fill-opacity="0.92">ONE JOB, NOT N CALLS</text>
+  </g>
+
+  <text x="618" y="292" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="13" fill="#131110" fill-opacity="0.80">Polling on a short timer is the usual reason an org runs out of its daily allocation.</text>
+
+  <text x="618" y="338" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="15" font-weight="700" fill="#131110" fill-opacity="0.68" letter-spacing="0.14em">WHAT THE RESPONSE ACTUALLY SAYS</text>
+
+  <g font-family="'Courier New', Courier, monospace" font-size="14">
+    <text x="618" y="378" font-weight="700" fill="#131110" fill-opacity="0.92">204 No Content</text>
+    <text x="1160" y="378" text-anchor="end" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="13" fill="#131110" fill-opacity="0.80">a PATCH that worked &#8212; do not parse the body</text>
+    <line x1="618" y1="392" x2="1160" y2="392" stroke="#131110" stroke-opacity="0.10" stroke-width="1"/>
+
+    <text x="618" y="422" font-weight="700" fill="#131110" fill-opacity="0.92">200 OK</text>
+    <text x="1160" y="422" text-anchor="end" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="13" fill="#131110" fill-opacity="0.80">with allOrNone false, some records still failed</text>
+    <line x1="618" y1="436" x2="1160" y2="436" stroke="#131110" stroke-opacity="0.10" stroke-width="1"/>
+
+    <text x="618" y="466" font-weight="700" fill="#131110" fill-opacity="0.92">REQUEST_LIMIT_EXCEEDED</text>
+    <text x="1160" y="466" text-anchor="end" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="13" fill="#131110" fill-opacity="0.80">not fixed by retrying it now</text>
+  </g>
+
+  <rect x="618" y="490" width="542" height="70" rx="12" fill="#131110" fill-opacity="0.92"/>
+  <rect x="642" y="506" width="156" height="20" rx="10" fill="#F7F4F2" fill-opacity="0.16"/>
+  <text x="654" y="520" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="9.5" font-weight="700" fill="#F7F4F2" fill-opacity="0.90" letter-spacing="0.12em">PIN THE VERSION</text>
+  <text x="642" y="548" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="16" font-weight="700" fill="#F7F4F2" fill-opacity="0.95">Bump it once a release cycle &#8212; not to whatever is newest.</text>
+</svg>

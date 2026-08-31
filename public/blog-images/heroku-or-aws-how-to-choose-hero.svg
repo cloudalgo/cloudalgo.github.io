@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" aria-hidden="true">
+  <!-- Background -->
+  <rect width="1200" height="600" fill="#F7F4F2"/>
+
+  <!-- Vertical separator -->
+  <line x1="578" y1="40" x2="578" y2="560" stroke="#F75A41" stroke-opacity="0.34" stroke-width="1"/>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- LEFT: the migration that was not worth it       -->
+  <!-- ══════════════════════════════════════════════ -->
+
+  <rect x="38" y="40" width="514" height="520" rx="12" fill="#FFFFFF" stroke="#131110" stroke-opacity="0.15" stroke-width="1.5"/>
+
+  <!-- Title bar -->
+  <rect x="38" y="40" width="514" height="40" rx="12" fill="#131110" fill-opacity="0.08"/>
+  <rect x="38" y="68" width="514" height="12" fill="#131110" fill-opacity="0.08"/>
+  <line x1="38" y1="80" x2="552" y2="80" stroke="#F75A41" stroke-opacity="0.34" stroke-width="1"/>
+  <circle cx="66" cy="60" r="6" fill="#131110" fill-opacity="0.16"/>
+  <circle cx="88" cy="60" r="6" fill="#131110" fill-opacity="0.16"/>
+  <circle cx="110" cy="60" r="6" fill="#131110" fill-opacity="0.16"/>
+  <text x="295" y="64" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="11" fill="#131110" fill-opacity="0.62" text-anchor="middle" letter-spacing="0.06em">cost model · 6 dynos · 1 Postgres · Heroku Connect</text>
+
+  <!-- Annual infrastructure, both sides -->
+  <text x="56" y="112" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="10" font-weight="700" fill="#131110" fill-opacity="0.68" letter-spacing="0.14em">ANNUAL INFRASTRUCTURE</text>
+
+  <text x="56" y="142" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="11" font-weight="700" fill="#131110" fill-opacity="0.74" letter-spacing="0.08em">HEROKU, AS INVOICED</text>
+  <text x="56" y="196" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="46" font-weight="900" fill="#131110" fill-opacity="0.92" letter-spacing="-0.02em">$18,000</text>
+
+  <text x="316" y="142" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="11" font-weight="700" fill="#131110" fill-opacity="0.74" letter-spacing="0.08em">AWS, MODELLED</text>
+  <text x="316" y="196" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="46" font-weight="900" fill="#131110" fill-opacity="0.92" letter-spacing="-0.02em">$9,000</text>
+  <text x="316" y="218" font-family="'Courier New', Courier, monospace" font-size="11" fill="#131110" fill-opacity="0.68">EC2 · RDS · NAT · ECS</text>
+
+  <line x1="56" y1="244" x2="534" y2="244" stroke="#F75A41" stroke-opacity="0.40" stroke-width="1"/>
+
+  <!-- The saving, which is the number everyone stops at -->
+  <rect x="56" y="264" width="478" height="66" rx="10" fill="#F75A41" fill-opacity="0.10"/>
+  <rect x="56" y="264" width="4" height="66" rx="2" fill="#F75A41" fill-opacity="0.70"/>
+  <text x="78" y="294" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="11" font-weight="700" fill="#131110" fill-opacity="0.74" letter-spacing="0.12em">SAVING</text>
+  <text x="78" y="320" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="22" font-weight="800" fill="#131110" fill-opacity="0.92">$9,000 a year</text>
+  <text x="514" y="320" text-anchor="end" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="12" font-weight="700" fill="#131110" fill-opacity="0.68" letter-spacing="0.06em">HALF THE BILL</text>
+
+  <!-- And the column nobody models -->
+  <text x="56" y="374" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="10" font-weight="700" fill="#131110" fill-opacity="0.68" letter-spacing="0.14em">THE OTHER SIDE OF THE LEDGER</text>
+
+  <text x="56" y="410" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="15" font-weight="700" fill="#131110" fill-opacity="0.86">Migration</text>
+  <text x="534" y="410" text-anchor="end" font-family="'Courier New', Courier, monospace" font-size="13" fill="#131110" fill-opacity="0.80">8 weeks of engineering</text>
+  <line x1="56" y1="424" x2="534" y2="424" stroke="#131110" stroke-opacity="0.10" stroke-width="1"/>
+
+  <text x="56" y="452" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="15" font-weight="700" fill="#131110" fill-opacity="0.86">Ongoing</text>
+  <text x="534" y="452" text-anchor="end" font-family="'Courier New', Courier, monospace" font-size="13" fill="#131110" fill-opacity="0.80">+2 hours a month, forever</text>
+  <line x1="56" y1="466" x2="534" y2="466" stroke="#131110" stroke-opacity="0.10" stroke-width="1"/>
+
+  <text x="56" y="494" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="15" font-weight="700" fill="#131110" fill-opacity="0.86">Payback</text>
+  <text x="534" y="494" text-anchor="end" font-family="'Courier New', Courier, monospace" font-size="13" fill="#131110" fill-opacity="0.80">longer than anyone wanted</text>
+
+  <line x1="56" y1="514" x2="534" y2="514" stroke="#F75A41" stroke-opacity="0.40" stroke-width="1"/>
+  <text x="56" y="538" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="15" font-weight="700" fill="#131110" fill-opacity="0.92">They stayed on Heroku.</text>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- RIGHT: what the decision actually turns on      -->
+  <!-- ══════════════════════════════════════════════ -->
+
+  <text x="618" y="64" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="15" font-weight="700" fill="#131110" fill-opacity="0.68" letter-spacing="0.14em">WHAT WE ACTUALLY ASSESS</text>
+
+  <g font-family="Archivo, Outfit, system-ui, sans-serif">
+    <rect x="618" y="110" width="4" height="48" rx="2" fill="#F75A41" fill-opacity="0.70"/>
+    <text x="640" y="130" font-size="18" font-weight="600" fill="#131110" fill-opacity="0.92">Team composition</text>
+    <text x="640" y="150" font-size="13" fill="#131110" fill-opacity="0.74">Three people and no DevOps background? AWS costs more than it saves</text>
+    <text x="1160" y="130" text-anchor="end" font-size="12" font-weight="700" letter-spacing="0.06em" fill="#131110" fill-opacity="0.68">TEAM</text>
+
+    <rect x="618" y="184" width="4" height="48" rx="2" fill="#F75A41" fill-opacity="0.70"/>
+    <text x="640" y="204" font-size="18" font-weight="600" fill="#131110" fill-opacity="0.92">Salesforce coupling</text>
+    <text x="640" y="224" font-size="13" fill="#131110" fill-opacity="0.74">Heroku Connect is first-class here and a custom build over there</text>
+    <text x="1160" y="204" text-anchor="end" font-size="12" font-weight="700" letter-spacing="0.06em" fill="#131110" fill-opacity="0.68">INTEGRATION</text>
+
+    <rect x="618" y="258" width="4" height="48" rx="2" fill="#F75A41" fill-opacity="0.58"/>
+    <text x="640" y="278" font-size="18" font-weight="600" fill="#131110" fill-opacity="0.92">Compliance requirements</text>
+    <text x="640" y="298" font-size="13" fill="#131110" fill-opacity="0.74">VPC isolation and fine-grained IAM, where a framework demands them</text>
+    <text x="1160" y="278" text-anchor="end" font-size="12" font-weight="700" letter-spacing="0.06em" fill="#131110" fill-opacity="0.68">REGULATION</text>
+
+    <rect x="618" y="332" width="4" height="48" rx="2" fill="#F75A41" fill-opacity="0.58"/>
+    <text x="640" y="352" font-size="18" font-weight="600" fill="#131110" fill-opacity="0.92">Cost at the scale you are at</text>
+    <text x="640" y="372" font-size="13" fill="#131110" fill-opacity="0.74">Real invoices against egress, load balancers, RDS and engineer time</text>
+    <text x="1160" y="352" text-anchor="end" font-size="12" font-weight="700" letter-spacing="0.06em" fill="#131110" fill-opacity="0.68">MONEY</text>
+  </g>
+
+  <!-- The answer that is usually right -->
+  <rect x="618" y="424" width="542" height="116" rx="12" fill="#131110" fill-opacity="0.92"/>
+  <rect x="642" y="446" width="150" height="22" rx="11" fill="#F7F4F2" fill-opacity="0.16"/>
+  <text x="656" y="461" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="10" font-weight="700" fill="#F7F4F2" fill-opacity="0.90" letter-spacing="0.12em">THE USUAL ANSWER</text>
+  <text x="642" y="497" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="19" font-weight="700" fill="#F7F4F2" fill-opacity="0.95">Not &#8220;migrate everything.&#8221;</text>
+  <text x="642" y="521" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="14" fill="#F7F4F2" fill-opacity="0.80">Migrate the services where the money is, and leave the rest alone.</text>
+</svg>

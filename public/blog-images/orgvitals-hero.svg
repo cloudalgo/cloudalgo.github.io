@@ -1,25 +1,25 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" aria-hidden="true" font-family="Outfit, sans-serif">
   <!-- Background -->
-  <rect width="1200" height="600" fill="#F5F5F2"/>
+  <rect width="1200" height="600" fill="#F7F4F2"/>
 
   <!-- Vertical separator -->
-  <line x1="600" y1="56" x2="600" y2="544" stroke="#0A0A0A" stroke-opacity="0.08" stroke-width="1"/>
+  <line x1="600" y1="56" x2="600" y2="544" stroke="#F75A41" stroke-opacity="0.34" stroke-width="1"/>
 
   <!-- ══════════════════════════ LEFT: the grade ══════════════════════════ -->
-  <text x="72" y="96" font-size="15" font-weight="700" letter-spacing="0.14em" fill="#0A0A0A" fill-opacity="0.5">ORGVITALS · HEALTH REPORT</text>
+  <text x="72" y="96" font-size="15" font-weight="700" letter-spacing="0.14em" fill="#131110" fill-opacity="0.74">ORGVITALS · HEALTH REPORT</text>
 
   <!-- Grade ring -->
-  <circle cx="150" cy="240" r="82" fill="none" stroke="#0A0A0A" stroke-width="10" stroke-opacity="0.10"/>
-  <circle cx="150" cy="240" r="82" fill="none" stroke="#0A0A0A" stroke-width="10" stroke-opacity="0.85"
+  <circle cx="150" cy="240" r="82" fill="none" stroke="#131110" stroke-width="10" stroke-opacity="0.17"/>
+  <circle cx="150" cy="240" r="82" fill="none" stroke="#131110" stroke-width="10" stroke-opacity="0.85"
           stroke-linecap="round" stroke-dasharray="402 515" transform="rotate(-90 150 240)"/>
-  <text x="150" y="270" text-anchor="middle" font-size="96" font-weight="900" fill="#0A0A0A">B</text>
+  <text x="150" y="270" text-anchor="middle" font-size="96" font-weight="900" fill="#131110">B</text>
 
   <!-- Score -->
-  <text x="270" y="222" font-size="58" font-weight="800" fill="#0A0A0A">78<tspan font-size="30" font-weight="600" fill-opacity="0.45"> / 100</tspan></text>
-  <text x="272" y="262" font-size="18" font-weight="500" fill="#0A0A0A" fill-opacity="0.55">Needs a little attention</text>
+  <text x="270" y="222" font-size="58" font-weight="800" fill="#131110">78<tspan font-size="30" font-weight="600" fill-opacity="0.45"> / 100</tspan></text>
+  <text x="272" y="262" font-size="18" font-weight="500" fill="#131110" fill-opacity="0.80">Needs a little attention</text>
 
   <!-- Category bars -->
-  <g font-size="14" font-weight="700" letter-spacing="0.04em" fill="#0A0A0A" fill-opacity="0.55">
+  <g font-size="14" font-weight="700" letter-spacing="0.04em" fill="#131110" fill-opacity="0.80">
     <text x="72" y="366">SECURITY</text>
     <text x="72" y="404">CODE QUALITY</text>
     <text x="72" y="442">AUTOMATION</text>
@@ -27,54 +27,54 @@
     <text x="72" y="518">PERFORMANCE</text>
   </g>
   <g>
-    <rect x="300" y="354" width="228" height="10" rx="5" fill="#0A0A0A" fill-opacity="0.08"/>
-    <rect x="300" y="354" width="150" height="10" rx="5" fill="#0A0A0A" fill-opacity="0.65"/>
-    <rect x="300" y="392" width="228" height="10" rx="5" fill="#0A0A0A" fill-opacity="0.08"/>
-    <rect x="300" y="392" width="186" height="10" rx="5" fill="#0A0A0A" fill-opacity="0.65"/>
-    <rect x="300" y="430" width="228" height="10" rx="5" fill="#0A0A0A" fill-opacity="0.08"/>
-    <rect x="300" y="430" width="205" height="10" rx="5" fill="#0A0A0A" fill-opacity="0.65"/>
-    <rect x="300" y="468" width="228" height="10" rx="5" fill="#0A0A0A" fill-opacity="0.08"/>
-    <rect x="300" y="468" width="132" height="10" rx="5" fill="#0A0A0A" fill-opacity="0.65"/>
-    <rect x="300" y="506" width="228" height="10" rx="5" fill="#0A0A0A" fill-opacity="0.08"/>
-    <rect x="300" y="506" width="216" height="10" rx="5" fill="#0A0A0A" fill-opacity="0.65"/>
+    <rect x="300" y="354" width="228" height="10" rx="5" fill="#131110" fill-opacity="0.10"/>
+    <rect x="300" y="354" width="150" height="10" rx="5" fill="#131110" fill-opacity="0.85"/>
+    <rect x="300" y="392" width="228" height="10" rx="5" fill="#131110" fill-opacity="0.10"/>
+    <rect x="300" y="392" width="186" height="10" rx="5" fill="#131110" fill-opacity="0.85"/>
+    <rect x="300" y="430" width="228" height="10" rx="5" fill="#131110" fill-opacity="0.10"/>
+    <rect x="300" y="430" width="205" height="10" rx="5" fill="#131110" fill-opacity="0.85"/>
+    <rect x="300" y="468" width="228" height="10" rx="5" fill="#131110" fill-opacity="0.10"/>
+    <rect x="300" y="468" width="132" height="10" rx="5" fill="#131110" fill-opacity="0.85"/>
+    <rect x="300" y="506" width="228" height="10" rx="5" fill="#131110" fill-opacity="0.10"/>
+    <rect x="300" y="506" width="216" height="10" rx="5" fill="#131110" fill-opacity="0.85"/>
   </g>
 
   <!-- ══════════════════════════ RIGHT: fix these first ══════════════════════════ -->
-  <text x="668" y="96" font-size="15" font-weight="700" letter-spacing="0.14em" fill="#0A0A0A" fill-opacity="0.5">FIX THESE FIRST · 12 CRITICAL</text>
+  <text x="668" y="96" font-size="15" font-weight="700" letter-spacing="0.14em" fill="#131110" fill-opacity="0.74">FIX THESE FIRST · 12 CRITICAL</text>
 
   <!-- Finding rows -->
   <g>
     <!-- row 1 -->
-    <rect x="668" y="128" width="4" height="40" rx="2" fill="#0A0A0A" fill-opacity="0.85"/>
-    <text x="688" y="146" font-size="18" font-weight="600" fill="#0A0A0A">SOQL query inside a loop</text>
-    <text x="1128" y="146" text-anchor="end" font-size="12" font-weight="700" letter-spacing="0.06em" fill="#0A0A0A" fill-opacity="0.4">PERFORMANCE</text>
-    <text x="688" y="164" font-size="13" fill="#0A0A0A" fill-opacity="0.45">Hits governor limits · 6 classes</text>
+    <rect x="668" y="128" width="4" height="40" rx="2" fill="#F75A41" fill-opacity="0.70"/>
+    <text x="688" y="146" font-size="18" font-weight="600" fill="#131110">SOQL query inside a loop</text>
+    <text x="1128" y="146" text-anchor="end" font-size="12" font-weight="700" letter-spacing="0.06em" fill="#131110" fill-opacity="0.68">PERFORMANCE</text>
+    <text x="688" y="164" font-size="13" fill="#131110" fill-opacity="0.74">Hits governor limits · 6 classes</text>
     <!-- row 2 -->
-    <rect x="668" y="188" width="4" height="40" rx="2" fill="#0A0A0A" fill-opacity="0.85"/>
-    <text x="688" y="206" font-size="18" font-weight="600" fill="#0A0A0A">Hardcoded credential in Apex</text>
-    <text x="1128" y="206" text-anchor="end" font-size="12" font-weight="700" letter-spacing="0.06em" fill="#0A0A0A" fill-opacity="0.4">SECURITY</text>
-    <text x="688" y="224" font-size="13" fill="#0A0A0A" fill-opacity="0.45">Secret in source · 2 classes</text>
+    <rect x="668" y="188" width="4" height="40" rx="2" fill="#F75A41" fill-opacity="0.70"/>
+    <text x="688" y="206" font-size="18" font-weight="600" fill="#131110">Hardcoded credential in Apex</text>
+    <text x="1128" y="206" text-anchor="end" font-size="12" font-weight="700" letter-spacing="0.06em" fill="#131110" fill-opacity="0.68">SECURITY</text>
+    <text x="688" y="224" font-size="13" fill="#131110" fill-opacity="0.74">Secret in source · 2 classes</text>
     <!-- row 3 -->
-    <rect x="668" y="248" width="4" height="40" rx="2" fill="#0A0A0A" fill-opacity="0.55"/>
-    <text x="688" y="266" font-size="18" font-weight="600" fill="#0A0A0A">Profile grants Modify All Data</text>
-    <text x="1128" y="266" text-anchor="end" font-size="12" font-weight="700" letter-spacing="0.06em" fill="#0A0A0A" fill-opacity="0.4">SECURITY</text>
-    <text x="688" y="284" font-size="13" fill="#0A0A0A" fill-opacity="0.45">Over-permissioned · review access</text>
+    <rect x="668" y="248" width="4" height="40" rx="2" fill="#F75A41" fill-opacity="0.58"/>
+    <text x="688" y="266" font-size="18" font-weight="600" fill="#131110">Profile grants Modify All Data</text>
+    <text x="1128" y="266" text-anchor="end" font-size="12" font-weight="700" letter-spacing="0.06em" fill="#131110" fill-opacity="0.68">SECURITY</text>
+    <text x="688" y="284" font-size="13" fill="#131110" fill-opacity="0.74">Over-permissioned · review access</text>
     <!-- row 4 -->
-    <rect x="668" y="308" width="4" height="40" rx="2" fill="#0A0A0A" fill-opacity="0.55"/>
-    <text x="688" y="326" font-size="18" font-weight="600" fill="#0A0A0A">Org data storage at 92%</text>
-    <text x="1128" y="326" text-anchor="end" font-size="12" font-weight="700" letter-spacing="0.06em" fill="#0A0A0A" fill-opacity="0.4">PERFORMANCE</text>
-    <text x="688" y="344" font-size="13" fill="#0A0A0A" fill-opacity="0.45">Approaching the limit</text>
+    <rect x="668" y="308" width="4" height="40" rx="2" fill="#F75A41" fill-opacity="0.58"/>
+    <text x="688" y="326" font-size="18" font-weight="600" fill="#131110">Org data storage at 92%</text>
+    <text x="1128" y="326" text-anchor="end" font-size="12" font-weight="700" letter-spacing="0.06em" fill="#131110" fill-opacity="0.68">PERFORMANCE</text>
+    <text x="688" y="344" font-size="13" fill="#131110" fill-opacity="0.74">Approaching the limit</text>
     <!-- row 5 -->
-    <rect x="668" y="368" width="4" height="40" rx="2" fill="#0A0A0A" fill-opacity="0.3"/>
-    <text x="688" y="386" font-size="18" font-weight="600" fill="#0A0A0A" fill-opacity="0.75">47 unused Apex classes</text>
-    <text x="1128" y="386" text-anchor="end" font-size="12" font-weight="700" letter-spacing="0.06em" fill="#0A0A0A" fill-opacity="0.4">TECH DEBT</text>
-    <text x="688" y="404" font-size="13" fill="#0A0A0A" fill-opacity="0.45">Dead code · safe to remove</text>
+    <rect x="668" y="368" width="4" height="40" rx="2" fill="#F75A41" fill-opacity="0.46"/>
+    <text x="688" y="386" font-size="18" font-weight="600" fill="#131110" fill-opacity="0.92">47 unused Apex classes</text>
+    <text x="1128" y="386" text-anchor="end" font-size="12" font-weight="700" letter-spacing="0.06em" fill="#131110" fill-opacity="0.68">TECH DEBT</text>
+    <text x="688" y="404" font-size="13" fill="#131110" fill-opacity="0.74">Dead code · safe to remove</text>
   </g>
 
   <!-- Quick-win chip -->
-  <rect x="668" y="446" width="150" height="30" rx="15" fill="#0A0A0A"/>
-  <text x="743" y="466" text-anchor="middle" font-size="13" font-weight="700" letter-spacing="0.04em" fill="#fff">QUICK WIN</text>
+  <rect x="668" y="446" width="150" height="30" rx="15" fill="#131110"/>
+  <text x="743" y="466" text-anchor="middle" font-size="13" font-weight="700" letter-spacing="0.04em" fill="#F7F4F2">QUICK WIN</text>
 
   <!-- Footer note -->
-  <text x="668" y="512" font-size="14" font-weight="600" fill="#0A0A0A" fill-opacity="0.55">49 read-only scanners · runs on your laptop · nothing uploaded</text>
+  <text x="668" y="512" font-size="14" font-weight="600" fill="#131110" fill-opacity="0.80">49 read-only scanners · runs on your laptop · nothing uploaded</text>
 </svg>

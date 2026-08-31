@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" aria-hidden="true">
+  <!-- Background -->
+  <rect width="1200" height="600" fill="#F7F4F2"/>
+
+  <!-- Vertical separator -->
+  <line x1="578" y1="40" x2="578" y2="560" stroke="#F75A41" stroke-opacity="0.34" stroke-width="1"/>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- LEFT: the pipeline, top to bottom               -->
+  <!-- ══════════════════════════════════════════════ -->
+
+  <text x="38" y="60" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="15" font-weight="700" fill="#131110" fill-opacity="0.68" letter-spacing="0.14em">SALESFORCE TO A PORTAL WITH NO API</text>
+
+  <rect x="38" y="78" width="514" height="482" rx="12" fill="#FFFFFF" stroke="#131110" stroke-opacity="0.15" stroke-width="1.5"/>
+
+  <g font-family="Archivo, Outfit, system-ui, sans-serif">
+    <!-- 1 -->
+    <rect x="66" y="104" width="458" height="48" rx="10" fill="#131110" fill-opacity="0.07"/>
+    <text x="88" y="134" font-size="15" font-weight="700" fill="#131110" fill-opacity="0.92">Salesforce</text>
+    <text x="502" y="134" text-anchor="end" font-family="'Courier New', Courier, monospace" font-size="11" fill="#131110" fill-opacity="0.74">Apex trigger on intake</text>
+    <line x1="295" y1="152" x2="295" y2="172" stroke="#F75A41" stroke-opacity="0.70" stroke-width="2"/>
+    <path d="M295 176 L291 168 L299 168 Z" fill="#F75A41" fill-opacity="0.70"/>
+
+    <!-- 2 -->
+    <rect x="66" y="176" width="458" height="48" rx="10" fill="#131110" fill-opacity="0.07"/>
+    <text x="88" y="206" font-size="15" font-weight="700" fill="#131110" fill-opacity="0.92">RabbitMQ · CloudAMQP</text>
+    <text x="502" y="206" text-anchor="end" font-family="'Courier New', Courier, monospace" font-size="11" fill="#131110" fill-opacity="0.74">the job survives a restart</text>
+    <line x1="295" y1="224" x2="295" y2="244" stroke="#F75A41" stroke-opacity="0.70" stroke-width="2"/>
+    <path d="M295 248 L291 240 L299 240 Z" fill="#F75A41" fill-opacity="0.70"/>
+
+    <!-- 3 -->
+    <rect x="66" y="248" width="458" height="48" rx="10" fill="#131110" fill-opacity="0.07"/>
+    <text x="88" y="278" font-size="15" font-weight="700" fill="#131110" fill-opacity="0.92">Heroku worker dyno</text>
+    <text x="502" y="278" text-anchor="end" font-family="'Courier New', Courier, monospace" font-size="11" fill="#131110" fill-opacity="0.74">throng-clustered consumer</text>
+    <line x1="295" y1="296" x2="295" y2="316" stroke="#F75A41" stroke-opacity="0.70" stroke-width="2"/>
+    <path d="M295 320 L291 312 L299 312 Z" fill="#F75A41" fill-opacity="0.70"/>
+
+    <!-- 4 -->
+    <rect x="66" y="320" width="458" height="48" rx="10" fill="#131110" fill-opacity="0.07"/>
+    <text x="88" y="350" font-size="15" font-weight="700" fill="#131110" fill-opacity="0.92">Puppeteer · headless Chrome</text>
+    <text x="502" y="350" text-anchor="end" font-family="'Courier New', Courier, monospace" font-size="11" fill="#131110" fill-opacity="0.74">what a human would click</text>
+    <line x1="295" y1="368" x2="295" y2="388" stroke="#F75A41" stroke-opacity="0.70" stroke-width="2"/>
+    <path d="M295 392 L291 384 L299 384 Z" fill="#F75A41" fill-opacity="0.70"/>
+
+    <!-- 5 : the wall the whole post is about -->
+    <rect x="66" y="392" width="458" height="48" rx="10" fill="#F75A41" fill-opacity="0.12" stroke="#F75A41" stroke-opacity="0.50" stroke-width="1.5"/>
+    <text x="88" y="422" font-size="15" font-weight="700" fill="#131110" fill-opacity="0.92">Fusion Web Clinic</text>
+    <text x="502" y="422" text-anchor="end" font-family="'Courier New', Courier, monospace" font-size="11" font-weight="700" fill="#131110" fill-opacity="0.92">NO API. ONLY A LOGIN PAGE.</text>
+    <line x1="295" y1="440" x2="295" y2="460" stroke="#F75A41" stroke-opacity="0.70" stroke-width="2"/>
+    <path d="M295 464 L291 456 L299 456 Z" fill="#F75A41" fill-opacity="0.70"/>
+
+    <!-- 6 -->
+    <rect x="66" y="464" width="458" height="48" rx="10" fill="#131110" fill-opacity="0.07"/>
+    <text x="88" y="494" font-family="'Courier New', Courier, monospace" font-size="14" font-weight="700" fill="#131110" fill-opacity="0.92">POST /updateSyncRequest/</text>
+    <text x="502" y="494" text-anchor="end" font-family="'Courier New', Courier, monospace" font-size="11" fill="#131110" fill-opacity="0.74">the patient id, or the error</text>
+  </g>
+
+  <text x="88" y="538" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="13" fill="#131110" fill-opacity="0.74">Either way, Salesforce learns what actually happened.</text>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- RIGHT: what the vendor exposes, and why it holds -->
+  <!-- ══════════════════════════════════════════════ -->
+
+  <text x="618" y="64" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="15" font-weight="700" fill="#131110" fill-opacity="0.68" letter-spacing="0.14em">WHAT THE VENDOR EXPOSES</text>
+
+  <g font-family="Archivo, Outfit, system-ui, sans-serif" font-size="16" font-weight="600">
+    <text x="618" y="122" fill="#131110" fill-opacity="0.86">Public API</text>
+    <text x="1160" y="122" text-anchor="end" font-family="'Courier New', Courier, monospace" font-size="14" fill="#131110" fill-opacity="0.62">none</text>
+    <line x1="618" y1="138" x2="1160" y2="138" stroke="#131110" stroke-opacity="0.10" stroke-width="1"/>
+
+    <text x="618" y="168" fill="#131110" fill-opacity="0.86">Webhooks</text>
+    <text x="1160" y="168" text-anchor="end" font-family="'Courier New', Courier, monospace" font-size="14" fill="#131110" fill-opacity="0.62">none</text>
+    <line x1="618" y1="184" x2="1160" y2="184" stroke="#131110" stroke-opacity="0.10" stroke-width="1"/>
+
+    <text x="618" y="214" fill="#131110" fill-opacity="0.86">Export endpoints</text>
+    <text x="1160" y="214" text-anchor="end" font-family="'Courier New', Courier, monospace" font-size="14" fill="#131110" fill-opacity="0.62">none</text>
+    <line x1="618" y1="230" x2="1160" y2="230" stroke="#131110" stroke-opacity="0.10" stroke-width="1"/>
+
+    <rect x="618" y="242" width="542" height="38" rx="8" fill="#F75A41" fill-opacity="0.10"/>
+    <rect x="618" y="242" width="4" height="38" rx="2" fill="#F75A41" fill-opacity="0.70"/>
+    <text x="640" y="267" fill="#131110" fill-opacity="0.92">A login page</text>
+    <text x="1140" y="267" text-anchor="end" font-family="'Courier New', Courier, monospace" font-size="14" font-weight="700" fill="#131110" fill-opacity="0.92">yes</text>
+  </g>
+
+  <text x="618" y="326" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="15" font-weight="700" fill="#131110" fill-opacity="0.68" letter-spacing="0.14em">WHY IT HOLDS UP IN PRODUCTION</text>
+
+  <g font-family="Archivo, Outfit, system-ui, sans-serif">
+    <text x="618" y="362" font-size="17" font-weight="600" fill="#131110" fill-opacity="0.92">A queue, not a direct call</text>
+    <text x="618" y="382" font-size="13" fill="#131110" fill-opacity="0.74">Jobs survive a restart and consumers scale sideways</text>
+
+    <text x="618" y="416" font-size="17" font-weight="600" fill="#131110" fill-opacity="0.92">Puppeteer, not Cheerio</text>
+    <text x="618" y="436" font-size="13" fill="#131110" fill-opacity="0.74">Fusion renders client-side; there is no HTML on the wire to parse</text>
+
+    <text x="618" y="470" font-size="17" font-weight="600" fill="#131110" fill-opacity="0.92">Idempotent field writes</text>
+    <text x="618" y="490" font-size="13" fill="#131110" fill-opacity="0.74">Read the field first, skip the write when nothing has changed</text>
+  </g>
+
+  <line x1="618" y1="516" x2="1160" y2="516" stroke="#F75A41" stroke-opacity="0.40" stroke-width="1"/>
+  <text x="618" y="542" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="17" font-weight="700" fill="#131110" fill-opacity="0.92">When there is no API, the browser is the API.</text>
+</svg>

@@ -4,7 +4,7 @@ date: 2022-11-11
 category: Salesforce
 excerpt: "Three ways to move contest entries from ViralSweep into Salesforce — Zapier, webhooks, or custom Apex — and how to pick between them before you build the wrong one."
 readTime: 3
-image: /blog-images/a08376513035a117d1b150b7224680ffd386769a-1200x600.jpg
+image: /blog-images/viralsweep-entries-into-lead-or-custom-object-salesforce-hero.svg
 published: true
 author: "Vikash Agarwal"
 authorDesignation: "Technical Architect"

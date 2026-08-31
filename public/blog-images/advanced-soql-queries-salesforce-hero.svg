@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" aria-hidden="true">
+  <rect width="1200" height="600" fill="#F7F4F2"/>
+  <line x1="578" y1="40" x2="578" y2="560" stroke="#F75A41" stroke-opacity="0.34" stroke-width="1"/>
+
+  <!-- LEFT: four things the database will do for you -->
+  <text x="38" y="60" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="15" font-weight="700" fill="#131110" fill-opacity="0.68" letter-spacing="0.14em">WORK THAT BELONGS IN THE QUERY</text>
+
+  <rect x="38" y="78" width="514" height="482" rx="12" fill="#FFFFFF" stroke="#131110" stroke-opacity="0.15" stroke-width="1.5"/>
+
+  <text x="60" y="108" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="10" font-weight="700" fill="#131110" fill-opacity="0.68" letter-spacing="0.12em">PARENT TO CHILDREN, ONE QUERY</text>
+  <rect x="60" y="118" width="470" height="58" rx="8" fill="#131110" fill-opacity="0.06"/>
+  <rect x="60" y="118" width="4" height="58" rx="2" fill="#131110" fill-opacity="0.14"/>
+  <g font-family="'Courier New', Courier, monospace" font-size="12.5" fill="#131110" fill-opacity="0.86">
+    <text x="84" y="140">SELECT Id, Name, (SELECT Amount__c FROM Invoices__r)</text>
+    <text x="84" y="162">FROM Account WHERE Name = 'Acme'</text>
+  </g>
+  <text x="84" y="194" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="12" fill="#131110" fill-opacity="0.74">Plural child relationship &#8212; not the lookup field name.</text>
+
+  <text x="60" y="222" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="10" font-weight="700" fill="#131110" fill-opacity="0.68" letter-spacing="0.12em">SUMMED IN THE DATABASE, NOT IN A LOOP</text>
+  <rect x="60" y="232" width="470" height="34" rx="8" fill="#131110" fill-opacity="0.06"/>
+  <rect x="60" y="232" width="4" height="34" rx="2" fill="#131110" fill-opacity="0.14"/>
+  <text x="84" y="255" font-family="'Courier New', Courier, monospace" font-size="12.5" fill="#131110" fill-opacity="0.86">SELECT Account__c, SUM(Amount__c) total ... GROUP BY</text>
+  <text x="84" y="284" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="12" fill="#131110" fill-opacity="0.74">Returns AggregateResult, not sObjects. Alias what you read.</text>
+
+  <text x="60" y="312" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="10" font-weight="700" fill="#131110" fill-opacity="0.68" letter-spacing="0.12em">THE RUNNING USER&#8217;S TIMEZONE AND FISCAL YEAR</text>
+  <rect x="60" y="322" width="470" height="34" rx="8" fill="#131110" fill-opacity="0.06"/>
+  <rect x="60" y="322" width="4" height="34" rx="2" fill="#131110" fill-opacity="0.14"/>
+  <text x="84" y="345" font-family="'Courier New', Courier, monospace" font-size="12.5" fill="#131110" fill-opacity="0.86">WHERE CreatedDate = THIS_MONTH</text>
+  <text x="84" y="374" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="12" fill="#131110" fill-opacity="0.74">Almost always what you actually meant by &#8220;this month&#8221;.</text>
+
+  <text x="60" y="402" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="10" font-weight="700" fill="#131110" fill-opacity="0.68" letter-spacing="0.12em">THE ONE WORTH REMEMBERING &#183; ANTI-JOIN</text>
+  <rect x="60" y="412" width="470" height="58" rx="8" fill="#F75A41" fill-opacity="0.12"/>
+  <rect x="60" y="412" width="4" height="58" rx="2" fill="#F75A41" fill-opacity="0.70"/>
+  <g font-family="'Courier New', Courier, monospace" font-size="12.5" font-weight="700" fill="#131110" fill-opacity="0.92">
+    <text x="84" y="434">SELECT Id, Name FROM Account WHERE Id NOT IN</text>
+    <text x="84" y="456">(SELECT Account__c FROM Invoice__c WHERE Status__c='Paid')</text>
+  </g>
+  <text x="84" y="488" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="12" fill="#131110" fill-opacity="0.80">Accounts with no paid invoice, without pulling either table into memory.</text>
+
+  <line x1="60" y1="508" x2="530" y2="508" stroke="#F75A41" stroke-opacity="0.40" stroke-width="1"/>
+  <text x="60" y="532" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="14" font-weight="700" fill="#131110" fill-opacity="0.92">Two semi-joins or anti-joins per query, and no nesting.</text>
+  <text x="60" y="550" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="12.5" fill="#131110" fill-opacity="0.74">Need a third and the work belongs in Apex.</text>
+
+  <!-- RIGHT: what discards the index, and the arithmetic -->
+  <text x="618" y="64" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="15" font-weight="700" fill="#131110" fill-opacity="0.68" letter-spacing="0.14em">WHAT THROWS THE INDEX AWAY</text>
+
+  <g font-family="'Courier New', Courier, monospace" font-size="15">
+    <rect x="618" y="86" width="542" height="46" rx="8" fill="#131110" fill-opacity="0.06"/>
+    <rect x="618" y="86" width="4" height="46" rx="2" fill="#131110" fill-opacity="0.14"/>
+    <text x="642" y="115" fill="#131110" fill-opacity="0.86">Name LIKE '%acme'</text>
+    <text x="1140" y="115" text-anchor="end" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="12" font-weight="700" letter-spacing="0.06em" fill="#131110" fill-opacity="0.68">LEADING WILDCARD</text>
+
+    <rect x="618" y="142" width="542" height="46" rx="8" fill="#131110" fill-opacity="0.06"/>
+    <rect x="618" y="142" width="4" height="46" rx="2" fill="#131110" fill-opacity="0.14"/>
+    <text x="642" y="171" fill="#131110" fill-opacity="0.86">Status__c != 'Paid'</text>
+    <text x="1140" y="171" text-anchor="end" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="12" font-weight="700" letter-spacing="0.06em" fill="#131110" fill-opacity="0.68">NEGATIVE OPERATOR</text>
+
+    <rect x="618" y="198" width="542" height="46" rx="8" fill="#F75A41" fill-opacity="0.12"/>
+    <rect x="618" y="198" width="4" height="46" rx="2" fill="#F75A41" fill-opacity="0.70"/>
+    <text x="642" y="227" font-weight="700" fill="#131110" fill-opacity="0.92">CALENDAR_MONTH(CreatedDate) = 3</text>
+    <text x="1140" y="227" text-anchor="end" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="12" font-weight="700" letter-spacing="0.06em" fill="#131110" fill-opacity="0.92">FUNCTION ON FIELD</text>
+  </g>
+  <text x="618" y="268" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="13" fill="#131110" fill-opacity="0.80">Reach for a calendar function only when the period is not contiguous.</text>
+
+  <text x="618" y="316" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="15" font-weight="700" fill="#131110" fill-opacity="0.68" letter-spacing="0.14em">THE ARITHMETIC, PER SYNCHRONOUS TRANSACTION</text>
+
+  <g font-family="Archivo, Outfit, system-ui, sans-serif">
+    <rect x="618" y="334" width="172" height="84" rx="12" fill="#FFFFFF" stroke="#131110" stroke-opacity="0.15" stroke-width="1.5"/>
+    <text x="640" y="382" font-size="34" font-weight="900" fill="#131110" fill-opacity="0.92">100</text>
+    <text x="640" y="404" font-size="10" font-weight="700" fill="#131110" fill-opacity="0.68" letter-spacing="0.1em">SOQL QUERIES</text>
+
+    <rect x="803" y="334" width="172" height="84" rx="12" fill="#FFFFFF" stroke="#131110" stroke-opacity="0.15" stroke-width="1.5"/>
+    <text x="825" y="382" font-size="34" font-weight="900" fill="#131110" fill-opacity="0.92">50,000</text>
+    <text x="825" y="404" font-size="10" font-weight="700" fill="#131110" fill-opacity="0.68" letter-spacing="0.1em">ROWS RETURNED</text>
+
+    <rect x="988" y="334" width="172" height="84" rx="12" fill="#FFFFFF" stroke="#131110" stroke-opacity="0.15" stroke-width="1.5"/>
+    <text x="1010" y="382" font-size="34" font-weight="900" fill="#131110" fill-opacity="0.92">5</text>
+    <text x="1010" y="404" font-size="10" font-weight="700" fill="#131110" fill-opacity="0.68" letter-spacing="0.1em">LEVELS UP A CHILD</text>
+  </g>
+
+  <rect x="618" y="440" width="542" height="118" rx="12" fill="#131110" fill-opacity="0.92"/>
+  <rect x="642" y="458" width="196" height="20" rx="10" fill="#F7F4F2" fill-opacity="0.16"/>
+  <text x="654" y="472" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="9.5" font-weight="700" fill="#F7F4F2" fill-opacity="0.90" letter-spacing="0.12em">QUERY PLAN, DEV CONSOLE</text>
+  <text x="642" y="506" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="19" font-weight="700" fill="#F7F4F2" fill-opacity="0.95">A cost above 1 is a table scan.</text>
+  <text x="642" y="532" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="14" fill="#F7F4F2" fill-opacity="0.80">Rows collapsed by GROUP BY count as groups, not as records &#8212;</text>
+  <text x="642" y="550" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="14" fill="#F7F4F2" fill-opacity="0.80">which is how an aggregate stays inside a limit a loop would break.</text>
+</svg>

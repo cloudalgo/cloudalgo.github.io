@@ -9,6 +9,7 @@ published: true
 author: "Sandeep Kumar"
 authorDesignation: "Technical Architect"
 authorPhoto: "/blog-images/a0bac224191c550df6e3a1f8ade4206b0927cbfb-515x515.jpg"
+image: /blog-images/salesforce-heroku-architecture-patterns-hero.svg
 ---
 
 The integration between Salesforce and Heroku can be done several different ways, and the choice you make early tends to become load-bearing infrastructure later. We have inherited codebases built on every pattern described below, and the quality of the original decision usually shows.

@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" aria-hidden="true">
+  <rect width="1200" height="600" fill="#F7F4F2"/>
+  <line x1="578" y1="40" x2="578" y2="560" stroke="#F75A41" stroke-opacity="0.34" stroke-width="1"/>
+
+  <!-- LEFT: the function -->
+  <rect x="38" y="40" width="514" height="520" rx="12" fill="#FFFFFF" stroke="#131110" stroke-opacity="0.15" stroke-width="1.5"/>
+  <rect x="38" y="40" width="514" height="40" rx="12" fill="#131110" fill-opacity="0.08"/>
+  <rect x="38" y="68" width="514" height="12" fill="#131110" fill-opacity="0.08"/>
+  <line x1="38" y1="80" x2="552" y2="80" stroke="#F75A41" stroke-opacity="0.34" stroke-width="1"/>
+  <circle cx="66" cy="60" r="6" fill="#131110" fill-opacity="0.16"/>
+  <circle cx="88" cy="60" r="6" fill="#131110" fill-opacity="0.16"/>
+  <circle cx="110" cy="60" r="6" fill="#131110" fill-opacity="0.16"/>
+  <text x="295" y="64" text-anchor="middle" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="11" fill="#131110" fill-opacity="0.62" letter-spacing="0.06em">DateUtils.cls</text>
+
+  <g font-family="'Courier New', Courier, monospace" font-size="13.5" fill="#131110" fill-opacity="0.86">
+    <text x="60" y="118">public static DateTime</text>
+    <text x="60" y="140">getDateTimeValueInGMTAsPerTimezone(</text>
+    <text x="84" y="162">String timezoneValue,</text>
+    <text x="84" y="184">Date dateValue,</text>
+    <text x="84" y="206">Time timeValue</text>
+    <text x="60" y="228">) {</text>
+
+    <text x="84" y="262">Timezone tz =</text>
+    <text x="108" y="284">Timezone.getTimeZone(timezoneValue);</text>
+
+    <text x="84" y="318">Long ms = Datetime</text>
+    <text x="108" y="340">.newInstanceGmt(dateValue, timeValue)</text>
+    <text x="108" y="362">.getTime();</text>
+
+    <text x="84" y="396">Long offset = tz.getOffset(</text>
+    <text x="108" y="418">Datetime.newInstanceGmt(dateValue, timeValue)</text>
+    <text x="84" y="440">);</text>
+  </g>
+
+  <rect x="60" y="458" width="470" height="34" rx="8" fill="#F75A41" fill-opacity="0.12"/>
+  <rect x="60" y="458" width="4" height="34" rx="2" fill="#F75A41" fill-opacity="0.70"/>
+  <text x="84" y="481" font-family="'Courier New', Courier, monospace" font-size="13.5" font-weight="700" fill="#131110" fill-opacity="0.92">return Datetime.newInstance(ms - offset);</text>
+
+  <text x="60" y="516" font-family="'Courier New', Courier, monospace" font-size="13.5" fill="#131110" fill-opacity="0.86">}</text>
+  <text x="60" y="542" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="13" fill="#131110" fill-opacity="0.74">The offset is asked for on the date itself. That is the whole trick.</text>
+
+  <!-- RIGHT: the same wall clock, two answers -->
+  <text x="618" y="64" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="15" font-weight="700" fill="#131110" fill-opacity="0.68" letter-spacing="0.14em">SAME WALL CLOCK, TWO ANSWERS</text>
+
+  <rect x="618" y="90" width="542" height="96" rx="12" fill="#FFFFFF" stroke="#131110" stroke-opacity="0.15" stroke-width="1.5"/>
+  <text x="642" y="118" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="10" font-weight="700" fill="#131110" fill-opacity="0.68" letter-spacing="0.12em">DEC 22 &#183; STANDARD TIME</text>
+  <text x="642" y="148" font-family="'Courier New', Courier, monospace" font-size="15" fill="#131110" fill-opacity="0.86">2022-12-22 18:30:02</text>
+  <line x1="874" y1="142" x2="912" y2="142" stroke="#F75A41" stroke-opacity="0.70" stroke-width="2"/>
+  <path d="M912 142 L904 138 L904 146 Z" fill="#F75A41" fill-opacity="0.70"/>
+  <text x="926" y="148" font-family="'Courier New', Courier, monospace" font-size="15" font-weight="700" fill="#131110" fill-opacity="0.92">2022-12-23 02:30:02</text>
+  <text x="642" y="172" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="12" fill="#131110" fill-opacity="0.74">America/Los_Angeles &#183; eight hours behind &#183; the date rolls over</text>
+
+  <rect x="618" y="200" width="542" height="96" rx="12" fill="#FFFFFF" stroke="#131110" stroke-opacity="0.15" stroke-width="1.5"/>
+  <text x="642" y="228" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="10" font-weight="700" fill="#131110" fill-opacity="0.68" letter-spacing="0.12em">MAY 22 &#183; DAYLIGHT SAVING</text>
+  <text x="642" y="258" font-family="'Courier New', Courier, monospace" font-size="15" fill="#131110" fill-opacity="0.86">2022-05-22 18:30:02</text>
+  <line x1="874" y1="252" x2="912" y2="252" stroke="#F75A41" stroke-opacity="0.70" stroke-width="2"/>
+  <path d="M912 252 L904 248 L904 256 Z" fill="#F75A41" fill-opacity="0.70"/>
+  <text x="926" y="258" font-family="'Courier New', Courier, monospace" font-size="15" font-weight="700" fill="#131110" fill-opacity="0.92">2022-05-23 01:30:02</text>
+  <text x="642" y="282" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="12" fill="#131110" fill-opacity="0.74">Same zone id &#183; seven hours behind &#183; one hour of difference</text>
+
+  <!-- the id you pass decides it -->
+  <text x="618" y="342" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="15" font-weight="700" fill="#131110" fill-opacity="0.68" letter-spacing="0.14em">WHICH STRING YOU PASS DECIDES IT</text>
+
+  <g font-family="'Courier New', Courier, monospace" font-size="15">
+    <rect x="618" y="360" width="542" height="38" rx="8" fill="#131110" fill-opacity="0.06"/>
+    <rect x="618" y="360" width="4" height="38" rx="2" fill="#131110" fill-opacity="0.14"/>
+    <text x="642" y="385" fill="#131110" fill-opacity="0.86">'PST'</text>
+    <text x="1140" y="385" text-anchor="end" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="13" font-weight="700" fill="#131110" fill-opacity="0.74">A FIXED OFFSET, ALL YEAR</text>
+
+    <rect x="618" y="406" width="542" height="38" rx="8" fill="#F75A41" fill-opacity="0.12"/>
+    <rect x="618" y="406" width="4" height="38" rx="2" fill="#F75A41" fill-opacity="0.70"/>
+    <text x="642" y="431" font-weight="700" fill="#131110" fill-opacity="0.92">'America/Los_Angeles'</text>
+    <text x="1140" y="431" text-anchor="end" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="13" font-weight="700" fill="#131110" fill-opacity="0.92">FOLLOWS THE RULES</text>
+  </g>
+
+  <rect x="618" y="462" width="542" height="96" rx="12" fill="#131110" fill-opacity="0.92"/>
+  <rect x="642" y="480" width="150" height="20" rx="10" fill="#F7F4F2" fill-opacity="0.16"/>
+  <text x="654" y="494" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="9.5" font-weight="700" fill="#F7F4F2" fill-opacity="0.90" letter-spacing="0.12em">PASS THE ZONE ID</text>
+  <text x="642" y="526" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="17" font-weight="700" fill="#F7F4F2" fill-opacity="0.95">Country/City, not the abbreviation.</text>
+  <text x="642" y="548" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="14" fill="#F7F4F2" fill-opacity="0.80">An abbreviation cannot know which side of the switch a date sits on.</text>
+</svg>

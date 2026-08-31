@@ -5,7 +5,7 @@ category: Heroku
 excerpt: "Airflow on Heroku, a bronze/silver/gold split in Postgres, and Heroku Connect pointed only at the gold tables. Why the layering is what keeps bad records out of Salesforce."
 seoDescription: "Airflow on Heroku, a bronze/silver/gold split in Postgres, and Heroku Connect pointed only at the gold tables. Why the layering keeps bad records out."
 readTime: 4
-image: /blog-images/921830719b89800a07f795a55ebea355aeb5b9b7-1200x600.jpg
+image: /blog-images/apache-airflow-on-heroku-salesforce-data-hero.svg
 published: true
 author: "Vikash Agarwal"
 authorDesignation: "Technical Architect"

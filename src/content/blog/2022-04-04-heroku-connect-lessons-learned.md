@@ -5,7 +5,7 @@ category: Heroku
 excerpt: "External IDs, formula fields that never sync, tables a reload silently deletes, and the Bulk API conditions nobody reads. Mistakes from real Heroku Connect projects and what to do instead."
 seoDescription: "External IDs, formula fields that never sync, tables a reload silently deletes, and the Bulk API conditions nobody reads — from real Heroku Connect projects."
 readTime: 6
-image: /blog-images/2f23904ac526708a919bb2c5e4b3574dbb601fee-800x239.webp
+image: /blog-images/heroku-connect-lessons-learned-hero.svg
 published: true
 author: "Vikash Agarwal"
 authorDesignation: "Technical Architect"

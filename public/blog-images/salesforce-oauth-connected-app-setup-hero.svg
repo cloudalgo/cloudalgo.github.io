@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" aria-hidden="true">
+  <rect width="1200" height="600" fill="#F7F4F2"/>
+  <line x1="578" y1="40" x2="578" y2="560" stroke="#F75A41" stroke-opacity="0.34" stroke-width="1"/>
+
+  <!-- LEFT: the web server flow, four steps -->
+  <text x="38" y="60" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="15" font-weight="700" fill="#131110" fill-opacity="0.68" letter-spacing="0.14em">THE WEB SERVER FLOW, IN ORDER</text>
+
+  <rect x="38" y="78" width="514" height="482" rx="12" fill="#FFFFFF" stroke="#131110" stroke-opacity="0.15" stroke-width="1.5"/>
+
+  <g font-family="Archivo, Outfit, system-ui, sans-serif">
+    <rect x="66" y="104" width="458" height="66" rx="10" fill="#131110" fill-opacity="0.07"/>
+    <text x="88" y="130" font-size="15" font-weight="700" fill="#131110" fill-opacity="0.92">Your app redirects to the authorize endpoint</text>
+    <text x="88" y="154" font-family="'Courier New', Courier, monospace" font-size="11.5" fill="#131110" fill-opacity="0.74">client_id &#183; redirect_uri &#183; scope &#183; state &#183; code_challenge</text>
+    <line x1="295" y1="170" x2="295" y2="190" stroke="#F75A41" stroke-opacity="0.70" stroke-width="2"/>
+    <path d="M295 194 L291 186 L299 186 Z" fill="#F75A41" fill-opacity="0.70"/>
+
+    <rect x="66" y="196" width="458" height="66" rx="10" fill="#131110" fill-opacity="0.07"/>
+    <text x="88" y="222" font-size="15" font-weight="700" fill="#131110" fill-opacity="0.92">The user logs in and approves the scopes</text>
+    <text x="88" y="246" font-family="'Courier New', Courier, monospace" font-size="11.5" fill="#131110" fill-opacity="0.74">login.salesforce.com &#183; test.salesforce.com for a sandbox</text>
+    <line x1="295" y1="262" x2="295" y2="282" stroke="#F75A41" stroke-opacity="0.70" stroke-width="2"/>
+    <path d="M295 286 L291 278 L299 278 Z" fill="#F75A41" fill-opacity="0.70"/>
+
+    <rect x="66" y="288" width="458" height="66" rx="10" fill="#F75A41" fill-opacity="0.12" stroke="#F75A41" stroke-opacity="0.50" stroke-width="1.5"/>
+    <text x="88" y="314" font-size="15" font-weight="700" fill="#131110" fill-opacity="0.92">Salesforce redirects back with a code</text>
+    <text x="88" y="338" font-size="13" font-weight="700" fill="#131110" fill-opacity="0.92">An authorization code. Not an access token.</text>
+    <text x="502" y="338" text-anchor="end" font-family="'Courier New', Courier, monospace" font-size="11" fill="#131110" fill-opacity="0.80">in the browser URL</text>
+    <line x1="295" y1="354" x2="295" y2="374" stroke="#F75A41" stroke-opacity="0.70" stroke-width="2"/>
+    <path d="M295 378 L291 370 L299 370 Z" fill="#F75A41" fill-opacity="0.70"/>
+
+    <rect x="66" y="380" width="458" height="66" rx="10" fill="#131110" fill-opacity="0.07"/>
+    <text x="88" y="406" font-size="15" font-weight="700" fill="#131110" fill-opacity="0.92">Your server exchanges it at the token endpoint</text>
+    <text x="88" y="430" font-family="'Courier New', Courier, monospace" font-size="11.5" fill="#131110" fill-opacity="0.74">code + code_verifier + client_secret</text>
+  </g>
+
+  <line x1="66" y1="472" x2="524" y2="472" stroke="#F75A41" stroke-opacity="0.40" stroke-width="1"/>
+  <text x="66" y="498" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="15" font-weight="700" fill="#131110" fill-opacity="0.92">The code is short-lived, single-use, and worthless alone.</text>
+  <text x="66" y="522" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="13" fill="#131110" fill-opacity="0.74">The secret never leaves your server. Neither do the tokens.</text>
+  <text x="66" y="544" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="13" fill="#131110" fill-opacity="0.74">And check <tspan font-family="'Courier New', Courier, monospace" font-weight="700">state</tspan> &#8212; it is what ties the callback to your own request.</text>
+
+  <!-- RIGHT: the three that cost time -->
+  <text x="618" y="64" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="15" font-weight="700" fill="#131110" fill-opacity="0.68" letter-spacing="0.14em">THREE DETAILS THE WALKTHROUGHS SKIP</text>
+
+  <rect x="618" y="84" width="542" height="112" rx="12" fill="#FFFFFF" stroke="#F75A41" stroke-opacity="0.50" stroke-width="1.5"/>
+  <rect x="642" y="102" width="4" height="52" rx="2" fill="#F75A41" fill-opacity="0.70"/>
+  <text x="664" y="120" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="17" font-weight="700" fill="#131110" fill-opacity="0.92">Callback URL, character for character</text>
+  <text x="664" y="146" font-family="'Courier New', Courier, monospace" font-size="13" fill="#131110" fill-opacity="0.86">/oauth/callback &#8800; /oauth/callback/</text>
+  <text x="1136" y="146" text-anchor="end" font-family="'Courier New', Courier, monospace" font-size="13" font-weight="700" fill="#131110" fill-opacity="0.92">redirect_uri_mismatch</text>
+  <text x="642" y="176" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="13" fill="#131110" fill-opacity="0.80">Scheme, port and trailing slash included &#8212; and the error names neither end.</text>
+
+  <rect x="618" y="208" width="542" height="98" rx="12" fill="#FFFFFF" stroke="#131110" stroke-opacity="0.15" stroke-width="1.5"/>
+  <rect x="642" y="226" width="4" height="52" rx="2" fill="#F75A41" fill-opacity="0.58"/>
+  <text x="664" y="244" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="17" font-weight="700" fill="#131110" fill-opacity="0.92">PKCE is on by default. Leave it on.</text>
+  <text x="664" y="270" font-family="'Courier New', Courier, monospace" font-size="13" fill="#131110" fill-opacity="0.86">code_challenge_method=S256</text>
+  <text x="642" y="296" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="13" fill="#131110" fill-opacity="0.80">The three-parameter authorize URL in older tutorials is rejected against it.</text>
+
+  <rect x="618" y="318" width="542" height="98" rx="12" fill="#FFFFFF" stroke="#131110" stroke-opacity="0.15" stroke-width="1.5"/>
+  <rect x="642" y="336" width="4" height="52" rx="2" fill="#F75A41" fill-opacity="0.46"/>
+  <text x="664" y="354" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="17" font-weight="700" fill="#131110" fill-opacity="0.92">Every API call goes to instance_url</text>
+  <text x="664" y="380" font-family="'Courier New', Courier, monospace" font-size="13" fill="#131110" fill-opacity="0.86">https://yourcompany.my.salesforce.com</text>
+  <text x="642" y="406" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="13" fill="#131110" fill-opacity="0.80">Store it beside the tokens. It differs per org, and an org can be moved.</text>
+
+  <rect x="618" y="438" width="542" height="120" rx="12" fill="#131110" fill-opacity="0.92"/>
+  <rect x="642" y="456" width="212" height="20" rx="10" fill="#F7F4F2" fill-opacity="0.16"/>
+  <text x="654" y="470" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="9.5" font-weight="700" fill="#F7F4F2" fill-opacity="0.90" letter-spacing="0.12em">WHEN THE REFRESH TOKEN DIES</text>
+  <text x="642" y="504" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="19" font-weight="700" fill="#F7F4F2" fill-opacity="0.95">A revocation is not a transient error.</text>
+  <text x="642" y="530" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="14" fill="#F7F4F2" fill-opacity="0.80">A password change, an admin, or the app&#8217;s own policy ends it &#8212; and</text>
+  <text x="642" y="548" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="14" fill="#F7F4F2" fill-opacity="0.80">retrying only hammers a token that will never work again.</text>
+</svg>

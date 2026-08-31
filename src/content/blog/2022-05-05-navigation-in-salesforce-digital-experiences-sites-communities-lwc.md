@@ -4,7 +4,7 @@ date: 2022-05-05
 category: Salesforce
 excerpt: "NavigationMixin.Navigate fails silently in Experience Cloud when the page API name is wrong. Here is the working comm__namedPage snippet and the exact detail to check."
 readTime: 1
-image: /blog-images/bdd4dba68c01c037c041e86132ee8a64215e2ba9-1200x600.jpg
+image: /blog-images/navigation-in-salesforce-digital-experiences-sites-communities-lwc-hero.svg
 published: true
 author: "Vikash Agarwal"
 authorDesignation: "Technical Architect"

@@ -77,16 +77,29 @@ Never widen a title by pasting a full sentence into a template. That is how five
 A crawler fetches `og:image` as a **bitmap** and none of them rasterise SVG, so
 an entry headed by a drawing cannot name that drawing. It names the PNG drawn
 *from* it: `socialCard()` in `src/build/social-cards.ts` maps `foo.svg` to
-`foo-1200x600.png`, `Base.astro` and `blog/[slug].astro` (the JSON-LD `image`)
-both go through it, and the `cloudalgo-social-cards` integration renders one
-per declared card at `astro:build:done` with sharp. The size in the filename is
-the same convention the rest of the blog's assets follow — `Base.astro` reads
-it back out to declare `og:image:width` / `og:image:height`.
+`foo-1200x630.png`, and `Base.astro` and `blog/[slug].astro` (the JSON-LD
+`image`) both go through it. The size in the filename is the same convention
+the rest of the blog's assets follow — `Base.astro` reads it back out to
+declare `og:image:width` / `og:image:height`.
 
-The card list is read out of the **emitted HTML**, not the collection, so what
-is drawn is exactly what was declared; a card named by a page whose hero SVG is
-missing fails the build rather than shipping a 404 no crawler reports. The
-generic `/og-default.jpg` is now the fallback only for an off-site SVG.
+**The card is a committed file, not a build artefact.** `npm run og` draws it —
+all published entries, or one, with `npm run og -- src/content/blog/foo.md`.
+`src/build/og-card.ts` holds the layout and reads its palette straight out of
+`themes/_press-room.scss`, so a reskin moves the card with it; the type is set
+by satori from the static TTFs vendored in `src/build/fonts/`, which emits
+every glyph as a path, so no font has to be installed here or on the runner and
+the card can never ship in a substituted face. The art column is a crop of the
+entry's own hero, cut at the widest run of uniform columns near the ideal
+aspect so the slice lands in a gutter rather than through a panel.
+
+It is a composition, so somebody looks at it before it ships. The cost of that
+is an entry whose author forgets to run the script, and nothing downstream
+would say so — a 404 `og:image` is reported by no crawler — so
+`social-cards.test.ts` walks the collection and fails when a published entry
+with an SVG hero has no committed card. `.github/workflows/journal-write.yml`
+names the script as a deliverable for the same reason.
+
+The generic `/og-default.jpg` is the fallback only for an off-site SVG.
 
 #### Legacy URLs
 

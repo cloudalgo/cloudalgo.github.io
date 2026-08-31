@@ -11,6 +11,7 @@ author: "Sandeep Kumar"
 authorDesignation: "Technical Architect"
 authorPhoto: "/blog-images/a0bac224191c550df6e3a1f8ade4206b0927cbfb-515x515.jpg"
 relatedCaseStudy: salesforce-netsuite-sync
+image: /blog-images/salesforce-netsuite-mulesoft-integration-hero.svg
 ---
 
 Every wholesale distributor has a version of the same problem.

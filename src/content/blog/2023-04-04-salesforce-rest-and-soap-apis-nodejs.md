@@ -4,7 +4,7 @@ date: 2023-04-04
 category: Salesforce
 excerpt: "Working Node.js examples for querying, creating, and bulk-inserting records over the REST API, when SOAP is still the right answer, and the API limits that shape both."
 readTime: 5
-image: /blog-images/870f59fff70dbc1fc789c519719f547d9151d3e6-1200x600.jpg
+image: /blog-images/salesforce-rest-and-soap-apis-nodejs-hero.svg
 published: true
 author: "Sandeep Kumar"
 authorDesignation: "Technical Architect"

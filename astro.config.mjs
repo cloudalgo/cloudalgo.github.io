@@ -9,15 +9,8 @@ import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 import { satteri } from '@astrojs/markdown-satteri';
 import { defineHastPlugin } from 'satteri';
-import sharp from 'sharp';
 import { unblockRedirectStub } from './src/build/redirect-stubs.ts';
 import { legacyRedirects } from './src/build/legacy-redirects.ts';
-import {
-  cardHero,
-  declaredCards,
-  CARD_WIDTH,
-  CARD_HEIGHT,
-} from './src/build/social-cards.ts';
 
 // Blog slugs dropped their YYYY-MM-DD- filename prefix (see src/content.config.ts).
 // Anything already indexed at the dated path is redirected to the clean one.
@@ -177,57 +170,6 @@ const indexableRedirects = {
   },
 };
 
-/**
- * Draw the bitmap social card for every entry headed by an SVG drawing.
- *
- * See src/build/social-cards.ts for why the card cannot be the SVG itself.
- * The list of cards is read back out of the emitted HTML rather than from the
- * content collection, so what gets drawn is exactly what got declared: a card
- * named by a page and never written would be a 404 that no crawler reports.
- *
- * Rendered at 2x through librsvg and downsampled, which is what keeps the
- * small type on these diagrams readable. The drawings are built out of boxes
- * with room in them, so the system face librsvg substitutes for Archivo sets
- * within the same bounds -- verified against a deliberately wider face.
- */
-const socialCards = {
-  name: 'cloudalgo-social-cards',
-  hooks: {
-    'astro:build:done': async ({ dir, logger }) => {
-      const root = fileURLToPath(dir);
-      const files = await readdir(root, { recursive: true });
-
-      const wanted = new Set();
-      for (const name of files) {
-        if (!name.endsWith('.html')) continue;
-        for (const card of declaredCards(await readFile(join(root, name), 'utf8'))) {
-          wanted.add(card);
-        }
-      }
-
-      for (const card of wanted) {
-        const hero = join(root, cardHero(card).slice(1));
-        let svg;
-        try {
-          svg = await readFile(hero);
-        } catch {
-          throw new Error(
-            `A page names the social card ${card}, but ${cardHero(card)} is not in the `
-              + 'built site. Every card is drawn from its SVG hero -- add the hero, or '
-              + 'point the entry at a bitmap.',
-          );
-        }
-        await sharp(svg, { density: 192 })
-          .resize(CARD_WIDTH, CARD_HEIGHT, { fit: 'contain' })
-          .png()
-          .toFile(join(root, card.slice(1)));
-      }
-
-      logger.info(`${wanted.size} social cards drawn from their SVG heroes`);
-    },
-  },
-};
-
 export default defineConfig({
   site: 'https://cloudalgo.com',
   output: 'static',
@@ -235,7 +177,6 @@ export default defineConfig({
   markdown: { processor: satteri({ hastPlugins: [satteriFigures] }) },
   integrations: [
     indexableRedirects,
-    socialCards,
     react(),
     sitemap({
       serialize: item => (blogLastmod[item.url] ? { ...item, lastmod: blogLastmod[item.url] } : item),
