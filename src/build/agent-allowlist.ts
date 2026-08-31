@@ -7,11 +7,19 @@
  * after it spent 17. Nothing in the log says which calls were refused, only how
  * many, so the waste is invisible until someone pays for a `--debug` run.
  *
- * The skills are the ground truth for what gets typed: they are handed to the
- * model as authoritative instructions, and a command written in one is a
- * command the model will try. So the gap is checkable statically -- read the
- * commands out of the skills a workflow names, read the rules out of that
- * workflow's --allowedTools, and see whether each is permitted.
+ * The skills and the workflow prompt are the ground truth for what gets typed:
+ * both are handed to the model as authoritative instructions, and a command
+ * written in either is a command the model will try. So the gap is checkable
+ * statically -- read the commands out of the prompt and the skills it names,
+ * read the rules out of that workflow's --allowedTools, and see whether each is
+ * permitted.
+ *
+ * Note what this does NOT prove. It shows every command asked for is allowed;
+ * it says nothing about whether an allowed rule is still needed. Reading
+ * `journal-radar.yml`'s allowlist next to its skills makes `Bash(curl:*)` look
+ * dead -- no skill mentions curl. The prompt does, in prose, and the feeds it
+ * pulls are the whole job. An unused-looking rule has to be read for, not
+ * inferred from silence.
  */
 
 /** One shell command found in a skill, with where it was written. */
@@ -56,6 +64,27 @@ export function bashRules(allowedTools: string[]): string[] {
   return allowedTools
     .map((tool) => tool.match(/^Bash\((.*)\)$/)?.[1])
     .filter((rule): rule is string => Boolean(rule));
+}
+
+/**
+ * The body of a workflow's `prompt: |` block scalar.
+ *
+ * The prompt gives the model commands of its own -- `gh issue view`, the prose
+ * gate -- so it needs checking alongside the skills it names. Everything from
+ * the fence to the next line at or below its own indentation is the block.
+ */
+export function promptBlock(workflowYaml: string): string {
+  const lines = workflowYaml.split('\n');
+  const start = lines.findIndex((l) => /^\s*prompt:\s*\|/.test(l));
+  if (start === -1) return '';
+
+  const indent = lines[start].search(/\S/);
+  const body: string[] = [];
+  for (const line of lines.slice(start + 1)) {
+    if (line.trim() && line.search(/\S/) <= indent) break;
+    body.push(line.trim());
+  }
+  return body.join('\n');
 }
 
 /** The `.claude/skills/<name>/SKILL.md` paths a workflow's prompt names. */
@@ -155,7 +184,11 @@ function stripComment(line: string): string {
  * a known binary followed by whitespace. The whitespace matters -- it is what
  * keeps the frontmatter example's `date: 2026-09-01` out of the results.
  */
-export function documentedCommands(markdown: string, file: string): DocumentedCommand[] {
+export function documentedCommands(
+  markdown: string,
+  file: string,
+  { bareLines = false } = {},
+): DocumentedCommand[] {
   const found: DocumentedCommand[] = [];
   let inShellFence = false;
   let inOtherFence = false;
@@ -188,6 +221,12 @@ export function documentedCommands(markdown: string, file: string): DocumentedCo
       return;
     }
     if (inOtherFence) return;
+
+    // A workflow prompt writes its commands as plain indented lines rather
+    // than in fences. Requiring whitespace after the binary name is what keeps
+    // the prose out -- "curl, because they are the reliable source" does not
+    // match, and neither does the frontmatter example's `date: 2026-09-01`.
+    if (bareLines) push(line);
 
     for (const span of line.matchAll(/`([^`]+)`/g)) push(span[1]);
   });

@@ -6,6 +6,7 @@ import {
   isPermitted,
   parseAllowedTools,
   ruleAllows,
+  promptBlock,
   skillsNamedBy,
   splitPipeline,
 } from './agent-allowlist';
@@ -77,7 +78,30 @@ describe('documentedCommands', () => {
   });
 });
 
-describe('the CI allowlists cover the skills their workflows load', () => {
+describe('promptBlock', () => {
+  it('takes the block scalar and stops at the next key', () => {
+    const yaml = [
+      '        with:',
+      '          prompt: |',
+      '            Read the issue:',
+      '',
+      '              gh issue view 12',
+      '          claude_args: |',
+      '            --max-turns 120',
+    ].join('\n');
+
+    expect(promptBlock(yaml)).toBe('Read the issue:\n\ngh issue view 12');
+  });
+
+  it('does not read prose that opens with a command name as a command', () => {
+    // journal-radar's prompt says "...directly with\ncurl, because they are
+    // the reliable source". The comma is what saves it.
+    expect(documentedCommands('curl, because they are reliable', 'p', { bareLines: true }))
+      .toEqual([]);
+  });
+});
+
+describe('the CI allowlists cover what their workflows ask for', () => {
   for (const workflow of WORKFLOWS) {
     it(`${workflow}`, () => {
       const yaml = read(workflow);
@@ -88,9 +112,10 @@ describe('the CI allowlists cover the skills their workflows load', () => {
       // test quietly stopped checking anything.
       expect(skills.length).toBeGreaterThan(0);
 
-      const denied = skills
-        .flatMap((skill) => documentedCommands(read(skill), skill))
-        .filter((c) => !isPermitted(c.command, rules));
+      const denied = [
+        ...documentedCommands(promptBlock(yaml), `${workflow} (prompt)`, { bareLines: true }),
+        ...skills.flatMap((skill) => documentedCommands(read(skill), skill)),
+      ].filter((c) => !isPermitted(c.command, rules));
 
       expect(
         denied.map((c) => `${c.file}:${c.line}  ${c.command}`),

@@ -26,3 +26,11 @@ pnpm-debug.log*
 .claude/worktrees/
 .superpowers/
 .sf
+
+# Claude Code local state. settings.local.json is one machine's permission
+# grants -- home directory layout, unrelated repo paths, local MCP plugins --
+# and this repository is public. It was tracked until 2026-08-31; nothing in
+# it was ever a secret, but none of it belongs here either, and the CI job
+# loads `local` as a settings source, so it was shipping a laptop's
+# additionalDirectories to a runner that has no such directories.
+.claude/settings.local.json

@@ -29,6 +29,26 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # Until now these ran on nobody's machine but the author's. Two of the
+      # three suites exist to catch a regression that is invisible in a green
+      # build: legacy-redirects.test.ts resolves every redirect target to the
+      # file that builds it, so renaming a post breaks the suite instead of
+      # silently 404ing a URL Google still ranks; agent-allowlist.test.ts
+      # checks the Journal robot's CI permissions against what its prompt and
+      # skills tell it to type. Neither failure shows up in `astro build`.
+      #
+      # The cost is real and deliberate: a red test now blocks a publish,
+      # including a Journal entry whose issue comment has already advertised
+      # its URL. That is the correct order -- shipping a build we know is
+      # broken to keep an announcement honest is the wrong trade.
+      - name: Test
+        run: npm test
+
+      # CLAUDE.md calls this the only type gate this project has, which was
+      # true in the sense that it had to be run by hand to be a gate at all.
+      - name: Type check
+        run: npm run astro check
+
       - name: Build
         run: npm run build
         env:
