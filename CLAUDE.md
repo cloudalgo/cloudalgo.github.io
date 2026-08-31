@@ -72,6 +72,22 @@ Never widen a title by pasting a full sentence into a template. That is how five
 
 `src/data/schema.ts` holds the entity facts once. Every page emits `organization` plus a `breadcrumbs(crumbs, url)` built from **the same array the masthead renders**, and refers to the org elsewhere by `orgRef` (`@id`) rather than restating it. Build page URLs with `abs('/path/')` — trailing slash included, since the site is served as directories. Do not hand-roll an `Organization` node in a page.
 
+#### The social card
+
+A crawler fetches `og:image` as a **bitmap** and none of them rasterise SVG, so
+an entry headed by a drawing cannot name that drawing. It names the PNG drawn
+*from* it: `socialCard()` in `src/build/social-cards.ts` maps `foo.svg` to
+`foo-1200x600.png`, `Base.astro` and `blog/[slug].astro` (the JSON-LD `image`)
+both go through it, and the `cloudalgo-social-cards` integration renders one
+per declared card at `astro:build:done` with sharp. The size in the filename is
+the same convention the rest of the blog's assets follow — `Base.astro` reads
+it back out to declare `og:image:width` / `og:image:height`.
+
+The card list is read out of the **emitted HTML**, not the collection, so what
+is drawn is exactly what was declared; a card named by a page whose hero SVG is
+missing fails the build rather than shipping a 404 no crawler reports. The
+generic `/og-default.jpg` is now the fallback only for an off-site SVG.
+
 #### Legacy URLs
 
 `astro.config.mjs` derives most redirects from the blog filenames, which is

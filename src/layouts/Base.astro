@@ -1,6 +1,7 @@
 ---
 import CookieConsent from '../components/ui/CookieConsent.astro';
 import ConsentBootstrap from '../components/ui/ConsentBootstrap.astro';
+import { socialCard } from '../build/social-cards';
 
 export interface Props {
   title: string;
@@ -45,11 +46,18 @@ const imageHost = 'https://cloudalgo.com';
 
 // ── The social card ────────────────────────────────────────
 // Every crawler that renders a card fetches og:image as a BITMAP. None of
-// them rasterise SVG, so a post whose hero is a drawing used to ship a card
-// that silently failed to render anywhere. Those posts fall back to the site
-// card, which is a card, rather than to nothing.
+// them rasterise SVG, so a post whose hero is a drawing cannot name that
+// drawing here. It names the bitmap DRAWN FROM it instead -- the build pass
+// in src/build/social-cards.ts renders one per SVG hero, and `socialCard`
+// is the single place the two agree on what it is called.
+//
+// Those posts used to fall back to the site's generic card, which meant
+// sharing the entry showed the CloudAlgo plate rather than the entry's own
+// artwork. The fallback is kept only for an SVG we cannot draw from (an
+// off-site one), where a card beats no card.
 const OG_DEFAULT = '/og-default.jpg';
-const cardSource = /\.svg(\?|$)/i.test(image) ? OG_DEFAULT : image;
+const cardSource =
+  socialCard(image) ?? (/\.svg(\?|$)/i.test(image) ? OG_DEFAULT : image);
 
 // Declared type and size have to match the bytes served, or the card is
 // rejected before it is drawn. Both were hard-coded to `image/jpeg` at

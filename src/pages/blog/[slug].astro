@@ -29,6 +29,7 @@
  */
 import { getCollection, render } from 'astro:content';
 import { organization, orgRef, breadcrumbs, abs } from '@/data/schema';
+import { socialCard } from '@/build/social-cards';
 import Page from '@/layouts/Page.astro';
 import PageMasthead from '@/components/ui/PageMasthead.astro';
 import ArchivePlate from '@/components/ui/ArchivePlate.astro';
@@ -126,13 +127,13 @@ const archiveLink = {
 };
 
 /* An entry's `image` is also its Article image, and Google will only take a
-   crawlable bitmap for that slot. Three entries are headed by a drawing, so
-   those fall back to the site card rather than naming an SVG the rich-result
-   pipeline will reject. Same rule as the social card in Base.astro. */
-const articleImage =
-  post.data.image && !/\.svg$/i.test(post.data.image)
-    ? `https://cloudalgo.com${post.data.image}`
-    : 'https://cloudalgo.com/og-default.jpg';
+   crawlable bitmap for that slot. The entries headed by a drawing name the
+   bitmap the build draws from it, not the SVG the rich-result pipeline would
+   reject -- the same file the social card names, by the same rule. */
+const cardPath = post.data.image
+  ? (socialCard(post.data.image) ?? (/\.svg$/i.test(post.data.image) ? null : post.data.image))
+  : null;
+const articleImage = `https://cloudalgo.com${cardPath ?? '/og-default.jpg'}`;
 
 /* The suffix names the section, which is worth a result's space until it
    costs the headline its own words. Sixty characters is what a result
