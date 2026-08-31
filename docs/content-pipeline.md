@@ -156,6 +156,36 @@ exactly like a real one, which makes the allowlist a cost control and not only
 a safety one: if the skills tell the model to type a command, the allowlist has
 to contain it, including every segment of a pipeline.
 
+## Why the write job deploys explicitly
+
+A push made with `GITHUB_TOKEN` does not trigger other workflows. GitHub does
+that on purpose, so a workflow cannot re-trigger itself forever.
+
+`journal-write.yml` commits as `claude[bot]`, but the identity on the commit is
+not the credential on the push: `actions/checkout` persists `GITHUB_TOKEN` into
+`.git/config`, and that is what `git push` uses. The push event is recorded with
+actor `github-actions[bot]`, and `deploy.yml` stays asleep.
+
+This was not theoretical. On 2026-08-31 an entry was committed to `main` at
+07:58, the issue comment announced its live URL, and the page returned 404
+because no deploy had run. The last step of the job now dispatches `deploy.yml`
+itself, and skips the dispatch when `main` did not move -- so a write that
+failed cannot look like a publish that worked.
+
+If you ever change how the job authenticates, check
+`gh api repos/OWNER/REPO/events` for the push actor rather than trusting the
+commit author. They are different things.
+
+## Debugging a run
+
+The action hides the model's output by default, so a failed run tells you
+`permission_denials_count` but not which calls were denied. Comment
+`/write N --debug` to set `show_full_output` for that one run.
+
+Leave it off otherwise. This repository is public, so the full transcript --
+every file read, every tool argument -- would be world-readable in the Actions
+log permanently.
+
 ## Changing the schedule
 
 The cron in `journal-radar.yml` is UTC. 02:30 UTC is 08:00 IST. If you move it,
