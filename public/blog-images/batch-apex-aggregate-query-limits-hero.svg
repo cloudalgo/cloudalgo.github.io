@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" aria-hidden="true">
+  <!-- Background -->
+  <rect width="1200" height="600" fill="#F7F4F2"/>
+
+  <!-- Vertical separator -->
+  <line x1="578" y1="40" x2="578" y2="560" stroke="#F75A41" stroke-opacity="0.34" stroke-width="1"/>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- LEFT: the batch class, before and after        -->
+  <!-- ══════════════════════════════════════════════ -->
+
+  <rect x="38" y="40" width="514" height="520" rx="12" fill="#FFFFFF" stroke="#131110" stroke-opacity="0.15" stroke-width="1.5"/>
+
+  <!-- Window chrome -->
+  <circle cx="64" cy="68" r="5" fill="#131110" fill-opacity="0.21"/>
+  <circle cx="82" cy="68" r="5" fill="#131110" fill-opacity="0.21"/>
+  <circle cx="100" cy="68" r="5" fill="#131110" fill-opacity="0.21"/>
+  <text x="295" y="73" text-anchor="middle" font-family="'Courier New', Courier, monospace" font-size="12.5" font-weight="700" letter-spacing="0.04em" fill="#131110" fill-opacity="0.68">InvoiceTotals.cls</text>
+  <line x1="38" y1="92" x2="552" y2="92" stroke="#F75A41" stroke-opacity="0.34" stroke-width="1"/>
+
+  <!-- BEFORE -->
+  <text x="62" y="122" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="12" font-weight="700" letter-spacing="0.12em" fill="#131110" fill-opacity="0.68">BATCH OVER THE FACT TABLE</text>
+
+  <!-- flagged line -->
+  <rect x="52" y="136" width="486" height="28" rx="4" fill="#131110" fill-opacity="0.06"/>
+  <rect x="52" y="136" width="4" height="28" rx="2" fill="#F75A41" fill-opacity="0.70"/>
+  <text x="66" y="156" font-family="'Courier New', Courier, monospace" font-size="13" fill="#131110" fill-opacity="0.88">Database.getQueryLocator(</text>
+  <text x="66" y="180" font-family="'Courier New', Courier, monospace" font-size="13" fill="#131110" fill-opacity="0.88">  'SELECT Account__c, SUM(Amount__c) total</text>
+  <text x="66" y="200" font-family="'Courier New', Courier, monospace" font-size="13" fill="#131110" fill-opacity="0.88">   FROM Invoice__c GROUP BY Account__c');</text>
+
+  <!-- the error -->
+  <rect x="52" y="214" width="486" height="76" rx="6" fill="#131110" fill-opacity="0.90"/>
+  <text x="68" y="238" font-family="'Courier New', Courier, monospace" font-size="12.5" fill="#F7F4F2" fill-opacity="0.95">Aggregate query does not support</text>
+  <text x="68" y="258" font-family="'Courier New', Courier, monospace" font-size="12.5" fill="#F7F4F2" fill-opacity="0.95">queryMore(), use LIMIT to restrict the</text>
+  <text x="68" y="278" font-family="'Courier New', Courier, monospace" font-size="12.5" fill="#F7F4F2" fill-opacity="0.78">results to a single batch</text>
+
+  <line x1="62" y1="302" x2="528" y2="302" stroke="#F75A41" stroke-opacity="0.34" stroke-width="1"/>
+
+  <!-- AFTER -->
+  <text x="62" y="332" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="12" font-weight="700" letter-spacing="0.12em" fill="#131110" fill-opacity="0.68">BATCH OVER THE GROUPING KEY</text>
+
+  <g font-family="'Courier New', Courier, monospace" font-size="13" fill="#131110">
+    <text x="62" y="360" fill-opacity="0.88">getQueryLocator('SELECT Id FROM Account');</text>
+    <text x="62" y="388" fill-opacity="0.62">// execute(), scope of 800</text>
+    <text x="62" y="410" fill-opacity="0.88">SELECT Account__c acct,</text>
+    <text x="62" y="430" fill-opacity="0.88">       SUM(Amount__c) total</text>
+    <text x="62" y="450" fill-opacity="0.88">FROM   Invoice__c</text>
+    <text x="62" y="470" fill-opacity="0.88">WHERE  Account__c IN :keys</text>
+    <text x="62" y="490" fill-opacity="0.88">GROUP  BY Account__c</text>
+  </g>
+
+  <line x1="62" y1="510" x2="528" y2="510" stroke="#F75A41" stroke-opacity="0.34" stroke-width="1"/>
+  <text x="62" y="536" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="14" font-weight="600" fill="#131110" fill-opacity="0.80">One row per key in scope. The ceiling</text>
+  <text x="62" y="554" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="14" font-weight="600" fill="#131110" fill-opacity="0.80">cannot be reached by construction.</text>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- RIGHT: where the ceilings sit                  -->
+  <!-- ══════════════════════════════════════════════ -->
+
+  <text x="668" y="82" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="15" font-weight="700" letter-spacing="0.14em" fill="#131110" fill-opacity="0.74">WHERE THE CEILINGS SIT</text>
+
+  <!-- hero numeral -->
+  <text x="668" y="182" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="96" font-weight="900" fill="#F75A41" fill-opacity="1">2,000</text>
+  <text x="668" y="212" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="16" font-weight="600" fill="#131110" fill-opacity="0.80">AggregateResult rows, whatever you asked for.</text>
+  <text x="668" y="234" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="16" font-weight="600" fill="#131110" fill-opacity="0.80">Groups, not records. Documented nowhere.</text>
+
+  <line x1="668" y1="258" x2="1160" y2="258" stroke="#F75A41" stroke-opacity="0.34" stroke-width="1"/>
+
+  <g font-family="Archivo, Outfit, system-ui, sans-serif">
+    <!-- row 1 -->
+    <rect x="668" y="276" width="4" height="34" rx="2" fill="#F75A41" fill-opacity="0.70"/>
+    <text x="690" y="294" font-size="17" font-weight="600" fill="#131110" fill-opacity="0.92">QueryLocator + GROUP BY</text>
+    <text x="690" y="312" font-size="13" fill="#131110" fill-opacity="0.74">No cursor exists for a grouped result set</text>
+    <text x="1160" y="296" text-anchor="end" font-size="14" font-weight="700" letter-spacing="0.06em" fill="#131110" fill-opacity="0.68">REFUSED</text>
+
+    <!-- row 2 -->
+    <rect x="668" y="330" width="4" height="34" rx="2" fill="#F75A41" fill-opacity="0.58"/>
+    <text x="690" y="348" font-size="17" font-weight="600" fill="#131110" fill-opacity="0.92">Iterable start()</text>
+    <text x="690" y="366" font-size="13" fill="#131110" fill-opacity="0.74">Built in one transaction, in async heap</text>
+    <text x="1160" y="350" text-anchor="end" font-size="17" font-weight="700" fill="#131110" fill-opacity="0.92">50,000</text>
+
+    <!-- row 3 -->
+    <rect x="668" y="384" width="4" height="34" rx="2" fill="#F75A41" fill-opacity="0.46"/>
+    <text x="690" y="402" font-size="17" font-weight="600" fill="#131110" fill-opacity="0.92">OFFSET, as an escape</text>
+    <text x="690" y="420" font-size="13" fill="#131110" fill-opacity="0.74">Past it: NUMBER_OUTSIDE_VALID_RANGE</text>
+    <text x="1160" y="404" text-anchor="end" font-size="17" font-weight="700" fill="#131110" fill-opacity="0.92">2,000</text>
+
+    <!-- row 4 -->
+    <rect x="668" y="438" width="4" height="34" rx="2" fill="#131110" fill-opacity="0.14"/>
+    <text x="690" y="456" font-size="17" font-weight="600" fill="#131110" fill-opacity="0.80">Query rows per group</text>
+    <text x="690" y="474" font-size="13" fill="#131110" fill-opacity="0.74">Two million invoices, 1,400 accounts, 1,400 rows</text>
+    <text x="1160" y="458" text-anchor="end" font-size="17" font-weight="700" fill="#131110" fill-opacity="0.80">1</text>
+  </g>
+
+  <line x1="668" y1="492" x2="1160" y2="492" stroke="#F75A41" stroke-opacity="0.34" stroke-width="1"/>
+
+  <text x="668" y="514" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="12" font-weight="700" letter-spacing="0.12em" fill="#131110" fill-opacity="0.68">ASK THIS FIRST</text>
+  <text x="668" y="538" font-family="'Courier New', Courier, monospace" font-size="15.5" font-weight="700" fill="#131110" fill-opacity="0.92">SELECT COUNT_DISTINCT(Account__c)</text>
+  <text x="668" y="558" font-family="'Courier New', Courier, monospace" font-size="15.5" font-weight="700" fill="#131110" fill-opacity="0.92">FROM Invoice__c</text>
+</svg>
