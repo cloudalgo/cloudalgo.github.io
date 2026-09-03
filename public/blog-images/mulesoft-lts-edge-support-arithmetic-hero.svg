@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" aria-hidden="true">
+  <!-- Background -->
+  <rect width="1200" height="600" fill="#F7F4F2"/>
+
+  <!-- Vertical separator -->
+  <line x1="578" y1="40" x2="578" y2="560" stroke="#F75A41" stroke-opacity="0.34" stroke-width="1"/>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- LEFT: what each channel actually buys you      -->
+  <!-- ══════════════════════════════════════════════ -->
+
+  <rect x="38" y="40" width="514" height="520" rx="12" fill="#FFFFFF" stroke="#131110" stroke-opacity="0.15" stroke-width="1.5"/>
+
+  <text x="62" y="74" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="15" font-weight="700" letter-spacing="0.13em" fill="#131110" fill-opacity="0.74">TOTAL SUPPORT WINDOW, IN MONTHS</text>
+  <line x1="52" y1="90" x2="538" y2="90" stroke="#F75A41" stroke-opacity="0.34" stroke-width="1"/>
+
+  <g font-family="Archivo, Outfit, system-ui, sans-serif">
+
+    <!-- 4.10 Edge — already dead -->
+    <rect x="52" y="108" width="4" height="52" rx="2" fill="#F75A41" fill-opacity="0.46"/>
+    <text x="70" y="124" font-size="17" font-weight="600" fill="#131110" fill-opacity="0.86">4.10 Edge</text>
+    <text x="70" y="143" font-size="12.5" fill="#131110" fill-opacity="0.74">Oct 2025 to 30 Jun 2026. Out of support since June.</text>
+    <rect x="70" y="152" width="380" height="9" rx="4.5" fill="#131110" fill-opacity="0.09"/>
+    <rect x="70" y="152" width="84" height="9" rx="4.5" fill="#131110" fill-opacity="0.80"/>
+    <text x="530" y="161" text-anchor="end" font-size="16" font-weight="700" fill="#131110" fill-opacity="0.86">8</text>
+
+    <!-- 4.11 Edge — the auto-upgrade lands next week -->
+    <rect x="52" y="196" width="4" height="52" rx="2" fill="#F75A41" fill-opacity="0.70"/>
+    <text x="70" y="212" font-size="17" font-weight="600" fill="#131110" fill-opacity="0.92">4.11 Edge</text>
+    <text x="70" y="231" font-size="12.5" fill="#131110" fill-opacity="0.74">Feb 2026 to 31 Oct 2026. Auto-upgrade due 11 Sep.</text>
+    <rect x="70" y="240" width="380" height="9" rx="4.5" fill="#131110" fill-opacity="0.09"/>
+    <rect x="70" y="240" width="84" height="9" rx="4.5" fill="#131110" fill-opacity="0.80"/>
+    <text x="530" y="249" text-anchor="end" font-size="16" font-weight="700" fill="#131110" fill-opacity="0.92">8</text>
+
+    <!-- 4.12 Edge — the only Edge in standard support -->
+    <rect x="52" y="284" width="4" height="52" rx="2" fill="#F75A41" fill-opacity="0.58"/>
+    <text x="70" y="300" font-size="17" font-weight="600" fill="#131110" fill-opacity="0.92">4.12 Edge</text>
+    <text x="70" y="319" font-size="12.5" fill="#131110" fill-opacity="0.74">Jun 2026 to 28 Feb 2027. The only Edge still current.</text>
+    <rect x="70" y="328" width="380" height="9" rx="4.5" fill="#131110" fill-opacity="0.09"/>
+    <rect x="70" y="328" width="84" height="9" rx="4.5" fill="#131110" fill-opacity="0.80"/>
+    <text x="530" y="337" text-anchor="end" font-size="16" font-weight="700" fill="#131110" fill-opacity="0.92">8</text>
+
+    <!-- 4.9 LTS -->
+    <rect x="52" y="372" width="4" height="52" rx="2" fill="#131110" fill-opacity="0.14"/>
+    <text x="70" y="388" font-size="17" font-weight="600" fill="#131110" fill-opacity="0.92">4.9 LTS</text>
+    <text x="70" y="407" font-size="12.5" fill="#131110" fill-opacity="0.74">Feb 2025 to 29 Feb 2028. The newest LTS there is.</text>
+    <rect x="70" y="416" width="380" height="9" rx="4.5" fill="#131110" fill-opacity="0.09"/>
+    <rect x="70" y="416" width="380" height="9" rx="4.5" fill="#131110" fill-opacity="0.80"/>
+    <text x="530" y="425" text-anchor="end" font-size="16" font-weight="700" fill="#131110" fill-opacity="0.92">36</text>
+
+    <!-- 4.6 LTS -->
+    <rect x="52" y="460" width="4" height="52" rx="2" fill="#131110" fill-opacity="0.14"/>
+    <text x="70" y="476" font-size="17" font-weight="600" fill="#131110" fill-opacity="0.86">4.6 LTS</text>
+    <text x="70" y="495" font-size="12.5" fill="#131110" fill-opacity="0.74">Feb 2024 to 28 Feb 2027. Standard support ended in Aug.</text>
+    <rect x="70" y="504" width="380" height="9" rx="4.5" fill="#131110" fill-opacity="0.09"/>
+    <rect x="70" y="504" width="380" height="9" rx="4.5" fill="#131110" fill-opacity="0.80"/>
+    <text x="530" y="513" text-anchor="end" font-size="16" font-weight="700" fill="#131110" fill-opacity="0.86">36</text>
+
+  </g>
+
+  <text x="70" y="542" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="13.5" font-weight="600" fill="#131110" fill-opacity="0.80">No LTS release is planned for 2026.</text>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- RIGHT: the two dates that are not in the table -->
+  <!-- ══════════════════════════════════════════════ -->
+
+  <text x="668" y="76" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="15" font-weight="700" letter-spacing="0.13em" fill="#131110" fill-opacity="0.74">WHAT THE TABLE DOES NOT SAY</text>
+  <line x1="668" y1="92" x2="1160" y2="92" stroke="#F75A41" stroke-opacity="0.34" stroke-width="1"/>
+
+  <text x="668" y="136" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="34" font-weight="900" fill="#131110" fill-opacity="1">11 SEP 2026</text>
+  <text x="668" y="164" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="15" font-weight="600" fill="#131110" fill-opacity="0.80">Six weeks after end of standard support, CloudHub</text>
+  <text x="668" y="186" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="15" font-weight="600" fill="#131110" fill-opacity="0.80">moves every 4.11 Edge app to 4.12. LTS apps stay.</text>
+
+  <line x1="668" y1="214" x2="1160" y2="214" stroke="#F75A41" stroke-opacity="0.34" stroke-width="1"/>
+
+  <text x="668" y="242" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="12" font-weight="700" letter-spacing="0.12em" fill="#131110" fill-opacity="0.68">AND ONE SATURDAY DOES DOUBLE DUTY</text>
+
+  <text x="668" y="306" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="60" font-weight="900" fill="#F75A41" fill-opacity="1">31 OCT 2026</text>
+  <text x="668" y="336" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="15" font-weight="600" fill="#131110" fill-opacity="0.80">Extended support for 4.11 Edge ends. And TLS 1.0</text>
+  <text x="668" y="358" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="15" font-weight="600" fill="#131110" fill-opacity="0.80">and 1.1 inbound is blocked on every runtime version</text>
+  <text x="668" y="380" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="15" font-weight="600" fill="#131110" fill-opacity="0.80">across CloudHub 1.0 and 2.0. Your version is no exit.</text>
+
+  <line x1="668" y1="408" x2="1160" y2="408" stroke="#F75A41" stroke-opacity="0.34" stroke-width="1"/>
+
+  <text x="668" y="436" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="12" font-weight="700" letter-spacing="0.12em" fill="#131110" fill-opacity="0.68">SO THE CHOICE IS</text>
+
+  <text x="668" y="486" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="44" font-weight="900" fill="#131110" fill-opacity="1">4.9 LTS</text>
+  <text x="900" y="486" font-family="'Courier New', Courier, monospace" font-size="16" font-weight="700" letter-spacing="0.06em" fill="#131110" fill-opacity="0.68">JAVA 17 ONLY</text>
+
+  <text x="668" y="518" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="15" font-weight="600" fill="#131110" fill-opacity="0.80">Eleven months of standard support left, then six more.</text>
+  <text x="668" y="540" font-family="Archivo, Outfit, system-ui, sans-serif" font-size="15" font-weight="600" fill="#131110" fill-opacity="0.80">Nothing after it is on any calendar yet.</text>
+</svg>
