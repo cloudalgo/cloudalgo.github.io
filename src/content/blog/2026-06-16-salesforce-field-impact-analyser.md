@@ -101,7 +101,7 @@ Wrote results to results.csv
 
 ```bash
 ./sf-field-impact.sh --org my-sandbox \
-  --analyze "Is_Mandatory_Workshop_Attended__c,Is_Sahaj_Workshop_Attended__c" \
+  --analyze "Is_Mandatory_Workshop_Attended__c,Is_Advanced_Workshop_Attended__c" \
   --object Account
 ```
 
@@ -121,7 +121,7 @@ Output shows every referencing component, with `[ACTIVE]` / `[INACTIVE]` on Flow
 │  ApexClass                        (14):
 │      • AccountTriggerHandler
 │      • AttendeeTriggerHandler
-│      • AOL_MyStudentListCtrl
+│      • MyStudentListCtrl
 │      • ... (11 more)
 │  String in source             : YES — appears in Apex/LWC/Aura/VF
 └──────────────────────────────────────────────────────────

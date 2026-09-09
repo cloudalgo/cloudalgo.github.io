@@ -142,7 +142,7 @@ export const caseStudies: CaseStudy[] = [
     seoTitle: 'Non-profit platform rebuild on Next.js',
 
     executiveSummary:
-      'A global non-profit spiritual organisation operating across 180+ countries had outgrown its custom PHP platform — a monolith with no CRM connectivity, mounting technical debt, and a scalability ceiling that made every course launch a risk. CloudAlgo led a deliberate full-platform rebuild: a Next.js 14 application with a Node.js backend, Salesforce as the CRM backbone, Stripe for payments and donations, and AWS Cognito for passwordless authentication. The result is a modern, maintainable platform the client has continued to expand for two-plus years — adding course types, membership tiers, content features, and integrations — the clearest signal that the architecture was right.',
+      'A global non-profit membership organisation operating across 180+ countries had outgrown its custom PHP platform — a monolith with no CRM connectivity, mounting technical debt, and a scalability ceiling that made every course launch a risk. CloudAlgo led a deliberate full-platform rebuild: a Next.js 14 application with a Node.js backend, Salesforce as the CRM backbone, Stripe for payments and donations, and AWS Cognito for passwordless authentication. The result is a modern, maintainable platform the client has continued to expand for two-plus years — adding course types, membership tiers, content features, and integrations — the clearest signal that the architecture was right.',
 
     challenge:
       'Software that still works can still be finished. The client had run its global community on a custom PHP platform for years, and it still served \u2014 but every new feature had become a negotiation with the code already in place. Here it was one organisation, 180+ countries, and nothing underneath that agreed on who a member was.',
@@ -155,7 +155,7 @@ export const caseStudies: CaseStudy[] = [
     ],
 
     solution:
-      'CloudAlgo led a full-platform rebuild — not a gradual migration, but a deliberate re-architecture. The new platform is a Next.js 14 application (React 18, Pages Router) deployed on Heroku, with a Node.js backend that normalises data contracts across six external systems, Salesforce as the unified CRM backbone, and Heroku Marketing Cloud for campaign and transactional email automation.',
+      'CloudAlgo led a full-platform rebuild — not a gradual migration, but a deliberate re-architecture. The new platform is a Next.js 14 application (React 18, Pages Router) deployed on Heroku, with a Node.js backend that normalises data contracts across six external systems, Salesforce as the unified CRM backbone, and Salesforce Marketing Cloud for campaign and transactional email automation.',
 
     solutionSteps: [
       {
@@ -171,7 +171,7 @@ export const caseStudies: CaseStudy[] = [
       {
         title: 'Membership & Content Platform',
         path: 'Salesforce \u2192 Next.js',
-        body: 'A complete membership lifecycle covering tier selection, billing, renewal, and personalized content gating. The content layer includes Daily Sky (daily inspiration), a guided meditation audio/video library, Ask Gurudev Q&A, a wisdom article and video collection, and a global audio player that persists playback state across page navigation.',
+        body: 'A complete membership lifecycle covering tier selection, billing, renewal, and personalised content gating. The content layer includes a daily inspiration feed, a guided meditation audio/video library, a members-only Q&A archive, a long-form article and video collection, and a global audio player that persists playback state across page navigation.',
       },
       {
         title: 'Donation Platform',
@@ -188,7 +188,7 @@ export const caseStudies: CaseStudy[] = [
     technicalHighlights: [
       {
         title: 'Six external systems, one backend layer',
-        body: 'The platform integrates Salesforce, Salesforce Community Cloud, Stripe, AWS Cognito, Segment, and Heroku Marketing Cloud — each with distinct data models and failure modes. CloudAlgo built a Node.js backend layer that normalises data contracts, handles retries, and decouples the frontend from individual vendor APIs. A Salesforce schema change doesn\'t cascade into the UI. A Stripe webhook failure doesn\'t leave the client state inconsistent.',
+        body: 'The platform integrates Salesforce, Salesforce Community Cloud, Stripe, AWS Cognito, Segment, and Salesforce Marketing Cloud — each with distinct data models and failure modes. CloudAlgo built a Node.js backend layer that normalises data contracts, handles retries, and decouples the frontend from individual vendor APIs. A Salesforce schema change doesn\'t cascade into the UI. A Stripe webhook failure doesn\'t leave the client state inconsistent.',
       },
       {
         title: 'Conventions the tooling enforces, not the reviewer',
@@ -246,7 +246,7 @@ export const caseStudies: CaseStudy[] = [
       { layer: 'Authentication', technology: 'AWS Cognito, Cognito Passwordless Auth (magic link + OTP)' },
       { layer: 'Payments', technology: 'Stripe (one-time, subscriptions, saved payment methods)' },
       { layer: 'CRM', technology: 'Salesforce, Salesforce Community Cloud' },
-      { layer: 'Email / SMS Automation', technology: 'Heroku Marketing Cloud' },
+      { layer: 'Email / SMS Automation', technology: 'Salesforce Marketing Cloud' },
       { layer: 'Analytics Pipeline', technology: 'Segment → Salesforce' },
       { layer: 'Server State', technology: 'React Query (TanStack)' },
       { layer: 'Forms', technology: 'Formik, React Hook Form, Yup, Zod' },
@@ -771,7 +771,7 @@ export const caseStudies: CaseStudy[] = [
       {
         title: 'A payment posts against the invoice it belongs to',
         path: 'Salesforce \u2192 NetSuite',
-        body: 'When a payment is recorded in Salesforce, an ABT_Payment_and_Refund_Event__e Platform Event carries the payment amount, NetSuite Account number, and NetSuite Invoice ID. MuleSoft transforms this into a NetSuite payment application — specifying the AR account, GL account, payment amount, and the exact invoice to apply it against. The payment is posted to NetSuite via REST, keeping accounts receivable in sync with Salesforce payment records without manual journal entries.',
+        body: 'When a payment is recorded in Salesforce, a Payment_and_Refund_Event__e Platform Event carries the payment amount, NetSuite Account number, and NetSuite Invoice ID. MuleSoft transforms this into a NetSuite payment application — specifying the AR account, GL account, payment amount, and the exact invoice to apply it against. The payment is posted to NetSuite via REST, keeping accounts receivable in sync with Salesforce payment records without manual journal entries.',
       },
     ],
 
@@ -978,7 +978,7 @@ CloudAlgo built the integration layer: eight MuleSoft applications covering cust
       { layer: 'Salesforce Connectivity', technology: 'Salesforce Connector — Bulk API v2, SOQL queries, upsert/create/update' },
       { layer: 'Salesforce Data Model', technology: 'Person Accounts (Member RecordType), Cases (Journey_ID__c), Portal_ID__c external IDs, Integration_Timestamp__c' },
       { layer: 'Health Portal Connectivity', technology: 'HTTP (X-Client-ID / X-Client-Secret), Secure Properties' },
-      { layer: 'Logistics Connectivity', technology: 'HTTP (Bearer token), SLP shipments/orders API' },
+      { layer: 'Logistics Connectivity', technology: 'HTTP (Bearer token), logistics platform shipments/orders API' },
       { layer: 'Transformation', technology: 'DataWeave 2.0' },
       { layer: 'State Management', technology: 'Anypoint Object Store v2 (case sync watermark on Integration_Timestamp__c)' },
       { layer: 'Security', technology: 'Secure Properties + Blowfish encryption' },
