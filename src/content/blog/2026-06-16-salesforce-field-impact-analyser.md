@@ -14,7 +14,7 @@ authorDesignation: "Founder, CloudAlgo"
 
 A client asked us to help prep their Salesforce org for a data migration. Eight years of history — product pivots, reorgs, features that got halfway built and then quietly abandoned. The schema had somewhere north of 800 custom fields on Account alone. Nobody on their team could tell you with confidence which ones were actually being used.
 
-Before the migration could happen, they wanted to clean it up. They'd already gone through the list and flagged a bunch of fields as dead — mostly tied to a workshop attendance tracking thing that got replaced by a third-party tool a couple years back. The plan was simple: clear the references, then delete.
+Before the migration could happen, they wanted to clean it up. They'd already gone through the list and flagged a bunch of fields as dead — mostly tied to an onboarding-session tracking thing that got replaced by a third-party tool a couple years back. The plan was simple: clear the references, then delete.
 
 We ran the native check. Setup → Object Manager → View Field Dependencies. Found a few things — some layouts, a validation rule. Cleared them. Ran it again. Clean. "Good to delete," the team said.
 
@@ -101,27 +101,27 @@ Wrote results to results.csv
 
 ```bash
 ./sf-field-impact.sh --org my-sandbox \
-  --analyze "Is_Mandatory_Workshop_Attended__c,Is_Advanced_Workshop_Attended__c" \
+  --analyze "Is_Orientation_Completed__c,Is_Advanced_Track_Completed__c" \
   --object Account
 ```
 
 Output shows every referencing component, with `[ACTIVE]` / `[INACTIVE]` on Flows and Triggers, plus whether the field shows up in source code:
 
 ```
-┌─ Is_Mandatory_Workshop_Attended__c
+┌─ Is_Orientation_Completed__c
 │  Layout                           (5):
 │      • Person Account Layout
 │      • Account Layout
-│      • Person Account Layout For Support
-│      • Person Account Layout For other Profile
-│      • Person Account Layout for BusinessDev
+│      • Person Account Layout for Support
+│      • Person Account Layout for Partners
+│      • Person Account Layout for Sales
 │  Flow                             (2):
-│      • MarkMandatoryOnStudentFlow [INACTIVE]
-│      • Attendee Record Trigger Flow [INACTIVE]
+│      • MarkOrientationOnMemberFlow [INACTIVE]
+│      • Member Record Trigger Flow [INACTIVE]
 │  ApexClass                        (14):
 │      • AccountTriggerHandler
-│      • AttendeeTriggerHandler
-│      • MyStudentListCtrl
+│      • MemberTriggerHandler
+│      • MemberListController
 │      • ... (11 more)
 │  String in source             : YES — appears in Apex/LWC/Aura/VF
 └──────────────────────────────────────────────────────────

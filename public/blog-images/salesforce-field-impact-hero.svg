@@ -111,8 +111,8 @@
 
   <!-- Field 1: found_in_code — solid border -->
   <rect x="598" y="196" width="152" height="50" rx="7" fill="#131110" fill-opacity="0.10" stroke="#131110" stroke-opacity="0.30" stroke-width="1"/>
-  <text x="608" y="215" font-family="'Courier New', Courier, monospace" font-size="9" fill="#131110" fill-opacity="0.86">Is_Mandatory_</text>
-  <text x="608" y="227" font-family="'Courier New', Courier, monospace" font-size="9" fill="#131110" fill-opacity="0.86">Workshop__c</text>
+  <text x="608" y="215" font-family="'Courier New', Courier, monospace" font-size="9" fill="#131110" fill-opacity="0.86">Is_Orientation_</text>
+  <text x="608" y="227" font-family="'Courier New', Courier, monospace" font-size="9" fill="#131110" fill-opacity="0.86">Completed__c</text>
   <rect x="608" y="232" width="80" height="11" rx="5.5" fill="#131110" fill-opacity="0.92"/>
   <text x="648" y="241" font-family="Outfit, system-ui, sans-serif" font-size="7.5" font-weight="700" fill="#F7F4F2" text-anchor="middle" letter-spacing="0.07em">FOUND IN CODE</text>
 
@@ -138,11 +138,11 @@
   <text x="614" y="298" font-family="Outfit, system-ui, sans-serif" font-size="8.5" font-weight="700" fill="#131110" fill-opacity="0.62" letter-spacing="0.13em">APEX REFERENCES FOUND</text>
   <line x1="606" y1="306" x2="838" y2="306" stroke="#F75A41" stroke-opacity="0.34" stroke-width="1"/>
   <text x="614" y="326" font-family="'Courier New', Courier, monospace" font-size="10" fill="#131110" fill-opacity="0.86">AccountTriggerHandler</text>
-  <text x="614" y="344" font-family="'Courier New', Courier, monospace" font-size="10" fill="#131110" fill-opacity="0.80">AttendeeTriggerHandler</text>
-  <text x="614" y="362" font-family="'Courier New', Courier, monospace" font-size="10" fill="#131110" fill-opacity="0.74">AOL_MyStudentListCtrl</text>
+  <text x="614" y="344" font-family="'Courier New', Courier, monospace" font-size="10" fill="#131110" fill-opacity="0.80">MemberTriggerHandler</text>
+  <text x="614" y="362" font-family="'Courier New', Courier, monospace" font-size="10" fill="#131110" fill-opacity="0.74">MemberListController</text>
   <text x="614" y="380" font-family="'Courier New', Courier, monospace" font-size="10" fill="#131110" fill-opacity="0.68">ReportBuilderService</text>
-  <text x="614" y="398" font-family="'Courier New', Courier, monospace" font-size="10" fill="#131110" fill-opacity="0.62">BatchAttendanceSync</text>
-  <text x="614" y="416" font-family="'Courier New', Courier, monospace" font-size="10" fill="#131110" fill-opacity="0.62">WorkshopMgmtController</text>
+  <text x="614" y="398" font-family="'Courier New', Courier, monospace" font-size="10" fill="#131110" fill-opacity="0.62">BatchOnboardingSync</text>
+  <text x="614" y="416" font-family="'Courier New', Courier, monospace" font-size="10" fill="#131110" fill-opacity="0.62">OnboardingMgmtController</text>
   <line x1="606" y1="426" x2="838" y2="426" stroke="#F75A41" stroke-opacity="0.34" stroke-width="1"/>
   <text x="614" y="444" font-family="Outfit, system-ui, sans-serif" font-size="10" fill="#131110" fill-opacity="0.62">+ 8 more · String in source: YES</text>
   <text x="614" y="462" font-family="Outfit, system-ui, sans-serif" font-size="10" font-weight="700" fill="#131110" fill-opacity="0.74">Dep graph showed:  0 references</text>
