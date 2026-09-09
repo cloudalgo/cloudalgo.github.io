@@ -53,6 +53,8 @@ pricing:
     price: "Included"
   - tier: "Cloud Backup"
     price: "Uses your iCloud"
+offer:
+  price: "0"
 requirements:
   - need: "iOS 15.0+ or Android 8.0 (API level 26)+"
   - need: "Built with Flutter — native performance on both platforms"

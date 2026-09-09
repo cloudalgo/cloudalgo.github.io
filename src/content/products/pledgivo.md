@@ -65,6 +65,11 @@ pricing:
     price: "None — donors are never billed"
   - tier: "Cut of what you raise"
     price: "None"
+offer:
+  price: "49"
+  unit: "user"
+  period: "P1M"
+  min: 3
 video:
   src: "https://pledgivo.cloudalgo.com/assets/video/pledgivo-social-overview.mp4"
   poster: "https://pledgivo.cloudalgo.com/assets/video/pledgivo-social-overview-poster.png"

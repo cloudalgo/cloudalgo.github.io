@@ -166,8 +166,37 @@ const softwareApp: Record<string, unknown> = {
   provider:            orgRef,
 };
 if (data.externalUrl) softwareApp.downloadUrl = data.externalUrl;
-if (data.status === 'ga') {
-  softwareApp.offers = { '@type': 'Offer', price: '0', priceCurrency: 'USD' };
+/* Only what the file says, and only when it says it. See the note on
+   `offer` in content.config.ts for why this is not read off `status`. */
+if (data.offer) {
+  const o = data.offer;
+  const offer: Record<string, unknown> = {
+    '@type':       'Offer',
+    price:         o.price,
+    priceCurrency: o.currency,
+  };
+  /* A per-seat subscription needs both halves said out loud: the
+     quantity the rate buys, and the interval it recurs on. Without
+     them $49 reads as the price of the product. */
+  if (o.unit || o.period) {
+    offer.priceSpecification = {
+      '@type':        'UnitPriceSpecification',
+      price:          o.price,
+      priceCurrency:  o.currency,
+      ...(o.period && { billingPeriod: o.period }),
+      ...(o.unit && {
+        referenceQuantity: { '@type': 'QuantitativeValue', value: 1, unitText: o.unit },
+      }),
+    };
+  }
+  if (o.min) {
+    offer.eligibleQuantity = {
+      '@type':   'QuantitativeValue',
+      minValue:  o.min,
+      unitText:  o.unit ?? 'licence',
+    };
+  }
+  softwareApp.offers = offer;
 }
 
 const schema: object[] = [softwareApp, organization, breadcrumbs(crumbs, productUrl)];

@@ -65,6 +65,8 @@ requirements:
 pricing:
   - tier: "OrgVitals Desktop"
     price: "Free"
+offer:
+  price: "0"
 screenshots:
   - src: "/products/orgvitals/guide/posters/02-run-scan.webp"
     clip: "/products/orgvitals/guide/clips/02-run-scan.mp4"

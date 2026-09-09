@@ -45,6 +45,8 @@ pricing:
     price: "Free — MIT license"
   - tier: "Enterprise Support"
     price: "Contact us"
+offer:
+  price: "0"
 requirements:
   - need: "PostgreSQL 14+ with hstore extension enabled"
   - need: "Salesforce Professional, Enterprise, or Unlimited edition with API access"

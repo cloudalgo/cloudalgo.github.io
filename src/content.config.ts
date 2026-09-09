@@ -139,6 +139,30 @@ const products = defineCollection({
       tier:  z.string(),
       price: z.string(),
     })).optional(),
+    /* What a crawler is told the product costs, which is a different
+       question from what `pricing` above shows a reader: that is prose
+       for the page, this is the machine fact, and the two are written
+       separately so neither has to be parsed out of the other.
+
+       It is deliberately NOT derived from `status`. Whether a product
+       is generally available says nothing about what it costs, and the
+       page used to publish `price: 0` for every GA product on exactly
+       that reasoning -- correct only for as long as everything GA
+       happened to be free. It is optional because a product with no
+       published price should emit no offer at all rather than an
+       invented one.
+
+       `unit` and `period` describe a subscription: what one licence
+       covers, and how long one billing period runs (ISO 8601, so a
+       month is P1M). `min` is the smallest number of licences the
+       offer can be bought in. */
+    offer: z.object({
+      price:    z.string(),
+      currency: z.string().default('USD'),
+      unit:     z.string().optional(),
+      period:   z.string().optional(),
+      min:      z.number().optional(),
+    }).optional(),
     /* `optional: true` marks a prerequisite you only need for one
        feature. The detail page draws it as a hollow mark rather than
        printing the word, so the flag is data and not a phrase. */
