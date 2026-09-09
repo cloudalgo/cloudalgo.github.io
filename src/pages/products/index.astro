@@ -140,7 +140,7 @@ const COPY = {
   },
   pledgivo: {
     contents: 'You raise money, and it is not allowed to leave Salesforce.',
-    price: 'Free to 200 gifts/yr',
+    price: '$49/mo per admin',
     meta: '2GP package · API 67.0',
     tagline: 'Fundraising that never leaves Salesforce.',
     description:
@@ -165,10 +165,10 @@ const COPY = {
       { term: 'Editions',    detail: 'Enterprise · Unlimited · Performance · Developer' },
       { term: 'Donor pages', detail: 'Enhanced LWR Experience Cloud site, LWC only' },
       { term: 'Payments',    detail: 'Stripe — card tokenised in the browser, never in Apex' },
-      // Reads on from the bar, which states the free tier. The rate
-      // itself is a shipped fact and stays on the page; only the half
-      // of the sentence the bar already carries came off this row.
-      { term: 'Then',        detail: '$299/mo · no cut of what you raise' },
+      // Reads on from the bar, which carries the rate. This row holds
+      // the two facts the bar has no room for: the licence floor the
+      // rate is multiplied by, and that we take nothing off the top.
+      { term: 'Licences',    detail: '3 minimum · $147/mo, no cut of what you raise' },
     ],
   },
   insurealgo: {
@@ -241,7 +241,7 @@ const COMPARE_ROWS = [
   { label: 'Salesforce access', cells: ['Read-only, via sf CLI', 'Read and write, API', 'Native — it is the org', { text: 'None', muted: true }] },
   { label: 'Who it is for',     cells: ['Architects & admins', 'Data & platform teams', 'Nonprofits', 'Anyone with a policy'] },
   { label: 'Set-up',            cells: ['Install and authenticate', 'Docker Compose or ECS', 'Install package, connect Stripe', 'Download and open'] },
-  { label: 'Price',             cells: ['Free', 'Free — MIT', 'Free to 200 gifts/yr', 'Free'] },
+  { label: 'Price',             cells: ['Free', 'Free — MIT', '$49/mo per admin', 'Free'] },
   { label: 'Status',            cells: ['Preview', 'Generally available', 'Preview', 'Generally available'] },
 ];
 ---
@@ -293,7 +293,7 @@ const COMPARE_ROWS = [
       <EvidenceStrip
         slot="figure"
         n="01"
-        caption="49 checks running against a live org, and the dashboard they produce. The grade above is that scan's, set in type because a reader should not have to squint at a recording to read the one number the product exists to give them."
+        caption="49 checks running against the demo org, and the dashboard they produce. The grade above is that scan's, set in type because a reader should not have to squint at a recording to read the one number the product exists to give them."
       >
         <div class="evidence__stack">
           <VitalsReadout />
@@ -306,7 +306,7 @@ const COMPARE_ROWS = [
             src="/products/orgvitals/scan-run.mp4"
             poster="/products/orgvitals/scan-run-poster.webp"
             ratio="1280 / 802"
-            label="OrgVitals running a scan: the dashboard, then 49 checks working through security, code quality, automation, tech debt and performance against a connected org."
+            label="OrgVitals running a scan: the dashboard, then 49 checks working through security, code quality, automation, tech debt and performance against the demo org."
           />
         </div>
       </EvidenceStrip>
@@ -406,8 +406,9 @@ const COMPARE_ROWS = [
       caption="The four CloudAlgo products compared by what they are, where they run, what they touch in Salesforce, who they are for, how they are set up, what they cost and their ship status."
     >
       <p class="compare-note" slot="footnote">
-        Two answers are the same in every column: none of the four sends your data to us, and all
-        four are free to start. Three of them never ask for a card at all.
+        One answer is the same in every column: your Salesforce data stays where it already is — in
+        your own org, on your own device, on your own infrastructure. Three of the four are free and
+        never ask for a card; Pledgivo is the one with a price on it.
       </p>
     </CompareTable>
   </section>

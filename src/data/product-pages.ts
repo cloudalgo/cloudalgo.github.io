@@ -168,8 +168,8 @@ export const productPages: Record<string, ProductPage> = {
         note: 'Six capabilities · 49 scanners',
       },
       viewer: {
-        title: 'Six minutes of it, without installing anything.',
-        note: 'Recorded against a live org',
+        title: 'A minute of it, without installing anything.',
+        note: 'Recorded against the demo org',
       },
       readout: { title: 'The specification.', note: 'As built, v1.1.1' },
       terms: {
@@ -299,14 +299,14 @@ export const productPages: Record<string, ProductPage> = {
     facts: [
       { term: 'Package', detail: '2GP managed · namespace pledgivo' },
       { term: 'Runs in', detail: 'Your Salesforce org' },
-      { term: 'Price', detail: 'Free to 200 gifts a year' },
+      { term: 'Price', detail: '$49/mo per admin' },
     ],
-    cta: { primary: 'Open pledgivo.com', secondary: 'Installation guide' },
+    cta: { primary: 'Open the Pledgivo site', secondary: 'Installation guide' },
     links: { external: 'The Pledgivo site', guide: 'Installation guide' },
     price: {
-      figure: '$0',
+      figure: '$49',
       gloss:
-        'Free for your first 200 donations a year, and that is the whole product — every feature, no card, no expiry date. Past 200 it is one flat price per org, never per user and never a percentage of what you raise.',
+        'A month per fundraising admin, or $490 a year, which is twelve months for the price of ten. Donors, event attendees and portal visitors never need a licence, so the count is your staff and nobody else. Three licences is the minimum, putting the org at $147 a month, and we never take a percentage of what you raise.',
     },
     folds: {
       transit: { title: 'How a gift travels.', note: 'The card stops at the browser' },
@@ -314,7 +314,7 @@ export const productPages: Record<string, ProductPage> = {
       viewer: { title: 'The feature tour.', note: 'Two minutes fifty-four, one capability at a time' },
       readout: { title: 'The specification.', note: 'As built, API 67.0' },
       terms: { title: 'What it costs, and what it needs.', note: 'Five prerequisites, two conditional' },
-      colophon: { title: 'Where to go next.', note: 'Pledgivo · August 2026' },
+      colophon: { title: 'Where to go next.', note: 'Pledgivo · September 2026' },
     },
     band: {
       ask: 'Pledgivo takes the gift.',

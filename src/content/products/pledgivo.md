@@ -3,13 +3,13 @@ title: "Pledgivo"
 status: preview
 type: salesforce-app
 tagline: "Fundraising that never leaves Salesforce. Donations, recurring giving, campaigns and ticketed events all run inside your org — no external platform, no sync job, no second permission model."
-excerpt: "A native AppExchange package for fundraising: the form, the payment and the donor record live in your org, so a gift is an Opportunity the instant it is taken."
+excerpt: "A native managed package for fundraising: the form, the payment and the donor record live in your org, so a gift is an Opportunity the instant it is taken."
 icon: "pledgivo"
 externalUrl: "https://pledgivo.cloudalgo.com/"
 guideUrl: "https://pledgivo.cloudalgo.com/getting-started/installation/"
 seoTitle: "Pledgivo — Native Salesforce Fundraising & Donations"
 order: 3
-lastUpdated: "August 2026"
+lastUpdated: "September 2026"
 features:
   - icon: "objects"
     title: "Standard Objects, Not a Shadow Schema"
@@ -57,14 +57,14 @@ techStack:
   - label: "Testing"
     value: "90% Apex coverage, gated on every change"
 pricing:
-  - tier: "Free — up to 200 donations a year"
-    price: "$0"
-  - tier: "Pledgivo — unlimited donations"
-    price: "$299/mo · $2,990/yr"
+  - tier: "Per fundraising admin"
+    price: "$49/mo · $490/yr"
+  - tier: "Minimum, three licences"
+    price: "$147/mo for the org"
+  - tier: "Donor and attendee licences"
+    price: "None — donors are never billed"
   - tier: "Cut of what you raise"
     price: "None"
-  - tier: "Per-user licences"
-    price: "None — priced per org"
 video:
   src: "https://pledgivo.cloudalgo.com/assets/video/pledgivo-social-overview.mp4"
   poster: "https://pledgivo.cloudalgo.com/assets/video/pledgivo-social-overview-poster.png"
@@ -84,6 +84,8 @@ published: true
 
 Pledgivo installs into your Salesforce org and stays there. There is no hosted platform behind it, no connector to license, and no copy of your donor data anywhere else.
 
+**Where it is.** The package is built and running. The AppExchange listing is with Salesforce for security review, and until that clears an install goes in by package version link, to a sandbox or to production.
+
 **How a gift travels.** A donor gives on your Experience Cloud site, where Stripe.js tokenizes the card in the browser. Salesforce then asks Stripe what happened — a guest-side poll right after the redirect, and a scheduled reconciliation pass as backup — rather than waiting on an inbound webhook you would have to expose and secure. What lands is an `Opportunity`, a donor `Contact` or Person Account, and a receipt, reportable with standard Salesforce reports immediately.
 
 **Standard objects used:** `Opportunity` · `Campaign` · `Contact` · `Account`. Package objects carry the rest — `Recurring_Donation__c` for billing schedules, `Payment_Account__c` for each connected Stripe account, `Campaign_Design__c` for page themes, `Designation__c` for funds.
@@ -92,4 +94,4 @@ Pledgivo installs into your Salesforce org and stays there. There is no hosted p
 
 **Works with or without Person Accounts.** Every donor-facing object carries two lookups — one for `Contact`, one for Person Account — so there is no org model to declare and no org-specific build to choose between.
 
-**Free until you are busy.** The free plan is the whole product for up to 200 donations a year: every feature, no credit card, no expiry date. Past 200 it is a flat $299 a month, priced per org rather than per user, and never a percentage of what you raise.
+**What it costs.** $49 a month per fundraising admin, or $490 a year, which is twelve months for the price of ten. Donors, event attendees and portal visitors never need a licence, so the count is your staff and nobody else. Three licences is the minimum, putting the whole org at $147 a month. Donations are unlimited at every count, and we never take a percentage of what you raise.
