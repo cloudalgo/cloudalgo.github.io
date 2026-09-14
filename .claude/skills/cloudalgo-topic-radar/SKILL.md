@@ -29,26 +29,48 @@ digital health, distribution and logistics.
 
 ## Where to look
 
-Run searches across these each day. Prefer the last 7 days, always check the
-last 30.
+Run the brief first. It is not optional and it is not a convenience:
 
-- **Salesforce release and platform news** — release notes and preview
-  announcements (Spring/Summer/Winter), retirements and end-of-life notices,
-  API version deprecations, governor limit changes, Agentforce and Data Cloud
-  changes, security review policy changes for AppExchange.
-- **Heroku** — pricing and dyno changes, Postgres version support, Heroku
-  Connect changes, anything affecting Salesforce-to-Heroku architectures.
-- **MuleSoft** — Anypoint releases, RPA, licensing shifts.
-- **AWS** — only where it touches a Salesforce or data-pipeline story.
-- **Airflow** — major versions, provider package changes.
-- **Trailblazer community and Stack Exchange** — recurring questions with no
-  good published answer. These are the highest-converting posts, because the
-  reader arrives already stuck.
-- **Competitor and partner blogs** — to find what is being covered badly or not
-  at all, not to copy.
+```bash
+node scripts/radar-brief.mjs --hours 24
+```
 
-A retirement notice or a breaking change is worth more than a feature
-announcement, because it creates work that someone has to pay for.
+It fetches every feed in `scripts/radar-feeds.json`, keeps only entries whose
+real publication date is inside the window, lists every candidate proposed in
+the last 45 days, and computes a burned list of topics already proposed twice
+or more.
+
+Work from its output. Add `WebSearch` and `WebFetch` on top to go deeper on
+something the brief surfaced, never to find topics the brief did not.
+
+To change what gets watched, edit `scripts/radar-feeds.json`. No code change.
+
+## What counts as news
+
+This is where the radar went wrong for three weeks, so it is worth being blunt.
+
+**A future deadline is not news.** A deprecation announced in August with a
+deadline in February is equally "important" on every one of the 180 mornings in
+between. Ranking by importance therefore surfaces the same item every day. That
+is how "Heroku Postgres 15" ended up proposed in eleven consecutive candidate
+sets and written once.
+
+**Something has to have changed inside the window.** An announcement, a date
+that moved, a release, a newly-filed bug, a doc page rewritten, a support
+article that appeared. The deadline is context inside the post. It is never the
+reason the post is being proposed today.
+
+Every candidate states the timestamp of the item it is anchored to, and which
+window that item came from. A candidate that cannot name one does not go in.
+
+## Fewer is better than padded
+
+Propose **up to** five. Three is fine. One is fine. Nothing is fine, and on a
+genuinely quiet day "nothing cleared the bar, here is what I checked" is the
+correct output.
+
+Five recycled headlines cost more than an empty issue: they train the reader to
+stop opening the issue at all.
 
 ## Deduplicate
 
@@ -68,6 +90,12 @@ Airflow on Heroku, async Heroku processes from Apex, and integration patterns.
 A new post must not repeat one of these. A genuinely new angle on an existing
 topic is fine — say explicitly which existing post it sits next to and how it
 differs.
+
+**Also dedupe against what was proposed and not written.** The brief lists every
+previous candidate and a burned-terms table. A topic that was proposed and
+passed over was passed over for a reason, and proposing it again wastes the
+reader's attention twice. Treat a burned term as spent unless something in the
+window genuinely changed about it, and say what changed.
 
 ## The bias: technical, not business
 
@@ -116,8 +144,15 @@ Rank on four things, in this order:
    post for a junior admin gets traffic and no leads. A post an architect
    bookmarks gets one lead that matters.
 
-Timeliness is a tiebreaker, not a driver. A well-written post on a permanent
-platform behaviour outlives ten posts about this quarter's release.
+Timeliness is now a gate rather than a tiebreaker: nothing enters the list
+without an anchor in the window. Among candidates that pass that gate, rank on
+the four criteria above, where writing from real experience beats everything
+else.
+
+A well-written post on permanent platform behaviour still outlives ten posts
+about this quarter's release. The way such a post enters the list is through
+the window too: a new question, a new bug report, a doc rewrite that shows
+people are hitting the behaviour now.
 
 ## Output: the approval request
 

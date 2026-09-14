@@ -1,0 +1,15 @@
+{
+  "_comment": "Sources the daily radar reads. Edit freely; radar-brief.mjs reads this file, not a list baked into code. 'weight' is advisory context for the model, not arithmetic.",
+  "feeds": [
+    { "name": "Heroku changelog",        "url": "https://devcenter.heroku.com/changelog.atom" },
+    { "name": "Salesforce Developers",   "url": "https://developer.salesforce.com/blogs/feed" },
+    { "name": "Salesforce Ben",          "url": "https://www.salesforceben.com/feed/" },
+    { "name": "Apex Hours",              "url": "https://www.apexhours.com/feed/" },
+    { "name": "MuleSoft blog",           "url": "https://blogs.mulesoft.com/feed/" },
+    { "name": "SF StackExchange (apex)", "url": "https://salesforce.stackexchange.com/feeds/tag/apex" },
+    { "name": "SF StackExchange (api)",  "url": "https://salesforce.stackexchange.com/feeds/tag/api" },
+    { "name": "Airflow releases",        "url": "https://github.com/apache/airflow/releases.atom" },
+    { "name": "Salesforce CLI releases", "url": "https://github.com/salesforcecli/cli/releases.atom" },
+    { "name": "jsforce releases",        "url": "https://github.com/jsforce/jsforce/releases.atom" }
+  ]
+}

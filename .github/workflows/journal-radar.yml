@@ -45,31 +45,62 @@ jobs:
               - .claude/skills/cloudalgo-topic-radar/SKILL.md
               - .claude/skills/cloudalgo-voice/SKILL.md
 
-            Research method. Use WebSearch and WebFetch if they are available to
-            you. Whether or not they are, also pull these feeds directly with
-            curl, because they are the reliable source and they work regardless
-            of which web tools this runner grants you:
+            Step 1. Build the brief. Run this first, before anything else:
 
-              https://devcenter.heroku.com/changelog.atom
-              https://developer.salesforce.com/blogs/feed
-              https://www.salesforceben.com/feed/
-              https://www.apexhours.com/feed/
-              https://blogs.mulesoft.com/feed/
-              https://salesforce.stackexchange.com/feeds/tag/apex
-              https://github.com/apache/airflow/releases.atom
+              node scripts/radar-brief.mjs --hours 24
 
-            Read the last 7 days from each, and go back 30 days if the week is
-            thin. Prefer retirements, breaking changes, deprecations and
-            documented limits over feature announcements: a change that creates
-            work someone must pay for is worth more than a new button.
+            It fetches every feed in scripts/radar-feeds.json, keeps only
+            entries whose real publication date falls inside the window, lists
+            every candidate proposed in the last 45 days, and computes a burned
+            list of topics already proposed two or more times.
 
-            Deduplicate against what is already published. List
-            src/content/blog/ and grep it for your candidate keywords before
-            proposing anything. Do not propose a topic an existing post covers.
+            You work from that output. Not from memory, not from what you know
+            about these platforms, not from a general sense of what matters in
+            the Salesforce world. If an item is not in the brief, it is not a
+            candidate today.
 
-            Every candidate must be technical, per the "technical, not business"
-            section of the radar skill. If a candidate would not contain
-            something a developer would copy, drop it and find another.
+            Step 2. The recency rule, which is the whole point.
+
+            Every candidate must anchor to a specific item in the brief's
+            primary window, and you must quote that item's timestamp in the
+            "Why now" line. If the primary window is thin, you may use the
+            secondary window, and you must say which window the item came from.
+
+            A deadline in the future is NOT news. This is the mistake that made
+            the last three weeks of candidates repetitive: a deprecation
+            announced in August has a deadline in February, and it stayed
+            "important" every single morning, so it got proposed eleven times
+            and written once. What makes something a candidate is that
+            SOMETHING CHANGED IN THE WINDOW - an announcement, a date moved, a
+            new release, a new bug report, a doc page rewritten. The deadline is
+            context for the post, never the reason to write it today.
+
+            Step 3. Do not repeat yourself.
+
+            Reject any candidate whose headline contains a burned term from the
+            brief, or that covers the same ground as anything in the "already
+            proposed" list, whether or not it was ever written up. Not proposed
+            before with different wording - not proposed before at all. If the
+            only angle you can find on a burned topic is genuinely new because
+            something changed in the window, say explicitly what changed and why
+            it is not the same post.
+
+            Step 4. Fewer is fine.
+
+            Propose UP TO five candidates. Propose three if only three clear the
+            bar. Propose one. If nothing in the window clears it, open the issue
+            saying so, list what you looked at, and propose nothing. A thin news
+            day is a real thing and an honest empty issue is worth more than
+            five recycled headlines. You will not be judged on filling five
+            slots.
+
+            Also report any feed the brief says failed. A dead feed means less
+            news reaching you, and that is how recycling starts.
+
+            Step 5. Dedupe against what is published. List src/content/blog/ and
+            grep it for your candidate keywords. Every candidate must be
+            technical per the "technical, not business" section of the radar
+            skill.
 
             Output. Create ONE GitHub issue using the gh CLI:
 
@@ -78,10 +109,18 @@ jobs:
                 --label journal-candidates \
                 --body-file <a file you write>
 
-            The body must contain exactly five candidates, numbered 1 to 5, each
-            in the format the radar skill specifies (headline, category and read
-            time, why now with a source link, the angle, and the CTA target).
-            After the five, add one sentence naming which you would pick and why.
+            The body must contain up to five candidates, numbered from 1, each
+            in the format the radar skill specifies: headline, category and read
+            time, "Why now" (the source link AND the item's timestamp from the
+            brief AND which window it came from), the angle, and the CTA target.
+            After them, add one sentence naming which you would pick and why. If
+            nothing cleared the bar, say that instead and list what you checked.
+
+            Then close the previous candidate issue if one is still open. Find
+            it with `gh issue list --label journal-candidates --state open`,
+            comment "Superseded by #<new number>." on any issue older than this
+            one, and close it. An unpicked candidate set is stale by the next
+            morning and leaving it open buries the current one.
 
             End the issue body with exactly this line:
 

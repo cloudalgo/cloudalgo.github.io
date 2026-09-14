@@ -117,6 +117,54 @@ issue does nothing.
 
 To skip a day, do nothing. To kill a candidate set, close the issue.
 
+## Keeping the radar off repeat
+
+The first three weeks of this pipeline proposed "Heroku Postgres 15" in eleven
+consecutive candidate sets and published it once. The cause was an instruction
+in the radar prompt telling it to prefer retirements and deprecations over
+feature announcements. That is good advice for judging importance and terrible
+advice for a daily job: a deprecation announced in August with a February
+deadline is equally important on all 180 mornings in between, so ranking by
+importance resurfaces the same item every day.
+
+Two mechanisms now prevent it, both deliberately taken away from the model:
+
+**`scripts/radar-brief.mjs` enforces the window.** It fetches every feed in
+`scripts/radar-feeds.json`, parses each entry's real publication date, and emits
+only what falls inside the last 24 hours, with a secondary 24-72h tier for thin
+days. The model no longer decides what "recent" means. It also caps items per
+feed, so one monorepo publishing forty provider point-releases cannot fill the
+window, and it reports any feed that failed, because a silently dead feed means
+less news arriving and recycling is the first symptom.
+
+**The same script computes a burned list.** It reads every candidate issue from
+the last 45 days and flags any term appearing in two or more candidate sets. The
+radar must not propose anything containing a burned term unless it can say what
+changed in the window to make it new again.
+
+The rule that follows from both: **a future deadline is not news.** Something
+has to have changed inside the window — an announcement, a date that moved, a
+release, a new bug report, a doc rewrite. The deadline is context inside the
+post, never the reason to propose it today. Every candidate must quote the
+timestamp of the item it is anchored to.
+
+And the radar may now propose **fewer than five**, down to none. An honest
+"nothing cleared the bar today, here is what I checked" is worth more than five
+recycled headlines, which teach you to stop opening the issue.
+
+Each run also closes the previous unpicked candidate issue as superseded, so
+the open list shows today's choices rather than three weeks of backlog.
+
+```bash
+node scripts/radar-brief.mjs --hours 24        # what the radar sees
+node scripts/radar-brief.mjs --hours 72        # widen on a quiet day
+node scripts/radar-brief.mjs --no-issues       # feeds only
+```
+
+Tuning: widen `--hours` if candidates dry up, edit `scripts/radar-feeds.json` to
+add or drop sources. Adding a good source is almost always the better fix,
+because the real cause of repetition is too little news arriving.
+
 ## Why it is built this way
 
 **Why the push must not use `GITHUB_TOKEN`.** GitHub deliberately does not fire
