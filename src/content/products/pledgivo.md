@@ -71,8 +71,8 @@ offer:
   period: "P1M"
   min: 3
 video:
-  src: "https://pledgivo.cloudalgo.com/assets/video/pledgivo-social-overview.mp4"
-  poster: "https://pledgivo.cloudalgo.com/assets/video/pledgivo-social-overview-poster.png"
+  src: "https://pledgivo.cloudalgo.com/assets/video/23-social-overview/pledgivo-social-overview.mp4"
+  poster: "https://pledgivo.cloudalgo.com/assets/video/23-social-overview/pledgivo-social-overview-poster.png"
   title: "The feature tour — every Pledgivo capability, one at a time."
   duration: "2 min 54 sec"
   heading: "The feature tour"
