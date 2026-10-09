@@ -1,0 +1,523 @@
+// The video controller. VideoPlayer.astro (a film) and VideoReel.astro
+// (a loop) own the markup, src/lib/player.ts owns the behaviour, and this
+// owns every pixel.
+//
+// The engine never styles anything. It writes state to data-* on the
+// root -- started, playing, ended, idle, waiting, muted, cc, has-cue,
+// hovering, scrubbing, fs, wired -- and progress to three custom
+// properties, each 0..1:
+//
+//   --p  played     --b  buffered     --h  under the pointer
+//
+// so a bar is `width: calc(var(--p) * 100%)` and nothing in the script
+// knows what a bar looks like.
+//
+// Until the engine marks the root `data-wired`, none of the controls
+// below show: a page whose script failed keeps the browser's own player.
+
+.player {
+  position: relative;
+  color: var(--player-ink);
+  background: var(--player-ground);
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+// At element weight, so every key's own class beats it without a fight.
+:where(.player) button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+.player:not([data-wired]) :is(
+  .player__surface, .player__slate, .player__deck, .player__flash,
+  .player__chip, .player__line, .player__key
+) {
+  display: none;
+}
+
+.player__media {
+  position: relative;
+  aspect-ratio: var(--player-ratio, 16 / 9);
+  overflow: hidden;
+  background: var(--player-ground);
+}
+
+.player__video {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.player__surface {
+  position: absolute;
+  inset: 0;
+  cursor: pointer;
+}
+
+// ── Glyphs ──
+// Each key holds both of its glyphs; state decides which one shows.
+
+.player__ic {
+  display: block;
+  flex: 0 0 auto;
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.player__ic-n {
+  font-family: var(--font-mono);
+  font-size: 7.5px;
+  font-weight: var(--weight-semibold);
+  fill: currentColor;
+}
+
+.player :is(.player__ic--pause, .player__ic--muted, .player__ic--fs-exit, .player__ic--replay) { display: none; }
+.player[data-playing='true'] .player__ic--play { display: none; }
+.player[data-playing='true'] .player__ic--pause { display: block; }
+.player[data-muted='true'] .player__ic--sound { display: none; }
+.player[data-muted='true'] .player__ic--muted { display: block; }
+.player[data-fs='true'] .player__ic--fs-enter { display: none; }
+.player[data-fs='true'] .player__ic--fs-exit { display: block; }
+
+// ── Over the picture: captions, buffering, the tap acknowledgement ──
+
+// Our own caption box, so it can rise clear of the deck instead of
+// sitting under it. `--cue-y` is the only thing the deck changes.
+.player__cue {
+  position: absolute;
+  left: 50%;
+  bottom: var(--cue-y, 1.25rem);
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: min(88%, 46rem);
+  padding: 0.3em 0.7em;
+  text-align: center;
+  white-space: pre-line;
+  font-size: clamp(0.8125rem, 1.55vw, 1.125rem);
+  font-weight: var(--weight-medium);
+  line-height: 1.4;
+  color: var(--player-ink);
+  background: var(--player-scrim);
+  pointer-events: none;
+  display: none;
+  transition: bottom var(--duration-base) var(--ease-out);
+}
+
+.player[data-cc='true'][data-has-cue='true'] .player__cue { display: block; }
+
+.player__spin {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 2px solid var(--player-spin-track);
+  border-top-color: var(--player-accent);
+  border-radius: 50%;
+  pointer-events: none;
+  display: none;
+  animation: player-spin 0.8s linear infinite;
+}
+
+.player[data-started='true'][data-waiting='true'] .player__spin { display: block; }
+
+@keyframes player-spin {
+  to { transform: rotate(360deg); }
+}
+
+// The glyph that answers a click on the picture. It shows the state the
+// click produced, then fades: a pause you can see happened.
+.player__flash {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 4rem;
+  height: 4rem;
+  display: grid;
+  place-items: center;
+  color: var(--player-ink);
+  background: var(--player-scrim);
+  opacity: 0;
+  pointer-events: none;
+
+  .player__ic { width: 1.75rem; height: 1.75rem; }
+  &.is-on { animation: player-flash 0.55s var(--ease-out); }
+}
+
+@keyframes player-flash {
+  from { opacity: 1; transform: scale(0.9); }
+  to { opacity: 0; transform: scale(1.25); }
+}
+
+// ── Film: the slate ──
+// A title card, not a play button on a poster. It is up before the roll
+// and again at the end, with the key reworded.
+
+.player__slate {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  padding: clamp(1rem, 4vw, 2.5rem);
+  cursor: pointer;
+  background: linear-gradient(
+    90deg,
+    var(--player-slate-from) 0%,
+    var(--player-slate-mid) 38%,
+    var(--player-slate-to) 78%
+  );
+}
+
+.player[data-started='true']:not([data-ended='true']) .player__slate { display: none; }
+
+.player__card { max-width: 25rem; }
+
+.player__eyebrow {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: var(--weight-medium);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--player-accent-text);
+}
+
+.player__title {
+  margin: 0.5rem 0 0.625rem;
+  font-family: var(--font-heading);
+  font-size: clamp(1.375rem, 3.4vw, 2.5rem);
+  font-weight: var(--weight-extrabold);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--player-ink);
+}
+
+.player__meta {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+  color: var(--player-ink-soft);
+}
+
+.player__roll {
+  margin-top: 1.25rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.8rem 1.1rem;
+  font-size: 0.9375rem;
+  font-weight: var(--weight-bold);
+  color: var(--player-on-accent);
+  background: var(--player-accent);
+  transition: background var(--duration-fast) var(--ease-out);
+}
+
+.player__slate:hover .player__roll,
+.player__roll:hover { background: var(--player-accent-hover); }
+
+.player__roll-again { display: none; }
+.player[data-ended='true'] {
+  .player__roll .player__ic--play, .player__roll-start { display: none; }
+  .player__roll .player__ic--replay { display: block; }
+  .player__roll-again { display: inline; }
+}
+
+// ── Film: the deck ──
+// Floats inset from the frame, so it reads as an instrument laid over
+// the film rather than a band cut out of it.
+
+.player__deck {
+  position: absolute;
+  left: 0.75rem;
+  right: 0.75rem;
+  bottom: 0.75rem;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.625rem 0.75rem;
+  background: var(--player-deck-bg);
+  border: 1px solid var(--player-deck-rule);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition:
+    opacity var(--duration-base) var(--ease-out),
+    transform var(--duration-base) var(--ease-out);
+}
+
+.player:not([data-started='true']) .player__deck,
+.player[data-ended='true'] .player__deck,
+.player[data-idle='true'] .player__deck {
+  opacity: 0;
+  transform: translateY(0.5rem);
+  pointer-events: none;
+}
+
+.player[data-idle='true'] .player__surface { cursor: none; }
+
+.player--film .player__cue { --cue-y: 1.25rem; }
+.player--film[data-started='true']:not([data-idle='true']) .player__cue { --cue-y: 6rem; }
+
+.player__tc {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 1.375rem;
+  font-weight: var(--weight-medium);
+  line-height: 1;
+  letter-spacing: 0.01em;
+  font-variant-numeric: tabular-nums;
+  color: var(--player-accent-text);
+}
+
+.player__tc-of {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 0.625rem;
+  letter-spacing: 0.1em;
+  color: var(--player-ink-faint);
+}
+
+// The ruler. Base line, buffered line, ticks, played line, the hover
+// ghost and the flagged playhead, bottom to top.
+.player__ruler {
+  position: relative;
+  height: 2.25rem;
+  cursor: pointer;
+  touch-action: none;
+}
+
+.player__base,
+.player__buf,
+.player__played {
+  position: absolute;
+  left: 0;
+}
+
+.player__base { right: 0; bottom: 6px; height: 1px; background: var(--player-rule); }
+.player__buf { bottom: 6px; height: 1px; width: calc(var(--b, 0) * 100%); background: var(--player-rule-strong); }
+.player__played { bottom: 5px; height: 3px; width: calc(var(--p, 0) * 100%); background: var(--player-accent); }
+
+.player__tick {
+  position: absolute;
+  bottom: 7px;
+  width: 1px;
+  height: 5px;
+  background: var(--player-rule);
+}
+
+.player__tick--major { height: 11px; background: var(--player-rule-strong); }
+
+.player__lab {
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  font-family: var(--font-mono);
+  font-size: 0.5625rem;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  color: var(--player-ink-faint);
+}
+
+.player__head,
+.player__ghost {
+  position: absolute;
+  top: 12px;
+  bottom: 0;
+}
+
+.player__head {
+  left: calc(var(--p, 0) * 100%);
+  width: 2px;
+  margin-left: -1px;
+  background: var(--player-accent);
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: -4px;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 7px solid var(--player-accent);
+  }
+}
+
+.player__ghost {
+  left: calc(var(--h, 0) * 100%);
+  width: 1px;
+  background: var(--player-ghost);
+  display: none;
+}
+
+.player[data-hovering='true'] .player__ghost { display: block; }
+
+.player__tip {
+  position: absolute;
+  bottom: calc(100% + 0.5rem);
+  left: 0;
+  transform: translateX(-50%);
+  padding: 0.35rem 0.45rem;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--player-tip-ink);
+  background: var(--player-tip-bg);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--duration-fast);
+}
+
+.player[data-hovering='true'] .player__tip,
+.player[data-scrubbing='true'] .player__tip { opacity: 1; }
+
+.player__keys {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.player__btn {
+  width: 2.25rem;
+  height: 2.25rem;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--player-deck-rule);
+  transition:
+    border-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out);
+
+  &:hover,
+  &[aria-pressed='true'] {
+    color: var(--player-accent-text);
+    border-color: var(--player-accent-text);
+  }
+}
+
+.player__btn--play {
+  color: var(--player-on-accent);
+  background: var(--player-accent);
+  border-color: var(--player-accent);
+
+  &:hover {
+    color: var(--player-on-accent);
+    background: var(--player-accent-hover);
+    border-color: var(--player-accent-hover);
+  }
+}
+
+.player__btn--text {
+  width: auto;
+  padding: 0 0.45rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+
+// ── Full screen ──
+
+.player:fullscreen {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+}
+
+.player:fullscreen .player__media {
+  flex: 1 1 auto;
+  aspect-ratio: auto;
+}
+
+// ── Narrow: the ruler takes its own row and loses its labels ──
+
+@media (max-width: 700px) {
+  .player__deck {
+    left: 0.375rem;
+    right: 0.375rem;
+    bottom: 0.375rem;
+    grid-template-columns: auto 1fr;
+    gap: 0.25rem 0.5rem;
+    padding: 0.375rem 0.5rem 0.25rem;
+  }
+
+  .player__ruler {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    height: 1.125rem;
+  }
+
+  .player__keys { justify-self: end; }
+  .player__tc { font-size: 1rem; }
+  .player__btn { width: 1.875rem; height: 1.875rem; }
+  .player__btn .player__ic { width: 1rem; height: 1rem; }
+
+  .player__tc-of,
+  .player__lab,
+  .player__btn--extra { display: none; }
+
+  .player--film[data-started='true']:not([data-idle='true']) .player__cue { --cue-y: 5rem; }
+}
+
+// ── Loop: a counter chip, a progress line and one key ──
+// The key is visible and permanent, never idled away: it is the stop
+// WCAG 2.2.2 requires of anything that moves for more than five seconds.
+
+.player--loop { overflow: hidden; }
+
+.player__chip {
+  position: absolute;
+  left: 0.625rem;
+  top: 0.625rem;
+  padding: 0.4rem 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  color: var(--player-accent-text);
+  background: var(--player-scrim);
+  pointer-events: none;
+}
+
+.player__line {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 3px;
+  width: calc(var(--p, 0) * 100%);
+  background: var(--player-accent);
+  pointer-events: none;
+}
+
+.player__key {
+  position: absolute;
+  right: 0.625rem;
+  bottom: 0.625rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: grid;
+  place-items: center;
+  color: var(--player-on-accent);
+  background: var(--player-accent);
+  transition: background var(--duration-fast) var(--ease-out);
+
+  &:hover { background: var(--player-accent-hover); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .player__deck,
+  .player__cue,
+  .player__tip,
+  .player__roll,
+  .player__btn,
+  .player__key { transition: none; }
+
+  .player__flash.is-on { animation: none; }
+}

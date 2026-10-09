@@ -19,8 +19,10 @@
  * own class, which is why the frame does not resize on the swap. The
  * minute-long walkthrough needs a scrubber, and a control with a scrubber
  * cannot live inside a button that would swallow every click on it, so
- * there the plate steps aside and the video replaces it.
+ * there the plate is the site's film player instead, whose slate does
+ * the poster's job.
  */
+import VideoPlayer from './VideoPlayer.astro';
 
 const BASE = '/products/orgvitals/guide/';
 
@@ -55,24 +57,35 @@ const clip = `${BASE}clips/${stem}.mp4`;
       <span class="panel__bar-t">{title}</span>
       <span class="panel__bar-d">{dur}</span>
     </p>
-    <button
-      class="panel__stage"
-      type="button"
-      data-clip={video ? undefined : clip}
-      data-video={video}
-      aria-label={`Play screen ${n}: ${title}`}
-    >
-      <img
-        class="panel__shot"
-        src={poster}
-        alt={alt}
-        width="1000"
-        height="625"
-        loading="lazy"
-        decoding="async"
+    {video ? (
+      <VideoPlayer
+        src={video}
+        poster={poster}
+        title={`OrgVitals: ${title}`}
+        heading={title}
+        eyebrow={`Screen ${n}`}
+        duration={dur}
+        ratio="1280 / 802"
       />
-      <span class="panel__play" aria-hidden="true">Play</span>
-    </button>
+    ) : (
+      <button
+        class="panel__stage"
+        type="button"
+        data-clip={clip}
+        aria-label={`Play screen ${n}: ${title}`}
+      >
+        <img
+          class="panel__shot"
+          src={poster}
+          alt={alt}
+          width="1000"
+          height="625"
+          loading="lazy"
+          decoding="async"
+        />
+        <span class="panel__play" aria-hidden="true">Play</span>
+      </button>
+    )}
   </div>
   <figcaption class="panel__cap"><slot /></figcaption>
 </figure>
@@ -87,7 +100,6 @@ const clip = `${BASE}clips/${stem}.mp4`;
     if (!stage || !shot || !play) return;
 
     const clip = stage.dataset.clip;
-    const full = stage.dataset.video;
     let live: HTMLVideoElement | null = null;
 
     stage.addEventListener('click', () => {
@@ -104,18 +116,6 @@ const clip = `${BASE}clips/${stem}.mp4`;
 
       panel.setAttribute('data-playing', '');
       play.textContent = 'Stop';
-
-      if (full) {
-        /* The walkthrough gets a scrubber, so the plate steps aside. */
-        const player = document.createElement('video');
-        player.className = 'panel__video';
-        player.src = full;
-        player.controls = true;
-        player.autoplay = true;
-        player.playsInline = true;
-        stage.replaceWith(player);
-        return;
-      }
 
       if (!clip) return;
       /* A clip is a silent loop with no transport of its own, so the

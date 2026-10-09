@@ -58,7 +58,7 @@
 }
 
 .viewer__shot,
-.viewer__clip {
+.viewer__clip .player__video {
   display: block;
   margin-inline: auto;
   max-width: 100%;
@@ -67,11 +67,23 @@
   height: auto;
 }
 
-.viewer__video {
-  display: block;
-  width: 100%;
-  height: auto;
-  background: var(--surface-inverse);
+// The recording sits inside the reel's controls, but keeps the still's
+// own size rather than the reel's box: the wrapper shrinks to the video,
+// so the counter and the key land on the picture's corners.
+.viewer__clip {
+  width: fit-content;
+  max-width: 100%;
+  margin-inline: auto;
+}
+
+.viewer__clip .reel {
+  aspect-ratio: auto;
+  border: 0;
+}
+
+.viewer__clip .player__video {
+  position: static;
+  object-fit: contain;
 }
 
 // The held state -- now a strip beneath the still rather than a plate

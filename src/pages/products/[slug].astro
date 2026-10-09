@@ -32,6 +32,8 @@ import { getCollection, render } from 'astro:content';
 import Page from '@/layouts/Page.astro';
 import PageMasthead from '@/components/ui/PageMasthead.astro';
 import CtaBand from '@/components/ui/CtaBand.astro';
+import VideoPlayer from '@/components/ui/VideoPlayer.astro';
+import VideoReel from '@/components/ui/VideoReel.astro';
 import { TYPE_LABEL, STATUS_LABEL } from '@/data/product-labels';
 import { productPages } from '@/data/product-pages';
 import { organization, orgRef, breadcrumbs, abs, SITE_ID } from '@/data/schema';
@@ -366,7 +368,9 @@ const schema: object[] = [softwareApp, organization, breadcrumbs(crumbs, product
                 loading="lazy"
                 decoding="async"
               />
-              <video class="viewer__clip" controls loop muted playsinline preload="none" hidden></video>
+              <div class="viewer__clip" hidden>
+                <VideoReel ambient={false} ratio="auto" label={shots[0].alt} />
+              </div>
             </div>
             {shots.some(s => s.clip) && (
               <div class="viewer__hold" hidden>
@@ -411,12 +415,15 @@ const schema: object[] = [softwareApp, organization, breadcrumbs(crumbs, product
               {video.duration && <span class="viewer__bar-n">{video.duration}</span>}
               <span class="viewer__bar-t">{video.heading ?? 'The tour'}</span>
             </div>
-            <video class="viewer__video" controls preload="none" poster={video.poster} playsinline>
-              <source src={video.src} type="video/mp4" />
-              {video.captions && (
-                <track kind="captions" src={video.captions} srclang="en" label="English" default />
-              )}
-            </video>
+            <VideoPlayer
+              src={video.src}
+              poster={video.poster}
+              captions={video.captions}
+              title={`${data.title}: ${video.heading ?? 'The tour'}`}
+              heading={video.heading ?? 'The tour'}
+              eyebrow={data.title}
+              duration={video.duration}
+            />
           </div>
           <figcaption class="viewer__cap">{video.title}</figcaption>
         </figure>
@@ -571,7 +578,11 @@ const schema: object[] = [softwareApp, organization, breadcrumbs(crumbs, product
     if (!viewer) return;
 
     const shot = viewer.querySelector<HTMLImageElement>('.viewer__shot');
-    const clip = viewer.querySelector<HTMLVideoElement>('.viewer__clip');
+    /* The clip sits inside the reel's own controls (VideoReel, not
+       ambient): this script sets the source and starts it, and the
+       wrapper is what shows and hides. */
+    const clipBox = viewer.querySelector<HTMLElement>('.viewer__clip');
+    const clip = clipBox?.querySelector<HTMLVideoElement>('video');
     const hold = viewer.querySelector<HTMLElement>('.viewer__hold');
     const play = viewer.querySelector<HTMLButtonElement>('.viewer__play');
     const cap  = viewer.querySelector<HTMLElement>('.viewer__cap');
@@ -581,7 +592,7 @@ const schema: object[] = [softwareApp, organization, breadcrumbs(crumbs, product
     /* `hold` and `play` are absent on a viewer whose steps are all
        stills -- InsureAlgo's four phone screens -- so they are optional
        here where the rest are not. */
-    if (!shot || !clip || !cap || !barN || !barT || !thumbs.length) return;
+    if (!shot || !clipBox || !clip || !cap || !barN || !barT || !thumbs.length) return;
 
     const still = window.matchMedia('(prefers-reduced-motion: reduce)');
     const total = String(thumbs.length).padStart(2, '0');
@@ -593,7 +604,7 @@ const schema: object[] = [softwareApp, organization, breadcrumbs(crumbs, product
     /** Puts the step's still on the stage and stops whatever was playing. */
     const showStill = (btn: HTMLButtonElement) => {
       clip.pause();
-      clip.hidden = true;
+      clipBox.hidden = true;
       clip.removeAttribute('src');
       clip.load(); // drops the buffered clip rather than leaving it decoding
       shot.src = btn.dataset.shot ?? '';
@@ -607,8 +618,9 @@ const schema: object[] = [softwareApp, organization, breadcrumbs(crumbs, product
       if (!src) return;
       clip.src = src;
       clip.poster = btn.dataset.shot ?? '';
+      clip.setAttribute('aria-label', btn.dataset.alt ?? '');
       shot.hidden = true;
-      clip.hidden = false;
+      clipBox.hidden = false;
       if (hold) hold.hidden = true;
       void clip.play().catch(() => {
         /* Autoplay refused. The controls are there; the still is not. */

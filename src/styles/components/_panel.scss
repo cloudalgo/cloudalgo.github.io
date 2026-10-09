@@ -158,16 +158,6 @@
 
 .panel--lead { margin-top: 1.75rem; }
 
-/* The walkthrough is a minute long, so it gets a scrubber -- and a
-   control with a scrubber cannot sit inside a button that would swallow
-   every click on it. The stage steps aside and this replaces it. */
-.panel__video {
-  display: block;
-  width: 100%;
-  height: auto;
-  background: var(--surface-inverse);
-}
-
 @media (prefers-reduced-motion: reduce) {
   .panel__play { transition: none; }
 }

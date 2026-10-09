@@ -1,0 +1,44 @@
+---
+/**
+ * The video controller's glyphs, on a 24-unit grid with square caps to
+ * match the press-room hairlines. Every one is `currentColor`, so the
+ * key it sits in decides its colour, and every one carries
+ * `player__ic--<name>` so _player.scss can swap play for pause (and the
+ * rest) off the player's state without the script touching an icon.
+ */
+interface Props {
+  name: 'play' | 'pause' | 'replay' | 'back' | 'forward' | 'sound' | 'muted' | 'captions' | 'fs-enter' | 'fs-exit';
+}
+const { name } = Astro.props;
+const cls = `player__ic player__ic--${name}`;
+---
+{name === 'play' && (
+  <svg class={cls} viewBox="0 0 24 24" aria-hidden="true"><path d="M7.5 5v14L19 12z" fill="currentColor" /></svg>
+)}
+{name === 'pause' && (
+  <svg class={cls} viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" fill="currentColor" /></svg>
+)}
+{name === 'replay' && (
+  <svg class={cls} viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12a7 7 0 1 0 2.05-4.95M5 4.5v3.5h3.5" stroke="currentColor" stroke-width="2" stroke-linecap="square" /></svg>
+)}
+{name === 'back' && (
+  <svg class={cls} viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3M4.5 4v3.2h3.2" stroke="currentColor" stroke-width="1.75" stroke-linecap="square" /><text class="player__ic-n" x="12.2" y="15.4" text-anchor="middle">10</text></svg>
+)}
+{name === 'forward' && (
+  <svg class={cls} viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M19.5 12a7.5 7.5 0 1 1-2.2-5.3M19.5 4v3.2h-3.2" stroke="currentColor" stroke-width="1.75" stroke-linecap="square" /><text class="player__ic-n" x="11.8" y="15.4" text-anchor="middle">10</text></svg>
+)}
+{name === 'sound' && (
+  <svg class={cls} viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor" /><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11" stroke="currentColor" stroke-width="1.75" stroke-linecap="square" /></svg>
+)}
+{name === 'muted' && (
+  <svg class={cls} viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor" /><path d="M15.5 9.5l5 5M20.5 9.5l-5 5" stroke="currentColor" stroke-width="1.75" stroke-linecap="square" /></svg>
+)}
+{name === 'captions' && (
+  <svg class={cls} viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" stroke="currentColor" stroke-width="1.75" /><path d="M10.5 10.2a2.3 2.3 0 1 0 0 3.6M17 10.2a2.3 2.3 0 1 0 0 3.6" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" /></svg>
+)}
+{name === 'fs-enter' && (
+  <svg class={cls} viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4.5 9V4.5H9M15 4.5h4.5V9M19.5 15v4.5H15M9 19.5H4.5V15" stroke="currentColor" stroke-width="1.75" stroke-linecap="square" /></svg>
+)}
+{name === 'fs-exit' && (
+  <svg class={cls} viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 4.5V9H4.5M19.5 9H15V4.5M15 19.5V15h4.5M4.5 15H9v4.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="square" /></svg>
+)}

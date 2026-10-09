@@ -542,15 +542,39 @@
   /* ── Ambient reel (.reel) ─────────────────────────────────
      A silent film running beside a screenshot. The ground is ink
      because a film's own letterboxing has to meet something, and a
-     paper ground behind a dark frame reads as a rendering fault.
-
-     The control's scrim is ink-at-alpha rather than a solid: it sits
-     over moving picture, and a solid chip would read as a hole
-     punched in the film. */
+     paper ground behind a dark frame reads as a rendering fault. Its
+     controls are the player's, below. */
   --reel-border: var(--border-default);
   --reel-bg: var(--surface-inverse);
-  --reel-btn-bg: var(--color-ink-a75);
-  --reel-btn-border: var(--color-paper-a30);
+
+  /* ── Video controller (.player) ───────────────────────────
+     The Timecode controller, for films and loops alike. Everything it
+     draws sits over moving picture, so every ground is ink-at-alpha:
+     a solid would read as a hole punched in the film.
+
+     The deck is a92, not lighter, because the ember counter is text:
+     accent-400 on ink-900 is 6.33:1, and at a92 over a white frame it
+     still clears 4.9:1. At a88 it fell to 4.4:1 and failed. */
+  --player-ground: var(--surface-inverse);
+  --player-ink: var(--color-on-inverse);
+  --player-ink-soft: var(--color-on-inverse-strong);
+  --player-ink-faint: var(--color-on-inverse-a50);
+  --player-scrim: var(--color-ink-a82);
+  --player-deck-bg: var(--color-ink-a92);
+  --player-deck-rule: var(--border-on-inverse);
+  --player-slate-from: var(--color-ink-a92);
+  --player-slate-mid: var(--color-ink-a75);
+  --player-slate-to: var(--color-ink-a00);
+  --player-rule: var(--color-on-inverse-a28);
+  --player-rule-strong: var(--color-on-inverse-a50);
+  --player-ghost: var(--color-on-inverse-a75);
+  --player-spin-track: var(--color-on-inverse-a20);
+  --player-accent: var(--color-accent);
+  --player-accent-hover: var(--color-accent-hover);
+  --player-on-accent: var(--color-on-accent);
+  --player-accent-text: var(--color-accent-inverse);
+  --player-tip-bg: var(--surface-card);
+  --player-tip-ink: var(--color-heading);
 
   /* ── Comparison table (.compare) ──────────────────────────
      Four products against seven questions. The head is the entry

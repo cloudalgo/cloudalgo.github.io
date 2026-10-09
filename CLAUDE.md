@@ -222,6 +222,28 @@ comment. Those numbers are load-bearing — if you retune a value, re-measure it
 - No `--ca-*` variables — that generation of tokens is gone.
 - No Tailwind utility classes (`text-red-500`, `flex`, …). Tailwind is not
   installed; those class names do nothing.
+### Video
+
+**Every video on the site goes through one controller — never ship a bare
+`<video controls>`.** The engine is `src/lib/player.ts`; the look is
+`components/_player.scss`. Two components wrap it:
+
+- `VideoPlayer.astro` — a film someone sits down to watch (the product tours,
+  the OrgVitals walkthrough). A slate before the roll, then a floating deck
+  with a timecode counter and a ruled timeline. Reports `video_start` /
+  `video_progress` / `video_complete`.
+- `VideoReel.astro` — a silent loop: counter chip, progress line, one key.
+  Reports nothing. Ambient by default (fetched on first sight, paused off
+  screen, still under reduced motion); `ambient={false}` hands the source to
+  the page, which is how the product viewer's step clips use it.
+
+The engine finds controls by `data-role`, writes state to `data-*` on the
+root and progress to `--p` / `--b` / `--h`; it never styles anything.
+
+**Do not add a caption track to a film whose captions are burned in.** The
+Pledgivo films carry their own, and a `captions` VTT on top shows every line
+twice.
+
 ### Scroll animations
 
 **There are none, deliberately.** Sections used to start at `opacity: 0` and fade
