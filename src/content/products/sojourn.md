@@ -63,7 +63,7 @@ roadmap:
   - version: "Release 1"
     theme: "In development"
     state: in-build
-    description: "Two of nine sprints done. Time in status and with owner on any object, business hours per org, object, field or queue, backfill, goals and breaches, live values, the record timeline, and twenty reports with four dashboards."
+    description: "In development, with early access open; current progress is at sojourn.cloudalgo.com. Release 1 includes time in status and with owner on any object, business hours per org, object, field or queue, backfill, goals and breaches, live values, the record timeline, and twenty reports with four dashboards."
   - version: "Sprint 8"
     theme: "Security review"
     state: planned
@@ -86,7 +86,7 @@ published: true
 
 Sojourn installs into your Salesforce org and measures what Field History never recorded: how long each value lasted, who held the record meanwhile, and how much of that time fell inside business hours.
 
-**Where it is.** Release 1 is in development, two sprints of nine done, and early access is open. There is no AppExchange listing yet; early-access customers are given a package version ID and install it into a sandbox first.
+**Where it is.** Release 1 is in development, and early access is open. Current progress is at [sojourn.cloudalgo.com](https://sojourn.cloudalgo.com). There is no AppExchange listing yet; early-access customers are given a package version ID and install it into a sandbox first.
 
 **How a stay becomes a row.** When a tracked field changes, Sojourn closes the interval that was open and starts the next one. Each closed interval is a record carrying the value, the owner, when it was entered and left, its business minutes and calendar minutes, its goal, and when it breached, if it did. A case that went New, Working, Waiting on customer, Working is four rows you can group by owner, status or week in any standard report.
 

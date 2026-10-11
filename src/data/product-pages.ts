@@ -377,7 +377,7 @@ export const productPages: Record<string, ProductPage> = {
       cap: { title: 'What it records, and what it gives you.', note: 'Seven capabilities' },
       readout: { title: 'The specification.', note: 'As designed, Release 1' },
       terms: { title: 'What it costs, and what it needs.', note: 'Five prerequisites, three conditional' },
-      ahead: { title: 'Where it is, and what comes next.', note: 'Two of nine sprints done' },
+      ahead: { title: 'Where it is, and what comes next.', note: 'Release 1 in development · early access open' },
       colophon: { title: 'Where to go next.', note: 'Sojourn Release 1 · October 2026' },
     },
     band: {
