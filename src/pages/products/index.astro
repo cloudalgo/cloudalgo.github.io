@@ -188,9 +188,14 @@ const COPY = {
     ],
     // Early access is asked for through our contact form -- the Sojourn
     // site's own button points there too -- so the primary action is
-    // ours, and the product site is the third way out.
+    // ours, and the product site is the third way out. The query opens
+    // the form with the Sojourn message filled in.
     actions: [
-      { label: 'Request early access →', href: '/contact/', primary: true },
+      {
+        label: 'Request early access →',
+        href: '/contact/?product=sojourn&intent=early-access&utm_source=cloudalgo-site&utm_medium=cta&utm_content=products-index',
+        primary: true,
+      },
       { label: 'Read the guide', href: 'https://sojourn.cloudalgo.com/docs/' },
       { label: 'The Sojourn site', href: 'https://sojourn.cloudalgo.com/' },
     ],
