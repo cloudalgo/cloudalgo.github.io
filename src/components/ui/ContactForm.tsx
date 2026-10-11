@@ -1,7 +1,8 @@
 import { useForm } from 'react-hook-form';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { readHubspotCookie, readFirstTouch, track } from '@/lib/analytics';
 import { HUBSPOT_CONTACT_FORM_ID, hubspotEndpoint } from '@/data/forms';
+import { MESSAGE_MAX_LENGTH, sojournPrefill } from '@/lib/contact-prefill';
 
 interface FormData {
   firstName: string;
@@ -18,7 +19,21 @@ const HUBSPOT_URL = hubspotEndpoint(HUBSPOT_CONTACT_FORM_ID);
    than derived from the form's own keys. */
 export default function ContactForm() {
   const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
-  const { register, handleSubmit, formState: { errors }, reset } = useForm<FormData>();
+  const { register, handleSubmit, formState: { errors }, reset, getValues, setValue } = useForm<FormData>();
+  const defaultPlaceholder = 'Every order gets typed into NetSuite twice. Two people, most of a morning, every day.';
+  const [placeholder, setPlaceholder] = useState(defaultPlaceholder);
+
+  /* A visitor sent from the Sojourn site starts with its questions in the
+     box. Read on mount, never during render, so the server HTML and the
+     first client render agree; the query string only exists in the browser.
+     An empty message only -- never overwrite what somebody has typed -- and
+     no validation trigger, so the form does not open with an error showing. */
+  useEffect(() => {
+    const prefill = sojournPrefill(window.location.search);
+    if (!prefill) return;
+    setPlaceholder(prefill.placeholder);
+    if (!getValues('message')) setValue('message', prefill.message);
+  }, [getValues, setValue]);
 
   const onSubmit = async (data: FormData) => {
     setStatus('sending');
@@ -159,10 +174,10 @@ export default function ContactForm() {
           className="ca-field__input ca-field__input--area"
           rows={7}
           autoComplete="off"
-          placeholder="Every order gets typed into NetSuite twice. Two people, most of a morning, every day."
+          placeholder={placeholder}
           aria-invalid={errors.message ? true : undefined}
           aria-describedby={errors.message ? 'cf-message-error' : undefined}
-          {...register('message', { required: 'Message is required', maxLength: { value: 500, message: 'Max 500 characters' } })} />
+          {...register('message', { required: 'Message is required', maxLength: { value: MESSAGE_MAX_LENGTH, message: `Max ${MESSAGE_MAX_LENGTH} characters` } })} />
         {errors.message && (
           <span className="error-line" id="cf-message-error" role="alert">{errors.message.message}</span>
         )}

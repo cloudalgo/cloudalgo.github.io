@@ -65,11 +65,37 @@ const schema = [
             owns, which is a hydration race -- see StatsBar.astro. */}
         <div class="desk__col">
           <h1 id="desk-heading" class="desk__title">Start with the sentence you are <span class="mark mark--draw">tired of saying</span>.</h1>
-          <p class="desk__lede">
+          <p class="desk__lede" id="desk-lede">
             &ldquo;We re-key that by hand.&rdquo; &ldquo;The data is a day old.&rdquo; &ldquo;That system
             has no API.&rdquo; Write yours below. It reaches Sandeep and Vikash, the two people who would
             do the work, and one of them answers in writing within one working day.
           </p>
+
+          {/* The Sojourn site sends its early-access buttons here with
+              ?product=sojourn. Swap the headline and lede for that visit
+              only; the markup above stays the default for visitors without
+              JavaScript and for every other visit. Inline so it runs before
+              first paint, and outside the React tree so it never races the
+              island's hydration -- it touches only nodes Astro owns. */}
+          <script is:inline>
+            (function () {
+              var params = new URLSearchParams(window.location.search);
+              if (params.get('product') !== 'sojourn') return;
+              var title = document.getElementById('desk-heading');
+              var lede = document.getElementById('desk-lede');
+              if (!title || !lede) return;
+              var mark = document.createElement('span');
+              mark.className = 'mark mark--draw';
+              mark.textContent = 'Sojourn';
+              title.textContent = 'Request ';
+              title.appendChild(mark);
+              title.appendChild(document.createTextNode(' early access.'));
+              lede.textContent =
+                'Tell us your Salesforce edition, the objects you want to track, and the question your director keeps asking. ' +
+                'It reaches Sandeep and Vikash, who build Sojourn, and one of them answers in writing within one working day.';
+              document.title = 'Sojourn early access \u2014 CloudAlgo';
+            })();
+          </script>
 
           <ContactForm client:load />
         </div>
