@@ -11,7 +11,8 @@ import { getCollection } from 'astro:content';
 
 const products = await getCollection('products');
 const ga = products.filter((p) => p.data.status === 'ga').length;
-const preview = products.length - ga;
+const early = products.filter((p) => p.data.status === 'early-access').length;
+const preview = products.length - ga - early;
 ---
 <section class="hero-press">
   <div>
@@ -21,13 +22,13 @@ const preview = products.length - ga;
     </h1>
     <div class="btn-row">
       <a class="btn btn-primary" href="/contact/">Book a consultation &rarr;</a>
-      <a class="btn btn-outline" href="/products/">See the four products</a>
+      <a class="btn btn-outline" href="/products/">See the five products</a>
     </div>
   </div>
   <div class="hero-press__standfirst">
     <p>
       Certified Salesforce architects and developers, the Heroku estate that sits
-      beside the org, and four products we build, run and support ourselves. We
+      beside the org, and five products we build, run and support ourselves. We
       scope tightly, ship on schedule, and hand back an org your admins can change
       without calling us. Hire us for the build, or start with something already
       working.
@@ -35,7 +36,7 @@ const preview = products.length - ga;
     <dl class="hero-press__facts">
       <div><dt>Founded</dt><dd>2019</dd></div>
       <div><dt>Practices</dt><dd>Consulting, Heroku, Product, Support, Data</dd></div>
-      <div><dt>Products</dt><dd>{ga} GA, {preview} preview</dd></div>
+      <div><dt>Products</dt><dd>{ga} GA, {preview} preview{early > 0 && `, ${early} early access`}</dd></div>
       <div><dt>Enquiries</dt><dd>sales@cloudalgo.com</dd></div>
     </dl>
   </div>

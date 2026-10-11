@@ -20,7 +20,7 @@ export interface ContentsItem {
   /** One line. It has to survive a quarter of the page width. */
   blurb: string;
   /**
-   * Raw collection value: 'ga' | 'preview' | 'beta'. Optional, and absent
+   * Raw collection value: 'ga' | 'preview' | 'beta' | 'early-access'. Optional, and absent
    * on the services index: a product ships and so has a ship status, but
    * an engagement is a period of time and has nothing to be GA about.
    * Omitted rather than faked, so the pip never appears empty.

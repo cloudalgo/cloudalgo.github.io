@@ -85,7 +85,7 @@ export const website = {
   url: `${SITE}/`,
   name: 'CloudAlgo',
   description:
-    'Salesforce, MuleSoft, Heroku and AWS consulting, and the four products built from the same bench.',
+    'Salesforce, MuleSoft, Heroku and AWS consulting, and the five products built from the same bench.',
   publisher: { '@id': ORG_ID },
   inLanguage: 'en',
 };

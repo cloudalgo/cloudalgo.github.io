@@ -190,3 +190,58 @@
   .evidence__flow { gap: 0.5rem 0; }
   .evidence__arrow { padding: 0 0.5rem; }
 }
+
+/* ── The drawn table ──────────────────────────────────────
+   Sojourn's figure: the rows the package writes for one sample case.
+   A product with no build to screenshot can still show its output, and
+   for Sojourn the output IS the claim -- one row per stay, durations
+   already in business hours. Mono, because these are values a reader
+   runs down a column to compare, the same reason .compare sets them so.
+
+   The breached row is marked by an ember rule on its leading edge and
+   its weight, not by a fill, so it survives the monochrome skin and a
+   reader who cannot separate ember from ink. */
+
+.evidence__intervals {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid var(--color-heading);
+  background: var(--surface-card);
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  color: var(--color-heading);
+}
+
+.evidence__intervals th,
+.evidence__intervals td {
+  padding: 0.5625rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border-default);
+}
+
+.evidence__intervals thead th {
+  font-weight: var(--weight-regular);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  border-bottom-color: var(--color-heading);
+}
+
+/* Hours line up on the point, so the column reads as one quantity. */
+.evidence__intervals th:nth-child(3),
+.evidence__intervals td:nth-child(3) {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.evidence__intervals tbody tr:last-child td { border-bottom: 0; }
+
+.evidence__intervals-breach td { font-weight: var(--weight-semibold); }
+.evidence__intervals-breach td:first-child {
+  box-shadow: inset 3px 0 0 var(--color-accent);
+}
+
+@media (max-width: 620px) {
+  .evidence__intervals th,
+  .evidence__intervals td { padding: 0.5rem 0.625rem; }
+}

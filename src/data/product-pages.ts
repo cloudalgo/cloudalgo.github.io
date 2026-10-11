@@ -13,8 +13,9 @@
  * product in the catalogue moves data along a path and makes a claim
  * about a boundary it never crosses. OrgVitals never writes back to the
  * org. Pledgivo never lets a card number reach Apex. AlgoBridge never
- * runs a record through our infrastructure. InsureAlgo never leaves the
- * handset. That claim was buried in body prose nobody reads; here it is
+ * runs a record through our infrastructure. Sojourn never makes a call
+ * out of the org. InsureAlgo never leaves the handset. That claim was
+ * buried in body prose nobody reads; here it is
  * the first thing on the page.
  *
  * Keyed by the collection id (the .md filename), so a fifth product
@@ -321,6 +322,69 @@ export const productPages: Record<string, ProductPage> = {
       emphasis: 'Getting your org ready to receive it is the other half.',
       note:
         'Most fundraising teams arrive with an Opportunity model that grew sideways for a decade. If yours needs straightening before the package lands on it, that is work we do.',
+    },
+  },
+
+  sojourn: {
+    headline: 'See where every record spent its time, and who was holding it.',
+    mark: 'who was holding it',
+    lede:
+      'Sojourn is a managed package that records how long every record spent in each status and with each owner, measured in business hours, on any object. Every stay becomes a row, so “why did this take so long?” is one report away.',
+    short: 'time in status',
+    claim:
+      'Nothing Sojourn records leaves your org. It makes no callouts, deploys no metadata, and every query runs with the reading user’s permissions.',
+    transit: {
+      source: {
+        label: 'Source',
+        name: 'A record in your org',
+        note: 'A Case, Lead, Opportunity or custom record whose status or owner changes.',
+      },
+      inTag: 'on save',
+      estate: 'Your Salesforce org',
+      stages: [
+        {
+          name: 'Capture',
+          what: 'The interval that was open closes and the next one opens, written only to Sojourn’s own objects.',
+        },
+        {
+          name: 'Measure',
+          what: 'Business minutes against the hours set for that org, object, field or queue, with calendar minutes beside them.',
+        },
+        {
+          name: 'Goal',
+          what: 'Each stay is checked against its target, and a breach is stamped with the moment it happened.',
+        },
+        {
+          name: 'Report',
+          what: 'One row per stay, read in user mode — twenty report templates, four dashboards and the record timeline.',
+        },
+      ],
+    },
+    facts: [
+      { term: 'Runs in', detail: 'Your Salesforce org' },
+      { term: 'Editions', detail: 'Enterprise · Unlimited · Performance · Developer' },
+      { term: 'Price', detail: 'Published at listing' },
+    ],
+    cta: { primary: 'Open the Sojourn site', secondary: 'Install guide' },
+    links: { external: 'The Sojourn site', guide: 'Install guide' },
+    price: {
+      figure: 'One tier',
+      gloss:
+        'Release 1 ships every feature in one package, with nothing held back for a higher tier. The price is published with the AppExchange listing once security review clears; early access is open until then. The Omni-Channel extension and a set-up by CloudAlgo are separate conversations.',
+    },
+    folds: {
+      transit: { title: 'How a stay becomes a row.', note: 'Inside the org, start to finish' },
+      cap: { title: 'What it records, and what it gives you.', note: 'Seven capabilities' },
+      readout: { title: 'The specification.', note: 'As designed, Release 1' },
+      terms: { title: 'What it costs, and what it needs.', note: 'Five prerequisites, three conditional' },
+      ahead: { title: 'Where it is, and what comes next.', note: 'Two of nine sprints done' },
+      colophon: { title: 'Where to go next.', note: 'Sojourn Release 1 · October 2026' },
+    },
+    band: {
+      ask: 'Sojourn shows where the time went.',
+      emphasis: 'Deciding what to do about it is the other half.',
+      note:
+        'A report that says cases wait 34 business hours on the customer is a finding, not a fix. If the answer is a process, a queue or an org that needs reshaping, that is work we do, and we can install Sojourn and build the reports your leadership asks for while we are there.',
     },
   },
 

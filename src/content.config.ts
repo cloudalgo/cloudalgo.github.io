@@ -95,7 +95,7 @@ const products = defineCollection({
   loader: glob({ pattern: '*.md', base: './src/content/products' }),
   schema: z.object({
     title:          z.string(),
-    status:         z.enum(['ga', 'preview', 'beta']),
+    status:         z.enum(['ga', 'preview', 'beta', 'early-access']),
     type:           z.enum(['salesforce-app', 'integration', 'mobile-app', 'desktop-app']),
     tagline:        z.string(),
     excerpt:        z.string(),
@@ -178,6 +178,9 @@ const products = defineCollection({
       version:     z.string(),
       theme:       z.string(),
       description: z.string(),
+      /* Read off position when absent: first shipped, second in build,
+         the rest planned. Set it where that would be untrue. */
+      state:       z.enum(['shipped', 'in-build', 'planned']).optional(),
     })).optional(),
     legal: z.array(z.object({
       label: z.string(),

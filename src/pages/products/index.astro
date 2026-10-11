@@ -12,7 +12,7 @@ import CompareTable from '@/components/ui/CompareTable.astro';
 import CtaBand from '@/components/ui/CtaBand.astro';
 import { organization, orgRef, breadcrumbs, abs, SITE_ID } from '@/data/schema';
 
-// The catalogue. Four entries printed as specimen plates, a contents
+// The catalogue. Five entries printed as specimen plates, a contents
 // strip that indexes them, one table that answers the questions people
 // actually ask, and two ways out.
 //
@@ -37,7 +37,7 @@ const catalogSchema = [
     '@type': 'CollectionPage',
     '@id': abs('/products/'),
     url: abs('/products/'),
-    name: 'Products — four Salesforce tools we built and run',
+    name: 'Products — five Salesforce tools we built and run',
     isPartOf: { '@id': SITE_ID },
     publisher: orgRef,
     inLanguage: 'en',
@@ -171,6 +171,37 @@ const COPY = {
       { term: 'Licences',    detail: '3 minimum · $147/mo, no cut of what you raise' },
     ],
   },
+  sojourn: {
+    contents: 'Your director asks why cases take so long, and no report can say.',
+    price: 'At listing',
+    meta: 'Release 1 · Managed package',
+    tagline: 'How long every record sat in each status, and with whom.',
+    description:
+      'Field History records that a value changed. It never records how long the value lasted, ' +
+      'who held the record meanwhile, or whether that time fell inside business hours. Sojourn ' +
+      'writes one row per stay — status, owner, business minutes, goal — on Case, Lead, ' +
+      'Opportunity or any custom object, and backfills up to 18 months from the history you ' +
+      'already have.',
+    chips: [
+      'Business hours', 'Time with owner', 'Goals & breaches',
+      'Record timeline', '20 reports · 4 dashboards', '18-month backfill',
+    ],
+    // Early access is asked for through our contact form -- the Sojourn
+    // site's own button points there too -- so the primary action is
+    // ours, and the product site is the third way out.
+    actions: [
+      { label: 'Request early access →', href: '/contact/', primary: true },
+      { label: 'Read the guide', href: 'https://sojourn.cloudalgo.com/docs/' },
+      { label: 'The Sojourn site', href: 'https://sojourn.cloudalgo.com/' },
+    ],
+    spec: [
+      { term: 'Runs in',     detail: 'Your Salesforce org — managed package' },
+      { term: 'Editions',    detail: 'Enterprise · Unlimited · Performance · Developer' },
+      { term: 'Tracks',      detail: 'Case, Lead, Opportunity, any custom object' },
+      { term: 'Org access',  detail: 'User mode — no callouts, no metadata deployed' },
+      { term: 'Ships',       detail: 'Release 1, 2 of 9 sprints done — sandbox first' },
+    ],
+  },
   insurealgo: {
     contents: 'You hold five insurance policies and miss the renewals.',
     price: 'Free',
@@ -197,7 +228,7 @@ const COPY = {
   },
 } satisfies Record<string, EntryCopy>;
 
-const ORDER = ['orgvitals', 'algobridge', 'pledgivo', 'insurealgo'] as const;
+const ORDER = ['orgvitals', 'algobridge', 'pledgivo', 'sojourn', 'insurealgo'] as const;
 
 const byId = new Map(products.map((p) => [p.id, p]));
 
@@ -232,54 +263,56 @@ const contents = ORDER.map((id) => ({
   blurb: COPY[id].contents,
 }));
 
-// Seven rows, four columns, no adjectives. The eighth row the first
-// draft carried -- "does it send your data to us" -- said "no" four
-// times, which is not a comparison; it is the note under the table.
+// Seven rows, five columns, no adjectives. The eighth row the first
+// draft carried -- "does it send your data to us" -- said "no" every
+// time, which is not a comparison; it is the note under the table.
 const COMPARE_ROWS = [
-  { label: 'What it is',        cells: ['Desktop app', 'Sync service', 'Managed package', 'Mobile app'] },
-  { label: 'Where it runs',     cells: ['Your machine', 'Your server', 'Your Salesforce org', 'Your phone'] },
-  { label: 'Salesforce access', cells: ['Read-only, via sf CLI', 'Read and write, API', 'Native — it is the org', { text: 'None', muted: true }] },
-  { label: 'Who it is for',     cells: ['Architects & admins', 'Data & platform teams', 'Nonprofits', 'Anyone with a policy'] },
-  { label: 'Set-up',            cells: ['Install and authenticate', 'Docker Compose or ECS', 'Install package, connect Stripe', 'Download and open'] },
-  { label: 'Price',             cells: ['Free', 'Free — MIT', '$49/mo per admin', 'Free'] },
-  { label: 'Status',            cells: ['Preview', 'Generally available', 'Preview', 'Generally available'] },
+  { label: 'What it is',        cells: ['Desktop app', 'Sync service', 'Managed package', 'Managed package', 'Mobile app'] },
+  { label: 'Where it runs',     cells: ['Your machine', 'Your server', 'Your Salesforce org', 'Your Salesforce org', 'Your phone'] },
+  { label: 'Salesforce access', cells: ['Read-only, via sf CLI', 'Read and write, API', 'Native — it is the org', 'Native — user mode', { text: 'None', muted: true }] },
+  { label: 'Who it is for',     cells: ['Architects & admins', 'Data & platform teams', 'Nonprofits', 'Service & sales ops', 'Anyone with a policy'] },
+  { label: 'Set-up',            cells: ['Install and authenticate', 'Docker Compose or ECS', 'Install package, connect Stripe', 'Install package, enable objects', 'Download and open'] },
+  { label: 'Price',             cells: ['Free', 'Free — MIT', '$49/mo per admin', 'Published at listing', 'Free'] },
+  { label: 'Status',            cells: ['Preview', 'Generally available', 'Preview', 'Early access', 'Generally available'] },
 ];
 ---
 
 <Page
-  title="Products — four Salesforce tools we built and run"
-  description="OrgVitals, AlgoBridge, Pledgivo and InsureAlgo: what each one is, where it runs, what it touches in Salesforce, and what it costs. Two are generally available."
+  title="Products — five Salesforce tools we built and run"
+  description="OrgVitals, AlgoBridge, Pledgivo, Sojourn and InsureAlgo: what each one is, where it runs, what it touches in Salesforce, and what it costs."
   schema={catalogSchema}
 >
   <PageMasthead
     {crumbs}
     facts={[
-      { term: 'Titles',              detail: '4' },
+      { term: 'Titles',              detail: '5' },
       { term: 'Generally available', detail: 'AlgoBridge · InsureAlgo' },
       { term: 'In preview',          detail: 'OrgVitals · Pledgivo' },
+      { term: 'Early access',        detail: 'Sojourn' },
       { term: 'Open source',         detail: 'AlgoBridge — MIT' },
       { term: 'Support',             detail: 'contact@cloudalgo.com' },
     ]}
   >
     <Fragment slot="title">
-      Four tools we needed, so we <span class="mark mark--draw">built them</span>.
+      Five tools we needed, so we <span class="mark mark--draw">built them</span>.
     </Fragment>
     <Fragment slot="lede">
       Three came out of client work — an org we had to audit before we could quote it, a sync no
-      connector covered, a fundraising stack that was not allowed to leave Salesforce. The fourth we
-      wrote for ourselves and gave away. Two are generally available; two are in preview and you can
-      use them today.
+      connector covered, a fundraising stack that was not allowed to leave Salesforce. One answers the
+      question every service desk is asked and no standard report covers: where the time went. The
+      last we wrote for ourselves and gave away. Two are generally available, two are in preview you
+      can use today, and one is still being built, with early access open.
     </Fragment>
   </PageMasthead>
 
-  <ContentsBar items={contents} label="Products" />
+  <ContentsBar items={contents} label="Products" class="contents-bar--5" />
 
   <section class="section-press" aria-labelledby="catalogue-heading">
     <div class="section-press__head">
       <h2 id="catalogue-heading" class="section-title section-title--xs section-title--tighter section-press__title">
         The catalogue, in order of depth.
       </h2>
-      <span class="section-press__note">Specifications as of Aug 2026</span>
+      <span class="section-press__note">Specifications as of Oct 2026</span>
     </div>
 
     <ProductEntry {...entries[0]}>
@@ -371,10 +404,35 @@ const COMPARE_ROWS = [
       </EvidenceStrip>
     </ProductEntry>
 
-    <ProductEntry {...entries[3]}>
+    <ProductEntry {...entries[3]} figure="below">
+      {/* No screenshot, because the package is still being built. What
+          it writes is already fixed, though, and that is the claim: the
+          rows below are the Sojourn site's own sample case, the stays
+          Field History logs as five changes with no durations. */}
       <EvidenceStrip
         slot="figure"
         n="04"
+        caption="the rows Sojourn writes for one sample case. Field History keeps five changes and no durations for it; this is four stays in business hours, ready to sum. Hours are Monday to Friday, 09:00 to 17:00."
+      >
+        <table class="evidence__intervals">
+          <caption class="sr-only">Intervals for sample case 00012345</caption>
+          <thead>
+            <tr><th scope="col">Value</th><th scope="col">Owner</th><th scope="col">Business hours</th><th scope="col">Goal</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>New</td><td>Tier 1 queue</td><td>2.0</td><td>Met</td></tr>
+            <tr><td>Working</td><td>Priya N.</td><td>6.0</td><td>Met</td></tr>
+            <tr class="evidence__intervals-breach"><td>Waiting on customer</td><td>Tier 2 queue</td><td>34.0</td><td>Breached</td></tr>
+            <tr><td>Working</td><td>Anita R.</td><td>5.5</td><td>Open</td></tr>
+          </tbody>
+        </table>
+      </EvidenceStrip>
+    </ProductEntry>
+
+    <ProductEntry {...entries[4]}>
+      <EvidenceStrip
+        slot="figure"
+        n="05"
         caption="what expires soonest, and the minute it takes to add a policy."
       >
         {/* Two screens at a size you can read, not four at thumbnail
@@ -394,7 +452,7 @@ const COMPARE_ROWS = [
   <section class="section-press" aria-labelledby="compare-heading">
     <div class="section-press__head">
       <h2 id="compare-heading" class="section-title section-title--xs section-title--tighter section-press__title">
-        All four, side by side.
+        All five, side by side.
       </h2>
       <span class="section-press__note">The questions people actually ask</span>
     </div>
@@ -403,12 +461,13 @@ const COMPARE_ROWS = [
       corner="Compare"
       columns={entries.map((e) => e.title)}
       rows={COMPARE_ROWS}
-      caption="The four CloudAlgo products compared by what they are, where they run, what they touch in Salesforce, who they are for, how they are set up, what they cost and their ship status."
+      caption="The five CloudAlgo products compared by what they are, where they run, what they touch in Salesforce, who they are for, how they are set up, what they cost and their ship status."
     >
       <p class="compare-note" slot="footnote">
         One answer is the same in every column: your Salesforce data stays where it already is — in
-        your own org, on your own device, on your own infrastructure. Three of the four are free and
-        never ask for a card; Pledgivo is the one with a price on it.
+        your own org, on your own device, on your own infrastructure. Three of the five are free and
+        never ask for a card. Pledgivo has a price on it, and Sojourn's is published with its
+        AppExchange listing.
       </p>
     </CompareTable>
   </section>

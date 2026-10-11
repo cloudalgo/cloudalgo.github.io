@@ -9,7 +9,7 @@ externalUrl: "https://apps.apple.com/in/app/insurealgo/id6778015224"
 seoTitle: "InsureAlgo — Insurance Policy Tracker for iOS & Android"
 version: "1.0.0"
 lastUpdated: "2025-05-29"
-order: 4
+order: 5
 features:
   - icon: "shield"
     title: "All Policy Types"

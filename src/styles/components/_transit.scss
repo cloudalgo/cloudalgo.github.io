@@ -13,6 +13,17 @@
   margin-bottom: 3rem;
 }
 
+// A product where nothing leaves the boundary has no outbound leg, and
+// the two columns that would hold it go to the estate instead -- the
+// box IS the claim, so it is the thing that should take the room.
+// Scoped above the breakpoint: below it the transit is a single column
+// and this must not undo that.
+@media (min-width: 1001px) {
+  .transit--closed {
+    grid-template-columns: minmax(9rem, 0.8fr) auto minmax(0, 3.4fr);
+  }
+}
+
 .transit__port {
   display: flex;
   flex-direction: column;

@@ -81,6 +81,24 @@
   }
 }
 
+/* ── .contents-bar--5 ────────────────────────────────────────
+   The products catalogue: five entries. At four across the fifth would
+   sit alone on a second row, so a wide screen takes all five in one
+   band, and the middle band -- where a fifth of the width would wrap
+   each blurb to five lines -- takes three over two instead. Below 900px
+   the two-column rules underneath own the dividers, as for --9. */
+@media (min-width: 1101px) {
+  .contents-bar--5 { grid-template-columns: repeat(5, 1fr); }
+}
+
+@media (min-width: 901px) and (max-width: 1100px) {
+  .contents-bar--5 { grid-template-columns: repeat(3, 1fr); }
+  .contents-bar--5 .contents-bar__item:nth-child(3n + 1) { border-left: 0; }
+  .contents-bar--5 .contents-bar__item:nth-child(n + 4) {
+    border-top: 1px solid var(--border-default);
+  }
+}
+
 /* Two-up before one-up: at four across the blurb wraps to four lines
    long before the cell is genuinely too narrow, and a 2x2 contents
    block still reads as a contents block. A single column does not. */

@@ -104,6 +104,12 @@ const pad = (n: number) => String(n).padStart(2, '0');
 
 const tiers = data.pricing ?? [];
 
+/* A roadmap row states its own state where position would lie about it.
+   Without one, the first row is taken as shipped and the second as in
+   build -- true of a product with a release out, false of one that has
+   not shipped anything yet. */
+const ROADMAP_STATE = { shipped: 'Shipped', 'in-build': 'In build', planned: 'Planned' } as const;
+
 interface Link { href: string; label: string; external?: boolean }
 const isExternal = (href: string) => /^https?:/.test(href);
 
@@ -260,7 +266,7 @@ const schema: object[] = [softwareApp, organization, breadcrumbs(crumbs, product
       <span class="section-press__note">{page.folds.transit.note}</span>
     </div>
 
-    <div class="transit">
+    <div class:list={['transit', !page.transit.out && 'transit--closed']}>
       <div class="transit__port transit__port--in">
         <span class="transit__port-label">{page.transit.source.label}</span>
         <span class="transit__port-name">{page.transit.source.name}</span>
@@ -503,14 +509,17 @@ const schema: object[] = [softwareApp, organization, breadcrumbs(crumbs, product
       </div>
 
       <ol class="ahead">
-        {data.roadmap.map((r, i) => (
-          <li class:list={['ahead__row', i === 0 && 'is-shipped']}>
+        {data.roadmap.map((r, i) => {
+          const state = r.state ?? (i === 0 ? 'shipped' : i === 1 ? 'in-build' : 'planned');
+          return (
+          <li class:list={['ahead__row', state === 'shipped' && 'is-shipped']}>
             <span class="ahead__v">{r.version}</span>
-            <span class="ahead__state">{i === 0 ? 'Shipped' : i === 1 ? 'In build' : 'Planned'}</span>
+            <span class="ahead__state">{ROADMAP_STATE[state]}</span>
             <h3 class="ahead__theme">{r.theme}</h3>
             <p class="ahead__what">{r.description}</p>
           </li>
-        ))}
+          );
+        })}
       </ol>
     </section>
   )}

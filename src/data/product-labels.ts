@@ -22,4 +22,7 @@ export const STATUS_LABEL: Record<string, string> = {
   ga:      'Generally available',
   preview: 'Preview',
   beta:    'Beta',
+  // Earlier than preview: the package is still being built, and what a
+  // reader can do today is ask to be let in, not install it.
+  'early-access': 'Early access',
 };
