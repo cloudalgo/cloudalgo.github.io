@@ -23,6 +23,8 @@ export default function ContactForm() {
   const defaultPlaceholder = 'Every order gets typed into NetSuite twice. Two people, most of a morning, every day.';
   const [placeholder, setPlaceholder] = useState(defaultPlaceholder);
   // The prefilled prompts, so a message sent back unanswered can be refused.
+  // Null when there is nothing to refuse (no prefill, or the fit checklist,
+  // whose message already carries the visitor's answers).
   const [template, setTemplate] = useState<string | null>(null);
   // Set once mounted. Until then the page's own script hides the server
   // placeholder for a Sojourn visit (see contact.astro), so the NetSuite
@@ -39,7 +41,7 @@ export default function ContactForm() {
     const prefill = sojournPrefill(window.location.search);
     if (!prefill) return;
     setPlaceholder(prefill.placeholder);
-    setTemplate(prefill.message);
+    setTemplate(prefill.answerOptional ? null : prefill.message);
     if (!getValues('message')) setValue('message', prefill.message);
   }, [getValues, setValue]);
 

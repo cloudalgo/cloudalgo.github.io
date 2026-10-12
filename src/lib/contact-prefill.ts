@@ -29,6 +29,96 @@ const BY_INTENT: Record<string, string> = {
 export interface SojournPrefill {
   message: string;
   placeholder: string;
+  /**
+   * Set only for the fit checklist, whose message already carries the
+   * visitor's answers, so it may be sent without writing anything more.
+   * Absent for every other prefill, which must still be answered. Kept as an
+   * optional flag so the shape of the existing prefills does not change.
+   */
+  answerOptional?: true;
+}
+
+/*
+ * The estimator on the Sojourn home page sends the two numbers it shows.
+ * Plain integers within the slider ranges, matched by regex so "3.5", "3e1"
+ * and " 3" are refused rather than coerced; anything else is the plain
+ * early-access template with no numbers in it.
+ */
+const ESTIMATE_PEOPLE_MAX = 30;
+const ESTIMATE_HOURS_MAX = 12;
+
+function boundedInteger(value: string | null, max: number): number | null {
+  if (value === null || !/^[1-9][0-9]?$/.test(value)) return null;
+  const n = Number(value);
+  return n <= max ? n : null;
+}
+
+function estimateMessage(params: URLSearchParams): string {
+  const people = boundedInteger(params.get('people'), ESTIMATE_PEOPLE_MAX);
+  const hours = boundedInteger(params.get('hours'), ESTIMATE_HOURS_MAX);
+  if (people === null || hours === null) return EARLY_ACCESS;
+
+  const who = people === 1 ? '1 person' : `${people} people`;
+  const lost = hours === 1 ? '1 hour' : `${hours} hours`;
+  const [heading, ...prompts] = EARLY_ACCESS.split('\n');
+  return [heading, `From the Sojourn estimator: ${who}, each losing ${lost} a week.`, ...prompts].join('\n');
+}
+
+/*
+ * The fit checklist sends one value per question, each from a fixed list.
+ * Lookups are own-property only (?edition=constructor must not reach
+ * Object.prototype); an unknown value is dropped and its line reads
+ * "Not answered".
+ */
+const NOT_ANSWERED = 'Not answered';
+
+const FIT_EDITION: Record<string, string> = {
+  enterprise: 'Enterprise',
+  unlimited: 'Unlimited',
+  performance: 'Performance',
+  developer: 'Developer',
+  other: 'Another edition or not sure',
+};
+
+// Insertion order is the order the message lists them in.
+const FIT_OBJECTS: Record<string, string> = {
+  case: 'Case',
+  lead: 'Lead',
+  opportunity: 'Opportunity',
+  custom: 'custom objects',
+};
+
+const FIT_YES_NO_UNSURE: Record<string, string> = { yes: 'Yes', no: 'No', unsure: 'Not sure' };
+
+const FIT_VOLUME: Record<string, string> = {
+  lt10k: 'Under 10,000',
+  '10k-100k': '10,000 to 100,000',
+  gt100k: 'Over 100,000',
+  unsure: 'Not sure',
+};
+
+function label(table: Record<string, string>, value: string | null): string {
+  return value !== null && Object.prototype.hasOwnProperty.call(table, value) ? table[value] : NOT_ANSWERED;
+}
+
+function fitObjects(value: string | null): string {
+  const chosen = new Set((value ?? '').split(','));
+  const labels = Object.keys(FIT_OBJECTS)
+    .filter((key) => chosen.has(key))
+    .map((key) => FIT_OBJECTS[key]);
+  return labels.length ? labels.join(', ') : NOT_ANSWERED;
+}
+
+function fitMessage(params: URLSearchParams): string {
+  return (
+    'Sojourn fit checklist.\n' +
+    `Salesforce edition: ${label(FIT_EDITION, params.get('edition'))}\n` +
+    `Objects to track: ${fitObjects(params.get('objects'))}\n` +
+    `Business hours set up: ${label(FIT_YES_NO_UNSURE, params.get('bh'))}\n` +
+    `Field history on for those fields: ${label(FIT_YES_NO_UNSURE, params.get('history'))}\n` +
+    `Changes per month: ${label(FIT_VOLUME, params.get('volume'))}\n` +
+    'Anything else we should know: '
+  );
 }
 
 /** Null for every visit that did not come from the Sojourn site. */
@@ -37,6 +127,13 @@ export function sojournPrefill(search: string): SojournPrefill | null {
   if (params.get('product') !== 'sojourn') return null;
 
   const intent = params.get('intent') ?? '';
+  if (intent === 'fit') {
+    return { message: fitMessage(params), placeholder: SOJOURN_PLACEHOLDER, answerOptional: true };
+  }
+  if (intent === 'estimate') {
+    return { message: estimateMessage(params), placeholder: SOJOURN_PLACEHOLDER };
+  }
+
   // Own-property check: ?intent=constructor must not reach Object.prototype.
   const message = Object.prototype.hasOwnProperty.call(BY_INTENT, intent)
     ? BY_INTENT[intent]

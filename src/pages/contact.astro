@@ -89,9 +89,20 @@ const schema = [
               var title = document.getElementById('desk-heading');
               var lede = document.getElementById('desk-lede');
               if (!title || !lede) return;
+              var fit = params.get('intent') === 'fit';
               var mark = document.createElement('span');
               mark.className = 'mark mark--draw';
               mark.textContent = 'Sojourn';
+              if (fit) {
+                title.textContent = 'Check ';
+                title.appendChild(mark);
+                title.appendChild(document.createTextNode(' fit.'));
+                lede.textContent =
+                  'Your checklist answers are below. Add anything else we should know, ' +
+                  'and Sandeep or Vikash replies in writing within one working day.';
+                document.title = 'Sojourn fit checklist \u2014 CloudAlgo';
+                return;
+              }
               title.textContent = 'Request ';
               title.appendChild(mark);
               title.appendChild(document.createTextNode(' early access.'));
