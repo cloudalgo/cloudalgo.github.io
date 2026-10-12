@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { MESSAGE_MAX_LENGTH, SOJOURN_PLACEHOLDER, sojournPrefill } from './contact-prefill';
+import { MESSAGE_MAX_LENGTH, SOJOURN_PLACEHOLDER, isUntouched, sojournPrefill } from './contact-prefill';
 
 const EARLY_ACCESS =
   'Sojourn early access.\nSalesforce edition: \nObjects to track (Case, Lead, Opportunity, custom): \nThe question your director asks that you cannot answer today: ';
@@ -42,5 +42,28 @@ describe('sojournPrefill', () => {
       const message = sojournPrefill(`?product=sojourn&intent=${intent}`)!.message;
       expect(message.length).toBeLessThan(MESSAGE_MAX_LENGTH);
     }
+  });
+});
+
+describe('isUntouched', () => {
+  it('is true for the template as sent, with or without trailing spaces', () => {
+    expect(isUntouched(EARLY_ACCESS, EARLY_ACCESS)).toBe(true);
+    expect(isUntouched(EARLY_ACCESS.replace(/ $/gm, ''), EARLY_ACCESS)).toBe(true);
+    expect(isUntouched('A question about Sojourn: ', 'A question about Sojourn: ')).toBe(true);
+  });
+
+  it('is true when prompts are deleted but nothing is written', () => {
+    expect(isUntouched('Sojourn early access.\nSalesforce edition:', EARLY_ACCESS)).toBe(true);
+    expect(isUntouched('   \n', EARLY_ACCESS)).toBe(true);
+  });
+
+  it('is false once any prompt has an answer', () => {
+    expect(isUntouched(EARLY_ACCESS.replace('Salesforce edition: ', 'Salesforce edition: Enterprise'), EARLY_ACCESS)).toBe(false);
+    expect(isUntouched('A question about Sojourn: does it track queues?', 'A question about Sojourn: ')).toBe(false);
+  });
+
+  it('is false for a message written over the template', () => {
+    expect(isUntouched('We need time per owner on Case.', EARLY_ACCESS)).toBe(false);
+    expect(isUntouched(EARLY_ACCESS + '\nAlso Lead.', EARLY_ACCESS)).toBe(false);
   });
 });

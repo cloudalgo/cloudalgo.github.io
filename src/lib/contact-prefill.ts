@@ -44,3 +44,23 @@ export function sojournPrefill(search: string): SojournPrefill | null {
 
   return { message, placeholder: SOJOURN_PLACEHOLDER };
 }
+
+export const UNTOUCHED_MESSAGE = 'Add your answers after the prompts before sending.';
+
+/*
+ * True when the message holds nothing beyond the prompts it was prefilled
+ * with: sent as-is, or with prompts deleted but nothing written. Each line
+ * that starts with a prompt counts only for what follows the prompt, so an
+ * answer on any one line is enough.
+ */
+export function isUntouched(message: string, template: string): boolean {
+  const prompts = template
+    .split('\n')
+    .map((line) => line.trim())
+    .filter(Boolean);
+  return message.split('\n').every((raw) => {
+    const line = raw.trim();
+    const prompt = prompts.find((p) => line.startsWith(p));
+    return (prompt ? line.slice(prompt.length) : line).trim() === '';
+  });
+}

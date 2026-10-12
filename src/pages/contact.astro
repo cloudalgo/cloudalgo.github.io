@@ -63,7 +63,7 @@ const schema = [
         {/* The ContactForm island sits inside this Astro wrapper; any
             class the page needs goes here rather than on a node React
             owns, which is a hydration race -- see StatsBar.astro. */}
-        <div class="desk__col">
+        <div class="desk__col" id="desk-col">
           <h1 id="desk-heading" class="desk__title">Start with the sentence you are <span class="mark mark--draw">tired of saying</span>.</h1>
           <p class="desk__lede" id="desk-lede">
             &ldquo;We re-key that by hand.&rdquo; &ldquo;The data is a day old.&rdquo; &ldquo;That system
@@ -81,6 +81,11 @@ const schema = [
             (function () {
               var params = new URLSearchParams(window.location.search);
               if (params.get('product') !== 'sojourn') return;
+              // Hides the form's default placeholder until the island sets
+              // the Sojourn one (_forms.scss); the class sits on this Astro
+              // wrapper, never on a node React owns.
+              var col = document.getElementById('desk-col');
+              if (col) col.classList.add('is-prefilling');
               var title = document.getElementById('desk-heading');
               var lede = document.getElementById('desk-lede');
               if (!title || !lede) return;

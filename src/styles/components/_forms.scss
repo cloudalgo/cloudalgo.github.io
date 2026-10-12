@@ -73,6 +73,10 @@
 .ca-field__input::placeholder,
 .form-control::placeholder { color: var(--color-text-faintest); }
 
+/* A prefilled visit (contact.astro) hides the server placeholder until the
+   island has mounted and set its own, so the default never flashes. */
+.is-prefilling .ca-field__input:not([data-ready])::placeholder { color: transparent; }
+
 .ca-field__input:hover,
 .form-control:hover { border-color: var(--color-text-faint); }
 

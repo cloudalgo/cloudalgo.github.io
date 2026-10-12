@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form';
 import { useEffect, useState } from 'react';
 import { readHubspotCookie, readFirstTouch, track } from '@/lib/analytics';
 import { HUBSPOT_CONTACT_FORM_ID, hubspotEndpoint } from '@/data/forms';
-import { MESSAGE_MAX_LENGTH, sojournPrefill } from '@/lib/contact-prefill';
+import { MESSAGE_MAX_LENGTH, UNTOUCHED_MESSAGE, isUntouched, sojournPrefill } from '@/lib/contact-prefill';
 
 interface FormData {
   firstName: string;
@@ -22,6 +22,12 @@ export default function ContactForm() {
   const { register, handleSubmit, formState: { errors }, reset, getValues, setValue } = useForm<FormData>();
   const defaultPlaceholder = 'Every order gets typed into NetSuite twice. Two people, most of a morning, every day.';
   const [placeholder, setPlaceholder] = useState(defaultPlaceholder);
+  // The prefilled prompts, so a message sent back unanswered can be refused.
+  const [template, setTemplate] = useState<string | null>(null);
+  // Set once mounted. Until then the page's own script hides the server
+  // placeholder for a Sojourn visit (see contact.astro), so the NetSuite
+  // example does not flash before the Sojourn one replaces it.
+  const [ready, setReady] = useState(false);
 
   /* A visitor sent from the Sojourn site starts with its questions in the
      box. Read on mount, never during render, so the server HTML and the
@@ -29,9 +35,11 @@ export default function ContactForm() {
      An empty message only -- never overwrite what somebody has typed -- and
      no validation trigger, so the form does not open with an error showing. */
   useEffect(() => {
+    setReady(true);
     const prefill = sojournPrefill(window.location.search);
     if (!prefill) return;
     setPlaceholder(prefill.placeholder);
+    setTemplate(prefill.message);
     if (!getValues('message')) setValue('message', prefill.message);
   }, [getValues, setValue]);
 
@@ -175,9 +183,14 @@ export default function ContactForm() {
           rows={7}
           autoComplete="off"
           placeholder={placeholder}
+          data-ready={ready ? '' : undefined}
           aria-invalid={errors.message ? true : undefined}
           aria-describedby={errors.message ? 'cf-message-error' : undefined}
-          {...register('message', { required: 'Message is required', maxLength: { value: MESSAGE_MAX_LENGTH, message: `Max ${MESSAGE_MAX_LENGTH} characters` } })} />
+          {...register('message', {
+            required: 'Message is required',
+            maxLength: { value: MESSAGE_MAX_LENGTH, message: `Max ${MESSAGE_MAX_LENGTH} characters` },
+            validate: (value) => !template || !isUntouched(value, template) || UNTOUCHED_MESSAGE,
+          })} />
         {errors.message && (
           <span className="error-line" id="cf-message-error" role="alert">{errors.message.message}</span>
         )}
