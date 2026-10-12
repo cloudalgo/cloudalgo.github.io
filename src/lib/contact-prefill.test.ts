@@ -112,6 +112,10 @@ describe('sojournPrefill intent=estimate', () => {
   it('ignores the estimator numbers on other intents', () => {
     expect(sojournPrefill('?product=sojourn&intent=question&people=4&hours=3')?.message).toBe('A question about Sojourn: ');
   });
+
+  it('keeps every estimate message under the field limit', () => {
+    expect(estimate('30', '12').message.length).toBeLessThan(MESSAGE_MAX_LENGTH);
+  });
 });
 
 const FIT_EXAMPLE =
@@ -174,6 +178,12 @@ describe('sojournPrefill intent=fit', () => {
     expect(objects('')).toBe('Not answered');
   });
 
+  it('matches objects exactly, without trimming spaces around commas', () => {
+    const objects = (value: string) => line(fit(`objects=${encodeURIComponent(value)}`).message, 'Objects to track: ');
+    expect(objects('case, lead')).toBe('Case');
+    expect(objects(' case')).toBe('Not answered');
+  });
+
   it('shows "Not answered" for missing and unknown values', () => {
     const message = fit('edition=platinum&bh=maybe&history=YES&volume=lots&objects=account').message;
     expect(message).toBe(
@@ -207,7 +217,4 @@ describe('prototype keys elsewhere', () => {
     expect(sojournPrefill('?product=sojourn&intent=__proto__')?.message).toBe(EARLY_ACCESS);
   });
 
-  it('keeps every estimate message under the field limit', () => {
-    expect(estimate('30', '12').message.length).toBeLessThan(MESSAGE_MAX_LENGTH);
-  });
 });
