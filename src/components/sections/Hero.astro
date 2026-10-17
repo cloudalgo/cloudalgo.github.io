@@ -7,9 +7,9 @@
 // "2 GA, 2 preview" and that is true today, but it is a fact about the
 // collection, and a fact about the collection should not be maintained
 // by hand in a hero.
-import { getCollection } from 'astro:content';
+import { listedProducts, countWord } from '@/lib/listing';
 
-const products = await getCollection('products');
+const products = await listedProducts();
 const ga = products.filter((p) => p.data.status === 'ga').length;
 const early = products.filter((p) => p.data.status === 'early-access').length;
 const preview = products.length - ga - early;
@@ -22,13 +22,13 @@ const preview = products.length - ga - early;
     </h1>
     <div class="btn-row">
       <a class="btn btn-primary" href="/contact/">Book a consultation &rarr;</a>
-      <a class="btn btn-outline" href="/products/">See the five products</a>
+      <a class="btn btn-outline" href="/products/">{`See the ${countWord(products.length)} products`}</a>
     </div>
   </div>
   <div class="hero-press__standfirst">
     <p>
       Certified Salesforce architects and developers, the Heroku estate that sits
-      beside the org, and five products we build, run and support ourselves. We
+      {`beside the org, and ${countWord(products.length)} products we build, run and support ourselves.`} We
       scope tightly, ship on schedule, and hand back an org your admins can change
       without calling us. Hire us for the build, or start with something already
       working.

@@ -1,5 +1,6 @@
 ---
-import { getCollection, getEntry } from 'astro:content';
+import { listedProduct } from '@/lib/listing';
+import { getCollection } from 'astro:content';
 import Page from '@/layouts/Page.astro';
 import PageMasthead from '@/components/ui/PageMasthead.astro';
 import ContentsBar from '@/components/ui/ContentsBar.astro';
@@ -42,12 +43,20 @@ const bySlug = new Map(services.map((s) => [s.id, s]));
 const proofStamp = new Map(
   await Promise.all(
     services.map(async (s) => {
-      const product = s.data.proves ? await getEntry(s.data.proves) : undefined;
+      const product = await listedProduct(s.data.proves);
       const claim = product ? product.data.title : s.data.provenBy;
       return [s.id, claim ? `Proven by ${claim}` : undefined] as const;
     })
   )
 );
+
+// The products that prove a practice, read from the same references as the stamps, so a product that is
+// switched off (src/lib/listing.ts) drops out of the masthead too.
+const provenBy = (await Promise.all(services.map((s) => listedProduct(s.data.proves))))
+  .filter((p): p is NonNullable<typeof p> => Boolean(p))
+  .sort((a, b) => a.data.order - b.data.order)
+  .map((p) => p.data.title)
+  .join(' · ');
 
 // The eight engagements themselves live in `src/data/engagements.ts`,
 // along with the typical lengths and the retainer's response windows.
@@ -234,7 +243,7 @@ const servicesSchema = [
       { term: 'Delivered',   detail: '70+ projects' },
       { term: 'Smallest',    detail: '10 hrs / month' },
       { term: 'Emergency',   detail: 'Unlimited P1, every tier' },
-      { term: 'Proven by',   detail: 'OrgVitals · Pledgivo · AlgoBridge' },
+      { term: 'Proven by',   detail: provenBy },
       { term: 'Enquiries',   detail: 'contact@cloudalgo.com' },
     ]}
   >

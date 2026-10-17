@@ -1,4 +1,5 @@
 ---
+import { listedProduct } from '@/lib/listing';
 /**
  * One engagement, in full: the ask, the shape of the time, the whole
  * scope, what you are left holding, and the two engagements either side.
@@ -18,7 +19,7 @@
  * a markdown file adds it to the rail and to the count without anyone
  * remembering to.
  */
-import { getCollection, getEntry, render } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 import Page from '@/layouts/Page.astro';
 import Button from '@/components/ui/Button.astro';
 import PageMasthead from '@/components/ui/PageMasthead.astro';
@@ -54,7 +55,7 @@ const { detail } = engagement;
 /* The same proof stamp /services/ prints beside this engagement in the
    routing table, from the same field: a product it shipped, or a counted
    figure. Three of the eight have neither yet and print five terms. */
-const product = service.data.proves ? await getEntry(service.data.proves) : undefined;
+const product = await listedProduct(service.data.proves);
 const proof = product ? product.data.title : service.data.provenBy;
 const facts = [
   ...engagement.terms.map((t) => ({ term: t.term, detail: t.detail })),

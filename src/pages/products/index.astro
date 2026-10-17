@@ -1,5 +1,5 @@
 ---
-import { getCollection } from 'astro:content';
+import { listedProducts, countWord } from '@/lib/listing';
 import Page from '@/layouts/Page.astro';
 import PageMasthead from '@/components/ui/PageMasthead.astro';
 import ContentsBar from '@/components/ui/ContentsBar.astro';
@@ -22,8 +22,9 @@ import { organization, orgRef, breadcrumbs, abs, SITE_ID } from '@/data/schema';
 // app -- and left the reader to open all four to find out which was
 // theirs. The plate below carries the specification on the page.
 
-const allProducts = await getCollection('products', ({ data }) => data.published);
-const products = allProducts.sort((a, b) => a.data.order - b.data.order);
+// Only the listed products: one switched off (src/lib/listing.ts) leaves every plate, count and column.
+const products = await listedProducts();
+const count = products.length;
 
 // The catalogue as one graph rather than a bare list: a CollectionPage
 // the ItemList hangs off, the organisation that publishes it, and the
@@ -37,7 +38,7 @@ const catalogSchema = [
     '@type': 'CollectionPage',
     '@id': abs('/products/'),
     url: abs('/products/'),
-    name: 'Products — five Salesforce tools we built and run',
+    name: `Products — ${countWord(count)} Salesforce tools we built and run`,
     isPartOf: { '@id': SITE_ID },
     publisher: orgRef,
     inLanguage: 'en',
@@ -240,13 +241,17 @@ const byId = new Map(products.map((p) => [p.id, p]));
 /** The three things both the contents strip and the plate read off the
     collection. A product that is unpublished or renamed fails the build
     here rather than rendering a plate with holes in it. */
+/** The catalogue order, less any product switched off. */
+const SHOWN = ORDER.filter((id) => byId.has(id));
+const listed = (id: (typeof ORDER)[number]) => SHOWN.includes(id);
+
 function record(id: (typeof ORDER)[number]) {
   const p = byId.get(id);
   if (!p) throw new Error(`products/index.astro: no published product "${id}"`);
   return {
     id,
     href: `/products/${id}/`,
-    n: String(p.data.order).padStart(2, '0'),
+    n: String(SHOWN.indexOf(id) + 1).padStart(2, '0'),
     title: p.data.title,
     status: p.data.status,
   };
@@ -257,12 +262,13 @@ function record(id: (typeof ORDER)[number]) {
     a row of phone screens, nothing at all. `contents` is the one field
     of the copy map the plate does not take: it is the strip's line, not
     the entry's. */
-const entries = ORDER.map((id) => {
+const entries = SHOWN.map((id) => {
   const { contents: _strip, ...plate } = COPY[id];
   return { ...record(id), ...plate };
 });
+const E = Object.fromEntries(entries.map((e) => [e.id, e])) as Record<(typeof ORDER)[number], (typeof entries)[number]>;
 
-const contents = ORDER.map((id) => ({
+const contents = SHOWN.map((id) => ({
   ...record(id),
   href: `#${id}`,
   blurb: COPY[id].contents,
@@ -280,37 +286,53 @@ const COMPARE_ROWS = [
   { label: 'Price',             cells: ['Free', 'Free — MIT', '$49/mo per admin', 'Published at listing', 'Free'] },
   { label: 'Status',            cells: ['Preview', 'Generally available', 'Preview', 'Early access', 'Generally available'] },
 ];
+// The table is written in ORDER, one cell per product; a switched-off product's column drops out.
+const compareRows = COMPARE_ROWS.map((row) => ({ ...row, cells: row.cells.filter((_, i) => listed(ORDER[i])) }));
+const priceRow = compareRows.find((r) => r.label === 'Price')!;
+const freeCount = priceRow.cells.filter((c) => typeof c === 'string' && c.startsWith('Free')).length;
+
+// The masthead's facts and the lede's count, read off the listed products rather than typed.
+const names = (status: string) => products.filter((p) => p.data.status === status).map((p) => p.data.title);
+const ga = names('ga');
+const preview = names('preview');
+const early = names('early-access');
+const verb = (n: number) => (n === 1 ? 'is' : 'are');
+// One string, so no expression boundary inside the sentence can lose a space.
+const lede = [
+  listed('algobridge')
+    ? 'Three came out of client work — an org we had to audit before we could quote it, a sync no connector covered, a fundraising stack that was not allowed to leave Salesforce.'
+    : 'Two came out of client work — an org we had to audit before we could quote it, and a fundraising stack that was not allowed to leave Salesforce.',
+  'One answers the question every service desk is asked and no standard report covers: where the time went.',
+  'The last we wrote for ourselves and gave away.',
+  `${countWord(ga.length, true)} ${verb(ga.length)} generally available, ${countWord(preview.length)} ${verb(preview.length)} in preview you can use today, and ${countWord(early.length)} ${verb(early.length)} still being built, with early access open.`,
+].join(' ');
 ---
 
 <Page
-  title="Products — five Salesforce tools we built and run"
-  description="OrgVitals, AlgoBridge, Pledgivo, Sojourn and InsureAlgo: what each one is, where it runs, what it touches in Salesforce, and what it costs."
+  title={`Products — ${countWord(count)} Salesforce tools we built and run`}
+  description={`${products.map((p) => p.data.title).slice(0, -1).join(', ')} and ${products[count - 1].data.title}: what each one is, where it runs, what it touches in Salesforce, and what it costs.`}
   schema={catalogSchema}
 >
   <PageMasthead
     {crumbs}
     facts={[
-      { term: 'Titles',              detail: '5' },
-      { term: 'Generally available', detail: 'AlgoBridge · InsureAlgo' },
-      { term: 'In preview',          detail: 'OrgVitals · Pledgivo' },
-      { term: 'Early access',        detail: 'Sojourn' },
-      { term: 'Open source',         detail: 'AlgoBridge — MIT' },
+      { term: 'Titles',              detail: String(count) },
+      ...(ga.length ? [{ term: 'Generally available', detail: ga.join(' · ') }] : []),
+      ...(preview.length ? [{ term: 'In preview', detail: preview.join(' · ') }] : []),
+      ...(early.length ? [{ term: 'Early access', detail: early.join(' · ') }] : []),
+      ...(listed('algobridge') ? [{ term: 'Open source', detail: 'AlgoBridge — MIT' }] : []),
       { term: 'Support',             detail: 'contact@cloudalgo.com' },
     ]}
   >
     <Fragment slot="title">
-      Five tools we needed, so we <span class="mark mark--draw">built them</span>.
+      {`${countWord(count, true)} tools we needed, so we `} <span class="mark mark--draw">built them</span>.
     </Fragment>
     <Fragment slot="lede">
-      Three came out of client work — an org we had to audit before we could quote it, a sync no
-      connector covered, a fundraising stack that was not allowed to leave Salesforce. One answers the
-      question every service desk is asked and no standard report covers: where the time went. The
-      last we wrote for ourselves and gave away. Two are generally available, two are in preview you
-      can use today, and one is still being built, with early access open.
+      {lede}
     </Fragment>
   </PageMasthead>
 
-  <ContentsBar items={contents} label="Products" class="contents-bar--5" />
+  <ContentsBar items={contents} label="Products" class={count === 5 ? 'contents-bar--5' : undefined} />
 
   <section class="section-press" aria-labelledby="catalogue-heading">
     <div class="section-press__head">
@@ -320,7 +342,8 @@ const COMPARE_ROWS = [
       <span class="section-press__note">Specifications as of Oct 2026</span>
     </div>
 
-    <ProductEntry {...entries[0]}>
+    {listed('orgvitals') && (
+    <ProductEntry {...E.orgvitals}>
       {/* The weights are the method note behind the grade the figure
           prints. They sit in the copy column directly opposite the
           readout, which is the same argument arriving from the other
@@ -330,7 +353,7 @@ const COMPARE_ROWS = [
 
       <EvidenceStrip
         slot="figure"
-        n="01"
+        n={E.orgvitals.n}
         caption="49 checks running against the demo org, and the dashboard they produce. The grade above is that scan's, set in type because a reader should not have to squint at a recording to read the one number the product exists to give them."
       >
         <div class="evidence__stack">
@@ -349,11 +372,13 @@ const COMPARE_ROWS = [
         </div>
       </EvidenceStrip>
     </ProductEntry>
+    )}
 
-    <ProductEntry {...entries[1]} figure="below">
+    {listed('algobridge') && (
+    <ProductEntry {...E.algobridge} figure="below">
       <EvidenceStrip
         slot="figure"
-        n="02"
+        n={E.algobridge.n}
         caption="both arrows point both ways. There is no screenshot because there is no interface: AlgoBridge is a daemon, and this is the whole of it."
       >
         {/* Three nodes, not four. The fourth used to be "and back",
@@ -378,15 +403,17 @@ const COMPARE_ROWS = [
         </div>
       </EvidenceStrip>
     </ProductEntry>
+    )}
 
-    <ProductEntry {...entries[2]} figure="below">
+    {listed('pledgivo') && (
+    <ProductEntry {...E.pledgivo} figure="below">
       {/* The one entry that had no figure at all. The console is the
           claim -- gifts as standard Opportunities, in the org -- and the
           film is what the donor sees; neither one on its own is the
           product, which is why they are one figure. */}
       <EvidenceStrip
         slot="figure"
-        n="03"
+        n={E.pledgivo.n}
         caption="the fundraiser console in the org, and the donor's fifty seconds beside it. The film is silent, stops when it leaves the screen, and never starts for a reader who has asked for less motion."
       >
         <div class="evidence__pair">
@@ -408,15 +435,17 @@ const COMPARE_ROWS = [
         </div>
       </EvidenceStrip>
     </ProductEntry>
+    )}
 
-    <ProductEntry {...entries[3]} figure="below">
+    {listed('sojourn') && (
+    <ProductEntry {...E.sojourn} figure="below">
       {/* No screenshot, because the package is still being built. What
           it writes is already fixed, though, and that is the claim: the
           rows below are the Sojourn site's own sample case, the stays
           Field History logs as five changes with no durations. */}
       <EvidenceStrip
         slot="figure"
-        n="04"
+        n={E.sojourn.n}
         caption="the rows Sojourn writes for one sample case. Field History keeps five changes and no durations for it; this is four stays in business hours, ready to sum. Hours are Monday to Friday, 09:00 to 17:00."
       >
         <table class="evidence__intervals">
@@ -433,11 +462,13 @@ const COMPARE_ROWS = [
         </table>
       </EvidenceStrip>
     </ProductEntry>
+    )}
 
-    <ProductEntry {...entries[4]}>
+    {listed('insurealgo') && (
+    <ProductEntry {...E.insurealgo}>
       <EvidenceStrip
         slot="figure"
-        n="05"
+        n={E.insurealgo.n}
         caption="what expires soonest, and the minute it takes to add a policy."
       >
         {/* Two screens at a size you can read, not four at thumbnail
@@ -452,12 +483,13 @@ const COMPARE_ROWS = [
         </div>
       </EvidenceStrip>
     </ProductEntry>
+    )}
   </section>
 
   <section class="section-press" aria-labelledby="compare-heading">
     <div class="section-press__head">
       <h2 id="compare-heading" class="section-title section-title--xs section-title--tighter section-press__title">
-        All five, side by side.
+        {`All ${countWord(count)}, side by side.`}
       </h2>
       <span class="section-press__note">The questions people actually ask</span>
     </div>
@@ -465,13 +497,12 @@ const COMPARE_ROWS = [
     <CompareTable
       corner="Compare"
       columns={entries.map((e) => e.title)}
-      rows={COMPARE_ROWS}
-      caption="The five CloudAlgo products compared by what they are, where they run, what they touch in Salesforce, who they are for, how they are set up, what they cost and their ship status."
+      rows={compareRows}
+      caption={`The ${countWord(count)} CloudAlgo products compared by what they are, where they run, what they touch in Salesforce, who they are for, how they are set up, what they cost and their ship status.`}
     >
       <p class="compare-note" slot="footnote">
         One answer is the same in every column: your Salesforce data stays where it already is — in
-        your own org, on your own device, on your own infrastructure. Three of the five are free and
-        never ask for a card. Pledgivo has a price on it, and Sojourn's is published with its
+        your own org, on your own device, on {`your own infrastructure. ${countWord(freeCount, true)} of the ${countWord(count)} are free and never ask for a card.`} Pledgivo has a price on it, and Sojourn's is published with its
         AppExchange listing.
       </p>
     </CompareTable>

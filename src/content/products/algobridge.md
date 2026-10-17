@@ -51,7 +51,9 @@ requirements:
   - need: "PostgreSQL 14+ with hstore extension enabled"
   - need: "Salesforce Professional, Enterprise, or Unlimited edition with API access"
   - need: "Docker Compose or AWS ECS for deployment"
-published: true
+# Switched off temporarily on 2026-10-17 while its site and docs are down: set to true to list it again.
+# Before relisting, bring the copy in line with the product: it is free but closed source, not MIT.
+published: false
 ---
 
 AlgoBridge keeps your Salesforce org and PostgreSQL database in sync — bidirectionally, automatically, and without any vendor dependency.

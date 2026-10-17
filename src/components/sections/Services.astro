@@ -1,4 +1,5 @@
 ---
+import { listedProduct } from '@/lib/listing';
 // Fold 4. Structure follows docs/superpowers/specs/assets/home-mock.html
 // (the `04 services` block): one row per service, same shape as the
 // product rows above them, so a buyer and a developer read the page the
@@ -23,7 +24,7 @@
 // four-line edit here, deliberately: the row blurb is home-page copy and
 // nobody else can write it. "All services ->" still carries the depth --
 // this fold names them, /services/ sells them.
-import { getCollection, getEntry } from 'astro:content';
+import { getCollection } from 'astro:content';
 
 // `name` overrides the collection title where the home row wants a shorter
 // one. Only consulting needs it: the section is already headed by products
@@ -110,7 +111,7 @@ for (const s of services) {
 const proofs = new Map(
   await Promise.all(
     services.map(async (s) => {
-      const product = s.data.proves ? await getEntry(s.data.proves) : undefined;
+      const product = await listedProduct(s.data.proves);
       return [s.id, product] as const;
     })
   )
